@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="Chinese">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>FreeRtos1 | Frank’s blogs</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="资源连接集合 ARM+LINUX嵌入式学习路线 - 知乎 (zhihu.com)  http:&#x2F;&#x2F;www.openedv.com&#x2F;docs&#x2F;book-videos&#x2F;zdyzshipin&#x2F;4free&#x2F;zdyz-freertos-book.html   为什么选择FreeRtos? RTOS 类系统有很多，比如 uC&#x2F;OS，资料很多，尤其是中文资料，那为什么要选择 FreeRTOS 呢？  FreeR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FreeRtos1">
+<meta property="og:url" content="http://frankzhang0219.gitee.io/2021/12/11/FreeRtos1/index.html">
+<meta property="og:site_name" content="Frank’s blogs">
+<meta property="og:description" content="资源连接集合 ARM+LINUX嵌入式学习路线 - 知乎 (zhihu.com)  http:&#x2F;&#x2F;www.openedv.com&#x2F;docs&#x2F;book-videos&#x2F;zdyzshipin&#x2F;4free&#x2F;zdyz-freertos-book.html   为什么选择FreeRtos? RTOS 类系统有很多，比如 uC&#x2F;OS，资料很多，尤其是中文资料，那为什么要选择 FreeRTOS 呢？  FreeR">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-12-11T10:03:10.000Z">
+<meta property="article:modified_time" content="2021-12-13T15:16:44.948Z">
+<meta property="article:author" content="FrankZhang">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">Frank&#39;s blogs</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        FreeRtos1
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2021/12/" class="post-meta__date button">2021-12-11</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="资源连接集合"><a href="#资源连接集合" class="headerlink" title="资源连接集合"></a>资源连接集合</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/97869854">ARM+LINUX嵌入式学习路线 - 知乎 (zhihu.com)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://www.openedv.com/docs/book-videos/zdyzshipin/4free/zdyz-freertos-book.html">http://www.openedv.com/docs/book-videos/zdyzshipin/4free/zdyz-freertos-book.html</a></p>
+</li>
+</ul>
+<h2 id="为什么选择FreeRtos"><a href="#为什么选择FreeRtos" class="headerlink" title="为什么选择FreeRtos?"></a>为什么选择FreeRtos?</h2><ul>
+<li><p>RTOS 类系统有很多，比如 uC/OS，资料很多，尤其是中文资料，那为什么要选择 FreeRTOS 呢？</p>
+</li>
+<li><p>FreeRTOS是免费的，学习RTOS操作系统的话 uC/OS是首选，但要做产品的话，免费的FreeRTOS操作系统就是个不错的选择。</p>
+</li>
+<li><p>许多半导体厂商产品的 SDK(Software Development Kit—软件开发工具包) 包就使用 FreeRTOS 作为其操作系统，尤其是 WIFI、蓝牙这些带协议栈的芯片或模块。</p>
+</li>
+<li><p>简单，因为FreeRTOS 的文件数量很少。</p>
+</li>
+</ul>
+<h2 id="FreeRtos-特点"><a href="#FreeRtos-特点" class="headerlink" title="FreeRtos 特点"></a>FreeRtos 特点</h2><ul>
+<li>FreeRTOS 的内核支持抢占式，合作式和时间片调度。</li>
+<li>提供了一个用于低功耗的 Tickless 模式。</li>
+<li>系统的组件在创建时可以选择动态或者静态的 RAM，比如任务、消息队列、信号量、软件定时器等等。</li>
+<li>FreeRTOS-MPU 支持 Corex-M 系列中的 MPU 单元，如 STM32F429。</li>
+<li>FreeRTOS 系统简单、小巧、易用，通常情况下内核占用 4k-9k 字节的空间。</li>
+<li>高可移植性，代码主要 C 语言编写。</li>
+<li>高效的软件定时器。</li>
+<li>强大的跟踪执行功能。</li>
+<li>堆栈溢出检测功能。</li>
+<li>任务数量不限。</li>
+<li>任务优先级不限。</li>
+</ul>
+<p><strong>官网：</strong><a target="_blank" rel="noopener" href="http://www.freertos.org/">www.freertos.org</a></p>
+<h2 id="基于STM32F407和Cubemx（HAL库）的FreeRtos开发"><a href="#基于STM32F407和Cubemx（HAL库）的FreeRtos开发" class="headerlink" title="基于STM32F407和Cubemx（HAL库）的FreeRtos开发"></a>基于STM32F407和Cubemx（HAL库）的FreeRtos开发</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/90608412">FreeRTOS 从入门到精通1–实时操作系统的前世今生 - 知乎 (zhihu.com)</a></p>
+</li>
+<li><p>为什么选用HAl库？因为ST官方 <strong><u>已经停止</u></strong> 对于标准库的维护</p>
+</li>
+<li><p>使用STM32CubeIDE的（ <strong>未尝试盗版仿真器能不能使用</strong> ）</p>
+</li>
+</ul>
+<h2 id="待续"><a href="#待续" class="headerlink" title="待续"></a>待续</h2>
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2021-12-13</p></div> 
+    <div class="post-entry__tags"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2021/12/11/FreeRtos2/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            FreeRtos2
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2021/12/08/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            pytorch入门笔记
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">Frank’s blogs</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>
