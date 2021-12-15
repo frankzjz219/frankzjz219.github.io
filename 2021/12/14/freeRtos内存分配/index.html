@@ -50,7 +50,7 @@
 <meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20211214234455862.png">
 <meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20211214234514596.png">
 <meta property="article:published_time" content="2021-12-14T14:29:57.000Z">
-<meta property="article:modified_time" content="2021-12-14T15:48:14.922Z">
+<meta property="article:modified_time" content="2021-12-15T01:10:46.611Z">
 <meta property="article:author" content="FrankZhang">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://frankzhang0219.gitee.io/imgs/image-20211214224037834.png">
@@ -160,6 +160,9 @@
 <p>​    如上图的示例程序所示，全局变量和常量属于静态区（Static)，由编译器事先分配好，生命周期贯穿整个程序；函数的参数值，局部变量的值属于栈（Stack），由编译器自动分配和释放；程序员用malloc函数动态请求分配的内存空间属于堆（Heap）。<em>值得注意的是，如果在动态分配的内存用完之后忘记使用free函数释放内存，则会导致内存泄漏，并且当堆和栈无止境的增长到互相覆盖对方区域时则会出现很多无法预料的问题。程序可能运行运行着就跑飞了。</em></p>
 <h2 id="FreeRtos-任务空间构成"><a href="#FreeRtos-任务空间构成" class="headerlink" title="FreeRtos 任务空间构成"></a>FreeRtos 任务空间构成</h2><p><img src="/imgs/image-20211214230245382.png" alt="image-20211214230245382"></p>
 <p>如上图所示，当调用FreeRTOS的创建任务API函数<code>xTaskCreate()</code>时，FreeRTOS会在堆中开辟出一块空间，用于存放<strong>任务的控制信息TCB块</strong>和<strong>栈区Stack</strong>用于储存任务相关的变量。图中创建的两个任务Task1和Task2都有各自独立的内存空间，互相独立。如果想在静态区建立任务的话可以调用<code>xTaskCreateStatic()</code>函数。</p>
+<ul>
+<li>注意，程序运行过程中<strong>动态创建的线程</strong>的内存位置在堆中，堆中分配的空间包括程序自身的TCB块和自身的<strong>栈</strong>，也就是程序的<strong>Stack</strong></li>
+</ul>
 <h3 id="TCB块的大小"><a href="#TCB块的大小" class="headerlink" title="TCB块的大小"></a>TCB块的大小</h3><p>​    <em>TCB块的大小取决于<strong>FreeRTOSConfig.h</strong>头文件中的设置</em></p>
 <ul>
 <li><p>在最小的设置下TCB块的大小是96字节</p>
@@ -235,13 +238,27 @@
 
     </div>
      
-    <div class="post-footer__meta"><p>updated at 2021-12-14</p></div> 
+    <div class="post-footer__meta"><p>更新于 2021-12-15</p></div> 
     <div class="post-entry__tags"></div> 
 </article>
 
 
     <div class="nav">
         <div class="nav__prev">
+            
+                <a href="/2021/12/15/STM32%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%89/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            STM32点亮ILI9341驱动的屏幕（HAL库）
+                        </div>
+                    </div>
+                </a>
             
         </div>
         <div class="nav__next">
