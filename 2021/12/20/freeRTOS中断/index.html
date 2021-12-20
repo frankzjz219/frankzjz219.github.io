@@ -25,7 +25,7 @@
     <!-- meta -->
 
 
-<title>freeRTOS中断 | Frank’s blogs</title>
+<title>freeRTOS中断和信号量以及任务管理 | Frank’s blogs</title>
 
 
 
@@ -35,7 +35,7 @@
  
     <meta name="description" content="freeRTOS中断和信号量使用freeRTOS中断与使用正常的中断区别不大（不使用FreeRTOS自带的API），直接使用系统给的中断函数即可  手动启动这两个    注意，使用EXTI的时候（外部中断），需要自己手动定义中断处理函数 1234void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)&amp;#123;    &amp;#125;  系统没有给出这个函数的定义">
 <meta property="og:type" content="article">
-<meta property="og:title" content="freeRTOS中断">
+<meta property="og:title" content="freeRTOS中断和信号量以及任务管理">
 <meta property="og:url" content="http://frankzhang0219.gitee.io/2021/12/20/freeRTOS%E4%B8%AD%E6%96%AD/index.html">
 <meta property="og:site_name" content="Frank’s blogs">
 <meta property="og:description" content="freeRTOS中断和信号量使用freeRTOS中断与使用正常的中断区别不大（不使用FreeRTOS自带的API），直接使用系统给的中断函数即可  手动启动这两个    注意，使用EXTI的时候（外部中断），需要自己手动定义中断处理函数 1234void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)&amp;#123;    &amp;#125;  系统没有给出这个函数的定义">
@@ -43,7 +43,7 @@
 <meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20211220221301553.png">
 <meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20211220234334003.png">
 <meta property="article:published_time" content="2021-12-20T14:10:33.000Z">
-<meta property="article:modified_time" content="2021-12-20T15:57:28.426Z">
+<meta property="article:modified_time" content="2021-12-20T16:00:25.542Z">
 <meta property="article:author" content="FrankZhang">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://frankzhang0219.gitee.io/imgs/image-20211220221301553.png">
@@ -126,7 +126,7 @@
 
 <div class="post-title">
     <h1 class="post-title__text">
-        freeRTOS中断
+        freeRTOS中断和信号量以及任务管理
     </h1>
     <div class="post-title__meta">
         <a href="/archives/2021/12/" class="post-meta__date button">2021-12-20</a>
@@ -188,7 +188,7 @@
 
     </div>
      
-    <div class="post-footer__meta"><p>更新于 2021-12-20</p></div> 
+    <div class="post-footer__meta"><p>updated at 2021-12-21</p></div> 
     <div class="post-entry__tags"></div> 
 </article>
 
