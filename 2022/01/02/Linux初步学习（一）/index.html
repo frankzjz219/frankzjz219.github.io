@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="Chinese">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>Linux初步学习（一） | Frank’s blogs</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="Linux初步学习（一）shellhttps:&#x2F;&#x2F;www.runoob.com&#x2F;linux&#x2F;linux-shell-variable.html  Shell 是一个用 C 语言编写的程序，它是用户使用 Linux 的桥梁。Shell 既是一种命令语言，又是一种程序设计语言。  Shell 是指一种应用程序，这个应用程序提供了一个界面，用户通过这个界面访问操作系统内核的服务。  Ken Thomps">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux初步学习（一）">
+<meta property="og:url" content="http://frankzhang0219.gitee.io/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="Frank’s blogs">
+<meta property="og:description" content="Linux初步学习（一）shellhttps:&#x2F;&#x2F;www.runoob.com&#x2F;linux&#x2F;linux-shell-variable.html  Shell 是一个用 C 语言编写的程序，它是用户使用 Linux 的桥梁。Shell 既是一种命令语言，又是一种程序设计语言。  Shell 是指一种应用程序，这个应用程序提供了一个界面，用户通过这个界面访问操作系统内核的服务。  Ken Thomps">
+<meta property="og:locale">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102115757607.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102121030726.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102121227839.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102142331661.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102141720725.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102142013809.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102142050921.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102142905800.png">
+<meta property="article:published_time" content="2022-01-02T03:36:20.000Z">
+<meta property="article:modified_time" content="2022-01-02T06:29:32.921Z">
+<meta property="article:author" content="FrankZhang">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102115757607.png">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">Frank&#39;s blogs</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        Linux初步学习（一）
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2022/01/" class="post-meta__date button">2022-01-02</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="Linux初步学习（一）"><a href="#Linux初步学习（一）" class="headerlink" title="Linux初步学习（一）"></a>Linux初步学习（一）</h1><h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><p><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-shell-variable.html">https://www.runoob.com/linux/linux-shell-variable.html</a></p>
+<ul>
+<li><p>Shell 是一个用 C 语言编写的程序，它是用户使用 Linux 的桥梁。Shell 既是一种命令语言，又是一种程序设计语言。</p>
+</li>
+<li><p>Shell 是指一种应用程序，这个应用程序提供了一个界面，用户通过这个界面访问操作系统内核的服务。</p>
+</li>
+<li><p>Ken Thompson 的 sh 是第一种 Unix Shell，Windows Explorer 是一个典型的图形界面 Shell。</p>
+</li>
+</ul>
+<h3 id="shell脚本的扩展名为-sh"><a href="#shell脚本的扩展名为-sh" class="headerlink" title="shell脚本的扩展名为.sh"></a>shell脚本的扩展名为.sh</h3><ul>
+<li>指定shell 解释器</li>
+</ul>
+<p>​        <code>#!/bin/bash</code></p>
+<p>​        <code>#!</code>符号后面指定</p>
+<ul>
+<li><p>运行脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod +x ./test.sh  #使脚本具有执行权限</span><br><span class="line">./test.sh  #执行脚本</span><br></pre></td></tr></table></figure></li>
+<li><p>注意此处运行的时候<strong>必须写成</strong><code>./</code>文件名的形式，<strong>直接写</strong>的话<strong>Linux会去Path里面</strong>寻找这个文件，而只有 /bin, /sbin, /usr/bin，/usr/sbin 等在 PATH 里，你的当前目录通常不在 PATH 里，所以写成 test.sh 是会找不到命令的，要用 <code>./test.sh </code>告诉系统说，就在当前目录找。</p>
+</li>
+<li><p>或者作为解释器参数传给解释器以进行运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/sh test.sh</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="第一个shell程序"><a href="#第一个shell程序" class="headerlink" title="第一个shell程序"></a>第一个shell程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">echo &quot;Hello World !&quot;</span><br></pre></td></tr></table></figure>
+
+<p><code>echo</code>是控制台输出</p>
+<p><img src="/imgs/image-20220102115757607.png" alt="image-20220102115757607"></p>
+<h3 id="shell-变量"><a href="#shell-变量" class="headerlink" title="shell 变量"></a>shell 变量</h3><ul>
+<li><p>变量名不能有<code>$</code></p>
+</li>
+<li><p>命名只能使用英文字母，数字和下划线，首个字符不能以数字开头。</p>
+</li>
+<li><p>中间不能有空格，可以使用下划线 **_**。</p>
+</li>
+<li><p>不能使用标点符号。</p>
+</li>
+<li><p>不能使用bash里的关键字（可用help命令查看保留关键字）。</p>
+</li>
+</ul>
+<h3 id="变量赋值"><a href="#变量赋值" class="headerlink" title="变量赋值"></a>变量赋值</h3><p>显式<code>=</code>，或者</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for file in `ls /etc`</span><br><span class="line">或者</span><br><span class="line">for file in $(ls /etc)</span><br></pre></td></tr></table></figure>
+
+<p>以上语句将 /etc 下目录的文件名循环出来。</p>
+<h3 id="变量使用"><a href="#变量使用" class="headerlink" title="变量使用"></a>变量使用</h3><ul>
+<li>使用一个定义过的变量，只要在变量名前面加美元符号即可</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">your_name=&quot;qinjx&quot;</span><br><span class="line">echo $your_name</span><br><span class="line">echo $&#123;your_name&#125;</span><br></pre></td></tr></table></figure>
+
+<p>花括号的作用是提示编译器这是个变量名</p>
+<p>比如</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for skill in Ada Coffe Action Java; do</span><br><span class="line">    echo &quot;I am good at $&#123;skill&#125;Script&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<p>如果不给skill变量加花括号，写成echo “I am good at $skillScript”，解释器就会把$skillScript当成一个变量（其值为空），代码执行结果就不是我们期望的样子了。</p>
+<ul>
+<li><p>加上：<img src="/imgs/image-20220102121030726.png" alt="image-20220102121030726"></p>
+</li>
+<li><p>不加但是加了空格：</p>
+</li>
+<li><p><img src="/imgs/image-20220102121227839.png" alt="image-20220102121227839"></p>
+</li>
+</ul>
+<p><strong>花括号加不加都行，不加的时候注意用空格区分开</strong></p>
+<h3 id="变量只读"><a href="#变量只读" class="headerlink" title="变量只读"></a>变量只读</h3><ul>
+<li>使用 readonly 命令可以将变量定义为只读变量，只读变量的值不能被改变。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">myUrl=&quot;https://www.google.com&quot;</span><br><span class="line">readonly myUrl</span><br><span class="line">myUrl=&quot;https://www.runoob.com&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="变量删除"><a href="#变量删除" class="headerlink" title="变量删除"></a>变量删除</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unset variable_name</span><br></pre></td></tr></table></figure>
+
+<h3 id="变量类型"><a href="#变量类型" class="headerlink" title="变量类型"></a>变量类型</h3><ul>
+<li><strong>1) 局部变量</strong> 局部变量在脚本或命令中定义，仅在当前shell实例中有效，其他shell启动的程序不能访问局部变量。</li>
+<li><strong>2) 环境变量</strong> 所有的程序，包括shell启动的程序，都能访问环境变量，有些程序需要环境变量来保证其正常运行。必要的时候shell脚本也可以定义环境变量。</li>
+<li><strong>3) shell变量</strong> shell变量是由shell程序设置的特殊变量。shell变量中有一部分是环境变量，有一部分是局部变量，这些变量保证了shell的正常运行</li>
+</ul>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p><strong>单引号</strong></p>
+<ul>
+<li>单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；</li>
+<li>单引号字串中不能出现单独一个的单引号（对单引号使用转义符后也不行），但可成对出现，作为字符串拼接使用。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str=&#x27;this is a string&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><strong>双引号</strong></p>
+<ul>
+<li>双引号里可以有变量</li>
+<li>双引号里可以出现转义字符</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">your_name=<span class="string">&quot;runoob&quot;</span></span><br><span class="line">str=<span class="string">&quot;Hello, I know you are \&quot;<span class="variable">$your_name</span>\&quot;! \n&quot;</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="variable">$str</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>字符串拼接</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">your_name=&quot;runoob&quot;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用双引号拼接</span></span><br><span class="line">greeting=&quot;hello, &quot;$your_name&quot; !&quot;</span><br><span class="line">greeting_1=&quot;hello, $&#123;your_name&#125; !&quot;</span><br><span class="line">echo $greeting  $greeting_1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用单引号拼接</span></span><br><span class="line">greeting_2=&#x27;hello, &#x27;$your_name&#x27; !&#x27;</span><br><span class="line">greeting_3=&#x27;hello, $&#123;your_name&#125; !&#x27;</span><br><span class="line">echo $greeting_2  $greeting_3</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>直接拼接，不需要逗号或者加号等</li>
+</ul>
+<p><strong>子字符串</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">string=&quot;runoob is a great site&quot;</span><br><span class="line">echo $&#123;string:1:4&#125; # 输出 unoo</span><br></pre></td></tr></table></figure>
+
+<p><strong>查找字符串</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">string=<span class="string">&quot;runoob is a great site&quot;</span></span><br><span class="line"><span class="built_in">echo</span> `expr index <span class="string">&quot;<span class="variable">$string</span>&quot;</span> io`  <span class="comment"># 输出 4</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意上面的expr…是反引号，不是单引号</li>
+</ul>
+<p><strong>字符串长度</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">string=<span class="string">&quot;abcd&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#string&#125;</span> <span class="comment">#输出 4</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>字符串长度的其他方法</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">string=<span class="string">&quot;hello,everyone my name is xiaoming&quot;</span></span><br><span class="line">expr length <span class="string">&quot;<span class="variable">$string</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/imgs/image-20220102142331661.png" alt="image-20220102142331661"></p>
+<p>输出6</p>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">数组名=(值1 值2 ... 值n)</span><br><span class="line">array_name=(value0 value1 value2 value3)</span><br><span class="line">array_name=(</span><br><span class="line">value0</span><br><span class="line">value1</span><br><span class="line">value2</span><br><span class="line">value3</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><strong>单独定义变量</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array_name[0]=value0</span><br><span class="line">array_name[1]=value1</span><br><span class="line">array_name[n]=valuen</span><br></pre></td></tr></table></figure>
+
+<p><strong>读数组内容</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$&#123;数组名[下标]&#125;</span></span><br><span class="line">valuen=<span class="variable">$&#123;array_name[n]&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>取得数组全部内容</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo $&#123;array_name[@]&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>取得数组长度</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 取得数组元素的个数</span></span><br><span class="line">length=<span class="variable">$&#123;#array_name[@]&#125;</span></span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">length=<span class="variable">$&#123;#array_name[*]&#125;</span></span><br><span class="line"><span class="comment"># 取得数组单个元素的长度</span></span><br><span class="line">lengthn=<span class="variable">$&#123;#array_name[n]&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>注意，可能数组会出现<img src="/imgs/image-20220102141720725.png" alt="image-20220102141720725">这是因为 ubuntu 模式使用的是 dash 模式，如果<strong>不想报错使用 bash 模式</strong></p>
+<p>的报错，此时使用命令 <code>bash xxx.sh</code>  或者 将脚本第一行改为 <code>*#!/bin/bash</code>，执行<code>./example.sh</code>也可以</p>
+<p>输出数组长度的时候可能<strong>不对</strong>，此时输出的是1</p>
+<p><img src="/imgs/image-20220102142013809.png" alt="image-20220102142013809"></p>
+<p>此时也是1</p>
+<p><img src="/imgs/image-20220102142050921.png" alt="image-20220102142050921"></p>
+<p>此代码的输出为</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">array=(0,1,2,3,4,5,6)</span><br><span class="line">echo $&#123;#array[@]&#125;</span><br><span class="line">echo $array</span><br><span class="line">echo $&#123;array[*]&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/imgs/image-20220102142905800.png" alt="image-20220102142905800"></p>
+<h3 id="注意，代码不能随意包含空格，比如等号两边，可能会引起错误"><a href="#注意，代码不能随意包含空格，比如等号两边，可能会引起错误" class="headerlink" title="注意，代码不能随意包含空格，比如等号两边，可能会引起错误"></a>注意，代码不能随意包含空格，比如等号两边，可能会引起错误</h3><h4 id="字符串截取"><a href="#字符串截取" class="headerlink" title="字符串截取"></a>字符串截取</h4><p>参考 <a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-shell-variable.html">https://www.runoob.com/linux/linux-shell-variable.html</a> 第一篇笔记</p>
+<h3 id="shell注释"><a href="#shell注释" class="headerlink" title="shell注释"></a>shell注释</h3><p>以<code>#</code> 开头的行就是注释，会被解释器忽略。</p>
+<ul>
+<li>多行注释</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">:&lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">注释内容...</span></span><br><span class="line"><span class="string">注释内容...</span></span><br><span class="line"><span class="string">注释内容...</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+
+<p>或者任何符号</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">:&lt;&lt;&#x27;</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">&#x27;</span><br><span class="line"></span><br><span class="line">:&lt;&lt;!</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">!</span><br></pre></td></tr></table></figure>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2022-01-02</p></div> 
+    <div class="post-entry__tags"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2021/12/21/SolidWorks%E6%89%93%E4%B8%8D%E5%BC%80UG%E5%AF%BC%E5%87%BA%E7%9A%84x-t%E6%96%87%E4%BB%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            SolidWorks打不开UG导出的x_t文件解决方法
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2022 <a href="/">Frank’s blogs</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>
