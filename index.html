@@ -1,612 +1,387 @@
 <!DOCTYPE html>
 <html lang="Chinese">
-<head>
+    <head>
     <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="Frank·Zhang">
-    
-    <title>
-        
-        Frank&#39;s Blogs
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
 
-    <link rel="shortcut icon" href="/images/FLogo.png">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
+    <!--icon-->
 
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
-    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
-  </script>
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>Frank’s blogs</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Frank’s blogs">
+<meta property="og:url" content="http://frankzhang0219.gitee.io/index.html">
+<meta property="og:site_name" content="Frank’s blogs">
+<meta property="og:locale">
+<meta property="article:author" content="FrankZhang">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
 <meta name="generator" content="Hexo 5.4.0"></head>
 
-
-<body>
-<div class="progress-bar-container">
-    
-
-    
-</div>
-
-
-<main class="page-container">
-
-    
-
-    <div class="page-main-content">
-
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
-
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                Frank&#39;s Blogs
-            </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class="active"
-                               href="/"
-                            >
-                                HOME
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                ARCHIVES
-                            </a>
-                        </li>
-                    
-                    
-                </ul>
-            </div>
-            <div class="mobile">
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">Frank&#39;s blogs</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
                 
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
             </div>
-        </div>
+        
+        
+        
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+            </div>
+        
     </div>
-
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class="active"
-                       href="/">HOME</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">ARCHIVES</a>
-                </li>
-            
-        </ul>
-    </div>
-
-    <div class="window-mask"></div>
-
 </header>
 
 
+    <div class="cover">
+        <div class="cover__logo">
+            
+                <h1>Frank&#39;s Blogs</h1>
+            
         </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="home-content-container fade-in-down-animation">
-    <ul class="home-article-list">
         
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/03/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89/">
-                        Linux初步学习（三）
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        Linux初步学习（三）shelltest
-Shell中的 test 命令用于检查某个条件是否成立，它可以进行数值、字符和文件三个方面的测试。
-
-数值
-
-
-
-
-参数
-说明
-
-
-
--eq
-等于则为真
-
-
--ne
-不等于则为真
-
-
--gt
-大于则为真
-
-...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon Jan 03 2022 12:58:20 GMT+0800">2022-01-03</span></span>
         
+            <div class="cover__intro">
+                <p>Hello, this is Frank Zhang, an atypical ME student.</p>
+ 
+            </div>
         
     </div>
 
-    <a href="/2022/01/03/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/">
-                        Linux初步学习（二）
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        Linux初步学习（二）shell向shell脚本传参12345echo &quot;Shell 传递参数实例！&quot;;echo &quot;执行的文件名：$0&quot;;echo &quot;第一个参数为：$1&quot;;echo &qu...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sun Jan 02 2022 17:25:44 GMT+0800">2022-01-02</span></span>
-        
-        
-    </div>
-
-    <a href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/">
-                        Linux初步学习（一）
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        Linux初步学习（一）shellhttps://www.runoob.com/linux/linux-shell-variable.html
-
-Shell 是一个用 C 语言编写的程序，它是用户使用 Linux 的桥梁。Shell 既是一种命令语言...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sun Jan 02 2022 11:36:20 GMT+0800">2022-01-02</span></span>
-        
-        
-    </div>
-
-    <a href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/21/SolidWorks%E6%89%93%E4%B8%8D%E5%BC%80UG%E5%AF%BC%E5%87%BA%E7%9A%84x-t%E6%96%87%E4%BB%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">
-                        SolidWorks打不开UG导出的x_t文件解决方法
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        SolidWorks打不开UG导出的x_t(Parasolid)文件解决方法
-更改设置
-
-
-
-
-
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Tue Dec 21 2021 16:34:45 GMT+0800">2021-12-21</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/21/SolidWorks%E6%89%93%E4%B8%8D%E5%BC%80UG%E5%AF%BC%E5%87%BA%E7%9A%84x-t%E6%96%87%E4%BB%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/20/freeRTOS%E4%B8%AD%E6%96%AD/">
-                        freeRTOS中断和信号量以及任务管理
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        freeRTOS中断和信号量使用freeRTOS中断与使用正常的中断区别不大（不使用FreeRTOS自带的API），直接使用系统给的中断函数即可
-
-手动启动这两个
-
-
-
-注意，使用EXTI的时候（外部中断），需要自己手动定义中断处理函数
-1234vo...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon Dec 20 2021 22:10:33 GMT+0800">2021-12-20</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/20/freeRTOS%E4%B8%AD%E6%96%AD/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/20/%E4%BD%BF%E7%94%A8CubeIDE%E9%85%8D%E7%BD%AEJLink%E5%92%8C%E9%A1%B9%E7%9B%AE/">
-                        使用CubeIDE配置JLink和项目
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        使用CubeIDE配置JLink和项目配置Cube
-
-
-新建项目，然后在Cube中配置相关的内容
-
-选择填写相关的信息，名称等
-
-
-
-此处放大窗口
-
-
-
-设置好之后，右键创建代码
-
-
-
-假如此时不能点击generate code的话，右键选择buil...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon Dec 20 2021 20:59:09 GMT+0800">2021-12-20</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/20/%E4%BD%BF%E7%94%A8CubeIDE%E9%85%8D%E7%BD%AEJLink%E5%92%8C%E9%A1%B9%E7%9B%AE/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/18/%E4%BD%BF%E7%94%A8freeRTOS%E7%9A%84%E9%98%9F%E5%88%97%E5%92%8C%E5%AE%9A%E6%97%B6%E5%99%A8/">
-                        使用freeRTOS的队列和定时器
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        使用freeRTOS的队列和定时器Cube
-注意必须用CMSIS_V2系统才可以设置定时器
-
-
-
-然后在freeRTOS.c中的初始化函数MX_FREERTOS_Init中添加启动定时器的语句
-1234567891011121314151617181...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sat Dec 18 2021 12:59:35 GMT+0800">2021-12-18</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/18/%E4%BD%BF%E7%94%A8freeRTOS%E7%9A%84%E9%98%9F%E5%88%97%E5%92%8C%E5%AE%9A%E6%97%B6%E5%99%A8/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/17/%E8%A7%A3%E5%86%B3C%E8%AF%AD%E8%A8%80%E5%8F%98%E9%87%8F%E8%A2%AB%E9%87%8D%E5%A4%8D%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/">
-                        解决C语言变量被重复定义错误的问题
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        解决C语言变量被重复定义错误的问题头文件编译的原理
-在每次头文件被某个.c文件include的时候，头文件头会被插入到代码中#include &quot;xxx.h&quot;的位置，假如在头文件中定义了变量，然后这个头文件被多个.c文件同时Incl...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Fri Dec 17 2021 23:10:42 GMT+0800">2021-12-17</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/17/%E8%A7%A3%E5%86%B3C%E8%AF%AD%E8%A8%80%E5%8F%98%E9%87%8F%E8%A2%AB%E9%87%8D%E5%A4%8D%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/">
-                        使用FreeRTOS和ILI9341点亮LCD屏幕
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕CubeMX配置
-SPI：
-
-
-
-DMA：
-
-
-
-NVIC（重要）：
-
-
-
-注意此处SPI、TIM1和DMA不要使用FreeRTOS 的中断函数，将对勾去掉，同时将中断优先级改为一个比...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Fri Dec 17 2021 21:35:25 GMT+0800">2021-12-17</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/16/STM32F4%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%892/">
-                        STM32F4点亮ili9341驱动的屏幕（HAL库）2
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        STM32F4点亮ili9341驱动的屏幕（HAL库）2地址
-https://github.com/ardnew/ILI9341-STM32-HAL
-
-Cube配置按照readme中的配置，注意以下问题
-
-SPI设置（打开中断）：
-
-DMA：
-
-生成...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Thu Dec 16 2021 10:36:21 GMT+0800">2021-12-16</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/16/STM32F4%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%892/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-    </ul>
-
-    <div class="home-paginator">
-        <div class="paginator">
+            <main class="main">
     
-
-    
-        <a class="next btn"
-           href="/page/2/"
-        >Next</a>
+    <div class="post-list">
+        
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        Linux初步学习（三）
+    </h2>
     
 </div>
-
-    </div>
+<div class="post-entry__meta">
+    <a href="/archives/2022/01/" class="post-meta__date button">2022-01-03</a>
+    
+ 
 </div>
-
-
+<div class="post-entry__tags"></div> 
+<a href="/2022/01/03/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89/" class="post-entry__link">Linux初步学习（三）</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        Linux初步学习（二）
+    </h2>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2022/01/" class="post-meta__date button">2022-01-02</a>
+    
+ 
+</div>
+<div class="post-entry__tags"></div> 
+<a href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-entry__link">Linux初步学习（二）</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        Linux初步学习（一）
+    </h2>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2022/01/" class="post-meta__date button">2022-01-02</a>
+    
+ 
+</div>
+<div class="post-entry__tags"></div> 
+<a href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/" class="post-entry__link">Linux初步学习（一）</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        SolidWorks打不开UG导出的x_t文件解决方法
+    </h2>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2021/12/" class="post-meta__date button">2021-12-21</a>
+    
+ 
+</div>
+<div class="post-entry__tags"></div> 
+<a href="/2021/12/21/SolidWorks%E6%89%93%E4%B8%8D%E5%BC%80UG%E5%AF%BC%E5%87%BA%E7%9A%84x-t%E6%96%87%E4%BB%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="post-entry__link">SolidWorks打不开UG导出的x_t文件解决方法</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        freeRTOS中断和信号量以及任务管理
+    </h2>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2021/12/" class="post-meta__date button">2021-12-20</a>
+    
+ 
+</div>
+<div class="post-entry__tags"></div> 
+<a href="/2021/12/20/freeRTOS%E4%B8%AD%E6%96%AD/" class="post-entry__link">freeRTOS中断和信号量以及任务管理</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        使用CubeIDE配置JLink和项目
+    </h2>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2021/12/" class="post-meta__date button">2021-12-20</a>
+    
+ 
+</div>
+<div class="post-entry__tags"></div> 
+<a href="/2021/12/20/%E4%BD%BF%E7%94%A8CubeIDE%E9%85%8D%E7%BD%AEJLink%E5%92%8C%E9%A1%B9%E7%9B%AE/" class="post-entry__link">使用CubeIDE配置JLink和项目</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        使用freeRTOS的队列和定时器
+    </h2>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2021/12/" class="post-meta__date button">2021-12-18</a>
+    
+ 
+</div>
+<div class="post-entry__tags"></div> 
+<a href="/2021/12/18/%E4%BD%BF%E7%94%A8freeRTOS%E7%9A%84%E9%98%9F%E5%88%97%E5%92%8C%E5%AE%9A%E6%97%B6%E5%99%A8/" class="post-entry__link">使用freeRTOS的队列和定时器</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        解决C语言变量被重复定义错误的问题
+    </h2>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2021/12/" class="post-meta__date button">2021-12-17</a>
+    
+ 
+</div>
+<div class="post-entry__tags"></div> 
+<a href="/2021/12/17/%E8%A7%A3%E5%86%B3C%E8%AF%AD%E8%A8%80%E5%8F%98%E9%87%8F%E8%A2%AB%E9%87%8D%E5%A4%8D%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-entry__link">解决C语言变量被重复定义错误的问题</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        使用FreeRTOS和ILI9341点亮LCD屏幕
+    </h2>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2021/12/" class="post-meta__date button">2021-12-17</a>
+    
+ 
+</div>
+<div class="post-entry__tags"></div> 
+<a href="/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/" class="post-entry__link">使用FreeRTOS和ILI9341点亮LCD屏幕</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        STM32F4点亮ili9341驱动的屏幕（HAL库）2
+    </h2>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2021/12/" class="post-meta__date button">2021-12-16</a>
+    
+ 
+</div>
+<div class="post-entry__tags"></div> 
+<a href="/2021/12/16/STM32F4%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%892/" class="post-entry__link">STM32F4点亮ili9341驱动的屏幕（HAL库）2</a>
+                </div>
+            
+        
+    </div>
+    
+        <div class="nav">
+            <div class="nav__prev">
                 
             </div>
-
+            <div class="nav__next">
+                
+                    <a href="/page/2/" class="nav__link">
+                        <div>
+                            <div class="nav__label">
+                                Next
+                            </div>
+                            <div class="nav__title">
+                                第 2 页
+                            </div>
+                        </div>
+                        <div>
+                            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                        </div>
+                    </a>
+                
+            </div>
         </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
-            
-              <span>2021</span>
-              -
-            
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
-        </div>
-        
-        <div class="theme-info info-item">
-            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
-        </div>
-        
-        
-    </div>
-</footer>
-
-        </div>
-    </div>
-
     
 
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="fas fa-arrow-up"></i>
-            </li>
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
-
-
-    
 
 </main>
 
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-
-
-
-
-
-<div class="post-scripts">
+            <footer class="footer">
     
-</div>
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2022 <a href="/">Frank’s blogs</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+ 
 
 
 
-</body>
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
 </html>

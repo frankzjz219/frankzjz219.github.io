@@ -1,161 +1,160 @@
 <!DOCTYPE html>
 <html lang="Chinese">
-<head>
+    <head>
     <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="Frank·Zhang">
-    
-    <title>
-        
-            Linux初步学习（一） |
-        
-        Frank&#39;s Blogs
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
 
-    <link rel="shortcut icon" href="/images/FLogo.png">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
+    <!--icon-->
 
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
-    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
-  </script>
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>Linux初步学习（一） | Frank’s blogs</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="Linux初步学习（一）shellhttps:&#x2F;&#x2F;www.runoob.com&#x2F;linux&#x2F;linux-shell-variable.html  Shell 是一个用 C 语言编写的程序，它是用户使用 Linux 的桥梁。Shell 既是一种命令语言，又是一种程序设计语言。  Shell 是指一种应用程序，这个应用程序提供了一个界面，用户通过这个界面访问操作系统内核的服务。  Ken Thomps">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux初步学习（一）">
+<meta property="og:url" content="http://frankzhang0219.gitee.io/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="Frank’s blogs">
+<meta property="og:description" content="Linux初步学习（一）shellhttps:&#x2F;&#x2F;www.runoob.com&#x2F;linux&#x2F;linux-shell-variable.html  Shell 是一个用 C 语言编写的程序，它是用户使用 Linux 的桥梁。Shell 既是一种命令语言，又是一种程序设计语言。  Shell 是指一种应用程序，这个应用程序提供了一个界面，用户通过这个界面访问操作系统内核的服务。  Ken Thomps">
+<meta property="og:locale">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102115757607.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102121030726.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102121227839.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102142331661.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102141720725.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102142013809.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102142050921.png">
+<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102142905800.png">
+<meta property="article:published_time" content="2022-01-02T03:36:20.000Z">
+<meta property="article:modified_time" content="2022-01-02T09:35:20.905Z">
+<meta property="article:author" content="FrankZhang">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://frankzhang0219.gitee.io/imgs/image-20220102115757607.png">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
 <meta name="generator" content="Hexo 5.4.0"></head>
 
-
-<body>
-<div class="progress-bar-container">
-    
-
-    
-</div>
-
-
-<main class="page-container">
-
-    
-
-    <div class="page-main-content">
-
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
-
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                Frank&#39;s Blogs
-            </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/"
-                            >
-                                HOME
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                ARCHIVES
-                            </a>
-                        </li>
-                    
-                    
-                </ul>
-            </div>
-            <div class="mobile">
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">Frank&#39;s blogs</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
                 
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
             </div>
-        </div>
+        
+        
+        
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+            </div>
+        
     </div>
-
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/">HOME</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">ARCHIVES</a>
-                </li>
-            
-        </ul>
-    </div>
-
-    <div class="window-mask"></div>
-
 </header>
 
 
-        </div>
+            <main class="main">
+    
 
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="fade-in-down-animation">
-    <div class="article-content-container">
-
-        <div class="article-title">
-            <span class="title-hover-animation">Linux初步学习（一）</span>
-        </div>
-
+<div class="post-title">
+    <h1 class="post-title__text">
+        Linux初步学习（一）
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2022/01/" class="post-meta__date button">2022-01-02</a>
         
-            <div class="article-header">
-                <div class="avatar">
-                    <img src="/images/FLogo.png">
-                </div>
-                <div class="info">
-                    <div class="author">
-                        <span class="name">Frank·Zhang</span>
-                        
-                            <span class="author-label">Lv3</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-01-02 11:36:20</span>
-        <span class="mobile">2022-01-02 11:36</span>
-    </span>
+ 
+        
     
     
 
-    
-    
-    
-    
+
+ 
+
+ 
+    </div>
 </div>
 
-                    </div>
-                </div>
-            </div>
-        
 
-        <div class="article-content markdown-body">
-            <h1 id="Linux初步学习（一）"><a href="#Linux初步学习（一）" class="headerlink" title="Linux初步学习（一）"></a>Linux初步学习（一）</h1><h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><p><a class="link"   target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-shell-variable.html" >https://www.runoob.com/linux/linux-shell-variable.html<i class="fas fa-external-link-alt"></i></a></p>
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="Linux初步学习（一）"><a href="#Linux初步学习（一）" class="headerlink" title="Linux初步学习（一）"></a>Linux初步学习（一）</h1><h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><p><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-shell-variable.html">https://www.runoob.com/linux/linux-shell-variable.html</a></p>
 <ul>
 <li><p>Shell 是一个用 C 语言编写的程序，它是用户使用 Linux 的桥梁。Shell 既是一种命令语言，又是一种程序设计语言。</p>
 </li>
@@ -292,7 +291,7 @@
 <ul>
 <li>可以通过给数组设置<strong>下标范围以外</strong>的单元的内容来增加数组的长度</li>
 </ul>
-<h4 id="注意，使用指定下标修改数组比如array-name-0-value0会丢弃该下标后面的其他内容"><a href="#注意，使用指定下标修改数组比如array-name-0-value0会丢弃该下标后面的其他内容" class="headerlink" title="注意，使用指定下标修改数组比如array_name[0]=value0会丢弃该下标后面的其他内容"></a>注意，使用指定下标修改数组比如<code>array_name[0]=value0</code>会丢弃该下标后面的其他内容</h4><h3 id="注意，代码不能随意包含空格，比如等号两边，可能会引起错误"><a href="#注意，代码不能随意包含空格，比如等号两边，可能会引起错误" class="headerlink" title="注意，代码不能随意包含空格，比如等号两边，可能会引起错误"></a>注意，代码不能随意包含空格，比如等号两边，可能会引起错误</h3><h4 id="字符串截取"><a href="#字符串截取" class="headerlink" title="字符串截取"></a>字符串截取</h4><p>参考 <a class="link"   target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-shell-variable.html" >https://www.runoob.com/linux/linux-shell-variable.html<i class="fas fa-external-link-alt"></i></a> 第一篇笔记</p>
+<h4 id="注意，使用指定下标修改数组比如array-name-0-value0会丢弃该下标后面的其他内容"><a href="#注意，使用指定下标修改数组比如array-name-0-value0会丢弃该下标后面的其他内容" class="headerlink" title="注意，使用指定下标修改数组比如array_name[0]=value0会丢弃该下标后面的其他内容"></a>注意，使用指定下标修改数组比如<code>array_name[0]=value0</code>会丢弃该下标后面的其他内容</h4><h3 id="注意，代码不能随意包含空格，比如等号两边，可能会引起错误"><a href="#注意，代码不能随意包含空格，比如等号两边，可能会引起错误" class="headerlink" title="注意，代码不能随意包含空格，比如等号两边，可能会引起错误"></a>注意，代码不能随意包含空格，比如等号两边，可能会引起错误</h3><h4 id="字符串截取"><a href="#字符串截取" class="headerlink" title="字符串截取"></a>字符串截取</h4><p>参考 <a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-shell-variable.html">https://www.runoob.com/linux/linux-shell-variable.html</a> 第一篇笔记</p>
 <h3 id="读取用户输入"><a href="#读取用户输入" class="headerlink" title="读取用户输入"></a>读取用户输入</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">read</span> [-options] [variable...]</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">read -p &quot;input a val:&quot; a    #获取键盘输入的 a 变量数字</span><br><span class="line">read -p &quot;input b val:&quot; b    #获取键盘输入的 b 变量数字</span><br><span class="line">r=$[a+b]                    #计算a+b的结果 赋值给r  不能有空格</span><br><span class="line">echo &quot;result = $&#123;r&#125;&quot;        #输出显示结果 r</span><br></pre></td></tr></table></figure>
@@ -306,176 +305,111 @@
 <p>或者任何符号</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">:&lt;&lt;&#x27;</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">&#x27;</span><br><span class="line"></span><br><span class="line">:&lt;&lt;!</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">!</span><br></pre></td></tr></table></figure>
 
-        </div>
-
-        
-
-        
-
-        
-            <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">Linux初步学习（二）</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/2021/12/21/SolidWorks%E6%89%93%E4%B8%8D%E5%BC%80UG%E5%AF%BC%E5%87%BA%E7%9A%84x-t%E6%96%87%E4%BB%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"
-                        >
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">SolidWorks打不开UG导出的x_t文件解决方法</span>
-                                <span class="post-nav-item">Next posts</span>
-                            </span>
-                            <span class="right arrow-icon flex-center">
-                              <i class="fas fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-        
     </div>
-</div>
+     
+    <div class="post-footer__meta"><p>更新于 2022-01-02</p></div> 
+    <div class="post-entry__tags"></div> 
+</article>
 
 
-                
-            </div>
-
-        </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
+    <div class="nav">
+        <div class="nav__prev">
             
-              <span>2021</span>
-              -
+                <a href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            Linux初步学习（二）
+                        </div>
+                    </div>
+                </a>
             
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
         </div>
-        
-        <div class="theme-info info-item">
-            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        <div class="nav__next">
+            
+                <a href="/2021/12/21/SolidWorks%E6%89%93%E4%B8%8D%E5%BC%80UG%E5%AF%BC%E5%87%BA%E7%9A%84x-t%E6%96%87%E4%BB%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            SolidWorks打不开UG导出的x_t文件解决方法
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
         </div>
-        
-        
-    </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="tools-list">
-        <!-- TOC aside toggle -->
-        
-
-        <!-- go comment -->
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="fas fa-arrow-up"></i>
-            </li>
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-    </ul>
-</div>
-
     </div>
 
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
 
 
-    
+
 
 </main>
 
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-
-
-
-
-
-<div class="post-scripts">
+            <footer class="footer">
     
-</div>
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2022 <a href="/">Frank’s blogs</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+ 
 
 
 
-</body>
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
 </html>
