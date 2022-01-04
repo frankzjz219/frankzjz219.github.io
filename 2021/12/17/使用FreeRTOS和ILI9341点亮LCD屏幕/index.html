@@ -1,158 +1,161 @@
 <!DOCTYPE html>
 <html lang="Chinese">
-    <head>
+<head>
     <meta charset="utf-8">
-
-    
-
-    <!-- 渲染优化 -->
-    <meta name="renderer" content="webkit">
-    <meta name="force-rendering" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-    <meta name="HandheldFriendly" content="True" >
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-    <!--icon-->
-
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Frank·Zhang">
     
-    
-    
-    
-    
-
-
-    <!-- meta -->
-
-
-<title>使用FreeRTOS和ILI9341点亮LCD屏幕 | Frank’s blogs</title>
-
-
-
-
-
-    <!-- OpenGraph -->
- 
-    <meta name="description" content="使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕CubeMX配置 SPI：    DMA：    NVIC（重要）：    注意此处SPI、TIM1和DMA不要使用FreeRTOS 的中断函数，将对勾去掉，同时将中断优先级改为一个比FreeRTOS小的数字，比如2。假如使用了FreeRTOS的中断的话在Cube中无法修改这个数字为更小的值  FreeRTOS:    注意此处使用">
-<meta property="og:type" content="article">
-<meta property="og:title" content="使用FreeRTOS和ILI9341点亮LCD屏幕">
-<meta property="og:url" content="http://frankzhang0219.gitee.io/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/index.html">
-<meta property="og:site_name" content="Frank’s blogs">
-<meta property="og:description" content="使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕CubeMX配置 SPI：    DMA：    NVIC（重要）：    注意此处SPI、TIM1和DMA不要使用FreeRTOS 的中断函数，将对勾去掉，同时将中断优先级改为一个比FreeRTOS小的数字，比如2。假如使用了FreeRTOS的中断的话在Cube中无法修改这个数字为更小的值  FreeRTOS:    注意此处使用">
-<meta property="og:locale">
-<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20211217213656004.png">
-<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20211217213717712.png">
-<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20211217213754825.png">
-<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20211217213921708.png">
-<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/image-20211217220230058.png">
-<meta property="og:image" content="http://frankzhang0219.gitee.io/imgs/20211217220332.gif">
-<meta property="article:published_time" content="2021-12-17T13:35:25.000Z">
-<meta property="article:modified_time" content="2021-12-17T14:04:32.133Z">
-<meta property="article:author" content="FrankZhang">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://frankzhang0219.gitee.io/imgs/image-20211217213656004.png">
-
-
-    
-<link rel="stylesheet" href="/css/style/main.css">
- 
-
-    
-    
-        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+    <title>
         
-            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+            使用FreeRTOS和ILI9341点亮LCD屏幕 |
         
+        Frank&#39;s Blogs
+    </title>
     
+<link rel="stylesheet" href="/css/style.css">
 
+    <link rel="shortcut icon" href="/images/FLogo.png">
     
-    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
 
-    
-    
-<link rel="stylesheet" href="/css/style/dark.css">
-
-    
-<script src="/js/darkmode.js"></script>
-
-
-
-     
-
-    <!-- custom head -->
-
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
+    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
 <meta name="generator" content="Hexo 5.4.0"></head>
 
-    <body>
-        <div id="app">
-            <header class="header">
-    <div class="header__left">
-        <a href="/" class="button">
-            <span class="logo__text">Frank&#39;s blogs</span>
-        </a>
-    </div>
-    <div class="header__right">
-        
-            <div class="navbar__menus">
-                
-                    <a href="/" class="navbar-menu button">首页</a>
-                
-                    <a href="/archives/" class="navbar-menu button">归档</a>
-                
-            </div>
-        
-        
-        
 
-        
-        
-    <a href="javaScript:void(0);" id="btn-toggle-dark">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-    </a>
-
-
-        
-            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
-            <div class="dropdown-menus" id="dropdown-menus">
-                
-                    <a href="/" class="dropdown-menu button">首页</a>
-                
-                    <a href="/archives/" class="dropdown-menu button">归档</a>
-                
-            </div>
-        
-    </div>
-</header>
-
-
-            <main class="main">
+<body>
+<div class="progress-bar-container">
     
 
-<div class="post-title">
-    <h1 class="post-title__text">
-        使用FreeRTOS和ILI9341点亮LCD屏幕
-    </h1>
-    <div class="post-title__meta">
-        <a href="/archives/2021/12/" class="post-meta__date button">2021-12-17</a>
-        
- 
-        
     
-    
-
-
- 
-
- 
-    </div>
 </div>
 
 
+<main class="page-container">
 
-<article class="post content-card">
-    <div class="post__header"></div>
-    <div class="post__content">
-        <h1 id="使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕"><a href="#使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕" class="headerlink" title="使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕"></a>使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕</h1><h2 id="CubeMX配置"><a href="#CubeMX配置" class="headerlink" title="CubeMX配置"></a>CubeMX配置</h2><ul>
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Frank&#39;s Blogs
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">使用FreeRTOS和ILI9341点亮LCD屏幕</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/FLogo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Frank·Zhang</span>
+                        
+                            <span class="author-label">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2021-12-17 21:35:25</span>
+        <span class="mobile">2021-12-17 21:35</span>
+    </span>
+    
+    
+
+    
+    
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h1 id="使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕"><a href="#使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕" class="headerlink" title="使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕"></a>使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕</h1><h2 id="CubeMX配置"><a href="#CubeMX配置" class="headerlink" title="CubeMX配置"></a>CubeMX配置</h2><ul>
 <li><p>SPI：</p>
 </li>
 <li><p><img src="/imgs/image-20211217213656004.png" alt="image-20211217213656004"></p>
@@ -192,111 +195,176 @@
 </ul>
 <h2 id="文中没有提到的按照上一篇博客的操作"><a href="#文中没有提到的按照上一篇博客的操作" class="headerlink" title="文中没有提到的按照上一篇博客的操作"></a>文中没有提到的按照上一篇博客的操作</h2><h2 id="效果如图"><a href="#效果如图" class="headerlink" title="效果如图"></a>效果如图</h2><p><img src="/imgs/20211217220332.gif" alt="20211217220332"></p>
 
-    </div>
-     
-    <div class="post-footer__meta"><p>updated at 2021-12-17</p></div> 
-    <div class="post-entry__tags"></div> 
-</article>
-
-
-    <div class="nav">
-        <div class="nav__prev">
-            
-                <a href="/2021/12/17/%E8%A7%A3%E5%86%B3C%E8%AF%AD%E8%A8%80%E5%8F%98%E9%87%8F%E8%A2%AB%E9%87%8D%E5%A4%8D%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/" class="nav__link">
-                    <div>
-                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
-                    </div>
-                    <div>
-                        <div class="nav__label">
-                            Previous Post
-                        </div>
-                        <div class="nav__title">
-                            解决C语言变量被重复定义错误的问题
-                        </div>
-                    </div>
-                </a>
-            
         </div>
-        <div class="nav__next">
-            
-                <a href="/2021/12/16/STM32F4%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%892/" class="nav__link">
-                    <div>
-                        <div class="nav__label">
-                            Next Post
-                        </div>
-                        <div class="nav__title">
-                            STM32F4点亮ili9341驱动的屏幕（HAL库）2
-                        </div>
-                    </div>
-                    <div>
-                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
-                    </div>
-                </a>
-            
-        </div>
-    </div>
 
-
-
-
-
-</main>
-
-            <footer class="footer">
-    
-    
-
-
-    
-     
- 
-
- 
-    
         
-        <p class="footer-copyright">
-            Copyright © 2022 <a href="/">Frank’s blogs</a>
-        </p>
-    
-    
-    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2021/12/17/%E8%A7%A3%E5%86%B3C%E8%AF%AD%E8%A8%80%E5%8F%98%E9%87%8F%E8%A2%AB%E9%87%8D%E5%A4%8D%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">解决C语言变量被重复定义错误的问题</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2021/12/16/STM32F4%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%892/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">STM32F4点亮ili9341驱动的屏幕（HAL库）2</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
+        </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
 </footer>
 
         </div>
-         
+    </div>
 
- 
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
 
- 
+        <!-- go comment -->
+        
+    </ul>
+</div>
 
- 
+        </div>
+    
 
- 
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
 
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
 
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
 
- 
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
 
+        <!-- rss -->
+        
 
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
 
- 
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
 
 
     
- 
 
- 
-
- 
-
- 
-
- 
-
- 
+</main>
 
 
 
 
-    </body>
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+</div>
+
+
+
+</body>
 </html>
