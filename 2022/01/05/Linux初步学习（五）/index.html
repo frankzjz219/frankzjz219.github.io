@@ -62,7 +62,7 @@
                             <a class=""
                                href="/"
                             >
-                                首页
+                                HOME
                             </a>
                         </li>
                     
@@ -70,7 +70,7 @@
                             <a class=""
                                href="/archives"
                             >
-                                归档
+                                ARCHIVES
                             </a>
                         </li>
                     
@@ -91,12 +91,12 @@
             
                 <li class="drawer-menu-item flex-center">
                     <a class=""
-                       href="/">首页</a>
+                       href="/">HOME</a>
                 </li>
             
                 <li class="drawer-menu-item flex-center">
                     <a class=""
-                       href="/archives">归档</a>
+                       href="/archives">ARCHIVES</a>
                 </li>
             
         </ul>
@@ -155,7 +155,45 @@
         
 
         <div class="article-content markdown-body">
-            <h1 id="Linux系统知识"><a href="#Linux系统知识" class="headerlink" title="Linux系统知识"></a>Linux系统知识</h1><h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p><img src="/imgs/image-20220105113244292.png" alt="image-20220105113244292"></p>
+            <h1 id="Linux系统知识"><a href="#Linux系统知识" class="headerlink" title="Linux系统知识"></a>Linux系统知识</h1><h2 id="apt命令"><a href="#apt命令" class="headerlink" title="apt命令"></a>apt命令</h2><p>apt（Advanced Packaging Tool）是一个在 Debian 和 Ubuntu 中的 Shell 前端软件包管理器。</p>
+<p>apt 命令提供了查找、安装、升级、删除某一个、一组甚至全部软件包的命令，而且命令简洁而又好记。</p>
+<p>apt 命令执行需要超级管理员权限(root)。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt [options] [command] [package ...]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>options：</strong>可选，选项包括 -h（帮助），-y（当安装过程提示选择全部为”yes”），-q（不显示安装的过程）等等。</li>
+<li><strong>command：</strong>要进行的操作。</li>
+<li><strong>package</strong>：安装的包名。</li>
+</ul>
+<p><strong>用法：</strong></p>
+<ul>
+<li><p>列出所有可更新的软件清单命令：<strong>sudo apt update</strong></p>
+</li>
+<li><p>升级软件包：<strong>sudo apt upgrade</strong></p>
+<p>列出可更新的软件包及版本信息：<strong>apt list –upgradeable</strong></p>
+<p>升级软件包，升级前先删除需要更新软件包：<strong>sudo apt full-upgrade</strong></p>
+</li>
+<li><p>安装指定的软件命令：<strong>sudo apt install <package_name></strong></p>
+<p>安装多个软件包：<strong>sudo apt install <package_1> <package_2> <package_3></strong></p>
+</li>
+<li><p>更新指定的软件命令：<strong>sudo apt update <package_name></strong></p>
+</li>
+<li><p>显示软件包具体信息,例如：版本号，安装大小，依赖关系等等：<strong>sudo apt show <package_name></strong></p>
+</li>
+<li><p>删除软件包命令：<strong>sudo apt remove <package_name></strong></p>
+</li>
+<li><p>清理不再使用的依赖和库文件: <strong>sudo apt autoremove</strong></p>
+</li>
+<li><p>移除软件包及配置文件: <strong>sudo apt purge <package_name></strong></p>
+</li>
+<li><p>查找软件包命令： <strong>sudo apt search <keyword></strong></p>
+</li>
+<li><p>列出所有已安装的包：<strong>apt list –installed</strong></p>
+</li>
+<li><p>列出所有已安装的包的版本信息：<strong>apt list –all-versions</strong></p>
+</li>
+</ul>
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p><img src="/imgs/image-20220105113244292.png" alt="image-20220105113244292"></p>
 <ul>
 <li><p><strong>/bin</strong>：<br>bin 是 Binaries (二进制文件) 的缩写, 这个目录存放着<strong>最经常使用的命令</strong>。</p>
 </li>
@@ -424,11 +462,11 @@
 </ul>
 <h3 id="fdisk"><a href="#fdisk" class="headerlink" title="fdisk"></a>fdisk</h3><p>fdisk 是 Linux 的磁盘分区表操作工具。</p>
 <ul>
-<li><p><code>fdisk [-l] 装置名称</code></p>
+<li><p><code>fdisk [-l] 装置名称</code>需要超级用户（sudo）权限</p>
 </li>
 <li><p>-l ：输出后面接的装置所有的分区内容。若仅有 fdisk -l 时， 则系统将会把整个系统内能够搜寻到的装置的分区均列出来。</p>
 </li>
-<li><p><img src="D:\self_learning\blogs\blogsLaptop\source\imgs\image-20220105215813215.png" alt="image-20220105215813215"></p>
+<li><p><img src="/imgs/image-20220105221448829.png" alt="image-20220105221448829"></p>
 </li>
 </ul>
 <h3 id="磁盘格式化"><a href="#磁盘格式化" class="headerlink" title="磁盘格式化"></a>磁盘格式化</h3><ul>
@@ -475,7 +513,7 @@
                         >
                             <span class="title flex-center">
                                 <span class="post-nav-title-item">Linux初步学习（四）</span>
-                                <span class="post-nav-item">下一篇</span>
+                                <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex-center">
                               <i class="fas fa-chevron-right"></i>
@@ -509,7 +547,7 @@
         </div>
         
         <div class="theme-info info-item">
-            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
         </div>
         
         
