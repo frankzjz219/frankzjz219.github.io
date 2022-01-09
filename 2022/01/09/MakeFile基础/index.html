@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="Chinese">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Frank·Zhang">
+    
+    <title>
+        
+            MakeFile基础 |
+        
+        Frank&#39;s Blogs
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/FLogo.png">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
+    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Frank&#39;s Blogs
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">MakeFile基础</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/FLogo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Frank·Zhang</span>
+                        
+                            <span class="author-label">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-01-09 16:51:55</span>
+        <span class="mobile">2022-01-09 16:51</span>
+    </span>
+    
+    
+
+    
+    
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h1 id="gcc和MakeFile基础"><a href="#gcc和MakeFile基础" class="headerlink" title="gcc和MakeFile基础"></a>gcc和MakeFile基础</h1><h2 id="gcc常用参数"><a href="#gcc常用参数" class="headerlink" title="gcc常用参数"></a>gcc常用参数</h2><ul>
+<li><code>gcc -c </code>指的是只把源码编译为目标文件而不进行链接。如果GCC不带-C参数，编译一个源代码文件（test.c)。那么会自动将编译和链接一步完成，并生成可执行文件。对于多个文件，需要先编译成中间目标文件(一般是.o文件），在链接成可执行文件，一般习惯目标文件都是以.o后缀，也没有硬性规定可执行文件不能用.o文件。</li>
+<li><code>gcc -o</code>指的是output_filename，确定输出文件的名称为output_filename，同时这个名称不能和源文件同名。如果不给出这个选项，gcc就给出预设的可执行文件a.out。</li>
+<li>其他参数详见 <a class="link"   target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/gcc-parameter-detail.html" >https://www.runoob.com/w3cnote/gcc-parameter-detail.html<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<h2 id="MakeFile是什么"><a href="#MakeFile是什么" class="headerlink" title="MakeFile是什么"></a>MakeFile是什么</h2><ul>
+<li><p>使用 GCC 编译器在 Linux 进行 C 语言编译，通过在终端执行 gcc 命 令来完成 C 文件的编译，如果我们的工程只有一两个 C 文件还好，需要输入的命令不多，当文 件有几十、上百甚至上万个的时候用终端输入 GCC 命令的方法显然是不现实的。如果我们能够 编写一个文件，这个文件描述了编译哪些源码文件、如何编译那就好了，每次需要编译工程的 时只需要使用这个文件就行了。这种问题怎么可能难倒聪明的程序员，为此提出了一个解决大 工程编译的工具：make，描述哪些文件需要编译、哪些需要重新编译的文件就叫做 Makefile， Makefile 就跟脚本文件一样，Makefile 里面还可以执行系统命令。使用的时候只需要一个 <code>make</code>命令即可完成整个工程的自动编译，极大的提高了软件开发的效率。</p>
+</li>
+<li><p>在 Linux 下用的最多的是 GCC 编译器，这是个没有 UI 的编译器，因此 Makefile 就需要我们自己来编写了。</p>
+</li>
+</ul>
+<h2 id="应用举例"><a href="#应用举例" class="headerlink" title="应用举例"></a>应用举例</h2><ul>
+<li>我们完成这样一个小工程，通过键盘输入两个整形数字，然后计算他们的和并将结果显示在屏幕上，在这个工程中我们有 main.c、input.c 和 calcu.c 这三个 C 文件和 input.h、calcu.h 这 两个头文件。其中 main.c 是主体，input.c 负责接收从键盘输入的数值，calcu.c 进行任意两个数 相加，其中 main.c 文件内容如下：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;input.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;calcu.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a, b, num;</span><br><span class="line"></span><br><span class="line">	input_int(&amp;a, &amp;b);</span><br><span class="line">	num = calcu(a, b);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d + %d = %d\r\n&quot;</span>, a, b, num);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>input.c 文件内容如下：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//input.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;input.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">input_int</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> *b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;input two num:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\r\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>calcu.c 文件内容如下：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;calcu.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">calcu</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (a + b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>文件 input.h 内容如下：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _INPUT_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _INPUT_H</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">input_int</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> *b)</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>文件 calcu.h 内容如下：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _CALCU_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _CALCU_H</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">calcu</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>假如使用gcc编译程序，那么此时需要再命令行输入</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc main.c calcu.c input.c -o main</span><br></pre></td></tr></table></figure>
+
+<p>上面命令的意思就是使用 gcc 编译器对 main.c、calcu.c 和 input.c 这三个文件进行编译，编 译生成的可执行文件叫做 <code>main</code>。</p>
+<p><img src="/imgs/image-20220109170757542.png" alt="image-20220109170757542"></p>
+<p>执行程序用到的命令是<code>./main</code>，含义是执行当前目录下的main文件</p>
+<h2 id="makefile的重要性"><a href="#makefile的重要性" class="headerlink" title="makefile的重要性"></a>makefile的重要性</h2><p>可以看出我们的代码按照我们所设想的工作了，使用命令“gcc main.c calcu.c input.c -o main” 看起来很简单是吧，只需要一行就可以完成编译，但是我们这个工程只有三个文件啊！如果几 千个文件呢？再就是如果<strong>有一个文件被修改了</strong>，使用上面的命令编译的时候<strong>所有的文件都会重新编译</strong>，如果工程有几万个文件(Linux 源码就有这么多文件！)，想想这几万个文件编译一次 所需要的时间就可怕。最好的办法肯定是<strong>哪个文件被修改了，只编译这个被修改的文件</strong>即可， 其它没有修改的文件就<strong>不需要再次重新编译了</strong>，为此我们改变我们的编译方法，如果第一次编译工程，我们先将工程中的文件都编译一遍，然后后面修改了哪个文件就编译哪个文件，命令 如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc -c main.c</span><br><span class="line">gcc -c input.c</span><br><span class="line">gcc -c calcu.c</span><br><span class="line">gcc main.o input.o calcu.o -o main</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意，gcc的<code>-c</code>选项的意思是将程序编译为.o文件但是<strong>不链接</strong>为最终的可执行文件，最后一句<code>gcc main.o input.o calcu.o -o main</code>的意思是将三个.o文件链接为一个可执行文件</li>
+<li>假如我们现在修改了 calcu.c 这个文件，<strong>只需要将 caclue.c 这一个文件重新编译成.o 文件</strong>，然后在<strong>将所有的.o 文件链接成可执行文件</strong>，只需要下面两条命令即可：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc -c calcu.c</span><br><span class="line">gcc main.o input.o calcu.o -o main</span><br></pre></td></tr></table></figure>
+
+<h3 id="makefile的作用"><a href="#makefile的作用" class="headerlink" title="makefile的作用"></a>makefile的作用</h3><ul>
+<li>如果工程没有编译过，那么工程中的所有.c 文件都要被编译并且链接成可执行程序。</li>
+<li>如果工程中只有个别 C 文件被修改了，那么只编译这些被修改的 C 文件即可。</li>
+<li>如果工程的头文件被修改了，那么我们需要编译所有引用这个头文件的 C 文件，并且 链接成可执行文件。</li>
+</ul>
+<h2 id="makeFile的使用"><a href="#makeFile的使用" class="headerlink" title="makeFile的使用"></a>makeFile的使用</h2><ul>
+<li>在工程目录下创建名为“Makefile”的文件， 文件名一定要叫做“<strong>Makefile</strong>”！！！<strong>区分大小写</strong>的哦！</li>
+<li><img src="/imgs/image-20220109171722524.png" alt="image-20220109171722524"></li>
+</ul>
+<p><strong>Makefile文件：</strong></p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main: main.o input.o calcu.o</span></span><br><span class="line">	gcc -o main main.o input.o calcu.o</span><br><span class="line"><span class="section">main.o: main.c</span></span><br><span class="line">	gcc -c main.c</span><br><span class="line"><span class="section">input.o: input.c</span></span><br><span class="line">	gcc -c input.c</span><br><span class="line"><span class="section">calcu.o: calcu.c</span></span><br><span class="line">	gcc -c calcu.c</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>上述代码中所有行首需要空出来的地方一定要使用<code>TAB</code>键！<strong>不要使用空格键</strong>！这是 Makefile 的语法要求</p>
+</li>
+<li><p><img src="/imgs/image-20220109172156926.png" alt="image-20220109172156926"></p>
+</li>
+<li><p>Makefile 编写好以后我们就可以使用 <code>make </code>命令来编译我们的工程了，直接<strong>在命令行中输入</strong><code>make</code>即可，make 命令会<strong>在当前目录下查找是否存在</strong><code>Makefile</code>这个文件，如果存在的 话就会按照 <code>Makefile</code> 里面定义的编译方式进行编译</p>
+</li>
+</ul>
+<p><img src="/imgs/image-20220109172335268.png" alt="image-20220109172335268"></p>
+<p><strong>MakeFile中一般存在的错误</strong></p>
+<ul>
+<li>Makefile 中命令缩进没有使用 TAB 键！</li>
+<li>VI/VIM 编辑器使用空格代替了 TAB 键，修改文件/etc/vim/vimrc，在文件最后面加上如 下所示代码：<ul>
+<li><code>set noexpandtab</code></li>
+</ul>
+</li>
+</ul>
+<p>此时修改一下<code>input.c</code>文件，重新编译看结果</p>
+<p><img src="/imgs/image-20220109172511759.png" alt="image-20220109172511759"></p>
+<p>可以看出因为我们修改了 input.c 这个文件，<strong>所以 input.c 和最后的可执行文 件 main 重新编译了</strong>，其它<strong>没有修改过的文件就没有编译</strong>。</p>
+<h2 id="Makefile语法"><a href="#Makefile语法" class="headerlink" title="Makefile语法"></a>Makefile语法</h2><p><img src="/imgs/image-20220109173249859.png" alt="image-20220109173249859"></p>
+<ul>
+<li>比如<img src="/imgs/image-20220109174534114.png" alt="image-20220109174534114"><ul>
+<li>这条规则的目标是 main，<strong>main.o、input.o 和 calcu.o 是生成 main 的依赖文件</strong>，如果<strong>要更新 目标 main，就必须先更新它的所有依赖文件</strong>，如果<strong>依赖文件中的任何一个有更新</strong>，那么<strong>目标也 必须更新</strong>，<strong>“更新”就是执行一遍规则中的命令列表</strong>。</li>
+<li>每条命令以tab开始</li>
+<li>make 命令会为 Makefile 中的每个以 TAB 开始的命令创建一个 Shell 进程去执行。</li>
+</ul>
+</li>
+<li>重新看一下上面的代码</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main: main.o input.o calcu.o</span></span><br><span class="line">	gcc -o main main.o input.o calcu.o</span><br><span class="line"><span class="section">main.o: main.c</span></span><br><span class="line">	gcc -c main.c</span><br><span class="line"><span class="section">input.o: input.c</span></span><br><span class="line">	gcc -c input.c</span><br><span class="line"><span class="section">calcu.o: calcu.c</span></span><br><span class="line">	gcc -c calcu.c</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先更新第一条规则中的 main，第一条规则的目标成为默认目标，只要默认目标更新了那 么就认为 Makefile 的工作。在第一次编译的时候<strong>由于 main 还不存在</strong>，因此<strong>第一条规则会执行</strong>， 第一条规则<strong>依赖于文件 main.o、input.o 和 calcu.o 这个三个.o 文件</strong>，这三个.o 文件<strong>目前还都没 有，因此必须先更新这三个文件</strong>。make <u><strong>会查找以这三个.o 文件为目标的规则并执行</strong></u>。<strong>以 main.o 为例，发现更新 main.o 的是第二条规则，因此会执行第二条规则</strong>，第二条规则里面的命令为“gcc –c main.c”，这行命令很熟悉了吧，就是不链接编译 main.c，生成 main.o，其它两个.o 文件同理。 最后一个规则目标是 clean，它<strong>没有依赖文件，因此会默认为依赖文件都是最新的</strong>，所以其<strong>对应 的命令不会执行</strong>，当我们<strong>想要执行 clean 的话可以直接使用命令<code>make clean</code><strong>，执行以后就会</strong>删 除当前目录下所有的.o 文件以及 main</strong>，因此 <strong>clean 的功能就是完成工程的清理</strong></li>
+<li><img src="/imgs/image-20220109180157902.png" alt="image-20220109180157902"></li>
+<li>可见这条命令将除了源文件和Makefile以外的编译产物都删除了</li>
+</ul>
+<p><strong>总结一下Makefile的编译过程</strong></p>
+<ul>
+<li>make 命令会在当前目录下查找以 Makefile(makefile 其实也可以)命名的文件。</li>
+<li>当找到 Makefile 文件以后就会按照 Makefile 中定义的规则去编译生成最终的目标文件。</li>
+<li>当发现目标文件不存在，或者目标所依赖的文件比目标文件新(也就是最后修改时间比 目标文件晚)的话就会执行后面的命令来更新目标。</li>
+</ul>
+<p>这就是 make 的执行过程，make 工具就是在 Makefile 中<strong>一层一层的查找依赖关系</strong>，并执行相应的命令。</p>
+<h3 id="Makefile-变量"><a href="#Makefile-变量" class="headerlink" title="Makefile 变量"></a>Makefile 变量</h3><ul>
+<li><p>Makefile 中的变量<strong>都是字符串</strong></p>
+</li>
+<li><p>实例</p>
+</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Makefile 变量的使用</span></span><br><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Makefile 中可以写注释，<strong>注释开头要 用符号“#”</strong></p>
+</li>
+<li><p>变量的引用方法是<code>$(变量名)</code></p>
+</li>
+</ul>
+<p><strong>不同赋值符号的区别</strong></p>
+<ul>
+<li>幅值符<code>=</code><ul>
+<li>类似于引用传参，幅值的变量的值会随着被赋给它的变量的值的改变去改变</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">name = zzk</span><br><span class="line">curname = <span class="variable">$(name)</span></span><br><span class="line">name = zuozhongkai</span><br><span class="line"><span class="section">print:</span></span><br><span class="line">	@echo curname: <span class="variable">$(curname)</span></span><br></pre></td></tr></table></figure>
+
+<p>​        此时输出的是<code>zuozhongkai</code>，意味着变量的内容随着变量的值<strong>更新而更新</strong></p>
+<p>​        <code>@</code>的意思是使得make在执行的过程中输出执行过程，否则不会输出</p>
+<ul>
+<li><p>幅值符<code>:=</code></p>
+<ul>
+<li>同样执行上面的代码，将<code>=</code>改为<code>:=</code>，则可见输出还是”zzk”，因为<code>:=</code>在幅值的时候不会采用变量修改后的值</li>
+</ul>
+</li>
+<li><p>幅值符<code>?=</code></p>
+<ul>
+<li><code>curname ?= zuozhongkai</code>的意思是，假如curname前面没有被赋值，那么此变量就是“zuozhongkai”， 如果前面已经赋过值了，那么就使用前面赋的值。</li>
+</ul>
+</li>
+<li><p>幅值符<code>+=</code></p>
+<ul>
+<li><p>Makefile 中的变量是字符串，有时候我们需要给前面已经定义好的变量添加一些字符串进 去，此时就要使用到符号“+=”，比如</p>
+</li>
+<li><p><code>objects = main.o inpiut.o</code>和<code>objects += calcu.o</code>执行完之后，objects就变成了<code>main.o input.o calcu.o</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Makefile模式规则"><a href="#Makefile模式规则" class="headerlink" title="Makefile模式规则"></a>Makefile模式规则</h3><ul>
+<li><p>自动匹配</p>
+<ul>
+<li><p>模式规则中，<strong>至少在规则的目标定定义中要包涵<code>%</code>，否则就是一般规则</strong>，目标中的<code>%</code> 表示对文件名的匹配，<code>%</code>表示长度任意的非空字符串，比如“%.c”就是所有的以.c 结尾的 文件，类似与通配符，<code>a.%.c</code> 就表示以 a.开头，以.c 结束的所有文件。</p>
+</li>
+<li><p>当“%”出现在目标中的时候，<strong>目标中“%”所代表的值决定了依赖中的“%”值</strong>，比如<code>%.o : %.c</code>中的<code>%</code>代表的是同样的内容</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>前面的代码可以修改如下：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br><span class="line"></span><br><span class="line">%.o : %.c</span><br><span class="line">	<span class="comment">#命令</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br></pre></td></tr></table></figure>
+
+<h3 id="Makefile自动化变量"><a href="#Makefile自动化变量" class="headerlink" title="Makefile自动化变量"></a>Makefile自动化变量</h3><ul>
+<li>如何通过一行命令来从不同的依赖文件中生 成对应的目标？自动化变量就是完成这个功能的！所谓自动化变量就是<strong>这种变量会把模式中所 定义的一系列的文件自动的挨个取出，直至所有的符合模式的文件都取完</strong>，类似于python中的变量解包，将一个数组中的变量一个一个的拆出来。自动化变量只应该出现在规则的命令中。</li>
+<li><img src="/imgs/image-20220110002525509.png" alt="image-20220110002525509"></li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br><span class="line">%.o : %.c</span><br><span class="line">	gcc -c <span class="variable">$&lt;</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>上面的代码中，<code>$&lt;</code>代表依赖文件(.c)的一系列集合</p>
+</li>
+<li><p>上述规则中并没有创建文件 clean 的命令，因此工作目录下<strong>永远都不会存在文件 clean</strong>，当 我们输入“make clean”以后，后面的“rm *.o”和“rm main”总是会执行。<strong>可是如果我们“手贱”，在工作目录下创建一个名为“clean”的文件</strong>，那就不一样了，当执行“make clean”的时 候，<strong>规则因为没有依赖文件，所以目标被认为是最新的，因此后面的 rm 命令也就不会执行</strong>，我 们预先设想的清理工程的功能也就无法完成。为了避免这个问题，我们可以将 clean 声明为伪 目标，声明方式如下：</p>
+</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.PHONY : clean</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br><span class="line"></span><br><span class="line">.PHONY : clean</span><br><span class="line"></span><br><span class="line">%.o : %.c</span><br><span class="line">	gcc -c <span class="variable">$&lt;</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>声明 clean 为伪目标，<strong>声明 clean 为伪目标以后不管当前目录下是否存在名 为“clean”的文件，输入“make clean”的话规则后面的 rm 命令都会执行</strong>。</li>
+</ul>
+
+        </div>
+
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/01/09/%E4%BF%AE%E5%A4%8D%E5%88%A0%E9%99%A4%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%90%8EBIOS%E4%B8%AD%E5%AD%98%E5%9C%A8%E5%A4%9A%E4%BD%99%E5%90%AF%E5%8A%A8%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9A%84%E9%97%AE%E9%A2%98/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">修复删除双系统之后BIOS中存在多余启动引导项的问题</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
+        </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+</div>
+
+
+
+</body>
+</html>
