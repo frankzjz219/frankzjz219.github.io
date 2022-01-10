@@ -341,6 +341,112 @@
 <ul>
 <li>声明 clean 为伪目标，<strong>声明 clean 为伪目标以后不管当前目录下是否存在名 为“clean”的文件，输入“make clean”的话规则后面的 rm 命令都会执行</strong>。</li>
 </ul>
+<h3 id="Makefile条件判断"><a href="#Makefile条件判断" class="headerlink" title="Makefile条件判断"></a>Makefile条件判断</h3><p>语法</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;条件关键字&gt;</span><br><span class="line">	&lt;条件为真时执行的语句&gt;</span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+
+<p>和</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;条件关键字&gt;</span><br><span class="line">	&lt;条件为真时执行的语句&gt;</span><br><span class="line">else</span><br><span class="line">	&lt;条件为假时执行的语句&gt;</span><br><span class="line">endif</span><br></pre></td></tr></table></figure>
+
+<p><strong>条件关键字的组成</strong></p>
+<ul>
+<li><code>ifeq</code>和<code>ifneq</code>，判断的是是否相等和是否不等<ul>
+<li>语法</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ifeq (&lt;参数 1&gt;, &lt;参数 2&gt;)</span><br><span class="line">ifeq ‘&lt;参数 1 &gt;’,‘ &lt;参数 2&gt;’</span><br><span class="line">ifeq “&lt;参数 1&gt;”, “&lt;参数 2&gt;”</span><br><span class="line">ifeq “&lt;参数 1&gt;”, ‘&lt;参数 2&gt;’</span><br><span class="line">ifeq ‘&lt;参数 1&gt;’, “&lt;参数 2&gt;”</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>ifdef</code>和<code>ifndef</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifdef &lt;变量名&gt;</span><br></pre></td></tr></table></figure>
+
+<p>​        如果“变量名”的值非空，那么表示表达式为真，否则表达式为假。“变量名”同样可以是 一个函数的返回值。ifndef 用法类似，但是含义用户 ifdef 相反。</p>
+<h3 id="Makefile函数"><a href="#Makefile函数" class="headerlink" title="Makefile函数"></a>Makefile函数</h3><ul>
+<li>Makefile 支持函数，类似 C 语言一样，<strong>Makefile 中的函数是已经定义好的，我们直接使用， 不支持我们自定义函数</strong>。make 所支持的函数不多，但是绝对够我们使用了</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(函数名 参数集合)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;函数名 参数集合&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以看出，调用函数和调用普通变量一样，<strong>使用符号“$”来标识</strong>。参数集合是函数的多个 参数，<strong>参数之间以逗号“,”隔开</strong>，<strong>函数名和参数之间以“空格”分隔开</strong>，函数的调用以“$”开 头。</li>
+</ul>
+<h4 id="sbust"><a href="#sbust" class="headerlink" title="sbust"></a>sbust</h4><ul>
+<li>函数 subst 用来完成字符串替换，调用形式如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(subst &lt;from&gt;,&lt;to&gt;,&lt;text&gt;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>此函数的功能是将字符串<text>中的<from>内容替换为<to>，函数返回被替换以后的字符 串，比如如下示例：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(subst zzk,ZZK,my name is zzk)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>把字符串“my name is zzk”中的“zzk”替换为“ZZK”，替换完成以后的字符串为“my name  is ZZK”。</li>
+</ul>
+<h4 id="patsubst"><a href="#patsubst" class="headerlink" title="patsubst"></a>patsubst</h4><ul>
+<li>函数 patsubst 用来完成模式字符串替换，使用方法如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(patsubst &lt;pattern&gt;,&lt;replacement&gt;,&lt;text&gt;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>此函数查找字<strong>符串中的单词是否符合模式</strong><pattern>，如果匹配就用<replacement>来 替换掉，<pattern>可以使用通配符“%”，表示任意长度的字符串，函数返回值就是替换后的字 符串。如果<replacement>中也包涵“%”，那么<replacement>中的“%”将是<pattern>中的那个 “%”所代表的字符串,<strong>也就是说<code>%</code>代表的字符串的内容不变</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(patsubst %.c,%.o,a.c b.c c.c)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将字符串<code>a.c b.c c.c</code>中的所有符合<code>%.c</code>的字符串，替换为<code>%.o</code>，替换完成以后的字 符串为“a.o b.o c.o”，注意此时a，b和c是不变的。</li>
+</ul>
+<h4 id="dir"><a href="#dir" class="headerlink" title="dir"></a>dir</h4><ul>
+<li>函数 dir 用来获取目录</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(dir &lt;names…&gt;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>此函数用来从文件名序列中提取出目录部分，返回值是文件名序列<names>的目录 部分</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(dir &lt;/src/a.c&gt;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>提取文件“/src/a.c”的目录部分，也就是“/src”。</li>
+</ul>
+<h4 id="notdir"><a href="#notdir" class="headerlink" title="notdir"></a>notdir</h4><ul>
+<li>函数 notdir 看名字就是知道去除文件中的目录部分，也就是提取文件名</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(notdir &lt;names…&gt;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>此函数用与从文件名序列<names>中提取出文件名非目录部分</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(notdir &lt;/src/a.c&gt;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>提取文件“/src/a.c”中的非目录部分，也就是文件名“a.c”。</li>
+</ul>
+<h4 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h4><ul>
+<li>foreach 函数用来完成循环</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(foreach &lt;var&gt;, &lt;list&gt;,&lt;text&gt;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>此函数的意思就是把参数<list>中的单词逐一取出来放到参数<var>中，然后再执行<text>所 包含的表达式。每次<text>都会返回一个字符串，循环的过程中，**<text>中所包含的每个字符串 会以空格隔开<strong>，最后当整个循环结束时，</strong><text>所返回的每个字符串所组成的整个字符串将会是 函数 foreach 函数的返回值**</li>
+</ul>
+<h4 id="wildcard"><a href="#wildcard" class="headerlink" title="wildcard"></a>wildcard</h4><ul>
+<li>通配符<strong>“%”只能用在规则中</strong>，<strong>只有在规则中它才会展开</strong>，如果在<strong>变量定义</strong>和<strong>函数使用</strong>时， 通配符<strong>不会自动展开</strong>，这个时候就要用到函数 wildcard</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(wildcard PATTERN…)</span><br></pre></td></tr></table></figure>
+
+<p>比如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(wildcard *.c)</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码是用来<strong>获取当前目录下所有的.c 文件，类似“%”</strong>。</p>
+<p><strong>使用例</strong></p>
+<p>（文件夹下有<code>a.c</code>, <code>b.c</code>和<code>c.c</code>三个文件）</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">list=<span class="variable">$(<span class="built_in">wildcard</span> *.c)</span></span><br><span class="line">files=<span class="variable">$(<span class="built_in">foreach</span> filename, <span class="variable">$(list)</span>, <span class="variable">$(filename)</span> hello)</span></span><br><span class="line"><span class="section">main: </span></span><br><span class="line">	</span><br><span class="line">	@echo $&#123;list&#125;</span><br><span class="line">	</span><br><span class="line">	@echo <span class="variable">$(files)</span></span><br><span class="line"></span><br><span class="line">.PHONY : clean</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<p><img src="/imgs/image-20220110111644323.png" alt="image-20220110111644323"></p>
 
         </div>
 
