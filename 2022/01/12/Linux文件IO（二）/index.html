@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="Chinese">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Frank·Zhang">
+    
+    <title>
+        
+            Linux文件IO（二） |
+        
+        Frank&#39;s Blogs
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/FLogo.png">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
+    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Frank&#39;s Blogs
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">Linux文件IO（二）</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/FLogo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Frank·Zhang</span>
+                        
+                            <span class="author-label">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-01-12 15:16:23</span>
+        <span class="mobile">2022-01-12 15:16</span>
+    </span>
+    
+    
+
+    
+    
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h1 id="Linux文件IO（二）"><a href="#Linux文件IO（二）" class="headerlink" title="Linux文件IO（二）"></a>Linux文件IO（二）</h1><h2 id="多次打开同一个文件"><a href="#多次打开同一个文件" class="headerlink" title="多次打开同一个文件"></a>多次打开同一个文件</h2><ul>
+<li>一个进程内多次 open 打开同一个文件，那么会得到多个不同的文件描述符 fd，同理在关闭文件的 时候也需要调用 close 依次关闭各个文件描述符。</li>
+<li>一个进程内多次 open 打开同一个文件，在内存中<strong>并不会存在</strong>多份动态文件。</li>
+<li>一个进程内多次 open 打开同一个文件，不同文件描述符所对应的读写位置偏移量是相互独立的。</li>
+<li><img src="/imgs/image-20220112193343091.png" alt="image-20220112193343091"></li>
+<li>实例</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">char</span> buffer[<span class="number">4</span>];</span><br><span class="line">     <span class="keyword">int</span> fd1, fd2;</span><br><span class="line">     <span class="keyword">int</span> ret;</span><br><span class="line">     <span class="comment">/* 创建新文件 test_file 并打开 */</span></span><br><span class="line">     fd1 = open(<span class="string">&quot;./test_file&quot;</span>, O_RDWR | O_CREAT | O_EXCL,</span><br><span class="line">     S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd1) &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 再次打开 test_file 文件 */</span></span><br><span class="line">     fd2 = open(<span class="string">&quot;./test_file&quot;</span>, O_RDWR);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd2) &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         ret = <span class="number">-1</span>;</span><br><span class="line">         <span class="keyword">goto</span> err1;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 通过 fd1 文件描述符写入 4 个字节数据 */</span></span><br><span class="line">     buffer[<span class="number">0</span>] = <span class="number">0x11</span>;</span><br><span class="line">     buffer[<span class="number">1</span>] = <span class="number">0x22</span>;</span><br><span class="line">     buffer[<span class="number">2</span>] = <span class="number">0x33</span>;</span><br><span class="line">     buffer[<span class="number">3</span>] = <span class="number">0x44</span>;</span><br><span class="line">     ret = write(fd1, buffer, <span class="number">4</span>);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err2;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 将读写位置偏移量移动到文件头 */</span></span><br><span class="line">     ret = lseek(fd2, <span class="number">0</span>, SEEK_SET);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;lseek error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err2;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 读取数据 */</span></span><br><span class="line">     <span class="built_in">memset</span>(buffer, <span class="number">0x00</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">     ret = read(fd2, buffer, <span class="number">4</span>);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;read error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err2;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;0x%x 0x%x 0x%x 0x%x\n&quot;</span>, buffer[<span class="number">0</span>], buffer[<span class="number">1</span>],</span><br><span class="line">     buffer[<span class="number">2</span>], buffer[<span class="number">3</span>]);</span><br><span class="line">     ret = <span class="number">0</span>;</span><br><span class="line">err2:</span><br><span class="line">     close(fd2);</span><br><span class="line">err1:</span><br><span class="line">     <span class="comment">/* 关闭文件 */</span></span><br><span class="line">     close(fd1);</span><br><span class="line">     <span class="built_in">exit</span>(ret);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>当前目录下<strong>不存在 test_file 文件</strong>，上述代码中，第一次调用 open 函数新建并打开 test_file 文件，第二次 调用 open 函数再次打开它，新建文件时，文件大小为 0；首先通过文件描述符 fd1 写入 4 个字节数据 （0x11/0x22/0x33/0x44），从文件头开始写；然后再通过文件描述符 fd2 读取 4 个字节数据，也是从文件头 开始读取。假如，内存中只有一份动态文件，那么读取得到的数据应该就是 0x11、0x22、0x33、0x44，如 果存在多份动态文件，那么通过 fd2 读取的是与它对应的动态文件中的数据，那就不是 0x11、0x22、0x33、 0x44，而是读取出 0 个字节数据，因为它的文件大小是 0。</p>
+</li>
+<li><p><img src="/imgs/image-20220112193309416.png" alt="image-20220112193309416"></p>
+</li>
+<li><p>上图中打印显示读取出来的数据是 0x11/0x22/0x33/0x44，所以由此可知，即使多次打开同一个文件，内 存中也只有一份动态文件。</p>
+</li>
+</ul>
+<h3 id="多次打开同一文件与O-APPEND"><a href="#多次打开同一文件与O-APPEND" class="headerlink" title="多次打开同一文件与O_APPEND"></a>多次打开同一文件与O_APPEND</h3><ul>
+<li>假如不使用<code>O_APPEND</code>的话，程序将会以不同的文件标识符为准的偏移量分别写入数据，多个文件标识符同时写一个文件的时候，不会互相更新标识符的位置，因此有可能互相覆盖。</li>
+<li>使用<code>O_APPEND</code>标志的时候，会<strong>自动将偏移量移动到文件尾部</strong>，会互相更新，比如一个文件标识符写入的时候会更新另一个文件标识符的写入偏移量。此时多个文件标识符进行读写的时候就不会互相覆盖了</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">unsigned</span> <span class="keyword">char</span> buffer1[<span class="number">4</span>], buffer2[<span class="number">4</span>];</span><br><span class="line">     <span class="keyword">int</span> fd1, fd2;</span><br><span class="line">     <span class="keyword">int</span> ret;</span><br><span class="line">     <span class="keyword">int</span> i;</span><br><span class="line"> <span class="comment">/* 创建新文件 test_file 并打开 */</span></span><br><span class="line">	 fd1 = open(<span class="string">&quot;./test_file&quot;</span>, O_RDWR | O_CREAT | O_EXCL | O_APPEND,</span><br><span class="line">            S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd1) &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">     &#125;</span><br><span class="line"> <span class="comment">/* 再次打开 test_file 文件 */</span></span><br><span class="line">     fd2 = open(<span class="string">&quot;./test_file&quot;</span>, O_RDWR | O_APPEND);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd2) &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         ret = <span class="number">-1</span>;</span><br><span class="line">         <span class="keyword">goto</span> err1;</span><br><span class="line">     &#125;</span><br><span class="line"> <span class="comment">/* buffer 数据初始化 */</span></span><br><span class="line">     buffer1[<span class="number">0</span>] = <span class="number">0x11</span>;</span><br><span class="line">     buffer1[<span class="number">1</span>] = <span class="number">0x22</span>;</span><br><span class="line">     buffer1[<span class="number">2</span>] = <span class="number">0x33</span>;</span><br><span class="line">     buffer1[<span class="number">3</span>] = <span class="number">0x44</span>;</span><br><span class="line">     buffer2[<span class="number">0</span>] = <span class="number">0xAA</span>;</span><br><span class="line">     buffer2[<span class="number">1</span>] = <span class="number">0xBB</span>;</span><br><span class="line">     buffer2[<span class="number">2</span>] = <span class="number">0xCC</span>;</span><br><span class="line">     buffer2[<span class="number">3</span>] = <span class="number">0xDD</span>;</span><br><span class="line">     <span class="comment">/* 循环写入数据 */</span></span><br><span class="line">     <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">         ret = write(fd1, buffer1, <span class="keyword">sizeof</span>(buffer1));</span><br><span class="line">         <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">             perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">             <span class="keyword">goto</span> err2;</span><br><span class="line">         &#125;</span><br><span class="line">         ret = write(fd2, buffer2, <span class="keyword">sizeof</span>(buffer2));</span><br><span class="line">         <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">             perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">             <span class="keyword">goto</span> err2;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 将读写位置偏移量移动到文件头 */</span></span><br><span class="line">     ret = lseek(fd1, <span class="number">0</span>, SEEK_SET);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;lseek error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err2;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 读取数据 */</span></span><br><span class="line">     <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">         ret = read(fd1, buffer1, <span class="keyword">sizeof</span>(buffer1));</span><br><span class="line">         <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">             perror(<span class="string">&quot;read error&quot;</span>);</span><br><span class="line">             <span class="keyword">goto</span> err2;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="built_in">printf</span>(<span class="string">&quot;%x%x%x%x&quot;</span>, buffer1[<span class="number">0</span>], buffer1[<span class="number">1</span>],</span><br><span class="line">         buffer1[<span class="number">2</span>], buffer1[<span class="number">3</span>]);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">     ret = <span class="number">0</span>;</span><br><span class="line">err2:</span><br><span class="line">     close(fd2);</span><br><span class="line">err1:</span><br><span class="line">     <span class="comment">/* 关闭文件 */</span></span><br><span class="line">     close(fd1);</span><br><span class="line">     <span class="built_in">exit</span>(ret);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="/imgs/image-20220112202602282.png" alt="image-20220112202602282"></li>
+</ul>
+<p>可见，每次fd1和fd2写入的内容都是交替出现的，也就是说<strong>一个标识符写入之后会自动更新另一个的偏移量</strong></p>
+<h3 id="复制文件描述符"><a href="#复制文件描述符" class="headerlink" title="复制文件描述符"></a>复制文件描述符</h3><ul>
+<li>在 Linux 系统中，open 返回得到的文件描述符 fd 可以进行复制，复制成功之后可以得到一个新的文件 描述符，使用新的文件描述符和旧的文件描述符都可以对文件进行 IO 操作，<strong>复制得到的文件描述符和旧的文件描述符拥有相同的权限</strong>，譬如使用旧的文件描述符对文件有读写权限，那么新的文件描述符同样也具 有读写权限；在 Linux 系统下，可以使用 dup 或 dup2 这两个系统调用对文件描述符进行复制，本小节就给 大家介绍这两个函数的用法以及它们之间的区别。 <strong>复制得到的文件描述符与旧的文件描述符都指向了同一个文件表</strong>，假设 fd1 为原文件描述符，fd2 为复 制得到的文件描述符，如下图所示：</li>
+<li><img src="/imgs/image-20220112202809873.png" alt="image-20220112202809873"></li>
+</ul>
+<h4 id="dup-函数"><a href="#dup-函数" class="headerlink" title="dup 函数"></a>dup 函数</h4><ul>
+<li>dup 函数用于复制文件描述符</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup</span><span class="params">(<span class="keyword">int</span> oldfd)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>oldfd：需要被复制的文件描述符。</li>
+<li>成功时将返回一个新的文件描述符，由操作系统分配，分配置原则遵循文件描述符分配原则； 如果复制失败将返回-1，并且会设置 errno 值。</li>
+<li>同一个程序中使用一个描述符和复制得到的描述符进行写内容的时候，会<strong>自动连接起来而不是互相覆盖</strong>，因为两个描述符<strong>使用的是用一个偏移量</strong>。</li>
+</ul>
+<h4 id="dup2函数"><a href="#dup2函数" class="headerlink" title="dup2函数"></a>dup2函数</h4><ul>
+<li>dup 系统调用分配的文件描述符是由系统分配的，遵循文件描述符分配原则，并不能自己指定一个文件 描述符，这是 dup 系统调用的一个缺陷；而 dup2 系统调用修复了这个缺陷，<strong>可以手动指定文件描述符，而 不需要遵循文件描述符分配原则</strong>，当然在实际的编程工作中，需要根据自己的情况来进行选择。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup2</span><span class="params">(<span class="keyword">int</span> oldfd, <span class="keyword">int</span> newfd)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>oldfd：需要被复制的文件描述符。</p>
+</li>
+<li><p>newfd：指定一个文件描述符（需要指定一个当前进程没有使用到的文件描述符）。</p>
+</li>
+<li><p>返回值：成功时将返回一个新的文件描述符，也就是手动指定的文件描述符 newfd；如果复制失败将返 回-1，并且会设置 errno 值。</p>
+</li>
+</ul>
+<h3 id="共享文件"><a href="#共享文件" class="headerlink" title="共享文件"></a>共享文件</h3><ul>
+<li>文件共享指的是同一个文件（譬如磁盘上的同一个文件，对应同一个 inode）被 多个独立的读写体同时进行 IO 操作。多个独立的读写体大家可以将其简单地理解为对应于同一个文件的多 个不同的文件描述符，譬如多次打开同一个文件所得到的多个不同的 fd，或使用 dup()（或 dup2）函数复制 得到的多个不同的 fd 等。</li>
+<li>同时进行 IO 操作指的是一个读写体操作文件尚未调用 close 关闭的情况下，另一个读写体去操作文件</li>
+<li>文件共享的意义有很多，多用于多进程或多线程编程环境中，譬如我们可以通过文件共享的方式来实现 多个线程同时操作同一个大文件，以减少文件读写时间、提升效率。</li>
+<li>文件共享的核心是：如何制造出多个不同的文件描述符来指向同一个文件。譬如多次调用 open 函数重复打开同一个文件得到多个不同的文件描述符、使用 dup() 或 dup2()函数对文件描述符进行复制以得到多个不同的文件描述符。</li>
+</ul>
+<h4 id="同一个进程中多次调用-open-函数打开同一个文件"><a href="#同一个进程中多次调用-open-函数打开同一个文件" class="headerlink" title="同一个进程中多次调用 open 函数打开同一个文件"></a>同一个进程中多次调用 open 函数打开同一个文件</h4><ul>
+<li><img src="/imgs/image-20220112205040312.png" alt="image-20220112205040312"></li>
+</ul>
+<h4 id="不同进程中分别使用-open-函数打开同一个文件"><a href="#不同进程中分别使用-open-函数打开同一个文件" class="headerlink" title="不同进程中分别使用 open 函数打开同一个文件"></a>不同进程中分别使用 open 函数打开同一个文件</h4><ul>
+<li><img src="/imgs/image-20220112205112471.png" alt="image-20220112205112471"></li>
+</ul>
+<h4 id="同一个进程中通过-dup（dup2）函数对文件描述符进行复制"><a href="#同一个进程中通过-dup（dup2）函数对文件描述符进行复制" class="headerlink" title="同一个进程中通过 dup（dup2）函数对文件描述符进行复制"></a>同一个进程中通过 dup（dup2）函数对文件描述符进行复制</h4><ul>
+<li><img src="/imgs/image-20220112205156025.png" alt="image-20220112205156025"></li>
+</ul>
+<h3 id="文件操作中的原子操作和竞争冒险问题"><a href="#文件操作中的原子操作和竞争冒险问题" class="headerlink" title="文件操作中的原子操作和竞争冒险问题"></a>文件操作中的原子操作和竞争冒险问题</h3><ul>
+<li><p>假设有两个独立的进程 A 和进程 B 都对同一个文件进行追加写操作（也就是在文件末尾写入数据）， 每一个进程都调用了 open 函数打开了该文件，但未使用 O_APPEND 标志，此时，各数据结构之间的关系 如图 3.8.2 所示。每个进程都有它自己的进程控制块 PCB，有自己的文件表（意味着有自己独立的读写位置 偏移量），但是共享同一个 inode 节点（也就是对应同一个文件）。假定此时进程 A 处于运行状态，B 未处 于等待运行状态，进程 A 调用了 lseek 函数，它将进程 A 的该文件当前位置偏移量设置为 1500 字节处（假 设这里是文件末尾），刚好此时进程 A 的时间片耗尽，然后内核切换到了进程 B，进程 B 执行 lseek 函数， 也将其对该文件的当前位置偏移量设置为 1500 个字节处（文件末尾）。然后进程 B 调用 write 函数，写入 了 100 个字节数据，那么此时在进程 B 中，该文件的当前位置偏移量已经移动到了 1600 字节处。B 进程时 间片耗尽，内核又切换到了进程 A，使进程 A 恢复运行，当进程 A 调用 write 函数时，是从进程 A 的该文 件当前位置偏移量（1500 字节处）开始写入，此时文件 1500 字节处已经不再是文件末尾了，如果还从 1500 字节处写入就会覆盖进程 B 刚才写入到该文件中的数据。</p>
+</li>
+<li><p><img src="/imgs/image-20220112205422813.png" alt="image-20220112205422813"></p>
+</li>
+<li><p>以上给大家所描述的这样一种情形就属于竞争状态（也成为竞争冒险），<strong>操作共享资源的两个进程</strong>（<strong>或 线程</strong>），其操作之后的所得到的结果<strong>往往是不可预期的</strong>，因为每个进程（或线程）去操作文件的顺序是不可 预期的，<strong>即这些进程获得 CPU 使用权的先后顺序是不可预期的</strong>，完全由操作系统调配，这就是所谓的竞争 状态。</p>
+</li>
+</ul>
+<h4 id="解决上述问题用到的原子操作"><a href="#解决上述问题用到的原子操作" class="headerlink" title="解决上述问题用到的原子操作"></a>解决上述问题用到的原子操作</h4><ul>
+<li><p>所谓原子操作，是有多步操作组成的一个操作，原子操作要么一步也不执行，一旦执行，必须要执行完所有 步骤，不可能只执行所有步骤中的一个子集。</p>
+</li>
+<li><p>使用<code>O_APPEND</code>实现原子操作</p>
+<ul>
+<li>当 open 函数的 flags 参数中包含了 O_APPEND 标志，每次执行 write 写入 操作时都会<strong>将文件当前写位置偏移量移动到文件末尾，然后再写入数据</strong>，这里“<strong>移动当前写位置偏移量到文 件末尾、写入数据</strong>”这两个操作步骤就组成了一个原子操作，加入 O_APPEND 标志后，不管怎么写入数据 都会是从文件末尾写，这样就不会导致出现“进程 A 写入的数据覆盖了进程 B 写入的数据”这种情况了。</li>
+</ul>
+</li>
+<li><p>使用<code>pread()</code>和<code>pwrite()</code>进行操作</p>
+<ul>
+<li>pread()和 pwrite()都是系统调用，与 read()、write()函数的作用一样，用于读取和写入数据。区别在于， pread()和 pwrite()可用于实现原子操作，<strong>调用 pread 函数或 pwrite 函数可传入一个位置偏移量 offset 参数</strong>， 用于指定文件当前读或写的位置偏移量，所以调用 <strong>pread 相当于调用 lseek 后再调用 read</strong>；同理，调用 pwrite 相当于调用 lseek 后再调用 write。所以可知，使用 pread 或 pwrite 函数不需要使用 lseek 来调整当前位置偏 移量，并会将“<strong>移动当前位置偏移量、读或写</strong>”这两步操作组成一个原子操作。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">pread</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> count, <span class="keyword">off_t</span> offset)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">pwrite</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> count, <span class="keyword">off_t</span> offset)</span></span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>fd、buf、count 参数与 read 或 write 函数意义相同。</p>
+</li>
+<li><p> offset：表示当前需要进行读或写的位置偏移量。 </p>
+</li>
+<li><p>返回值：返回值与 read、write 函数返回值意义一样。</p>
+</li>
+<li><p>虽然 pread（或 pwrite）函数相当于 lseek 与 pread（或 pwrite）函数的集合，但还是有下列区别：</p>
+<ul>
+<li>调用 pread 函数时，<strong>无法中断</strong>其定位和读操作（也就是原子操作）；</li>
+<li><strong>不更新</strong>文件表中的当前位置偏移量。</li>
+</ul>
+</li>
+<li><p>**<code>fcntl()</code>和<code>ioctl()</code>**详见原子的《I.MX6U嵌入式Linux C应用编程指南》</p>
+</li>
+</ul>
+<h3 id="截断文件"><a href="#截断文件" class="headerlink" title="截断文件"></a>截断文件</h3><ul>
+<li>使用系统调用 truncate()或 ftruncate()可将普通文件截断为指定字节长度</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">truncate</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">off_t</span> length)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ftruncate</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">off_t</span> length)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>这两个函数的区别在于：ftruncate()使用文件描述符 fd 来指定目标文件，而 truncate()则直接使用文件路 径 path 来指定目标文件，其功能一样。</p>
+</li>
+<li><p>这两个函数都可以对文件进行截断操作，将文件截断为参数 length 指定的字节长度，什么是截断？如 果文件目前的大小大于参数 length 所指定的大小，则多余的数据将被丢失，类似于多余的部分被“砍”掉 了；如果文件目前的<strong>大小小于参数 length 所指定的大小，则将其进行扩展，对扩展部分进行读取将得到空字 节”\0”。</strong></p>
+</li>
+<li><p>使用 ftruncate()函数进行文件截断操作之前，必须调用 open()函数打开该文件得到文件描述符，并且必 须要具有可写权限，也就是调用 open()打开文件时需要指定 O_WRONLY 或 O_RDWR。</p>
+</li>
+<li><p>调用这两个函数并不会导致文件读写位置偏移量发生改变，所以截断之后一般需要重新设置文件当前 的读写位置偏移量，以免由于之前所指向的位置已经不存在而发生错误（譬如文件长度变短了，文件当前所 指向的读写位置已不存在）。</p>
+</li>
+</ul>
+
+        </div>
+
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2022/01/12/%E9%85%8D%E7%BD%AELinux%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">配置Linux开机启动脚本</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/01/12/Linux%E6%96%87%E4%BB%B6IO%E4%BD%BF%E7%94%A8/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Linux文件IO使用</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
+        </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+</div>
+
+
+
+</body>
+</html>
