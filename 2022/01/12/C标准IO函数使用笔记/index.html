@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="Chinese">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Frank·Zhang">
+    
+    <title>
+        
+            C标准IO函数使用笔记 |
+        
+        Frank&#39;s Blogs
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/FLogo.png">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
+    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Frank&#39;s Blogs
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">C标准IO函数使用笔记</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/FLogo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Frank·Zhang</span>
+                        
+                            <span class="author-label">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-01-12 22:20:06</span>
+        <span class="mobile">2022-01-12 22:20</span>
+    </span>
+    
+    
+
+    
+    
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h1 id="C标准IO函数使用笔记"><a href="#C标准IO函数使用笔记" class="headerlink" title="C标准IO函数使用笔记"></a>C标准IO函数使用笔记</h1><h2 id="文件读写"><a href="#文件读写" class="headerlink" title="文件读写"></a>文件读写</h2><ul>
+<li><p><img src="/imgs/image-20220112223547788.png" alt="image-20220112223547788"></p>
+</li>
+<li><p>上面的函数实现了将一个每个单元大小为4个byte的浮点数存储在文件中，并且再原样读取回来的功能。</p>
+</li>
+<li><p>写文件和读文件的参数分别是单个单元的大小为4字节，总长度为5.下面看结果</p>
+</li>
+<li><p><img src="/imgs/image-20220112223727041.png" alt="image-20220112223727041"></p>
+</li>
+<li><p>测试可知，文件读写函数用的是同一个文件偏移量，也就是随着文件的写入而顺次增加的偏移量，假如文件读取之前不将偏移量移动回初始位置的话，会什么也读不出来</p>
+</li>
+<li><p><strong>可见sizeof()函数读取数组的时候，读取的是数组的总空间大小而不是数组的元素个数。图上数组的读取结果是20，也就是5*4</strong></p>
+</li>
+<li><p>同时还可以推测文件写入模式<code>r+</code>的默认起始位置是0</p>
+</li>
+<li><p>在上述函数中的<code>fwrite</code>后面添加一个<code>ftell()</code>显示偏移量，可见<img src="/imgs/image-20220112224257063.png" alt="image-20220112224257063">fwrite函数执行完毕的时候文件的偏移量自动增加到了20字节处</p>
+</li>
+</ul>
+<h2 id="格式化文本函数的格式控制字符串"><a href="#格式化文本函数的格式控制字符串" class="headerlink" title="格式化文本函数的格式控制字符串"></a>格式化文本函数的格式控制字符串</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%[flags][width][.precision][length]type</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>flags：标志，可包含 0 个或多个标志； </p>
+</li>
+<li><p>width：输出最小宽度，表示转换后输出字符串的最小宽度； </p>
+</li>
+<li><p>precision：精度，前面有一个点号” . “； </p>
+</li>
+<li><p>length：长度修饰符； </p>
+</li>
+<li><p>type：转换类型，指定待转换数据的类型。</p>
+</li>
+<li><p>type:</p>
+<ul>
+<li><img src="/imgs/image-20220112225548985.png" alt="image-20220112225548985"></li>
+<li><img src="/imgs/image-20220112225613496-16419994522663.png" alt="image-20220112225613496"></li>
+</ul>
+</li>
+<li><p>flags</p>
+<ul>
+<li><img src="/imgs/image-20220112225757743.png" alt="image-20220112225757743"></li>
+<li><img src="/imgs/image-20220112230005582.png" alt="image-20220112230005582"></li>
+</ul>
+</li>
+<li><p>width</p>
+<ul>
+<li>最小的输出宽度，用十进制数来表示输出的最小位数<strong>，若实际的输出位数大于指定的输出的最小位数， 则以实际的位数进行输出，若实际的位数小于指定输出的最小位数，则可按照指定的 flags 标志补 0 或补空 格。</strong></li>
+<li><img src="/imgs/image-20220113000901462.png" alt="image-20220113000901462"></li>
+</ul>
+</li>
+<li><p>precision 精度</p>
+<ul>
+<li>精度字段<strong>以点号” . “开头，后跟一个十进制正数</strong></li>
+<li><img src="/imgs/image-20220113000935320.png" alt="image-20220113000935320"></li>
+<li><img src="/imgs/image-20220113001001277.png" alt="image-20220113001001277"></li>
+</ul>
+</li>
+<li><p>length</p>
+<ul>
+<li>长度修饰符指明待转换数据的长度，因为 <strong>type 字段指定的的类型只有 int、unsigned int 以及 double</strong> 等 几种数据类型，<strong>但是 C 语言内置的数据类型不止这几种，譬如有 16bit 的 short、unsigned short，8bit 的 char、 unsigned char，也有 64bit 的 long long 等</strong>，为了能够区别不同长度的数据类型，于是乎，长度修饰符（length） 应运而生，成为转换说明的一部分。</li>
+<li><img src="/../../blogsPage/source/imgs/image-20220113001057843.png" alt="image-20220113001057843"></li>
+</ul>
+</li>
+</ul>
+<p>示例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">printf(&quot;%hd\n&quot;, 12345); //将数据以 short int 类型进行转换</span><br><span class="line">printf(&quot;%ld\n&quot;, 12345); //将数据以 long int 类型进行转换</span><br><span class="line">printf(&quot;%lld\n&quot;, 12345); //将数据以 long long int 类型进行转换</span><br></pre></td></tr></table></figure>
+
+<h2 id="格式化输入"><a href="#格式化输入" class="headerlink" title="格式化输入"></a>格式化输入</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">scanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fscanf</span><span class="params">(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sscanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>可以看到，这 3 个格式化输入函数也是可变参函数，它们都有一个共同的参数 format，同样也称为格式 控制字符串，用于指定输入数据如何进行格式转换，与格式化输出函数中的 format 参数格式相似，但也有 所不同。 </p>
+</li>
+<li><p>每个函数除了固定参数之外，还可携带 0 个或多个可变参数。 </p>
+</li>
+<li><p>scanf()函数可将用户输入（标准输入）的数据进行格式化转换；fscanf()函数从 FILE 指针指定文件中读 取数据，并将数据进行格式化转换；sscanf()函数从参数 str 所指向的字符串中读取数据，并将数据进行格式 化转换。</p>
+</li>
+</ul>
+<h3 id="scanf"><a href="#scanf" class="headerlink" title="scanf"></a>scanf</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a, b, c;</span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>, &amp;a, &amp;b, &amp;c);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>函数调用成功后，将返回成功匹配和分配的输入项的数量；如果较早匹配失败，则该数目可能小于所提 供的数目，甚至为零。发生错误则返回负值。</li>
+</ul>
+<h3 id="fscanf"><a href="#fscanf" class="headerlink" title="fscanf"></a>fscanf</h3><ul>
+<li>注意，该函数的第一个参数可以是标准输入流，此时它的作用与scanf相同</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a, b, c;</span><br><span class="line"><span class="built_in">fscanf</span>(<span class="built_in">stdin</span>, <span class="string">&quot;%d %d %d&quot;</span>, &amp;a, &amp;b, &amp;c);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>函数调用成功后，将返回成功匹配和分配的输入项的数量；如果较早匹配失败，则该数目可能小于所提供的数目，甚至为零。发生错误则返回负值。</li>
+</ul>
+<h3 id="sscanf"><a href="#sscanf" class="headerlink" title="sscanf"></a>sscanf</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *str = <span class="string">&quot;5454 hello&quot;</span>;</span><br><span class="line"><span class="keyword">char</span> buf[<span class="number">10</span>];</span><br><span class="line"><span class="keyword">int</span> a;</span><br><span class="line"><span class="built_in">sscanf</span>(str, <span class="string">&quot;%d %s&quot;</span>, &amp;a, buf);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>函数调用成功后，将返回成功匹配和分配的输入项的数量；如果较早匹配失败，则该数目可能小于所提 供的数目，甚至为零。发生错误则返回负值。</li>
+</ul>
+<h3 id="格式控制字符串"><a href="#格式控制字符串" class="headerlink" title="格式控制字符串"></a>格式控制字符串</h3><ul>
+<li>本小节的重点依然是这个 format 参数的格式，与格式化输出函数中的 format 参数格式、写法上比较相 似，但也有一些区别。format 字符串包含一个或多个转换说明，每一个转换说明都是以百分号”%”或者”%n$” 开头（n 是一个十进制数字），关于”%n$”这种开头的转换说明就不介绍了，实际上用的不多。</li>
+<li>以%百分号开头的转换说明一般格式如下(<code>[]</code>部分是可选的参数)</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">%[*][width][length]type</span><br><span class="line">%[m][width][length]type</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>%后面可选择性添加<strong>星号</strong><code>*</code>或**字母 <code>m</code>**，如果添加了星号<code>*</code>，格式化输入函数会按照转换说明的指示读取输 入，但是丢弃输入，意味着不需要对转换后的结果进行存储，所以也就不需要提供相应的指针参数。</li>
+<li>如果添加了 m，它只能与%s、%c 以及%[一起使用，调用者无需分配相应的缓冲区来保存格式转换后的 数据，原因在于添加了 m，这些格式化输入函数内部会自动分配足够大小的缓冲区，并将缓冲区的地址值通 过与该格式转换相对应的指针参数返回出来，该指针参数应该是指向 char *变量的指针。随后，当不再需要 此缓冲区时，调用者应调用 free()函数来释放此缓冲区。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *buf;</span><br><span class="line"></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%ms&quot;</span>, &amp;buf);</span><br><span class="line">......</span><br><span class="line"><span class="built_in">free</span>(buf);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>width：最大字符宽度；</p>
+</li>
+<li><p>length：长度修饰符，与格式化输出函数的 format 参数中的 length 字段意义相同。</p>
+</li>
+<li><p>type：指定输入数据的类型。</p>
+</li>
+<li><p><strong>type</strong></p>
+<ul>
+<li><img src="/imgs/image-20220113130730315.png" alt="image-20220113130730315"></li>
+<li><img src="/../../blogsPage/source/imgs/image-20220113130752641.png" alt="image-20220113130752641"></li>
+</ul>
+</li>
+<li><p><strong>width</strong>最大字符长度限制。</p>
+<ul>
+<li>是一个十进制表示的整数，用于指定最大字符宽度，当达到此最大值或发现不匹配的字符时（以先发生 者为准），字符的读取将停止。大多数 type 类型会丢弃初始的空白字符，并且这些丢弃的字符不会计入最 大字符宽度。对于字符串转换来说，scanf()会在字符串末尾自动添加终止符”\0”，最大字符宽度中不包括此 终止符。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%4s&quot;</span>, buf); <span class="comment">//匹配字符串，字符串长度不超过 4 个字符</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>此时输入“abcdef”，存储的是“abcd”</li>
+<li><strong>length</strong>数据长度修饰符<ul>
+<li><img src="/imgs/image-20220113131301042.png" alt="image-20220113131301042"></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%hd&quot;</span>, var); <span class="comment">//匹配 short int 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%hhd&quot;</span>, var); <span class="comment">//匹配 signed char 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%ld&quot;</span>, var); <span class="comment">//匹配 long int 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%f&quot;</span>, var); <span class="comment">//匹配 float 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%lf&quot;</span>, var); <span class="comment">//匹配 double 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%Lf&quot;</span>, var); <span class="comment">//匹配 long double 类型数据</span></span><br></pre></td></tr></table></figure>
+
+<p>使用例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> inputBuf;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%*10[A-Za-z]%f&quot;</span>, &amp;inputBuf);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%03.4f&quot;</span>, inputBuf);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意<code>[]</code>里面的内容的写法，比如想一次性收取所有字母，<strong>使用<code>[A-Za-z]</code>，连续写即可，数字写0-9，同</strong></li>
+<li>控制台测试输入</li>
+<li><img src="/imgs/image-20220113132156094.png" alt="image-20220113132156094"></li>
+<li>都能够正确接收到0.01，说明成功识别到了hello并且将其丢弃（因为指定了<code>*</code>符号）</li>
+</ul>
+
+        </div>
+
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/01/12/%E9%85%8D%E7%BD%AELinux%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">配置Linux开机启动脚本</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
+        </div>
+        
+        <div class="theme-info info-item">
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+</div>
+
+
+
+</body>
+</html>
