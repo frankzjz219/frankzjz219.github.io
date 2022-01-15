@@ -62,7 +62,7 @@
                             <a class=""
                                href="/"
                             >
-                                首頁
+                                HOME
                             </a>
                         </li>
                     
@@ -70,7 +70,7 @@
                             <a class=""
                                href="/archives"
                             >
-                                歸檔
+                                ARCHIVES
                             </a>
                         </li>
                     
@@ -91,12 +91,12 @@
             
                 <li class="drawer-menu-item flex-center">
                     <a class=""
-                       href="/">首頁</a>
+                       href="/">HOME</a>
                 </li>
             
                 <li class="drawer-menu-item flex-center">
                     <a class=""
-                       href="/archives">歸檔</a>
+                       href="/archives">ARCHIVES</a>
                 </li>
             
         </ul>
@@ -130,7 +130,7 @@
                     <div class="author">
                         <span class="name">Frank·Zhang</span>
                         
-                            <span class="author-label">Lv3</span>
+                            <span class="author-label">Lv4</span>
                         
                     </div>
                     <div class="meta-info">
@@ -300,6 +300,35 @@
 <li><img src="/imgs/image-20220113132156094.png" alt="image-20220113132156094"></li>
 <li>都能够正确接收到0.01，说明成功识别到了hello并且将其丢弃（因为指定了<code>*</code>符号）</li>
 </ul>
+<h2 id="I-O缓冲"><a href="#I-O缓冲" class="headerlink" title="I/O缓冲"></a>I/O缓冲</h2><p>略，详见原子教程《I.MX6U嵌入式Linux C应用编程指南》</p>
+<ul>
+<li>标准 I/O 所维护的 stdio 缓冲是用户空间 的缓冲区，当<u>应用程序中通过标准 I/O 操作磁盘文件时</u>，为了减少调用系统调用的次数，标准 I/O 函数会<u>将 用户写入或读取文件的数据缓存在 stdio 缓冲区</u>，然后<strong>再一次性</strong>将 stdio 缓冲区中缓存的数据通过调用系统 调用 I/O（文件 I/O）<u>写入到文件 I/O 内核缓冲区或者拷贝到应用程序的 buf</u> 中。</li>
+<li>通过这样的优化操作，当操作磁盘文件时，在用户空间缓存大块数据以减少调用系统调用的次数，使得 效率、性能得到优化。使用标准 I/O 可以使编程者免于自行处理对数据的缓冲，无论是调用 write()写入数 据、还是调用 read()读取数据。</li>
+<li>直接 I/O 方式效率、性能比较低，绝大部分应用程序不会使用直接 I/O 方式对文件进行 I/O 操作，通常 只在一些特殊的应用场合下才可能会使用，那我们<u>可以使用直接 I/O 方式来测试磁盘设备的读写速率</u>，这种 测试方式相比普通 I/O 方式就会更加准确。</li>
+</ul>
+<h2 id="文件描述符和FILE指针的转化"><a href="#文件描述符和FILE指针的转化" class="headerlink" title="文件描述符和FILE指针的转化"></a>文件描述符和FILE指针的转化</h2><ul>
+<li>在应用程序中，在同一个文件上执行 I/O 操作时，还可以<strong>将文件 I/O（系统调用 I/O）与标准 I/O 混合使 用</strong>，这个时候我们就需要将文件描述符和 FILE 指针对象之间进行转换，此时可以借助于库函数 <code>fdopen()</code>、 <code>fileno()</code>来完成。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fileno</span><span class="params">(FILE *stream)</span></span>;</span><br><span class="line"><span class="function">FILE *<span class="title">fdopen</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span> *mode)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>对于 fileno()函数来说，根据传入的 FILE 指针得到整数文件描述符，<strong>通过返回值得到文件描述符</strong>，如果 转换<strong>错误将返回-1</strong>，并且会设置 errno 来指示错误原因。得到文件描述符之后，便可以使用诸如 read()、write()、 lseek()、fcntl()等文件 I/O 方式操作文件。</p>
+</li>
+<li><p>fdopen()函数与 fileno()功能相反，给定一个文件描述符，<strong>得到该文件对应的 FILE 指针</strong>，之后便可以使 用诸如 fread()、fwrite()等标准 I/O 方式操作文件了。参数 mode 与 fopen()函数中的 mode 参数含义相同如下表，<strong>若该参数与文件描述符 fd 的访问模式<u>不一致</u>，则会导致调用 fdopen()失败。</strong></p>
+<ul>
+<li><img src="/image-20220113163201525.png" alt="image-20220113163201525"></li>
+<li><img src="/image-20220113163221211.png" alt="image-20220113163221211"></li>
+</ul>
+</li>
+</ul>
+<h3 id="混用两种IO函数的时候的缓冲区问题"><a href="#混用两种IO函数的时候的缓冲区问题" class="headerlink" title="混用两种IO函数的时候的缓冲区问题"></a>混用两种IO函数的时候的缓冲区问题</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;print&quot;</span>);</span><br><span class="line">    write(STDOUT_FILENO, <span class="string">&quot;write\n&quot;</span>, <span class="number">6</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>当混合使用文件 I/O 和标准 I/O 时，需要特别注意缓冲的问题，<strong>文件 I/O 会直接将数据写入到内核缓冲 区进行高速缓存</strong>，而<strong>标准 I/O 则会将数据写入到 stdio 缓冲区，之后再调用 write()将 stdio 缓冲区中的数据写 入到内核缓冲区</strong>。</p>
+</li>
+<li><p>执行结果你会发现，<strong>先输出了”write”字符串信息，接着再输出了”print”字符串信息</strong></p>
+</li>
+</ul>
 
         </div>
 
@@ -310,6 +339,21 @@
         
             <div class="article-nav">
                 
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2022/01/13/Cpp%E5%A4%8D%E4%B9%A0%E5%92%8CQt%EF%BC%88%E4%B8%80%EF%BC%89/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">C++复习和Qt（一）</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
                 
                     <div class="article-next">
                         <a class="next"
@@ -318,7 +362,7 @@
                         >
                             <span class="title flex-center">
                                 <span class="post-nav-title-item">配置Linux开机启动脚本</span>
-                                <span class="post-nav-item">下一篇</span>
+                                <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex-center">
                               <i class="fas fa-chevron-right"></i>
@@ -352,7 +396,7 @@
         </div>
         
         <div class="theme-info info-item">
-            <a target="_blank" href="https://hexo.io">Hexo</a> 框架&nbsp;|&nbsp;主題&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
         </div>
         
         
