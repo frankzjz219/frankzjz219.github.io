@@ -155,7 +155,16 @@
         
 
         <div class="article-content markdown-body">
-            <h1 id="C-复习和Qt（Ubuntu）"><a href="#C-复习和Qt（Ubuntu）" class="headerlink" title="C++复习和Qt（Ubuntu）"></a>C++复习和Qt（Ubuntu）</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> &lt;</span><span class="class"><span class="keyword">class</span> <span class="title">name</span>&gt;</span> : &lt;访问权限修饰符&gt; &lt;super <span class="class"><span class="keyword">class</span>&gt;</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+            <h1 id="C-复习和Qt（Ubuntu）"><a href="#C-复习和Qt（Ubuntu）" class="headerlink" title="C++复习和Qt（Ubuntu）"></a>C++复习和Qt（Ubuntu）</h1><h2 id="namespace"><a href="#namespace" class="headerlink" title="namespace"></a>namespace</h2><ul>
+<li>命名空间的定义</li>
+<li><code>namespace Ui &#123; class MainWindow; class myThread;&#125;</code></li>
+<li>一个命名空间的定义包含两部分：首先是关键字namespace，随后是命名空间的名字。</li>
+<li>在命名空间名字后面是<strong>一系列由花括号括起来的声明和定义</strong>。</li>
+<li>只要能出现在全局作用域中的声明就能置于命名空间内，主要包括：类、变量(及其初始化操作)、函数(及其定义)、模板和其它命名空间。</li>
+<li>命名空间<strong>结束后无须分号</strong>，这一点与块类似。</li>
+</ul>
+<p><strong>假如在一个类中使用在之后定义的类的对象或者其他内容的话，先在这个类之前使用<code>class &lt;被使用的类名&gt;;</code>声明一下类</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> &lt;</span><span class="class"><span class="keyword">class</span> <span class="title">name</span>&gt;</span> : &lt;访问权限修饰符&gt; &lt;super <span class="class"><span class="keyword">class</span>&gt;</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>不写权限默认private</li>
