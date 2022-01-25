@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="Chinese">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Frank·Zhang">
+    
+    <title>
+        
+            链表相关题目题解 |
+        
+        Frank&#39;s Blogs
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/FLogo.png">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
+    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Frank&#39;s Blogs
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">链表相关题目题解</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/FLogo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Frank·Zhang</span>
+                        
+                            <span class="author-label">Lv4</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-01-24 13:04:08</span>
+        <span class="mobile">2022-01-24 13:04</span>
+    </span>
+    
+    
+
+    
+    
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h1 id="链表相关题目题解"><a href="#链表相关题目题解" class="headerlink" title="链表相关题目题解"></a>链表相关题目题解</h1><h2 id="返回链表倒数第k个元素"><a href="#返回链表倒数第k个元素" class="headerlink" title="返回链表倒数第k个元素"></a>返回链表倒数第k个元素</h2><ul>
+<li>快慢指针，<strong>第一个指针先移动k步，然后第二个指针再从头开始，这个时候这两个指针同时移动，当第一个指针到链表的末尾的时候，返回第二个指针即可</strong></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function">def <span class="title">FindKthToTail</span><span class="params">(self , pHead , k )</span>:</span></span><br><span class="line"><span class="function">        <span class="meta"># write code here</span></span></span><br><span class="line"><span class="function">        # 快慢指针</span></span><br><span class="line"><span class="function">        fast </span>= pHead</span><br><span class="line">        slow = pHead</span><br><span class="line">        # 快指针先走k步</span><br><span class="line">        <span class="keyword">for</span> i in range(<span class="number">0</span>, k):</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> fast:</span><br><span class="line">                <span class="keyword">return</span> None</span><br><span class="line">            fast = fast.next</span><br><span class="line">        # 双指针同时行走</span><br><span class="line">        <span class="keyword">while</span> fast:</span><br><span class="line">            fast = fast.next</span><br><span class="line">            slow = slow.next</span><br><span class="line">        <span class="keyword">return</span> slow</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>栈</strong>。把原链表的结点全部压栈，然后再把栈中最上面的k个节点出栈，出栈的结点重新串成一个新的链表即可</p>
+</li>
+<li><p><img src="/../imgs/image-20220124130552601.png" alt="image-20220124130552601"></p>
+</li>
+</ul>
+<h2 id="链表反序"><a href="#链表反序" class="headerlink" title="链表反序"></a>链表反序</h2><ul>
+<li>直接遍历</li>
+<li>递归</li>
+</ul>
+<h2 id="链表公共节点"><a href="#链表公共节点" class="headerlink" title="链表公共节点"></a>链表公共节点</h2><ul>
+<li><p>给定两个单链表<code>A，B</code>，假设一定含有公共结点，返回第一个公共结点的指针。</p>
+</li>
+<li><p>双指针</p>
+</li>
+<li><p><img src="/../imgs/image-20220124132357395.png" alt="image-20220124132357395"></p>
+</li>
+<li><p><img src="/../imgs/image-20220124132433562.png" alt="image-20220124132433562"></p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">FindFirstCommonNode</span><span class="params">( ListNode* pHead1, ListNode* pHead2)</span> </span>&#123;</span><br><span class="line">        ListNode *ta = pHead1, *tb = pHead2;</span><br><span class="line">        <span class="keyword">while</span> (ta != tb) &#123;</span><br><span class="line">            ta = ta ? ta-&gt;next : pHead2;</span><br><span class="line">            tb = tb ? tb-&gt;next : pHead1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ta;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>上述代码是从第一个链表的尾部循环到第二个链表的头部，第二个链表从尾部循环到第一个链表的头部，<strong>相当于是把一个链表完整的连接在了另一个后面构成一个长度为m+n的新的链表，长度相等，而且保留原来的相同的节点</strong></li>
+</ul>
+<h2 id="找带环链表的入口位置"><a href="#找带环链表的入口位置" class="headerlink" title="找带环链表的入口位置"></a>找带环链表的入口位置</h2><ul>
+<li><p>返回带有环的链表的环的入口节点</p>
+</li>
+<li><p><img src="/../imgs/image-20220124134956992.png" alt="image-20220124134956992"></p>
+</li>
+<li><p>理解：假设从开始到相遇位置的总距离是x+y，x是直线距离，y是在环上的距离，那么此时快指针走过的路径长度是2（x+y），也就意味着环上<strong>剩余的长度为x+y</strong>,此时将其中一个指针移动到头部，另一个保持在原地，二者都按照1的步长运动，走到入口节点的距离是<strong>相同</strong>的都是x+y，所以必定会在环的入口相遇</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">EntryNodeOfLoop</span><span class="params">(ListNode* pHead)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        ListNode *fast = pHead;</span><br><span class="line">        ListNode *slow = pHead;</span><br><span class="line">        <span class="keyword">while</span> (fast &amp;amp;&amp;amp; fast-&amp;gt;next) &#123;</span><br><span class="line">            fast = fast-&amp;gt;next-&amp;gt;next;</span><br><span class="line">            slow = slow-&amp;gt;next;</span><br><span class="line">            <span class="keyword">if</span> (fast == slow) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!fast || !fast-&amp;gt;next) <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">        fast = pHead;</span><br><span class="line">        <span class="keyword">while</span> (fast != slow) &#123;</span><br><span class="line">            fast = fast-&amp;gt;next;</span><br><span class="line">            slow = slow-&amp;gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> fast;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2022/01/25/Linux%E9%AB%98%E7%BA%A7IO/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Linux高级IO</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/01/23/Linux%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Linux线程（三）线程同步</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
+        </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+</div>
+
+
+
+</body>
+</html>
