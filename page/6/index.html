@@ -120,6 +120,84 @@
                 
 
                 <h3 class="home-article-title">
+                    <a href="/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/">
+                        使用FreeRTOS和ILI9341点亮LCD屏幕
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕CubeMX配置
+SPI：
+
+
+
+DMA：
+
+
+
+NVIC（重要）：
+
+
+
+注意此处SPI、TIM1和DMA不要使用FreeRTOS 的中断函数，将对勾去掉，同时将中断优先级改为一个比...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Fri Dec 17 2021 21:35:25 GMT+0800">2021-12-17</span></span>
+        
+        
+    </div>
+
+    <a href="/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2021/12/16/STM32F4%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%892/">
+                        STM32F4点亮ili9341驱动的屏幕（HAL库）2
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        STM32F4点亮ili9341驱动的屏幕（HAL库）2地址
+https://github.com/ardnew/ILI9341-STM32-HAL
+
+Cube配置按照readme中的配置，注意以下问题
+
+SPI设置（打开中断）：
+
+DMA：
+
+生成...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Thu Dec 16 2021 10:36:21 GMT+0800">2021-12-16</span></span>
+        
+        
+    </div>
+
+    <a href="/2021/12/16/STM32F4%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%892/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
                     <a href="/2021/12/15/STM32%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%E7%AC%AC%E4%B8%80%E7%89%88%EF%BC%89/">
                         STM32点亮ILI9341驱动的屏幕（HAL库）
                     </a>
