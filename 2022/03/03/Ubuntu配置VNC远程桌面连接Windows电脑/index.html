@@ -9,7 +9,7 @@
     
     <title>
         
-            修复删除双系统之后BIOS中存在多余启动引导项的问题 |
+            Ubuntu配置VNC远程桌面连接Windows电脑 |
         
         Frank&#39;s Blogs
     </title>
@@ -118,7 +118,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">修复删除双系统之后BIOS中存在多余启动引导项的问题</span>
+            <span class="title-hover-animation">Ubuntu配置VNC远程桌面连接Windows电脑</span>
         </div>
 
         
@@ -137,8 +137,8 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-01-09 00:10:33</span>
-        <span class="mobile">2022-01-09 00:10</span>
+        <span class="pc">2022-03-03 17:54:22</span>
+        <span class="mobile">2022-03-03 17:54</span>
     </span>
     
     
@@ -155,11 +155,55 @@
         
 
         <div class="article-content markdown-body">
-            <h1 id="修复删除双系统之后BIOS中存在多余启动引导项的问题"><a href="#修复删除双系统之后BIOS中存在多余启动引导项的问题" class="headerlink" title="修复删除双系统之后BIOS中存在多余启动引导项的问题"></a>修复删除双系统之后BIOS中存在多余启动引导项的问题</h1><h2 id="下载DiskGenius"><a href="#下载DiskGenius" class="headerlink" title="下载DiskGenius"></a>下载DiskGenius</h2><p><a class="link"   target="_blank" rel="noopener" href="http://www.diskgenius.cn/download.php" >http://www.diskgenius.cn/download.php<i class="fas fa-external-link-alt"></i></a></p>
-<p>然后此处按下delete即可</p>
-<p><img src="/imgs/image-20220109001539680.png" alt="image-20220109001539680"></p>
-<p>可见启动引导项中已经没有了刚才删除的Manjaro选项</p>
-<p><img src="/imgs/image-20220109002008500.png" alt="image-20220109002008500"></p>
+            <h1 id="Ubuntu配置VNC远程桌面连接Windows电脑"><a href="#Ubuntu配置VNC远程桌面连接Windows电脑" class="headerlink" title="Ubuntu配置VNC远程桌面连接Windows电脑"></a>Ubuntu配置VNC远程桌面连接Windows电脑</h1><ul>
+<li>参考指南<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/295422718" >https://zhuanlan.zhihu.com/p/295422718<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+</li>
+<li>考虑安装<code>xrdp</code>，通过<code>sudo apt-get install xrdp</code>安装</li>
+<li>安装好之后再安装<code>deconf-editor</code>，也就是<code>sudo apt-get install dconf-editor</code>安装</li>
+<li>在<code>deconf-editor</code>中关闭<strong>org-gnome-desktop-remote-access</strong>下面的<code>requlre-encryption</code>即可</li>
+<li>安装好之后配置vnc服务的开机自启动</li>
+<li>参考这篇博客</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40723748/article/details/120013808" >https://blog.csdn.net/qq_40723748/article/details/120013808<i class="fas fa-external-link-alt"></i></a></li>
+<li>主要就是要在<code>/etc/systemd/user</code>目录下创建一个systemd服务文件, 命名为<code>user-defined.service</code></li>
+<li>这个文件具有固定的格式，如下</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">After=network.service</span><br><span class="line"> </span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/home/&lt;username&gt;/&lt;usershell&gt;.sh</span><br><span class="line"> </span><br><span class="line">[Install]</span><br><span class="line">WantedBy=default.target</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>其中将<code>username</code>和<code>usershell</code>替换为自己的用户名和新建的脚本</li>
+<li>自己新建的脚本的第一行一定要注意带有<code>#!/bin/bash</code></li>
+<li>这个脚本启动过程中出错的话是不会报错的，比较难debug</li>
+<li>然后使用<code>sudo chmod</code>赋予自己新建的.sh文件和<code>user-defined.service</code>权限</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 744 ~/test.sh</span><br><span class="line">sudo chmod 664 /etc/systemd/user/user-defined.service</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>然后调用<strong>以下两行</strong>刷新系统服务</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br><span class="line">systemctl --user enable user-defined.service</span><br></pre></td></tr></table></figure>
+
+<p>然后reboot系统即可</p>
+<p>然后使用windows自带的远程桌面连接，在系统<strong>没有登陆</strong>的前提下进行远程桌面，<strong>否则会黑屏</strong></p>
+<ul>
+<li><p><img src="/imgs/image-20220303180321664.png" alt="image-20220303180321664"></p>
+</li>
+<li><p>此处保持设置不变，输入linux的用户名和密码</p>
+</li>
+<li><p>注意，假如卡顿的话可以修改设置为</p>
+</li>
+<li><p>点击最下的显示选项，点击体验，<strong>修改为LAN，会变流畅一些</strong></p>
+</li>
+<li><p><img src="/imgs/image-20220303180359964.png" alt="image-20220303180359964"></p>
+</li>
+<li><p>sudo reboot之后远程主机不需要登陆直接链接即可</p>
+</li>
+<li><p><img src="/imgs/image-20220303181038496.png" alt="image-20220303181038496"></p>
+</li>
+<li><p><img src="/imgs/image-20220303181046174.png" alt="image-20220303181046174"></p>
+</li>
+</ul>
 
         </div>
 
@@ -170,29 +214,14 @@
         
             <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/01/09/MakeFile%E5%9F%BA%E7%A1%80/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">MakeFile基础</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2022/01/08/STM32%E5%AE%9E%E7%8E%B0W25Q16%E8%8A%AF%E7%89%87%E7%9A%84%E6%93%A6%E9%99%A4%E3%80%81%E8%AF%BB%E5%92%8C%E5%86%99/"
+                           href="/2022/03/02/%E5%9C%A8%E5%9B%BA%E6%80%81%E5%92%8C%E6%9C%BA%E6%A2%B0%E7%9B%98%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">STM32实现W25Q16芯片的擦除、读和写</span>
+                                <span class="post-nav-title-item">在固态和机械盘上安装Ubuntu</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex-center">
