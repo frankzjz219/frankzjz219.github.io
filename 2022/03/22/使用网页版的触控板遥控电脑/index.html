@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="Chinese">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Frank·Zhang">
+    
+    <title>
+        
+            使用网页版的触控板遥控电脑 |
+        
+        Frank&#39;s Blogs
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/FLogo.png">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
+    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Frank&#39;s Blogs
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">使用网页版的触控板遥控电脑</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/FLogo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Frank·Zhang</span>
+                        
+                            <span class="author-label">Lv5</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-03-22 18:19:44</span>
+        <span class="mobile">2022-03-22 18:19</span>
+    </span>
+    
+    
+
+    
+    
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h1 id="使用网页版的触控板遥控电脑"><a href="#使用网页版的触控板遥控电脑" class="headerlink" title="使用网页版的触控板遥控电脑"></a>使用网页版的触控板遥控电脑</h1><h2 id="基于flask和pyautogui开发的后端"><a href="#基于flask和pyautogui开发的后端" class="headerlink" title="基于flask和pyautogui开发的后端"></a>基于flask和pyautogui开发的后端</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> make_response</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> send_from_directory</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">chatDict = []</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/favicon.ico&#x27;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">returnIcon</span>():</span></span><br><span class="line">    <span class="keyword">return</span> send_from_directory(<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;favicon.ico&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/chat&#x27;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">returnPage1</span>():</span></span><br><span class="line">    <span class="keyword">return</span> send_from_directory(<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;page1.html&#x27;</span>)</span><br><span class="line"><span class="comment">#发送信息</span></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/chat/sendData&#x27;</span>, methods = [<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">receiveText</span>():</span></span><br><span class="line">    dataReceived = json.loads(request.get_data())</span><br><span class="line">    textSender = request.remote_addr</span><br><span class="line">    textReceived = dataReceived[<span class="string">&#x27;text&#x27;</span>]</span><br><span class="line">    tempDict = &#123;&#125;</span><br><span class="line">    tempDict[textSender] = textReceived</span><br><span class="line">    </span><br><span class="line">    chatDict.append(tempDict)</span><br><span class="line">    countReceived = dataReceived[<span class="string">&#x27;count&#x27;</span>]</span><br><span class="line">    returnDict = &#123;&#125;</span><br><span class="line">    returnDict[<span class="string">&#x27;Refresh&#x27;</span>] = <span class="number">0</span></span><br><span class="line">    returnDict[<span class="string">&#x27;datas&#x27;</span>] = []</span><br><span class="line">    <span class="keyword">if</span>((countReceived)&lt;<span class="built_in">len</span>(chatDict)):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(countReceived, <span class="built_in">len</span>(chatDict)):</span><br><span class="line">            returnDict[<span class="string">&#x27;datas&#x27;</span>].append(chatDict[i])</span><br><span class="line">    <span class="keyword">elif</span>((countReceived) == <span class="built_in">len</span>(chatDict)):</span><br><span class="line">        returnDict[<span class="string">&#x27;Refresh&#x27;</span>] = <span class="number">2</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        returnDict[<span class="string">&#x27;Refresh&#x27;</span>] = <span class="number">1</span></span><br><span class="line">        returnDict[<span class="string">&#x27;datas&#x27;</span>] = chatDict</span><br><span class="line">    <span class="comment"># print(textReceived)</span></span><br><span class="line">    <span class="built_in">print</span>(returnDict)</span><br><span class="line">    <span class="keyword">return</span> json.dumps(returnDict)</span><br><span class="line"><span class="comment">#刷新信息</span></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/chat/refershData&#x27;</span>, methods = [<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">refershText</span>():</span></span><br><span class="line">    dataReceived = json.loads(request.get_data())</span><br><span class="line">    countReceived = dataReceived[<span class="string">&#x27;count&#x27;</span>]</span><br><span class="line">    returnDict = &#123;&#125;</span><br><span class="line">    returnDict[<span class="string">&#x27;Refresh&#x27;</span>] = <span class="number">0</span></span><br><span class="line">    returnDict[<span class="string">&#x27;datas&#x27;</span>] = []</span><br><span class="line">    <span class="keyword">if</span>((countReceived)&lt;<span class="built_in">len</span>(chatDict)):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(countReceived, <span class="built_in">len</span>(chatDict)):</span><br><span class="line">            returnDict[<span class="string">&#x27;datas&#x27;</span>].append(chatDict[i])</span><br><span class="line">    <span class="keyword">elif</span>((countReceived) == <span class="built_in">len</span>(chatDict)):</span><br><span class="line">        returnDict[<span class="string">&#x27;Refresh&#x27;</span>] = <span class="number">2</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        returnDict[<span class="string">&#x27;Refresh&#x27;</span>] = <span class="number">1</span></span><br><span class="line">        returnDict[<span class="string">&#x27;datas&#x27;</span>] = chatDict</span><br><span class="line">    <span class="comment"># print(textReceived)</span></span><br><span class="line">    <span class="built_in">print</span>(returnDict)</span><br><span class="line">    <span class="keyword">return</span> json.dumps(returnDict)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/file&#x27;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">returnPage2</span>():</span></span><br><span class="line">    <span class="keyword">return</span> send_from_directory(<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;page2.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/file/fileUpload&#x27;</span>, methods = [<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">receiveFile</span>():</span></span><br><span class="line">    fileObj = request.files[<span class="string">&#x27;name&#x27;</span>]</span><br><span class="line">    fileObj.save(os.path.join(<span class="string">&#x27;temp/&#x27;</span>, fileObj.filename))</span><br><span class="line">    <span class="keyword">return</span> json.dumps(<span class="string">&#x27;Copy!&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/file/refresh&#x27;</span>, methods = [<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">refershFile</span>():</span></span><br><span class="line">    fileList = os.listdir(<span class="string">&#x27;temp/&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    lengthOfFile = <span class="built_in">len</span>(fileList)</span><br><span class="line">    fileDict = &#123;&#125;</span><br><span class="line">    fileDict[<span class="string">&#x27;length&#x27;</span>] = lengthOfFile</span><br><span class="line">    fileDict[<span class="string">&#x27;list&#x27;</span>] = fileList</span><br><span class="line">    <span class="comment"># print(fileDict)</span></span><br><span class="line">    <span class="keyword">return</span> json.dumps(fileDict)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/file/getFile/&lt;fileName&gt;&#x27;</span>,methods = [<span class="string">&#x27;POST&#x27;</span>,<span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getFile</span>(<span class="params">fileName</span>):</span></span><br><span class="line">    <span class="comment"># fileName = json.loads(request.get_data())</span></span><br><span class="line">    pwd = os.getcwd()</span><br><span class="line">    fatherPath = os.path.abspath(<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(os.path.join(fatherPath,<span class="string">&#x27;temp/&#x27;</span>))</span><br><span class="line">    <span class="built_in">print</span>(fileName)</span><br><span class="line">    response = send_from_directory(os.path.join(fatherPath,<span class="string">&#x27;temp/&#x27;</span>),fileName, as_attachment = <span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># response.headers[&#x27;Content-Disposition&#x27;] += &quot;;filename*=utf-8&#x27;&#x27;&#123;&#125;&quot;.format(fileName)</span></span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/file/removeFile/&lt;fileName&gt;&#x27;</span>,methods = [<span class="string">&#x27;POST&#x27;</span>,<span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">removeFile</span>(<span class="params">fileName</span>):</span></span><br><span class="line">    pwd = os.getcwd()</span><br><span class="line">    fatherPath = os.path.abspath(<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">    os.remove(os.path.join(fatherPath,<span class="string">&#x27;temp\\&#x27;</span>)+fileName)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment"># app.config[&#x27;JSON_AS_ASCII&#x27;] = False</span></span><br><span class="line">    app.run(host = <span class="string">&#x27;0.0.0.0&#x27;</span>, port = <span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="前端html"><a href="#前端html" class="headerlink" title="前端html"></a>前端html</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span> = <span class="string">&quot;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- &lt;div id = &quot;div1&quot;&gt;0, 0&lt;/div&gt; --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- &lt;button id=&quot;Mup&quot; style=&quot;width: 10%; height: 30px; left: 45%;top:10px;position:absolute&quot; onmousedown=&quot;handleMDown(event)&quot;onmouseup = &quot;handleMUp(event)&quot;&gt;↑&lt;/button&gt;</span></span><br><span class="line"><span class="comment">&lt;button id=&quot;Mleft&quot; style=&quot;width: 10%; height: 30px; left: 20%;top:60px;position:absolute&quot; onmousedown=&quot;handleMDown(event)&quot;onmouseup = &quot;handleMUp(event)&quot;&gt;←&lt;/button&gt;</span></span><br><span class="line"><span class="comment">&lt;button id=&quot;Mright&quot; style=&quot;width: 10%; height: 30px; left: 70%;top: 60px;position:absolute&quot; onmousedown=&quot;handleMDown(event)&quot;onmouseup = &quot;handleMUp(event)&quot;&gt;→&lt;/button&gt;</span></span><br><span class="line"><span class="comment">&lt;button id=&quot;Mdown&quot; style=&quot;width: 10%; height: 30px; left: 45%;top:110px;position:absolute&quot; onmousedown=&quot;handleMDown(event)&quot;onmouseup = &quot;handleMUp(event)&quot;&gt;↓&lt;/button&gt; --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;click&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 12%; height: 30px; left: 20%;top:160px;position:absolute&quot;</span><span class="attr">onclick</span> = <span class="string">&quot;handleClick(event);&quot;</span>&gt;</span>左击<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;dClick&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 12%; height: 30px; left: 44%;top:160px;position:absolute&quot;</span><span class="attr">onclick</span> = <span class="string">&quot;handleClick(event);&quot;</span>&gt;</span>双击<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;rClick&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 12%; height: 30px; left: 68%;top:160px;position:absolute&quot;</span><span class="attr">onclick</span> = <span class="string">&quot;handleClick(event);&quot;</span>&gt;</span>右击<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">hr</span> <span class="attr">style</span>=<span class="string">&quot;top:190px;position:relative&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;esc&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 20%;top:200px;position:absolute&quot;</span> <span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span> <span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>Esc<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot; &quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 30%; height: 30px; left: 35%;top:200px;position:absolute&quot;</span> <span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span> <span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>Space<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;enter&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 70%;top:200px;position:absolute&quot;</span><span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span> <span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>Enter<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;left&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 20%;top:240px;position:absolute&quot;</span><span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span><span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>l<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;up&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 35%;top:240px;position:absolute&quot;</span><span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span><span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>u<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;down&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 55%;top:240px;position:absolute&quot;</span><span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span><span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>d<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;right&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 70%;top:240px;position:absolute&quot;</span><span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span><span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>r<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;altTab&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 20%;top:280px;position:absolute&quot;</span><span class="attr">onclick</span> = <span class="string">&quot;handleClick(event);&quot;</span>&gt;</span>AltTab<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;Win&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 70%;top:280px;position:absolute&quot;</span><span class="attr">onclick</span> = <span class="string">&quot;handleClick(event);&quot;</span>&gt;</span>Win<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="comment">// mouseXPrev = window.event.clientX;</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// mouseYPrev = window.touch.pageY;</span></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">mouseXPrev = -<span class="number">1</span>;</span></span><br><span class="line"><span class="javascript">mouseYPrev = -<span class="number">1</span>;</span></span><br><span class="line"><span class="javascript"><span class="comment">// event.preventDefault();</span></span></span><br><span class="line"><span class="javascript"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;touchstart&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript"></span>&#123;</span></span><br><span class="line"><span class="javascript">    event.preventDefault();</span></span><br><span class="line"><span class="javascript">    mouseXPrev = event.targetTouches[<span class="number">0</span>].pageX;</span></span><br><span class="line"><span class="javascript">    mouseYPrev = event.targetTouches[<span class="number">0</span>].pageY;</span></span><br><span class="line"><span class="javascript">    <span class="comment">//document.getElementById(&quot;div1&quot;).value = mouseXPrev + &#x27;, &#x27; + mouseYPrev;</span></span></span><br><span class="line"><span class="javascript">&#125;)</span></span><br><span class="line"><span class="javascript"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;touchmove&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript"></span>&#123;</span></span><br><span class="line"><span class="javascript">    </span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> touch = event.targetTouches[<span class="number">0</span>];</span></span><br><span class="line"><span class="javascript">    <span class="comment">// if(mouseXPrev&lt;0)mouseXPrev = Number(touch.pageX);</span></span></span><br><span class="line"><span class="javascript">    <span class="comment">// if(mouseYPrev&lt;0)mouseYPrev = Number(touch.pageY);</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;x&#x27;</span>:<span class="number">0</span>,<span class="string">&#x27;y&#x27;</span>:<span class="number">0</span>&#125;;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">if</span>(touch.pageY&gt;<span class="number">160</span>)<span class="keyword">return</span>;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> x = <span class="built_in">Number</span>(touch.pageX)-mouseXPrev;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> y = <span class="built_in">Number</span>(touch.pageY)-mouseYPrev;</span></span><br><span class="line"><span class="javascript">    dataToSend[<span class="string">&#x27;x&#x27;</span>] = x;</span></span><br><span class="line"><span class="javascript">    dataToSend[<span class="string">&#x27;y&#x27;</span>] = y;</span></span><br><span class="line"><span class="javascript">    mouseXPrev = <span class="built_in">Number</span>(touch.pageX);</span></span><br><span class="line"><span class="javascript">    mouseYPrev = <span class="built_in">Number</span>(touch.pageY);</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(jsonToSend)</span></span><br><span class="line"><span class="javascript">    $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">        <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">        <span class="attr">url</span>:<span class="string">&quot;mousemove&quot;</span>,</span></span><br><span class="line"><span class="javascript">        <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">        <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">        </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">    &#125;)</span></span><br><span class="line"><span class="javascript">&#125;)</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="comment">/*</span></span></span><br><span class="line"><span class="comment"><span class="javascript">function handleMDown(buttonClicked)</span></span></span><br><span class="line"><span class="comment"><span class="javascript">&#123;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">    switch(buttonClicked.target.id)</span></span></span><br><span class="line"><span class="comment"><span class="javascript">    &#123;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mup&#x27;:Mup = true;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mdown&#x27;:Mdown = true;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mleft&#x27;:Mleft = true;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mright&#x27;:Mright = true;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">    &#125;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">&#125;</span></span></span><br><span class="line"><span class="comment"><span class="javascript"></span></span></span><br><span class="line"><span class="comment"><span class="javascript">function handleMUp(buttonClicked)</span></span></span><br><span class="line"><span class="comment"><span class="javascript">&#123;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">    switch(buttonClicked.target.id)</span></span></span><br><span class="line"><span class="comment"><span class="javascript">    &#123;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mup&#x27;:Mup = false;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mdown&#x27;:Mdown = false;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mleft&#x27;:Mleft = false;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mright&#x27;:Mright = false;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">    &#125;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">&#125;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">*/</span></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">handleDown</span>(<span class="params">buttonClicked</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript"></span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;key&#x27;</span>:buttonClicked.target.id,<span class="string">&#x27;move&#x27;</span>:<span class="number">1</span>&#125;;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">    <span class="comment">//console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">    $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">        <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">        <span class="attr">url</span>:<span class="string">&quot;key&quot;</span>,</span></span><br><span class="line"><span class="javascript">        <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">        <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">        </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">    &#125;)</span></span><br><span class="line"><span class="javascript">&#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">handleUp</span>(<span class="params">buttonClicked</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript"></span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;key&#x27;</span>:buttonClicked.target.id,<span class="string">&#x27;move&#x27;</span>:<span class="number">2</span>&#125;;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">    <span class="comment">// console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">    $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">        <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">        <span class="attr">url</span>:<span class="string">&quot;key&quot;</span>,</span></span><br><span class="line"><span class="javascript">        <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">        <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">        </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">    &#125;)</span></span><br><span class="line"><span class="javascript">&#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">handleClick</span>(<span class="params">buttonClicked</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript"></span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">switch</span>(buttonClicked.target.id)</span></span><br><span class="line"><span class="javascript">    &#123;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">case</span> <span class="string">&#x27;click&#x27;</span>:</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;time&#x27;</span>:<span class="number">1</span>,<span class="string">&#x27;btn&#x27;</span>:<span class="number">1</span>&#125;;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">            <span class="comment">// console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">            $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">                <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">url</span>:<span class="string">&quot;click&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">                <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">                </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">            &#125;)</span></span><br><span class="line"><span class="javascript">            <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">case</span> <span class="string">&#x27;dClick&#x27;</span>:</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;time&#x27;</span>:<span class="number">2</span>,<span class="string">&#x27;btn&#x27;</span>:<span class="number">1</span>&#125;;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">            <span class="comment">// console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">            $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">                <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">url</span>:<span class="string">&quot;click&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">                <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">                </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">            &#125;)</span></span><br><span class="line"><span class="javascript">            <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">case</span> <span class="string">&#x27;rClick&#x27;</span>:</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;time&#x27;</span>:<span class="number">1</span>,<span class="string">&#x27;btn&#x27;</span>:<span class="number">2</span>&#125;;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">            <span class="comment">// console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">            $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">                <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">url</span>:<span class="string">&quot;click&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">                <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">                </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">            &#125;)</span></span><br><span class="line"><span class="javascript">            <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">case</span> <span class="string">&#x27;altTab&#x27;</span>:</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;key&#x27;</span>:<span class="string">&#x27;altTab&#x27;</span>&#125;;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">            <span class="comment">// console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">            $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">                <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">url</span>:<span class="string">&quot;altTabAndWin&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">                <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">                </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">            &#125;)</span></span><br><span class="line"><span class="javascript">            <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">case</span> <span class="string">&#x27;Win&#x27;</span>:</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;key&#x27;</span>:<span class="string">&#x27;win&#x27;</span>&#125;;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">            <span class="comment">// console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">            $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">                <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">url</span>:<span class="string">&quot;altTabAndWin&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">                <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">                </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">            &#125;)</span></span><br><span class="line"><span class="javascript">            <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">&#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>前端的要点是调用了<code>event.targetTouches</code>这一属性，获得手指按压或者是触控笔的位置</li>
+<li>此API在计算机端无法使用</li>
+</ul>
+
+        </div>
+
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/03/03/Ubuntu%E9%85%8D%E7%BD%AEVNC%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%BF%9E%E6%8E%A5Windows%E7%94%B5%E8%84%91/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Ubuntu配置VNC远程桌面连接Windows电脑</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
+        </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+</div>
+
+
+
+</body>
+</html>
