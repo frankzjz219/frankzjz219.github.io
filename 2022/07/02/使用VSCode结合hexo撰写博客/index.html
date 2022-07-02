@@ -9,7 +9,7 @@
     
     <title>
         
-            解决Cube新建项目使用UART编译出错的问题 |
+            使用VSCode结合hexo撰写博客 |
         
         Frank&#39;s Blogs
     </title>
@@ -118,7 +118,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">解决Cube新建项目使用UART编译出错的问题</span>
+            <span class="title-hover-animation">使用VSCode结合hexo撰写博客</span>
         </div>
 
         
@@ -137,8 +137,8 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-01-06 22:07:10</span>
-        <span class="mobile">2022-01-06 22:07</span>
+        <span class="pc">2022-07-02 13:29:22</span>
+        <span class="mobile">2022-07-02 13:29</span>
     </span>
     
     
@@ -155,10 +155,26 @@
         
 
         <div class="article-content markdown-body">
-            <h1 id="解决Cube新建项目使用UART编译出错的问题"><a href="#解决Cube新建项目使用UART编译出错的问题" class="headerlink" title="解决Cube新建项目使用UART编译出错的问题"></a>解决Cube新建项目使用UART编译出错的问题</h1><p>注意<code>stm32f4xx_hal_conf.h</code>中有一些宏定义</p>
-<p><img src="/imgs/image-20220106220834007.png" alt="image-20220106220834007"></p>
-<p>此处可能是系统没有将<code>#define HAL_UART_MODULE_ENABLED   </code>取消注释，此处自己删除注释即可正常编译</p>
-<p><img src="/imgs/image-20220106220934356.png" alt="image-20220106220934356"></p>
+            <h1 id="使用VSCode结合hexo撰写博客"><a href="#使用VSCode结合hexo撰写博客" class="headerlink" title="使用VSCode结合hexo撰写博客"></a>使用VSCode结合hexo撰写博客</h1><ul>
+<li><p>VSCode安装<code>Markdown All in One</code>插件<br><img src="/imgs/3bb6348ccf8c066c5afdaeac0eb63f22098a3e1457877205f190013df629f4d8.png" alt="图 5">  </p>
+</li>
+<li><p>安装<code>Markdown Image</code>插件<br><img src="/imgs/96279228f003610f7191bc2809341b9d48cdc6f2a90cb29725106a506728dfe4.png" alt="图 6">  </p>
+</li>
+<li><p>安装之后配置该插件的设置部分</p>
+</li>
+<li><p><img src="/imgs/5460b26cc260f397280cd6ef4c3b623cfc94f70a624dd431f87b9031c2f567e3.png" alt="图 7">  </p>
+</li>
+<li><p>然后注意将图片目录配置为之前自己指定的<code>hexo</code>图片目录</p>
+</li>
+<li><p><img src="/imgs/57871a0f3ce7e49bfe93d872ac2302e3ddd9f94be85fb68280597d1b6eb648ba.png" alt="图 8">  </p>
+</li>
+<li><p>然后在使用的时候使用VSCode<code>打开文件夹</code>打开hexo的<code>source</code>文件夹，然后即可自动加载图片进行预览</p>
+</li>
+<li><p><img src="/imgs/11b45fa602b1f75a3e282386ac4b7fe3293cb7546191c22265243eba5ca12b06.png" alt="图 9">  </p>
+</li>
+<li><p>使用VSCode<strong>打开文件夹</strong>之后就<strong>不需要</strong>手动配置<code>Makrdown all in one</code>的根目录</p>
+</li>
+</ul>
 
         </div>
 
@@ -169,29 +185,14 @@
         
             <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/01/08/%E4%BD%BF%E7%94%A8STM32%E8%AF%BB%E5%8F%96Winbond-W25Q16-Flash%E8%8A%AF%E7%89%87%E7%9A%84ID%E5%92%8C%E5%BA%8F%E5%88%97%E5%8F%B7/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">使用STM32读取Winbond_W25Q16_Flash芯片的ID和序列号</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2022/01/05/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%94%EF%BC%89/"
+                           href="/2022/07/02/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%89%E7%A7%8D%E9%81%8D%E5%8E%86%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">Linux初步学习（五）</span>
+                                <span class="post-nav-title-item">二叉树的三种遍历的非递归实现</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex-center">
