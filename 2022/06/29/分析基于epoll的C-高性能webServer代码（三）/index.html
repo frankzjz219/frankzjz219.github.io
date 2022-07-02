@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="Chinese">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Frank·Zhang">
+    
+    <title>
+        
+            分析基于epoll的C++高性能webServer代码（三） |
+        
+        Frank&#39;s Blogs
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/FLogo.png">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
+    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Frank&#39;s Blogs
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">分析基于epoll的C++高性能webServer代码（三）</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/FLogo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Frank·Zhang</span>
+                        
+                            <span class="author-label">Lv5</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-06-29 19:39:45</span>
+        <span class="mobile">2022-06-29 19:39</span>
+    </span>
+    
+    
+
+    
+    
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h1 id="分析基于epoll的C-高性能webServer代码（三）"><a href="#分析基于epoll的C-高性能webServer代码（三）" class="headerlink" title="分析基于epoll的C++高性能webServer代码（三）"></a>分析基于epoll的C++高性能webServer代码（三）</h1><h2 id="Socket类"><a href="#Socket类" class="headerlink" title="Socket类"></a>Socket类</h2><ul>
+<li><p>Socket类基于C语言的tcp通信库实现，将C语言提供的Socket相关操作函数利用C++的面向对象进行了包装</p>
+</li>
+<li><p>成员数据对象只有一个<code>int serverfd_;</code></p>
+</li>
+</ul>
+<h3 id="构造函数Socket-args"><a href="#构造函数Socket-args" class="headerlink" title="构造函数Socket(/* args */)"></a>构造函数Socket(/* args */)</h3><ul>
+<li>创建<code>socket</code>对象</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Socket::<span class="built_in">Socket</span>(<span class="comment">/* args */</span>)</span><br><span class="line">&#123;</span><br><span class="line">    serverfd_ = <span class="built_in">socket</span>(AF_INET, SOCK_STREAM, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="number">-1</span> == serverfd_)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;socket create fail!&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;server create socket&quot;</span> &lt;&lt; serverfd_ &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h3><ul>
+<li>关闭<code>socket</code>文件描述符</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Socket::~<span class="built_in">Socket</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">close</span>(serverfd_);</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;server close...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="SetReuseAddr"><a href="#SetReuseAddr" class="headerlink" title="SetReuseAddr()"></a>SetReuseAddr()</h3><ul>
+<li>设置地址</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Socket::SetReuseAddr</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> on = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">setsockopt</span>(serverfd_, SOL_SOCKET, SO_REUSEADDR, &amp;on, <span class="built_in"><span class="keyword">sizeof</span></span>(on));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Setnonblocking"><a href="#Setnonblocking" class="headerlink" title="Setnonblocking()"></a>Setnonblocking()</h3><ul>
+<li>设置为非阻塞模式</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Socket::Setnonblocking</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> opts = <span class="built_in">fcntl</span>(serverfd_, F_GETFL);</span><br><span class="line">    <span class="keyword">if</span> (opts&lt;<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;fcntl(serverfd_,GETFL)&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">fcntl</span>(serverfd_, F_SETFL, opts | O_NONBLOCK) &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;fcntl(serverfd_,SETFL,opts)&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;server setnonblocking...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="BindAddress-int-serverport"><a href="#BindAddress-int-serverport" class="headerlink" title="BindAddress(int serverport)"></a>BindAddress(int serverport)</h3><ul>
+<li>将主机对应的端口号与<code>socket</code>进行绑定</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Socket::BindAddress</span><span class="params">(<span class="keyword">int</span> serverport)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">serveraddr</span>;</span></span><br><span class="line">	<span class="built_in">memset</span>(&amp;serveraddr, <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(serveraddr));</span><br><span class="line">	serveraddr.sin_family = AF_INET;</span><br><span class="line">	serveraddr.sin_addr.s_addr = <span class="built_in">htonl</span>(INADDR_ANY);<span class="comment">//inet_addr(_ServerIP.c_str());</span></span><br><span class="line">	serveraddr.sin_port = <span class="built_in">htons</span>(serverport);</span><br><span class="line">	<span class="keyword">int</span> resval = <span class="built_in">bind</span>(serverfd_, (struct sockaddr*)&amp;serveraddr, <span class="built_in"><span class="keyword">sizeof</span></span>(serveraddr));</span><br><span class="line">	<span class="keyword">if</span> (resval == <span class="number">-1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">close</span>(serverfd_);</span><br><span class="line">		<span class="built_in">perror</span>(<span class="string">&quot;error bind&quot;</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;server bindaddress...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Listen"><a href="#Listen" class="headerlink" title="Listen()"></a>Listen()</h3><ul>
+<li>就是调用C提供的<code>Listen</code>函数</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Socket::Listen</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;    </span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">listen</span>(serverfd_, <span class="number">2048</span>) &lt; <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">perror</span>(<span class="string">&quot;error listen&quot;</span>);</span><br><span class="line">		<span class="built_in">close</span>(serverfd_);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;server listenning...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Accept-struct-sockaddr-in-amp-clientaddr"><a href="#Accept-struct-sockaddr-in-amp-clientaddr" class="headerlink" title="Accept(struct sockaddr_in &amp;clientaddr)"></a>Accept(struct sockaddr_in &amp;clientaddr)</h3><ul>
+<li>调用C提供的<code>Accept()</code>函数</li>
+<li>返回用户<code>socket</code>的文件描述符</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Socket::Accept</span><span class="params">(struct sockaddr_in &amp;clientaddr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">socklen_t</span> lengthofsockaddr = <span class="built_in"><span class="keyword">sizeof</span></span>(clientaddr);</span><br><span class="line">    <span class="keyword">int</span> clientfd = <span class="built_in">accept</span>(serverfd_, (struct sockaddr*)&amp;clientaddr, &amp;lengthofsockaddr);</span><br><span class="line">    <span class="keyword">if</span> (clientfd &lt; <span class="number">0</span>) </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//perror(&quot;error accept&quot;);</span></span><br><span class="line">        <span class="comment">//if(errno == EAGAIN)</span></span><br><span class="line">            <span class="comment">//return 0;</span></span><br><span class="line">		<span class="comment">//std::cout &lt;&lt; &quot;error accept:there is no new connection accept...&quot; &lt;&lt; std::endl;</span></span><br><span class="line">        <span class="keyword">return</span> clientfd;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot;server accept,clientfd: &quot; &lt;&lt; clientfd &lt;&lt; std::endl;</span></span><br><span class="line">    <span class="keyword">return</span> clientfd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Close"><a href="#Close" class="headerlink" title="Close()"></a>Close()</h3><ul>
+<li>关闭对应的文件描述符</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Socket::Close</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">close</span>(serverfd_);</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;server close...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Epoll介绍"><a href="#Epoll介绍" class="headerlink" title="Epoll介绍"></a>Epoll介绍</h2><h3 id="等待队列"><a href="#等待队列" class="headerlink" title="等待队列"></a>等待队列</h3><ul>
+<li>当进程A执行到创建socket的语句时，操作系统会创建一个由文件系统管理的socket对象（如下图）。这个socket对象包含了发送缓冲区、接收缓冲区、等待队列等成员。<u>等待队列是个非常重要的结构，它指向所有需要等待该socket事件的进程</u>。</li>
+</ul>
+<p><img src="/imgs/v2-7ce207c92c9dd7085fb7b823e2aa5872_720w.jpg" alt="img"></p>
+<ul>
+<li>当程序执行到<strong>recv时</strong>，操作系统会将进程A从工作队列移动到该socket的等待队列中（如下图）。由于工作队列只剩下了进程B和C，依据进程调度，cpu会轮流执行这两个进程的程序，不会执行进程A的程序。<strong>所以进程A被阻塞，不会往下执行代码，也不会占用cpu资源</strong>。</li>
+</ul>
+<p><img src="/imgs/v2-1c7a96c8da16f123388e46f88772e6d8_720w.jpg" alt="img"></p>
+<ul>
+<li>ps：操作系统添加等待队列只是添加了对这个“等待中”进程的引用，以便在接收到数据时获取进程对象、将其唤醒，而非直接将进程管理纳入自己之下。上图为了方便说明，直接将进程挂到等待队列之下。</li>
+<li>当socket接收到数据后，操作系统将该socket等待队列上的进程<strong>重新放回到工作队列</strong>，该进程变成运行状态，继续执行代码。也由于<u>socket的接收缓冲区已经有了数据，recv可以返回接收到的数据</u>。</li>
+</ul>
+<h3 id="内核接收网络数据全过程"><a href="#内核接收网络数据全过程" class="headerlink" title="内核接收网络数据全过程"></a>内核接收网络数据全过程</h3><ul>
+<li>如下图所示，进程在recv阻塞期间，计算机收到了对端传送的数据（步骤①）。数据经由网卡传送到内存（步骤②），然后网卡通过中断信号通知cpu有数据到达，cpu执行中断程序（步骤③）。此处的中断程序主要有两项功能，先将网络数据写入到对应socket的接收缓冲区里面（步骤④），再唤醒进程A（步骤⑤），重新将进程A放入工作队列中。</li>
+</ul>
+<p><img src="/imgs/v2-696b131cae434f2a0b5ab4d6353864af_720w.jpg" alt="img"></p>
+<ul>
+<li>一个socket对应着一个端口号，而网络数据包中包含了ip和端口的信息，内核可以通过端口号找到对应的socket。当然，为了提高处理速度，操作系统会维护端口号到socket的索引结构，以快速读取。</li>
+</ul>
+<h3 id="同时监视多个socket的简单方法"><a href="#同时监视多个socket的简单方法" class="headerlink" title="同时监视多个socket的简单方法"></a><strong>同时监视多个socket的简单方法</strong></h3><ul>
+<li>服务端需要管理多个客户端连接，而recv只能监视单个socket，这种矛盾下，人们开始寻找监视多个socket的方法。epoll的要义是<strong>高效</strong>的监视多个socket。从历史发展角度看，必然先出现一种不太高效的方法，人们再加以改进。只有先理解了不太高效的方法，才能够理解epoll的本质。</li>
+<li>假如能够预先传入一个socket列表，<strong>如果列表中的socket都没有数据，挂起进程，直到有一个socket收到数据，唤醒进程</strong>。这种方法很直接，也是select的设计思想。</li>
+<li>为方便理解，我们先复习select的用法。在如下的代码中，先准备一个数组（下面代码中的fds），让fds存放着所有需要监视的socket。然后调用select，如果fds中的所有socket都没有数据，select会阻塞，直到有一个socket接收到数据，select返回，唤醒进程。用户可以遍历fds，通过FD_ISSET判断具体哪个socket收到数据，然后做出处理。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> s = <span class="built_in">socket</span>(AF_INET, SOCK_STREAM, <span class="number">0</span>);  </span><br><span class="line"><span class="built_in">bind</span>(s, ...)</span><br><span class="line"><span class="built_in">listen</span>(s, ...)</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> fds[] =  存放需要监听的socket</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">    <span class="keyword">int</span> n = <span class="built_in">select</span>(..., fds, ...)</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; fds.count; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">FD_ISSET</span>(fds[i], ...))&#123;</span><br><span class="line">            <span class="comment">//fds[i]的数据处理</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="select的流程"><a href="#select的流程" class="headerlink" title="select的流程"></a>select的流程</h3><ul>
+<li>select的实现思路很直接。假如程序同时监视如下图的sock1、sock2和sock3三个socket，那么在调用select之后，操作系统把进程A分别加入这三个socket的等待队列中。</li>
+</ul>
+<p><img src="/imgs/v2-0cccb4976f8f2c2f8107f2b3a5bc46b3_720w.jpg" alt="img"></p>
+<ul>
+<li>当任何一个socket收到数据后，中断程序将唤起进程。下图展示了sock2接收到了数据的处理流程。</li>
+</ul>
+<p><img src="/imgs/v2-85dba5430f3c439e4647ea4d97ba54fc_720w.jpg" alt="img"></p>
+<ul>
+<li>所谓唤起进程，就是将进程从所有的等待队列中移除，加入到工作队列里面。如下图所示。</li>
+</ul>
+<p><img src="/imgs/v2-a86b203b8d955466fff34211d965d9eb_720w.jpg" alt="img"></p>
+<ul>
+<li><p>经由这些步骤，当进程A被唤醒后，它知道至少有一个socket接收了数据。程序只需遍历一遍socket列表，就可以得到就绪的socket。</p>
+</li>
+<li><p>这种简单方式<strong>行之有效</strong>，在几乎所有操作系统都有对应的实现。</p>
+</li>
+</ul>
+<h2 id="TcpServer"><a href="#TcpServer" class="headerlink" title="TcpServer"></a>TcpServer</h2><ul>
+<li><p><a class="link"   target="_blank" rel="noopener" href="http://naotu.baidu.com/file/1c993feb2c86cb9e3caf273d19c9d54d?token=f68ea843fc2470f4" >成员对象以及函数思维导图<i class="fas fa-external-link-alt"></i></a></p>
+</li>
+<li><p>注册业务函数函数指针的部分<u>在此处略去</u></p>
+</li>
+</ul>
+<h3 id="构造函数-TcpServer-EventLoop-loop-int-port"><a href="#构造函数-TcpServer-EventLoop-loop-int-port" class="headerlink" title="构造函数 TcpServer(EventLoop* loop, int port)"></a>构造函数 TcpServer(EventLoop* loop, int port)</h3><ul>
+<li>利用初始化列表初始化<code>Socket</code>的<code>Serversocket</code>对象，初始化循环体<code>loop</code>对象，初始化<code>Channel</code>类型的<code>serverchannel</code>对象，初始化链接计数<code>conncount</code>对象</li>
+<li><code>serversocket</code>分别进行<code>SetReuseAddr()</code>、<code>BindAddress(port)</code>, <code>Listen()</code>, <code>Setnonblocking()</code></li>
+</ul>
+
+        </div>
+
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2022/07/02/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%89%E7%A7%8D%E9%81%8D%E5%8E%86%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">二叉树的三种遍历的非递归实现</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81%EF%BC%88%E4%BA%8C%EF%BC%89/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">分析基于epoll的C++高性能webServer代码（二）</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
+        </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+</div>
+
+
+
+</body>
+</html>

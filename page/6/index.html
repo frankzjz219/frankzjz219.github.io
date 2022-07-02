@@ -120,6 +120,160 @@
                 
 
                 <h3 class="home-article-title">
+                    <a href="/2022/01/08/STM32%E5%AE%9E%E7%8E%B0W25Q16%E8%8A%AF%E7%89%87%E7%9A%84%E6%93%A6%E9%99%A4%E3%80%81%E8%AF%BB%E5%92%8C%E5%86%99/">
+                        STM32实现W25Q16芯片的擦除、读和写
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        STM32实现W25Q16芯片的擦除、读和写封装等待函数（通过读取状态寄存器）1234567891011121314void delayBusy()&#123;  uint8_t D05 = 0x05;  uint8_t result;  EnCS(...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sat Jan 08 2022 12:45:39 GMT+0800">2022-01-08</span></span>
+        
+        
+    </div>
+
+    <a href="/2022/01/08/STM32%E5%AE%9E%E7%8E%B0W25Q16%E8%8A%AF%E7%89%87%E7%9A%84%E6%93%A6%E9%99%A4%E3%80%81%E8%AF%BB%E5%92%8C%E5%86%99/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2022/01/08/%E4%BD%BF%E7%94%A8STM32%E8%AF%BB%E5%8F%96Winbond-W25Q16-Flash%E8%8A%AF%E7%89%87%E7%9A%84ID%E5%92%8C%E5%BA%8F%E5%88%97%E5%8F%B7/">
+                        使用STM32读取Winbond_W25Q16_Flash芯片的ID和序列号
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        使用STM32读取Winbond_W25Q16_Flash芯片的ID和序列号Cube配置配置为全双工主设备
+
+
+使用的是SPI1（根据开发板的接线），Prescaler配置多少都可以，不关键，2和256都行
+
+DMA也可以开，不影响
+配置CS引脚，原...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sat Jan 08 2022 11:10:07 GMT+0800">2022-01-08</span></span>
+        
+        
+    </div>
+
+    <a href="/2022/01/08/%E4%BD%BF%E7%94%A8STM32%E8%AF%BB%E5%8F%96Winbond-W25Q16-Flash%E8%8A%AF%E7%89%87%E7%9A%84ID%E5%92%8C%E5%BA%8F%E5%88%97%E5%8F%B7/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2022/01/06/%E8%A7%A3%E5%86%B3Cube%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8UART%E7%BC%96%E8%AF%91%E5%87%BA%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98/">
+                        解决Cube新建项目使用UART编译出错的问题
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        解决Cube新建项目使用UART编译出错的问题注意stm32f4xx_hal_conf.h中有一些宏定义
+
+此处可能是系统没有将#define HAL_UART_MODULE_ENABLED   取消注释，此处自己删除注释即可正常编译
+
+
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Thu Jan 06 2022 22:07:10 GMT+0800">2022-01-06</span></span>
+        
+        
+    </div>
+
+    <a href="/2022/01/06/%E8%A7%A3%E5%86%B3Cube%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8UART%E7%BC%96%E8%AF%91%E5%87%BA%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2022/01/05/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%94%EF%BC%89/">
+                        Linux初步学习（五）
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        Linux系统知识apt命令apt（Advanced Packaging Tool）是一个在 Debian 和 Ubuntu 中的 Shell 前端软件包管理器。
+apt 命令提供了查找、安装、升级、删除某一个、一组甚至全部软件包的命令，而且命令简洁...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Wed Jan 05 2022 11:21:36 GMT+0800">2022-01-05</span></span>
+        
+        
+    </div>
+
+    <a href="/2022/01/05/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%94%EF%BC%89/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2022/01/04/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/">
+                        Linux初步学习（四）
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        Linux初步学习（四）函数123456789[ function ] funname [()]&#123;    action;    [return int;]&#125;
+
+
+1、可以带function fun() 定义，也可以直接fun() ...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Tue Jan 04 2022 16:39:24 GMT+0800">2022-01-04</span></span>
+        
+        
+    </div>
+
+    <a href="/2022/01/04/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
                     <a href="/2022/01/03/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89/">
                         Linux初步学习（三）
                     </a>
@@ -289,192 +443,6 @@ shellhttps://www.runoob.com/linux/linux-shell-variable.ht...
     </div>
 
     <a href="/2021/12/20/freeRTOS%E4%B8%AD%E6%96%AD/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/20/%E4%BD%BF%E7%94%A8CubeIDE%E9%85%8D%E7%BD%AEJLink%E5%92%8C%E9%A1%B9%E7%9B%AE/">
-                        使用CubeIDE配置JLink和项目
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        使用CubeIDE配置JLink和项目配置Cube
-
-
-新建项目，然后在Cube中配置相关的内容
-
-选择填写相关的信息，名称等
-
-
-
-此处放大窗口
-
-
-
-设置好之后，右键创建代码
-
-
-
-假如此时不能点击generate code的话，右键选择buil...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon Dec 20 2021 20:59:09 GMT+0800">2021-12-20</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/20/%E4%BD%BF%E7%94%A8CubeIDE%E9%85%8D%E7%BD%AEJLink%E5%92%8C%E9%A1%B9%E7%9B%AE/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/18/%E4%BD%BF%E7%94%A8freeRTOS%E7%9A%84%E9%98%9F%E5%88%97%E5%92%8C%E5%AE%9A%E6%97%B6%E5%99%A8/">
-                        使用freeRTOS的队列和定时器
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        使用freeRTOS的队列和定时器Cube
-注意必须用CMSIS_V2系统才可以设置定时器
-
-
-
-然后在freeRTOS.c中的初始化函数MX_FREERTOS_Init中添加启动定时器的语句
-1234567891011121314151617181...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sat Dec 18 2021 12:59:35 GMT+0800">2021-12-18</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/18/%E4%BD%BF%E7%94%A8freeRTOS%E7%9A%84%E9%98%9F%E5%88%97%E5%92%8C%E5%AE%9A%E6%97%B6%E5%99%A8/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/17/%E8%A7%A3%E5%86%B3C%E8%AF%AD%E8%A8%80%E5%8F%98%E9%87%8F%E8%A2%AB%E9%87%8D%E5%A4%8D%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/">
-                        解决C语言变量被重复定义错误的问题
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        解决C语言变量被重复定义错误的问题头文件编译的原理
-在每次头文件被某个.c文件include的时候，头文件头会被插入到代码中#include &quot;xxx.h&quot;的位置，假如在头文件中定义了变量，然后这个头文件被多个.c文件同时Incl...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Fri Dec 17 2021 23:10:42 GMT+0800">2021-12-17</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/17/%E8%A7%A3%E5%86%B3C%E8%AF%AD%E8%A8%80%E5%8F%98%E9%87%8F%E8%A2%AB%E9%87%8D%E5%A4%8D%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/">
-                        使用FreeRTOS和ILI9341点亮LCD屏幕
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕CubeMX配置
-SPI：
-
-
-
-DMA：
-
-
-
-NVIC（重要）：
-
-
-
-注意此处SPI、TIM1和DMA不要使用FreeRTOS 的中断函数，将对勾去掉，同时将中断优先级改为一个比...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Fri Dec 17 2021 21:35:25 GMT+0800">2021-12-17</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/16/STM32F4%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%892/">
-                        STM32F4点亮ili9341驱动的屏幕（HAL库）2
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        STM32F4点亮ili9341驱动的屏幕（HAL库）2地址
-https://github.com/ardnew/ILI9341-STM32-HAL
-
-Cube配置按照readme中的配置，注意以下问题
-
-SPI设置（打开中断）：
-
-DMA：
-
-生成...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Thu Dec 16 2021 10:36:21 GMT+0800">2021-12-16</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/16/STM32F4%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%892/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
