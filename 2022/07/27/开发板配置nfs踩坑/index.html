@@ -9,7 +9,7 @@
     
     <title>
         
-            配置开发板通过网线连接本机WSL虚拟机 |
+            开发板配置nfs踩坑 |
         
         Frank&#39;s Blogs
     </title>
@@ -118,7 +118,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">配置开发板通过网线连接本机WSL虚拟机</span>
+            <span class="title-hover-animation">开发板配置nfs踩坑</span>
         </div>
 
         
@@ -137,8 +137,8 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-07-27 11:55:00</span>
-        <span class="mobile">2022-07-27 11:55</span>
+        <span class="pc">2022-07-27 13:38:52</span>
+        <span class="mobile">2022-07-27 13:38</span>
     </span>
     
     
@@ -155,45 +155,19 @@
         
 
         <div class="article-content markdown-body">
-            <h1 id="配置开发板通过网线连接本机WSL虚拟机"><a href="#配置开发板通过网线连接本机WSL虚拟机" class="headerlink" title="配置开发板通过网线连接本机WSL虚拟机"></a>配置开发板通过网线连接本机WSL虚拟机</h1><ul>
-<li><p>开发板先正常启动到Linux系统方便调试</p>
-</li>
-<li><p>开发板用上面的网线接口连接到计算机的网口</p>
-</li>
-<li><p>此时在计算机Windows端命令行输入<code>ipconfig</code>可以看到“以太网”具有相应的IP地址等信息</p>
-</li>
-<li><p>打开WSL虚拟机</p>
-</li>
-<li><p>在WSL虚拟机使用<code>ifconfig</code>命令查看虚拟机的网络配置，IP地址，子网掩码，广播地址等等</p>
-</li>
-<li><p><img src="/imgs/61f4265dbfff438355aad4fbe7486a2eafda4b901f1dc691ab19f9d533f457b0.png" alt="图 1">  </p>
-</li>
-<li><p>虚拟机使用<code>netstat -rn</code>命令查看网关</p>
-</li>
-<li><p><img src="/imgs/4c7645d1ddf70738ba0b2481e06e64ba824a9cf41d4df016ae1d27d57c2c3747.png" alt="图 2">  </p>
-</li>
-<li><p>看到内核路由表的第一条的Gateway就是网关信息</p>
-</li>
-<li><p><strong>此时WSL处在NAT模式，没有开启桥接</strong></p>
-</li>
-<li><p>使用命令<code>Get-NetAdapter</code>查看网络设备</p>
-</li>
-<li><p>使用命令<code>Set-VMSwitch WSL -NetAdapterName &lt;桥接到的网卡名称&gt;</code>桥接WSL与以太网，如下(直接输入中文“以太网”即可)</p>
-</li>
-<li><p><img src="/imgs/ec8dfe21ae9cf0d454518137d0a9b8c4ac8759f610575c1012027702b0fbc280.png" alt="图 3">  </p>
-</li>
-<li><p>复位开发板，按下键盘打断Uboot启动Linux</p>
-</li>
-<li><p>使用Uboot的如下命令设置网络并保存环境变量</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">setenv ipaddr &lt;与WSL虚拟机在同一子网下的另一个IP地址&gt;</span><br><span class="line">setenv gatewayip &lt;WSL虚拟机上看到的网关&gt;</span><br><span class="line">setenv netmask &lt;WSL虚拟机看到的子网掩码&gt;</span><br><span class="line">setenv serverip &lt;WSL虚拟机上ifconfig看到的IP地址&gt;</span><br><span class="line">saveenv</span><br></pre></td></tr></table></figure></li>
-<li><p>然后尝试ping WSL虚拟机IP（也就是在WSL中ifconfig看到的IP）</p>
-</li>
-<li><p><img src="/imgs/5aa9ff0c921acd969021449f60b49a85e3d9597b1ed0c42f285dac9fb217856c.png" alt="图 4">  </p>
-</li>
-<li><p>然后开始使用tftp传输Linux内核</p>
-</li>
-<li><p><img src="/imgs/7aca547914f9f4056cbb698df2d99ecef6131cf615739af5b4c324fce75ade36.png" alt="图 5">  </p>
-</li>
+            <h1 id="开发板配置nfs踩坑"><a href="#开发板配置nfs踩坑" class="headerlink" title="开发板配置nfs踩坑"></a>开发板配置nfs踩坑</h1><h2 id="配置好nfs服务器路径等之后重启nfs服务的时候可能无法重启遇到错误"><a href="#配置好nfs服务器路径等之后重启nfs服务的时候可能无法重启遇到错误" class="headerlink" title="配置好nfs服务器路径等之后重启nfs服务的时候可能无法重启遇到错误"></a>配置好nfs服务器路径等之后重启nfs服务的时候可能无法重启遇到错误</h2><ul>
+<li><img src="/imgs/1b64ed91879caed772df196df38cbd0e5638597e292ef9ddd9505a4126295e86.png" alt="图 1">  </li>
+<li>此时需要执行命令<code>sudo service rpcbind start</code></li>
+<li>然后再执行<code>sudo /etc/init.d/nfs-kernel-server restart</code><h2 id="从Uboot启动Linux可能ping不通WSL的问题"><a href="#从Uboot启动Linux可能ping不通WSL的问题" class="headerlink" title="从Uboot启动Linux可能ping不通WSL的问题"></a>从Uboot启动Linux可能ping不通WSL的问题</h2></li>
+<li>开发板Linux端使用命令<code>ifconfig eth0 172.20.98.200 netmask 255.255.240.0</code>，配置ip地址和子网掩码，配置到与WSL再<strong>同一个子网之下</strong>即可ping通<h2 id="Uboot可以通过tftp下载内核和设备树但是无法用nfs下载文件系统的问题"><a href="#Uboot可以通过tftp下载内核和设备树但是无法用nfs下载文件系统的问题" class="headerlink" title="Uboot可以通过tftp下载内核和设备树但是无法用nfs下载文件系统的问题"></a>Uboot可以通过tftp下载内核和设备树但是无法用nfs下载文件系统的问题</h2></li>
+<li>使用WSL<strong>安装旧版（比如18.04）</strong>的Ubuntu</li>
+<li>将Ubuntu移动到D盘（假如C盘空间不足）<a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45700350/article/details/125227040" >参考链接<i class="fas fa-external-link-alt"></i></a></li>
+<li>安装好之后安装完nfs服务之后，将服务的配置文件<code>/etc/default/nfs-kernel-server</code>文件进行修改如下<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment"># Number of servers to start up</span></span><br><span class="line">RPCNFSDCOUNT=<span class="string">&quot;-V 2 8&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Runtime priority of server (see nice(1))</span></span><br><span class="line">RPCNFSDPRIORITY=0</span><br><span class="line"></span><br><span class="line"><span class="comment"># Options for rpc.mountd.</span></span><br><span class="line"><span class="comment"># If you have a port-based firewall, you might want to set up</span></span><br><span class="line"><span class="comment"># a fixed port here using the --port option. For more information,</span></span><br><span class="line"><span class="comment"># see rpc.mountd(8) or http://wiki.debian.org/SecuringNFS</span></span><br><span class="line"><span class="comment"># To disable NFSv4 on the server, specify &#x27;--no-nfs-version 4&#x27; here</span></span><br><span class="line">RPCMOUNTDOPTS=<span class="string">&quot;-V 2 --manage-gids&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Do you want to start the svcgssd daemon? It is only required for Kerberos</span></span><br><span class="line"><span class="comment"># exports. Valid alternatives are &quot;yes&quot; and &quot;no&quot;; the default is &quot;no&quot;.</span></span><br><span class="line">NEED_SVCGSSD=<span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Options for rpc.svcgssd.</span></span><br><span class="line">RPCSVCGSSDOPTS=<span class="string">&quot;--nfs-version 2,3,4 --debug --syslog&quot;</span></span><br><span class="line">RPCNFSDOPTS=<span class="string">&quot;--nfs-version 2,3,4 --debug --syslog&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li>然后<strong>重启WSL虚拟机</strong>，然后重启tftp、xinetd、rpcbind、nfs服务**</li>
+<li>注意重启之后WSL所处的<strong>网段、子网掩码、网关</strong>等都可能改变，，所以一定要使用WSL的<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig &lt;网卡号（比如eth0）&gt; &lt;指定的IP地址&gt;</span><br></pre></td></tr></table></figure>
+设置WSL系统的IP地址到同一个网段下，假如重启之后<strong>开发板ping不通虚拟机</strong>的话还需要重新按照之前的博客配置虚拟机网络与开发板的桥接</li>
+<li>成功结果如图</li>
+<li><img src="/imgs/f3d2319d4773d96e9331fba91ad296b376fd2e876dedefe74e05bd8bc1ae205b.png" alt="图 2">  </li>
 </ul>
 
         </div>
@@ -205,29 +179,14 @@
         
             <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/07/27/%E5%BC%80%E5%8F%91%E6%9D%BF%E9%85%8D%E7%BD%AEnfs%E8%B8%A9%E5%9D%91/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">开发板配置nfs踩坑</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2022/07/26/%E9%85%8D%E7%BD%AEWSL2%E4%B8%BA%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%8E%9F%E6%9D%A5%E6%98%AFNAT%E6%A8%A1%E5%BC%8F%EF%BC%89/"
+                           href="/2022/07/27/%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E6%9D%BF%E9%80%9A%E8%BF%87%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E6%9C%AC%E6%9C%BAWSL%E8%99%9A%E6%8B%9F%E6%9C%BA/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">配置WSL2为桥接模式（原来是NAT模式）</span>
+                                <span class="post-nav-title-item">配置开发板通过网线连接本机WSL虚拟机</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex-center">
