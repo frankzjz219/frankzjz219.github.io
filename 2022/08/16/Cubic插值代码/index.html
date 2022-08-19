@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="Chinese">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Frank·Zhang">
+    
+    <title>
+        
+            Cubic插值代码 |
+        
+        Frank&#39;s Blogs
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/FLogo.png">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
+    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Frank&#39;s Blogs
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">Cubic插值代码</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/FLogo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Frank·Zhang</span>
+                        
+                            <span class="author-label">Lv5</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-08-16 14:49:50</span>
+        <span class="mobile">2022-08-16 14:49</span>
+    </span>
+    
+    
+
+    
+    
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h2 id="一维Cubic插值代码"><a href="#一维Cubic插值代码" class="headerlink" title="一维Cubic插值代码"></a>一维Cubic插值代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;chrono&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">cubicCalc</span><span class="params">(<span class="keyword">double</span> xs[<span class="number">4</span>], <span class="keyword">double</span> ys[<span class="number">4</span>], <span class="keyword">double</span> xInput)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 旧方法</span></span><br><span class="line">    <span class="comment">// return p[1] + 0.5 * x*(p[2] - p[0] + x * (2.0*p[0] - 5.0*p[1] + 4.0*p[2] - p[3] + x * (3.0*(p[1] - p[2]) + p[3] - p[0])));</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始化</span></span><br><span class="line">    <span class="keyword">double</span>* H,*A,*B,*C,*D,*Z,*F,*X,*Y;</span><br><span class="line">    <span class="keyword">double</span> dbOutY;</span><br><span class="line">    X = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line">    Y = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line"></span><br><span class="line">    A = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line">    B = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line">    C = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line">    D = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line">    H = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line">    <span class="built_in">memcpy</span>(X, xs, <span class="number">4</span>*<span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">double</span>));</span><br><span class="line">    <span class="built_in">memcpy</span>(Y, ys, <span class="number">4</span>*<span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">double</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> M = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">int</span> N = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">int</span> i,P,L;   </span><br><span class="line">    <span class="comment">// 生成Spline</span></span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">1</span>;i&lt;=N;i++)   </span><br><span class="line">    &#123;   </span><br><span class="line">        H[i<span class="number">-1</span>]=X[i]-X[i<span class="number">-1</span>];   </span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    L=N<span class="number">-1</span>;   </span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=L;i++)   </span><br><span class="line">    &#123;   </span><br><span class="line">        A[i]=H[i<span class="number">-1</span>]/(H[i<span class="number">-1</span>]+H[i]);   </span><br><span class="line">        B[i]=<span class="number">3</span>*((<span class="number">1</span>-A[i])*(Y[i]-Y[i<span class="number">-1</span>])/H[i<span class="number">-1</span>]+A[i]*(Y[i+<span class="number">1</span>]-Y[i])/H[i]);   </span><br><span class="line">    &#125;   </span><br><span class="line">    A[<span class="number">0</span>]=<span class="number">1</span>;   </span><br><span class="line">    A[N]=<span class="number">0</span>;   </span><br><span class="line">    B[<span class="number">0</span>]=<span class="number">3</span>*(Y[<span class="number">1</span>]-Y[<span class="number">0</span>])/H[<span class="number">0</span>];   </span><br><span class="line">    B[N]=<span class="number">3</span>*(Y[N]-Y[N<span class="number">-1</span>])/H[N<span class="number">-1</span>];   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=N;i++)   </span><br><span class="line">    &#123;   </span><br><span class="line">        D[i]=<span class="number">2</span>;   </span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=N;i++)   </span><br><span class="line">    &#123;   </span><br><span class="line">        C[i]=<span class="number">1</span>-A[i];   </span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    P=N;   </span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=P;i++)   </span><br><span class="line">    &#123;   </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (  <span class="built_in">fabs</span>(D[i]) &lt;= <span class="number">0.000001</span> )                                  </span><br><span class="line">        &#123;   </span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;   </span><br><span class="line">            <span class="comment">//    MessageBox(0,&quot;�޽�&quot;,&quot;��ʾ,MB_OK);   </span></span><br><span class="line">            <span class="comment">//break;   </span></span><br><span class="line">        &#125;   </span><br><span class="line">        A[i<span class="number">-1</span>]=A[i<span class="number">-1</span>]/D[i<span class="number">-1</span>];   </span><br><span class="line">        B[i<span class="number">-1</span>]=B[i<span class="number">-1</span>]/D[i<span class="number">-1</span>];   </span><br><span class="line">        D[i]=A[i<span class="number">-1</span>]*(-C[i])+D[i];   </span><br><span class="line">        B[i]=-C[i]*B[i<span class="number">-1</span>]+B[i];   </span><br><span class="line">    &#125;   </span><br><span class="line">    B[P]=B[P]/D[P];   </span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=P;i++)   </span><br><span class="line">    &#123;   </span><br><span class="line">        B[P-i]=B[P-i]-A[P-i]*B[P-i+<span class="number">1</span>];   </span><br><span class="line">    &#125;   </span><br><span class="line">    <span class="comment">// 生成Spline结束</span></span><br><span class="line">    <span class="comment">// 获得Y坐标</span></span><br><span class="line">    <span class="keyword">double</span> E,E1,K,K1,H1;   </span><br><span class="line">    <span class="keyword">int</span> j ;    </span><br><span class="line">    <span class="keyword">if</span>(xInput&lt;X[<span class="number">0</span>])   </span><br><span class="line">    &#123;   </span><br><span class="line">        j = <span class="number">0</span>;   </span><br><span class="line"></span><br><span class="line">    &#125;   </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (xInput &gt; X[N])   </span><br><span class="line">    &#123;   </span><br><span class="line">        j = N<span class="number">-1</span>;   </span><br><span class="line">    &#125;   </span><br><span class="line">    <span class="keyword">else</span>  </span><br><span class="line">    &#123;   </span><br><span class="line">        <span class="keyword">for</span> (j=<span class="number">1</span>;j&lt;=N;j++)   </span><br><span class="line">        &#123;   </span><br><span class="line">            <span class="keyword">if</span>(xInput&lt;=X[j])   </span><br><span class="line">            &#123;   </span><br><span class="line">                j=j<span class="number">-1</span>;   </span><br><span class="line"></span><br><span class="line">                <span class="keyword">break</span>;   </span><br><span class="line">            &#125;   </span><br><span class="line">        &#125;   </span><br><span class="line"></span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    <span class="comment">//////////////////////////////////////////////////////////////////////////   </span></span><br><span class="line">    E=X[j+<span class="number">1</span>]-xInput;   </span><br><span class="line">    E1=E*E;   </span><br><span class="line">    K=xInput-X[j];   </span><br><span class="line">    K1=K*K;   </span><br><span class="line">    H1=H[j]*H[j];   </span><br><span class="line"></span><br><span class="line">    dbOutY=(<span class="number">3</span>*E1<span class="number">-2</span>*E1*E/H[j])*Y[j]+(<span class="number">3</span>*K1<span class="number">-2</span>*K1*K/H[j])*Y[j+<span class="number">1</span>];   </span><br><span class="line">    dbOutY=dbOutY+(H[j]*E1-E1*E)*B[j]-(H[j]*K1-K1*K)*B[j+<span class="number">1</span>];   </span><br><span class="line">    dbOutY=dbOutY/H1;   </span><br><span class="line">    <span class="keyword">return</span> dbOutY;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="二维插值"><a href="#二维插值" class="headerlink" title="二维插值"></a>二维插值</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">bicubicInterpolate</span><span class="params">(<span class="keyword">double</span>* xs, <span class="keyword">double</span>* ys, <span class="keyword">double</span> p[<span class="number">4</span>][<span class="number">4</span>], <span class="keyword">double</span> x, <span class="keyword">double</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">double</span> arr[<span class="number">4</span>];</span><br><span class="line">    arr[<span class="number">0</span>] = <span class="built_in">cubicCalc</span>(xs, p[<span class="number">0</span>], y);</span><br><span class="line">    arr[<span class="number">1</span>] = <span class="built_in">cubicCalc</span>(xs, p[<span class="number">1</span>], y);</span><br><span class="line">    arr[<span class="number">2</span>] = <span class="built_in">cubicCalc</span>(xs, p[<span class="number">2</span>], y);</span><br><span class="line">    arr[<span class="number">3</span>] = <span class="built_in">cubicCalc</span>(xs, p[<span class="number">3</span>], y);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">cubicCalc</span>(ys, arr, x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>上述代码中的<code>xs</code>是描述二维矩阵中取样点的X坐标的集合（从小到大）</li>
+<li><code>ys</code>是上述矩阵中取样点的y坐标的集合</li>
+<li>二位插值的思路实际上就是<strong>先在一维上</strong>完成插值然后利用<strong>一维插值的结果向量</strong>再进行<strong>正交方向</strong>上的<strong>一维插值</strong></li>
+</ul>
+
+        </div>
+
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/08/15/C-%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88%E5%92%8C%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">C++二级指针和二维数组（不使用Vector）</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
+        </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+</div>
+
+
+
+</body>
+</html>
