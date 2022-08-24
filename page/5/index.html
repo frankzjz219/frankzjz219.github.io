@@ -120,6 +120,65 @@
                 
 
                 <h3 class="home-article-title">
+                    <a href="/2022/01/21/Linux%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E7%AE%80%E4%BB%8B/">
+                        Linux进程间通信简介
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        Linux进程间通信简介管道和 FIFO
+管道是 UNIX 系统上最古老的 IPC 方法，它在 20 世纪 70 年代早期 UNIX 的第三个版本上就出现了。 把一个进程连接到另一个进程的数据流称为管道，管道被抽象成一个文件，5.1 小节曾提及过管道...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Fri Jan 21 2022 23:36:06 GMT+0800">2022-01-21</span></span>
+        
+        
+    </div>
+
+    <a href="/2022/01/21/Linux%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E7%AE%80%E4%BB%8B/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2022/01/21/linux%E8%BF%9B%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/">
+                        linux进程（二）
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        Linux进程（二）进程的状态
+Linux 系统下进程通常存在 6 种不同的状态，分为：就绪态、运行态、僵尸态、可中断睡眠状态（浅度 睡眠）、不可中断睡眠状态（深度睡眠）以及暂停态。
+就绪态（Ready）：指该进程满足被 CPU 调度的所有条件但此时...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Fri Jan 21 2022 21:13:28 GMT+0800">2022-01-21</span></span>
+        
+        
+    </div>
+
+    <a href="/2022/01/21/linux%E8%BF%9B%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
                     <a href="/2022/01/21/linux%E8%BF%9B%E7%A8%8B/">
                         linux进程
                     </a>
@@ -369,76 +428,6 @@ https://blog.csdn.net/xingshen100/article/details/85014978
     </div>
 
     <a href="/2022/01/17/Qt%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/17/%E5%90%8C%E4%B8%80WiFi%E4%B8%8B%E4%B8%A4%E4%B8%AALinux%E8%AE%BE%E5%A4%87%E4%BD%BF%E7%94%A8scp%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6/">
-                        同一WiFi下两个Linux设备使用scp传输文件
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        同一WiFi下两个Linux设备使用scp传输文件首先要保证两个设备可以互相ping通
-
-然后在主机上使用
-1scp &lt;文件路径&gt; &lt;对方用户名&gt;@ip:&lt;要复制到的路径&gt;
-
-
-效果如上图
-
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon Jan 17 2022 09:37:12 GMT+0800">2022-01-17</span></span>
-        
-        
-    </div>
-
-    <a href="/2022/01/17/%E5%90%8C%E4%B8%80WiFi%E4%B8%8B%E4%B8%A4%E4%B8%AALinux%E8%AE%BE%E5%A4%87%E4%BD%BF%E7%94%A8scp%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/15/%E4%BD%BF%E7%94%A8echo%E5%90%91%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/">
-                        使用echo向文件写入数据
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        使用echo向文件写入数据
-主要是使用echo的输出重定向功能，也就是&gt;和&gt;&gt;
-覆盖文件内容用&gt;，也就是
-echo &quot;Raspberry&quot; &gt; test.txt
-
-
-追加文件内容用&gt;&gt;
-e...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sat Jan 15 2022 16:17:14 GMT+0800">2022-01-15</span></span>
-        
-        
-    </div>
-
-    <a href="/2022/01/15/%E4%BD%BF%E7%94%A8echo%E5%90%91%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>

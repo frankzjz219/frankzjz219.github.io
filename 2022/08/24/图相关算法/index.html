@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="Chinese">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Frank·Zhang">
+    
+    <title>
+        
+            图相关算法 |
+        
+        Frank&#39;s Blogs
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/FLogo.png">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
+    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Frank&#39;s Blogs
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">图相关算法</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/FLogo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Frank·Zhang</span>
+                        
+                            <span class="author-label">Lv5</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-08-24 00:20:38</span>
+        <span class="mobile">2022-08-24 00:20</span>
+    </span>
+    
+    
+
+    
+    
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h2 id="图对象的定义"><a href="#图对象的定义" class="headerlink" title="图对象的定义"></a>图对象的定义</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Graph</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> HashMap&lt;Integer, Node&gt; nodes;</span><br><span class="line">	<span class="keyword">public</span> HashSet&lt;Edge&gt; edges;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Graph</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		nodes = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">		edges = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="边对象的定义"><a href="#边对象的定义" class="headerlink" title="边对象的定义"></a>边对象的定义</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Edge</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> weight;</span><br><span class="line">	<span class="keyword">public</span> Node from;</span><br><span class="line">	<span class="keyword">public</span> Node to;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Edge</span><span class="params">(<span class="keyword">int</span> weight, Node from, Node to)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.weight = weight;</span><br><span class="line">		<span class="keyword">this</span>.from = from;</span><br><span class="line">		<span class="keyword">this</span>.to = to;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="节点对象的定义"><a href="#节点对象的定义" class="headerlink" title="节点对象的定义"></a>节点对象的定义</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 点结构的描述</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> value;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> in;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> out;</span><br><span class="line">	<span class="keyword">public</span> ArrayList&lt;Node&gt; nexts;</span><br><span class="line">	<span class="keyword">public</span> ArrayList&lt;Edge&gt; edges;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.value = value;</span><br><span class="line">		in = <span class="number">0</span>;</span><br><span class="line">		out = <span class="number">0</span>;</span><br><span class="line">		nexts = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">		edges = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="BFS"><a href="#BFS" class="headerlink" title="BFS"></a>BFS</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.LinkedList;</span><br><span class="line"><span class="keyword">import</span> java.util.Queue;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code01_BFS</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 从node出发，进行宽度优先遍历</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bfs</span><span class="params">(Node start)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (start == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		Queue&lt;Node&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">		HashSet&lt;Node&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">		queue.add(start);</span><br><span class="line">		set.add(start);</span><br><span class="line">		<span class="keyword">while</span> (!queue.isEmpty()) &#123;</span><br><span class="line">			Node cur = queue.poll();</span><br><span class="line">			System.out.println(cur.value);</span><br><span class="line">			<span class="keyword">for</span> (Node next : cur.nexts) &#123;</span><br><span class="line">				<span class="keyword">if</span> (!set.contains(next)) &#123;</span><br><span class="line">					set.add(next);</span><br><span class="line">					queue.add(next);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>主要是在添加一个节点的所有相邻节点到队列里的时候使用了一个set结构判断这个节点是否被添加过，防止无限循环的产生<h2 id="DFS"><a href="#DFS" class="headerlink" title="DFS"></a>DFS</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code02_DFS</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">		HashSet&lt;Node&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">		stack.add(node);</span><br><span class="line">		set.add(node);</span><br><span class="line">		System.out.println(node.value);</span><br><span class="line">		<span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">			Node cur = stack.pop();</span><br><span class="line">			<span class="keyword">for</span> (Node next : cur.nexts) &#123;</span><br><span class="line">				<span class="keyword">if</span> (!set.contains(next)) &#123;</span><br><span class="line">					stack.push(cur);</span><br><span class="line">					stack.push(next);</span><br><span class="line">					set.add(next);</span><br><span class="line">					System.out.println(next.value);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>使用一个栈的数据结构，每从栈中弹出一个节点的时候，遍历该节点的所有邻接点，如果不在已经遍历过的节点的set内，那么先将<strong>节点自身</strong>进栈，然后再将<strong>该邻接节点</strong>进栈<h2 id="最小生成树"><a href="#最小生成树" class="headerlink" title="最小生成树"></a>最小生成树</h2></li>
+<li>对于一个带权连通无向图G=(V,E)，生成树不同，每棵树的权（<strong>树中所有边上的权值和</strong>）也不同，设R为G的所有生成树的集合，若T为R中权值和最小的生成树，则T称为G的最小生成树（Minimum-Spanning-Tree，MST）<h2 id="kruskal算法"><a href="#kruskal算法" class="headerlink" title="kruskal算法"></a>kruskal算法</h2></li>
+<li>并查集：具有检查数据结构中的一些节点是否在同一个集合中、以及将不同的集合合并为一个集合的功能的数据结构<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Collection;</span><br><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.PriorityQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="comment">//undirected graph only</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code04_Kruskal</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Union-Find Set</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span> </span>&#123;</span><br><span class="line">		<span class="comment">// key 某一个节点， value key节点往上的节点</span></span><br><span class="line">		<span class="keyword">private</span> HashMap&lt;Node, Node&gt; fatherMap;</span><br><span class="line">		<span class="comment">// key 某一个集合的代表节点, value key所在集合的节点个数</span></span><br><span class="line">		<span class="keyword">private</span> HashMap&lt;Node, Integer&gt; sizeMap;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			fatherMap = <span class="keyword">new</span> HashMap&lt;Node, Node&gt;();</span><br><span class="line">			sizeMap = <span class="keyword">new</span> HashMap&lt;Node, Integer&gt;();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">makeSets</span><span class="params">(Collection&lt;Node&gt; nodes)</span> </span>&#123;</span><br><span class="line">			fatherMap.clear();</span><br><span class="line">			sizeMap.clear();</span><br><span class="line">			<span class="keyword">for</span> (Node node : nodes) &#123;</span><br><span class="line">				fatherMap.put(node, node);</span><br><span class="line">				sizeMap.put(node, <span class="number">1</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">private</span> Node <span class="title">findFather</span><span class="params">(Node n)</span> </span>&#123;</span><br><span class="line">			Stack&lt;Node&gt; path = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">			<span class="keyword">while</span>(n != fatherMap.get(n)) &#123;</span><br><span class="line">				path.add(n);</span><br><span class="line">				n = fatherMap.get(n);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">while</span>(!path.isEmpty()) &#123;</span><br><span class="line">				fatherMap.put(path.pop(), n);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> n;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSameSet</span><span class="params">(Node a, Node b)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> findFather(a) == findFather(b);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(Node a, Node b)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">if</span> (a == <span class="keyword">null</span> || b == <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			Node aDai = findFather(a);</span><br><span class="line">			Node bDai = findFather(b);</span><br><span class="line">			<span class="keyword">if</span> (aDai != bDai) &#123;</span><br><span class="line">				<span class="keyword">int</span> aSetSize = sizeMap.get(aDai);</span><br><span class="line">				<span class="keyword">int</span> bSetSize = sizeMap.get(bDai);</span><br><span class="line">				<span class="keyword">if</span> (aSetSize &lt;= bSetSize) &#123;</span><br><span class="line">					fatherMap.put(aDai, bDai);</span><br><span class="line">					sizeMap.put(bDai, aSetSize + bSetSize);</span><br><span class="line">					sizeMap.remove(aDai);</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					fatherMap.put(bDai, aDai);</span><br><span class="line">					sizeMap.put(aDai, aSetSize + bSetSize);</span><br><span class="line">					sizeMap.remove(bDai);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">EdgeComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Edge</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Edge o1, Edge o2)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> o1.weight - o2.weight;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Set&lt;Edge&gt; <span class="title">kruskalMST</span><span class="params">(Graph graph)</span> </span>&#123;</span><br><span class="line">		UnionFind unionFind = <span class="keyword">new</span> UnionFind();</span><br><span class="line">		unionFind.makeSets(graph.nodes.values());</span><br><span class="line">		<span class="comment">// 从小的边到大的边，依次弹出，小根堆！</span></span><br><span class="line">		PriorityQueue&lt;Edge&gt; priorityQueue = <span class="keyword">new</span> PriorityQueue&lt;&gt;(<span class="keyword">new</span> EdgeComparator());</span><br><span class="line">		<span class="keyword">for</span> (Edge edge : graph.edges) &#123; <span class="comment">// M 条边</span></span><br><span class="line">			priorityQueue.add(edge);  <span class="comment">// O(logM)</span></span><br><span class="line">		&#125;</span><br><span class="line">		Set&lt;Edge&gt; result = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">		<span class="keyword">while</span> (!priorityQueue.isEmpty()) &#123; <span class="comment">// M 条边</span></span><br><span class="line">			Edge edge = priorityQueue.poll(); <span class="comment">// O(logM)</span></span><br><span class="line">			<span class="keyword">if</span> (!unionFind.isSameSet(edge.from, edge.to)) &#123; <span class="comment">// O(1)</span></span><br><span class="line">				result.add(edge);</span><br><span class="line">				unionFind.union(edge.from, edge.to);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>findfFather函数是当一个节点具有多级的父亲的时候找到最高级别的父亲，并且修改一路上所有节点的父亲为最高级的父亲</li>
+<li>算法的思路是先按照权值将图中所有的边都放入小根堆中，将图中所有节点放入并查集中独立存在，然后从堆中依次弹出边，假如边链接的两端不是同一个集合，那么将边放入结果中，同时在并查集中合并两个集合，直到无可合并为止。<h2 id="prim算法"><a href="#prim算法" class="headerlink" title="prim算法"></a>prim算法</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.PriorityQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="comment">// undirected graph only</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code05_Prim</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">EdgeComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Edge</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Edge o1, Edge o2)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> o1.weight - o2.weight;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Set&lt;Edge&gt; <span class="title">primMST</span><span class="params">(Graph graph)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// 解锁的边进入小根堆</span></span><br><span class="line">		PriorityQueue&lt;Edge&gt; priorityQueue = <span class="keyword">new</span> PriorityQueue&lt;&gt;(<span class="keyword">new</span> EdgeComparator());</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 哪些点被解锁出来了</span></span><br><span class="line">		HashSet&lt;Node&gt; nodeSet = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		Set&lt;Edge&gt; result = <span class="keyword">new</span> HashSet&lt;&gt;(); <span class="comment">// 依次挑选的的边在result里</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> (Node node : graph.nodes.values()) &#123; <span class="comment">// 随便挑了一个点</span></span><br><span class="line">			<span class="comment">// node 是开始点</span></span><br><span class="line">			<span class="keyword">if</span> (!nodeSet.contains(node)) &#123;</span><br><span class="line">				nodeSet.add(node);</span><br><span class="line">				<span class="keyword">for</span> (Edge edge : node.edges) &#123; <span class="comment">// 由一个点，解锁所有相连的边</span></span><br><span class="line">					priorityQueue.add(edge);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">while</span> (!priorityQueue.isEmpty()) &#123;</span><br><span class="line">					Edge edge = priorityQueue.poll(); <span class="comment">// 弹出解锁的边中，最小的边</span></span><br><span class="line">					Node toNode = edge.to; <span class="comment">// 可能的一个新的点</span></span><br><span class="line">					<span class="keyword">if</span> (!nodeSet.contains(toNode)) &#123; <span class="comment">// 不含有的时候，就是新的点</span></span><br><span class="line">						nodeSet.add(toNode);</span><br><span class="line">						result.add(edge);</span><br><span class="line">						<span class="keyword">for</span> (Edge nextEdge : toNode.edges) &#123;</span><br><span class="line">							priorityQueue.add(nextEdge);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// break;</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 请保证graph是连通图</span></span><br><span class="line">	<span class="comment">// graph[i][j]表示点i到点j的距离，如果是系统最大值代表无路</span></span><br><span class="line">	<span class="comment">// 返回值是最小连通图的路径之和</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">prim</span><span class="params">(<span class="keyword">int</span>[][] graph)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> size = graph.length;</span><br><span class="line">		<span class="keyword">int</span>[] distances = <span class="keyword">new</span> <span class="keyword">int</span>[size];</span><br><span class="line">		<span class="keyword">boolean</span>[] visit = <span class="keyword">new</span> <span class="keyword">boolean</span>[size];</span><br><span class="line">		visit[<span class="number">0</span>] = <span class="keyword">true</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">			distances[i] = graph[<span class="number">0</span>][i];</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; size; i++) &#123;</span><br><span class="line">			<span class="keyword">int</span> minPath = Integer.MAX_VALUE;</span><br><span class="line">			<span class="keyword">int</span> minIndex = -<span class="number">1</span>;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; size; j++) &#123;</span><br><span class="line">				<span class="keyword">if</span> (!visit[j] &amp;&amp; distances[j] &lt; minPath) &#123;</span><br><span class="line">					minPath = distances[j];</span><br><span class="line">					minIndex = j;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (minIndex == -<span class="number">1</span>) &#123;</span><br><span class="line">				<span class="keyword">return</span> sum;</span><br><span class="line">			&#125;</span><br><span class="line">			visit[minIndex] = <span class="keyword">true</span>;</span><br><span class="line">			sum += minPath;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; size; j++) &#123;</span><br><span class="line">				<span class="keyword">if</span> (!visit[j] &amp;&amp; distances[j] &gt; graph[minIndex][j]) &#123;</span><br><span class="line">					distances[j] = graph[minIndex][j];</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> sum;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;hello world!&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>prim算法主要用到一个存储边用的小根堆和一个记录哪些点被解锁的set</li>
+<li>首先在graph中随便选择一个点，将这个点加入记录解锁的点的集合，然后将这个<strong>点的所有边</strong>放入优先级队列中，然后开始while循环，每次从优先级队列中弹出一个权值最小的边，假如这个边指向的节点<strong>不在</strong>前面的set中的话就将这个边指向的节点放入点set中，将这条边放入结果中，然后将<strong>该节点延伸出的所有边</strong>放入优先级队列中。<h2 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h2></li>
+<li>该算法主要是找到指定起始点到图上剩余所有点的最近距离<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.Map.Entry;</span><br><span class="line"></span><br><span class="line"><span class="comment">// no negative weight</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code06_Dijkstra</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> HashMap&lt;Node, Integer&gt; <span class="title">dijkstra1</span><span class="params">(Node from)</span> </span>&#123;</span><br><span class="line">    HashMap&lt;Node, Integer&gt; distanceMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    distanceMap.put(from, <span class="number">0</span>);</span><br><span class="line">    <span class="comment">// 打过对号的点</span></span><br><span class="line">    HashSet&lt;Node&gt; selectedNodes = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    Node minNode = getMinDistanceAndUnselectedNode(distanceMap, selectedNodes);</span><br><span class="line">    <span class="keyword">while</span> (minNode != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//  原始点  -&gt;  minNode(跳转点)   最小距离distance</span></span><br><span class="line">        <span class="keyword">int</span> distance = distanceMap.get(minNode);</span><br><span class="line">        <span class="keyword">for</span> (Edge edge : minNode.edges) &#123;</span><br><span class="line">            Node toNode = edge.to;</span><br><span class="line">            <span class="keyword">if</span> (!distanceMap.containsKey(toNode)) &#123;</span><br><span class="line">                distanceMap.put(toNode, distance + edge.weight);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// toNode </span></span><br><span class="line">                distanceMap.put(edge.to, Math.min(distanceMap.get(toNode), distance + edge.weight));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        selectedNodes.add(minNode);</span><br><span class="line">        minNode = getMinDistanceAndUnselectedNode(distanceMap, selectedNodes);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> distanceMap;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">getMinDistanceAndUnselectedNode</span><span class="params">(HashMap&lt;Node, Integer&gt; distanceMap, HashSet&lt;Node&gt; touchedNodes)</span> </span>&#123;</span><br><span class="line">    Node minNode = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">int</span> minDistance = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">for</span> (Entry&lt;Node, Integer&gt; entry : distanceMap.entrySet()) &#123;</span><br><span class="line">        Node node = entry.getKey();</span><br><span class="line">        <span class="keyword">int</span> distance = entry.getValue();</span><br><span class="line">        <span class="keyword">if</span> (!touchedNodes.contains(node) &amp;&amp; distance &lt; minDistance) &#123;</span><br><span class="line">            minNode = node;</span><br><span class="line">            minDistance = distance;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> minNode;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">NodeRecord</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Node node;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> distance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NodeRecord</span><span class="params">(Node node, <span class="keyword">int</span> distance)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.node = node;</span><br><span class="line">        <span class="keyword">this</span>.distance = distance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>算法主要依赖一个记录到对应节点最近距离的哈希表和一个记录某个节点是否已经被锁定的set</li>
+<li>在初始时刻将起始点到起始点放入哈希表，并且将其距离设置为0。</li>
+<li>然后的while循环每次都对找出的当前<strong>尚未被锁定</strong>而且在哈希表中到起始位置距离最小的点指向的所有尚未被锁定的节点的距离进行重算，假如被指向的节点之前的距离小于从该点出发到被指向的点的距离，将被指向点的距离更新为被选中的点出发的距离。（假如被指向的点<strong>不存在</strong>于哈希表中的话认为被指向的点的距离为<strong>正无穷</strong>，同样添加该点的距离条目进行更新）。然后将当前选中的点锁定，也就是假如被锁定的点的set中，然后找到当前未被锁定而且从总出发点开始距离最短的点，再次重复循环。</li>
+</ul>
+
+        </div>
+
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/08/23/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">排序算法总结</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
+        </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+</div>
+
+
+
+</body>
+</html>
