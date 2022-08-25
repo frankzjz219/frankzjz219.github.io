@@ -1,168 +1,21 @@
-<!DOCTYPE html>
-<html lang="Chinese">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="Frank·Zhang">
-    
-    <title>
-        
-            Linux文件IO（二） |
-        
-        Frank&#39;s Blogs
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
-
-    <link rel="shortcut icon" href="/images/FLogo.png">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
-
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
-    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
-  </script>
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-
-<body>
-<div class="progress-bar-container">
-    
-
-    
-</div>
-
-
-<main class="page-container">
-
-    
-
-    <div class="page-main-content">
-
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
-
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                Frank&#39;s Blogs
-            </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/"
-                            >
-                                HOME
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                ARCHIVES
-                            </a>
-                        </li>
-                    
-                    
-                </ul>
-            </div>
-            <div class="mobile">
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/">HOME</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">ARCHIVES</a>
-                </li>
-            
-        </ul>
-    </div>
-
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="fade-in-down-animation">
-    <div class="article-content-container">
-
-        <div class="article-title">
-            <span class="title-hover-animation">Linux文件IO（二）</span>
-        </div>
-
-        
-            <div class="article-header">
-                <div class="avatar">
-                    <img src="/images/FLogo.png">
-                </div>
-                <div class="info">
-                    <div class="author">
-                        <span class="name">Frank·Zhang</span>
-                        
-                            <span class="author-label">Lv5</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-01-12 15:16:23</span>
-        <span class="mobile">2022-01-12 15:16</span>
-    </span>
-    
-    
-
-    
-    
-    
-    
-</div>
-
-                    </div>
-                </div>
-            </div>
-        
-
-        <div class="article-content markdown-body">
-            <h1 id="Linux文件IO（二）"><a href="#Linux文件IO（二）" class="headerlink" title="Linux文件IO（二）"></a>Linux文件IO（二）</h1><h2 id="多次打开同一个文件"><a href="#多次打开同一个文件" class="headerlink" title="多次打开同一个文件"></a>多次打开同一个文件</h2><ul>
+<!DOCTYPE html><html lang="Chinese"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Linux文件IO（二）"><meta name="keywords" content=""><meta name="author" content="FrankZhang"><meta name="copyright" content="FrankZhang"><title>Linux文件IO（二） | Frank’s blogs</title><link rel="shortcut icon" href="/Flogo.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E6%96%87%E4%BB%B6IO%EF%BC%88%E4%BA%8C%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">Linux文件IO（二）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E6%AC%A1%E6%89%93%E5%BC%80%E5%90%8C%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">多次打开同一个文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E6%AC%A1%E6%89%93%E5%BC%80%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E4%B8%8EO-APPEND"><span class="toc-number">1.1.1.</span> <span class="toc-text">多次打开同一文件与O_APPEND</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="toc-number">1.1.2.</span> <span class="toc-text">复制文件描述符</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#dup-%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">dup 函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dup2%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">dup2函数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.3.</span> <span class="toc-text">共享文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8C%E4%B8%80%E4%B8%AA%E8%BF%9B%E7%A8%8B%E4%B8%AD%E5%A4%9A%E6%AC%A1%E8%B0%83%E7%94%A8-open-%E5%87%BD%E6%95%B0%E6%89%93%E5%BC%80%E5%90%8C%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.3.1.</span> <span class="toc-text">同一个进程中多次调用 open 函数打开同一个文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E8%BF%9B%E7%A8%8B%E4%B8%AD%E5%88%86%E5%88%AB%E4%BD%BF%E7%94%A8-open-%E5%87%BD%E6%95%B0%E6%89%93%E5%BC%80%E5%90%8C%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.3.2.</span> <span class="toc-text">不同进程中分别使用 open 函数打开同一个文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8C%E4%B8%80%E4%B8%AA%E8%BF%9B%E7%A8%8B%E4%B8%AD%E9%80%9A%E8%BF%87-dup%EF%BC%88dup2%EF%BC%89%E5%87%BD%E6%95%B0%E5%AF%B9%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%BF%9B%E8%A1%8C%E5%A4%8D%E5%88%B6"><span class="toc-number">1.1.3.3.</span> <span class="toc-text">同一个进程中通过 dup（dup2）函数对文件描述符进行复制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C%E5%92%8C%E7%AB%9E%E4%BA%89%E5%86%92%E9%99%A9%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.4.</span> <span class="toc-text">文件操作中的原子操作和竞争冒险问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E4%B8%8A%E8%BF%B0%E9%97%AE%E9%A2%98%E7%94%A8%E5%88%B0%E7%9A%84%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C"><span class="toc-number">1.1.4.1.</span> <span class="toc-text">解决上述问题用到的原子操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%AA%E6%96%AD%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.5.</span> <span class="toc-text">截断文件</span></a></li></ol></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">FrankZhang</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">84</span></a></div></div></div><div id="content-outer"><div class="plain" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Frank’s blogs</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right"></span></div></div><div class="layout" id="content-inner"><article id="post"><div class="plain" id="post-title">Linux文件IO（二）</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-01-12</time></div><div class="article-container" id="post-content"><h1 id="Linux文件IO（二）"><a href="#Linux文件IO（二）" class="headerlink" title="Linux文件IO（二）"></a>Linux文件IO（二）</h1><h2 id="多次打开同一个文件"><a href="#多次打开同一个文件" class="headerlink" title="多次打开同一个文件"></a>多次打开同一个文件</h2><ul>
 <li>一个进程内多次 open 打开同一个文件，那么会得到多个不同的文件描述符 fd，同理在关闭文件的 时候也需要调用 close 依次关闭各个文件描述符。</li>
 <li>一个进程内多次 open 打开同一个文件，在内存中<strong>并不会存在</strong>多份动态文件。</li>
 <li>一个进程内多次 open 打开同一个文件，不同文件描述符所对应的读写位置偏移量是相互独立的。</li>
 <li><img src="/imgs/image-20220112193343091.png" alt="image-20220112193343091"></li>
 <li>实例</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">char</span> buffer[<span class="number">4</span>];</span><br><span class="line">     <span class="keyword">int</span> fd1, fd2;</span><br><span class="line">     <span class="keyword">int</span> ret;</span><br><span class="line">     <span class="comment">/* 创建新文件 test_file 并打开 */</span></span><br><span class="line">     fd1 = open(<span class="string">&quot;./test_file&quot;</span>, O_RDWR | O_CREAT | O_EXCL,</span><br><span class="line">     S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd1) &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 再次打开 test_file 文件 */</span></span><br><span class="line">     fd2 = open(<span class="string">&quot;./test_file&quot;</span>, O_RDWR);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd2) &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         ret = <span class="number">-1</span>;</span><br><span class="line">         <span class="keyword">goto</span> err1;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 通过 fd1 文件描述符写入 4 个字节数据 */</span></span><br><span class="line">     buffer[<span class="number">0</span>] = <span class="number">0x11</span>;</span><br><span class="line">     buffer[<span class="number">1</span>] = <span class="number">0x22</span>;</span><br><span class="line">     buffer[<span class="number">2</span>] = <span class="number">0x33</span>;</span><br><span class="line">     buffer[<span class="number">3</span>] = <span class="number">0x44</span>;</span><br><span class="line">     ret = write(fd1, buffer, <span class="number">4</span>);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err2;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 将读写位置偏移量移动到文件头 */</span></span><br><span class="line">     ret = lseek(fd2, <span class="number">0</span>, SEEK_SET);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;lseek error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err2;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 读取数据 */</span></span><br><span class="line">     <span class="built_in">memset</span>(buffer, <span class="number">0x00</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">     ret = read(fd2, buffer, <span class="number">4</span>);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;read error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err2;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;0x%x 0x%x 0x%x 0x%x\n&quot;</span>, buffer[<span class="number">0</span>], buffer[<span class="number">1</span>],</span><br><span class="line">     buffer[<span class="number">2</span>], buffer[<span class="number">3</span>]);</span><br><span class="line">     ret = <span class="number">0</span>;</span><br><span class="line">err2:</span><br><span class="line">     close(fd2);</span><br><span class="line">err1:</span><br><span class="line">     <span class="comment">/* 关闭文件 */</span></span><br><span class="line">     close(fd1);</span><br><span class="line">     <span class="built_in">exit</span>(ret);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">char</span> buffer[<span class="number">4</span>];</span><br><span class="line">     <span class="keyword">int</span> fd1, fd2;</span><br><span class="line">     <span class="keyword">int</span> ret;</span><br><span class="line">     <span class="comment">/* 创建新文件 test_file 并打开 */</span></span><br><span class="line">     fd1 = open(<span class="string">&quot;./test_file&quot;</span>, O_RDWR | O_CREAT | O_EXCL,</span><br><span class="line">     S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd1) &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 再次打开 test_file 文件 */</span></span><br><span class="line">     fd2 = open(<span class="string">&quot;./test_file&quot;</span>, O_RDWR);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd2) &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         ret = <span class="number">-1</span>;</span><br><span class="line">         <span class="keyword">goto</span> err1;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 通过 fd1 文件描述符写入 4 个字节数据 */</span></span><br><span class="line">     buffer[<span class="number">0</span>] = <span class="number">0x11</span>;</span><br><span class="line">     buffer[<span class="number">1</span>] = <span class="number">0x22</span>;</span><br><span class="line">     buffer[<span class="number">2</span>] = <span class="number">0x33</span>;</span><br><span class="line">     buffer[<span class="number">3</span>] = <span class="number">0x44</span>;</span><br><span class="line">     ret = write(fd1, buffer, <span class="number">4</span>);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err2;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 将读写位置偏移量移动到文件头 */</span></span><br><span class="line">     ret = lseek(fd2, <span class="number">0</span>, SEEK_SET);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;lseek error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err2;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 读取数据 */</span></span><br><span class="line">     <span class="built_in">memset</span>(buffer, <span class="number">0x00</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">     ret = read(fd2, buffer, <span class="number">4</span>);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;read error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err2;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;0x%x 0x%x 0x%x 0x%x\n&quot;</span>, buffer[<span class="number">0</span>], buffer[<span class="number">1</span>],</span><br><span class="line">     buffer[<span class="number">2</span>], buffer[<span class="number">3</span>]);</span><br><span class="line">     ret = <span class="number">0</span>;</span><br><span class="line">err2:</span><br><span class="line">     close(fd2);</span><br><span class="line">err1:</span><br><span class="line">     <span class="comment">/* 关闭文件 */</span></span><br><span class="line">     close(fd1);</span><br><span class="line">     <span class="built_in">exit</span>(ret);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> </span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>当前目录下<strong>不存在 test_file 文件</strong>，上述代码中，第一次调用 open 函数新建并打开 test_file 文件，第二次 调用 open 函数再次打开它，新建文件时，文件大小为 0；首先通过文件描述符 fd1 写入 4 个字节数据 （0x11/0x22/0x33/0x44），从文件头开始写；然后再通过文件描述符 fd2 读取 4 个字节数据，也是从文件头 开始读取。假如，内存中只有一份动态文件，那么读取得到的数据应该就是 0x11、0x22、0x33、0x44，如 果存在多份动态文件，那么通过 fd2 读取的是与它对应的动态文件中的数据，那就不是 0x11、0x22、0x33、 0x44，而是读取出 0 个字节数据，因为它的文件大小是 0。</p>
@@ -176,7 +29,7 @@
 <li>假如不使用<code>O_APPEND</code>的话，程序将会以不同的文件标识符为准的偏移量分别写入数据，多个文件标识符同时写一个文件的时候，不会互相更新标识符的位置，因此有可能互相覆盖。</li>
 <li>使用<code>O_APPEND</code>标志的时候，会<strong>自动将偏移量移动到文件尾部</strong>，会互相更新，比如一个文件标识符写入的时候会更新另一个文件标识符的写入偏移量。此时多个文件标识符进行读写的时候就不会互相覆盖了</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">unsigned</span> <span class="keyword">char</span> buffer1[<span class="number">4</span>], buffer2[<span class="number">4</span>];</span><br><span class="line">     <span class="keyword">int</span> fd1, fd2;</span><br><span class="line">     <span class="keyword">int</span> ret;</span><br><span class="line">     <span class="keyword">int</span> i;</span><br><span class="line"> <span class="comment">/* 创建新文件 test_file 并打开 */</span></span><br><span class="line">	 fd1 = open(<span class="string">&quot;./test_file&quot;</span>, O_RDWR | O_CREAT | O_EXCL | O_APPEND,</span><br><span class="line">            S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd1) &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">     &#125;</span><br><span class="line"> <span class="comment">/* 再次打开 test_file 文件 */</span></span><br><span class="line">     fd2 = open(<span class="string">&quot;./test_file&quot;</span>, O_RDWR | O_APPEND);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd2) &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         ret = <span class="number">-1</span>;</span><br><span class="line">         <span class="keyword">goto</span> err1;</span><br><span class="line">     &#125;</span><br><span class="line"> <span class="comment">/* buffer 数据初始化 */</span></span><br><span class="line">     buffer1[<span class="number">0</span>] = <span class="number">0x11</span>;</span><br><span class="line">     buffer1[<span class="number">1</span>] = <span class="number">0x22</span>;</span><br><span class="line">     buffer1[<span class="number">2</span>] = <span class="number">0x33</span>;</span><br><span class="line">     buffer1[<span class="number">3</span>] = <span class="number">0x44</span>;</span><br><span class="line">     buffer2[<span class="number">0</span>] = <span class="number">0xAA</span>;</span><br><span class="line">     buffer2[<span class="number">1</span>] = <span class="number">0xBB</span>;</span><br><span class="line">     buffer2[<span class="number">2</span>] = <span class="number">0xCC</span>;</span><br><span class="line">     buffer2[<span class="number">3</span>] = <span class="number">0xDD</span>;</span><br><span class="line">     <span class="comment">/* 循环写入数据 */</span></span><br><span class="line">     <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">         ret = write(fd1, buffer1, <span class="keyword">sizeof</span>(buffer1));</span><br><span class="line">         <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">             perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">             <span class="keyword">goto</span> err2;</span><br><span class="line">         &#125;</span><br><span class="line">         ret = write(fd2, buffer2, <span class="keyword">sizeof</span>(buffer2));</span><br><span class="line">         <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">             perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">             <span class="keyword">goto</span> err2;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 将读写位置偏移量移动到文件头 */</span></span><br><span class="line">     ret = lseek(fd1, <span class="number">0</span>, SEEK_SET);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;lseek error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err2;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 读取数据 */</span></span><br><span class="line">     <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">         ret = read(fd1, buffer1, <span class="keyword">sizeof</span>(buffer1));</span><br><span class="line">         <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">             perror(<span class="string">&quot;read error&quot;</span>);</span><br><span class="line">             <span class="keyword">goto</span> err2;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="built_in">printf</span>(<span class="string">&quot;%x%x%x%x&quot;</span>, buffer1[<span class="number">0</span>], buffer1[<span class="number">1</span>],</span><br><span class="line">         buffer1[<span class="number">2</span>], buffer1[<span class="number">3</span>]);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">     ret = <span class="number">0</span>;</span><br><span class="line">err2:</span><br><span class="line">     close(fd2);</span><br><span class="line">err1:</span><br><span class="line">     <span class="comment">/* 关闭文件 */</span></span><br><span class="line">     close(fd1);</span><br><span class="line">     <span class="built_in">exit</span>(ret);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">unsigned</span> <span class="keyword">char</span> buffer1[<span class="number">4</span>], buffer2[<span class="number">4</span>];</span><br><span class="line">     <span class="keyword">int</span> fd1, fd2;</span><br><span class="line">     <span class="keyword">int</span> ret;</span><br><span class="line">     <span class="keyword">int</span> i;</span><br><span class="line"> <span class="comment">/* 创建新文件 test_file 并打开 */</span></span><br><span class="line">	 fd1 = open(<span class="string">&quot;./test_file&quot;</span>, O_RDWR | O_CREAT | O_EXCL | O_APPEND,</span><br><span class="line">            S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd1) &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">     &#125;</span><br><span class="line"> <span class="comment">/* 再次打开 test_file 文件 */</span></span><br><span class="line">     fd2 = open(<span class="string">&quot;./test_file&quot;</span>, O_RDWR | O_APPEND);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd2) &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         ret = <span class="number">-1</span>;</span><br><span class="line">         <span class="keyword">goto</span> err1;</span><br><span class="line">     &#125;</span><br><span class="line"> <span class="comment">/* buffer 数据初始化 */</span></span><br><span class="line">     buffer1[<span class="number">0</span>] = <span class="number">0x11</span>;</span><br><span class="line">     buffer1[<span class="number">1</span>] = <span class="number">0x22</span>;</span><br><span class="line">     buffer1[<span class="number">2</span>] = <span class="number">0x33</span>;</span><br><span class="line">     buffer1[<span class="number">3</span>] = <span class="number">0x44</span>;</span><br><span class="line">     buffer2[<span class="number">0</span>] = <span class="number">0xAA</span>;</span><br><span class="line">     buffer2[<span class="number">1</span>] = <span class="number">0xBB</span>;</span><br><span class="line">     buffer2[<span class="number">2</span>] = <span class="number">0xCC</span>;</span><br><span class="line">     buffer2[<span class="number">3</span>] = <span class="number">0xDD</span>;</span><br><span class="line">     <span class="comment">/* 循环写入数据 */</span></span><br><span class="line">     <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">         ret = write(fd1, buffer1, <span class="keyword">sizeof</span>(buffer1));</span><br><span class="line">         <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">             perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">             <span class="keyword">goto</span> err2;</span><br><span class="line">         &#125;</span><br><span class="line">         ret = write(fd2, buffer2, <span class="keyword">sizeof</span>(buffer2));</span><br><span class="line">         <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">             perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">             <span class="keyword">goto</span> err2;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 将读写位置偏移量移动到文件头 */</span></span><br><span class="line">     ret = lseek(fd1, <span class="number">0</span>, SEEK_SET);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;lseek error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err2;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 读取数据 */</span></span><br><span class="line">     <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">         ret = read(fd1, buffer1, <span class="keyword">sizeof</span>(buffer1));</span><br><span class="line">         <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">             perror(<span class="string">&quot;read error&quot;</span>);</span><br><span class="line">             <span class="keyword">goto</span> err2;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="built_in">printf</span>(<span class="string">&quot;%x%x%x%x&quot;</span>, buffer1[<span class="number">0</span>], buffer1[<span class="number">1</span>],</span><br><span class="line">         buffer1[<span class="number">2</span>], buffer1[<span class="number">3</span>]);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">     ret = <span class="number">0</span>;</span><br><span class="line">err2:</span><br><span class="line">     close(fd2);</span><br><span class="line">err1:</span><br><span class="line">     <span class="comment">/* 关闭文件 */</span></span><br><span class="line">     close(fd1);</span><br><span class="line">     <span class="built_in">exit</span>(ret);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><img src="/imgs/image-20220112202602282.png" alt="image-20220112202602282"></li>
@@ -189,7 +42,7 @@
 <h4 id="dup-函数"><a href="#dup-函数" class="headerlink" title="dup 函数"></a>dup 函数</h4><ul>
 <li>dup 函数用于复制文件描述符</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup</span><span class="params">(<span class="keyword">int</span> oldfd)</span></span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup</span><span class="params">(<span class="keyword">int</span> oldfd)</span></span>;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>oldfd：需要被复制的文件描述符。</li>
@@ -199,7 +52,7 @@
 <h4 id="dup2函数"><a href="#dup2函数" class="headerlink" title="dup2函数"></a>dup2函数</h4><ul>
 <li>dup 系统调用分配的文件描述符是由系统分配的，遵循文件描述符分配原则，并不能自己指定一个文件 描述符，这是 dup 系统调用的一个缺陷；而 dup2 系统调用修复了这个缺陷，<strong>可以手动指定文件描述符，而 不需要遵循文件描述符分配原则</strong>，当然在实际的编程工作中，需要根据自己的情况来进行选择。</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup2</span><span class="params">(<span class="keyword">int</span> oldfd, <span class="keyword">int</span> newfd)</span></span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup2</span><span class="params">(<span class="keyword">int</span> oldfd, <span class="keyword">int</span> newfd)</span></span>;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>oldfd：需要被复制的文件描述符。</p>
@@ -246,7 +99,7 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">pread</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> count, <span class="keyword">off_t</span> offset)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">pwrite</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> count, <span class="keyword">off_t</span> offset)</span></span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">pread</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> count, <span class="keyword">off_t</span> offset)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">pwrite</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> count, <span class="keyword">off_t</span> offset)</span></span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>fd、buf、count 参数与 read 或 write 函数意义相同。</p>
@@ -267,7 +120,7 @@
 <h3 id="截断文件"><a href="#截断文件" class="headerlink" title="截断文件"></a>截断文件</h3><ul>
 <li>使用系统调用 truncate()或 ftruncate()可将普通文件截断为指定字节长度</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">truncate</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">off_t</span> length)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ftruncate</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">off_t</span> length)</span></span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">truncate</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">off_t</span> length)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ftruncate</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">off_t</span> length)</span></span>;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>这两个函数的区别在于：ftruncate()使用文件描述符 fd 来指定目标文件，而 truncate()则直接使用文件路 径 path 来指定目标文件，其功能一样。</p>
@@ -279,177 +132,8 @@
 <li><p>调用这两个函数并不会导致文件读写位置偏移量发生改变，所以截断之后一般需要重新设置文件当前 的读写位置偏移量，以免由于之前所指向的位置已经不存在而发生错误（譬如文件长度变短了，文件当前所 指向的读写位置已不存在）。</p>
 </li>
 </ul>
-
-        </div>
-
-        
-
-        
-
-        
-            <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/01/12/%E9%85%8D%E7%BD%AELinux%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">配置Linux开机启动脚本</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/2022/01/12/Linux%E6%96%87%E4%BB%B6IO%E4%BD%BF%E7%94%A8/"
-                        >
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">Linux文件IO使用</span>
-                                <span class="post-nav-item">Next posts</span>
-                            </span>
-                            <span class="right arrow-icon flex-center">
-                              <i class="fas fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-        
-    </div>
-</div>
-
-
-                
-            </div>
-
-        </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
-            
-              <span>2021</span>
-              -
-            
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
-        </div>
-        
-        <div class="theme-info info-item">
-            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
-        </div>
-        
-        
-    </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="tools-list">
-        <!-- TOC aside toggle -->
-        
-
-        <!-- go comment -->
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="fas fa-arrow-up"></i>
-            </li>
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
-
-
-    
-
-</main>
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-
-
-
-
-
-<div class="post-scripts">
-    
-</div>
-
-
-
-</body>
-</html>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">FrankZhang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://frankzhang0219.gitee.io/2022/01/12/Linux文件IO（二）/">http://frankzhang0219.gitee.io/2022/01/12/Linux文件IO（二）/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2022/01/12/%E9%85%8D%E7%BD%AELinux%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC/"><i class="fa fa-chevron-left">  </i><span>配置Linux开机启动脚本</span></a></div><div class="next-post pull-right"><a href="/2022/01/12/Linux%E6%96%87%E4%BB%B6IO%E4%BD%BF%E7%94%A8/"><span>Linux文件IO使用</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2021 - 2022 By FrankZhang</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

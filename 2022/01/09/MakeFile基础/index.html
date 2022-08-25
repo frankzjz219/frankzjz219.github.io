@@ -1,164 +1,17 @@
-<!DOCTYPE html>
-<html lang="Chinese">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="Frank·Zhang">
-    
-    <title>
-        
-            MakeFile基础 |
-        
-        Frank&#39;s Blogs
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
-
-    <link rel="shortcut icon" href="/images/FLogo.png">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
-
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
-    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
-  </script>
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-
-<body>
-<div class="progress-bar-container">
-    
-
-    
-</div>
-
-
-<main class="page-container">
-
-    
-
-    <div class="page-main-content">
-
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
-
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                Frank&#39;s Blogs
-            </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/"
-                            >
-                                HOME
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                ARCHIVES
-                            </a>
-                        </li>
-                    
-                    
-                </ul>
-            </div>
-            <div class="mobile">
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/">HOME</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">ARCHIVES</a>
-                </li>
-            
-        </ul>
-    </div>
-
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="fade-in-down-animation">
-    <div class="article-content-container">
-
-        <div class="article-title">
-            <span class="title-hover-animation">MakeFile基础</span>
-        </div>
-
-        
-            <div class="article-header">
-                <div class="avatar">
-                    <img src="/images/FLogo.png">
-                </div>
-                <div class="info">
-                    <div class="author">
-                        <span class="name">Frank·Zhang</span>
-                        
-                            <span class="author-label">Lv5</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-01-09 16:51:55</span>
-        <span class="mobile">2022-01-09 16:51</span>
-    </span>
-    
-    
-
-    
-    
-    
-    
-</div>
-
-                    </div>
-                </div>
-            </div>
-        
-
-        <div class="article-content markdown-body">
-            <h1 id="gcc和MakeFile基础"><a href="#gcc和MakeFile基础" class="headerlink" title="gcc和MakeFile基础"></a>gcc和MakeFile基础</h1><h2 id="gcc常用参数"><a href="#gcc常用参数" class="headerlink" title="gcc常用参数"></a>gcc常用参数</h2><ul>
+<!DOCTYPE html><html lang="Chinese"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="MakeFile基础"><meta name="keywords" content=""><meta name="author" content="FrankZhang"><meta name="copyright" content="FrankZhang"><title>MakeFile基础 | Frank’s blogs</title><link rel="shortcut icon" href="/Flogo.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#gcc%E5%92%8CMakeFile%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">gcc和MakeFile基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#gcc%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0"><span class="toc-number">1.1.</span> <span class="toc-text">gcc常用参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MakeFile%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.2.</span> <span class="toc-text">MakeFile是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E4%B8%BE%E4%BE%8B"><span class="toc-number">1.3.</span> <span class="toc-text">应用举例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#makefile%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="toc-number">1.4.</span> <span class="toc-text">makefile的重要性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#makefile%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.4.1.</span> <span class="toc-text">makefile的作用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#makeFile%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.5.</span> <span class="toc-text">makeFile的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Makefile%E8%AF%AD%E6%B3%95"><span class="toc-number">1.6.</span> <span class="toc-text">Makefile语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Makefile-%E5%8F%98%E9%87%8F"><span class="toc-number">1.6.1.</span> <span class="toc-text">Makefile 变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Makefile%E6%A8%A1%E5%BC%8F%E8%A7%84%E5%88%99"><span class="toc-number">1.6.2.</span> <span class="toc-text">Makefile模式规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Makefile%E8%87%AA%E5%8A%A8%E5%8C%96%E5%8F%98%E9%87%8F"><span class="toc-number">1.6.3.</span> <span class="toc-text">Makefile自动化变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Makefile%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="toc-number">1.6.4.</span> <span class="toc-text">Makefile条件判断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Makefile%E5%87%BD%E6%95%B0"><span class="toc-number">1.6.5.</span> <span class="toc-text">Makefile函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#sbust"><span class="toc-number">1.6.5.1.</span> <span class="toc-text">sbust</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#patsubst"><span class="toc-number">1.6.5.2.</span> <span class="toc-text">patsubst</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dir"><span class="toc-number">1.6.5.3.</span> <span class="toc-text">dir</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#notdir"><span class="toc-number">1.6.5.4.</span> <span class="toc-text">notdir</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#foreach"><span class="toc-number">1.6.5.5.</span> <span class="toc-text">foreach</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#wildcard"><span class="toc-number">1.6.5.6.</span> <span class="toc-text">wildcard</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">FrankZhang</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">84</span></a></div></div></div><div id="content-outer"><div class="plain" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Frank’s blogs</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right"></span></div></div><div class="layout" id="content-inner"><article id="post"><div class="plain" id="post-title">MakeFile基础</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-01-09</time></div><div class="article-container" id="post-content"><h1 id="gcc和MakeFile基础"><a href="#gcc和MakeFile基础" class="headerlink" title="gcc和MakeFile基础"></a>gcc和MakeFile基础</h1><h2 id="gcc常用参数"><a href="#gcc常用参数" class="headerlink" title="gcc常用参数"></a>gcc常用参数</h2><ul>
 <li><code>gcc -c </code>指的是只把源码编译为目标文件而不进行链接。如果GCC不带-C参数，编译一个源代码文件（test.c)。那么会自动将编译和链接一步完成，并生成可执行文件。对于多个文件，需要先编译成中间目标文件(一般是.o文件），在链接成可执行文件，一般习惯目标文件都是以.o后缀，也没有硬性规定可执行文件不能用.o文件。</li>
 <li><code>gcc -o</code>指的是output_filename，确定输出文件的名称为output_filename，同时这个名称不能和源文件同名。如果不给出这个选项，gcc就给出预设的可执行文件a.out。</li>
-<li>其他参数详见 <a class="link"   target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/gcc-parameter-detail.html" >https://www.runoob.com/w3cnote/gcc-parameter-detail.html<i class="fas fa-external-link-alt"></i></a></li>
+<li>其他参数详见 <a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/gcc-parameter-detail.html">https://www.runoob.com/w3cnote/gcc-parameter-detail.html</a></li>
 </ul>
 <h2 id="MakeFile是什么"><a href="#MakeFile是什么" class="headerlink" title="MakeFile是什么"></a>MakeFile是什么</h2><ul>
 <li><p>使用 GCC 编译器在 Linux 进行 C 语言编译，通过在终端执行 gcc 命 令来完成 C 文件的编译，如果我们的工程只有一两个 C 文件还好，需要输入的命令不多，当文 件有几十、上百甚至上万个的时候用终端输入 GCC 命令的方法显然是不现实的。如果我们能够 编写一个文件，这个文件描述了编译哪些源码文件、如何编译那就好了，每次需要编译工程的 时只需要使用这个文件就行了。这种问题怎么可能难倒聪明的程序员，为此提出了一个解决大 工程编译的工具：make，描述哪些文件需要编译、哪些需要重新编译的文件就叫做 Makefile， Makefile 就跟脚本文件一样，Makefile 里面还可以执行系统命令。使用的时候只需要一个 <code>make</code>命令即可完成整个工程的自动编译，极大的提高了软件开发的效率。</p>
@@ -169,44 +22,44 @@
 <h2 id="应用举例"><a href="#应用举例" class="headerlink" title="应用举例"></a>应用举例</h2><ul>
 <li>我们完成这样一个小工程，通过键盘输入两个整形数字，然后计算他们的和并将结果显示在屏幕上，在这个工程中我们有 main.c、input.c 和 calcu.c 这三个 C 文件和 input.h、calcu.h 这 两个头文件。其中 main.c 是主体，input.c 负责接收从键盘输入的数值，calcu.c 进行任意两个数 相加，其中 main.c 文件内容如下：</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;input.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;calcu.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a, b, num;</span><br><span class="line"></span><br><span class="line">	input_int(&amp;a, &amp;b);</span><br><span class="line">	num = calcu(a, b);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d + %d = %d\r\n&quot;</span>, a, b, num);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;input.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;calcu.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a, b, num;</span><br><span class="line"></span><br><span class="line">	input_int(&amp;a, &amp;b);</span><br><span class="line">	num = calcu(a, b);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d + %d = %d\r\n&quot;</span>, a, b, num);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>input.c 文件内容如下：</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//input.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;input.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">input_int</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> *b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;input two num:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\r\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//input.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;input.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">input_int</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> *b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;input two num:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\r\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>calcu.c 文件内容如下：</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;calcu.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">calcu</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (a + b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;calcu.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">calcu</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (a + b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>文件 input.h 内容如下：</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _INPUT_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _INPUT_H</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">input_int</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> *b)</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _INPUT_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _INPUT_H</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">input_int</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> *b)</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>文件 calcu.h 内容如下：</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _CALCU_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _CALCU_H</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">calcu</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _CALCU_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _CALCU_H</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">calcu</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>假如使用gcc编译程序，那么此时需要再命令行输入</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc main.c calcu.c input.c -o main</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">gcc main.c calcu.c input.c -o main</span><br></pre></td></tr></table></figure>
 
 <p>上面命令的意思就是使用 gcc 编译器对 main.c、calcu.c 和 input.c 这三个文件进行编译，编 译生成的可执行文件叫做 <code>main</code>。</p>
 <p><img src="/imgs/image-20220109170757542.png" alt="image-20220109170757542"></p>
 <p>执行程序用到的命令是<code>./main</code>，含义是执行当前目录下的main文件</p>
 <h2 id="makefile的重要性"><a href="#makefile的重要性" class="headerlink" title="makefile的重要性"></a>makefile的重要性</h2><p>可以看出我们的代码按照我们所设想的工作了，使用命令“gcc main.c calcu.c input.c -o main” 看起来很简单是吧，只需要一行就可以完成编译，但是我们这个工程只有三个文件啊！如果几 千个文件呢？再就是如果<strong>有一个文件被修改了</strong>，使用上面的命令编译的时候<strong>所有的文件都会重新编译</strong>，如果工程有几万个文件(Linux 源码就有这么多文件！)，想想这几万个文件编译一次 所需要的时间就可怕。最好的办法肯定是<strong>哪个文件被修改了，只编译这个被修改的文件</strong>即可， 其它没有修改的文件就<strong>不需要再次重新编译了</strong>，为此我们改变我们的编译方法，如果第一次编译工程，我们先将工程中的文件都编译一遍，然后后面修改了哪个文件就编译哪个文件，命令 如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc -c main.c</span><br><span class="line">gcc -c input.c</span><br><span class="line">gcc -c calcu.c</span><br><span class="line">gcc main.o input.o calcu.o -o main</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">gcc -c main.c</span><br><span class="line">gcc -c input.c</span><br><span class="line">gcc -c calcu.c</span><br><span class="line">gcc main.o input.o calcu.o -o main</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>注意，gcc的<code>-c</code>选项的意思是将程序编译为.o文件但是<strong>不链接</strong>为最终的可执行文件，最后一句<code>gcc main.o input.o calcu.o -o main</code>的意思是将三个.o文件链接为一个可执行文件</li>
 <li>假如我们现在修改了 calcu.c 这个文件，<strong>只需要将 caclue.c 这一个文件重新编译成.o 文件</strong>，然后在<strong>将所有的.o 文件链接成可执行文件</strong>，只需要下面两条命令即可：</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc -c calcu.c</span><br><span class="line">gcc main.o input.o calcu.o -o main</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">gcc -c calcu.c</span><br><span class="line">gcc main.o input.o calcu.o -o main</span><br></pre></td></tr></table></figure>
 
 <h3 id="makefile的作用"><a href="#makefile的作用" class="headerlink" title="makefile的作用"></a>makefile的作用</h3><ul>
 <li>如果工程没有编译过，那么工程中的所有.c 文件都要被编译并且链接成可执行程序。</li>
@@ -218,7 +71,7 @@
 <li><img src="/imgs/image-20220109171722524.png" alt="image-20220109171722524"></li>
 </ul>
 <p><strong>Makefile文件：</strong></p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main: main.o input.o calcu.o</span></span><br><span class="line">	gcc -o main main.o input.o calcu.o</span><br><span class="line"><span class="section">main.o: main.c</span></span><br><span class="line">	gcc -c main.c</span><br><span class="line"><span class="section">input.o: input.c</span></span><br><span class="line">	gcc -c input.c</span><br><span class="line"><span class="section">calcu.o: calcu.c</span></span><br><span class="line">	gcc -c calcu.c</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">main: main.o input.o calcu.o</span></span><br><span class="line">	gcc -o main main.o input.o calcu.o</span><br><span class="line"><span class="section">main.o: main.c</span></span><br><span class="line">	gcc -c main.c</span><br><span class="line"><span class="section">input.o: input.c</span></span><br><span class="line">	gcc -c input.c</span><br><span class="line"><span class="section">calcu.o: calcu.c</span></span><br><span class="line">	gcc -c calcu.c</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>上述代码中所有行首需要空出来的地方一定要使用<code>TAB</code>键！<strong>不要使用空格键</strong>！这是 Makefile 的语法要求</p>
@@ -250,7 +103,7 @@
 </li>
 <li>重新看一下上面的代码</li>
 </ul>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main: main.o input.o calcu.o</span></span><br><span class="line">	gcc -o main main.o input.o calcu.o</span><br><span class="line"><span class="section">main.o: main.c</span></span><br><span class="line">	gcc -c main.c</span><br><span class="line"><span class="section">input.o: input.c</span></span><br><span class="line">	gcc -c input.c</span><br><span class="line"><span class="section">calcu.o: calcu.c</span></span><br><span class="line">	gcc -c calcu.c</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">main: main.o input.o calcu.o</span></span><br><span class="line">	gcc -o main main.o input.o calcu.o</span><br><span class="line"><span class="section">main.o: main.c</span></span><br><span class="line">	gcc -c main.c</span><br><span class="line"><span class="section">input.o: input.c</span></span><br><span class="line">	gcc -c input.c</span><br><span class="line"><span class="section">calcu.o: calcu.c</span></span><br><span class="line">	gcc -c calcu.c</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>首先更新第一条规则中的 main，第一条规则的目标成为默认目标，只要默认目标更新了那 么就认为 Makefile 的工作。在第一次编译的时候<strong>由于 main 还不存在</strong>，因此<strong>第一条规则会执行</strong>， 第一条规则<strong>依赖于文件 main.o、input.o 和 calcu.o 这个三个.o 文件</strong>，这三个.o 文件<strong>目前还都没 有，因此必须先更新这三个文件</strong>。make <u><strong>会查找以这三个.o 文件为目标的规则并执行</strong></u>。<strong>以 main.o 为例，发现更新 main.o 的是第二条规则，因此会执行第二条规则</strong>，第二条规则里面的命令为“gcc –c main.c”，这行命令很熟悉了吧，就是不链接编译 main.c，生成 main.o，其它两个.o 文件同理。 最后一个规则目标是 clean，它<strong>没有依赖文件，因此会默认为依赖文件都是最新的</strong>，所以其<strong>对应 的命令不会执行</strong>，当我们<strong>想要执行 clean 的话可以直接使用命令<code>make clean</code><strong>，执行以后就会</strong>删 除当前目录下所有的.o 文件以及 main</strong>，因此 <strong>clean 的功能就是完成工程的清理</strong></li>
@@ -270,7 +123,7 @@
 <li><p>实例</p>
 </li>
 </ul>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Makefile 变量的使用</span></span><br><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Makefile 变量的使用</span></span><br><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>Makefile 中可以写注释，<strong>注释开头要 用符号“#”</strong></p>
@@ -285,7 +138,7 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">name = zzk</span><br><span class="line">curname = <span class="variable">$(name)</span></span><br><span class="line">name = zuozhongkai</span><br><span class="line"><span class="section">print:</span></span><br><span class="line">	@echo curname: <span class="variable">$(curname)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">name = zzk</span><br><span class="line">curname = <span class="variable">$(name)</span></span><br><span class="line">name = zuozhongkai</span><br><span class="line"><span class="section">print:</span></span><br><span class="line">	@echo curname: <span class="variable">$(curname)</span></span><br></pre></td></tr></table></figure>
 
 <p>​        此时输出的是<code>zuozhongkai</code>，意味着变量的内容随着变量的值<strong>更新而更新</strong></p>
 <p>​        <code>@</code>的意思是使得make在执行的过程中输出执行过程，否则不会输出</p>
@@ -320,13 +173,13 @@
 </li>
 </ul>
 <p>前面的代码可以修改如下：</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br><span class="line"></span><br><span class="line">%.o : %.c</span><br><span class="line">	<span class="comment">#命令</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br><span class="line"></span><br><span class="line">%.o : %.c</span><br><span class="line">	<span class="comment">#命令</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br></pre></td></tr></table></figure>
 
 <h3 id="Makefile自动化变量"><a href="#Makefile自动化变量" class="headerlink" title="Makefile自动化变量"></a>Makefile自动化变量</h3><ul>
 <li>如何通过一行命令来从不同的依赖文件中生 成对应的目标？自动化变量就是完成这个功能的！所谓自动化变量就是<strong>这种变量会把模式中所 定义的一系列的文件自动的挨个取出，直至所有的符合模式的文件都取完</strong>，类似于python中的变量解包，将一个数组中的变量一个一个的拆出来。自动化变量只应该出现在规则的命令中。</li>
 <li><img src="/imgs/image-20220110002525509.png" alt="image-20220110002525509"></li>
 </ul>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br><span class="line">%.o : %.c</span><br><span class="line">	gcc -c <span class="variable">$&lt;</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br><span class="line">%.o : %.c</span><br><span class="line">	gcc -c <span class="variable">$&lt;</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>上面的代码中，<code>$&lt;</code>代表依赖文件(.c)的一系列集合</p>
@@ -334,18 +187,18 @@
 <li><p>上述规则中并没有创建文件 clean 的命令，因此工作目录下<strong>永远都不会存在文件 clean</strong>，当 我们输入“make clean”以后，后面的“rm *.o”和“rm main”总是会执行。<strong>可是如果我们“手贱”，在工作目录下创建一个名为“clean”的文件</strong>，那就不一样了，当执行“make clean”的时 候，<strong>规则因为没有依赖文件，所以目标被认为是最新的，因此后面的 rm 命令也就不会执行</strong>，我 们预先设想的清理工程的功能也就无法完成。为了避免这个问题，我们可以将 clean 声明为伪 目标，声明方式如下：</p>
 </li>
 </ul>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.PHONY : clean</span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">.PHONY : clean</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br><span class="line"></span><br><span class="line">.PHONY : clean</span><br><span class="line"></span><br><span class="line">%.o : %.c</span><br><span class="line">	gcc -c <span class="variable">$&lt;</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br><span class="line"></span><br><span class="line">.PHONY : clean</span><br><span class="line"></span><br><span class="line">%.o : %.c</span><br><span class="line">	gcc -c <span class="variable">$&lt;</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>声明 clean 为伪目标，<strong>声明 clean 为伪目标以后不管当前目录下是否存在名 为“clean”的文件，输入“make clean”的话规则后面的 rm 命令都会执行</strong>。</li>
 </ul>
 <h3 id="Makefile条件判断"><a href="#Makefile条件判断" class="headerlink" title="Makefile条件判断"></a>Makefile条件判断</h3><p>语法</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;条件关键字&gt;</span><br><span class="line">	&lt;条件为真时执行的语句&gt;</span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">&lt;条件关键字&gt;</span><br><span class="line">	&lt;条件为真时执行的语句&gt;</span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
 
 <p>和</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;条件关键字&gt;</span><br><span class="line">	&lt;条件为真时执行的语句&gt;</span><br><span class="line">else</span><br><span class="line">	&lt;条件为假时执行的语句&gt;</span><br><span class="line">endif</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;条件关键字&gt;</span><br><span class="line">	&lt;条件为真时执行的语句&gt;</span><br><span class="line">else</span><br><span class="line">	&lt;条件为假时执行的语句&gt;</span><br><span class="line">endif</span><br></pre></td></tr></table></figure>
 
 <p><strong>条件关键字的组成</strong></p>
 <ul>
@@ -354,20 +207,20 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ifeq (&lt;参数 1&gt;, &lt;参数 2&gt;)</span><br><span class="line">ifeq ‘&lt;参数 1 &gt;’,‘ &lt;参数 2&gt;’</span><br><span class="line">ifeq “&lt;参数 1&gt;”, “&lt;参数 2&gt;”</span><br><span class="line">ifeq “&lt;参数 1&gt;”, ‘&lt;参数 2&gt;’</span><br><span class="line">ifeq ‘&lt;参数 1&gt;’, “&lt;参数 2&gt;”</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ifeq (&lt;参数 1&gt;, &lt;参数 2&gt;)</span><br><span class="line">ifeq ‘&lt;参数 1 &gt;’,‘ &lt;参数 2&gt;’</span><br><span class="line">ifeq “&lt;参数 1&gt;”, “&lt;参数 2&gt;”</span><br><span class="line">ifeq “&lt;参数 1&gt;”, ‘&lt;参数 2&gt;’</span><br><span class="line">ifeq ‘&lt;参数 1&gt;’, “&lt;参数 2&gt;”</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><code>ifdef</code>和<code>ifndef</code></li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifdef &lt;变量名&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ifdef &lt;变量名&gt;</span><br></pre></td></tr></table></figure>
 
 <p>​        如果“变量名”的值非空，那么表示表达式为真，否则表达式为假。“变量名”同样可以是 一个函数的返回值。ifndef 用法类似，但是含义用户 ifdef 相反。</p>
 <h3 id="Makefile函数"><a href="#Makefile函数" class="headerlink" title="Makefile函数"></a>Makefile函数</h3><ul>
 <li>Makefile 支持函数，类似 C 语言一样，<strong>Makefile 中的函数是已经定义好的，我们直接使用， 不支持我们自定义函数</strong>。make 所支持的函数不多，但是绝对够我们使用了</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(函数名 参数集合)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(函数名 参数集合)</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;函数名 参数集合&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$&#123;函数名 参数集合&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>可以看出，调用函数和调用普通变量一样，<strong>使用符号“$”来标识</strong>。参数集合是函数的多个 参数，<strong>参数之间以逗号“,”隔开</strong>，<strong>函数名和参数之间以“空格”分隔开</strong>，函数的调用以“$”开 头。</li>
@@ -375,12 +228,12 @@
 <h4 id="sbust"><a href="#sbust" class="headerlink" title="sbust"></a>sbust</h4><ul>
 <li>函数 subst 用来完成字符串替换，调用形式如下：</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(subst &lt;from&gt;,&lt;to&gt;,&lt;text&gt;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(subst &lt;from&gt;,&lt;to&gt;,&lt;text&gt;)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>此函数的功能是将字符串<text>中的<from>内容替换为<to>，函数返回被替换以后的字符 串，比如如下示例：</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(subst zzk,ZZK,my name is zzk)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(subst zzk,ZZK,my name is zzk)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>把字符串“my name is zzk”中的“zzk”替换为“ZZK”，替换完成以后的字符串为“my name  is ZZK”。</li>
@@ -388,12 +241,12 @@
 <h4 id="patsubst"><a href="#patsubst" class="headerlink" title="patsubst"></a>patsubst</h4><ul>
 <li>函数 patsubst 用来完成模式字符串替换，使用方法如下：</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(patsubst &lt;pattern&gt;,&lt;replacement&gt;,&lt;text&gt;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(patsubst &lt;pattern&gt;,&lt;replacement&gt;,&lt;text&gt;)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>此函数查找字<strong>符串中的单词是否符合模式</strong><pattern>，如果匹配就用<replacement>来 替换掉，<pattern>可以使用通配符“%”，表示任意长度的字符串，函数返回值就是替换后的字 符串。如果<replacement>中也包涵“%”，那么<replacement>中的“%”将是<pattern>中的那个 “%”所代表的字符串,<strong>也就是说<code>%</code>代表的字符串的内容不变</strong></li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(patsubst %.c,%.o,a.c b.c c.c)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(patsubst %.c,%.o,a.c b.c c.c)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>将字符串<code>a.c b.c c.c</code>中的所有符合<code>%.c</code>的字符串，替换为<code>%.o</code>，替换完成以后的字 符串为“a.o b.o c.o”，注意此时a，b和c是不变的。</li>
@@ -401,12 +254,12 @@
 <h4 id="dir"><a href="#dir" class="headerlink" title="dir"></a>dir</h4><ul>
 <li>函数 dir 用来获取目录</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(dir &lt;names…&gt;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(dir &lt;names…&gt;)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>此函数用来从文件名序列中提取出目录部分，返回值是文件名序列<names>的目录 部分</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(dir &lt;/src/a.c&gt;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(dir &lt;/src/a.c&gt;)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>提取文件“/src/a.c”的目录部分，也就是“/src”。</li>
@@ -414,12 +267,12 @@
 <h4 id="notdir"><a href="#notdir" class="headerlink" title="notdir"></a>notdir</h4><ul>
 <li>函数 notdir 看名字就是知道去除文件中的目录部分，也就是提取文件名</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(notdir &lt;names…&gt;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(notdir &lt;names…&gt;)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>此函数用与从文件名序列<names>中提取出文件名非目录部分</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(notdir &lt;/src/a.c&gt;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(notdir &lt;/src/a.c&gt;)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>提取文件“/src/a.c”中的非目录部分，也就是文件名“a.c”。</li>
@@ -427,7 +280,7 @@
 <h4 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h4><ul>
 <li>foreach 函数用来完成循环</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(foreach &lt;var&gt;, &lt;list&gt;,&lt;text&gt;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(foreach &lt;var&gt;, &lt;list&gt;,&lt;text&gt;)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>此函数的意思就是把参数<list>中的单词逐一取出来放到参数<var>中，然后再执行<text>所 包含的表达式。每次<text>都会返回一个字符串，循环的过程中，**<text>中所包含的每个字符串 会以空格隔开<strong>，最后当整个循环结束时，</strong><text>所返回的每个字符串所组成的整个字符串将会是 函数 foreach 函数的返回值**</li>
@@ -435,189 +288,20 @@
 <h4 id="wildcard"><a href="#wildcard" class="headerlink" title="wildcard"></a>wildcard</h4><ul>
 <li>通配符<strong>“%”只能用在规则中</strong>，<strong>只有在规则中它才会展开</strong>，如果在<strong>变量定义</strong>和<strong>函数使用</strong>时， 通配符<strong>不会自动展开</strong>，这个时候就要用到函数 wildcard</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(wildcard PATTERN…)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(wildcard PATTERN…)</span><br></pre></td></tr></table></figure>
 
 <p>比如</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(wildcard *.c)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(wildcard *.c)</span><br></pre></td></tr></table></figure>
 
 <p>上面的代码是用来<strong>获取当前目录下所有的.c 文件，类似“%”</strong>。</p>
 <p><strong>使用例</strong></p>
 <p>（文件夹下有<code>a.c</code>, <code>b.c</code>和<code>c.c</code>三个文件）</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">list=<span class="variable">$(<span class="built_in">wildcard</span> *.c)</span></span><br><span class="line">files=<span class="variable">$(<span class="built_in">foreach</span> filename, <span class="variable">$(list)</span>, <span class="variable">$(filename)</span> hello)</span></span><br><span class="line"><span class="section">main: </span></span><br><span class="line">	</span><br><span class="line">	@echo $&#123;list&#125;</span><br><span class="line">	</span><br><span class="line">	@echo <span class="variable">$(files)</span></span><br><span class="line"></span><br><span class="line">.PHONY : clean</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">list=<span class="variable">$(<span class="built_in">wildcard</span> *.c)</span></span><br><span class="line">files=<span class="variable">$(<span class="built_in">foreach</span> filename, <span class="variable">$(list)</span>, <span class="variable">$(filename)</span> hello)</span></span><br><span class="line"><span class="section">main: </span></span><br><span class="line">	</span><br><span class="line">	@echo $&#123;list&#125;</span><br><span class="line">	</span><br><span class="line">	@echo <span class="variable">$(files)</span></span><br><span class="line"></span><br><span class="line">.PHONY : clean</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br></pre></td></tr></table></figure>
 
 <p>输出</p>
 <p><img src="/imgs/image-20220110111644323.png" alt="image-20220110111644323"></p>
-
-        </div>
-
-        
-
-        
-
-        
-            <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/01/10/DSP28377%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">DSP28377学习（一）</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/2022/01/09/%E4%BF%AE%E5%A4%8D%E5%88%A0%E9%99%A4%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%90%8EBIOS%E4%B8%AD%E5%AD%98%E5%9C%A8%E5%A4%9A%E4%BD%99%E5%90%AF%E5%8A%A8%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9A%84%E9%97%AE%E9%A2%98/"
-                        >
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">修复删除双系统之后BIOS中存在多余启动引导项的问题</span>
-                                <span class="post-nav-item">Next posts</span>
-                            </span>
-                            <span class="right arrow-icon flex-center">
-                              <i class="fas fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-        
-    </div>
-</div>
-
-
-                
-            </div>
-
-        </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
-            
-              <span>2021</span>
-              -
-            
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
-        </div>
-        
-        <div class="theme-info info-item">
-            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
-        </div>
-        
-        
-    </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="tools-list">
-        <!-- TOC aside toggle -->
-        
-
-        <!-- go comment -->
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="fas fa-arrow-up"></i>
-            </li>
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
-
-
-    
-
-</main>
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-
-
-
-
-
-<div class="post-scripts">
-    
-</div>
-
-
-
-</body>
-</html>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">FrankZhang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://frankzhang0219.gitee.io/2022/01/09/MakeFile基础/">http://frankzhang0219.gitee.io/2022/01/09/MakeFile基础/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2022/01/10/DSP28377%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/"><i class="fa fa-chevron-left">  </i><span>DSP28377学习（一）</span></a></div><div class="next-post pull-right"><a href="/2022/01/09/%E4%BF%AE%E5%A4%8D%E5%88%A0%E9%99%A4%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%90%8EBIOS%E4%B8%AD%E5%AD%98%E5%9C%A8%E5%A4%9A%E4%BD%99%E5%90%AF%E5%8A%A8%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9A%84%E9%97%AE%E9%A2%98/"><span>修复删除双系统之后BIOS中存在多余启动引导项的问题</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2021 - 2022 By FrankZhang</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

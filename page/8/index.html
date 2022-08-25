@@ -1,600 +1,375 @@
-<!DOCTYPE html>
-<html lang="Chinese">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="Frank·Zhang">
-    
-    <title>
-        
-        Frank&#39;s Blogs
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
-
-    <link rel="shortcut icon" href="/images/FLogo.png">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
-
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
-    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
-  </script>
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-
-<body>
-<div class="progress-bar-container">
-    
-
-    
-</div>
-
-
-<main class="page-container">
-
-    
-
-    <div class="page-main-content">
-
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
-
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                Frank&#39;s Blogs
-            </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class="active"
-                               href="/"
-                            >
-                                HOME
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                ARCHIVES
-                            </a>
-                        </li>
-                    
-                    
-                </ul>
-            </div>
-            <div class="mobile">
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class="active"
-                       href="/">HOME</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">ARCHIVES</a>
-                </li>
-            
-        </ul>
-    </div>
-
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="home-content-container fade-in-down-animation">
-    <ul class="home-article-list">
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/20/freeRTOS%E4%B8%AD%E6%96%AD/">
-                        freeRTOS中断和信号量以及任务管理
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        freeRTOS中断和信号量使用freeRTOS中断与使用正常的中断区别不大（不使用FreeRTOS自带的API），直接使用系统给的中断函数即可
-
-手动启动这两个
-
-
-
-注意，使用EXTI的时候（外部中断），需要自己手动定义中断处理函数
-1234vo...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon Dec 20 2021 22:10:33 GMT+0800">2021-12-20</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/20/freeRTOS%E4%B8%AD%E6%96%AD/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/20/%E4%BD%BF%E7%94%A8CubeIDE%E9%85%8D%E7%BD%AEJLink%E5%92%8C%E9%A1%B9%E7%9B%AE/">
-                        使用CubeIDE配置JLink和项目
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        使用CubeIDE配置JLink和项目配置Cube
-
-
-新建项目，然后在Cube中配置相关的内容
-
-选择填写相关的信息，名称等
-
-
-
-此处放大窗口
-
-
-
-设置好之后，右键创建代码
-
-
-
-假如此时不能点击generate code的话，右键选择buil...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon Dec 20 2021 20:59:09 GMT+0800">2021-12-20</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/20/%E4%BD%BF%E7%94%A8CubeIDE%E9%85%8D%E7%BD%AEJLink%E5%92%8C%E9%A1%B9%E7%9B%AE/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/18/%E4%BD%BF%E7%94%A8freeRTOS%E7%9A%84%E9%98%9F%E5%88%97%E5%92%8C%E5%AE%9A%E6%97%B6%E5%99%A8/">
-                        使用freeRTOS的队列和定时器
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        使用freeRTOS的队列和定时器Cube
-注意必须用CMSIS_V2系统才可以设置定时器
-
-
-
-然后在freeRTOS.c中的初始化函数MX_FREERTOS_Init中添加启动定时器的语句
-1234567891011121314151617181...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sat Dec 18 2021 12:59:35 GMT+0800">2021-12-18</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/18/%E4%BD%BF%E7%94%A8freeRTOS%E7%9A%84%E9%98%9F%E5%88%97%E5%92%8C%E5%AE%9A%E6%97%B6%E5%99%A8/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/17/%E8%A7%A3%E5%86%B3C%E8%AF%AD%E8%A8%80%E5%8F%98%E9%87%8F%E8%A2%AB%E9%87%8D%E5%A4%8D%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/">
-                        解决C语言变量被重复定义错误的问题
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        解决C语言变量被重复定义错误的问题头文件编译的原理
-在每次头文件被某个.c文件include的时候，头文件头会被插入到代码中#include &quot;xxx.h&quot;的位置，假如在头文件中定义了变量，然后这个头文件被多个.c文件同时Incl...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Fri Dec 17 2021 23:10:42 GMT+0800">2021-12-17</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/17/%E8%A7%A3%E5%86%B3C%E8%AF%AD%E8%A8%80%E5%8F%98%E9%87%8F%E8%A2%AB%E9%87%8D%E5%A4%8D%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/">
-                        使用FreeRTOS和ILI9341点亮LCD屏幕
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕CubeMX配置
-SPI：
-
-
-
-DMA：
-
-
-
-NVIC（重要）：
-
-
-
-注意此处SPI、TIM1和DMA不要使用FreeRTOS 的中断函数，将对勾去掉，同时将中断优先级改为一个比...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Fri Dec 17 2021 21:35:25 GMT+0800">2021-12-17</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/16/STM32F4%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%892/">
-                        STM32F4点亮ili9341驱动的屏幕（HAL库）2
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        STM32F4点亮ili9341驱动的屏幕（HAL库）2地址
-https://github.com/ardnew/ILI9341-STM32-HAL
-
-Cube配置按照readme中的配置，注意以下问题
-
-SPI设置（打开中断）：
-
-DMA：
-
-生成...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Thu Dec 16 2021 10:36:21 GMT+0800">2021-12-16</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/16/STM32F4%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%892/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/15/STM32%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%E7%AC%AC%E4%B8%80%E7%89%88%EF%BC%89/">
-                        STM32点亮ILI9341驱动的屏幕（HAL库）
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        STM32F407点亮ILI9341驱动的屏幕驱动网址（国内镜像）
-https://hub.fastgit.org/afiskon/stm32-ili9341
-接线
-屏幕的供电是3.3V
-SCL是时钟，接SCK
-SDA是输入信号，接MOSI
-其他接对...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Wed Dec 15 2021 19:48:42 GMT+0800">2021-12-15</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/15/STM32%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%E7%AC%AC%E4%B8%80%E7%89%88%EF%BC%89/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/14/freeRtos%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/">
-                        FreeRtos内存分配
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        内存分配的种类本文转载自https://zhuanlan.zhihu.com/p/115276865
-堆栈的关系
-​    如上图的示例程序所示，全局变量和常量属于静态区（Static)，由编译器事先分配好，生命周期贯穿整个程序；函数的参数值，局部变...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Tue Dec 14 2021 22:29:57 GMT+0800">2021-12-14</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/14/freeRtos%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/13/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
-                        git常用命令
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        git 常见命令https://www.liaoxuefeng.com/wiki/896043488029600
-一次添加目录下所有文件（ 包括gitignore 的文件）：
-git add . -f
-一次添加目录下的所有文件（ 不包括gitigno...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon Dec 13 2021 14:56:17 GMT+0800">2021-12-13</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/13/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/11/FreeRtos2/">
-                        FreeRtos2
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        FreeRtos创建注意（使用CubeMX）
-创建按照前篇知乎上的文章创建即可，注意此时会提示Systick的问题，设置为外部时钟晶振，而且设置为TIM1（或者其他timer可能也可以，没有尝试过）
-
-
-
-然后另一个可能存在的问题是在freertos...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sat Dec 11 2021 18:03:10 GMT+0800">2021-12-11</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/11/FreeRtos2/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-    </ul>
-
-    <div class="home-paginator">
-        <div class="paginator">
-    
-        <a class="prev btn"
-           href="/page/7/"
-        >Prev</a>
-    
-
-    
-        <a class="next btn"
-           href="/page/9/"
-        >Next</a>
-    
-</div>
-
-    </div>
-</div>
-
-
-                
-            </div>
-
-        </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
-            
-              <span>2021</span>
-              -
-            
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
-        </div>
-        
-        <div class="theme-info info-item">
-            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
-        </div>
-        
-        
-    </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="fas fa-arrow-up"></i>
-            </li>
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
-
-
-    
-
-</main>
-
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-
-
-
-
-
-<div class="post-scripts">
-    
-</div>
-
-
-
-</body>
-</html>
+<!DOCTYPE html><html lang="Chinese"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content=""><meta name="keywords" content=""><meta name="author" content="FrankZhang"><meta name="copyright" content="FrankZhang"><title>Frank’s blogs</title><link rel="shortcut icon" href="/Flogo.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="author-info"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">FrankZhang</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">84</span></a></div></div></div><nav class="no-bg" id="nav"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Frank’s blogs</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right"></span></div><div id="site-info"><div id="site-title">Frank’s blogs</div><div id="site-sub-title"></div></div></nav><div id="content-outer"><div class="layout" id="content-inner"><div class="recent-post-item article-container"><a class="article-title" href="/2021/12/20/freeRTOS%E4%B8%AD%E6%96%AD/">freeRTOS中断和信号量以及任务管理</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-12-20</time><div class="content"><h1 id="freeRTOS中断和信号量"><a href="#freeRTOS中断和信号量" class="headerlink" title="freeRTOS中断和信号量"></a>freeRTOS中断和信号量</h1><p>使用freeRTOS中断与使用正常的中断区别不大（不使用FreeRTOS自带的API），直接使用系统给的中断函数即可</p>
+<ul>
+<li><p>手动启动这两个</p>
+</li>
+<li><p><img src="/imgs/image-20211220221301553.png" alt="image-20211220221301553"></p>
+</li>
+<li><p>注意，使用EXTI的时候（外部中断），需要自己<strong>手动定义</strong>中断处理函数</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HAL_GPIO_EXTI_Callback</span><span class="params">(<span class="keyword">uint16_t</span> GPIO_Pin)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>系统没有给出这个函数的定义，可以自己在任意文件中定义</p>
+</li>
+<li><p>设置的优先级比系统（RTOS）<strong>高</strong>的话，中断处理函数就<strong>不会被系统打断执行</strong>。</p>
+</li>
+<li><p>注意，在中断函数中调用FreeRTOS的API的时候，需要采用Fron_ISR的API。FreeRTOS对于一些系统API函数提供两种版本，一种是供<strong>任务调用</strong>的，一种是供<strong>中断调用的（Interrupt Safe API）</strong>。由中断调用的API函数后缀上会有“FromISR”。</p>
+</li>
+</ul>
+<h2 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h2><ul>
+<li><p>简单而言就是一个进程通过一个信号变量指示另一个线程是阻塞还是运行，详见<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/139469342">https://zhuanlan.zhihu.com/p/139469342</a></p>
+</li>
+<li><p>有两种调用方式，一种是使用CMSIS_OS中的<code>osSemaphoreId osSemaphoreCreate (const osSemaphoreDef_t *semaphore_def, int32_t count);</code>、<code>int32_t osSemaphoreWait (osSemaphoreId semaphore_id, uint32_t millisec);</code>和<code>osStatus osSemaphoreRelease (osSemaphoreId semaphore_id);</code>函数</p>
+</li>
+<li><p>或者是手动<code>#include &quot;semphr.h&quot;</code>，然后使用知乎网页上的<code>SemaphoreHandle_t xSemaphoreCreateBinary( void )</code>、<code>BaseType_t xSemaphoreTake( SemaphoreHandle_t xSemaphore, TickType_t xTicksToWait )</code>、<code>BaseType_t xSemaphoreGive( SemaphoreHandle_t xSemaphore );</code>以及中断函数中的<code>BaseType_t xSemaphoreGiveFromISR( SemaphoreHandle_t xSemaphore, BaseType_t *pxHigherPriorityTaskWoken )</code></p>
+</li>
+<li><p>注意，<code>xSemaphoreGiveFromISR</code>函数的第二个参数是可选的，不需要的时候可以给NULL，具体作用详见<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45045399/article/details/103238514">https://blog.csdn.net/weixin_45045399/article/details/103238514</a></p>
+</li>
+<li><p><strong>xTicksToWait</strong> 如果信号量不可用的话任务处于阻塞状态的<strong>最长时间</strong>，设置为 portMAX_DELAY的话任务会<strong>一直处于阻塞状态</strong>直到信号量可用，设置为0的话如果信号量不可用的话会<strong>直接返回</strong></p>
+</li>
+<li><p>假如准备在对应的中断中调用系统的API的话，注意<strong>勾选这个选项</strong>并且<strong>调整相应的中断优先级</strong>，<strong>否则会卡死</strong></p>
+</li>
+<li><p><img src="/imgs/image-20211220234334003.png" alt="image-20211220234334003"></p>
+</li>
+<li><p>经过测试，虽然<code>osSemaphoreId</code>与FreeRTOS原生的API要求的<code>SemaphoreHandle_t</code>不同，但是两种API<strong>都可以运行</strong>，直接替换即可。</p>
+</li>
+</ul>
+<h2 id="优先级倒置"><a href="#优先级倒置" class="headerlink" title="优先级倒置"></a>优先级倒置</h2><p>参考知乎文章<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/139469342">https://zhuanlan.zhihu.com/p/139469342</a></p>
+<h2 id="互斥量"><a href="#互斥量" class="headerlink" title="互斥量"></a>互斥量</h2><p>同上</p>
+<h2 id="关键区"><a href="#关键区" class="headerlink" title="关键区"></a>关键区</h2><p>同上</p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2021/12/20/%E4%BD%BF%E7%94%A8CubeIDE%E9%85%8D%E7%BD%AEJLink%E5%92%8C%E9%A1%B9%E7%9B%AE/">使用CubeIDE配置JLink和项目</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-12-20</time><div class="content"><h1 id="使用CubeIDE配置JLink和项目"><a href="#使用CubeIDE配置JLink和项目" class="headerlink" title="使用CubeIDE配置JLink和项目"></a>使用CubeIDE配置JLink和项目</h1><h2 id="配置Cube"><a href="#配置Cube" class="headerlink" title="配置Cube"></a>配置Cube</h2><ul>
+<li><p><img src="/imgs/image-20211220210102796.png" alt="image-20211220210102796"></p>
+</li>
+<li><p>新建项目，然后在Cube中配置相关的内容</p>
+</li>
+<li><p>选择填写相关的信息，名称等</p>
+</li>
+<li><p><img src="/imgs/image-20211220210224776.png" alt="image-20211220210224776"></p>
+</li>
+<li><p>此处放大窗口</p>
+</li>
+<li><p><img src="/imgs/image-20211220211956239.png" alt="image-20211220211956239"></p>
+</li>
+<li><p>设置好之后，右键创建代码</p>
+</li>
+<li><p><img src="/imgs/image-20211220212713729.png" alt="image-20211220212713729"></p>
+</li>
+<li><p>假如此时不能点击<code>generate code</code>的话，右键选择<code>build project</code>然后在提示创建代码的时候选择ok，或者是点击cancel然后再次右键，可以看到<code>generate code</code>可以使用了</p>
+</li>
+</ul>
+<h2 id="配置J-Link"><a href="#配置J-Link" class="headerlink" title="配置J-Link"></a>配置J-Link</h2><ul>
+<li><p><img src="/imgs/image-20211220210941718.png" alt="image-20211220210941718"></p>
+</li>
+<li><p>然后点击这里</p>
+</li>
+<li><p><img src="/imgs/image-20211220213008029.png" alt="image-20211220213008029"></p>
+</li>
+<li><p>然后选择</p>
+</li>
+<li><p><img src="/imgs/image-20211220213904526.png" alt="image-20211220213904526"></p>
+</li>
+<li><p>此处选择</p>
+</li>
+<li><p><img src="/imgs/image-20211220215318321.png" alt="image-20211220215318321"></p>
+</li>
+<li><p>否则会说program file does not exist的错误</p>
+</li>
+<li><p>注意include 文件的时候需要包括上一级目录到系统的include路径下才行，比如</p>
+</li>
+<li><p><img src="/imgs/image-20211220215431799.png" alt="image-20211220215431799"></p>
+</li>
+</ul>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2021/12/18/%E4%BD%BF%E7%94%A8freeRTOS%E7%9A%84%E9%98%9F%E5%88%97%E5%92%8C%E5%AE%9A%E6%97%B6%E5%99%A8/">使用freeRTOS的队列和定时器</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-12-18</time><div class="content"><h1 id="使用freeRTOS的队列和定时器"><a href="#使用freeRTOS的队列和定时器" class="headerlink" title="使用freeRTOS的队列和定时器"></a>使用freeRTOS的队列和定时器</h1><h2 id="Cube"><a href="#Cube" class="headerlink" title="Cube"></a>Cube</h2><ul>
+<li>注意必须用<code>CMSIS_V2</code>系统才可以设置定时器</li>
+</ul>
+<p><img src="/imgs/image-20211218130310454.png" alt="image-20211218130310454"></p>
+<p><img src="/imgs/image-20211218130352028.png" alt="image-20211218130352028"></p>
+<p>然后在<code>freeRTOS.c</code>中的<strong>初始化函数</strong><code>MX_FREERTOS_Init</code>中添加启动定时器的语句</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MX_FREERTOS_Init</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN Init */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE END Init */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN RTOS_MUTEX */</span></span><br><span class="line">  <span class="comment">/* add mutexes, ... */</span></span><br><span class="line">  <span class="comment">/* USER CODE END RTOS_MUTEX */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN RTOS_SEMAPHORES */</span></span><br><span class="line">  <span class="comment">/* add semaphores, ... */</span></span><br><span class="line">  <span class="comment">/* USER CODE END RTOS_SEMAPHORES */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Create the timer(s) */</span></span><br><span class="line">  <span class="comment">/* creation of myTimer01 */</span></span><br><span class="line">  myTimer01Handle = osTimerNew(refreshScreen, osTimerPeriodic, <span class="literal">NULL</span>, &amp;myTimer01_attributes);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* creation of myTimer02 */</span></span><br><span class="line">  myTimer02Handle = osTimerNew(drawString, osTimerPeriodic, <span class="literal">NULL</span>, &amp;myTimer02_attributes);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN RTOS_TIMERS */</span></span><br><span class="line">  osTimerStart(myTimer01Handle, <span class="number">500</span>);</span><br><span class="line">  osTimerStart(myTimer02Handle, <span class="number">500</span>);</span><br><span class="line">  <span class="comment">/* start timers, add new ones, ... */</span></span><br><span class="line">  <span class="comment">/* USER CODE END RTOS_TIMERS */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Create the queue(s) */</span></span><br><span class="line">  <span class="comment">/* creation of colorQ */</span></span><br><span class="line">  colorQHandle = osMessageQueueNew (<span class="number">16</span>, <span class="keyword">sizeof</span>(<span class="keyword">uint8_t</span>), &amp;colorQ_attributes);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN RTOS_QUEUES */</span></span><br><span class="line">  <span class="comment">/* add queues, ... */</span></span><br><span class="line">  <span class="comment">/* USER CODE END RTOS_QUEUES */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Create the thread(s) */</span></span><br><span class="line">  <span class="comment">/* creation of drawColor */</span></span><br><span class="line">  drawColorHandle = osThreadNew(StartDefaultTask, <span class="literal">NULL</span>, &amp;drawColor_attributes);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN RTOS_THREADS */</span></span><br><span class="line">  <span class="comment">/* add threads, ... */</span></span><br><span class="line">  <span class="comment">/* USER CODE END RTOS_THREADS */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN RTOS_EVENTS */</span></span><br><span class="line">  <span class="comment">/* add events, ... */</span></span><br><span class="line">  <span class="comment">/* USER CODE END RTOS_EVENTS */</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>队列从Cube里直接创建即可，不需要额外的代码启动。</li>
+<li>队列相关的操作函数在<code>cmsis_os2.h</code>中，如图</li>
+<li><img src="/imgs/image-20211218130544220.png" alt="image-20211218130544220"></li>
+</ul>
+<h2 id="测试CMSIS-V2使用ili9341驱动"><a href="#测试CMSIS-V2使用ili9341驱动" class="headerlink" title="测试CMSIS_V2使用ili9341驱动"></a>测试CMSIS_V2使用ili9341驱动</h2><ul>
+<li><p>能开始像芯片发送一次左右的指令，然后就会不知道因为什么原因（猜测是SPI）进入hardFault无限循环</p>
+</li>
+<li><p><img src="/imgs/image-20211218132008015.png" alt="image-20211218132008015"></p>
+</li>
+<li><p>认为还是<strong>只能用</strong><code>CMSIS_V1</code>进行操作。</p>
+</li>
+<li><p>尝试过SPI和DMA都不使用freeRTOS的中断，中断都比RTOS高，也尝试过DMA不用而SPI用，<strong>都不行。</strong></p>
+</li>
+</ul>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2021/12/17/%E8%A7%A3%E5%86%B3C%E8%AF%AD%E8%A8%80%E5%8F%98%E9%87%8F%E8%A2%AB%E9%87%8D%E5%A4%8D%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/">解决C语言变量被重复定义错误的问题</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-12-17</time><div class="content"><h1 id="解决C语言变量被重复定义错误的问题"><a href="#解决C语言变量被重复定义错误的问题" class="headerlink" title="解决C语言变量被重复定义错误的问题"></a>解决C语言变量被重复定义错误的问题</h1><h2 id="头文件编译的原理"><a href="#头文件编译的原理" class="headerlink" title="头文件编译的原理"></a>头文件编译的原理</h2><ul>
+<li>在每次头文件被某个.c文件include的时候，头文件头会被插入到代码中<code>#include &quot;xxx.h&quot;</code>的位置，假如在头文件中定义了变量，然后这个头文件被多个.c文件同时Include的话，就会导致头文件中的变量以同样的名称被定义多次。因此产生错误</li>
+</ul>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ul>
+<li>就是在定义该变量的.c文件的头文件中（或者需要用到在其他.c文件中定义的变量的文件中）给对应的变量加<code>extern</code>关键字定义，此时会意味着这个变量是在其他位置被定义的，在此处仅仅是声明一下，而不是定义，也不分配内存空间。此时在该文件被其他.c文件Include的时候，就不会使得变量被定义多次。</li>
+<li>或者使用<code>#ifndef</code>，<code>#define XX</code>，<code>#endif</code>防止if块中的内容被定义多次。</li>
+</ul>
+<h2 id="其他知识点"><a href="#其他知识点" class="headerlink" title="其他知识点"></a>其他知识点</h2><ul>
+<li><p>C语言中两种方式使用#include命令,<code> #include &lt;&gt;</code>与<code>#include ””</code>的区别</p>
+</li>
+<li><p>一种是在包含指令<code>#include</code>后面”&lt;&gt;”将头文件名括起来。这种方式用于<strong>标准或系统提供</strong>的头文件，到保存系统标准头文件的位置查找头文件。</p>
+</li>
+<li><p>另一种是在包含指令<code>#include</code>后用双引号””将头文件包括起来。这种方式常用与<strong>程序员自己的头文件</strong>。用这种格式时，C编译器先查找当前目录是否有指定名称的头文件，然后在从标准头文件目录中查找。</p>
+</li>
+</ul>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/">使用FreeRTOS和ILI9341点亮LCD屏幕</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-12-17</time><div class="content"><h1 id="使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕"><a href="#使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕" class="headerlink" title="使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕"></a>使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕</h1><h2 id="CubeMX配置"><a href="#CubeMX配置" class="headerlink" title="CubeMX配置"></a>CubeMX配置</h2><ul>
+<li><p>SPI：</p>
+</li>
+<li><p><img src="/imgs/image-20211217213656004.png" alt="image-20211217213656004"></p>
+</li>
+<li><p>DMA：</p>
+</li>
+<li><p><img src="/imgs/image-20211217213717712.png" alt="image-20211217213717712"></p>
+</li>
+<li><p>NVIC（重要）：</p>
+</li>
+<li><p><img src="/imgs/image-20211217213754825.png" alt="image-20211217213754825"></p>
+</li>
+<li><p>注意此处SPI、TIM1和DMA<strong>不要使用FreeRTOS 的中断函数</strong>，将对勾去掉，同时将中断优先级<strong>改为一个比FreeRTOS小的数字</strong>，比如2。假如使用了FreeRTOS的中断的话在Cube中无法修改这个数字为更小的值</p>
+</li>
+<li><p>FreeRTOS:</p>
+</li>
+<li><p><img src="/imgs/image-20211217213921708.png" alt="image-20211217213921708"></p>
+</li>
+<li><p>注意此处使用的是<strong>v1</strong>，尚未测试v2是否可以，其他内容（比如每个线程的堆栈空间之类的没有修改，默认应该是128字节）</p>
+</li>
+</ul>
+<h2 id="程序配置"><a href="#程序配置" class="headerlink" title="程序配置"></a>程序配置</h2><p><strong>主程序</strong>中include如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ili9341.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ili9341_font.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ili9341_gfx.h&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>同时添加</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ili9341_t</span> *_lcd;</span><br><span class="line"><span class="keyword">ili9341_text_attr_t</span> fontSend1;</span><br><span class="line"><span class="keyword">ili9341_text_attr_t</span> fontSend2;</span><br><span class="line"><span class="function"><span class="keyword">ili9341_t</span> *<span class="title">screenReturn</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _lcd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>freeRTOS</strong>的C文件中添加上面的Include，此外还有</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">ili9341_text_attr_t</span> fontSend1;</span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">ili9341_text_attr_t</span> fontSend2;</span><br></pre></td></tr></table></figure>
+
+<p>freeRTOS的<strong>线程</strong>定义如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* USER CODE END Header_startScreenFill */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">startScreenFill</span><span class="params">(<span class="keyword">void</span> <span class="keyword">const</span> * argument)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN startScreenFill */</span></span><br><span class="line">  <span class="comment">/* Infinite loop */</span></span><br><span class="line">  <span class="keyword">for</span>(;;)</span><br><span class="line">  &#123;</span><br><span class="line">    ili9341_fill_screen(screenReturn(),ILI9341_BLUE);</span><br><span class="line">    osDelay(<span class="number">500</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/* USER CODE END startScreenFill */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意不同的线程要区分优先级，如图</li>
+<li><img src="/imgs/image-20211217220230058.png" alt="image-20211217220230058"></li>
+</ul>
+<h2 id="文中没有提到的按照上一篇博客的操作"><a href="#文中没有提到的按照上一篇博客的操作" class="headerlink" title="文中没有提到的按照上一篇博客的操作"></a>文中没有提到的按照上一篇博客的操作</h2><h2 id="效果如图"><a href="#效果如图" class="headerlink" title="效果如图"></a>效果如图</h2><p><img src="/imgs/20211217220332.gif" alt="20211217220332"></p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2021/12/16/STM32F4%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%892/">STM32F4点亮ili9341驱动的屏幕（HAL库）2</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-12-16</time><div class="content"><h1 id="STM32F4点亮ili9341驱动的屏幕（HAL库）2"><a href="#STM32F4点亮ili9341驱动的屏幕（HAL库）2" class="headerlink" title="STM32F4点亮ili9341驱动的屏幕（HAL库）2"></a>STM32F4点亮ili9341驱动的屏幕（HAL库）2</h1><h2 id="地址"><a href="#地址" class="headerlink" title="地址"></a>地址</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/ardnew/ILI9341-STM32-HAL">https://github.com/ardnew/ILI9341-STM32-HAL</a></li>
+</ul>
+<h2 id="Cube配置"><a href="#Cube配置" class="headerlink" title="Cube配置"></a>Cube配置</h2><p>按照readme中的配置，注意以下问题</p>
+<ul>
+<li>SPI设置（打开中断）：</li>
+<li><img src="/imgs/image-20211216141849088.png" alt="image-20211216141849088"></li>
+<li>DMA：</li>
+<li><img src="/imgs/image-20211216141832051.png" alt="image-20211216141832051"></li>
+<li>生成项目</li>
+<li><img src="/imgs/image-20211218120959770.png" alt="image-20211218120959770"></li>
+</ul>
+<h3 id="编译注意事项"><a href="#编译注意事项" class="headerlink" title="编译注意事项"></a>编译注意事项</h3><ul>
+<li><p>注意在Flash中将库的目录添加到C/C++目录下</p>
+</li>
+<li><p><img src="/imgs/image-20211216142551872.png" alt="image-20211216142551872"></p>
+</li>
+<li><p><img src="/imgs/image-20211216142622319.png" alt="image-20211216142622319"></p>
+</li>
+<li><p>在<code>ili9341.h</code>文件添加<code>#pragma anon_unions</code>允许union类型</p>
+</li>
+<li><p>在keil编译配置管理的c/c++选项卡中Misc control中填写<code>--gnu</code></p>
+</li>
+<li><p><img src="/imgs/image-20211216141659806.png" alt="image-20211216141659806"></p>
+</li>
+<li><p>可能会出现未定义<code>MX_SPI1_Init();</code>的问题，在<code>main.c</code>文件中手动添加<code>dma.h</code>的include</p>
+</li>
+<li><p>lcd初始化示例（执行这个函数即可），返回一个<code>ili9341_t *</code>对象</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">_lcd = ili9341_new(</span><br><span class="line">  &amp;hspi1,</span><br><span class="line">  GPIOC, GPIO_PIN_6,</span><br><span class="line">  GPIOC,    GPIO_PIN_7,</span><br><span class="line">  GPIOC,    GPIO_PIN_8,</span><br><span class="line">  isoLandscape,</span><br><span class="line">  GPIOD,  GPIO_PIN_15,</span><br><span class="line">  GPIOD, GPIO_PIN_15,</span><br><span class="line">  itsNONE,</span><br><span class="line">  itnNONE);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意，不使用触摸功能的时候后面几个输入填写任意不用的引脚即可，最后两个写<code>***NONE</code>，有枚举类型的定义</li>
+<li><strong>不需要</strong>手动执行<code>init</code>之类的函数，之前那个<code>_new</code>中已经包括了</li>
+</ul>
+<h3 id="速度比上一个还是快一些"><a href="#速度比上一个还是快一些" class="headerlink" title="速度比上一个还是快一些"></a>速度比上一个还是快一些</h3></div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2021/12/15/STM32%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%E7%AC%AC%E4%B8%80%E7%89%88%EF%BC%89/">STM32点亮ILI9341驱动的屏幕（HAL库）</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-12-15</time><div class="content"><h1 id="STM32F407点亮ILI9341驱动的屏幕"><a href="#STM32F407点亮ILI9341驱动的屏幕" class="headerlink" title="STM32F407点亮ILI9341驱动的屏幕"></a>STM32F407点亮ILI9341驱动的屏幕</h1><h2 id="驱动网址"><a href="#驱动网址" class="headerlink" title="驱动网址"></a>驱动网址</h2><p>（国内镜像）</p>
+<p><a target="_blank" rel="noopener" href="https://hub.fastgit.org/afiskon/stm32-ili9341">https://hub.fastgit.org/afiskon/stm32-ili9341</a></p>
+<h2 id="接线"><a href="#接线" class="headerlink" title="接线"></a>接线</h2><ul>
+<li>屏幕的供电是3.3V</li>
+<li>SCL是时钟，接SCK</li>
+<li>SDA是输入信号，接MOSI</li>
+<li>其他接对应的输出引脚即可</li>
+</ul>
+<h2 id="Cube配置"><a href="#Cube配置" class="headerlink" title="Cube配置"></a>Cube配置</h2><ul>
+<li>SPI设置（不需要设置为全双工 ，只需要设置为<strong>纯发送</strong>即可）</li>
+</ul>
+<p><img src="/imgs/image-20211215215305442.png" alt="image-20211215215305442"></p>
+<ul>
+<li>但是STM32F4使用HAL库配置的时候的结果与github上的驱动效果略有不同，也就是波特率位42.0MBits/s</li>
+<li><img src="/imgs/image-20211215201627479.png" alt="image-20211215201627479"></li>
+</ul>
+<h2 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h2><p>先把ili9341文件夹（在src文件夹中）复制到项目文件夹下</p>
+<p><img src="/imgs/image-20211215202205389.png" alt="image-20211215202205389"></p>
+<p>然后在此处将其添加到paths</p>
+<p><img src="/imgs/image-20211215202351571.png" alt="image-20211215202351571"></p>
+<p>然后通过add existing files to group… 添加ili9341目录下的文件</p>
+<ul>
+<li><p>然后修改ili9341的头文件</p>
+</li>
+<li><p><img src="/imgs/image-20211215215407292.png" alt="image-20211215215407292"></p>
+</li>
+<li><p>还有</p>
+</li>
+<li><p><img src="/imgs/image-20211215215423986.png" alt="image-20211215215423986"></p>
+</li>
+<li><p>然后在主程序中include相关的头文件</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ili9341.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;fonts.h&quot;</span></span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="粗略写程序如下"><a href="#粗略写程序如下" class="headerlink" title="粗略写程序如下"></a>粗略写程序如下</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN 1 */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE END 1 */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* MCU Configuration--------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Reset of all peripherals, Initializes the Flash interface and the Systick. */</span></span><br><span class="line">  HAL_Init();</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN Init */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE END Init */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Configure the system clock */</span></span><br><span class="line">  SystemClock_Config();</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN SysInit */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE END SysInit */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Initialize all configured peripherals */</span></span><br><span class="line">  MX_GPIO_Init();</span><br><span class="line">  MX_SPI1_Init();</span><br><span class="line">  MX_USART1_UART_Init();</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN 2 */</span></span><br><span class="line">  ILI9341_Init();</span><br><span class="line">  <span class="comment">/* USER CODE END 2 */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Infinite loop */</span></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN WHILE */</span></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">/* USER CODE END WHILE */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* USER CODE BEGIN 3 */</span></span><br><span class="line">    ILI9341_FillScreen(ILI9341_BLUE);</span><br><span class="line">    ILI9341_WriteString(<span class="number">0</span>,<span class="number">10</span>,<span class="string">&quot;Hello World!&quot;</span>, Font_7x10, ILI9341_WHITE, ILI9341_BLACK);</span><br><span class="line">    HAL_Delay(<span class="number">500</span>);</span><br><span class="line">    ILI9341_FillScreen(ILI9341_GREEN);</span><br><span class="line">    ILI9341_WriteString(<span class="number">0</span>,<span class="number">10</span>,<span class="string">&quot;Hello World!&quot;</span>, Font_7x10, ILI9341_WHITE, ILI9341_BLACK);</span><br><span class="line">    HAL_Delay(<span class="number">500</span>);</span><br><span class="line">    HAL_UART_Transmit(&amp;huart1,textSend,<span class="number">5</span>,<span class="number">500</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/* USER CODE END 3 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="但是这个驱动的效果不是特别好，刷新比较慢，会有明显的刷新过程"><a href="#但是这个驱动的效果不是特别好，刷新比较慢，会有明显的刷新过程" class="headerlink" title="但是这个驱动的效果不是特别好，刷新比较慢，会有明显的刷新过程"></a>但是这个驱动的效果不是特别好，刷新比较慢，会有明显的刷新过程</h3><p><img src="/imgs/1639576655398.gif" alt="image-20211215220004575"></p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2021/12/14/freeRtos%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/">FreeRtos内存分配</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-12-14</time><div class="content"><h1 id="内存分配的种类"><a href="#内存分配的种类" class="headerlink" title="内存分配的种类"></a>内存分配的种类</h1><p>本文转载自<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/115276865">https://zhuanlan.zhihu.com/p/115276865</a></p>
+<h2 id="堆栈的关系"><a href="#堆栈的关系" class="headerlink" title="堆栈的关系"></a>堆栈的关系</h2><p><img src="/imgs/image-20211214224037834.png" alt="image-20211214224037834"></p>
+<p>​    如上图的示例程序所示，全局变量和常量属于静态区（Static)，由编译器事先分配好，生命周期贯穿整个程序；函数的参数值，局部变量的值属于栈（Stack），由编译器自动分配和释放；程序员用malloc函数动态请求分配的内存空间属于堆（Heap）。<em>值得注意的是，如果在动态分配的内存用完之后忘记使用free函数释放内存，则会导致内存泄漏，并且当堆和栈无止境的增长到互相覆盖对方区域时则会出现很多无法预料的问题。程序可能运行运行着就跑飞了。</em></p>
+<h2 id="FreeRtos-任务空间构成"><a href="#FreeRtos-任务空间构成" class="headerlink" title="FreeRtos 任务空间构成"></a>FreeRtos 任务空间构成</h2><p><img src="/imgs/image-20211214230245382.png" alt="image-20211214230245382"></p>
+<p>如上图所示，当调用FreeRTOS的创建任务API函数<code>xTaskCreate()</code>时，FreeRTOS会在堆中开辟出一块空间，用于存放<strong>任务的控制信息TCB块</strong>和<strong>栈区Stack</strong>用于储存任务相关的变量。图中创建的两个任务Task1和Task2都有各自独立的内存空间，互相独立。如果想在静态区建立任务的话可以调用<code>xTaskCreateStatic()</code>函数。</p>
+<ul>
+<li>注意，程序运行过程中<strong>动态创建的线程</strong>的内存位置在堆中，堆中分配的空间包括程序自身的TCB块和自身的<strong>栈</strong>，也就是程序的<strong>Stack</strong></li>
+</ul>
+<h3 id="TCB块的大小"><a href="#TCB块的大小" class="headerlink" title="TCB块的大小"></a>TCB块的大小</h3><p>​    <em>TCB块的大小取决于<strong>FreeRTOSConfig.h</strong>头文件中的设置</em></p>
+<ul>
+<li><p>在最小的设置下TCB块的大小是96字节</p>
+</li>
+<li><p>如果<strong>configUSE_TASK_NOTIFICATIONS</strong>是1的话再增加8个字节</p>
+</li>
+<li><p>如果<strong>configUSE_TRACE_FACILITY</strong>是1的话再增加8个字节</p>
+</li>
+<li><p>如果<strong>configUSE_MUTEXES</strong>是1的话再增加8个字节</p>
+</li>
+</ul>
+<p>上一章节中的任务TCB块因为这三个选项都为1，所以大小为96+8+8+8=120字节。</p>
+<p>总结下来 <strong>任务占用字节数 = TCB_size + (4 x Task stack size)</strong></p>
+<h2 id="TCB块的大小-1"><a href="#TCB块的大小-1" class="headerlink" title="TCB块的大小"></a>TCB块的大小</h2><p><em>TCB块的大小取决于<strong>FreeRTOSConfig.h</strong>头文件中的设置</em></p>
+<ul>
+<li>在最小的设置下TCB块的大小是96字节</li>
+<li>如果<strong>configUSE_TASK_NOTIFICATIONS</strong>是1的话再增加8个字节</li>
+<li>如果<strong>configUSE_TRACE_FACILITY</strong>是1的话再增加8个字节</li>
+<li>如果<strong>configUSE_MUTEXES</strong>是1的话再增加8个字节</li>
+</ul>
+<p>上一章节中的任务TCB块因为这三个选项都为1，所以大小为96+8+8+8=120字节。</p>
+<p>总结下来 <strong>任务占用字节数 = TCB_size + (4 x Task stack size)</strong></p>
+<h2 id="MSP和PSP栈指针"><a href="#MSP和PSP栈指针" class="headerlink" title="MSP和PSP栈指针"></a><strong>MSP和PSP栈指针</strong></h2><p>在FreeRTOS中维护着两个栈的指针，分别是MSP主堆栈指针(Main stack pointer)和PSP进程堆栈指针(Process stack pointer)。</p>
+<p>两个栈指针的区别是</p>
+<h3 id="MSP指针"><a href="#MSP指针" class="headerlink" title="MSP指针"></a>MSP指针</h3><ul>
+<li>用于操作内核以及处理异常和中断</li>
+<li>由编译器分配</li>
+</ul>
+<h3 id="PSP指针"><a href="#PSP指针" class="headerlink" title="PSP指针"></a>PSP指针</h3><ul>
+<li><p>用于每个任务的独立的栈指针</p>
+</li>
+<li><p>在任务调度上下文切换(context switch)中，PSP会初始化为相对应的任务的栈指针，如下图所示</p>
+<p><img src="/imgs/image-20211214230729141-16394963018092.png" alt="image-20211214230729141"></p>
+<p><strong><u>通常MSP指针用于系统内核和中断服务函数，PSP指针用于用户的任务。</u></strong></p>
+</li>
+</ul>
+<h2 id="Heap-1"><a href="#Heap-1" class="headerlink" title="Heap_1"></a>Heap_1</h2><p>本方案适用于小型的嵌入式系统，并且这个系统<strong>只能在调度器启动之前创建任务和其它内核对象</strong>。内存只需要在程序启动调度器前采用first fit算法对内存进行动态分配，<strong>之后任务的内存分配在程序的运行周期中保持不变并且无法被释放</strong>。heap_1.c实现了一个基础版本的pvPortMalloc函数，并没有实现vPortFree这个函数。如果系统运行后<strong>不用删除任务或者内核对象</strong>就可以采用这个方案。<strong>一些不需要动态分配内存的安全相关的系统</strong>也可以采用这个方案，因为这个方案是可确定性的（deterministic）所以<strong>不会导致内存碎片化</strong>。这个方案中堆由一个数组实现，数组的大小由<strong>FreeRTOSConfig.h</strong>文件中configTOTAL_HEAP_SIZE定义</p>
+<p><img src="/imgs/image-20211214223607533.png" alt="image-20211214223607533"></p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><ul>
+<li>内存分配示例如下，A表示没有任何任务创建时的内存；B表示一个任务（<strong>每个任务有自己的TCB块和栈区</strong>）被创建时的内存分配情况；C表示三个任务被创建时的分配情况。</li>
+<li><img src="/imgs/image-20211214223641571.png" alt="image-20211214223641571"></li>
+</ul>
+<h2 id="Heap-2"><a href="#Heap-2" class="headerlink" title="Heap_2"></a>Heap_2</h2><p>这个方案用于保持FreeRTOS的向下兼容性，<strong>并不推荐使用</strong>。内存管理也由一个数组实现，大小由FreeRTOSConfig.h文件中configTOTAL_HEAP_SIZE定义。它通过一套 <strong>优化算法</strong> （best fit algorithm）对内存进行分配，并允许释放内存。Heap_4是Heap_2的功能强化版本。</p>
+<p>best fit 算法确保pvPortMalloc函数分配大小最接近所需要字节的内存空间。它会对大的内存块进行分割，但无法合并相连的内存块。Heap_2适用于<strong>重复添加和删除相同任务的系统</strong>，但这种系统应该十分少见。</p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><ul>
+<li>内存分配示例如下，A表示有三个任务被创建时的内存分配情况；B表示有一个任务被删除时的分配情况，此时有两个小的内存块空闲出来；C表示另一个相同任务被创建时的分配情况，因为这个对TCB块和栈区大小的要求和之前被删除任务的大小一样，best fit 算法便把之前被释放的内存块分配给它。</li>
+<li><img src="/imgs/image-20211214223823014.png" alt="image-20211214223823014"></li>
+</ul>
+<h2 id="Heap-3"><a href="#Heap-3" class="headerlink" title="Heap_3"></a>Heap_3</h2><p>本方案使用标准库里的malloc和free函数，所以堆的大小由链接器配置决定，不受configTOTAL_HEAP_SIZE大小影响。因为这个方案使用的场景不多，所以在这里不作详细介绍。</p>
+<h3 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h3><p><img src="/imgs/image-20211214232509178.png" alt="image-20211214232509178"></p>
+<p>可以看到Heap_3使用<strong>标准库</strong>里的malloc和free函数对任务进行内存分配和释放</p>
+<h2 id="Heap-5"><a href="#Heap-5" class="headerlink" title="Heap_5"></a>Heap_5</h2><p>这个方案使用类似于Heap_4的内存分配技术，但不同于Heap_4只用一个连续的数组表示堆，Heap_5可以用不同的数组空间对内存进行分配。在本方案要使用vPortDefineHeapRegions这个函数对不同的数组进行申明。</p>
+<h3 id="Heap-5-示例"><a href="#Heap-5-示例" class="headerlink" title="Heap_5 示例"></a>Heap_5 示例</h3><p>下面这张图定义了三个不同内存空间用于模拟堆。程序如下，首先定义了每个区域的开始地址START_ADDRESS和空间大小SIZE，然后用一个结构体xHeapRegions指向了这些区域，最后使用<code>vPortDefineHeapRegions</code>函数申明堆的空间。</p>
+<p><img src="/imgs/image-20211214234455862.png" alt="image-20211214234455862"></p>
+<p><img src="/imgs/image-20211214234514596.png" alt="image-20211214234514596"></p>
+<ul>
+<li>上图为声明空间的举例</li>
+</ul>
+<h2 id="内存管理相关函数"><a href="#内存管理相关函数" class="headerlink" title="内存管理相关函数"></a>内存管理相关函数</h2><ul>
+<li><p><code>size_t xPortGetFreeHeapSize( void );</code></p>
+</li>
+<li><p>这个函数会返回当前堆中的空闲空间，可以用来优化堆空间大小。比如在系统运行起来后调用xPortGetFreeHeapSize如果返回了3000，就可以把堆大小configTOTAL_HEAP_SIZE设置为3000。</p>
+</li>
+<li><p><code>size_t xPortGetMinimumEverFreeHeapSize( void );</code></p>
+</li>
+<li><p>这个函数会返回在系统运行过程中堆空间的最小空闲空间，如果最小空闲空间很小的话可以考虑提高堆大小configTOTAL_HEAP_SIZE的值。</p>
+</li>
+<li><p><code>void vApplicationMallocFailedHook( void );</code></p>
+</li>
+<li><p>这是一个回调函数，需要用户自己实现。如果配置文件中configUSE_MALLOC_FAILED_HOOK 设置为1的话，当堆分配内存失败时会调用此函数。用户可以在此函数中进行错误处理。</p>
+</li>
+</ul>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2021/12/13/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">git常用命令</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-12-13</time><div class="content"><h1 id="git-常见命令"><a href="#git-常见命令" class="headerlink" title="git 常见命令"></a>git 常见命令</h1><p><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/896043488029600">https://www.liaoxuefeng.com/wiki/896043488029600</a></p>
+<p>一次添加目录下所有文件（ <strong>包括gitignore</strong> 的文件）：</p>
+<p><code>git add . -f</code></p>
+<p>一次添加目录下的所有文件（ <strong>不包括gitignore</strong> 的文件）：</p>
+<p><code> git add .</code></p>
+<p>一次<code>commit</code> 所有东西</p>
+<p><code> git commit -a -m &lt;信息&gt;</code></p>
+<p>一次添加目录下的所有东西：</p>
+<p><code>git add 文件夹名/*</code></p>
+<p>上传出问题的时候（上传 <strong>被拒绝</strong> 的时候）的解决方法：</p>
+<p><code>git push -u origin master -f</code></p>
+<p>这个会 <strong>丢弃</strong> 所有远程仓库领先于本地仓库的部分， <strong>强行</strong> 将本地仓库的内容推送到远端 </p>
+<p>或下面这个，但是这个可能会 <strong>覆盖一些本地的文件</strong> （主要是多人开发的情况下可能会出现）</p>
+<p><code>git pull origin master --allow-unrelated-histories</code></p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2021/12/11/FreeRtos1/">FreeRtos1</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-12-11</time><div class="content"><h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="资源连接集合"><a href="#资源连接集合" class="headerlink" title="资源连接集合"></a>资源连接集合</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/97869854">ARM+LINUX嵌入式学习路线 - 知乎 (zhihu.com)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://www.openedv.com/docs/book-videos/zdyzshipin/4free/zdyz-freertos-book.html">http://www.openedv.com/docs/book-videos/zdyzshipin/4free/zdyz-freertos-book.html</a></p>
+</li>
+</ul>
+<h2 id="为什么选择FreeRtos"><a href="#为什么选择FreeRtos" class="headerlink" title="为什么选择FreeRtos?"></a>为什么选择FreeRtos?</h2><ul>
+<li><p>RTOS 类系统有很多，比如 uC/OS，资料很多，尤其是中文资料，那为什么要选择 FreeRTOS 呢？</p>
+</li>
+<li><p>FreeRTOS是免费的，学习RTOS操作系统的话 uC/OS是首选，但要做产品的话，免费的FreeRTOS操作系统就是个不错的选择。</p>
+</li>
+<li><p>许多半导体厂商产品的 SDK(Software Development Kit—软件开发工具包) 包就使用 FreeRTOS 作为其操作系统，尤其是 WIFI、蓝牙这些带协议栈的芯片或模块。</p>
+</li>
+<li><p>简单，因为FreeRTOS 的文件数量很少。</p>
+</li>
+</ul>
+<h2 id="FreeRtos-特点"><a href="#FreeRtos-特点" class="headerlink" title="FreeRtos 特点"></a>FreeRtos 特点</h2><ul>
+<li>FreeRTOS 的内核支持抢占式，合作式和时间片调度。</li>
+<li>提供了一个用于低功耗的 Tickless 模式。</li>
+<li>系统的组件在创建时可以选择动态或者静态的 RAM，比如任务、消息队列、信号量、软件定时器等等。</li>
+<li>FreeRTOS-MPU 支持 Corex-M 系列中的 MPU 单元，如 STM32F429。</li>
+<li>FreeRTOS 系统简单、小巧、易用，通常情况下内核占用 4k-9k 字节的空间。</li>
+<li>高可移植性，代码主要 C 语言编写。</li>
+<li>高效的软件定时器。</li>
+<li>强大的跟踪执行功能。</li>
+<li>堆栈溢出检测功能。</li>
+<li>任务数量不限。</li>
+<li>任务优先级不限。</li>
+</ul>
+<p><strong>官网：</strong><a target="_blank" rel="noopener" href="http://www.freertos.org/">www.freertos.org</a></p>
+<h2 id="基于STM32F407和Cubemx（HAL库）的FreeRtos开发"><a href="#基于STM32F407和Cubemx（HAL库）的FreeRtos开发" class="headerlink" title="基于STM32F407和Cubemx（HAL库）的FreeRtos开发"></a>基于STM32F407和Cubemx（HAL库）的FreeRtos开发</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/90608412">FreeRTOS 从入门到精通1–实时操作系统的前世今生 - 知乎 (zhihu.com)</a></p>
+</li>
+<li><p>为什么选用HAl库？因为ST官方 <strong><u>已经停止</u></strong> 对于标准库的维护</p>
+</li>
+<li><p>使用STM32CubeIDE的（ <strong>未尝试盗版仿真器能不能使用</strong> ）</p>
+</li>
+</ul>
+<h2 id="待续"><a href="#待续" class="headerlink" title="待续"></a>待续</h2></div><hr></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-chevron-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2021 - 2022 By FrankZhang</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span><span></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

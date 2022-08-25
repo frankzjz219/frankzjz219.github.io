@@ -1,581 +1,1222 @@
-<!DOCTYPE html>
-<html lang="Chinese">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="Frank·Zhang">
-    
-    <title>
-        
-        Frank&#39;s Blogs
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
-
-    <link rel="shortcut icon" href="/images/FLogo.png">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
-
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
-    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
-  </script>
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-
-<body>
-<div class="progress-bar-container">
-    
-
-    
-</div>
-
-
-<main class="page-container">
-
-    
-
-    <div class="page-main-content">
-
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
-
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                Frank&#39;s Blogs
-            </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class="active"
-                               href="/"
-                            >
-                                HOME
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                ARCHIVES
-                            </a>
-                        </li>
-                    
-                    
-                </ul>
-            </div>
-            <div class="mobile">
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class="active"
-                       href="/">HOME</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">ARCHIVES</a>
-                </li>
-            
-        </ul>
-    </div>
-
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="home-content-container fade-in-down-animation">
-    <ul class="home-article-list">
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/09/%E4%BF%AE%E5%A4%8D%E5%88%A0%E9%99%A4%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%90%8EBIOS%E4%B8%AD%E5%AD%98%E5%9C%A8%E5%A4%9A%E4%BD%99%E5%90%AF%E5%8A%A8%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9A%84%E9%97%AE%E9%A2%98/">
-                        修复删除双系统之后BIOS中存在多余启动引导项的问题
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        修复删除双系统之后BIOS中存在多余启动引导项的问题下载DiskGeniushttp://www.diskgenius.cn/download.php
-然后此处按下delete即可
-
-可见启动引导项中已经没有了刚才删除的Manjaro选项
-
-
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sun Jan 09 2022 00:10:33 GMT+0800">2022-01-09</span></span>
-        
-        
-    </div>
-
-    <a href="/2022/01/09/%E4%BF%AE%E5%A4%8D%E5%88%A0%E9%99%A4%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%90%8EBIOS%E4%B8%AD%E5%AD%98%E5%9C%A8%E5%A4%9A%E4%BD%99%E5%90%AF%E5%8A%A8%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9A%84%E9%97%AE%E9%A2%98/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/08/STM32%E5%AE%9E%E7%8E%B0W25Q16%E8%8A%AF%E7%89%87%E7%9A%84%E6%93%A6%E9%99%A4%E3%80%81%E8%AF%BB%E5%92%8C%E5%86%99/">
-                        STM32实现W25Q16芯片的擦除、读和写
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        STM32实现W25Q16芯片的擦除、读和写封装等待函数（通过读取状态寄存器）1234567891011121314void delayBusy()&#123;  uint8_t D05 = 0x05;  uint8_t result;  EnCS(...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sat Jan 08 2022 12:45:39 GMT+0800">2022-01-08</span></span>
-        
-        
-    </div>
-
-    <a href="/2022/01/08/STM32%E5%AE%9E%E7%8E%B0W25Q16%E8%8A%AF%E7%89%87%E7%9A%84%E6%93%A6%E9%99%A4%E3%80%81%E8%AF%BB%E5%92%8C%E5%86%99/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/08/%E4%BD%BF%E7%94%A8STM32%E8%AF%BB%E5%8F%96Winbond-W25Q16-Flash%E8%8A%AF%E7%89%87%E7%9A%84ID%E5%92%8C%E5%BA%8F%E5%88%97%E5%8F%B7/">
-                        使用STM32读取Winbond_W25Q16_Flash芯片的ID和序列号
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        使用STM32读取Winbond_W25Q16_Flash芯片的ID和序列号Cube配置配置为全双工主设备
-
-
-使用的是SPI1（根据开发板的接线），Prescaler配置多少都可以，不关键，2和256都行
-
-DMA也可以开，不影响
-配置CS引脚，原...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sat Jan 08 2022 11:10:07 GMT+0800">2022-01-08</span></span>
-        
-        
-    </div>
-
-    <a href="/2022/01/08/%E4%BD%BF%E7%94%A8STM32%E8%AF%BB%E5%8F%96Winbond-W25Q16-Flash%E8%8A%AF%E7%89%87%E7%9A%84ID%E5%92%8C%E5%BA%8F%E5%88%97%E5%8F%B7/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/06/%E8%A7%A3%E5%86%B3Cube%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8UART%E7%BC%96%E8%AF%91%E5%87%BA%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98/">
-                        解决Cube新建项目使用UART编译出错的问题
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        解决Cube新建项目使用UART编译出错的问题注意stm32f4xx_hal_conf.h中有一些宏定义
-
-此处可能是系统没有将#define HAL_UART_MODULE_ENABLED   取消注释，此处自己删除注释即可正常编译
-
-
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Thu Jan 06 2022 22:07:10 GMT+0800">2022-01-06</span></span>
-        
-        
-    </div>
-
-    <a href="/2022/01/06/%E8%A7%A3%E5%86%B3Cube%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8UART%E7%BC%96%E8%AF%91%E5%87%BA%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/05/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%94%EF%BC%89/">
-                        Linux初步学习（五）
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        Linux系统知识apt命令apt（Advanced Packaging Tool）是一个在 Debian 和 Ubuntu 中的 Shell 前端软件包管理器。
-apt 命令提供了查找、安装、升级、删除某一个、一组甚至全部软件包的命令，而且命令简洁...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Wed Jan 05 2022 11:21:36 GMT+0800">2022-01-05</span></span>
-        
-        
-    </div>
-
-    <a href="/2022/01/05/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%94%EF%BC%89/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/04/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/">
-                        Linux初步学习（四）
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        Linux初步学习（四）函数123456789[ function ] funname [()]&#123;    action;    [return int;]&#125;
-
-
-1、可以带function fun() 定义，也可以直接fun() ...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Tue Jan 04 2022 16:39:24 GMT+0800">2022-01-04</span></span>
-        
-        
-    </div>
-
-    <a href="/2022/01/04/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/03/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89/">
-                        Linux初步学习（三）
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        Linux初步学习（三）shelltest
-Shell中的 test 命令用于检查某个条件是否成立，它可以进行数值、字符和文件三个方面的测试。
-
-数值
-
-
-
-参数
-说明
-
-
-
--eq
-等于则为真
-
-
--ne
-不等于则为真
-
-
--gt
-大于则为真
-
-
-...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon Jan 03 2022 12:58:20 GMT+0800">2022-01-03</span></span>
-        
-        
-    </div>
-
-    <a href="/2022/01/03/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/">
-                        Linux初步学习（二）
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        Linux初步学习（二）shell向shell脚本传参12345echo &quot;Shell 传递参数实例！&quot;;echo &quot;执行的文件名：$0&quot;;echo &quot;第一个参数为：$1&quot;;echo &qu...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sun Jan 02 2022 17:25:44 GMT+0800">2022-01-02</span></span>
-        
-        
-    </div>
-
-    <a href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/">
-                        Linux初步学习（一）
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        Linux初步学习（一）菜鸟教程入口：https://www.runoob.com/linux/linux-tutorial.html
-shellhttps://www.runoob.com/linux/linux-shell-variable.ht...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sun Jan 02 2022 11:36:20 GMT+0800">2022-01-02</span></span>
-        
-        
-    </div>
-
-    <a href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/12/21/SolidWorks%E6%89%93%E4%B8%8D%E5%BC%80UG%E5%AF%BC%E5%87%BA%E7%9A%84x-t%E6%96%87%E4%BB%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">
-                        SolidWorks打不开UG导出的x_t文件解决方法
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        SolidWorks打不开UG导出的x_t(Parasolid)文件解决方法
-更改设置
-
-
-
-
-
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Tue Dec 21 2021 16:34:45 GMT+0800">2021-12-21</span></span>
-        
-        
-    </div>
-
-    <a href="/2021/12/21/SolidWorks%E6%89%93%E4%B8%8D%E5%BC%80UG%E5%AF%BC%E5%87%BA%E7%9A%84x-t%E6%96%87%E4%BB%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-    </ul>
-
-    <div class="home-paginator">
-        <div class="paginator">
-    
-        <a class="prev btn"
-           href="/page/6/"
-        >Prev</a>
-    
-
-    
-        <a class="next btn"
-           href="/page/8/"
-        >Next</a>
-    
-</div>
-
-    </div>
-</div>
-
-
-                
-            </div>
-
-        </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
-            
-              <span>2021</span>
-              -
-            
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
-        </div>
-        
-        <div class="theme-info info-item">
-            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
-        </div>
-        
-        
-    </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="fas fa-arrow-up"></i>
-            </li>
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
-
-
-    
-
-</main>
-
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-
-
-
-
-
-<div class="post-scripts">
-    
-</div>
-
-
-
-</body>
-</html>
+<!DOCTYPE html><html lang="Chinese"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content=""><meta name="keywords" content=""><meta name="author" content="FrankZhang"><meta name="copyright" content="FrankZhang"><title>Frank’s blogs</title><link rel="shortcut icon" href="/Flogo.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="author-info"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">FrankZhang</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">84</span></a></div></div></div><nav class="no-bg" id="nav"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Frank’s blogs</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right"></span></div><div id="site-info"><div id="site-title">Frank’s blogs</div><div id="site-sub-title"></div></div></nav><div id="content-outer"><div class="layout" id="content-inner"><div class="recent-post-item article-container"><a class="article-title" href="/2022/01/09/%E4%BF%AE%E5%A4%8D%E5%88%A0%E9%99%A4%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%90%8EBIOS%E4%B8%AD%E5%AD%98%E5%9C%A8%E5%A4%9A%E4%BD%99%E5%90%AF%E5%8A%A8%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9A%84%E9%97%AE%E9%A2%98/">修复删除双系统之后BIOS中存在多余启动引导项的问题</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-01-09</time><div class="content"><h1 id="修复删除双系统之后BIOS中存在多余启动引导项的问题"><a href="#修复删除双系统之后BIOS中存在多余启动引导项的问题" class="headerlink" title="修复删除双系统之后BIOS中存在多余启动引导项的问题"></a>修复删除双系统之后BIOS中存在多余启动引导项的问题</h1><h2 id="下载DiskGenius"><a href="#下载DiskGenius" class="headerlink" title="下载DiskGenius"></a>下载DiskGenius</h2><p><a target="_blank" rel="noopener" href="http://www.diskgenius.cn/download.php">http://www.diskgenius.cn/download.php</a></p>
+<p>然后此处按下delete即可</p>
+<p><img src="/imgs/image-20220109001539680.png" alt="image-20220109001539680"></p>
+<p>可见启动引导项中已经没有了刚才删除的Manjaro选项</p>
+<p><img src="/imgs/image-20220109002008500.png" alt="image-20220109002008500"></p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/01/08/STM32%E5%AE%9E%E7%8E%B0W25Q16%E8%8A%AF%E7%89%87%E7%9A%84%E6%93%A6%E9%99%A4%E3%80%81%E8%AF%BB%E5%92%8C%E5%86%99/">STM32实现W25Q16芯片的擦除、读和写</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-01-08</time><div class="content"><h1 id="STM32实现W25Q16芯片的擦除、读和写"><a href="#STM32实现W25Q16芯片的擦除、读和写" class="headerlink" title="STM32实现W25Q16芯片的擦除、读和写"></a>STM32实现W25Q16芯片的擦除、读和写</h1><h2 id="封装等待函数（通过读取状态寄存器）"><a href="#封装等待函数（通过读取状态寄存器）" class="headerlink" title="封装等待函数（通过读取状态寄存器）"></a>封装等待函数（通过读取状态寄存器）</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">delayBusy</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D05 = <span class="number">0x05</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> result;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D05, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Receive(&amp;hspi1, &amp;result, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">while</span>((result&amp;<span class="number">0x01</span>) == <span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// HAL_SPI_Transmit(&amp;hspi1, &amp;D05, 1, 1000);</span></span><br><span class="line">    HAL_SPI_Receive(&amp;hspi1, &amp;result, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意，手册上说明此处的状态寄存器可以连续读取，也就是在指令开始的时候发送一次<code>0x05</code>即可，之后<strong>循环读取</strong>，通过将片选信号<strong>CS置为高电平停止</strong></p>
+<h2 id="擦除函数"><a href="#擦除函数" class="headerlink" title="擦除函数"></a>擦除函数</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">EraseChip</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D60 = <span class="number">0x60</span>;</span><br><span class="line">  writeEnable();</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D60, <span class="number">1</span> ,<span class="number">1000</span>);</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">  delayBusy();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意，将芯片内容擦除之前需要<strong>先发送一个使能写</strong>的命令，在下面的函数中会封装这个功能</p>
+<p>然后在函数的最后增加等待芯片空闲的函数，该芯片的擦除时间大概1-2s，不同容量的芯片可能时间不同。</p>
+<ul>
+<li>擦除前的读取数据（第二行）：</li>
+<li><img src="/imgs/image-20220108130401292.png" alt="image-20220108130401292"></li>
+<li>擦除后的读取数据</li>
+<li><img src="/imgs/image-20220108130417022.png" alt="image-20220108130417022"></li>
+<li>可见擦除成功</li>
+</ul>
+<h2 id="写使能函数"><a href="#写使能函数" class="headerlink" title="写使能函数"></a>写使能函数</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">writeEnable</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D06 = <span class="number">0x06</span>;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D06, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>禁止写</strong>函数与写使能函数类似，将命令替换为0x04即可</p>
+<h2 id="读取函数"><a href="#读取函数" class="headerlink" title="读取函数"></a>读取函数</h2><p><img src="/imgs/image-20220108125308657.png" alt="image-20220108125308657"></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">readChip</span><span class="params">(<span class="keyword">uint32_t</span> addr, <span class="keyword">int32_t</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D03 = <span class="number">0x03</span>;</span><br><span class="line">  <span class="keyword">int32_t</span> count = length<span class="number">-1</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> Haddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Maddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Laddr;</span><br><span class="line">  Haddr = addr/<span class="number">256</span>/<span class="number">256</span>;</span><br><span class="line">  Maddr = (addr/<span class="number">256</span>)&amp;<span class="number">0xff</span>;</span><br><span class="line">  Laddr = addr&amp;<span class="number">0xff</span>;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D03, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Haddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Maddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Laddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">for</span>(count = length<span class="number">-1</span>; count&gt;=<span class="number">0</span>;count--)</span><br><span class="line">  &#123;</span><br><span class="line">    HAL_SPI_Receive(&amp;hspi1, recBuff+count, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中的<code>recBuff</code>是一个大小与length相同的byte数组</p>
+<p>注意，与上面类似的是，此处在发送一次读指令之后，芯片会从指定的地址开始自动向前串行发送往后的数据直到CS被置为高电平终止指令，严格的讲从发送的地址开始，可以<strong>只发送一次读取指令便读取到芯片的末尾存储空间</strong>。</p>
+<h2 id="写数据函数"><a href="#写数据函数" class="headerlink" title="写数据函数"></a>写数据函数</h2><p><img src="/imgs/image-20220108133158219.png" alt="image-20220108133158219"></p>
+<p>写函数的执行逻辑是：</p>
+<ul>
+<li>发送一个写使能信号</li>
+<li>CS置为低电平</li>
+<li>发送0x02</li>
+<li>发送24位地址</li>
+<li>连续发送写入的数据（1-256个，一次最多不超过256个，否则超出的会从头部开始覆盖）</li>
+<li>CS置为高电平</li>
+<li>等待芯片写完</li>
+<li>发送禁止写命令</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">writeChip</span><span class="params">(<span class="keyword">uint32_t</span> addr, <span class="keyword">uint16_t</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D02 = <span class="number">0x02</span>;</span><br><span class="line">  <span class="keyword">int32_t</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> Haddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Maddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Laddr;</span><br><span class="line">  Haddr = addr/<span class="number">256</span>/<span class="number">256</span>;</span><br><span class="line">  Maddr = (addr/<span class="number">256</span>)&amp;<span class="number">0xff</span>;</span><br><span class="line">  Laddr = addr&amp;<span class="number">0xff</span>;</span><br><span class="line">  writeEnable();</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D02, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Haddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Maddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Laddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">for</span>(count = <span class="number">0</span>; count&lt;length;count++)</span><br><span class="line">  &#123;</span><br><span class="line">    HAL_SPI_Transmit(&amp;hspi1, writeBuff+count, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">  delayBusy();</span><br><span class="line">  writeDisable();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>writeBuff</code>是一个长度为<code>length</code>的字节数组</p>
+<p>注意：</p>
+<ul>
+<li>假如一次写256个字节的话，地址的最后8位务必是0，假如不是的话会导致超出的部分从头部开始覆盖</li>
+<li>写入的字节数不能超出从地址位置开始剩余的字节量（比如地址后8位是0的话，剩余的字节就是256）</li>
+<li>注意在写完最后一个数据之后，比如将片选信号CS置为高电平，此时芯片会开始写入数据，写入的时候查询BUSY寄存器会得到1，所以使用等待函数等待</li>
+</ul>
+<p>执行效果</p>
+<ul>
+<li> 发送buff定义为<code>uint8_t writeBuff[] = &#123;1,2,3,4,5,6,7,8&#125;;</code><strong>注意数组初始化不要漏写</strong><code>[]</code></li>
+<li>发送函数和读取函数</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">writeChip(<span class="number">0x01</span>,<span class="number">8</span>);</span><br><span class="line">readChip(<span class="number">0x01</span>, <span class="number">8</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结果</li>
+<li><img src="/imgs/image-20220108133835422.png" alt="image-20220108133835422"></li>
+<li>可见已经成功写入</li>
+</ul>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/01/08/%E4%BD%BF%E7%94%A8STM32%E8%AF%BB%E5%8F%96Winbond-W25Q16-Flash%E8%8A%AF%E7%89%87%E7%9A%84ID%E5%92%8C%E5%BA%8F%E5%88%97%E5%8F%B7/">使用STM32读取Winbond_W25Q16_Flash芯片的ID和序列号</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-01-08</time><div class="content"><h1 id="使用STM32读取Winbond-W25Q16-Flash芯片的ID和序列号"><a href="#使用STM32读取Winbond-W25Q16-Flash芯片的ID和序列号" class="headerlink" title="使用STM32读取Winbond_W25Q16_Flash芯片的ID和序列号"></a>使用STM32读取Winbond_W25Q16_Flash芯片的ID和序列号</h1><h2 id="Cube配置"><a href="#Cube配置" class="headerlink" title="Cube配置"></a>Cube配置</h2><p>配置为<strong>全双工主设备</strong></p>
+<p><img src="/imgs/image-20220108111641258.png" alt="image-20220108111641258"></p>
+<p><img src="/imgs/image-20220108111113092.png" alt="image-20220108111113092"></p>
+<p>使用的是SPI1（根据开发板的接线），<strong>Prescaler配置多少都可以，不关键，2和256都行</strong></p>
+<p><img src="/imgs/image-20220108111433160.png" alt="image-20220108111433160"></p>
+<p>DMA也<strong>可以开</strong>，不影响</p>
+<p><strong>配置CS引脚</strong>，原理图接线为</p>
+<p><img src="/imgs/image-20220108111515938.png" alt="image-20220108111515938"></p>
+<p>图中的F_CS是片选引脚，注意低电平有效</p>
+<h2 id="程序编写"><a href="#程序编写" class="headerlink" title="程序编写"></a>程序编写</h2><p>封装一个片选函数</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">EnCS</span><span class="params">(<span class="keyword">uint8_t</span> flag)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(flag==<span class="number">1</span>)</span><br><span class="line">    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="读取chipID的函数根据手册编写"><a href="#读取chipID的函数根据手册编写" class="headerlink" title="读取chipID的函数根据手册编写"></a><strong>读取chipID</strong>的函数根据手册编写</h3><p><img src="/imgs/image-20220108111759707.png" alt="image-20220108111759707"></p>
+<p>可见是先把CS置为低电平，然后SPI发送0x90，然后发送3byte的0x00地址，然后接收即可</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ReadChipID</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">uint8_t</span> D00 = <span class="number">0x00</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> DFF = <span class="number">0xFF</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> D90 = <span class="number">0x90</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> D06 = <span class="number">0x06</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> D60 = <span class="number">0x60</span>;</span><br><span class="line">  </span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D90, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D00, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D00, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D00, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_TransmitReceive(&amp;hspi1,&amp;DFF, recBuff, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_TransmitReceive(&amp;hspi1, &amp;DFF, recBuff+<span class="number">1</span>, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//然后将接收到的字符串格式化</span></span><br><span class="line"><span class="built_in">sprintf</span>(stringToSend, <span class="string">&quot;0x%2x%2x%2x%2x%2x%2x%2x%2x&quot;</span>,recBuff[<span class="number">7</span>],recBuff[<span class="number">6</span>],recBuff[<span class="number">5</span>],recBuff[<span class="number">4</span>],recBuff[<span class="number">3</span>],recBuff[<span class="number">2</span>],recBuff[<span class="number">1</span>],recBuff[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
+
+<p>注意此处因为函数的接收参数是接受数据存放位置的<strong>指针</strong>，所以必须使用<code>recBuff + X</code>的形式（<code>recBuff</code>是一个<code>uint8_t</code>数组）而不能用<code>recBuff[X]</code>的形式。</p>
+<p>结果如图</p>
+<p><img src="/imgs/image-20220108112619532.png" alt="image-20220108112619532"></p>
+<h3 id="同样根据手册编写读取芯片唯一序列号的程序"><a href="#同样根据手册编写读取芯片唯一序列号的程序" class="headerlink" title="同样根据手册编写读取芯片唯一序列号的程序"></a>同样根据手册编写读取芯片<strong>唯一序列号</strong>的程序</h3><p><img src="/imgs/image-20220108112138116.png" alt="image-20220108112138116"></p>
+<p>也是先把CS置为低电平，然后发送指令，然后等待三个数据传输周期（可以向芯片发送0xFF模拟等待延时），然后接收，注意此时必须手动等待，而<strong>不能直接使用HAL库的SPI接收函数的接收超时等待</strong>功能，因为会接收到错误的结果（比如<strong>全是0xFF</strong>）。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ReadUniqueID</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D4B = <span class="number">0x4B</span>;</span><br><span class="line">  <span class="keyword">int8_t</span> count = <span class="number">7</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> DFF = <span class="number">0xFF</span>;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D4B, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;DFF, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;DFF, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;DFF, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;DFF, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">for</span>(count=<span class="number">7</span>;count&gt;=<span class="number">0</span>;count--)</span><br><span class="line">  &#123;</span><br><span class="line">    HAL_SPI_Receive(&amp;hspi1, recBuff+count, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//然后将接收到的字符串格式化</span></span><br><span class="line"><span class="built_in">sprintf</span>(stringToSend, <span class="string">&quot;0x%2x%2x%2x%2x%2x%2x%2x%2x&quot;</span>,recBuff[<span class="number">7</span>],recBuff[<span class="number">6</span>],recBuff[<span class="number">5</span>],recBuff[<span class="number">4</span>],recBuff[<span class="number">3</span>],recBuff[<span class="number">2</span>],recBuff[<span class="number">1</span>],recBuff[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/imgs/image-20220108112807141.png" alt="image-20220108112807141"></p>
+<p>假如去掉四行<code>HAL_SPI_Transmit(&amp;hspi1, &amp;DFF, 1, 1000);</code>，接收到的序列号将会变成</p>
+<p><img src="/imgs/image-20220108112925406.png" alt="image-20220108112925406"></p>
+<p>注意到开头出现了很多ff，因为芯片在此时的4个数据周期中是没有响应的，对应接收到<strong>4byte的ff</strong>，也就是图上的8个ff</p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/01/06/%E8%A7%A3%E5%86%B3Cube%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8UART%E7%BC%96%E8%AF%91%E5%87%BA%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98/">解决Cube新建项目使用UART编译出错的问题</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-01-06</time><div class="content"><h1 id="解决Cube新建项目使用UART编译出错的问题"><a href="#解决Cube新建项目使用UART编译出错的问题" class="headerlink" title="解决Cube新建项目使用UART编译出错的问题"></a>解决Cube新建项目使用UART编译出错的问题</h1><p>注意<code>stm32f4xx_hal_conf.h</code>中有一些宏定义</p>
+<p><img src="/imgs/image-20220106220834007.png" alt="image-20220106220834007"></p>
+<p>此处可能是系统没有将<code>#define HAL_UART_MODULE_ENABLED   </code>取消注释，此处自己删除注释即可正常编译</p>
+<p><img src="/imgs/image-20220106220934356.png" alt="image-20220106220934356"></p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/01/05/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%94%EF%BC%89/">Linux初步学习（五）</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-01-05</time><div class="content"><h1 id="Linux系统知识"><a href="#Linux系统知识" class="headerlink" title="Linux系统知识"></a>Linux系统知识</h1><h2 id="apt命令"><a href="#apt命令" class="headerlink" title="apt命令"></a>apt命令</h2><p>apt（Advanced Packaging Tool）是一个在 Debian 和 Ubuntu 中的 Shell 前端软件包管理器。</p>
+<p>apt 命令提供了查找、安装、升级、删除某一个、一组甚至全部软件包的命令，而且命令简洁而又好记。</p>
+<p>apt 命令执行需要超级管理员权限(root)。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt [options] [command] [package ...]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>options：</strong>可选，选项包括 -h（帮助），-y（当安装过程提示选择全部为”yes”），-q（不显示安装的过程）等等。</li>
+<li><strong>command：</strong>要进行的操作。</li>
+<li><strong>package</strong>：安装的包名。</li>
+</ul>
+<p><strong>用法：</strong></p>
+<ul>
+<li><p>列出所有可更新的软件清单命令：<strong>sudo apt update</strong></p>
+</li>
+<li><p>升级软件包：<strong>sudo apt upgrade</strong></p>
+<p>列出可更新的软件包及版本信息：<strong>apt list –upgradeable</strong></p>
+<p>升级软件包，升级前先删除需要更新软件包：<strong>sudo apt full-upgrade</strong></p>
+</li>
+<li><p>安装指定的软件命令：<strong>sudo apt install <package_name></strong></p>
+<p>安装多个软件包：<strong>sudo apt install <package_1> <package_2> <package_3></strong></p>
+</li>
+<li><p>更新指定的软件命令：<strong>sudo apt update <package_name></strong></p>
+</li>
+<li><p>显示软件包具体信息,例如：版本号，安装大小，依赖关系等等：<strong>sudo apt show <package_name></strong></p>
+</li>
+<li><p>删除软件包命令：<strong>sudo apt remove <package_name></strong></p>
+</li>
+<li><p>清理不再使用的依赖和库文件: <strong>sudo apt autoremove</strong></p>
+</li>
+<li><p>移除软件包及配置文件: <strong>sudo apt purge <package_name></strong></p>
+</li>
+<li><p>查找软件包命令： <strong>sudo apt search <keyword></strong></p>
+</li>
+<li><p>列出所有已安装的包：<strong>apt list –installed</strong></p>
+</li>
+<li><p>列出所有已安装的包的版本信息：<strong>apt list –all-versions</strong></p>
+</li>
+</ul>
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p><img src="/imgs/image-20220105113244292.png" alt="image-20220105113244292"></p>
+<ul>
+<li><p><strong>/bin</strong>：<br>bin 是 Binaries (二进制文件) 的缩写, 这个目录存放着<strong>最经常使用的命令</strong>。</p>
+</li>
+<li><p><strong>/boot：</strong><br>这里存放的是<strong>启动 Linux</strong> 时使用的一些<strong>核心文件</strong>，包括一些连接文件以及镜像文件。</p>
+</li>
+<li><p><strong>/dev ：</strong><br>dev 是 Device(设备) 的缩写, 该目录下存放的是 Linux 的<strong>外部设备</strong>，在 Linux 中**<u>访问设备的方式和访问文件的方式是相同的</u>**。</p>
+</li>
+<li><p><strong>/etc：</strong><br>etc 是 Etcetera(等等) 的缩写,这个目录用来存放所有的<strong>系统管理所需要的配置文件和子目录</strong>。</p>
+</li>
+<li><p><strong>/home</strong>：<br>用户的<strong>主目录</strong>，在 Linux 中，每个<strong>用户都有一个自己的目录</strong>，一般该目录名是以用户的账号命名的，如上图中的 alice、bob 和 eve。</p>
+</li>
+<li><p><strong>/lib</strong>：<br>lib 是 Library(库) 的缩写这个目录里存放着系统<strong>最基本的动态连接共享库</strong>，其作用<strong>类似于 Windows 里的 DLL 文件</strong>。几乎所有的应用程序都需要用到这些共享库。</p>
+</li>
+<li><p><strong>/lost+found</strong>：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
+</li>
+<li><p><strong>/media</strong>：<br>linux 系统会<strong>自动识别一些设备</strong>，例如U盘、光驱等等，当识别后，Linux 会把识别的设备<strong>挂载到这个目录下</strong>。</p>
+</li>
+<li><p><strong>/mnt</strong>：<br>系统提供该目录是为了让用户<strong>临时挂载别的文件系统</strong>的，我们可以将光驱挂载在 /mnt/ 上，然后进入该目录就可以查看光驱里的内容了。</p>
+</li>
+<li><p><strong>/opt</strong>：<br>opt 是 optional(可选) 的缩写，这是给主机<strong>额外安装软件</strong>所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
+</li>
+<li><p><strong>/proc</strong>：<br>proc 是 Processes(进程) 的缩写，/proc 是一种<strong>伪文件系统</strong>（也即虚拟文件系统），存储的是当前<strong>内核运行状态的一系列特殊文件</strong>，这个目录是一个虚拟的目录，它<strong>是系统内存的映射</strong>，我们可以通过直接访问这个目录来获取<strong>系统信息</strong>。<br>这个目录的内容<strong>不在硬盘</strong>上而是<strong>在内存里</strong>，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>/root</strong>：<br>该目录为系统管理员，也称作<strong>超级权限者的用户主目录</strong>。</p>
+</li>
+<li><p><strong>/sbin</strong>：<br>s 就是 Super User 的意思，是 Superuser Binaries (超级用户的二进制文件) 的缩写，这里存放的是系统<strong>管理员使用的系统管理程序</strong>。</p>
+</li>
+<li><p><strong>/selinux</strong>：<br> 这个目录是 Redhat/CentOS 所特有的目录，Selinux 是一个安全机制，类似于 windows 的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
+</li>
+<li><p><strong>/srv</strong>：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
+</li>
+<li><p><strong>/sys</strong>：</p>
+<p>这是 Linux2.6 内核的一个很大的变化。该目录下安装了 2.6 内核中新出现的一个文件系统 sysfs 。</p>
+<p>sysfs 文件系统集成了下面3种文件系统的信息：<strong>针对进程信息的 proc 文件系统、针对设备的 devfs 文件系统以及针对伪终端的 devpts 文件系统</strong>。</p>
+<p>该文件系统是<strong>内核设备树</strong>的一个直观反映。</p>
+<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
+</li>
+<li><p><strong>/tmp</strong>：<br>tmp 是 temporary(临时) 的缩写这个目录是用来存放一些<strong>临时文件</strong>的。</p>
+</li>
+<li><p><strong>/usr</strong>：<br> usr 是 unix shared resources(共享资源) 的缩写，这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，<strong>类似于 windows 下的 program files 目录</strong>。</p>
+</li>
+<li><p><strong>/usr/bin：</strong><br>系统用户使用的<strong>应用程序</strong>。</p>
+</li>
+<li><p><strong>/usr/sbin：</strong><br><strong>超级用户</strong>使用的比较高级的<strong>管理程序和系统守护程序</strong>。</p>
+</li>
+<li><p><strong>/usr/src：</strong><br><strong>内核源代码</strong>默认的放置目录。</p>
+</li>
+<li><p><strong>/var</strong>：<br>var 是 variable(变量) 的缩写，这个目录中存放着在不断扩充着的东西，我们习惯将那些<strong>经常被修改的目录</strong>放在这个目录下。包括各种日志文件。</p>
+</li>
+<li><p><strong>/run</strong>：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
+</li>
+<li><p><code>.</code>或者<code>./</code>代表当前目录，<code>..</code>或者<code>../</code>代表上一级目录</p>
+</li>
+<li><p>如果一个目录或文件名以一个点 . 开始，表示这个目录或文件是一个隐藏目录或文件(如：.bashrc)。即以默认方式查找时，不显示该目录或文件。</p>
+</li>
+<li><p><code>~/</code>的含义：<strong>主目录</strong>：</p>
+<ul>
+<li><img src="/imgs/image-20220105211153744.png" alt="image-20220105211153744"></li>
+<li></li>
+</ul>
+</li>
+</ul>
+<h2 id="文件属性"><a href="#文件属性" class="headerlink" title="文件属性"></a>文件属性</h2><ul>
+<li>chown (change owner) ： 修改所属用户与组。</li>
+<li>chmod (change mode) ： 修改用户的权限。</li>
+<li>使用 <strong>ll</strong> 或者 <strong>ls –l</strong> 命令来显示一个文件的属性以及文件所属的用户和组，如：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@www /]# ls -l</span><br><span class="line">total 64</span><br><span class="line">dr-xr-xr-x   2 root root 4096 Dec 14  2012 bin</span><br><span class="line">dr-xr-xr-x   4 root root 4096 Apr 19  2012 boot</span><br><span class="line">……</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>文件属性的字符表示：</p>
+</li>
+<li><p>当为 <strong>d</strong> 则是目录</p>
+</li>
+<li><p>当为 <strong>-</strong> 则是文件；</p>
+</li>
+<li><p>若是 <strong>l</strong> 则表示为链接文档(link file)；</p>
+</li>
+<li><p>若是 <strong>b</strong> 则表示为装置文件里面的可供储存的接口设备(可随机存取装置)；</p>
+</li>
+<li><p>若是 <strong>c</strong> 则表示为装置文件里面的串行端口设备，例如键盘、鼠标(一次性读取装置)。</p>
+</li>
+<li><p>接下来的字符中，以三个为一组，且均为 <strong>rwx</strong> 的三个参数的组合。其中， <strong>r</strong> 代表可读(read)、 <strong>w</strong> 代表可写(write)、 <strong>x</strong> 代表可执行(execute)。 要注意的是，这三个权限的位置不会改变，如果没有权限，就会出现减号 <strong>-</strong> 而已。</p>
+</li>
+<li><p><img src="/imgs/image-20220105115020261.png" alt="image-20220105115020261"></p>
+</li>
+<li><p>文件类型的表示：<br><img src="/imgs/image-20220105115040437.png" alt="image-20220105115040437"></p>
+</li>
+<li><p>更改属性：</p>
+<ul>
+<li><p>chgrp：更改文件属组：<code>chgrp [-R] 属组名 文件名</code></p>
+</li>
+<li><p>-R：递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。</p>
+</li>
+<li><p>chown：更改文件属主，也可以同时更改文件属组</p>
+</li>
+<li><p><code>chown [–R] 属主名 文件名</code>和<code>chown [-R] 属主名：属组名 文件名</code></p>
+</li>
+<li><p>Linux文件属性有两种设置方法，一种是数字，一种是符号。</p>
+<p>Linux 文件的基本权限就有九个，分别是 <strong>owner/group/others(拥有者/组/其他)</strong> 三种身份各有自己的 <strong>read/write/execute</strong> 权限。</p>
+<p>先复习一下刚刚上面提到的数据：文件的权限字符为： <strong>-rwxrwxrwx</strong> ， 这九个权限是三个三个一组的！其中，我们可以使用数字来代表各个权限，各权限的分数对照表如下：</p>
+<ul>
+<li>r:4</li>
+<li>w:2</li>
+<li>x:1</li>
+</ul>
+</li>
+<li><p>语法：<code> chmod [-R] xyz 文件或目录</code></p>
+<ul>
+<li>xyz : 就是刚刚提到的<strong>数字类型</strong>的权限属性，为 rwx 属性数值的相加。</li>
+<li>-R : 进行递归(recursive)的持续变更，亦即连同次目录下的所有文件都会变更</li>
+</ul>
+</li>
+<li><p>比如<code>chmod 777 .bashrc</code>就是启用<code>.bashrc</code>文件的所有权限</p>
+</li>
+<li><p>还有一个改变权限的方法，从之前的介绍中我们可以发现，基本上就九个权限分别是：</p>
+<ul>
+<li>user：用户</li>
+<li>group：组</li>
+<li>others：其他</li>
+<li>此外， <strong>a</strong> 则代表 <strong>all</strong>，即全部的身份。读写的权限可以写成 <strong>r, w, x</strong></li>
+<li><code>+</code>代表添加，<code>-</code>代表除去，<code>=</code>代表指定（对应的权限）</li>
+</ul>
+</li>
+<li><p>方法为<code>chmod u=rwx,g=rx,o=r 文件名</code>来指定,其中的rwx等是对应的用户的权限</p>
+</li>
+<li><p>去掉权限：</p>
+<ul>
+<li>例如要拿掉全部人的可执行权限<code>chmod  a-x test1</code></li>
+</ul>
+</li>
+<li><p>比如</p>
+</li>
+<li><p><img src="/imgs/image-20220105202406126.png" alt="image-20220105202406126"></p>
+</li>
+<li><p>此处在<code>chmod a+x test.txt</code>之后，权限可以看见全部增加了x</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="处理目录"><a href="#处理目录" class="headerlink" title="处理目录"></a>处理目录</h2><ul>
+<li>ls（英文全拼：list files）: 列出目录及文件名</li>
+<li>cd（英文全拼：change directory）：切换目录</li>
+<li>pwd（英文全拼：print work directory）：显示目前的目录</li>
+<li>mkdir（英文全拼：make directory）：创建一个新的目录</li>
+<li>rmdir（英文全拼：remove directory）：删除一个空的目录</li>
+<li>cp（英文全拼：copy file）: 复制文件或目录</li>
+<li>rm（英文全拼：remove）: 删除文件或目录</li>
+<li>mv（英文全拼：move file）: 移动文件与目录，或修改文件与目录的名称</li>
+</ul>
+<h3 id="ls列出目录"><a href="#ls列出目录" class="headerlink" title="ls列出目录"></a>ls列出目录</h3><ul>
+<li>-a ：全部的文件，连同隐藏文件( 开头为 . 的文件) 一起列出来(常用)</li>
+<li>-d ：仅列出目录本身，而不是列出目录内的文件数据(常用)</li>
+<li>-l ：长数据串列出，包含文件的属性与权限等等数据；(常用)</li>
+</ul>
+<h3 id="cd变换路径"><a href="#cd变换路径" class="headerlink" title="cd变换路径"></a>cd变换路径</h3><ul>
+<li><code>cd [相对路径或绝对路径]</code></li>
+</ul>
+<h3 id="pwd（显示当前所在的目录）"><a href="#pwd（显示当前所在的目录）" class="headerlink" title="pwd（显示当前所在的目录）"></a>pwd（显示当前所在的目录）</h3><ul>
+<li><strong>-P</strong> ：显示出确实的路径，而非使用连结 (link) 路径。</li>
+<li><img src="/imgs/image-20220105203806376.png" alt="image-20220105203806376"></li>
+</ul>
+<h3 id="mkdir-创建新目录"><a href="#mkdir-创建新目录" class="headerlink" title="mkdir (创建新目录)"></a>mkdir (创建新目录)</h3><ul>
+<li><code>mkdir [-mp] 目录名称</code></li>
+<li>-m ：配置文件的权限喔！直接配置，不需要看默认权限 (umask) 的脸色～<ul>
+<li>比如<code>mkdir -m 711 test2</code></li>
+</ul>
+</li>
+<li>-p ：帮助你直接将所需要的目录(包含上一级目录)<strong>递归创建</strong>起来！<ul>
+<li>比如<code>mkdir test1/test2/test3/test4</code>不能创建的时候，使用<code>-p</code>选项即可</li>
+<li><img src="/imgs/image-20220105204407469.png" alt="image-20220105204407469"></li>
+</ul>
+</li>
+</ul>
+<h3 id="rmdir-删除空的目录"><a href="#rmdir-删除空的目录" class="headerlink" title="rmdir (删除空的目录)"></a>rmdir (删除空的目录)</h3><ul>
+<li><code>rmdir [-p] 目录名称</code></li>
+<li><strong>-p ：</strong>从该目录起，一次删除多级空目录<ul>
+<li><img src="/imgs/image-20220105205146656.png" alt="image-20220105205146656"></li>
+</ul>
+</li>
+</ul>
+<h3 id="cp-复制文件或目录"><a href="#cp-复制文件或目录" class="headerlink" title="cp (复制文件或目录)"></a>cp (复制文件或目录)</h3><ul>
+<li><code>cp [-adfilprsu] 来源档(source) 目标档(destination)</code></li>
+<li><code>cp [options] source1 source2 source3 .... directory</code></li>
+<li><strong>-a：</strong>相当於 -pdr 的意思，至於 pdr 请参考下列说明；(常用)</li>
+<li><strong>-d：</strong>若来源档为连结档的属性(link file)，则复制连结档属性而非文件本身；</li>
+<li><strong>-f：</strong>为强制(force)的意思，若目标文件已经存在且无法开启，则移除后再尝试一次；</li>
+<li><strong>-i：</strong>若目标档(destination)已经存在时，在覆盖时会先询问动作的进行(常用)</li>
+<li><strong>-l：</strong>进行硬式连结(hard link)的连结档创建，而非复制文件本身；</li>
+<li><strong>-p：</strong>连同文件的属性一起复制过去，而非使用默认属性(备份常用)；</li>
+<li><strong>-r：</strong>递归持续复制，用於目录的复制行为；(常用)</li>
+<li><strong>-s：</strong>复制成为符号连结档 (symbolic link)，亦即『捷径』文件；</li>
+<li><strong>-u：</strong>若 destination 比 source 旧才升级 destination ！</li>
+</ul>
+<h3 id="rm-移除文件或目录"><a href="#rm-移除文件或目录" class="headerlink" title="rm (移除文件或目录)"></a>rm (移除文件或目录)</h3><ul>
+<li><code>rm [-fir] 文件或目录</code></li>
+<li>-f ：就是 force 的意思，忽略不存在的文件，不会出现警告信息；</li>
+<li>-i ：互动模式，在删除前会询问使用者是否动作</li>
+<li>-r ：递归删除啊！最常用在目录的删除了！这是非常危险的选项！！！</li>
+</ul>
+<h3 id="mv-移动文件与目录，或修改名称"><a href="#mv-移动文件与目录，或修改名称" class="headerlink" title="mv (移动文件与目录，或修改名称)"></a>mv (移动文件与目录，或修改名称)</h3><ul>
+<li><code>mv [-fiu] source destination</code></li>
+<li><code>mv [options] source1 source2 source3 .... directory</code></li>
+<li>-f ：force 强制的意思，如果目标文件已经存在，不会询问而直接覆盖；</li>
+<li>-i ：若目标文件 (destination) 已经存在时，就会询问是否覆盖！</li>
+<li>-u ：若目标文件已经存在，且 source 比较新，才会升级 (update)</li>
+<li><strong>更改文件夹名称</strong>：<img src="/imgs/image-20220105212045584.png" alt="image-20220105212045584"><ul>
+<li>也就是<code>mv 原名称 现名称</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="Linux-文件内容查看"><a href="#Linux-文件内容查看" class="headerlink" title="Linux 文件内容查看"></a>Linux 文件内容查看</h3><ul>
+<li>cat 由第一行开始显示文件内容</li>
+<li>tac 从最后一行开始显示，可以看出 tac 是 cat 的倒着写！</li>
+<li>nl  显示的时候，顺道输出行号！</li>
+<li>more 一页一页的显示文件内容</li>
+<li>less 与 more 类似，但是比 more 更好的是，他可以往前翻页！</li>
+<li>head 只看头几行</li>
+<li>tail 只看尾巴几行</li>
+</ul>
+<h2 id="Linux-文件链接"><a href="#Linux-文件链接" class="headerlink" title="Linux 文件链接"></a>Linux 文件链接</h2><h3 id="硬连接"><a href="#硬连接" class="headerlink" title="硬连接"></a><strong>硬连接</strong></h3><p>硬连接指通过索引节点来进行连接。在 Linux 的文件系统中，保存在磁盘分区中的文件<strong>不管是什么类型</strong>都给它<strong>分配一个编号</strong>，称为索引节点号(Inode Index)。在 Linux 中，<strong>多个文件名指向同一索引节点</strong>是存在的。比如：A 是 B 的硬链接（A 和 B 都是文件名），则 A 的目录项中的 inode 节点号与 B 的目录项中的 inode 节点号相同，即<strong>一个 inode 节点对应两个不同的文件名</strong>，<strong>两个</strong>文件名指向<strong>同一</strong>个文件，A 和 B 对文件系统来说是<strong>完全平等</strong>的。<strong>删除其中任何一个都不会影响另外一个的访问</strong>。</p>
+<p>硬连接的作用是<strong>允许一个文件拥有多个有效路径</strong>名，这样用户就可以<strong>建立硬连接到重要文件</strong>，以<strong>防止“误删”</strong>的功能。其原因如上所述，因为对应该目录的索引节点有一个以上的连接。只删除一个连接并不影响索引节点本身和其它的连接，只<strong>有当最后一个连接被删除后，文件的数据块及目录的连接才会被释放</strong>。也就是说，文件<strong>真正删除</strong>的条件是<strong>与之相关的所有硬连接文件均被删除</strong>。</p>
+<h3 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h3><p>另外一种连接称之为符号连接（Symbolic Link），也叫软连接。软链接文件<strong>有类似于 Windows 的快捷方式</strong>。它实际上是一个特殊的文件。在符号连接中，文件<strong>实际上</strong>是一个<strong>文本文件</strong>，其中包含的有另一文件的位置信息。比如：A 是 B 的软链接（A 和 B 都是文件名），A 的目录项中的 inode 节点号与 B 的目录项中的 inode 节点号不相同，A 和 B 指向的是<strong>两个不同的 inode</strong>，继而指向两块不同的数据块。但是 <strong>A 的数据块中存放的只是 B 的路径名</strong>（可以根据这个找到 B 的目录项）。A 和 B 之间是“主从”关系，<strong>如果 B 被删除了，A 仍然存在（因为两个是不同的文件），但指向的是一个无效的链接</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[oracle@Linux]$ touch f1          #创建一个测试文件f1</span><br><span class="line">[oracle@Linux]$ ln f1 f2          #创建f1的一个硬连接文件f2</span><br><span class="line">[oracle@Linux]$ ln -s f1 f3       #创建f1的一个符号连接文件f3</span><br><span class="line">[oracle@Linux]$ ls -li            # -i参数显示文件的inode节点信息</span><br><span class="line">total 0</span><br><span class="line">9797648 -rw-r--r--  2 oracle oinstall 0 Apr 21 08:11 f1</span><br><span class="line">9797648 -rw-r--r--  2 oracle oinstall 0 Apr 21 08:11 f2</span><br><span class="line">9797649 lrwxrwxrwx  1 oracle oinstall 2 Apr 21 08:11 f3 -&gt; f1</span><br></pre></td></tr></table></figure>
+
+<p>从上面的结果中可以看出，硬连接文件 f2 与原文件 f1 的 inode 节点相同，均为 9797648，然而符号连接文件的 inode 节点不同。</p>
+<ul>
+<li>注意创建硬链接文件的语法为<code>ln 文件 硬链接</code></li>
+<li>创建符号链接文件的语法为<code>ln -s 文件 符号链接</code></li>
+<li><code>ls -li</code>可以显示文件的inode节点信息</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[oracle@Linux]$ echo &quot;I am f1 file&quot; &gt;&gt;f1</span><br><span class="line">[oracle@Linux]$ cat f1</span><br><span class="line">I am f1 file</span><br><span class="line">[oracle@Linux]$ cat f2</span><br><span class="line">I am f1 file</span><br><span class="line">[oracle@Linux]$ cat f3</span><br><span class="line">I am f1 file</span><br><span class="line">[oracle@Linux]$ rm -f f1</span><br><span class="line">[oracle@Linux]$ cat f2</span><br><span class="line">I am f1 file</span><br><span class="line">[oracle@Linux]$ cat f3</span><br><span class="line">cat: f3: No such file or directory</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过上面的测试可以看出：当删除原始文件 f1 后，硬连接 f2 不受影响，但是符号连接 f3 文件无效</li>
+</ul>
+<h2 id="Linux-磁盘管理"><a href="#Linux-磁盘管理" class="headerlink" title="Linux 磁盘管理"></a>Linux 磁盘管理</h2><h3 id="df"><a href="#df" class="headerlink" title="df"></a>df</h3><p>检查<strong>文件系统</strong>的磁盘空间占用情况。可以利用该命令来获取硬盘被占用了多少空间，目前还剩下多少空间等信息。</p>
+<ul>
+<li><code>df [-ahikHTm] [目录或文件名]</code></li>
+<li>-a ：列出所有的文件系统，包括系统特有的 /proc 等文件系统；</li>
+<li>-k ：以 KBytes 的容量显示各文件系统；</li>
+<li>-m ：以 MBytes 的容量显示各文件系统；</li>
+<li>-h ：以人们较易阅读的 GBytes, MBytes, KBytes 等格式自行显示；</li>
+<li>-H ：以 M=1000K 取代 M=1024K 的进位方式；</li>
+<li>-T ：显示文件系统类型, 连同该 partition 的 filesystem 名称 (例如 ext3) 也列出；</li>
+<li>-i ：不用硬盘容量，而以 inode 的数量来显示</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@www ~]# df -h</span><br><span class="line">Filesystem            Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/hdc2             9.5G  3.7G  5.4G  41% /</span><br><span class="line">/dev/hdc3             4.8G  139M  4.4G   4% /home</span><br><span class="line">/dev/hdc1              99M   11M   83M  12% /boot</span><br><span class="line">tmpfs                 363M     0  363M   0% /dev/shm</span><br></pre></td></tr></table></figure>
+
+<h3 id="du"><a href="#du" class="headerlink" title="du"></a>du</h3><p>Linux du 命令也是查看使用空间的，但是与 df 命令不同的是 Linux du 命令是对<strong>文件和目录磁盘使用</strong>的空间的查看，还是和df命令有一些区别的，这里介绍 Linux du 命令。</p>
+<ul>
+<li><p><code>du [-ahskm] 文件或目录名称</code></p>
+</li>
+<li><p>-a ：列出所有的文件与目录容量，因为默认仅统计目录底下的文件量而已。</p>
+</li>
+<li><p>-h ：以人们较易读的容量格式 (G/M) 显示；</p>
+</li>
+<li><p>-s ：列出总量而已，而不列出每个各别的目录占用容量；</p>
+</li>
+<li><p>-S ：不包括子目录下的总计，与 -s 有点差别。</p>
+</li>
+<li><p>-k ：以 KBytes 列出容量显示；</p>
+</li>
+<li><p>-m ：以 MBytes 列出容量显示；</p>
+</li>
+</ul>
+<h3 id="fdisk"><a href="#fdisk" class="headerlink" title="fdisk"></a>fdisk</h3><p>fdisk 是 Linux 的磁盘分区表操作工具。</p>
+<ul>
+<li><p><code>fdisk [-l] 装置名称</code>需要超级用户（sudo）权限</p>
+</li>
+<li><p>-l ：输出后面接的装置所有的分区内容。若仅有 fdisk -l 时， 则系统将会把整个系统内能够搜寻到的装置的分区均列出来。</p>
+</li>
+<li><p><img src="/imgs/image-20220105221448829.png" alt="image-20220105221448829"></p>
+</li>
+</ul>
+<h3 id="磁盘格式化"><a href="#磁盘格式化" class="headerlink" title="磁盘格式化"></a>磁盘格式化</h3><ul>
+<li><code>mkfs [-t 文件系统格式] 装置文件名</code></li>
+<li><code>-t </code>：可以接文件系统格式，例如 ext3, ext2, vfat 等(系统有支持才会生效)</li>
+</ul>
+<h3 id="磁盘检验"><a href="#磁盘检验" class="headerlink" title="磁盘检验"></a>磁盘检验</h3><p>fsck（file system check）用来检查和维护不一致的文件系统。</p>
+<p>若系统掉电或磁盘发生问题，可利用fsck命令对文件系统进行检查。</p>
+<ul>
+<li><code>fsck [-t 文件系统] [-ACay] 装置名称</code></li>
+<li>-t : 给定档案系统的型式，若在 /etc/fstab 中已有定义或 kernel 本身已支援的则不需加上此参数</li>
+<li>-s : 依序一个一个地执行 fsck 的指令来检查</li>
+<li>-A : 对/etc/fstab 中所有列出来的 分区（partition）做检查</li>
+<li>-C : 显示完整的检查进度</li>
+<li>-d : 打印出 e2fsck 的 debug 结果</li>
+<li>-p : 同时有 -A 条件时，同时有多个 fsck 的检查一起执行</li>
+<li>-R : 同时有 -A 条件时，省略 / 不检查</li>
+<li>-V : 详细显示模式</li>
+<li>-a : 如果检查有错则自动修复</li>
+<li>-r : 如果检查有错则由使用者回答是否修复</li>
+<li>-y : 选项指定检测每个文件是自动输入yes，在不确定那些是不正常的时候，可以执行 # fsck -y 全部检查修复。</li>
+</ul>
+<h3 id="磁盘挂载和删除"><a href="#磁盘挂载和删除" class="headerlink" title="磁盘挂载和删除"></a>磁盘挂载和删除</h3><ul>
+<li>Linux 的磁盘挂载使用 <code>mount</code> 命令，卸载使用 <code>umount</code> 命令。</li>
+<li><code>mount [-t 文件系统] [-L Label名] [-o 额外选项] [-n]  装置文件名  挂载点</code></li>
+<li><code>umount [-fn] 装置文件名或挂载点</code></li>
+</ul>
+<p><strong>参考<a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-file-content-manage.html">https://www.runoob.com/linux/linux-file-content-manage.html</a></strong></p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/01/04/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/">Linux初步学习（四）</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-01-04</time><div class="content"><h1 id="Linux初步学习（四）"><a href="#Linux初步学习（四）" class="headerlink" title="Linux初步学习（四）"></a>Linux初步学习（四）</h1><h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[ <span class="keyword">function</span> ] funname [()]</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    action;</span><br><span class="line"></span><br><span class="line">    [<span class="built_in">return</span> int;]</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>1、可以带function fun() 定义，也可以直接fun() 定义,不带任何参数。</li>
+<li>2、参数返回，可以显示加：return 返回，如果不加，将以<strong>最后一条命令</strong>运行结果，作为返回值。 return后跟数值n(0-255)</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># author:菜鸟教程</span></span><br><span class="line"><span class="comment"># url:www.runoob.com</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">demoFun</span></span>()&#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;这是我的第一个 shell 函数!&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;-----函数开始执行-----&quot;</span></span><br><span class="line">demoFun</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;-----函数执行完毕-----&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="传递参数"><a href="#传递参数" class="headerlink" title="传递参数"></a>传递参数</h3><ul>
+<li>在Shell中，调用函数时可以向其传递参数。在函数体内部，通过 $n 的形式来获取参数的值，例如，$1表示第一个参数，$2表示第二个参数等等</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># author:菜鸟教程</span></span><br><span class="line"><span class="comment"># url:www.runoob.com</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">funWithParam</span></span>()&#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;第一个参数为 <span class="variable">$1</span> !&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;第二个参数为 <span class="variable">$2</span> !&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;第十个参数为 <span class="variable">$10</span> !&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;第十个参数为 <span class="variable">$&#123;10&#125;</span> !&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;第十一个参数为 <span class="variable">$&#123;11&#125;</span> !&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;参数总数有 <span class="variable">$#</span> 个!&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;作为一个字符串输出所有参数 $* !&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">funWithParam 1 2 3 4 5 6 7 8 9 34 73</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意，$10 不能获取第十个参数，获取第十个参数需要${10}。当n&gt;=10时，需要使用${n}来获取参数。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">参数处理</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">$#</td>
+<td align="left">传递到脚本或函数的参数个数</td>
+</tr>
+<tr>
+<td align="left">$*</td>
+<td align="left">以一个单字符串显示所有向脚本传递的参数</td>
+</tr>
+<tr>
+<td align="left">$$</td>
+<td align="left">脚本运行的当前进程ID号</td>
+</tr>
+<tr>
+<td align="left">$!</td>
+<td align="left">后台运行的最后一个进程的ID号</td>
+</tr>
+<tr>
+<td align="left">$@</td>
+<td align="left">与$*相同，但是使用时加引号，并在引号中返回每个参数。</td>
+</tr>
+<tr>
+<td align="left">$-</td>
+<td align="left">显示Shell使用的当前选项，与set命令功能相同。</td>
+</tr>
+<tr>
+<td align="left">$?</td>
+<td align="left">显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。</td>
+</tr>
+</tbody></table>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/01/03/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89/">Linux初步学习（三）</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-01-03</time><div class="content"><h1 id="Linux初步学习（三）"><a href="#Linux初步学习（三）" class="headerlink" title="Linux初步学习（三）"></a>Linux初步学习（三）</h1><h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3><ul>
+<li>Shell中的 test 命令用于检查某个条件是否成立，它可以进行数值、字符和文件三个方面的测试。</li>
+</ul>
+<p><strong>数值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-eq</td>
+<td align="left">等于则为真</td>
+</tr>
+<tr>
+<td align="left">-ne</td>
+<td align="left">不等于则为真</td>
+</tr>
+<tr>
+<td align="left">-gt</td>
+<td align="left">大于则为真</td>
+</tr>
+<tr>
+<td align="left">-ge</td>
+<td align="left">大于等于则为真</td>
+</tr>
+<tr>
+<td align="left">-lt</td>
+<td align="left">小于则为真</td>
+</tr>
+<tr>
+<td align="left">-le</td>
+<td align="left">小于等于则为真</td>
+</tr>
+</tbody></table>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">num1=100</span><br><span class="line">num2=100</span><br><span class="line"><span class="keyword">if</span> <span class="built_in">test</span> $[num1] -eq $[num2]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&#x27;两个数相等！&#x27;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&#x27;两个数不相等！&#x27;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><code>[]</code>中可以执行算术运算比如加减等</li>
+</ul>
+<p><strong>字符串</strong></p>
+<ul>
+<li><table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">=</td>
+<td align="left">等于则为真</td>
+</tr>
+<tr>
+<td align="left">!=</td>
+<td align="left">不相等则为真</td>
+</tr>
+<tr>
+<td align="left">-z 字符串</td>
+<td align="left">字符串的长度为零则为真</td>
+</tr>
+<tr>
+<td align="left">-n 字符串</td>
+<td align="left">字符串的长度不为零则为真</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>实例</p>
+</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">num1=<span class="string">&quot;ru1noob&quot;</span></span><br><span class="line">num2=<span class="string">&quot;runoob&quot;</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">test</span> <span class="variable">$num1</span> = <span class="variable">$num2</span></span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&#x27;两个字符串相等!&#x27;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&#x27;两个字符串不相等!&#x27;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>文件</strong></p>
+<ul>
+<li><table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-e 文件名</td>
+<td align="left">如果文件存在则为真</td>
+</tr>
+<tr>
+<td align="left">-r 文件名</td>
+<td align="left">如果文件存在且可读则为真</td>
+</tr>
+<tr>
+<td align="left">-w 文件名</td>
+<td align="left">如果文件存在且可写则为真</td>
+</tr>
+<tr>
+<td align="left">-x 文件名</td>
+<td align="left">如果文件存在且可执行则为真</td>
+</tr>
+<tr>
+<td align="left">-s 文件名</td>
+<td align="left">如果文件存在且至少有一个字符则为真</td>
+</tr>
+<tr>
+<td align="left">-d 文件名</td>
+<td align="left">如果文件存在且为目录则为真</td>
+</tr>
+<tr>
+<td align="left">-f 文件名</td>
+<td align="left">如果文件存在且为普通文件则为真</td>
+</tr>
+<tr>
+<td align="left">-c 文件名</td>
+<td align="left">如果文件存在且为字符型特殊文件则为真</td>
+</tr>
+<tr>
+<td align="left">-b 文件名</td>
+<td align="left">如果文件存在且为块特殊文件则为真</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>使用例</p>
+</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /bin</span><br><span class="line"><span class="keyword">if</span> <span class="built_in">test</span> -e ./bash</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&#x27;文件已存在!&#x27;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&#x27;文件不存在!&#x27;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<p>Shell 还提供了与( -a )、或( -o )、非( ! )三个逻辑操作符用于将测试条件连接起来，其优先级为： <strong>!</strong> 最高， <strong>-a</strong> 次之， <strong>-o</strong> 最低。</p>
+<ul>
+<li>比如</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /bin</span><br><span class="line"><span class="keyword">if</span> <span class="built_in">test</span> -e ./notFile -o -e ./bash</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&#x27;至少有一个文件存在!&#x27;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&#x27;两个文件都不存在&#x27;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="分支和循环"><a href="#分支和循环" class="headerlink" title="分支和循环"></a>分支和循环</h3><p><strong>if-else</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> condition1</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    command1</span><br><span class="line"><span class="keyword">elif</span> condition2 </span><br><span class="line"><span class="keyword">then</span> </span><br><span class="line">    command2</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    commandN</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>for循环</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> var <span class="keyword">in</span> item1 item2 ... itemN</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    command1</span><br><span class="line">    command2</span><br><span class="line">    ...</span><br><span class="line">    commandN</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>针对字符串的特殊用法(不加引号)</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> str <span class="keyword">in</span> This is a string</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$str</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>输出</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">This</span><br><span class="line">is</span><br><span class="line">a</span><br><span class="line">string</span><br></pre></td></tr></table></figure>
+
+<p><strong>while 语句</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> condition</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">command</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>while读取键盘信息</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo &#x27;按下 &lt;CTRL-D&gt; 退出&#x27;</span><br><span class="line">echo -n &#x27;输入你最喜欢的网站名: &#x27;</span><br><span class="line">while read FILM</span><br><span class="line">do</span><br><span class="line">    echo &quot;是的！$FILM 是一个好网站&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<p><strong>无限循环</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> :</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">command</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">command</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for (( ; ; ))</span><br></pre></td></tr></table></figure>
+
+<p><strong>until循环</strong></p>
+<p>until 循环执行一系列命令直至条件为 true 时停止。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">until condition</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">command</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>case和easc</strong></p>
+<p>类似于switch case语句</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="keyword">case</span> 值 <span class="keyword">in</span></span><br><span class="line">模式1)</span><br><span class="line">    command1</span><br><span class="line">    command2</span><br><span class="line">    ...</span><br><span class="line">    commandN</span><br><span class="line">    ;;</span><br><span class="line">模式2)</span><br><span class="line">    command1</span><br><span class="line">    command2</span><br><span class="line">    ...</span><br><span class="line">    commandN</span><br><span class="line">    ;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>其他写法</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">while :</span><br><span class="line">do</span><br><span class="line">    echo -n &quot;输入 1 到 5 之间的数字:&quot;</span><br><span class="line">    read aNum</span><br><span class="line">    case $aNum in</span><br><span class="line">        1|2|3|4|5) echo &quot;你输入的数字为 $aNum!&quot;</span><br><span class="line">        ;;</span><br><span class="line">        *) echo &quot;你输入的数字不是 1 到 5 之间的! 游戏结束&quot;</span><br><span class="line">            break</span><br><span class="line">        ;;</span><br><span class="line">    esac</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>此处注意多个输入对应一个case的时候，使用<code>|</code>分隔，蒋多个输入列为一种情况</li>
+</ul>
+<p><strong>break和continue</strong></p>
+<p>类似于其他语言，略</p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/">Linux初步学习（二）</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-01-02</time><div class="content"><h1 id="Linux初步学习（二）"><a href="#Linux初步学习（二）" class="headerlink" title="Linux初步学习（二）"></a>Linux初步学习（二）</h1><h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><h3 id="向shell脚本传参"><a href="#向shell脚本传参" class="headerlink" title="向shell脚本传参"></a>向shell脚本传参</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Shell 传递参数实例！&quot;</span>;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;执行的文件名：<span class="variable">$0</span>&quot;</span>;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第一个参数为：<span class="variable">$1</span>&quot;</span>;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第二个参数为：<span class="variable">$2</span>&quot;</span>;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第三个参数为：<span class="variable">$3</span>&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">参数处理</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">$#</td>
+<td align="left">传递到脚本的参数个数</td>
+</tr>
+<tr>
+<td align="left">$*</td>
+<td align="left">以一个单字符串显示所有向脚本传递的参数。 如”$*”用「”」括起来的情况、以”$1 $2 … $n”的形式输出所有参数。</td>
+</tr>
+<tr>
+<td align="left">$$</td>
+<td align="left">脚本运行的当前进程ID号</td>
+</tr>
+<tr>
+<td align="left">$!</td>
+<td align="left">后台运行的最后一个进程的ID号</td>
+</tr>
+<tr>
+<td align="left">$@</td>
+<td align="left">与$*相同，但是使用时加引号，并在引号中返回每个参数。 如”$@”用「”」括起来的情况、以”$1” “$2” … “$n” 的形式输出所有参数。</td>
+</tr>
+<tr>
+<td align="left">$-</td>
+<td align="left">显示Shell使用的当前选项，与<a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-comm-set.html">set命令</a>功能相同。</td>
+</tr>
+<tr>
+<td align="left">$?</td>
+<td align="left">显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。</td>
+</tr>
+</tbody></table>
+<p><strong>实例</strong></p>
+<p><img src="/imgs/image-20220102172744910.png" alt="image-20220102172744910"></p>
+<p><em><em>$</em> 与 $@ 区别：</em>*</p>
+<ul>
+<li>相同点：都是引用所有参数。</li>
+<li>不同点：只有在双引号中体现出来。假设在脚本运行时写了三个参数 1、2、3，，则 “ * “ 等价于 “1 2 3”（传递了一个参数），而 “@” 等价于 “1” “2” “3”（传递了三个参数）。</li>
+</ul>
+<p><strong>演示</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># author:菜鸟教程</span></span><br><span class="line"><span class="comment"># url:www.runoob.com</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;-- \$* 演示 ---&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">&quot;$*&quot;</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;-- \$@ 演示 ---&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$@</span>&quot;</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<p><img src="/imgs/image-20220102173644362.png" alt="image-20220102173644362"></p>
+<hr>
+<h3 id="shell-数组"><a href="#shell-数组" class="headerlink" title="shell 数组"></a>shell 数组</h3><p>获取元素个数</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ chmod +x test.sh </span><br><span class="line">$ ./test.sh</span><br><span class="line">数组元素个数为: 4</span><br><span class="line">数组元素个数为: 4</span><br></pre></td></tr></table></figure>
+
+<p>数组长度</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;数组元素个数为: <span class="variable">$&#123;#my_array[*]&#125;</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;数组元素个数为: <span class="variable">$&#123;#my_array[@]&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>数组的值可以是变量</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">A=1</span><br><span class="line">my_array=(<span class="variable">$A</span> B C D)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第一个元素为: <span class="variable">$&#123;my_array[0]&#125;</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第二个元素为: <span class="variable">$&#123;my_array[1]&#125;</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第三个元素为: <span class="variable">$&#123;my_array[2]&#125;</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第四个元素为: <span class="variable">$&#123;my_array[3]&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="shell-运算符"><a href="#shell-运算符" class="headerlink" title="shell 运算符"></a>shell 运算符</h3><p><code>expr</code>：expr是计算表达式的工具，比如</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">val = `expr 2 + 2`</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>表达式和运算符之间<strong>要有空格</strong>，例如 2+2 是不对的，必须写成 2 + 2，这与我们熟悉的大多数编程语言不一样。</li>
+<li>完整的表达式要被反引号 包含，注意这个字符不是常用的单引号，在 Esc 键下边。</li>
+</ul>
+<h3 id="if表达式"><a href="#if表达式" class="headerlink" title="if表达式"></a>if表达式</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> [ <span class="variable">$a</span> == <span class="variable">$b</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;a 等于 b&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$a</span> != <span class="variable">$b</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;a 不等于 b&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$a</span> -le <span class="variable">$b</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$a</span> -le <span class="variable">$b</span>: a 小于或等于 b&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$a</span> -le <span class="variable">$b</span>: a 大于 b&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>关系运算符</strong></p>
+<table>
+<thead>
+<tr>
+<th>-eq</th>
+<th>检测两个数是否相等，相等返回 true。</th>
+<th>[ $a -eq $b ] 返回 false。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-ne</td>
+<td>检测两个数是否不相等，不相等返回 true。</td>
+<td>[ $a -ne $b ] 返回 true。</td>
+</tr>
+<tr>
+<td>-gt</td>
+<td>检测左边的数是否大于右边的，如果是，则返回 true。</td>
+<td>[ $a -gt $b ] 返回 false。</td>
+</tr>
+<tr>
+<td>-lt</td>
+<td>检测左边的数是否小于右边的，如果是，则返回 true。</td>
+<td>[ $a -lt $b ] 返回 true。</td>
+</tr>
+<tr>
+<td>-ge</td>
+<td>检测左边的数是否大于等于右边的，如果是，则返回 true。</td>
+<td>[ $a -ge $b ] 返回 false。</td>
+</tr>
+<tr>
+<td>-le</td>
+<td>检测左边的数是否小于等于右边的，如果是，则返回 true。</td>
+<td>[ $a -le $b ] 返回 true。</td>
+</tr>
+</tbody></table>
+<p><strong>布尔运算符</strong></p>
+<table>
+<thead>
+<tr>
+<th>!</th>
+<th>非运算，表达式为 true 则返回 false，否则返回 true。</th>
+<th>[ ! false ] 返回 true。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-o</td>
+<td>或运算，有一个表达式为 true 则返回 true。</td>
+<td>[ $a -lt 20 -o $b -gt 100 ] 返回 true。</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>与运算，两个表达式都为 true 才返回 true。</td>
+<td>[ $a -lt 20 -a $b -gt 100 ] 返回 false。</td>
+</tr>
+</tbody></table>
+<p><strong>逻辑运算符</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">说明</th>
+<th align="left">举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&amp;&amp;</td>
+<td align="left">逻辑的 AND</td>
+<td align="left">[[ $a -lt 100 &amp;&amp; $b -gt 100 ]] 返回 false</td>
+</tr>
+<tr>
+<td align="left">||</td>
+<td align="left">逻辑的 OR</td>
+<td align="left">[[ $a -lt 100 || $b -gt 100 ]] 返回 true</td>
+</tr>
+</tbody></table>
+<p><strong>字符串运算符</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">说明</th>
+<th align="left">举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">=</td>
+<td align="left">检测两个字符串是否相等，相等返回 true。</td>
+<td align="left">[ $a = $b ] 返回 false。</td>
+</tr>
+<tr>
+<td align="left">!=</td>
+<td align="left">检测两个字符串是否不相等，不相等返回 true。</td>
+<td align="left">[ $a != $b ] 返回 true。</td>
+</tr>
+<tr>
+<td align="left">-z</td>
+<td align="left">检测字符串长度是否为0，为0返回 true。</td>
+<td align="left">[ -z $a ] 返回 false。</td>
+</tr>
+<tr>
+<td align="left">-n</td>
+<td align="left">检测字符串长度是否不为 0，不为 0 返回 true。</td>
+<td align="left">[ -n “$a” ] 返回 true。</td>
+</tr>
+<tr>
+<td align="left">$</td>
+<td align="left">检测字符串是否为空，不为空返回 true。</td>
+<td align="left">[ $a ] 返回 true。</td>
+</tr>
+</tbody></table>
+<p>使用例</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> author:菜鸟教程</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> url:www.runoob.com</span></span><br><span class="line"></span><br><span class="line">a=&quot;abc&quot;</span><br><span class="line">b=&quot;efg&quot;</span><br><span class="line"></span><br><span class="line">if [ $a = $b ]</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a = $b : a 等于 b&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a = $b: a 不等于 b&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a != $b ]</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a != $b : a 不等于 b&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a != $b: a 等于 b&quot;</span><br><span class="line">fi</span><br><span class="line">if [ -z $a ]</span><br><span class="line">then</span><br><span class="line">   echo &quot;-z $a : 字符串长度为 0&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;-z $a : 字符串长度不为 0&quot;</span><br><span class="line">fi</span><br><span class="line">if [ -n &quot;$a&quot; ]</span><br><span class="line">then</span><br><span class="line">   echo &quot;-n $a : 字符串长度不为 0&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;-n $a : 字符串长度为 0&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a ]</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a : 字符串不为空&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a : 字符串为空&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>文件测试运算符</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">操作符</th>
+<th align="left">说明</th>
+<th align="left">举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-b file</td>
+<td align="left">检测文件是否是块设备文件，如果是，则返回 true。</td>
+<td align="left">[ -b $file ] 返回 false。</td>
+</tr>
+<tr>
+<td align="left">-c file</td>
+<td align="left">检测文件是否是字符设备文件，如果是，则返回 true。</td>
+<td align="left">[ -c $file ] 返回 false。</td>
+</tr>
+<tr>
+<td align="left">-d file</td>
+<td align="left">检测文件是否是目录，如果是，则返回 true。</td>
+<td align="left">[ -d $file ] 返回 false。</td>
+</tr>
+<tr>
+<td align="left">-f file</td>
+<td align="left">检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回 true。</td>
+<td align="left">[ -f $file ] 返回 true。</td>
+</tr>
+<tr>
+<td align="left">-g file</td>
+<td align="left">检测文件是否设置了 SGID 位，如果是，则返回 true。</td>
+<td align="left">[ -g $file ] 返回 false。</td>
+</tr>
+<tr>
+<td align="left">-k file</td>
+<td align="left">检测文件是否设置了粘着位(Sticky Bit)，如果是，则返回 true。</td>
+<td align="left">[ -k $file ] 返回 false。</td>
+</tr>
+<tr>
+<td align="left">-p file</td>
+<td align="left">检测文件是否是有名管道，如果是，则返回 true。</td>
+<td align="left">[ -p $file ] 返回 false。</td>
+</tr>
+<tr>
+<td align="left">-u file</td>
+<td align="left">检测文件是否设置了 SUID 位，如果是，则返回 true。</td>
+<td align="left">[ -u $file ] 返回 false。</td>
+</tr>
+<tr>
+<td align="left">-r file</td>
+<td align="left">检测文件是否可读，如果是，则返回 true。</td>
+<td align="left">[ -r $file ] 返回 true。</td>
+</tr>
+<tr>
+<td align="left">-w file</td>
+<td align="left">检测文件是否可写，如果是，则返回 true。</td>
+<td align="left">[ -w $file ] 返回 true。</td>
+</tr>
+<tr>
+<td align="left">-x file</td>
+<td align="left">检测文件是否可执行，如果是，则返回 true。</td>
+<td align="left">[ -x $file ] 返回 true。</td>
+</tr>
+<tr>
+<td align="left">-s file</td>
+<td align="left">检测文件是否为空（文件大小是否大于0），不为空返回 true。</td>
+<td align="left">[ -s $file ] 返回 true。</td>
+</tr>
+<tr>
+<td align="left">-e file</td>
+<td align="left">检测文件（包括目录）是否存在，如果是，则返回 true。</td>
+<td align="left">[ -e $file ] 返回 true。</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>-S</strong>: 判断某文件是否 socket。</li>
+<li><strong>-L</strong>: 检测文件是否存在并且是一个符号链接。</li>
+</ul>
+<p>使用例</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># author:菜鸟教程</span></span><br><span class="line"><span class="comment"># url:www.runoob.com</span></span><br><span class="line"></span><br><span class="line">file=<span class="string">&quot;/var/www/runoob/test.sh&quot;</span></span><br><span class="line"><span class="keyword">if</span> [ -r <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件可读&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件不可读&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ -w <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件可写&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件不可写&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ -x <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件可执行&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件不可执行&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ -f <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件为普通文件&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件为特殊文件&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ -d <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件是个目录&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件不是个目录&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ -s <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件不为空&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件为空&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ -e <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件存在&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件不存在&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="命令行输入和输出"><a href="#命令行输入和输出" class="headerlink" title="命令行输入和输出"></a>命令行输入和输出</h3><p>echo，显示转义字符使用<code>\</code></p>
+<p>read，从标准输入获取一行，并且将其赋给变量</p>
+<p>比如<code>read name</code>将一行内容赋值给name</p>
+<ul>
+<li>echo开启转义字符：<code>-e</code></li>
+</ul>
+<p>比如</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;OK! \n&quot;</span> <span class="comment"># -e 开启转义</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;It is a test&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>会在OK后换行</p>
+<ul>
+<li>不换行</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;OK! \c&quot;</span> <span class="comment"># -e 开启转义 \c 不换行</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;It is a test&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结果定向至文件</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;It is a test&quot;</span> &gt; myfile</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>原样输出字符串，不考虑变量和转义：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;$name\&quot;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>显示对应的命令执行的结果(反引号)</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo `date`</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Thu Jul 24 10:08:46 CST 2014</span><br></pre></td></tr></table></figure>
+
+<h3 id="printf"><a href="#printf" class="headerlink" title="printf"></a>printf</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>  format-string  [arguments...]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用例</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span> <span class="string">&quot;%-10s %-8s %-4s\n&quot;</span> 姓名 性别 体重kg  </span><br><span class="line"><span class="built_in">printf</span> <span class="string">&quot;%-10s %-8s %-4.2f\n&quot;</span> 郭靖 男 66.1234</span><br><span class="line"><span class="built_in">printf</span> <span class="string">&quot;%-10s %-8s %-4.2f\n&quot;</span> 杨过 男 48.6543</span><br><span class="line"><span class="built_in">printf</span> <span class="string">&quot;%-10s %-8s %-4.2f\n&quot;</span> 郭芙 女 47.9876</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><p>输出</p>
+</li>
+<li><pre><code>姓名     性别   体重kg
+郭靖     男      66.12
+杨过     男      48.65
+郭芙     女      47.99
+</code></pre>
+</li>
+</ul>
+<p><strong>%s %c %d %f</strong> 都是格式替代符，<strong>％s</strong> 输出一个字符串，<strong>％d</strong> 整型输出，<strong>％c</strong> 输出一个字符，<strong>％f</strong> 输出实数，以小数形式输出。</p>
+<p><strong>%-10s</strong> 指一个宽度为 10 个字符（- 表示左对齐，没有则表示右对齐），任何字符都会被显示在 10 个字符宽的字符内，如果不足则自动以空格填充，超过也会将内容全部显示出来。</p>
+<p><strong>%-4.2f</strong> 指格式化为小数，其中 <strong>.2</strong> 指保留2位小数。</p>
+<ul>
+<li><p><em>单引号与双引号效果一样</em></p>
+</li>
+<li><p><em><strong>没有引号</strong>也可以输出</em></p>
+</li>
+<li><p><em>格式只指定的参数比传入的需要格式化输出的参数少的时候，多出的参数仍然会按照该格式输出，format-string 被重用</em>，类似于printf被重复使用多次直到所有参数都被格式化输出为止</p>
+</li>
+<li><p>转义序列</p>
+</li>
+<li></li>
+<li><table>
+<thead>
+<tr>
+<th align="left">序列</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">\a</td>
+<td align="left">警告字符，通常为ASCII的BEL字符</td>
+</tr>
+<tr>
+<td align="left">\b</td>
+<td align="left">后退</td>
+</tr>
+<tr>
+<td align="left">\c</td>
+<td align="left">抑制（不显示）输出结果中任何结尾的换行字符（只在%b格式指示符控制下的参数字符串中有效），而且，任何留在参数里的字符、任何接下来的参数以及任何留在格式字符串中的字符，都被忽略</td>
+</tr>
+<tr>
+<td align="left">\f</td>
+<td align="left">换页（formfeed）</td>
+</tr>
+<tr>
+<td align="left">\n</td>
+<td align="left">换行</td>
+</tr>
+<tr>
+<td align="left">\r</td>
+<td align="left">回车（Carriage return）</td>
+</tr>
+<tr>
+<td align="left">\t</td>
+<td align="left">水平制表符</td>
+</tr>
+<tr>
+<td align="left">\v</td>
+<td align="left">垂直制表符</td>
+</tr>
+<tr>
+<td align="left">\</td>
+<td align="left">一个字面上的反斜杠字符</td>
+</tr>
+<tr>
+<td align="left">\ddd</td>
+<td align="left">表示1到3位数八进制值的字符。仅在格式字符串中有效</td>
+</tr>
+<tr>
+<td align="left">\0ddd</td>
+<td align="left">表示1到3位的八进制值字符</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/">Linux初步学习（一）</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-01-02</time><div class="content"><h1 id="Linux初步学习（一）"><a href="#Linux初步学习（一）" class="headerlink" title="Linux初步学习（一）"></a>Linux初步学习（一）</h1><p><strong>菜鸟教程入口：</strong><br><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-tutorial.html">https://www.runoob.com/linux/linux-tutorial.html</a></p>
+<h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><p><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-shell-variable.html">https://www.runoob.com/linux/linux-shell-variable.html</a></p>
+<ul>
+<li><p>Shell 是一个用 C 语言编写的程序，它是用户使用 Linux 的桥梁。Shell 既是一种命令语言，又是一种程序设计语言。</p>
+</li>
+<li><p>Shell 是指一种应用程序，这个应用程序提供了一个界面，用户通过这个界面访问操作系统内核的服务。</p>
+</li>
+<li><p>Ken Thompson 的 sh 是第一种 Unix Shell，Windows Explorer 是一个典型的图形界面 Shell。</p>
+</li>
+</ul>
+<h3 id="shell脚本的扩展名为-sh"><a href="#shell脚本的扩展名为-sh" class="headerlink" title="shell脚本的扩展名为.sh"></a>shell脚本的扩展名为.sh</h3><ul>
+<li>指定shell 解释器</li>
+</ul>
+<p>​        <code>#!/bin/bash</code></p>
+<p>​        <code>#!</code>符号后面指定</p>
+<ul>
+<li><p>运行脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chmod +x ./test.sh  #使脚本具有执行权限</span><br><span class="line">./test.sh  #执行脚本</span><br></pre></td></tr></table></figure></li>
+<li><p>注意此处运行的时候<strong>必须写成</strong><code>./</code>文件名的形式，<strong>直接写</strong>的话<strong>Linux会去Path里面</strong>寻找这个文件，而只有 /bin, /sbin, /usr/bin，/usr/sbin 等在 PATH 里，你的当前目录通常不在 PATH 里，所以写成 test.sh 是会找不到命令的，要用 <code>./test.sh </code>告诉系统说，就在当前目录找。</p>
+</li>
+<li><p>或者作为解释器参数传给解释器以进行运行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/bin/sh test.sh</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="第一个shell程序"><a href="#第一个shell程序" class="headerlink" title="第一个shell程序"></a>第一个shell程序</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">echo &quot;Hello World !&quot;</span><br></pre></td></tr></table></figure>
+
+<p><code>echo</code>是控制台输出</p>
+<p><img src="/imgs/image-20220102115757607.png" alt="image-20220102115757607"></p>
+<h3 id="shell-变量"><a href="#shell-变量" class="headerlink" title="shell 变量"></a>shell 变量</h3><ul>
+<li><p>变量名不能有<code>$</code></p>
+</li>
+<li><p>命名只能使用英文字母，数字和下划线，首个字符不能以数字开头。</p>
+</li>
+<li><p>中间不能有空格，可以使用下划线 **_**。</p>
+</li>
+<li><p>不能使用标点符号。</p>
+</li>
+<li><p>不能使用bash里的关键字（可用help命令查看保留关键字）。</p>
+</li>
+</ul>
+<h3 id="变量赋值"><a href="#变量赋值" class="headerlink" title="变量赋值"></a>变量赋值</h3><p>显式<code>=</code>，或者</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">for file in `ls /etc`</span><br><span class="line">或者</span><br><span class="line">for file in $(ls /etc)</span><br></pre></td></tr></table></figure>
+
+<p>以上语句将 /etc 下目录的文件名循环出来。</p>
+<h3 id="变量使用"><a href="#变量使用" class="headerlink" title="变量使用"></a>变量使用</h3><ul>
+<li>使用一个定义过的变量，只要在变量名前面加美元符号即可</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">your_name=&quot;qinjx&quot;</span><br><span class="line">echo $your_name</span><br><span class="line">echo $&#123;your_name&#125;</span><br></pre></td></tr></table></figure>
+
+<p>花括号的作用是提示编译器这是个变量名</p>
+<p>比如</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">for skill in Ada Coffe Action Java; do</span><br><span class="line">    echo &quot;I am good at $&#123;skill&#125;Script&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<p>如果不给skill变量加花括号，写成echo “I am good at $skillScript”，解释器就会把$skillScript当成一个变量（其值为空），代码执行结果就不是我们期望的样子了。</p>
+<ul>
+<li><p>加上：<img src="/imgs/image-20220102121030726.png" alt="image-20220102121030726"></p>
+</li>
+<li><p>不加但是加了空格：</p>
+</li>
+<li><p><img src="/imgs/image-20220102121227839.png" alt="image-20220102121227839"></p>
+</li>
+</ul>
+<p><strong>花括号加不加都行，不加的时候注意用空格区分开</strong></p>
+<h3 id="变量只读"><a href="#变量只读" class="headerlink" title="变量只读"></a>变量只读</h3><ul>
+<li>使用 readonly 命令可以将变量定义为只读变量，只读变量的值不能被改变。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">myUrl=&quot;https://www.google.com&quot;</span><br><span class="line">readonly myUrl</span><br><span class="line">myUrl=&quot;https://www.runoob.com&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="变量删除"><a href="#变量删除" class="headerlink" title="变量删除"></a>变量删除</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">unset variable_name</span><br></pre></td></tr></table></figure>
+
+<h3 id="变量类型"><a href="#变量类型" class="headerlink" title="变量类型"></a>变量类型</h3><ul>
+<li><strong>1) 局部变量</strong> 局部变量在脚本或命令中定义，仅在当前shell实例中有效，其他shell启动的程序不能访问局部变量。</li>
+<li><strong>2) 环境变量</strong> 所有的程序，包括shell启动的程序，都能访问环境变量，有些程序需要环境变量来保证其正常运行。必要的时候shell脚本也可以定义环境变量。</li>
+<li><strong>3) shell变量</strong> shell变量是由shell程序设置的特殊变量。shell变量中有一部分是环境变量，有一部分是局部变量，这些变量保证了shell的正常运行</li>
+</ul>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p><strong>单引号</strong></p>
+<ul>
+<li>单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；</li>
+<li>单引号字串中不能出现单独一个的单引号（对单引号使用转义符后也不行），但可成对出现，作为字符串拼接使用。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">str=&#x27;this is a string&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><strong>双引号</strong></p>
+<ul>
+<li>双引号里可以有变量</li>
+<li>双引号里可以出现转义字符</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">your_name=<span class="string">&quot;runoob&quot;</span></span><br><span class="line">str=<span class="string">&quot;Hello, I know you are \&quot;<span class="variable">$your_name</span>\&quot;! \n&quot;</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="variable">$str</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>字符串拼接</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">your_name=&quot;runoob&quot;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用双引号拼接</span></span><br><span class="line">greeting=&quot;hello, &quot;$your_name&quot; !&quot;</span><br><span class="line">greeting_1=&quot;hello, $&#123;your_name&#125; !&quot;</span><br><span class="line">echo $greeting  $greeting_1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用单引号拼接</span></span><br><span class="line">greeting_2=&#x27;hello, &#x27;$your_name&#x27; !&#x27;</span><br><span class="line">greeting_3=&#x27;hello, $&#123;your_name&#125; !&#x27;</span><br><span class="line">echo $greeting_2  $greeting_3</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>直接拼接，不需要逗号或者加号等</li>
+</ul>
+<p><strong>子字符串</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">string=&quot;runoob is a great site&quot;</span><br><span class="line">echo $&#123;string:1:4&#125; # 输出 unoo</span><br></pre></td></tr></table></figure>
+
+<p><strong>查找字符串</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">string=<span class="string">&quot;runoob is a great site&quot;</span></span><br><span class="line"><span class="built_in">echo</span> `expr index <span class="string">&quot;<span class="variable">$string</span>&quot;</span> io`  <span class="comment"># 输出 4</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意上面的expr…是反引号，不是单引号</li>
+</ul>
+<p><strong>字符串长度</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">string=<span class="string">&quot;abcd&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#string&#125;</span> <span class="comment">#输出 4</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>字符串长度的其他方法</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">string=<span class="string">&quot;hello,everyone my name is xiaoming&quot;</span></span><br><span class="line">expr length <span class="string">&quot;<span class="variable">$string</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/imgs/image-20220102142331661.png" alt="image-20220102142331661"></p>
+<p>输出6</p>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">数组名=(值1 值2 ... 值n)</span><br><span class="line">array_name=(value0 value1 value2 value3)</span><br><span class="line">array_name=(</span><br><span class="line">value0</span><br><span class="line">value1</span><br><span class="line">value2</span><br><span class="line">value3</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><strong>单独定义变量</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">array_name[0]=value0</span><br><span class="line">array_name[1]=value1</span><br><span class="line">array_name[n]=valuen</span><br></pre></td></tr></table></figure>
+
+<p><strong>读数组内容</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="variable">$&#123;数组名[下标]&#125;</span></span><br><span class="line">valuen=<span class="variable">$&#123;array_name[n]&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>取得数组全部内容</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo $&#123;array_name[@]&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>取得数组长度</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 取得数组元素的个数</span></span><br><span class="line">length=<span class="variable">$&#123;#array_name[@]&#125;</span></span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">length=<span class="variable">$&#123;#array_name[*]&#125;</span></span><br><span class="line"><span class="comment"># 取得数组单个元素的长度</span></span><br><span class="line">lengthn=<span class="variable">$&#123;#array_name[n]&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>注意，可能数组会出现<img src="/imgs/image-20220102141720725.png" alt="image-20220102141720725">这是因为 ubuntu 模式使用的是 dash 模式，如果<strong>不想报错使用 bash 模式</strong></p>
+<p>的报错，此时使用命令 <code>bash xxx.sh</code>  或者 将脚本第一行改为 <code>*#!/bin/bash</code>，执行<code>./example.sh</code>也可以</p>
+<p>输出数组长度的时候可能<strong>不对</strong>，此时输出的是1</p>
+<p><img src="/imgs/image-20220102142013809.png" alt="image-20220102142013809"></p>
+<p>此时也是1</p>
+<p><img src="/imgs/image-20220102142050921.png" alt="image-20220102142050921"></p>
+<p>此代码的输出为</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">array=(0,1,2,3,4,5,6)</span><br><span class="line">echo $&#123;#array[@]&#125;</span><br><span class="line">echo $array</span><br><span class="line">echo $&#123;array[*]&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/imgs/image-20220102142905800.png" alt="image-20220102142905800"></p>
+<ul>
+<li>可以通过给数组设置<strong>下标范围以外</strong>的单元的内容来增加数组的长度</li>
+</ul>
+<h4 id="注意，使用指定下标修改数组比如array-name-0-value0会丢弃该下标后面的其他内容"><a href="#注意，使用指定下标修改数组比如array-name-0-value0会丢弃该下标后面的其他内容" class="headerlink" title="注意，使用指定下标修改数组比如array_name[0]=value0会丢弃该下标后面的其他内容"></a>注意，使用指定下标修改数组比如<code>array_name[0]=value0</code>会丢弃该下标后面的其他内容</h4><h3 id="注意，代码不能随意包含空格，比如等号两边，可能会引起错误"><a href="#注意，代码不能随意包含空格，比如等号两边，可能会引起错误" class="headerlink" title="注意，代码不能随意包含空格，比如等号两边，可能会引起错误"></a>注意，代码不能随意包含空格，比如等号两边，可能会引起错误</h3><h4 id="字符串截取"><a href="#字符串截取" class="headerlink" title="字符串截取"></a>字符串截取</h4><p>参考 <a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-shell-variable.html">https://www.runoob.com/linux/linux-shell-variable.html</a> 第一篇笔记</p>
+<h3 id="读取用户输入"><a href="#读取用户输入" class="headerlink" title="读取用户输入"></a>读取用户输入</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">read</span> [-options] [variable...]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">read -p &quot;input a val:&quot; a    #获取键盘输入的 a 变量数字</span><br><span class="line">read -p &quot;input b val:&quot; b    #获取键盘输入的 b 变量数字</span><br><span class="line">r=$[a+b]                    #计算a+b的结果 赋值给r  不能有空格</span><br><span class="line">echo &quot;result = $&#123;r&#125;&quot;        #输出显示结果 r</span><br></pre></td></tr></table></figure>
+
+<h3 id="shell注释"><a href="#shell注释" class="headerlink" title="shell注释"></a>shell注释</h3><p>以<code>#</code> 开头的行就是注释，会被解释器忽略。</p>
+<ul>
+<li>多行注释</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">:&lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">注释内容...</span></span><br><span class="line"><span class="string">注释内容...</span></span><br><span class="line"><span class="string">注释内容...</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+
+<p>或者任何符号</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">:&lt;&lt;&#x27;</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">&#x27;</span><br><span class="line"></span><br><span class="line">:&lt;&lt;!</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">!</span><br></pre></td></tr></table></figure>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2021/12/21/SolidWorks%E6%89%93%E4%B8%8D%E5%BC%80UG%E5%AF%BC%E5%87%BA%E7%9A%84x-t%E6%96%87%E4%BB%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">SolidWorks打不开UG导出的x_t文件解决方法</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-12-21</time><div class="content"><h1 id="SolidWorks打不开UG导出的x-t-Parasolid-文件解决方法"><a href="#SolidWorks打不开UG导出的x-t-Parasolid-文件解决方法" class="headerlink" title="SolidWorks打不开UG导出的x_t(Parasolid)文件解决方法"></a>SolidWorks打不开UG导出的x_t(Parasolid)文件解决方法</h1><ul>
+<li><p>更改设置</p>
+</li>
+<li><p><img src="/imgs/image-20211221163511577.png" alt="image-20211221163511577"></p>
+</li>
+</ul>
+</div><hr></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-chevron-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2021 - 2022 By FrankZhang</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span><span></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

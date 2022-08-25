@@ -1,363 +1,47 @@
-<!DOCTYPE html>
-<html lang="Chinese">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="Frank·Zhang">
-    
-    <title>
-        
-            Qt网络编程 |
-        
-        Frank&#39;s Blogs
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
-
-    <link rel="shortcut icon" href="/images/FLogo.png">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
-
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
-    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
-  </script>
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-
-<body>
-<div class="progress-bar-container">
-    
-
-    
-</div>
-
-
-<main class="page-container">
-
-    
-
-    <div class="page-main-content">
-
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
-
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                Frank&#39;s Blogs
-            </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/"
-                            >
-                                HOME
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                ARCHIVES
-                            </a>
-                        </li>
-                    
-                    
-                </ul>
-            </div>
-            <div class="mobile">
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/">HOME</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">ARCHIVES</a>
-                </li>
-            
-        </ul>
-    </div>
-
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="fade-in-down-animation">
-    <div class="article-content-container">
-
-        <div class="article-title">
-            <span class="title-hover-animation">Qt网络编程</span>
-        </div>
-
-        
-            <div class="article-header">
-                <div class="avatar">
-                    <img src="/images/FLogo.png">
-                </div>
-                <div class="info">
-                    <div class="author">
-                        <span class="name">Frank·Zhang</span>
-                        
-                            <span class="author-label">Lv5</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-01-17 18:49:55</span>
-        <span class="mobile">2022-01-17 18:49</span>
-    </span>
-    
-    
-
-    
-    
-    
-    
-</div>
-
-                    </div>
-                </div>
-            </div>
-        
-
-        <div class="article-content markdown-body">
-            <h1 id="Qt网络编程"><a href="#Qt网络编程" class="headerlink" title="Qt网络编程"></a>Qt网络编程</h1><h2 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h2><h3 id="获取IP"><a href="#获取IP" class="headerlink" title="获取IP"></a>获取IP</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">getLocalHostIP</span>()</span><br><span class="line">&#123;</span><br><span class="line">    QList&lt;QNetworkInterface&gt; list = QNetworkInterface::<span class="built_in">allInterfaces</span>();</span><br><span class="line">    foreach (QNetworkInterface interface, list)</span><br><span class="line">    &#123;</span><br><span class="line">        QList&lt;QNetworkAddressEntry&gt; entryList = interface.<span class="built_in">addressEntries</span>();</span><br><span class="line">        foreach(QNetworkAddressEntry entry ,entryList)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(entry.<span class="built_in">ip</span>().<span class="built_in">protocol</span>() == QAbstractSocket::IPv4Protocol)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(entry.<span class="built_in">ip</span>().<span class="built_in">toString</span>() == <span class="string">&quot;127.0.0.1&quot;</span>)<span class="keyword">continue</span>;</span><br><span class="line">                comboBox-&gt;<span class="built_in">addItem</span>(entry.<span class="built_in">ip</span>().<span class="built_in">toString</span>());</span><br><span class="line">                IPlist&lt;&lt;entry.<span class="built_in">ip</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html><html lang="Chinese"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Qt网络编程"><meta name="keywords" content=""><meta name="author" content="FrankZhang"><meta name="copyright" content="FrankZhang"><title>Qt网络编程 | Frank’s blogs</title><link rel="shortcut icon" href="/Flogo.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Qt%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">Qt网络编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-number">1.1.</span> <span class="toc-text">服务端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96IP"><span class="toc-number">1.1.1.</span> <span class="toc-text">获取IP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%91%E5%90%AC"><span class="toc-number">1.1.2.</span> <span class="toc-text">监听</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%9C%E6%AD%A2%E7%9B%91%E5%90%AC"><span class="toc-number">1.1.3.</span> <span class="toc-text">停止监听</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E5%AF%B9%E7%94%A8%E6%88%B7%E9%93%BE%E6%8E%A5"><span class="toc-number">1.1.4.</span> <span class="toc-text">应对用户链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%B6%E5%8F%96%E6%B6%88%E6%81%AF"><span class="toc-number">1.1.5.</span> <span class="toc-text">收取消息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF"><span class="toc-number">1.1.6.</span> <span class="toc-text">发送消息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">1.2.</span> <span class="toc-text">客户端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.2.1.</span> <span class="toc-text">链接服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.2.2.</span> <span class="toc-text">断开连接</span></a></li></ol></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">FrankZhang</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">84</span></a></div></div></div><div id="content-outer"><div class="plain" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Frank’s blogs</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right"></span></div></div><div class="layout" id="content-inner"><article id="post"><div class="plain" id="post-title">Qt网络编程</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-01-17</time></div><div class="article-container" id="post-content"><h1 id="Qt网络编程"><a href="#Qt网络编程" class="headerlink" title="Qt网络编程"></a>Qt网络编程</h1><h2 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h2><h3 id="获取IP"><a href="#获取IP" class="headerlink" title="获取IP"></a>获取IP</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">getLocalHostIP</span>()</span><br><span class="line">&#123;</span><br><span class="line">    QList&lt;QNetworkInterface&gt; list = QNetworkInterface::<span class="built_in">allInterfaces</span>();</span><br><span class="line">    foreach (QNetworkInterface interface, list)</span><br><span class="line">    &#123;</span><br><span class="line">        QList&lt;QNetworkAddressEntry&gt; entryList = interface.<span class="built_in">addressEntries</span>();</span><br><span class="line">        foreach(QNetworkAddressEntry entry ,entryList)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(entry.<span class="built_in">ip</span>().<span class="built_in">protocol</span>() == QAbstractSocket::IPv4Protocol)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(entry.<span class="built_in">ip</span>().<span class="built_in">toString</span>() == <span class="string">&quot;127.0.0.1&quot;</span>)<span class="keyword">continue</span>;</span><br><span class="line">                comboBox-&gt;<span class="built_in">addItem</span>(entry.<span class="built_in">ip</span>().<span class="built_in">toString</span>());</span><br><span class="line">                IPlist&lt;&lt;entry.<span class="built_in">ip</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><code>allInterfaces()</code>获取本地的所有网络接口，比如wlan，本地连接等等，然后使用<code>addressEntries()</code>获取所有IP地址，使用<code>IPv4Protocol</code>筛选所有的IPv4地址，进行连接，同时在</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(entry.<span class="built_in">ip</span>().<span class="built_in">toString</span>() == <span class="string">&quot;127.0.0.1&quot;</span>)<span class="keyword">continue</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(entry.<span class="built_in">ip</span>().<span class="built_in">toString</span>() == <span class="string">&quot;127.0.0.1&quot;</span>)<span class="keyword">continue</span>;</span><br></pre></td></tr></table></figure>
 
 <p>中筛选去掉本地IP，只留下有意义的（可以从外部连接的）IP地址。</p>
-<h3 id="监听"><a href="#监听" class="headerlink" title="监听"></a>监听</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">startListen</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(comboBox-&gt;<span class="built_in">currentIndex</span>() != <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;start Listen&quot;</span>&lt;&lt;endl;</span><br><span class="line">        tcpServer-&gt;<span class="built_in">listen</span>(IPlist[comboBox-&gt;<span class="built_in">currentIndex</span>()], spinBox-&gt;<span class="built_in">value</span>());</span><br><span class="line">        btn1-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">        btn2-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">        comboBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">        spinBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">        clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;server IP address:&quot;</span>+comboBox-&gt;<span class="built_in">currentText</span>());</span><br><span class="line">        clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Listening port: &quot;</span>+spinBox-&gt;<span class="built_in">text</span>());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="监听"><a href="#监听" class="headerlink" title="监听"></a>监听</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">startListen</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(comboBox-&gt;<span class="built_in">currentIndex</span>() != <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;start Listen&quot;</span>&lt;&lt;endl;</span><br><span class="line">        tcpServer-&gt;<span class="built_in">listen</span>(IPlist[comboBox-&gt;<span class="built_in">currentIndex</span>()], spinBox-&gt;<span class="built_in">value</span>());</span><br><span class="line">        btn1-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">        btn2-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">        comboBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">        spinBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">        clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;server IP address:&quot;</span>+comboBox-&gt;<span class="built_in">currentText</span>());</span><br><span class="line">        clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Listening port: &quot;</span>+spinBox-&gt;<span class="built_in">text</span>());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>监听就是使用<code>tcpServer</code>对象，监听IP和端口，通过函数传入，等待程序链接</p>
-<h3 id="停止监听"><a href="#停止监听" class="headerlink" title="停止监听"></a>停止监听</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">stopListen</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;stop listen&quot;</span>&lt;&lt;endl;</span><br><span class="line">    tcpServer-&gt;<span class="built_in">close</span>();</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket-&gt;<span class="built_in">state</span>() == tcpSocket-&gt;ConnectedState)</span><br><span class="line">    &#123;</span><br><span class="line">        tcpSocket-&gt;<span class="built_in">disconnectFromHost</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    btn1-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">    btn2-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Stopped Listening: &quot;</span>+spinBox-&gt;<span class="built_in">text</span>());</span><br><span class="line">    comboBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">    spinBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="停止监听"><a href="#停止监听" class="headerlink" title="停止监听"></a>停止监听</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">stopListen</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;stop listen&quot;</span>&lt;&lt;endl;</span><br><span class="line">    tcpServer-&gt;<span class="built_in">close</span>();</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket-&gt;<span class="built_in">state</span>() == tcpSocket-&gt;ConnectedState)</span><br><span class="line">    &#123;</span><br><span class="line">        tcpSocket-&gt;<span class="built_in">disconnectFromHost</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    btn1-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">    btn2-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Stopped Listening: &quot;</span>+spinBox-&gt;<span class="built_in">text</span>());</span><br><span class="line">    comboBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">    spinBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>注意，调用<code>tcpServer-&gt;close()</code>之后，已经连接的客户端还可以继续与主机进行通信，此时需要<code>tcpSocket-&gt;disconnectFromHost();</code>来断开当前连接的客户端与服务器的链接，**注意此时调用的tcpSocket对象是用户连接时候从下面的<code>tcpServer-&gt;nextPendingConnection()</code>获得的Socket对象 **。</p>
-<h3 id="应对用户链接"><a href="#应对用户链接" class="headerlink" title="应对用户链接"></a>应对用户链接</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">clientConnection</span>()</span><br><span class="line">&#123;</span><br><span class="line">    tcpSocket = tcpServer-&gt;<span class="built_in">nextPendingConnection</span>();</span><br><span class="line">    QString ip = tcpSocket-&gt;<span class="built_in">peerAddress</span>().<span class="built_in">toString</span>();</span><br><span class="line">    quint16 port = tcpSocket-&gt;<span class="built_in">peerPort</span>();</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Client IP: &quot;</span>+ip);</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Client port&quot;</span>+QString::<span class="built_in">number</span>(port));</span><br><span class="line"></span><br><span class="line">    <span class="built_in">connect</span>(tcpSocket, <span class="built_in">SIGNAL</span>(<span class="built_in">readyRead</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">recMessage</span>()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="应对用户链接"><a href="#应对用户链接" class="headerlink" title="应对用户链接"></a>应对用户链接</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">clientConnection</span>()</span><br><span class="line">&#123;</span><br><span class="line">    tcpSocket = tcpServer-&gt;<span class="built_in">nextPendingConnection</span>();</span><br><span class="line">    QString ip = tcpSocket-&gt;<span class="built_in">peerAddress</span>().<span class="built_in">toString</span>();</span><br><span class="line">    quint16 port = tcpSocket-&gt;<span class="built_in">peerPort</span>();</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Client IP: &quot;</span>+ip);</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Client port&quot;</span>+QString::<span class="built_in">number</span>(port));</span><br><span class="line"></span><br><span class="line">    <span class="built_in">connect</span>(tcpSocket, <span class="built_in">SIGNAL</span>(<span class="built_in">readyRead</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">recMessage</span>()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>注意用户链接的时候，可以通过<code>tcpServer-&gt;nextPendingConnection();</code>获取用户链接的Socket对象，进而获取<code>tcpSocket-&gt;peerAddress().toString();</code>IP和<code>tcpSocket-&gt;peerPort();</code>端口号</p>
-<h3 id="收取消息"><a href="#收取消息" class="headerlink" title="收取消息"></a>收取消息</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">recMessage</span>()</span><br><span class="line">&#123;</span><br><span class="line">    QString messages = tcpSocket-&gt;<span class="built_in">readAll</span>();</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(messages);</span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;messages&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="收取消息"><a href="#收取消息" class="headerlink" title="收取消息"></a>收取消息</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">recMessage</span>()</span><br><span class="line">&#123;</span><br><span class="line">    QString messages = tcpSocket-&gt;<span class="built_in">readAll</span>();</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(messages);</span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;messages&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
-<h3 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sendMessage</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket-&gt;<span class="built_in">state</span>() == tcpSocket-&gt;ConnectedState)</span><br><span class="line">    &#123;</span><br><span class="line">        tcpSocket-&gt;<span class="built_in">write</span>(send-&gt;<span class="built_in">text</span>().<span class="built_in">toUtf8</span>().<span class="built_in">data</span>());</span><br><span class="line">        clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Server:&quot;</span>+send-&gt;<span class="built_in">text</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sendMessage</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket-&gt;<span class="built_in">state</span>() == tcpSocket-&gt;ConnectedState)</span><br><span class="line">    &#123;</span><br><span class="line">        tcpSocket-&gt;<span class="built_in">write</span>(send-&gt;<span class="built_in">text</span>().<span class="built_in">toUtf8</span>().<span class="built_in">data</span>());</span><br><span class="line">        clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Server:&quot;</span>+send-&gt;<span class="built_in">text</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
 <h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><p>此处仅仅强调客户端与服务器的区别</p>
-<h3 id="链接服务器"><a href="#链接服务器" class="headerlink" title="链接服务器"></a>链接服务器</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">toConnect</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket-&gt;<span class="built_in">state</span>()!=tcpSocket-&gt;ConnectedState)</span><br><span class="line">    &#123;</span><br><span class="line">        QHostAddress hostAdd;</span><br><span class="line">        hostAdd.<span class="built_in">setAddress</span>(ipInput-&gt;<span class="built_in">text</span>());</span><br><span class="line">        textBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Connecting: &quot;</span> + hostAdd.<span class="built_in">toString</span>() + <span class="string">&quot;  ...&quot;</span>);</span><br><span class="line">        tcpSocket-&gt;<span class="built_in">connectToHost</span>(hostAdd, spinBox-&gt;<span class="built_in">value</span>());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="链接服务器"><a href="#链接服务器" class="headerlink" title="链接服务器"></a>链接服务器</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">toConnect</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket-&gt;<span class="built_in">state</span>()!=tcpSocket-&gt;ConnectedState)</span><br><span class="line">    &#123;</span><br><span class="line">        QHostAddress hostAdd;</span><br><span class="line">        hostAdd.<span class="built_in">setAddress</span>(ipInput-&gt;<span class="built_in">text</span>());</span><br><span class="line">        textBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Connecting: &quot;</span> + hostAdd.<span class="built_in">toString</span>() + <span class="string">&quot;  ...&quot;</span>);</span><br><span class="line">        tcpSocket-&gt;<span class="built_in">connectToHost</span>(hostAdd, spinBox-&gt;<span class="built_in">value</span>());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>注意<code>QHostAddress</code>具有从字符串0-255点分格式的IP地址中parse出IP地址的功能（<code>hostAdd.setAddress(ipInput-&gt;text());</code>)</li>
 </ul>
-<h3 id="断开连接"><a href="#断开连接" class="headerlink" title="断开连接"></a>断开连接</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">toDisconnect</span>()</span><br><span class="line">&#123;</span><br><span class="line">    tcpSocket-&gt;<span class="built_in">disconnectFromHost</span>();</span><br><span class="line">    tcpSocket-&gt;<span class="built_in">close</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="断开连接"><a href="#断开连接" class="headerlink" title="断开连接"></a>断开连接</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">toDisconnect</span>()</span><br><span class="line">&#123;</span><br><span class="line">    tcpSocket-&gt;<span class="built_in">disconnectFromHost</span>();</span><br><span class="line">    tcpSocket-&gt;<span class="built_in">close</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>其他与编写服务端类似，在此不再赘述。</p>
-
-        </div>
-
-        
-
-        
-
-        
-            <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/01/18/Qt%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87%E5%B9%B6%E4%B8%94%E6%98%BE%E7%A4%BA/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">Qt网络请求下载图片并且显示</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/2022/01/17/%E5%90%8C%E4%B8%80WiFi%E4%B8%8B%E4%B8%A4%E4%B8%AALinux%E8%AE%BE%E5%A4%87%E4%BD%BF%E7%94%A8scp%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6/"
-                        >
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">同一WiFi下两个Linux设备使用scp传输文件</span>
-                                <span class="post-nav-item">Next posts</span>
-                            </span>
-                            <span class="right arrow-icon flex-center">
-                              <i class="fas fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-        
-    </div>
-</div>
-
-
-                
-            </div>
-
-        </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
-            
-              <span>2021</span>
-              -
-            
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
-        </div>
-        
-        <div class="theme-info info-item">
-            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
-        </div>
-        
-        
-    </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="tools-list">
-        <!-- TOC aside toggle -->
-        
-
-        <!-- go comment -->
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="fas fa-arrow-up"></i>
-            </li>
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
-
-
-    
-
-</main>
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-
-
-
-
-
-<div class="post-scripts">
-    
-</div>
-
-
-
-</body>
-</html>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">FrankZhang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://frankzhang0219.gitee.io/2022/01/17/Qt网络编程/">http://frankzhang0219.gitee.io/2022/01/17/Qt网络编程/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2022/01/18/Qt%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87%E5%B9%B6%E4%B8%94%E6%98%BE%E7%A4%BA/"><i class="fa fa-chevron-left">  </i><span>Qt网络请求下载图片并且显示</span></a></div><div class="next-post pull-right"><a href="/2022/01/17/%E5%90%8C%E4%B8%80WiFi%E4%B8%8B%E4%B8%A4%E4%B8%AALinux%E8%AE%BE%E5%A4%87%E4%BD%BF%E7%94%A8scp%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6/"><span>同一WiFi下两个Linux设备使用scp传输文件</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2021 - 2022 By FrankZhang</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

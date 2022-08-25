@@ -1,161 +1,14 @@
-<!DOCTYPE html>
-<html lang="Chinese">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="Frank·Zhang">
-    
-    <title>
-        
-            C++复习和Qt（一） |
-        
-        Frank&#39;s Blogs
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
-
-    <link rel="shortcut icon" href="/images/FLogo.png">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
-
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
-    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
-  </script>
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-
-<body>
-<div class="progress-bar-container">
-    
-
-    
-</div>
-
-
-<main class="page-container">
-
-    
-
-    <div class="page-main-content">
-
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
-
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                Frank&#39;s Blogs
-            </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/"
-                            >
-                                HOME
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                ARCHIVES
-                            </a>
-                        </li>
-                    
-                    
-                </ul>
-            </div>
-            <div class="mobile">
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/">HOME</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">ARCHIVES</a>
-                </li>
-            
-        </ul>
-    </div>
-
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="fade-in-down-animation">
-    <div class="article-content-container">
-
-        <div class="article-title">
-            <span class="title-hover-animation">C++复习和Qt（一）</span>
-        </div>
-
-        
-            <div class="article-header">
-                <div class="avatar">
-                    <img src="/images/FLogo.png">
-                </div>
-                <div class="info">
-                    <div class="author">
-                        <span class="name">Frank·Zhang</span>
-                        
-                            <span class="author-label">Lv5</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-01-13 23:43:16</span>
-        <span class="mobile">2022-01-13 23:43</span>
-    </span>
-    
-    
-
-    
-    
-    
-    
-</div>
-
-                    </div>
-                </div>
-            </div>
-        
-
-        <div class="article-content markdown-body">
-            <h1 id="C-复习和Qt（Ubuntu）"><a href="#C-复习和Qt（Ubuntu）" class="headerlink" title="C++复习和Qt（Ubuntu）"></a>C++复习和Qt（Ubuntu）</h1><h2 id="namespace"><a href="#namespace" class="headerlink" title="namespace"></a>namespace</h2><ul>
+<!DOCTYPE html><html lang="Chinese"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="C++复习和Qt（一）"><meta name="keywords" content=""><meta name="author" content="FrankZhang"><meta name="copyright" content="FrankZhang"><title>C++复习和Qt（一） | Frank’s blogs</title><link rel="shortcut icon" href="/Flogo.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-%E5%A4%8D%E4%B9%A0%E5%92%8CQt%EF%BC%88Ubuntu%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">C++复习和Qt（Ubuntu）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#namespace"><span class="toc-number">1.1.</span> <span class="toc-text">namespace</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.</span> <span class="toc-text">构造函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.</span> <span class="toc-text">析构函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#this%E6%8C%87%E9%92%88"><span class="toc-number">1.4.</span> <span class="toc-text">this指针</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%A7%E6%89%BF"><span class="toc-number">1.5.</span> <span class="toc-text">继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD"><span class="toc-number">1.6.</span> <span class="toc-text">运算符重载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E6%80%81"><span class="toc-number">1.7.</span> <span class="toc-text">多态</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0"><span class="toc-number">1.7.1.</span> <span class="toc-text">虚函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0"><span class="toc-number">1.7.2.</span> <span class="toc-text">纯虚函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%B0%81%E8%A3%85"><span class="toc-number">1.8.</span> <span class="toc-text">数据封装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB"><span class="toc-number">1.8.1.</span> <span class="toc-text">抽象类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E4%B8%8B%E5%AE%89%E8%A3%85Qt"><span class="toc-number">1.9.</span> <span class="toc-text">Linux下安装Qt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD"><span class="toc-number">1.10.</span> <span class="toc-text">信号与槽</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7"><span class="toc-number">1.10.1.</span> <span class="toc-text">信号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A7%BD"><span class="toc-number">1.10.2.</span> <span class="toc-text">槽</span></a></li></ol></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">FrankZhang</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">84</span></a></div></div></div><div id="content-outer"><div class="plain" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Frank’s blogs</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right"></span></div></div><div class="layout" id="content-inner"><article id="post"><div class="plain" id="post-title">C++复习和Qt（一）</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-01-13</time></div><div class="article-container" id="post-content"><h1 id="C-复习和Qt（Ubuntu）"><a href="#C-复习和Qt（Ubuntu）" class="headerlink" title="C++复习和Qt（Ubuntu）"></a>C++复习和Qt（Ubuntu）</h1><h2 id="namespace"><a href="#namespace" class="headerlink" title="namespace"></a>namespace</h2><ul>
 <li>命名空间的定义</li>
 <li><code>namespace Ui &#123; class MainWindow; class myThread;&#125;</code></li>
 <li>一个命名空间的定义包含两部分：首先是关键字namespace，随后是命名空间的名字。</li>
@@ -164,7 +17,7 @@
 <li>命名空间<strong>结束后无须分号</strong>，这一点与块类似。</li>
 </ul>
 <p><strong>假如在一个类中使用在之后定义的类的对象或者其他内容的话，先在这个类之前使用<code>class &lt;被使用的类名&gt;;</code>声明一下类</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> &lt;</span><span class="class"><span class="keyword">class</span> <span class="title">name</span>&gt;</span> : &lt;访问权限修饰符&gt; &lt;super <span class="class"><span class="keyword">class</span>&gt;</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> &lt;</span><span class="class"><span class="keyword">class</span> <span class="title">name</span>&gt;</span> : &lt;访问权限修饰符&gt; &lt;super <span class="class"><span class="keyword">class</span>&gt;</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>不写权限默认private</li>
@@ -186,7 +39,7 @@
 <li>this 在成员函数的开始前构造，在成员函数的结束后清除。</li>
 <li>this 指针会因编译器不同而有不同的放置位置。可能是栈，也可能是寄存器，甚至全 局变量。</li>
 </ul>
-<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class &lt;class name&gt; : &lt;访问权限修饰符&gt; &lt;super class&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class &lt;class name&gt; : &lt;访问权限修饰符&gt; &lt;super class&gt;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>公有继承（public）：当一个类派生继承公有基类时，基类的公有成员也是派生类的公有成 员，基类的保护成员也是派生类的保护成员，基类的私有成员不能直接被派生类访问，但 是可以通过调用基类的公有和保护成员来访问。</li>
@@ -196,7 +49,7 @@
 <h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><ul>
 <li>运算符重载的实质就是函数重载或函数多态。运算符重载是一种形式的 C++多态。目的在 于让人能够用同名的函数来完成不同的基本操作。</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;返回类型说明符&gt; <span class="keyword">operator</span> &lt;运算符符号&gt;(&lt;参数表&gt;)</span><br><span class="line">&#123;</span><br><span class="line">	&lt;函数体&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&lt;返回类型说明符&gt; <span class="keyword">operator</span> &lt;运算符符号&gt;(&lt;参数表&gt;)</span><br><span class="line">&#123;</span><br><span class="line">	&lt;函数体&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>可重载的函数<ul>
@@ -205,7 +58,7 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#比如有一个dog类，具有一个属性是体重weight</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	...</span><br><span class="line">    Dog <span class="keyword">operator</span>+(<span class="keyword">const</span> Dog &amp;d)</span><br><span class="line">    &#123;</span><br><span class="line">        Dog dog;</span><br><span class="line">        dog.weight = <span class="keyword">this</span>-&gt;weight+d.weight;</span><br><span class="line">        <span class="keyword">return</span> dog;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">#比如有一个dog类，具有一个属性是体重weight</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	...</span><br><span class="line">    Dog <span class="keyword">operator</span>+(<span class="keyword">const</span> Dog &amp;d)</span><br><span class="line">    &#123;</span><br><span class="line">        Dog dog;</span><br><span class="line">        dog.weight = <span class="keyword">this</span>-&gt;weight+d.weight;</span><br><span class="line">        <span class="keyword">return</span> dog;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>注意传入的参数是引用传递</li>
@@ -245,16 +98,16 @@
 <li>如果一个 ABC 的子类需要被实例化，则<strong>必须实现每个虚函数</strong>，这也意味着 C++ 支 持使用 ABC 声明接口。如果没有在派生类中重写纯虚函数，就尝试实例化该类的对象，会导 致编译错误。可用于实例化对象的类被称为具体类。</li>
 </ul>
 <h2 id="Linux下安装Qt"><a href="#Linux下安装Qt" class="headerlink" title="Linux下安装Qt"></a>Linux下安装Qt</h2><ul>
-<li><p><a class="link"   target="_blank" rel="noopener" href="https://download.qt.io/archive/qt/5.12/5.12.9/" >https://download.qt.io/archive/qt/5.12/5.12.9/<i class="fas fa-external-link-alt"></i></a></p>
+<li><p><a target="_blank" rel="noopener" href="https://download.qt.io/archive/qt/5.12/5.12.9/">https://download.qt.io/archive/qt/5.12/5.12.9/</a></p>
 </li>
 <li><p><img src="/_posts/image-20220114004101649.png" alt="image-20220114004101649"></p>
 </li>
 <li><p>然后shell基于执行权限（x)然后运行即可</p>
 </li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x qt-opensource-linux-x64-5.12.9.run</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chmod +x qt-opensource-linux-x64-5.12.9.run</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./qt-opensource-linux-x64-5.12.9.run</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./qt-opensource-linux-x64-5.12.9.run</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>安装开始会要求登录，登录之后选择安装的内容</li>
@@ -264,7 +117,7 @@
 <li>信号（Signal）就是在特定情况下被发射的事件，例如 PushButton 最常见的信号就是鼠标 单击时发射的 clicked() 信号，一个 ComboBox 最常见的信号是选择的列表项变化时发射的 CurrentIndexChanged() 信号。</li>
 <li>槽（Slot）就是对信号响应的函数。槽就是一个函数，与一般的 C++函数是一样的，可以 定义在类的任何部分（public、private 或 protected），可以具有任何参数，也可以被直接调用。 槽函数与一般的函数不同的是：槽函数可以与一个信号关联，当信号被发射时，关联的槽函数 被自动执行。</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QObject::connect(sender, SIGNAL(signal()), receiver, SLOT(slot()));</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QObject::connect(sender, SIGNAL(signal()), receiver, SLOT(slot()));</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>其中，sender 是发射信号的对象的名称，signal() 是信号名称。信号可以看做是特殊的函 数，需要带括号，有参数时还需要指明参数。receiver 是接收信号的对象名称，slot() 是槽函数 的名称，需要带括号，有参数时还需要指明参数。</p>
@@ -272,7 +125,7 @@
 <li><p>使用例</p>
 </li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QObject::connect(pushButton, SIGNAL(clicked()), MainWindow, SLOT(close()));</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">QObject::connect(pushButton, SIGNAL(clicked()), MainWindow, SLOT(close()));</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>其中的pishButton是动作的发出者，MainWindow是信号的接收者</p>
@@ -284,7 +137,7 @@
 <li><p>一个信号可以连接另外一个信号</p>
 </li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">connect(pushButton, SIGNAL(objectNameChanged(QString)),this, SIGNAL(windowTitelChanged(QString)));</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">connect(pushButton, SIGNAL(objectNameChanged(QString)),this, SIGNAL(windowTitelChanged(QString)));</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>当<strong>一个信号发射时，也会发射另外一个信号</strong>，实现某些特殊的功能。</p>
@@ -311,12 +164,12 @@
 <ul>
 <li>mainwindow.h</li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MAINWINDOW_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAINWINDOW_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QMainWindow&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QPushButton&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainWindow</span> :</span> <span class="keyword">public</span> QMainWindow</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MainWindow</span>(QWidget *parent = <span class="literal">nullptr</span>);</span><br><span class="line">    ~<span class="built_in">MainWindow</span>();</span><br><span class="line"></span><br><span class="line">signals:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pushBtnTxtChanged</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> slots:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">changeBtnTxt</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pushBtnClicked</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    QPushButton *pushBtn;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// MAINWINDOW_H</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MAINWINDOW_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAINWINDOW_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QMainWindow&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QPushButton&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainWindow</span> :</span> <span class="keyword">public</span> QMainWindow</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MainWindow</span>(QWidget *parent = <span class="literal">nullptr</span>);</span><br><span class="line">    ~<span class="built_in">MainWindow</span>();</span><br><span class="line"></span><br><span class="line">signals:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pushBtnTxtChanged</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> slots:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">changeBtnTxt</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pushBtnClicked</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    QPushButton *pushBtn;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// MAINWINDOW_H</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>mainwindow.cpp</li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;mainwindow.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">MainWindow::<span class="built_in">MainWindow</span>(QWidget *parent)</span><br><span class="line">    : <span class="built_in">QMainWindow</span>(parent)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;<span class="built_in">resize</span>(<span class="number">800</span>, <span class="number">600</span>);</span><br><span class="line"></span><br><span class="line">    pushBtn = <span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    pushBtn-&gt;<span class="built_in">setText</span>(<span class="string">&quot;I am a Button&quot;</span>);</span><br><span class="line">    <span class="built_in">connect</span>(pushBtn, <span class="built_in">SIGNAL</span>(<span class="built_in">clicked</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">pushBtnClicked</span>()));</span><br><span class="line">    <span class="built_in">connect</span>(<span class="keyword">this</span>, <span class="built_in">SIGNAL</span>(<span class="built_in">pushBtnTxtChanged</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">changeBtnTxt</span>()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MainWindow::~<span class="built_in">MainWindow</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> pushBtn;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> MainWindow:: <span class="built_in">pushBtnClicked</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">emit <span class="title">pushBtnTxtChanged</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::changeBtnTxt</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    pushBtn-&gt;<span class="built_in">setText</span>(<span class="string">&quot;clicked!&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;mainwindow.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">MainWindow::<span class="built_in">MainWindow</span>(QWidget *parent)</span><br><span class="line">    : <span class="built_in">QMainWindow</span>(parent)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;<span class="built_in">resize</span>(<span class="number">800</span>, <span class="number">600</span>);</span><br><span class="line"></span><br><span class="line">    pushBtn = <span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    pushBtn-&gt;<span class="built_in">setText</span>(<span class="string">&quot;I am a Button&quot;</span>);</span><br><span class="line">    <span class="built_in">connect</span>(pushBtn, <span class="built_in">SIGNAL</span>(<span class="built_in">clicked</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">pushBtnClicked</span>()));</span><br><span class="line">    <span class="built_in">connect</span>(<span class="keyword">this</span>, <span class="built_in">SIGNAL</span>(<span class="built_in">pushBtnTxtChanged</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">changeBtnTxt</span>()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MainWindow::~<span class="built_in">MainWindow</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> pushBtn;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> MainWindow:: <span class="built_in">pushBtnClicked</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">emit <span class="title">pushBtnTxtChanged</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::changeBtnTxt</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    pushBtn-&gt;<span class="built_in">setText</span>(<span class="string">&quot;clicked!&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>上面的代码中实现了自定义一个信号<code>pushBtnTxtchanged()</code>，将其通过自定义的槽函数<code>pushBtnClicked()</code>emit出来，然后连接到<code>changeBtnTxt()</code>函数上。通过将自定义的槽函数<code>pushBtnClicked()</code>连接到按钮自带的<code>clicked()</code>信号上，实现按下之后修改按键文字的功能。</p>
@@ -326,177 +179,8 @@
 <li><p><img src="/imgs/image-20220114203057405.png" alt="image-20220114203057405"></p>
 </li>
 </ul>
-
-        </div>
-
-        
-
-        
-
-        
-            <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/01/15/Linux%E4%B8%8B%E6%8C%82%E8%BD%BDU%E7%9B%98%E6%93%8D%E4%BD%9C/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">Linux下挂载U盘操作</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/2022/01/12/C%E6%A0%87%E5%87%86IO%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"
-                        >
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">C标准IO函数使用笔记</span>
-                                <span class="post-nav-item">Next posts</span>
-                            </span>
-                            <span class="right arrow-icon flex-center">
-                              <i class="fas fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-        
-    </div>
-</div>
-
-
-                
-            </div>
-
-        </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
-            
-              <span>2021</span>
-              -
-            
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
-        </div>
-        
-        <div class="theme-info info-item">
-            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
-        </div>
-        
-        
-    </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="tools-list">
-        <!-- TOC aside toggle -->
-        
-
-        <!-- go comment -->
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="fas fa-arrow-up"></i>
-            </li>
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
-
-
-    
-
-</main>
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-
-
-
-
-
-<div class="post-scripts">
-    
-</div>
-
-
-
-</body>
-</html>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">FrankZhang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://frankzhang0219.gitee.io/2022/01/13/Cpp复习和Qt（一）/">http://frankzhang0219.gitee.io/2022/01/13/Cpp复习和Qt（一）/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2022/01/15/Linux%E4%B8%8B%E6%8C%82%E8%BD%BDU%E7%9B%98%E6%93%8D%E4%BD%9C/"><i class="fa fa-chevron-left">  </i><span>Linux下挂载U盘操作</span></a></div><div class="next-post pull-right"><a href="/2022/01/12/C%E6%A0%87%E5%87%86IO%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"><span>C标准IO函数使用笔记</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2021 - 2022 By FrankZhang</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

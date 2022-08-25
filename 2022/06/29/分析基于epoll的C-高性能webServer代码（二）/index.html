@@ -1,167 +1,20 @@
-<!DOCTYPE html>
-<html lang="Chinese">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="Frank·Zhang">
-    
-    <title>
-        
-            分析基于epoll的C++高性能webServer代码（二） |
-        
-        Frank&#39;s Blogs
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
-
-    <link rel="shortcut icon" href="/images/FLogo.png">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
-
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"frankzhang0219.gitee.io","root":"/","language":"Chinese"};
-    KEEP.theme_config = {"toc":{"enable":false,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/FLogo.png","favicon":"/images/FLogo.png","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":false,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
-  </script>
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-
-<body>
-<div class="progress-bar-container">
-    
-
-    
-</div>
-
-
-<main class="page-container">
-
-    
-
-    <div class="page-main-content">
-
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
-
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                Frank&#39;s Blogs
-            </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/"
-                            >
-                                HOME
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                ARCHIVES
-                            </a>
-                        </li>
-                    
-                    
-                </ul>
-            </div>
-            <div class="mobile">
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/">HOME</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">ARCHIVES</a>
-                </li>
-            
-        </ul>
-    </div>
-
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="fade-in-down-animation">
-    <div class="article-content-container">
-
-        <div class="article-title">
-            <span class="title-hover-animation">分析基于epoll的C++高性能webServer代码（二）</span>
-        </div>
-
-        
-            <div class="article-header">
-                <div class="avatar">
-                    <img src="/images/FLogo.png">
-                </div>
-                <div class="info">
-                    <div class="author">
-                        <span class="name">Frank·Zhang</span>
-                        
-                            <span class="author-label">Lv5</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-06-29 12:43:03</span>
-        <span class="mobile">2022-06-29 12:43</span>
-    </span>
-    
-    
-
-    
-    
-    
-    
-</div>
-
-                    </div>
-                </div>
-            </div>
-        
-
-        <div class="article-content markdown-body">
-            <h1 id="分析基于epoll的C-高性能webServer代码（二）"><a href="#分析基于epoll的C-高性能webServer代码（二）" class="headerlink" title="分析基于epoll的C++高性能webServer代码（二）"></a>分析基于epoll的C++高性能webServer代码（二）</h1><h2 id="C-bind-函数用法"><a href="#C-bind-函数用法" class="headerlink" title="C++bind()函数用法"></a>C++<code>bind()</code>函数用法</h2><ul>
-<li><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/dongkun152/article/details/123992292" >参考链接<i class="fas fa-external-link-alt"></i></a></p>
+<!DOCTYPE html><html lang="Chinese"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="分析基于epoll的C++高性能webServer代码（二）"><meta name="keywords" content=""><meta name="author" content="FrankZhang"><meta name="copyright" content="FrankZhang"><title>分析基于epoll的C++高性能webServer代码（二） | Frank’s blogs</title><link rel="shortcut icon" href="/Flogo.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81%EF%BC%88%E4%BA%8C%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">分析基于epoll的C++高性能webServer代码（二）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#C-bind-%E5%87%BD%E6%95%B0%E7%94%A8%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">C++bind()函数用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E4%BB%A5%E7%94%A8std-placeholders-1%E7%AD%89%E6%9B%BF%E6%8D%A2%E5%87%BD%E6%95%B0%E6%9C%AC%E8%BA%AB%E7%9A%84%E8%BE%93%E5%85%A5%E5%8F%82%E6%95%B0"><span class="toc-number">1.1.1.</span> <span class="toc-text">可以用std::placeholders::_1等替换函数本身的输入参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#httpServer%E7%9A%84%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%E5%88%86%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">httpServer的成员函数分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.1.</span> <span class="toc-text">构造函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HandleNewConnection-TcpConnection-ptcpconn"><span class="toc-number">1.2.2.</span> <span class="toc-text">HandleNewConnection(TcpConnection *ptcpconn)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HandleMessage-TcpConnection-ptcpconn-std-string-amp-s"><span class="toc-number">1.2.3.</span> <span class="toc-text">HandleMessage(TcpConnection *ptcpconn, std::string &amp;s)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HttpServer-HandleClose-TcpConnection-ptcpconn"><span class="toc-number">1.3.</span> <span class="toc-text">HttpServer::HandleClose(TcpConnection *ptcpconn)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HttpServer-HandleError-TcpConnection-ptcpconn"><span class="toc-number">1.4.</span> <span class="toc-text">HttpServer::HandleError(TcpConnection *ptcpconn)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HttpServer-Start"><span class="toc-number">1.5.</span> <span class="toc-text">HttpServer::Start()</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">FrankZhang</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">84</span></a></div></div></div><div id="content-outer"><div class="plain" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Frank’s blogs</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right"></span></div></div><div class="layout" id="content-inner"><article id="post"><div class="plain" id="post-title">分析基于epoll的C++高性能webServer代码（二）</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-06-29</time></div><div class="article-container" id="post-content"><h1 id="分析基于epoll的C-高性能webServer代码（二）"><a href="#分析基于epoll的C-高性能webServer代码（二）" class="headerlink" title="分析基于epoll的C++高性能webServer代码（二）"></a>分析基于epoll的C++高性能webServer代码（二）</h1><h2 id="C-bind-函数用法"><a href="#C-bind-函数用法" class="headerlink" title="C++bind()函数用法"></a>C++<code>bind()</code>函数用法</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dongkun152/article/details/123992292">参考链接</a></p>
 </li>
 <li><p>std::bind()函数作为<strong>函数的适配器</strong>，它可以<strong>扩大函数是使用场合</strong>，使得函数更加灵活的被使用。<br>template&lt;class F, class… Args&gt;</p>
 </li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">bind</span>(F&amp;&amp;f, Args&amp;&amp;… args);</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">bind</span>(F&amp;&amp;f, Args&amp;&amp;… args);</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>参数：<br>f 可以是function object，函数指针，函数引用，成员函数指针，或者数据成员的指针。</li>
@@ -170,233 +23,64 @@
 <h3 id="可以用std-placeholders-1等替换函数本身的输入参数"><a href="#可以用std-placeholders-1等替换函数本身的输入参数" class="headerlink" title="可以用std::placeholders::_1等替换函数本身的输入参数"></a>可以用<code>std::placeholders::_1</code>等替换函数本身的输入参数</h3><ul>
 <li>举例：</li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std::placeholders;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; (a -b -c) &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> fn1 = <span class="built_in">bind</span>(func, _1, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">auto</span> fn2 = <span class="built_in">bind</span>(func, <span class="number">2</span>, _1, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">fn1</span>(<span class="number">10</span>);</span><br><span class="line">    <span class="built_in">fn2</span>(<span class="number">10</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出</span></span><br><span class="line"><span class="comment">5</span></span><br><span class="line"><span class="comment">-11</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std::placeholders;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; (a -b -c) &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> fn1 = <span class="built_in">bind</span>(func, _1, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">auto</span> fn2 = <span class="built_in">bind</span>(func, <span class="number">2</span>, _1, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">fn1</span>(<span class="number">10</span>);</span><br><span class="line">    <span class="built_in">fn2</span>(<span class="number">10</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出</span></span><br><span class="line"><span class="comment">5</span></span><br><span class="line"><span class="comment">-11</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>注意上面的三输入函数<code>func</code>使用<code>bind</code>替换掉了其中的两个输入参数，仅仅在<code>placeholder</code>的位置提供一个输入</li>
 <li>注意，当具有多个输入的时候，输入的顺序是按照<code>std::placeholders::_1</code>、<code>std::placeholders::_2</code>、<code>std::placeholders::_3</code>等的顺序</li>
 <li>举例：</li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std::placeholders;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; (a - b -c) &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> fn1= <span class="built_in">bind</span>(func, _2, <span class="number">2</span>, _1);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;the value of function is :&quot;</span>;</span><br><span class="line">    <span class="built_in">fn1</span>(<span class="number">1</span>, <span class="number">13</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> fn2 = <span class="built_in">bind</span>(func, _1, <span class="number">2</span>, _2);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;the value of function after changing placeholder position is :&quot;</span>;</span><br><span class="line">    <span class="built_in">fn2</span>(<span class="number">1</span>, <span class="number">13</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出</span></span><br><span class="line"><span class="comment">the value of function is :10</span></span><br><span class="line"><span class="comment">the value of function after changing placeholder position is :-14</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std::placeholders;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; (a - b -c) &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> fn1= <span class="built_in">bind</span>(func, _2, <span class="number">2</span>, _1);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;the value of function is :&quot;</span>;</span><br><span class="line">    <span class="built_in">fn1</span>(<span class="number">1</span>, <span class="number">13</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> fn2 = <span class="built_in">bind</span>(func, _1, <span class="number">2</span>, _2);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;the value of function after changing placeholder position is :&quot;</span>;</span><br><span class="line">    <span class="built_in">fn2</span>(<span class="number">1</span>, <span class="number">13</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出</span></span><br><span class="line"><span class="comment">the value of function is :10</span></span><br><span class="line"><span class="comment">the value of function after changing placeholder position is :-14</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>注意上面的函数中，fn1的实际输入到func中的参数是<code>func(13, 2, 1)</code>，而输入到fn2中的参数实际上是<code>func(1, 2, 13)</code></li>
 </ul>
 <h2 id="httpServer的成员函数分析"><a href="#httpServer的成员函数分析" class="headerlink" title="httpServer的成员函数分析"></a>httpServer的成员函数分析</h2><ul>
-<li><a class="link"   target="_blank" rel="noopener" href="http://naotu.baidu.com/file/5affaf781a1d7a139d281fba48af613a?token=e03c48870d07da80" >类结构思维导图<i class="fas fa-external-link-alt"></i></a></li>
+<li><a target="_blank" rel="noopener" href="http://naotu.baidu.com/file/5affaf781a1d7a139d281fba48af613a?token=e03c48870d07da80">类结构思维导图</a></li>
 </ul>
 <h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><ul>
 <li>使用初始化列表初始化成员<code>tcpserver_</code>，然后将<code>tcpserver_</code>的函数接口全部初始化为HttpServer提供的处理函数</li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">HttpServer::<span class="built_in">HttpServer</span>(EventLoop *loop, <span class="keyword">int</span> port)</span><br><span class="line">    : <span class="built_in">tcpserver_</span>(loop, port),</span><br><span class="line">    <span class="built_in">cnt</span>(<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    tcpserver_.<span class="built_in">SetNewConnCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleNewConnection, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetMessageCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleMessage, <span class="keyword">this</span>, std::placeholders::_1, std::placeholders::_2));</span><br><span class="line">    tcpserver_.<span class="built_in">SetSendCompleteCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleSendComplete, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetCloseCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleClose, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetErrorCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleError, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">HttpServer::<span class="built_in">HttpServer</span>(EventLoop *loop, <span class="keyword">int</span> port)</span><br><span class="line">    : <span class="built_in">tcpserver_</span>(loop, port),</span><br><span class="line">    <span class="built_in">cnt</span>(<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    tcpserver_.<span class="built_in">SetNewConnCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleNewConnection, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetMessageCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleMessage, <span class="keyword">this</span>, std::placeholders::_1, std::placeholders::_2));</span><br><span class="line">    tcpserver_.<span class="built_in">SetSendCompleteCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleSendComplete, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetCloseCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleClose, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetErrorCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleError, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="HandleNewConnection-TcpConnection-ptcpconn"><a href="#HandleNewConnection-TcpConnection-ptcpconn" class="headerlink" title="HandleNewConnection(TcpConnection *ptcpconn)"></a>HandleNewConnection(TcpConnection *ptcpconn)</h3><ul>
 <li>处理新建立的http连接请求</li>
 <li>新建一个<code>HttpSession</code>对象</li>
 <li>将该对象放入<code>httpsessionlist_</code>中(<code>httpsessionlist_</code>是一个map，通过TcpConnection映射到httpSession对象)</li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleNewConnection</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//std::string msg(s);</span></span><br><span class="line">    HttpSession *phttpsession = <span class="keyword">new</span> <span class="built_in">HttpSession</span>();</span><br><span class="line">    httpsessionnlist_[ptcpconn] = phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleNewConnection</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//std::string msg(s);</span></span><br><span class="line">    HttpSession *phttpsession = <span class="keyword">new</span> <span class="built_in">HttpSession</span>();</span><br><span class="line">    httpsessionnlist_[ptcpconn] = phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="HandleMessage-TcpConnection-ptcpconn-std-string-amp-s"><a href="#HandleMessage-TcpConnection-ptcpconn-std-string-amp-s" class="headerlink" title="HandleMessage(TcpConnection *ptcpconn, std::string &amp;s)"></a>HandleMessage(TcpConnection *ptcpconn, std::string &amp;s)</h3><ul>
 <li>调用<code>httpsessionlist_</code>中的对象处理信息</li>
 <li>将同样的数据发送回发送方（回显）</li>
 <li>处理短链接问题</li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleMessage</span><span class="params">(TcpConnection *ptcpconn, std::string &amp;s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot;http num is:&quot; &lt;&lt; ++cnt &lt;&lt; std::endl;   </span></span><br><span class="line">    HttpSession *phttpsession =  httpsessionnlist_[ptcpconn];</span><br><span class="line">    phttpsession-&gt;<span class="built_in">PraseHttpRequest</span>(s);</span><br><span class="line">    phttpsession-&gt;<span class="built_in">HttpProcess</span>();</span><br><span class="line">    std::string msg;</span><br><span class="line">    phttpsession-&gt;<span class="built_in">AddToBuf</span>(msg);</span><br><span class="line">    ptcpconn-&gt;<span class="built_in">Send</span>(msg);</span><br><span class="line">    <span class="keyword">if</span>(!phttpsession-&gt;<span class="built_in">KeepAlive</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//短连接，可以告诉框架层数据发完就可以关掉TCP连接，不过这里注释掉，还是交给客户端主动关闭吧</span></span><br><span class="line">        <span class="comment">//ptcpconn-&gt;HandleClose();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleMessage</span><span class="params">(TcpConnection *ptcpconn, std::string &amp;s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot;http num is:&quot; &lt;&lt; ++cnt &lt;&lt; std::endl;   </span></span><br><span class="line">    HttpSession *phttpsession =  httpsessionnlist_[ptcpconn];</span><br><span class="line">    phttpsession-&gt;<span class="built_in">PraseHttpRequest</span>(s);</span><br><span class="line">    phttpsession-&gt;<span class="built_in">HttpProcess</span>();</span><br><span class="line">    std::string msg;</span><br><span class="line">    phttpsession-&gt;<span class="built_in">AddToBuf</span>(msg);</span><br><span class="line">    ptcpconn-&gt;<span class="built_in">Send</span>(msg);</span><br><span class="line">    <span class="keyword">if</span>(!phttpsession-&gt;<span class="built_in">KeepAlive</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//短连接，可以告诉框架层数据发完就可以关掉TCP连接，不过这里注释掉，还是交给客户端主动关闭吧</span></span><br><span class="line">        <span class="comment">//ptcpconn-&gt;HandleClose();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><code>HttpProcess()</code>的行为：</li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpSession::HttpProcess</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">&quot;GET&quot;</span> == httprequestcontext_.method)</span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;POST&quot;</span> == httprequestcontext_.method)</span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;HttpServer::HttpParser&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        errormsg = <span class="string">&quot;Method Not Implemented&quot;</span>;</span><br><span class="line">        <span class="built_in">HttpError</span>(<span class="number">501</span>, <span class="string">&quot;Method Not Implemented&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">size_t</span> pos = httprequestcontext_.url.<span class="built_in">find</span>(<span class="string">&quot;?&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(pos != std::string::npos)</span><br><span class="line">    &#123;</span><br><span class="line">        path_ = httprequestcontext_.url.<span class="built_in">substr</span>(<span class="number">0</span>, pos);</span><br><span class="line">        querystring_ = httprequestcontext_.url.<span class="built_in">substr</span>(pos+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        path_ = httprequestcontext_.url;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//keepalive判断处理</span></span><br><span class="line">    std::map&lt;std::string, std::string&gt;::const_iterator iter = httprequestcontext_.header.<span class="built_in">find</span>(<span class="string">&quot;Connection&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        keepalive_ = (iter-&gt;second == <span class="string">&quot;Keep-Alive&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(httprequestcontext_.version == <span class="string">&quot;HTTP/1.1&quot;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            keepalive_ = <span class="literal">true</span>;<span class="comment">//HTTP/1.1默认长连接</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            keepalive_ = <span class="literal">false</span>;<span class="comment">//HTTP/1.0默认短连接</span></span><br><span class="line">        &#125;            </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    responsebody_.<span class="built_in">clear</span>();</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">&quot;/&quot;</span> == path_)</span><br><span class="line">    &#123;        </span><br><span class="line">        path_ = <span class="string">&quot;/index.html&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;/hello&quot;</span> == path_)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//Wenbbench 测试用</span></span><br><span class="line">        std::string <span class="built_in">filetype</span>(<span class="string">&quot;text/html&quot;</span>);</span><br><span class="line">        responsebody_ = (<span class="string">&quot;hello world&quot;</span>);</span><br><span class="line">        responsecontext_ += httprequestcontext_.version + <span class="string">&quot; 200 OK\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Server: Chen Shuaihao&#x27;s NetServer/0.1\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Content-Type: &quot;</span> + filetype + <span class="string">&quot;; charset=utf-8\r\n&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            responsecontext_ += <span class="string">&quot;Connection: &quot;</span> + iter-&gt;second + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Content-Length: &quot;</span> + std::<span class="built_in">to_string</span>(responsebody_.<span class="built_in">size</span>()) + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += responsebody_;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;    </span><br><span class="line"></span><br><span class="line">    <span class="comment">//std::string responsebody;    </span></span><br><span class="line">    path_.<span class="built_in">insert</span>(<span class="number">0</span>,<span class="string">&quot;.&quot;</span>);</span><br><span class="line">    FILE* fp = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span>((fp = <span class="built_in">fopen</span>(path_.<span class="built_in">c_str</span>(), <span class="string">&quot;rb&quot;</span>)) == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//perror(&quot;error fopen&quot;);</span></span><br><span class="line">        <span class="comment">//404 NOT FOUND</span></span><br><span class="line">        <span class="built_in">HttpError</span>(<span class="number">404</span>, <span class="string">&quot;Not Found&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">char</span> buffer[<span class="number">4096</span>];</span><br><span class="line">        <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer));</span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">fread</span>(buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), <span class="number">1</span>, fp) == <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            responsebody_.<span class="built_in">append</span>(buffer);</span><br><span class="line">            <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">feof</span>(fp))</span><br><span class="line">        &#123;</span><br><span class="line">            responsebody_.<span class="built_in">append</span>(buffer);</span><br><span class="line">        &#125;        </span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;error fread&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        &#125;        	</span><br><span class="line">        <span class="built_in">fclose</span>(fp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">std::string <span class="title">filetype</span><span class="params">(<span class="string">&quot;text/html&quot;</span>)</span></span>; <span class="comment">//暂时固定为html</span></span><br><span class="line">    responsecontext_ += httprequestcontext_.version + <span class="string">&quot; 200 OK\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Server: Chen Shuaihao&#x27;s NetServer/0.1\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Content-Type: &quot;</span> + filetype + <span class="string">&quot;; charset=utf-8\r\n&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Connection: &quot;</span> + iter-&gt;second + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Content-Length: &quot;</span> + std::<span class="built_in">to_string</span>(responsebody_.<span class="built_in">size</span>()) + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += responsebody_;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpSession::HttpProcess</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">&quot;GET&quot;</span> == httprequestcontext_.method)</span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;POST&quot;</span> == httprequestcontext_.method)</span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;HttpServer::HttpParser&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        errormsg = <span class="string">&quot;Method Not Implemented&quot;</span>;</span><br><span class="line">        <span class="built_in">HttpError</span>(<span class="number">501</span>, <span class="string">&quot;Method Not Implemented&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">size_t</span> pos = httprequestcontext_.url.<span class="built_in">find</span>(<span class="string">&quot;?&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(pos != std::string::npos)</span><br><span class="line">    &#123;</span><br><span class="line">        path_ = httprequestcontext_.url.<span class="built_in">substr</span>(<span class="number">0</span>, pos);</span><br><span class="line">        querystring_ = httprequestcontext_.url.<span class="built_in">substr</span>(pos+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        path_ = httprequestcontext_.url;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//keepalive判断处理</span></span><br><span class="line">    std::map&lt;std::string, std::string&gt;::const_iterator iter = httprequestcontext_.header.<span class="built_in">find</span>(<span class="string">&quot;Connection&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        keepalive_ = (iter-&gt;second == <span class="string">&quot;Keep-Alive&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(httprequestcontext_.version == <span class="string">&quot;HTTP/1.1&quot;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            keepalive_ = <span class="literal">true</span>;<span class="comment">//HTTP/1.1默认长连接</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            keepalive_ = <span class="literal">false</span>;<span class="comment">//HTTP/1.0默认短连接</span></span><br><span class="line">        &#125;            </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    responsebody_.<span class="built_in">clear</span>();</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">&quot;/&quot;</span> == path_)</span><br><span class="line">    &#123;        </span><br><span class="line">        path_ = <span class="string">&quot;/index.html&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;/hello&quot;</span> == path_)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//Wenbbench 测试用</span></span><br><span class="line">        std::string <span class="built_in">filetype</span>(<span class="string">&quot;text/html&quot;</span>);</span><br><span class="line">        responsebody_ = (<span class="string">&quot;hello world&quot;</span>);</span><br><span class="line">        responsecontext_ += httprequestcontext_.version + <span class="string">&quot; 200 OK\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Server: Chen Shuaihao&#x27;s NetServer/0.1\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Content-Type: &quot;</span> + filetype + <span class="string">&quot;; charset=utf-8\r\n&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            responsecontext_ += <span class="string">&quot;Connection: &quot;</span> + iter-&gt;second + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Content-Length: &quot;</span> + std::<span class="built_in">to_string</span>(responsebody_.<span class="built_in">size</span>()) + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += responsebody_;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;    </span><br><span class="line"></span><br><span class="line">    <span class="comment">//std::string responsebody;    </span></span><br><span class="line">    path_.<span class="built_in">insert</span>(<span class="number">0</span>,<span class="string">&quot;.&quot;</span>);</span><br><span class="line">    FILE* fp = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span>((fp = <span class="built_in">fopen</span>(path_.<span class="built_in">c_str</span>(), <span class="string">&quot;rb&quot;</span>)) == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//perror(&quot;error fopen&quot;);</span></span><br><span class="line">        <span class="comment">//404 NOT FOUND</span></span><br><span class="line">        <span class="built_in">HttpError</span>(<span class="number">404</span>, <span class="string">&quot;Not Found&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">char</span> buffer[<span class="number">4096</span>];</span><br><span class="line">        <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer));</span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">fread</span>(buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), <span class="number">1</span>, fp) == <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            responsebody_.<span class="built_in">append</span>(buffer);</span><br><span class="line">            <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">feof</span>(fp))</span><br><span class="line">        &#123;</span><br><span class="line">            responsebody_.<span class="built_in">append</span>(buffer);</span><br><span class="line">        &#125;        </span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;error fread&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        &#125;        	</span><br><span class="line">        <span class="built_in">fclose</span>(fp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">std::string <span class="title">filetype</span><span class="params">(<span class="string">&quot;text/html&quot;</span>)</span></span>; <span class="comment">//暂时固定为html</span></span><br><span class="line">    responsecontext_ += httprequestcontext_.version + <span class="string">&quot; 200 OK\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Server: Chen Shuaihao&#x27;s NetServer/0.1\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Content-Type: &quot;</span> + filetype + <span class="string">&quot;; charset=utf-8\r\n&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Connection: &quot;</span> + iter-&gt;second + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Content-Length: &quot;</span> + std::<span class="built_in">to_string</span>(responsebody_.<span class="built_in">size</span>()) + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += responsebody_;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="HttpServer-HandleClose-TcpConnection-ptcpconn"><a href="#HttpServer-HandleClose-TcpConnection-ptcpconn" class="headerlink" title="HttpServer::HandleClose(TcpConnection *ptcpconn)"></a>HttpServer::HandleClose(TcpConnection *ptcpconn)</h2><ul>
 <li>通过传入的参数<code>TcpConnecton</code>和map映射找到对应的<code>httpSession</code></li>
 <li>将<code>httpSession</code>从列表中删除</li>
 <li>释放<code>httpSession</code>占用的内存空间</li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleClose</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HttpSession *phttpsession = httpsessionnlist_[ptcpconn];</span><br><span class="line">    httpsessionnlist_.<span class="built_in">erase</span>(ptcpconn);</span><br><span class="line">    <span class="keyword">delete</span> phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleClose</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HttpSession *phttpsession = httpsessionnlist_[ptcpconn];</span><br><span class="line">    httpsessionnlist_.<span class="built_in">erase</span>(ptcpconn);</span><br><span class="line">    <span class="keyword">delete</span> phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="HttpServer-HandleError-TcpConnection-ptcpconn"><a href="#HttpServer-HandleError-TcpConnection-ptcpconn" class="headerlink" title="HttpServer::HandleError(TcpConnection *ptcpconn)"></a>HttpServer::HandleError(TcpConnection *ptcpconn)</h2><ul>
 <li>删除对应的<code>httpSession</code>同上</li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleError</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HttpSession *phttpsession = httpsessionnlist_[ptcpconn];</span><br><span class="line">    httpsessionnlist_.<span class="built_in">erase</span>(ptcpconn);</span><br><span class="line">    <span class="keyword">delete</span> phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleError</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HttpSession *phttpsession = httpsessionnlist_[ptcpconn];</span><br><span class="line">    httpsessionnlist_.<span class="built_in">erase</span>(ptcpconn);</span><br><span class="line">    <span class="keyword">delete</span> phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="HttpServer-Start"><a href="#HttpServer-Start" class="headerlink" title="HttpServer::Start()"></a>HttpServer::Start()</h2><ul>
 <li>直接调用内部的<code>tcpserver</code>成员的<code>start</code>函数</li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::Start</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    tcpserver_.<span class="built_in">Start</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::Start</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    tcpserver_.<span class="built_in">Start</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-        </div>
-
-        
-
-        
-
-        
-            <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81%EF%BC%88%E4%B8%89%EF%BC%89/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">分析基于epoll的C++高性能webServer代码（三）</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81/"
-                        >
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">分析基于epoll的C++高性能webServer代码（一）</span>
-                                <span class="post-nav-item">Next posts</span>
-                            </span>
-                            <span class="right arrow-icon flex-center">
-                              <i class="fas fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-        
-    </div>
-</div>
-
-
-                
-            </div>
-
-        </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
-            
-              <span>2021</span>
-              -
-            
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Frank·Zhang</a>
-        </div>
-        
-        <div class="theme-info info-item">
-            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
-        </div>
-        
-        
-    </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="tools-list">
-        <!-- TOC aside toggle -->
-        
-
-        <!-- go comment -->
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="fas fa-arrow-up"></i>
-            </li>
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
-
-
-    
-
-</main>
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-
-
-
-
-
-<div class="post-scripts">
-    
-</div>
-
-
-
-</body>
-</html>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">FrankZhang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://frankzhang0219.gitee.io/2022/06/29/分析基于epoll的C-高性能webServer代码（二）/">http://frankzhang0219.gitee.io/2022/06/29/分析基于epoll的C-高性能webServer代码（二）/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81%EF%BC%88%E4%B8%89%EF%BC%89/"><i class="fa fa-chevron-left">  </i><span>分析基于epoll的C++高性能webServer代码（三）</span></a></div><div class="next-post pull-right"><a href="/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81/"><span>分析基于epoll的C++高性能webServer代码（一）</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2021 - 2022 By FrankZhang</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>
