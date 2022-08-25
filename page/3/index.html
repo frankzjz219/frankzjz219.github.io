@@ -1,14 +1,174 @@
-<!DOCTYPE html><html lang="Chinese"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content=""><meta name="keywords" content=""><meta name="author" content="FrankZhang"><meta name="copyright" content="FrankZhang"><title>Frank’s blogs</title><link rel="shortcut icon" href="/Flogo.png"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
-  root: '/',
-  algolia: undefined,
-  localSearch: undefined,
-  copy: {
-    success: 'Copy successfully',
-    error: 'Copy error',
-    noSupport: 'The browser does not support'
-  },
-  hexoVersion: '5.4.0'
-} </script><meta name="generator" content="Hexo 5.4.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="author-info"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">FrankZhang</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">84</span></a></div></div></div><nav class="no-bg" id="nav"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Frank’s blogs</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/archives">Archives</a></span><span class="pull-right"></span></div><div id="site-info"><div id="site-title">Frank’s blogs</div><div id="site-sub-title"></div></div></nav><div id="content-outer"><div class="layout" id="content-inner"><div class="recent-post-item article-container"><a class="article-title" href="/2022/03/22/%E4%BD%BF%E7%94%A8%E7%BD%91%E9%A1%B5%E7%89%88%E7%9A%84%E8%A7%A6%E6%8E%A7%E6%9D%BF%E9%81%A5%E6%8E%A7%E7%94%B5%E8%84%91/">使用网页版的触控板遥控电脑</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-03-22</time><div class="content"><h1 id="使用网页版的触控板遥控电脑"><a href="#使用网页版的触控板遥控电脑" class="headerlink" title="使用网页版的触控板遥控电脑"></a>使用网页版的触控板遥控电脑</h1><h2 id="基于flask和pyautogui开发的后端"><a href="#基于flask和pyautogui开发的后端" class="headerlink" title="基于flask和pyautogui开发的后端"></a>基于flask和pyautogui开发的后端</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> make_response</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> send_from_directory</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pyautogui</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">returnIndex</span>():</span></span><br><span class="line">    <span class="keyword">return</span> send_from_directory(<span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;remotePage.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/mousemove&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>, <span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">moveMouse</span>():</span></span><br><span class="line">    data = json.loads(request.get_data())</span><br><span class="line">    xMove = data[<span class="string">&#x27;x&#x27;</span>]</span><br><span class="line">    yMove = data[<span class="string">&#x27;y&#x27;</span>]</span><br><span class="line">    pyautogui.moveRel(xOffset=xMove, yOffset=yMove, duration=<span class="number">0.0</span>, tween=pyautogui.linear)</span><br><span class="line">    <span class="keyword">return</span> json.dumps(<span class="string">&quot; &quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/click&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>, <span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">click</span>():</span></span><br><span class="line">    data = json.loads(request.get_data())</span><br><span class="line">    clickTime = data[<span class="string">&#x27;time&#x27;</span>]</span><br><span class="line">    clickBtn = data[<span class="string">&#x27;btn&#x27;</span>]</span><br><span class="line">    <span class="keyword">if</span> (clickTime == <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">if</span> (clickBtn == <span class="number">1</span>):  <span class="comment"># 左单击</span></span><br><span class="line">            pyautogui.click(x=<span class="literal">None</span>, y=<span class="literal">None</span>, clicks=<span class="number">1</span>, interval=<span class="number">0.0</span>, button=<span class="string">&#x27;left&#x27;</span>, duration=<span class="number">0.0</span>, tween=pyautogui.linear)</span><br><span class="line">        <span class="keyword">else</span>:  <span class="comment"># 右单击</span></span><br><span class="line">            pyautogui.click(x=<span class="literal">None</span>, y=<span class="literal">None</span>, clicks=<span class="number">1</span>, interval=<span class="number">0.0</span>, button=<span class="string">&#x27;right&#x27;</span>, duration=<span class="number">0.0</span>,</span><br><span class="line">                            tween=pyautogui.linear)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> (clickBtn == <span class="number">1</span>):  <span class="comment"># 左双击</span></span><br><span class="line">            pyautogui.doubleClick(x=<span class="literal">None</span>, y=<span class="literal">None</span>, interval=<span class="number">0.0</span>, button=<span class="string">&#x27;left&#x27;</span>, duration=<span class="number">0.0</span>,</span><br><span class="line">                                  tween=pyautogui.linear)</span><br><span class="line">        <span class="keyword">else</span>:  <span class="comment"># 右双击</span></span><br><span class="line">            pyautogui.doubleClick(x=<span class="literal">None</span>, y=<span class="literal">None</span>, interval=<span class="number">0.0</span>, button=<span class="string">&#x27;right&#x27;</span>, duration=<span class="number">0.0</span>,</span><br><span class="line">                                  tween=pyautogui.linear)</span><br><span class="line">    <span class="keyword">return</span> json.dumps(<span class="string">&quot; &quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/key&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>, <span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">keyBoard</span>():</span></span><br><span class="line">    data = json.loads(request.get_data())</span><br><span class="line">    key = data[<span class="string">&#x27;key&#x27;</span>]</span><br><span class="line">    moveType = data[<span class="string">&#x27;move&#x27;</span>]</span><br><span class="line">    <span class="keyword">if</span> (moveType == <span class="number">1</span>):</span><br><span class="line">        pyautogui.keyDown(key)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        pyautogui.keyUp(key)</span><br><span class="line">    <span class="keyword">return</span> json.dumps(<span class="string">&quot; &quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/altTabAndWin&#x27;</span> ,methods = [<span class="string">&#x27;POST&#x27;</span>,<span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">altAndWin</span>():</span></span><br><span class="line">    data = json.loads(request.get_data())</span><br><span class="line">    key = data[<span class="string">&#x27;key&#x27;</span>]</span><br><span class="line">    <span class="keyword">if</span>(key == <span class="string">&#x27;altTab&#x27;</span>):</span><br><span class="line">        pyautogui.hotkey(<span class="string">&#x27;altleft&#x27;</span>, <span class="string">&#x27;tab&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        pyautogui.press(<span class="string">&#x27;winleft&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> json.dumps(<span class="string">&quot; &quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment"># app.config[&#x27;JSON_AS_ASCII&#x27;] = False</span></span><br><span class="line">    app.run(host=<span class="string">&#x27;0.0.0.0&#x27;</span>, port=<span class="number">8080</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+
+
+<html lang="Chinese">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title> Frank’s blogs</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/Flogo.png" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      
+<link rel="stylesheet" href="/css/fonts/remixicon.css">
+
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      
+<section class="cover">
+    
+  <div class="cover-frame">
+    <div class="bg-box">
+      <img src="/images/bkgPic.png" alt="image frame" />
+    </div>
+    <div class="cover-inner text-center text-white">
+      <h1><a href="/">Frank’s blogs</a></h1>
+      <div id="subtitle-box">
+        
+        <span id="subtitle"></span>
+        
+      </div>
+      <div>
+        
+      </div>
+    </div>
+  </div>
+  <div class="cover-learn-more">
+    <a href="javascript:void(0)" class="anchor"><i class="ri-arrow-down-line"></i></a>
+  </div>
+</section>
+
+
+
+<script src="https://cdn.staticfile.org/typed.js/2.0.12/typed.min.js"></script>
+
+
+<!-- Subtitle -->
+
+  <script>
+    try {
+      var typed = new Typed("#subtitle", {
+        strings: ['包含但不限于Linux编程', '算法题总结', 'C/C++/python等开发'],
+        startDelay: 0,
+        typeSpeed: 100,
+        loop: true,
+        backSpeed: 100,
+        showCursor: true
+      });
+    } catch (err) {
+      console.log(err)
+    }
+  </script>
+  
+<div id="main">
+  <section class="outer">
+  
+  
+  
+<div class="notice" style="margin-top:50px">
+    <i class="ri-heart-fill"></i>
+    <div class="notice-content">包含但不限于Linux编程、C/C++开发、算法题等等。</div>
+</div>
+
+
+<style>
+    .notice {
+        padding: 20px;
+        border: 1px dashed #e6e6e6;
+        color: #969696;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        background: #fbfbfb50;
+        border-radius: 10px;
+    }
+
+    .notice i {
+        float: left;
+        color: #999;
+        font-size: 16px;
+        padding-right: 10px;
+        vertical-align: middle;
+        margin-top: -2px;
+    }
+
+    .notice-content {
+        display: initial;
+        vertical-align: middle;
+    }
+</style>
+  
+  <article class="articles">
+    
+    
+    
+    
+    <article
+  id="post-使用网页版的触控板遥控电脑"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/03/22/%E4%BD%BF%E7%94%A8%E7%BD%91%E9%A1%B5%E7%89%88%E7%9A%84%E8%A7%A6%E6%8E%A7%E6%9D%BF%E9%81%A5%E6%8E%A7%E7%94%B5%E8%84%91/"
+    >使用网页版的触控板遥控电脑</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/03/22/%E4%BD%BF%E7%94%A8%E7%BD%91%E9%A1%B5%E7%89%88%E7%9A%84%E8%A7%A6%E6%8E%A7%E6%9D%BF%E9%81%A5%E6%8E%A7%E7%94%B5%E8%84%91/" class="article-date">
+  <time datetime="2022-03-22T10:19:44.000Z" itemprop="datePublished">2022-03-22</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="使用网页版的触控板遥控电脑"><a href="#使用网页版的触控板遥控电脑" class="headerlink" title="使用网页版的触控板遥控电脑"></a>使用网页版的触控板遥控电脑</h1><h2 id="基于flask和pyautogui开发的后端"><a href="#基于flask和pyautogui开发的后端" class="headerlink" title="基于flask和pyautogui开发的后端"></a>基于flask和pyautogui开发的后端</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> make_response</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> send_from_directory</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pyautogui</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">returnIndex</span>():</span></span><br><span class="line">    <span class="keyword">return</span> send_from_directory(<span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;remotePage.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/mousemove&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>, <span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">moveMouse</span>():</span></span><br><span class="line">    data = json.loads(request.get_data())</span><br><span class="line">    xMove = data[<span class="string">&#x27;x&#x27;</span>]</span><br><span class="line">    yMove = data[<span class="string">&#x27;y&#x27;</span>]</span><br><span class="line">    pyautogui.moveRel(xOffset=xMove, yOffset=yMove, duration=<span class="number">0.0</span>, tween=pyautogui.linear)</span><br><span class="line">    <span class="keyword">return</span> json.dumps(<span class="string">&quot; &quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/click&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>, <span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">click</span>():</span></span><br><span class="line">    data = json.loads(request.get_data())</span><br><span class="line">    clickTime = data[<span class="string">&#x27;time&#x27;</span>]</span><br><span class="line">    clickBtn = data[<span class="string">&#x27;btn&#x27;</span>]</span><br><span class="line">    <span class="keyword">if</span> (clickTime == <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">if</span> (clickBtn == <span class="number">1</span>):  <span class="comment"># 左单击</span></span><br><span class="line">            pyautogui.click(x=<span class="literal">None</span>, y=<span class="literal">None</span>, clicks=<span class="number">1</span>, interval=<span class="number">0.0</span>, button=<span class="string">&#x27;left&#x27;</span>, duration=<span class="number">0.0</span>, tween=pyautogui.linear)</span><br><span class="line">        <span class="keyword">else</span>:  <span class="comment"># 右单击</span></span><br><span class="line">            pyautogui.click(x=<span class="literal">None</span>, y=<span class="literal">None</span>, clicks=<span class="number">1</span>, interval=<span class="number">0.0</span>, button=<span class="string">&#x27;right&#x27;</span>, duration=<span class="number">0.0</span>,</span><br><span class="line">                            tween=pyautogui.linear)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> (clickBtn == <span class="number">1</span>):  <span class="comment"># 左双击</span></span><br><span class="line">            pyautogui.doubleClick(x=<span class="literal">None</span>, y=<span class="literal">None</span>, interval=<span class="number">0.0</span>, button=<span class="string">&#x27;left&#x27;</span>, duration=<span class="number">0.0</span>,</span><br><span class="line">                                  tween=pyautogui.linear)</span><br><span class="line">        <span class="keyword">else</span>:  <span class="comment"># 右双击</span></span><br><span class="line">            pyautogui.doubleClick(x=<span class="literal">None</span>, y=<span class="literal">None</span>, interval=<span class="number">0.0</span>, button=<span class="string">&#x27;right&#x27;</span>, duration=<span class="number">0.0</span>,</span><br><span class="line">                                  tween=pyautogui.linear)</span><br><span class="line">    <span class="keyword">return</span> json.dumps(<span class="string">&quot; &quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/key&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>, <span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">keyBoard</span>():</span></span><br><span class="line">    data = json.loads(request.get_data())</span><br><span class="line">    key = data[<span class="string">&#x27;key&#x27;</span>]</span><br><span class="line">    moveType = data[<span class="string">&#x27;move&#x27;</span>]</span><br><span class="line">    <span class="keyword">if</span> (moveType == <span class="number">1</span>):</span><br><span class="line">        pyautogui.keyDown(key)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        pyautogui.keyUp(key)</span><br><span class="line">    <span class="keyword">return</span> json.dumps(<span class="string">&quot; &quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/altTabAndWin&#x27;</span> ,methods = [<span class="string">&#x27;POST&#x27;</span>,<span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">altAndWin</span>():</span></span><br><span class="line">    data = json.loads(request.get_data())</span><br><span class="line">    key = data[<span class="string">&#x27;key&#x27;</span>]</span><br><span class="line">    <span class="keyword">if</span>(key == <span class="string">&#x27;altTab&#x27;</span>):</span><br><span class="line">        pyautogui.hotkey(<span class="string">&#x27;altleft&#x27;</span>, <span class="string">&#x27;tab&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        pyautogui.press(<span class="string">&#x27;winleft&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> json.dumps(<span class="string">&quot; &quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment"># app.config[&#x27;JSON_AS_ASCII&#x27;] = False</span></span><br><span class="line">    app.run(host=<span class="string">&#x27;0.0.0.0&#x27;</span>, port=<span class="number">8080</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h2 id="前端html"><a href="#前端html" class="headerlink" title="前端html"></a>前端html</h2><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span> = <span class="string">&quot;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- &lt;div id = &quot;div1&quot;&gt;0, 0&lt;/div&gt; --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- &lt;button id=&quot;Mup&quot; style=&quot;width: 10%; height: 30px; left: 45%;top:10px;position:absolute&quot; onmousedown=&quot;handleMDown(event)&quot;onmouseup = &quot;handleMUp(event)&quot;&gt;↑&lt;/button&gt;</span></span><br><span class="line"><span class="comment">&lt;button id=&quot;Mleft&quot; style=&quot;width: 10%; height: 30px; left: 20%;top:60px;position:absolute&quot; onmousedown=&quot;handleMDown(event)&quot;onmouseup = &quot;handleMUp(event)&quot;&gt;←&lt;/button&gt;</span></span><br><span class="line"><span class="comment">&lt;button id=&quot;Mright&quot; style=&quot;width: 10%; height: 30px; left: 70%;top: 60px;position:absolute&quot; onmousedown=&quot;handleMDown(event)&quot;onmouseup = &quot;handleMUp(event)&quot;&gt;→&lt;/button&gt;</span></span><br><span class="line"><span class="comment">&lt;button id=&quot;Mdown&quot; style=&quot;width: 10%; height: 30px; left: 45%;top:110px;position:absolute&quot; onmousedown=&quot;handleMDown(event)&quot;onmouseup = &quot;handleMUp(event)&quot;&gt;↓&lt;/button&gt; --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;click&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 12%; height: 30px; left: 20%;top:160px;position:absolute&quot;</span><span class="attr">onclick</span> = <span class="string">&quot;handleClick(event);&quot;</span>&gt;</span>左击<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;dClick&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 12%; height: 30px; left: 44%;top:160px;position:absolute&quot;</span><span class="attr">onclick</span> = <span class="string">&quot;handleClick(event);&quot;</span>&gt;</span>双击<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;rClick&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 12%; height: 30px; left: 68%;top:160px;position:absolute&quot;</span><span class="attr">onclick</span> = <span class="string">&quot;handleClick(event);&quot;</span>&gt;</span>右击<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">hr</span> <span class="attr">style</span>=<span class="string">&quot;top:190px;position:relative&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;esc&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 20%;top:200px;position:absolute&quot;</span> <span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span> <span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>Esc<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot; &quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 30%; height: 30px; left: 35%;top:200px;position:absolute&quot;</span> <span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span> <span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>Space<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;enter&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 70%;top:200px;position:absolute&quot;</span><span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span> <span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>Enter<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;left&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 20%;top:240px;position:absolute&quot;</span><span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span><span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>l<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;up&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 35%;top:240px;position:absolute&quot;</span><span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span><span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>u<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;down&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 55%;top:240px;position:absolute&quot;</span><span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span><span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>d<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;right&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 70%;top:240px;position:absolute&quot;</span><span class="attr">onmousedown</span>=<span class="string">&quot;handleDown(event)&quot;</span><span class="attr">onmouseup</span>=<span class="string">&quot;handleUp(event)&quot;</span>&gt;</span>r<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;altTab&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 20%;top:280px;position:absolute&quot;</span><span class="attr">onclick</span> = <span class="string">&quot;handleClick(event);&quot;</span>&gt;</span>AltTab<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span> = <span class="string">&quot;Win&quot;</span> <span class="attr">style</span> = <span class="string">&quot;width: 10%; height: 30px; left: 70%;top:280px;position:absolute&quot;</span><span class="attr">onclick</span> = <span class="string">&quot;handleClick(event);&quot;</span>&gt;</span>Win<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="comment">// mouseXPrev = window.event.clientX;</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// mouseYPrev = window.touch.pageY;</span></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">mouseXPrev = -<span class="number">1</span>;</span></span><br><span class="line"><span class="javascript">mouseYPrev = -<span class="number">1</span>;</span></span><br><span class="line"><span class="javascript"><span class="comment">// event.preventDefault();</span></span></span><br><span class="line"><span class="javascript"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;touchstart&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript"></span>&#123;</span></span><br><span class="line"><span class="javascript">    event.preventDefault();</span></span><br><span class="line"><span class="javascript">    mouseXPrev = event.targetTouches[<span class="number">0</span>].pageX;</span></span><br><span class="line"><span class="javascript">    mouseYPrev = event.targetTouches[<span class="number">0</span>].pageY;</span></span><br><span class="line"><span class="javascript">    <span class="comment">//document.getElementById(&quot;div1&quot;).value = mouseXPrev + &#x27;, &#x27; + mouseYPrev;</span></span></span><br><span class="line"><span class="javascript">&#125;)</span></span><br><span class="line"><span class="javascript"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;touchmove&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript"></span>&#123;</span></span><br><span class="line"><span class="javascript">    </span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> touch = event.targetTouches[<span class="number">0</span>];</span></span><br><span class="line"><span class="javascript">    <span class="comment">// if(mouseXPrev&lt;0)mouseXPrev = Number(touch.pageX);</span></span></span><br><span class="line"><span class="javascript">    <span class="comment">// if(mouseYPrev&lt;0)mouseYPrev = Number(touch.pageY);</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;x&#x27;</span>:<span class="number">0</span>,<span class="string">&#x27;y&#x27;</span>:<span class="number">0</span>&#125;;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">if</span>(touch.pageY&gt;<span class="number">160</span>)<span class="keyword">return</span>;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> x = <span class="built_in">Number</span>(touch.pageX)-mouseXPrev;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> y = <span class="built_in">Number</span>(touch.pageY)-mouseYPrev;</span></span><br><span class="line"><span class="javascript">    dataToSend[<span class="string">&#x27;x&#x27;</span>] = x;</span></span><br><span class="line"><span class="javascript">    dataToSend[<span class="string">&#x27;y&#x27;</span>] = y;</span></span><br><span class="line"><span class="javascript">    mouseXPrev = <span class="built_in">Number</span>(touch.pageX);</span></span><br><span class="line"><span class="javascript">    mouseYPrev = <span class="built_in">Number</span>(touch.pageY);</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(jsonToSend)</span></span><br><span class="line"><span class="javascript">    $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">        <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">        <span class="attr">url</span>:<span class="string">&quot;mousemove&quot;</span>,</span></span><br><span class="line"><span class="javascript">        <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">        <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">        </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">    &#125;)</span></span><br><span class="line"><span class="javascript">&#125;)</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="comment">/*</span></span></span><br><span class="line"><span class="comment"><span class="javascript">function handleMDown(buttonClicked)</span></span></span><br><span class="line"><span class="comment"><span class="javascript">&#123;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">    switch(buttonClicked.target.id)</span></span></span><br><span class="line"><span class="comment"><span class="javascript">    &#123;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mup&#x27;:Mup = true;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mdown&#x27;:Mdown = true;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mleft&#x27;:Mleft = true;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mright&#x27;:Mright = true;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">    &#125;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">&#125;</span></span></span><br><span class="line"><span class="comment"><span class="javascript"></span></span></span><br><span class="line"><span class="comment"><span class="javascript">function handleMUp(buttonClicked)</span></span></span><br><span class="line"><span class="comment"><span class="javascript">&#123;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">    switch(buttonClicked.target.id)</span></span></span><br><span class="line"><span class="comment"><span class="javascript">    &#123;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mup&#x27;:Mup = false;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mdown&#x27;:Mdown = false;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mleft&#x27;:Mleft = false;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        case &#x27;Mright&#x27;:Mright = false;break;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">    &#125;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">&#125;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">*/</span></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">handleDown</span>(<span class="params">buttonClicked</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript"></span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;key&#x27;</span>:buttonClicked.target.id,<span class="string">&#x27;move&#x27;</span>:<span class="number">1</span>&#125;;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">    <span class="comment">//console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">    $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">        <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">        <span class="attr">url</span>:<span class="string">&quot;key&quot;</span>,</span></span><br><span class="line"><span class="javascript">        <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">        <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">        </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">    &#125;)</span></span><br><span class="line"><span class="javascript">&#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">handleUp</span>(<span class="params">buttonClicked</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript"></span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;key&#x27;</span>:buttonClicked.target.id,<span class="string">&#x27;move&#x27;</span>:<span class="number">2</span>&#125;;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">    <span class="comment">// console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">    $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">        <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">        <span class="attr">url</span>:<span class="string">&quot;key&quot;</span>,</span></span><br><span class="line"><span class="javascript">        <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">        <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">        </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">    &#125;)</span></span><br><span class="line"><span class="javascript">&#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">handleClick</span>(<span class="params">buttonClicked</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript"></span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">switch</span>(buttonClicked.target.id)</span></span><br><span class="line"><span class="javascript">    &#123;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">case</span> <span class="string">&#x27;click&#x27;</span>:</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;time&#x27;</span>:<span class="number">1</span>,<span class="string">&#x27;btn&#x27;</span>:<span class="number">1</span>&#125;;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">            <span class="comment">// console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">            $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">                <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">url</span>:<span class="string">&quot;click&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">                <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">                </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">            &#125;)</span></span><br><span class="line"><span class="javascript">            <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">case</span> <span class="string">&#x27;dClick&#x27;</span>:</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;time&#x27;</span>:<span class="number">2</span>,<span class="string">&#x27;btn&#x27;</span>:<span class="number">1</span>&#125;;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">            <span class="comment">// console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">            $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">                <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">url</span>:<span class="string">&quot;click&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">                <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">                </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">            &#125;)</span></span><br><span class="line"><span class="javascript">            <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">case</span> <span class="string">&#x27;rClick&#x27;</span>:</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;time&#x27;</span>:<span class="number">1</span>,<span class="string">&#x27;btn&#x27;</span>:<span class="number">2</span>&#125;;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">            <span class="comment">// console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">            $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">                <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">url</span>:<span class="string">&quot;click&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">                <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">                </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">            &#125;)</span></span><br><span class="line"><span class="javascript">            <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">case</span> <span class="string">&#x27;altTab&#x27;</span>:</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;key&#x27;</span>:<span class="string">&#x27;altTab&#x27;</span>&#125;;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">            <span class="comment">// console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">            $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">                <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">url</span>:<span class="string">&quot;altTabAndWin&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">                <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">                </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">            &#125;)</span></span><br><span class="line"><span class="javascript">            <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">case</span> <span class="string">&#x27;Win&#x27;</span>:</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> dataToSend = &#123;<span class="string">&#x27;key&#x27;</span>:<span class="string">&#x27;win&#x27;</span>&#125;;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> jsonToSend = <span class="built_in">JSON</span>.stringify(dataToSend);</span></span><br><span class="line"><span class="javascript">            <span class="comment">// console.log(jsonToSend)</span></span></span><br><span class="line"><span class="javascript">            $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">                <span class="attr">type</span>:<span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">url</span>:<span class="string">&quot;altTabAndWin&quot;</span>,</span></span><br><span class="line"><span class="javascript">                <span class="attr">data</span>:jsonToSend,</span></span><br><span class="line"><span class="javascript">                <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">datas</span>)</span></span></span><br><span class="line"><span class="function"><span class="javascript">                </span>&#123;&#125;</span></span><br><span class="line"><span class="javascript">            &#125;)</span></span><br><span class="line"><span class="javascript">            <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">&#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -16,7 +176,53 @@
 <li>前端的要点是调用了<code>event.targetTouches</code>这一属性，获得手指按压或者是触控笔的位置</li>
 <li>此API在计算机端无法使用</li>
 </ul>
-</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/03/03/Ubuntu%E9%85%8D%E7%BD%AEVNC%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%BF%9E%E6%8E%A5Windows%E7%94%B5%E8%84%91/">Ubuntu配置VNC远程桌面连接Windows电脑</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-03-03</time><div class="content"><h1 id="Ubuntu配置VNC远程桌面连接Windows电脑"><a href="#Ubuntu配置VNC远程桌面连接Windows电脑" class="headerlink" title="Ubuntu配置VNC远程桌面连接Windows电脑"></a>Ubuntu配置VNC远程桌面连接Windows电脑</h1><ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-Ubuntu配置VNC远程桌面连接Windows电脑"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/03/03/Ubuntu%E9%85%8D%E7%BD%AEVNC%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%BF%9E%E6%8E%A5Windows%E7%94%B5%E8%84%91/"
+    >Ubuntu配置VNC远程桌面连接Windows电脑</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/03/03/Ubuntu%E9%85%8D%E7%BD%AEVNC%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%BF%9E%E6%8E%A5Windows%E7%94%B5%E8%84%91/" class="article-date">
+  <time datetime="2022-03-03T09:54:22.000Z" itemprop="datePublished">2022-03-03</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Ubuntu配置VNC远程桌面连接Windows电脑"><a href="#Ubuntu配置VNC远程桌面连接Windows电脑" class="headerlink" title="Ubuntu配置VNC远程桌面连接Windows电脑"></a>Ubuntu配置VNC远程桌面连接Windows电脑</h1><ul>
 <li>参考指南<ul>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/295422718">https://zhuanlan.zhihu.com/p/295422718</a></li>
 </ul>
@@ -65,7 +271,53 @@
 <li><p><img src="/imgs/image-20220303181046174.png" alt="image-20220303181046174"></p>
 </li>
 </ul>
-</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/03/02/%E5%9C%A8%E5%9B%BA%E6%80%81%E5%92%8C%E6%9C%BA%E6%A2%B0%E7%9B%98%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu/">在固态和机械盘上安装Ubuntu</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-03-02</time><div class="content"><h1 id="在固态和机械盘上安装Ubuntu"><a href="#在固态和机械盘上安装Ubuntu" class="headerlink" title="在固态和机械盘上安装Ubuntu"></a>在固态和机械盘上安装Ubuntu</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-在固态和机械盘上安装Ubuntu"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/03/02/%E5%9C%A8%E5%9B%BA%E6%80%81%E5%92%8C%E6%9C%BA%E6%A2%B0%E7%9B%98%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu/"
+    >在固态和机械盘上安装Ubuntu</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/03/02/%E5%9C%A8%E5%9B%BA%E6%80%81%E5%92%8C%E6%9C%BA%E6%A2%B0%E7%9B%98%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu/" class="article-date">
+  <time datetime="2022-03-02T03:43:09.000Z" itemprop="datePublished">2022-03-02</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="在固态和机械盘上安装Ubuntu"><a href="#在固态和机械盘上安装Ubuntu" class="headerlink" title="在固态和机械盘上安装Ubuntu"></a>在固态和机械盘上安装Ubuntu</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
 <li>挂载系统不同分区的时候，注意/和/home的空间大小是按照/来计算的，也就是说假如/home是另外挂载在容量更大的机械硬盘上的话，是无法使用的，同样会因为空间超出而导致无法继续使用</li>
 </ul>
 <h2 id="系统映像烧写"><a href="#系统映像烧写" class="headerlink" title="系统映像烧写"></a>系统映像烧写</h2><ul>
@@ -141,7 +393,53 @@
 <li><p>退出BIOS设置，重新启动，可见已经可以进入ubuntu提供的系统选择的界面了</p>
 </li>
 </ul>
-</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/02/27/Linux%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">Linux根文件系统</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-02-27</time><div class="content"><h1 id="Linux根文件系统"><a href="#Linux根文件系统" class="headerlink" title="Linux根文件系统"></a>Linux根文件系统</h1><h2 id="什么是文件系统"><a href="#什么是文件系统" class="headerlink" title="什么是文件系统"></a>什么是文件系统</h2><ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-Linux根文件系统"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/02/27/Linux%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"
+    >Linux根文件系统</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/02/27/Linux%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="article-date">
+  <time datetime="2022-02-27T08:33:12.000Z" itemprop="datePublished">2022-02-27</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Linux根文件系统"><a href="#Linux根文件系统" class="headerlink" title="Linux根文件系统"></a>Linux根文件系统</h1><h2 id="什么是文件系统"><a href="#什么是文件系统" class="headerlink" title="什么是文件系统"></a>什么是文件系统</h2><ul>
 <li><p>根文件系统一般也叫做 rootfs，那么什么叫根文件系统？看到“文件系统”这四个字，很多 人，包括我第一反应就是 FATFS、FAT、EXT4、YAFFS 和 NTFS 等这样的文件系统。在这里， 根文件系统<u>并不是 FATFS 这样的文件系统代码</u>，EXT4 这样的<u>文件系统代码属于 Linux 内核的 一部分</u>。Linux 中的根文件系统更像是<strong>一个文件夹或者叫做目录</strong>(在我看来就是一个文件夹，只 不过是特殊的文件夹)，在这个目录里面<strong>会有很多的子目录。根目录下和子目录中会有很多的文件</strong>，这些文件是 Linux 运行所必须的，比如库、常用的软件和命令、设备文件、配置文件等等。</p>
 </li>
 <li><p>根文件系统首先是内核启动时所 <strong>mount(挂载)的第一个文件系统</strong>，内核代码映像文件保存在 根文件系统中，而系统引导启动程序会在根文件系统挂载之后从中把一些基本的初始化脚本和 服务等加载到内存中去运行。</p>
@@ -188,7 +486,53 @@
 <h3 id="opt目录"><a href="#opt目录" class="headerlink" title="/opt目录"></a>/opt目录</h3><ul>
 <li>可选的文件、软件存放区，由用户选择将哪些文件或软件放到此目录中。</li>
 </ul>
-</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/02/27/Linux%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8%E5%88%86%E6%9E%90/">Linux内核启动分析</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-02-27</time><div class="content"><h1 id="Linux内核启动分析"><a href="#Linux内核启动分析" class="headerlink" title="Linux内核启动分析"></a>Linux内核启动分析</h1><h2 id="start-kernel函数"><a href="#start-kernel函数" class="headerlink" title="start_kernel函数"></a>start_kernel函数</h2><ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-Linux内核启动分析"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/02/27/Linux%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8%E5%88%86%E6%9E%90/"
+    >Linux内核启动分析</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/02/27/Linux%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8%E5%88%86%E6%9E%90/" class="article-date">
+  <time datetime="2022-02-27T02:52:51.000Z" itemprop="datePublished">2022-02-27</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Linux内核启动分析"><a href="#Linux内核启动分析" class="headerlink" title="Linux内核启动分析"></a>Linux内核启动分析</h1><h2 id="start-kernel函数"><a href="#start-kernel函数" class="headerlink" title="start_kernel函数"></a>start_kernel函数</h2><ul>
 <li><p>start_kernel 通过调用众多的子函数来完成 Linux 启动之前的一些初始化工作，由于 start_kernel 函数里面调用的子函数太多，而这些子函数又很复杂，因此我们简单的来看一下一 些重要的子函数。</p>
 </li>
 <li><p>精简后的内容大致如下</p>
@@ -345,7 +689,53 @@
 </ul>
 </li>
 </ul>
-</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/02/25/U-Boot%E5%85%A5%E9%97%A8/">U_Boot入门</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-02-25</time><div class="content"><h1 id="U-Boot入门"><a href="#U-Boot入门" class="headerlink" title="U_Boot入门"></a>U_Boot入门</h1><h2 id="U-Boot简介"><a href="#U-Boot简介" class="headerlink" title="U_Boot简介"></a>U_Boot简介</h2><ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-U-Boot入门"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/02/25/U-Boot%E5%85%A5%E9%97%A8/"
+    >U_Boot入门</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/02/25/U-Boot%E5%85%A5%E9%97%A8/" class="article-date">
+  <time datetime="2022-02-25T12:50:25.000Z" itemprop="datePublished">2022-02-25</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="U-Boot入门"><a href="#U-Boot入门" class="headerlink" title="U_Boot入门"></a>U_Boot入门</h1><h2 id="U-Boot简介"><a href="#U-Boot简介" class="headerlink" title="U_Boot简介"></a>U_Boot简介</h2><ul>
 <li>Linux 系统要启动就必须需要一个 bootloader 程序，也就说芯片上电以后先运行一段 bootloader程序。这段bootloader程序会先初始化DDR等外设，然后将Linux内核从flash(NAND， NOR FLASH，SD，MMC 等)拷贝到 DDR 中，最后启动 Linux 内核。当然了，bootloader 的实 际工作要复杂的多，但是它最主要的工作就是启动 Linux 内核，bootloader 和 Linux 内核的关系 就跟 PC 上的 BIOS 和 Windows 的关系一样，bootloader 就相当于 BIOS。所以我们要先搞定 bootloader，很庆幸，有很多现成的 bootloader 软件可以使用，比如 U-Boot、vivi、RedBoot 等 等，其中以 U-Boot 使用最为广泛，为了方便书写，本书会将 U-Boot 写为 uboot。</li>
 <li>uboot 的全称是 Universal Boot Loader，uboot 是一个遵循 GPL 协议的<strong>开源软件</strong>，uboot <strong>是一 个裸机代码，可以看作是一个裸机综合例程</strong>。现在的 uboot 已经支持液晶屏、网络、USB 等高 级功能。</li>
 <li>uboot 官网为 <a target="_blank" rel="noopener" href="http://www.denx.de/wiki/U-Boot/">http://www.denx.de/wiki/U-Boot/</a></li>
@@ -491,7 +881,53 @@
 <li><p>第 139 行调用 mkdir 命令，创建 KBUILD_OUTPUT 目录，并且将创建成功以后的绝对路 径赋值给 KBUILD_OUTPUT。至此，通过 O 指定的输出目录就存在了。</p>
 </li>
 </ul>
-</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/02/19/DSP28377d%E5%BC%80%E5%90%AFfp_mode%E6%8F%90%E9%AB%98%E6%B5%AE%E7%82%B9%E6%95%B0%E9%99%A4%E6%B3%95%E6%80%A7%E8%83%BD/">DSP28377d开启--fp_mode提高浮点数除法性能</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-02-19</time><div class="content"><h1 id="DSP28377d开启–fp-mode提高浮点数除法性能"><a href="#DSP28377d开启–fp-mode提高浮点数除法性能" class="headerlink" title="DSP28377d开启–fp_mode提高浮点数除法性能"></a>DSP28377d开启–fp_mode提高浮点数除法性能</h1><p>在程序中执行浮点数除法比如</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-DSP28377d开启fp_mode提高浮点数除法性能"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/02/19/DSP28377d%E5%BC%80%E5%90%AFfp_mode%E6%8F%90%E9%AB%98%E6%B5%AE%E7%82%B9%E6%95%B0%E9%99%A4%E6%B3%95%E6%80%A7%E8%83%BD/"
+    >DSP28377d开启--fp_mode提高浮点数除法性能</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/02/19/DSP28377d%E5%BC%80%E5%90%AFfp_mode%E6%8F%90%E9%AB%98%E6%B5%AE%E7%82%B9%E6%95%B0%E9%99%A4%E6%B3%95%E6%80%A7%E8%83%BD/" class="article-date">
+  <time datetime="2022-02-19T10:32:24.000Z" itemprop="datePublished">2022-02-19</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="DSP28377d开启–fp-mode提高浮点数除法性能"><a href="#DSP28377d开启–fp-mode提高浮点数除法性能" class="headerlink" title="DSP28377d开启–fp_mode提高浮点数除法性能"></a>DSP28377d开启–fp_mode提高浮点数除法性能</h1><p>在程序中执行浮点数除法比如</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Speed=(float)1000000/(float)count*speedTemp*15;</span><br></pre></td></tr></table></figure>
 
 <p>的时候会看到如下的提示：</p>
@@ -506,7 +942,53 @@
 <li><p><img src="/imgs/image-20220219183528275.png" alt="image-20220219183528275"></p>
 </li>
 </ul>
-</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/02/18/C%E8%AF%AD%E8%A8%80%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0/">C语言常见内存操作以及系统操作函数</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-02-18</time><div class="content"><h1 id="C语言常见内存操作函数"><a href="#C语言常见内存操作函数" class="headerlink" title="C语言常见内存操作函数"></a>C语言常见内存操作函数</h1><ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-C语言常见内存操作函数"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/02/18/C%E8%AF%AD%E8%A8%80%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0/"
+    >C语言常见内存操作以及系统操作函数</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/02/18/C%E8%AF%AD%E8%A8%80%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0/" class="article-date">
+  <time datetime="2022-02-18T02:31:31.000Z" itemprop="datePublished">2022-02-18</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="C语言常见内存操作函数"><a href="#C语言常见内存操作函数" class="headerlink" title="C语言常见内存操作函数"></a>C语言常见内存操作函数</h1><ul>
 <li>&lt;string.h&gt;目录 <a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-standard-library-string-h.html">https://www.runoob.com/cprogramming/c-standard-library-string-h.html</a></li>
 </ul>
 <h2 id="memcpy"><a href="#memcpy" class="headerlink" title="memcpy()"></a>memcpy()</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">void *memcpy(void *str1, const void *str2, size_t n)</span><br></pre></td></tr></table></figure>
@@ -680,7 +1162,53 @@
 <li><strong>endptr</strong> – 对类型为 char* 的对象的引用，其值由函数设置为 str 中数值后的下一个字符。</li>
 <li><strong>base</strong> – 基数，必须介于 2 和 36（包含）之间，或者是特殊值 0。</li>
 </ul>
-</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/02/16/DSP28377%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/">DSP28377相关知识</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-02-16</time><div class="content"><h1 id="DSP28377相关知识"><a href="#DSP28377相关知识" class="headerlink" title="DSP28377相关知识"></a>DSP28377相关知识</h1><h2 id="BLDC（PWM）相关"><a href="#BLDC（PWM）相关" class="headerlink" title="BLDC（PWM）相关"></a>BLDC（PWM）相关</h2><ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-DSP28377相关知识"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/02/16/DSP28377%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/"
+    >DSP28377相关知识</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/02/16/DSP28377%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/" class="article-date">
+  <time datetime="2022-02-16T07:43:53.000Z" itemprop="datePublished">2022-02-16</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="DSP28377相关知识"><a href="#DSP28377相关知识" class="headerlink" title="DSP28377相关知识"></a>DSP28377相关知识</h1><h2 id="BLDC（PWM）相关"><a href="#BLDC（PWM）相关" class="headerlink" title="BLDC（PWM）相关"></a>BLDC（PWM）相关</h2><ul>
 <li>驱动的PWM中135为一组，246为一组</li>
 <li></li>
 </ul>
@@ -690,7 +1218,53 @@
 <h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2><p>开启中断的步骤</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> “DSP2833x_Device.h”</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> “DSP2833x_Examples.h”</span></span><br><span class="line"></span><br><span class="line">interrupt <span class="keyword">void</span> cpu_TImer0_isr（<span class="keyword">void</span>）;<span class="comment">//声明中断服务函数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main（）</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step1：初始化系统控制、PLL、看门狗、允许外设时钟</span></span><br><span class="line"></span><br><span class="line">    InitSysCtrl（）;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step2：初始化GPIO</span></span><br><span class="line"></span><br><span class="line">    InitGpio（）;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step3：清除所有中断，初始化PIE向量表</span></span><br><span class="line"></span><br><span class="line">    DINT;</span><br><span class="line"></span><br><span class="line">    InitPieCtrl（）; <span class="comment">//初始化PIE控制器</span></span><br><span class="line"></span><br><span class="line">    IER = <span class="number">0x0000</span>; <span class="comment">//禁止CPU中断</span></span><br><span class="line"></span><br><span class="line">    IFR = <span class="number">0x0000</span>; <span class="comment">//清除所有CPU中断标志</span></span><br><span class="line"></span><br><span class="line">    InitPieVectTable（）; <span class="comment">//初始化PIE中断向量表</span></span><br><span class="line"></span><br><span class="line">    EALLOW;</span><br><span class="line"></span><br><span class="line">    PieVectTable.TINT0 = &amp;cpu_TImer0_isr; <span class="comment">//重映射中断向量，指向中断服务程序</span></span><br><span class="line"></span><br><span class="line">    EDIS;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step4：初始化外设模块</span></span><br><span class="line"></span><br><span class="line">    InitCpuTImers（）;</span><br><span class="line"></span><br><span class="line">    ConfigCpuTimer（&amp;CpuTimer0，<span class="number">150</span>，<span class="number">1000000</span>）; <span class="comment">//150MHz，周期1秒</span></span><br><span class="line"></span><br><span class="line">    CpuTimer0Regs.TCR.all = <span class="number">0x4001</span>; <span class="comment">//允许定时器中断，且设置TSS为0启动定时器工作</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//step5：</span></span><br><span class="line"></span><br><span class="line">    IER |= M_INT1; <span class="comment">//允许CPU的INT1中断，该中断连接至TINT0</span></span><br><span class="line"></span><br><span class="line">    PieCtrlRegs.PIEIER1.bit.INTx7 = <span class="number">1</span>; <span class="comment">//在PIE中断组1中允许TINT0中断</span></span><br><span class="line"></span><br><span class="line">    EINT; <span class="comment">//清除全局屏蔽</span></span><br><span class="line"></span><br><span class="line">    ERTM; <span class="comment">//允许全局实时中断</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//step6：循环</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>（<span class="number">1</span>）;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interrupt <span class="keyword">void</span> cpu_timer0_isr（<span class="keyword">void</span>）</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    CpuTimer0.InterruptCount++;</span><br><span class="line"></span><br><span class="line">    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1; <span class="comment">//清除PIE中断组1的应答位，以便CPU再次响应</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/02/16/DSP28377d%E4%B8%8E%E6%97%A0%E5%88%B7%E7%9B%B4%E6%B5%81%E7%94%B5%E6%9C%BA%E7%9A%84%E6%8E%A5%E7%BA%BF%E6%96%B9%E6%B3%95/">DSP28377d与无刷直流电机的接线方法</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-02-16</time><div class="content"><h1 id="DSP28377d与无刷直流电机的接线方法"><a href="#DSP28377d与无刷直流电机的接线方法" class="headerlink" title="DSP28377d与无刷直流电机的接线方法"></a>DSP28377d与无刷直流电机的接线方法</h1><h2 id="霍尔传感器："><a href="#霍尔传感器：" class="headerlink" title="霍尔传感器："></a>霍尔传感器：</h2><ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-DSP28377d与无刷直流电机的接线方法"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/02/16/DSP28377d%E4%B8%8E%E6%97%A0%E5%88%B7%E7%9B%B4%E6%B5%81%E7%94%B5%E6%9C%BA%E7%9A%84%E6%8E%A5%E7%BA%BF%E6%96%B9%E6%B3%95/"
+    >DSP28377d与无刷直流电机的接线方法</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/02/16/DSP28377d%E4%B8%8E%E6%97%A0%E5%88%B7%E7%9B%B4%E6%B5%81%E7%94%B5%E6%9C%BA%E7%9A%84%E6%8E%A5%E7%BA%BF%E6%96%B9%E6%B3%95/" class="article-date">
+  <time datetime="2022-02-16T03:48:12.000Z" itemprop="datePublished">2022-02-16</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="DSP28377d与无刷直流电机的接线方法"><a href="#DSP28377d与无刷直流电机的接线方法" class="headerlink" title="DSP28377d与无刷直流电机的接线方法"></a>DSP28377d与无刷直流电机的接线方法</h1><h2 id="霍尔传感器："><a href="#霍尔传感器：" class="headerlink" title="霍尔传感器："></a>霍尔传感器：</h2><ul>
 <li>程序中指定的CAP霍尔传感器输入引脚为</li>
 </ul>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">InitECap1Gpio(<span class="number">20</span>);</span><br><span class="line">GPIO_SetupPinOptions(<span class="number">20</span>, GPIO_INPUT, GPIO_ASYNC);</span><br><span class="line">InitECap2Gpio(<span class="number">21</span>);</span><br><span class="line">GPIO_SetupPinOptions(<span class="number">21</span>, GPIO_INPUT, GPIO_ASYNC);</span><br><span class="line">InitECap3Gpio(<span class="number">23</span>);</span><br><span class="line">GPIO_SetupPinOptions(<span class="number">23</span>, GPIO_INPUT, GPIO_ASYNC);</span><br></pre></td></tr></table></figure>
@@ -728,8 +1302,355 @@
 <li><p><img src="/imgs/image-20220216120155122.png" alt="image-20220216120155122"></p>
 </li>
 </ul>
-</div><hr></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-chevron-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2021 - 2022 By FrankZhang</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span><span></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
-  $('#nav').addClass('is-mobile')
-  $('footer').addClass('is-mobile')
-  $('#top-container').addClass('is-mobile')
-}</script></body></html>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+  </article>
+  
+
+  
+  <nav class="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/2/">上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/">下一页</a>
+  </nav>
+  
+</section>
+</div>
+
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2021-2022
+        <i class="ri-heart-fill heart_icon"></i> FrankZhang
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>Visitors:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>Views:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/avatar.png" alt="Frank’s blogs"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>
