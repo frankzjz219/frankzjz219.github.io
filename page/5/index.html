@@ -815,71 +815,6 @@
 
     
     <article
-  id="post-LRU缓存机制思路"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/20/LRU%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%80%9D%E8%B7%AF/"
-    >LRU缓存机制思路</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/20/LRU%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%80%9D%E8%B7%AF/" class="article-date">
-  <time datetime="2022-01-20T14:06:38.000Z" itemprop="datePublished">2022-01-20</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="LRU缓存"><a href="#LRU缓存" class="headerlink" title="LRU缓存"></a>LRU缓存</h1><h2 id="程序"><a href="#程序" class="headerlink" title="程序"></a>程序</h2><p>请你设计并实现一个满足  LRU (最近最少使用) 缓存的数据结构。</p>
-<ul>
-<li>LRUCache(int capacity) 以 正整数 作为容量 capacity 初始化 LRU 缓存</li>
-<li>int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。</li>
-<li>void put(int key, int value) 如果关键字 key 已经存在，则变更其数据值 value ；如果不存在，则向缓存中插入该组 key-value 。如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。</li>
-<li>函数 get 和 put 必须以 O(1) 的平均时间复杂度运行。</li>
-</ul>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ul>
-<li><p>使用一个双向链表存储数据，双向链表具有一个头节点和一个尾节点</p>
-</li>
-<li><p>使用一个unordered_map存储每一个键值对的位置指针</p>
-</li>
-<li><p>每一次使用key值对应的node，将其移动到链表的头部</p>
-</li>
-<li><p>容量超出的时候删除链表的末端节点</p>
-</li>
-<li><p><img src="/../imgs/image-20220120221201766.png" alt="image-20220120221201766"></p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
   id="post-修复manjaro不能识别外接显示器并且开启独显"
   class="article article-type-post"
   itemscope
@@ -978,6 +913,71 @@
 <p>点击edit-new-global shortcut-command/URL新建，设置trigger和action即可</p>
 <p><img src="/../imgs/image-20220120105715782.png" alt="image-20220120105715782"></p>
 <p><img src="/../imgs/image-20220120105729191.png" alt="image-20220120105729191"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-LRU缓存机制思路"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/19/LRU%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%80%9D%E8%B7%AF/"
+    >LRU缓存机制思路</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/19/LRU%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%80%9D%E8%B7%AF/" class="article-date">
+  <time datetime="2022-01-19T14:06:38.000Z" itemprop="datePublished">2022-01-19</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="LRU缓存"><a href="#LRU缓存" class="headerlink" title="LRU缓存"></a>LRU缓存</h1><h2 id="程序"><a href="#程序" class="headerlink" title="程序"></a>程序</h2><p>请你设计并实现一个满足  LRU (最近最少使用) 缓存的数据结构。</p>
+<ul>
+<li>LRUCache(int capacity) 以 正整数 作为容量 capacity 初始化 LRU 缓存</li>
+<li>int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。</li>
+<li>void put(int key, int value) 如果关键字 key 已经存在，则变更其数据值 value ；如果不存在，则向缓存中插入该组 key-value 。如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。</li>
+<li>函数 get 和 put 必须以 O(1) 的平均时间复杂度运行。</li>
+</ul>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ul>
+<li><p>使用一个双向链表存储数据，双向链表具有一个头节点和一个尾节点</p>
+</li>
+<li><p>使用一个unordered_map存储每一个键值对的位置指针</p>
+</li>
+<li><p>每一次使用key值对应的node，将其移动到链表的头部</p>
+</li>
+<li><p>容量超出的时候删除链表的末端节点</p>
+</li>
+<li><p><img src="/../imgs/image-20220120221201766.png" alt="image-20220120221201766"></p>
+</li>
+</ul>
  
       <!-- reward -->
       
