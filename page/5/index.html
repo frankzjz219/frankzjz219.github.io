@@ -966,18 +966,6 @@
 <li>void put(int key, int value) 如果关键字 key 已经存在，则变更其数据值 value ；如果不存在，则向缓存中插入该组 key-value 。如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。</li>
 <li>函数 get 和 put 必须以 O(1) 的平均时间复杂度运行。</li>
 </ul>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ul>
-<li><p>使用一个双向链表存储数据，双向链表具有一个头节点和一个尾节点</p>
-</li>
-<li><p>使用一个unordered_map存储每一个键值对的位置指针</p>
-</li>
-<li><p>每一次使用key值对应的node，将其移动到链表的头部</p>
-</li>
-<li><p>容量超出的时候删除链表的末端节点</p>
-</li>
-<li><p><img src="/../imgs/image-20220120221201766.png" alt="image-20220120221201766"></p>
-</li>
-</ul>
  
       <!-- reward -->
       
