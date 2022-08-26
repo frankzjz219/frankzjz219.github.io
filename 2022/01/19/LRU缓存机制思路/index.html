@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">242</span>
+            <span class="post-count">247</span>
         </span>
     </span>
 
@@ -111,11 +111,11 @@
 <li>void put(int key, int value) 如果关键字 key 已经存在，则变更其数据值 value ；如果不存在，则向缓存中插入该组 key-value 。如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。</li>
 <li>函数 get 和 put 必须以 O(1) 的平均时间复杂度运行。</li>
 </ul>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ul>
+<h2 id="程序思路"><a href="#程序思路" class="headerlink" title="程序思路"></a>程序思路</h2><ul>
 <li>使用<strong>双向链表</strong>存储数据，<em>头节点</em>和<em>尾节点</em>另外存储</li>
 <li>使用一个<code>unordered_map</code>存储每一个键值对的指针</li>
-<li>每一次使用对应的指针，将其移动到链表的头部</li>
-<li>容量超过的时候删除链表的末端节点</li>
+<li>每一次使用对应的指针，都将其移动到双向链表的头部</li>
+<li>容量超出的时候删除链表的末端节点</li>
 <li><img src="/imgs/image-12345678.png" alt="image-12345678"></li>
 </ul>
  
