@@ -141,6 +141,445 @@
     
     
     <article
+  id="post-python多线程以及线程同步"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/06/28/python%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BB%A5%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/"
+    >python多线程以及线程同步</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/06/28/python%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BB%A5%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/" class="article-date">
+  <time datetime="2022-06-28T01:22:29.000Z" itemprop="datePublished">2022-06-28</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="python多线程以及线程同步"><a href="#python多线程以及线程同步" class="headerlink" title="python多线程以及线程同步"></a>python多线程以及线程同步</h1><h2 id="多线程基础知识"><a href="#多线程基础知识" class="headerlink" title="多线程基础知识"></a>多线程基础知识</h2><ul>
+<li>python创建多线程主要依靠threading库</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>线程的创建使用<code>Thread()</code>函数，提供的参数为线程的函数指针和函数的参数（必须为可迭代的对象）</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>(<span class="params">num</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num):</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line"></span><br><span class="line">t1=threading.Thread(target=task, args=(<span class="number">3</span>,)) <span class="comment"># 注意此处不能使用args=(3)，否则会因为传入的参数不可迭代导致错误，必须加逗号</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>线程的开始使用<code>start()</code>，使用<code>join()</code>回收线程</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 多线程</span></span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br><span class="line">t3.start()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 回收线程</span></span><br><span class="line">t1.join()</span><br><span class="line">t2.join()</span><br><span class="line">t3.join()</span><br></pre></td></tr></table></figure>
+
+<h2 id="多线程时间测试"><a href="#多线程时间测试" class="headerlink" title="多线程时间测试"></a>多线程时间测试</h2><ul>
+<li>线程执行任务为控制台输出的</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>(<span class="params">num</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num):</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line"></span><br><span class="line">t1=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line">t2=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line">t3=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多线程</span></span><br><span class="line"></span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br><span class="line">t3.start()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 回收线程</span></span><br><span class="line">t1.join()</span><br><span class="line">t2.join()</span><br><span class="line">t3.join()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;多线程用时:%.8f\n&quot;</span>%(time.time()-start))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 单线程</span></span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    task(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">end = time.time()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;单线程用时:%.8f\n&quot;</span>%(end-start))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><img src="/imgs/image-20220628093137346.png" alt="image-20220628093137346"></p>
+<ul>
+<li>可见，多线程用时还更多一些</li>
+</ul>
+</li>
+<li><p>多线程执行不涉及IO的操作（比如加法）</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>(<span class="params">num</span>):</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num):</span><br><span class="line">        count+=<span class="number">1</span></span><br><span class="line"></span><br><span class="line">t1=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line">t2=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line">t3=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多线程</span></span><br><span class="line"></span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br><span class="line">t3.start()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 回收线程</span></span><br><span class="line">t1.join()</span><br><span class="line">t2.join()</span><br><span class="line">t3.join()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;多线程用时:%.8f\n&quot;</span>%(time.time()-start))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 单线程</span></span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    task(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">end = time.time()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;单线程用时:%.8f\n&quot;</span>%(end-start))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>输出结果为<ul>
+<li><img src="/imgs/image-20220628093356210.png" alt="image-20220628093356210"></li>
+<li>可见，单线程比多线程的优势更明显了</li>
+</ul>
+</li>
+</ul>
+<h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><ul>
+<li><p>你会发现多线程比单线程花费的时间还要更多，这是因为GIL的原因。</p>
+<p>GIL的全称是Global Interpreter Lock（全局解释器锁），Python最初的设计理念在于，<u>为了解决多线程之间数据完整性和状态同步的问题，设计为在任意时刻只能由一个线程在解释器中运行</u>。因此Python中的多线程是<strong>表面上的多线程</strong>（同一时刻只有一个线程），不是真正的多线程。</p>
+<p>但是如果是因为GIL的原因，就说多线程无用是不对的，对于IO密集的程序，多线程是要比单线程快的。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1715829331938364561&wfr=spider&for=pc">参考链接</a></p>
+</li>
+</ul>
+<h2 id="python线程同步"><a href="#python线程同步" class="headerlink" title="python线程同步"></a>python线程同步</h2><ul>
+<li>python线程同步具有一些与C类似的机制，比如各种锁和获取、释放锁等等</li>
+<li><a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1714105650396326932&wfr=spider&for=pc">参考链接</a></li>
+</ul>
+<h3 id="同步锁Lock"><a href="#同步锁Lock" class="headerlink" title="同步锁Lock"></a>同步锁Lock</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">lock = threading.Lock()</span><br><span class="line">lock.acquire()</span><br><span class="line">lock.release()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>用于保护临界区</p>
+</li>
+<li><p>由于<code>threading.Lock()</code>对象中实现了<strong>enter__()与__exit</strong>()方法，故我们可以使用<strong>with语句</strong>进行上下文管理形式的加锁解锁操作</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> lock:</span><br><span class="line">    <span class="comment"># 自动加锁</span></span><br><span class="line">    <span class="keyword">global</span> num</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10_000_000</span>):</span><br><span class="line">    num += <span class="number">1</span></span><br><span class="line">    <span class="comment"># 自动解锁</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="RLock-递归锁"><a href="#RLock-递归锁" class="headerlink" title="RLock() 递归锁"></a>RLock() 递归锁</h3><ul>
+<li><p>递归锁是同步锁的一个升级版本，在同步锁的基础上可以做到连续重复使用多次acquire()后再重复使用多次release()的操作，但是一定要注意加锁次数和解锁次数必须一致，否则也将引发死锁现象。</p>
+</li>
+<li><p>其他部分类似，不再详细赘述</p>
+</li>
+</ul>
+<h3 id="Condition-条件锁"><a href="#Condition-条件锁" class="headerlink" title="Condition() 条件锁"></a>Condition() 条件锁</h3><ul>
+<li><p>条件锁是在递归锁的基础上增加了能够暂停线程运行的功能。并且我们可以使用wait()与notify()来控制线程执行的个数。</p>
+<p>注意：条件锁可以自由设定一次放行几个线程。</p>
+</li>
+<li><p><img src="/imgs/838ba61ea8d3fd1fc946d753909e6e1694ca5f61.jpeg" alt="img"></p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">currentRunThreadNumber = <span class="number">0</span></span><br><span class="line">maxSubThreadNumber = <span class="number">10</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    <span class="keyword">global</span> currentRunThreadNumber</span><br><span class="line">    thName = threading.currentThread().name</span><br><span class="line"></span><br><span class="line">    condLock.acquire()  <span class="comment"># 上锁</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;start and wait run thread : %s&quot;</span> % thName)</span><br><span class="line"></span><br><span class="line">    condLock.wait()  <span class="comment"># 暂停线程运行、等待唤醒</span></span><br><span class="line">    currentRunThreadNumber += <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;carry on run thread : %s&quot;</span> % thName)</span><br><span class="line"></span><br><span class="line">    condLock.release()  <span class="comment"># 解锁</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    condLock = threading.Condition()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxSubThreadNumber):</span><br><span class="line">        subThreadIns = threading.Thread(target=task)</span><br><span class="line">        subThreadIns.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> currentRunThreadNumber &lt; maxSubThreadNumber:</span><br><span class="line">        notifyNumber = <span class="built_in">int</span>(</span><br><span class="line">            <span class="built_in">input</span>(<span class="string">&quot;Please enter the number of threads that need to be notified to run：&quot;</span>))</span><br><span class="line"></span><br><span class="line">        condLock.acquire()</span><br><span class="line">        condLock.notify(notifyNumber)  <span class="comment"># 放行</span></span><br><span class="line">        condLock.release()</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;main thread run end&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 先启动10个子线程，然后这些子线程会全部变为等待状态</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-1</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-2</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-3</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-4</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-5</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-6</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-7</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-8</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-9</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-10</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 批量发送通知，放行特定数量的子线程继续运行</span></span><br><span class="line"><span class="comment"># Please enter the number of threads that need to be notified to run：5  # 放行5个</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-4</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-3</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-1</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-2</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-5</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Please enter the number of threads that need to be notified to run：5  # 放行5个</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-8</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-10</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-6</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-9</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-7</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Please enter the number of threads that need to be notified to run：1</span></span><br><span class="line"><span class="comment"># main thread run end</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意，上面的代码中的线程在使用<code>acquire()</code>获取锁之后，进入了休眠状态（也就是<code>wait()</code>），然后等待锁的<code>notify()</code>函数<strong>唤醒相应数量的正在休眠的进程</strong></li>
+</ul>
+<h3 id="Event-事件锁"><a href="#Event-事件锁" class="headerlink" title="Event() 事件锁"></a>Event() 事件锁</h3><ul>
+<li><p>事件锁是基于条件锁来做的，它与条件锁的区别在于一次只能放行全部，不能放行任意个数量的子线程继续运行。</p>
+<p>我们可以将事件锁看为红绿灯，当红灯时所有子线程都暂停运行，并进入“等待”状态，当绿灯时所有子线程都恢复“运行”。</p>
+</li>
+<li><p><img src="/imgs/b3fb43166d224f4ae902e4228a27db5b9922d146.jpeg" alt="img"></p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line">maxSubThreadNumber = <span class="number">3</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    thName = threading.currentThread().name    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;start and wait run thread : %s&quot;</span> % thName)    </span><br><span class="line">    eventLock.wait()  <span class="comment"># 暂停运行，等待绿灯    </span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;green light, %s carry on run&quot;</span> % thName)    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;red light, %s stop run&quot;</span> % thName)    </span><br><span class="line">    eventLock.wait()  <span class="comment"># 暂停运行，等待绿灯    </span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;green light, %s carry on run&quot;</span> % thName)    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;sub thread %s run end&quot;</span> % thName)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:    </span><br><span class="line">    eventLock = threading.Event()    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxSubThreadNumber):        </span><br><span class="line">        subThreadIns = threading.Thread(target=task)        </span><br><span class="line">        subThreadIns.start()    </span><br><span class="line">        eventLock.<span class="built_in">set</span>()  <span class="comment"># 设置为绿灯    </span></span><br><span class="line">        eventLock.clear()  <span class="comment"># 设置为红灯    </span></span><br><span class="line">        eventLock.<span class="built_in">set</span>()  <span class="comment"># 设置为绿灯</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-1</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-2</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-3</span></span><br><span class="line"><span class="comment"># green light, Thread-1 carry on run</span></span><br><span class="line"><span class="comment"># red light, Thread-1 stop run</span></span><br><span class="line"><span class="comment"># green light, Thread-1 carry on run</span></span><br><span class="line"><span class="comment"># sub thread Thread-1 run end</span></span><br><span class="line"><span class="comment"># green light, Thread-3 carry on run</span></span><br><span class="line"><span class="comment"># red light, Thread-3 stop run</span></span><br><span class="line"><span class="comment"># green light, Thread-3 carry on run</span></span><br><span class="line"><span class="comment"># sub thread Thread-3 run end</span></span><br><span class="line"><span class="comment"># green light, Thread-2 carry on run</span></span><br><span class="line"><span class="comment"># red light, Thread-2 stop run</span></span><br><span class="line"><span class="comment"># green light, Thread-2 carry on run</span></span><br><span class="line"><span class="comment"># sub thread Thread-2 run end</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>不能使用<code>with</code>语句进行调用</strong></li>
+</ul>
+<h3 id="Semaphore-信号量锁"><a href="#Semaphore-信号量锁" class="headerlink" title="Semaphore() 信号量锁"></a>Semaphore() 信号量锁</h3><ul>
+<li><p>信号量锁也是根据条件锁来做的，它与条件锁和事件锁的区别如下：</p>
+<ul>
+<li>条件锁：一次可以放行任意个处于“等待”状态的线程</li>
+<li>事件锁：一次可以放行全部的处于“等待”状态的线程</li>
+<li>信号量锁：通过规定，成批的放行<strong>特定个处于“上锁”状态的线程</strong></li>
+</ul>
+</li>
+<li><p><img src="/imgs/0b55b319ebc4b74555e89af84b2c551e8b82153c.jpeg" alt="img"></p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">maxSubThreadNumber = <span class="number">6</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    thName = threading.currentThread().name</span><br><span class="line">    semaLock.acquire()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;run sub thread %s&quot;</span> % thName)</span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line">    semaLock.release()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 每次只能放行2个</span></span><br><span class="line">    semaLock = threading.Semaphore(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxSubThreadNumber):</span><br><span class="line">        subThreadIns = threading.Thread(target=task)</span><br><span class="line">        subThreadIns.start()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># run sub thread Thread-1</span></span><br><span class="line"><span class="comment"># run sub thread Thread-2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># run sub thread Thread-3</span></span><br><span class="line"><span class="comment"># run sub thread Thread-4</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># run sub thread Thread-6</span></span><br><span class="line"><span class="comment"># run sub thread Thread-5</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意调用<code>Semaphore()</code>初始化的时候传递参数<strong>指定同时能够放行的线程数量</strong></li>
+<li>也可以使用<code>with</code>语句</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">maxSubThreadNumber = <span class="number">6</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    thName = threading.currentThread().name</span><br><span class="line">    <span class="keyword">with</span> semaLock:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;run sub thread %s&quot;</span> % thName)</span><br><span class="line">        time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line"></span><br><span class="line">    semaLock = threading.Semaphore(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxSubThreadNumber):</span><br><span class="line">        subThreadIns = threading.Thread(target=task)</span><br><span class="line">        subThreadIns.start()</span><br></pre></td></tr></table></figure>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/06/27/WSL2%E4%B8%8A%E4%BD%BF%E7%94%A8matplotlib%E7%BB%93%E5%90%88VSCode%E8%BF%9C%E7%A8%8B%E4%B8%8D%E6%98%BE%E7%A4%BA%E8%BE%93%E5%87%BA%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"
+    >WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/06/27/WSL2%E4%B8%8A%E4%BD%BF%E7%94%A8matplotlib%E7%BB%93%E5%90%88VSCode%E8%BF%9C%E7%A8%8B%E4%B8%8D%E6%98%BE%E7%A4%BA%E8%BE%93%E5%87%BA%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="article-date">
+  <time datetime="2022-06-27T05:21:29.000Z" itemprop="datePublished">2022-06-27</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法"><a href="#WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法" class="headerlink" title="WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法"></a>WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法</h1><h2 id="报错信息"><a href="#报错信息" class="headerlink" title="报错信息"></a>报错信息</h2><h3 id="问题一般分为两种"><a href="#问题一般分为两种" class="headerlink" title="问题一般分为两种"></a>问题一般分为两种</h3><ul>
+<li>没有报错但是使用<code>plt.show()</code>之后<strong>没有任何输出</strong></li>
+<li>使用<code>matplotlib.use(&#39;Tkagg&#39;)</code>之后出现报错<code>Cannot load backend &#39;TkAgg&#39; which requires the &#39;tk&#39; interactive framework, as &#39;headless&#39; is currently running</code>，或者是<code>_tkinter.TclError: couldn&#39;t connect to display &quot;:0.0&quot;</code><ul>
+<li><img src="/imgs/image-20220627132430453.png" alt="image-20220627132430453"></li>
+</ul>
+</li>
+</ul>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ul>
+<li>开始Import的时候改变顺序</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line">matplotlib.use(<span class="string">&#x27;Tkagg&#x27;</span>) <span class="comment">#这一句修改使用的后端输出设备</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>然后在windows上安装<code>VcXsrv</code>服务器并且启动，具体下载地址为 <a target="_blank" rel="noopener" href="https://sourceforge.net/projects/vcxsrv/">sourceForge</a></p>
+</li>
+<li><p>安装过程中一路选择默认设置</p>
+</li>
+<li><p>然后通过桌面图标启动VcXsrv</p>
+</li>
+<li><p><img src="/imgs/3c06ab6204e183d7f8fcbf6507ef0822_r.jpg" alt="preview"></p>
+</li>
+<li><p><img src="/imgs/43f9d404f8d8db71b566a9d97439229d_r.jpg" alt="preview"></p>
+</li>
+<li><p><img src="/imgs/d0f6d5aaaa26b78d6af77e2a7094fff7_r.jpg" alt="preview"></p>
+</li>
+<li><p><img src="/imgs/v908aa4dd6a4dec03549efd26f418ca49_r.jpg" alt="preview"></p>
+</li>
+<li><p>然后正常情况会弹出Windows防火墙提示，允许访问即可</p>
+</li>
+<li><p>然后修改WSL端的环境</p>
+</li>
+<li><p>首先需要查看Windows系统和WSL2通信使用的<strong>虚拟网卡地址</strong></p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/resolv.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># nameserver后面的地址就是Windows系统虚拟网卡的地址,记一下</span></span><br><span class="line"><span class="comment"># 需要取消下面两行内容的注释,禁用自动重新生成配置文件,否则重启后这个地址会变</span></span><br><span class="line">[network]</span><br><span class="line">generateResolvConf = <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>然后修改<code>.bashrc</code></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim ~/.bashrc</span><br><span class="line"><span class="comment"># 在文件最后追加下面内容,地址使用上面查看到的</span></span><br><span class="line"><span class="built_in">export</span> DISPLAY=&lt;nameServer IP地址&gt;:0</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">source</span> ~/.bashrc </span><br></pre></td></tr></table></figure>
+
+<p>详细可以参考配置<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/150555651">VcXsrv</a></p>
+<ul>
+<li>最终效果</li>
+<li><img src="/imgs/image-20220627133421950.png" alt="image-20220627133421950"></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-C语言使用并行执行的for循环"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/06/22/C%E8%AF%AD%E8%A8%80%E4%BD%BF%E7%94%A8%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C%E7%9A%84for%E5%BE%AA%E7%8E%AF/"
+    >C语言使用并行执行的for循环</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/06/22/C%E8%AF%AD%E8%A8%80%E4%BD%BF%E7%94%A8%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C%E7%9A%84for%E5%BE%AA%E7%8E%AF/" class="article-date">
+  <time datetime="2022-06-22T07:29:40.000Z" itemprop="datePublished">2022-06-22</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="C语言使用并行执行的for循环"><a href="#C语言使用并行执行的for循环" class="headerlink" title="C语言使用并行执行的for循环"></a>C语言使用并行执行的for循环</h1><h2 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;omp.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="编译指令"><a href="#编译指令" class="headerlink" title="编译指令"></a>编译指令</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">g++ test111.cpp -o paraCpp111 -fopenmp</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意要添加<code>-fopenmp</code>选项</li>
+</ul>
+<h2 id="设置线程数量"><a href="#设置线程数量" class="headerlink" title="设置线程数量"></a>设置线程数量</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">omp_set_num_threads(<span class="number">2</span>); <span class="comment">//参数为线程的数量</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用parallel的for循环"><a href="#使用parallel的for循环" class="headerlink" title="使用parallel的for循环"></a>使用parallel的for循环</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意<code>#pragma omp parallel for</code>这句必须和for循环<strong>紧邻</strong>，中间不能有其他语句，否则会出错</li>
+</ul>
+<h2 id="执行效果"><a href="#执行效果" class="headerlink" title="执行效果"></a>执行效果</h2><p>不进行线程设置和线程设置为2的效果对比：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1线程\n&quot;</span>);</span><br><span class="line">    before = clock();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    timePeriod = clock()-before;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;timePeriod&lt;&lt;<span class="string">&#x27;!&#x27;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2线程\n&quot;</span>);</span><br><span class="line"><span class="comment">// 此处设置了2线程</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    omp_set_num_threads(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    before = clock();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    timePeriod = clock()-before;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;timePeriod&lt;&lt;<span class="string">&#x27;!&#x27;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+
+<p>输出对比：</p>
+<ul>
+<li><p><img src="/imgs/image-20220622153605823.png" alt="image-20220622153605823"></p>
+</li>
+<li><p>注意到没有开启并行for循环的输出是按照顺序的，开启的输出是乱序的</p>
+</li>
+<li><p>同时经过尝试发现，假如开启了并行for循环的输出但是<strong>指定线程为1</strong>的，输出<strong>仍然是乱序</strong>的，暂时还不清楚原因</p>
+</li>
+</ul>
+<p>对比大量计算和多组计算：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;omp.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">1e8</span>;</span><br><span class="line">    <span class="keyword">int</span> before, timePeriod;</span><br><span class="line">    <span class="keyword">int</span> array1[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array2[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array4[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array8[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> count = <span class="number">0</span>;count&lt;<span class="number">100</span>;++count)</span><br><span class="line">    &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="comment">// printf(&quot;1线程\n&quot;);</span></span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;2线程\n&quot;);</span></span><br><span class="line">        array1[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">2</span>);</span><br><span class="line">        <span class="comment">// printf(&quot;2线程\n&quot;);</span></span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;4线程\n&quot;);</span></span><br><span class="line">        array2[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    </span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;8线程\n&quot;);</span></span><br><span class="line">        array4[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    </span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">8</span>);</span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>() - before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        array8[count] = timePeriod;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ofstream out;</span><br><span class="line">    out.<span class="built_in">open</span>(<span class="string">&quot;data.csv&quot;</span>, ios::out);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array1[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array2[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array4[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array8[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    out.<span class="built_in">close</span>();</span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;python3 showData.py&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>其中分别开启1、2、4、8线程，进行for循环的计算，对比所需时间（通过<code>clock()</code>进行测量），最后调用命令行脚本<code>system</code>，开启另外撰写的python脚本进行数据折线图的显示</p>
+</li>
+<li><p><img src="/imgs/image-20220622154102661.png" alt="image-20220622154102661"></p>
+<ul>
+<li>上图是分别开启1、2、4、8线程的计算结果</li>
+</ul>
+</li>
+<li><p>对于代码进行简单修改，在<strong>1线程的时候取消对于parallel的使用</strong>，实验结果如下图</p>
+</li>
+<li><p><img src="/imgs/image-20220622154349763.png" alt="image-20220622154349763"></p>
+<ul>
+<li>可见结果在1线程的时候，某些情况下会占用很长的时间</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;omp.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">1e8</span>;</span><br><span class="line">    <span class="keyword">int</span> before, timePeriod;</span><br><span class="line">    <span class="keyword">int</span> array1[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array2[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array4[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array8[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> count = <span class="number">0</span>;count&lt;<span class="number">100</span>;++count)</span><br><span class="line">    &#123;</span><br><span class="line"><span class="comment">// #pragma omp parallel</span></span><br><span class="line"><span class="comment">//         omp_set_num_threads(1);</span></span><br><span class="line">        <span class="comment">// printf(&quot;1线程\n&quot;);</span></span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="comment">// #pragma omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;2线程\n&quot;);</span></span><br><span class="line">        array1[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">2</span>);</span><br><span class="line">        <span class="comment">// printf(&quot;2线程\n&quot;);</span></span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;4线程\n&quot;);</span></span><br><span class="line">        array2[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    </span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;8线程\n&quot;);</span></span><br><span class="line">        array4[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    </span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">8</span>);</span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>() - before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        array8[count] = timePeriod;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ofstream out;</span><br><span class="line">    out.<span class="built_in">open</span>(<span class="string">&quot;data.csv&quot;</span>, ios::out);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array1[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array2[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array4[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array8[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    out.<span class="built_in">close</span>();</span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;python3 showData.py&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-wsl2的Python以及增加远程用交互界面"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/06/22/wsl2%E7%9A%84Python%E4%BB%A5%E5%8F%8A%E5%A2%9E%E5%8A%A0%E8%BF%9C%E7%A8%8B%E7%94%A8%E4%BA%A4%E4%BA%92%E7%95%8C%E9%9D%A2/"
+    >wsl2的Python以及增加远程用交互界面</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/06/22/wsl2%E7%9A%84Python%E4%BB%A5%E5%8F%8A%E5%A2%9E%E5%8A%A0%E8%BF%9C%E7%A8%8B%E7%94%A8%E4%BA%A4%E4%BA%92%E7%95%8C%E9%9D%A2/" class="article-date">
+  <time datetime="2022-06-22T07:03:04.000Z" itemprop="datePublished">2022-06-22</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="wsl2的Python以及增加远程用交互界面"><a href="#wsl2的Python以及增加远程用交互界面" class="headerlink" title="wsl2的Python以及增加远程用交互界面"></a>wsl2的Python以及增加远程用交互界面</h1><h2 id="wsl2的pip相关问题以及安装问题"><a href="#wsl2的pip相关问题以及安装问题" class="headerlink" title="wsl2的pip相关问题以及安装问题"></a>wsl2的pip相关问题以及安装问题</h2><ul>
+<li>wsl2（Ubuntu20.04）有时候会出现一些软件包安装不上的问题，或者是安装某些包的时候出现<code>Python.h</code>无法编译，建议安装<code>python3-dev</code>等情况，此时并不需要安装上面提示安装的内容，而是系统自身的python出现了问题。此时只需要通过以下的命令<strong>彻底卸载Python</strong>然后再重新安装python3和pip即可</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudop apt-get remove python3-pip</span><br><span class="line">sudo apt-get remove python3.8 #或者其他版本</span><br><span class="line">sudo apt-get purge python3</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>直到在命令行输入<code>python3</code>不再自动进入python互动命令行模式即可</p>
+</li>
+<li><p>此外，假如安装的时候持续出现安装问题，比如依赖包不能解决的问题，可能是软件源的问题。此时建议使用清华源，也就是</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-security main restricted universe multiverse</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 预发布软件源，不建议启用</span></span><br><span class="line"><span class="comment"># deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-proposed main restricted universe multiverse</span></span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-proposed main restricted universe multiverse</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="WSL的Ubuntu20-04配置远程桌面"><a href="#WSL的Ubuntu20-04配置远程桌面" class="headerlink" title="WSL的Ubuntu20.04配置远程桌面"></a>WSL的Ubuntu20.04配置远程桌面</h2><p>在完成上述的<strong>换源</strong>等步骤之后，开始为Ubuntu20.04配置远程桌面。参考这篇<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43878324/article/details/113616883?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-1-113616883-null-119135374.pc_relevant_downloadblacklistv1&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-1-113616883-null-119135374.pc_relevant_downloadblacklistv1&utm_relevant_index=2">WSL2 Ubuntu图形界面安装与远程桌面</a>和<a target="_blank" rel="noopener" href="https://www.iamkyun.com/2020/07/25/WSL2-Ubuntu-GUI/">在Windows 10 WSL2中使用图形界面（GUI）</a></p>
+<ul>
+<li>安装桌面环境</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo apt install ubuntu-desktop</span><br><span class="line"><span class="comment">#或者</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#KDE</span></span><br><span class="line">sudo apt install kubuntu-desktop</span><br><span class="line"></span><br><span class="line"><span class="comment">#Xfce</span></span><br><span class="line">sudo apt install xubuntu-desktop</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>安装xrdp</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo apt purge xrdp</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo apt install -y xrdp</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>（<strong>非必须</strong>）更改<code>XRDP</code>的一些配置：增加bpp(bits per pixel)，让远程连接质量更好</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo sed -i <span class="string">&#x27;s/max_bpp=32/#max_bpp=32\nmax_bpp=128/g&#x27;</span> /etc/xrdp/xrdp.ini</span><br><span class="line">sudo sed -i <span class="string">&#x27;s/xserverbpp=24/#xserverbpp=24\nxserverbpp=128/g&#x27;</span> /etc/xrdp/xrdp.ini</span><br><span class="line"><span class="built_in">echo</span> xfce4-session &gt; ~/.xsession</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>接下来更改<code>XRDP</code>的启动脚本，让它同时启动<code>Xfce</code></li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/xrdp/startwm.sh</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>把文件的最后几行改成这样：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># test -x /etc/X11/Xsession &amp;&amp; exec /etc/X11/Xsession</span></span><br><span class="line"><span class="comment"># exec /bin/sh /etc/X11/Xsession</span></span><br><span class="line"><span class="comment"># xfce</span></span><br><span class="line">startxfce4</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>启动<code>xrdp</code></li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/xrdp start</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>默认端口为<code>3389</code></li>
+<li>在wsl上安装<code>net-tools</code>，然后使用<code>ifconfig</code>命令查看wsl 的IP地址，然后使用Windows远程桌面链接即可</li>
+<li><img src="/imgs/12D00CBEE77BABCD02C2EF57A3947A30.jpg" alt="img"></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-使用网页版的触控板遥控电脑"
   class="article article-type-post"
   itemscope
@@ -879,427 +1318,6 @@
 <li><p>第 135 行判断 KBUILD_OUTPUT 是否为空。 </p>
 </li>
 <li><p>第 139 行调用 mkdir 命令，创建 KBUILD_OUTPUT 目录，并且将创建成功以后的绝对路 径赋值给 KBUILD_OUTPUT。至此，通过 O 指定的输出目录就存在了。</p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-DSP28377d开启fp_mode提高浮点数除法性能"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/02/19/DSP28377d%E5%BC%80%E5%90%AFfp_mode%E6%8F%90%E9%AB%98%E6%B5%AE%E7%82%B9%E6%95%B0%E9%99%A4%E6%B3%95%E6%80%A7%E8%83%BD/"
-    >DSP28377d开启--fp_mode提高浮点数除法性能</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/02/19/DSP28377d%E5%BC%80%E5%90%AFfp_mode%E6%8F%90%E9%AB%98%E6%B5%AE%E7%82%B9%E6%95%B0%E9%99%A4%E6%B3%95%E6%80%A7%E8%83%BD/" class="article-date">
-  <time datetime="2022-02-19T10:32:24.000Z" itemprop="datePublished">2022-02-19</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="DSP28377d开启–fp-mode提高浮点数除法性能"><a href="#DSP28377d开启–fp-mode提高浮点数除法性能" class="headerlink" title="DSP28377d开启–fp_mode提高浮点数除法性能"></a>DSP28377d开启–fp_mode提高浮点数除法性能</h1><p>在程序中执行浮点数除法比如</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Speed=(float)1000000/(float)count*speedTemp*15;</span><br></pre></td></tr></table></figure>
-
-<p>的时候会看到如下的提示：</p>
-<p><img src="/imgs/image-20220219183335144.png" alt="image-20220219183335144"></p>
-<ul>
-<li><p>此时需要在项目的<code>properties</code>中选择</p>
-</li>
-<li><p><img src="/imgs/image-20220219183408708.png" alt="image-20220219183408708"></p>
-</li>
-<li><p>选择<code>optimizations</code>中的<code>--fp_mode</code>为<code>relaxed</code>即可（如图）</p>
-</li>
-<li><p><img src="/imgs/image-20220219183528275.png" alt="image-20220219183528275"></p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-C语言常见内存操作函数"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/02/18/C%E8%AF%AD%E8%A8%80%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0/"
-    >C语言常见内存操作以及系统操作函数</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/02/18/C%E8%AF%AD%E8%A8%80%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0/" class="article-date">
-  <time datetime="2022-02-18T02:31:31.000Z" itemprop="datePublished">2022-02-18</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="C语言常见内存操作函数"><a href="#C语言常见内存操作函数" class="headerlink" title="C语言常见内存操作函数"></a>C语言常见内存操作函数</h1><ul>
-<li>&lt;string.h&gt;目录 <a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-standard-library-string-h.html">https://www.runoob.com/cprogramming/c-standard-library-string-h.html</a></li>
-</ul>
-<h2 id="memcpy"><a href="#memcpy" class="headerlink" title="memcpy()"></a>memcpy()</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">void *memcpy(void *str1, const void *str2, size_t n)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>str1</strong> – 指向用于存储复制内容的目标数组，类型强制转换为 void* 指针。</p>
-</li>
-<li><p><strong>str2</strong> – 指向要复制的数据源，类型强制转换为 void* 指针。</p>
-</li>
-<li><p><strong>n</strong> – 要被复制的字节数。</p>
-</li>
-<li><p>该函数返回一个指向目标存储区 str1 的指针。</p>
-</li>
-</ul>
-<h2 id="memchr"><a href="#memchr" class="headerlink" title="memchr()"></a>memchr()</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void *memchr(const void *str, int c, size_t n)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>str</strong> – 指向要执行搜索的内存块。</p>
-</li>
-<li><p><strong>c</strong> – 以 int 形式传递的值，但是函数在每次字节搜索时是使用该值的无符号字符形式。</p>
-</li>
-<li><p><strong>n</strong> – 要被分析的字节数。</p>
-</li>
-<li><p>该函数返回一个指向匹配字节的指针，如果在给定的内存区域未出现字符，则返回 NULL。</p>
-</li>
-</ul>
-<h2 id="memcmp"><a href="#memcmp" class="headerlink" title="memcmp()"></a>memcmp()</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int memcmp(const void *str1, const void *str2, size_t n)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str1</strong> – 指向内存块的指针。</li>
-<li><strong>str2</strong> – 指向内存块的指针。</li>
-<li><strong>n</strong> – 要被比较的字节数。</li>
-</ul>
-<p>返回值</p>
-<ul>
-<li>如果返回值 &lt; 0，则表示 str1 小于 str2。</li>
-<li>如果返回值 &gt; 0，则表示 str1 大于 str2。</li>
-<li>如果返回值 = 0，则表示 str1 等于 str2。</li>
-</ul>
-<h2 id="memmove"><a href="#memmove" class="headerlink" title="memmove()"></a>memmove()</h2><ul>
-<li>C 库函数 <strong>void *memmove(void *str1, const void *str2, size_t n)</strong> 从 <strong>str2</strong> 复制 <strong>n</strong> 个字符到 <strong>str1</strong>，但是在重叠内存块这方面，memmove() 是比 memcpy() <strong>更安全</strong>的方法。如果目标区域和源区域有重叠的话，memmove() 能够保证源串在被覆盖之前将重叠区域的字节拷贝到目标区域中，复制后源区域的内容会被更改。如果目标区域与源区域<strong>没有重叠</strong>，则和 memcpy() 函数<strong>功能相同</strong>。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void *memmove(void *str1, const void *str2, size_t n)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str1</strong> – 指向用于存储复制内容的目标数组，类型强制转换为 void* 指针。</li>
-<li><strong>str2</strong> – 指向要复制的数据源，类型强制转换为 void* 指针。</li>
-<li><strong>n</strong> – 要被复制的字节数。</li>
-<li>该函数返回一个指向目标存储区 str1 的指针。</li>
-</ul>
-<h2 id="memset"><a href="#memset" class="headerlink" title="memset()"></a>memset()</h2><ul>
-<li>C 库函数 <strong>void *memset(void *str, int c, size_t n)</strong> 复制字符 <strong>c</strong>（一个无符号字符）到参数 <strong>str</strong> 所指向的字符串的前 <strong>n</strong> 个字符。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void *memset(void *str, int c, size_t n)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str</strong> – 指向要填充的内存块。</li>
-<li><strong>c</strong> – 要被设置的值。该值以 int 形式传递，但是函数在填充内存块时是使用该值的无符号字符形式。</li>
-<li><strong>n</strong> – 要被设置为该值的字符数。</li>
-<li>该值返回一个指向存储区 str 的指针。</li>
-</ul>
-<h2 id="strcat"><a href="#strcat" class="headerlink" title="strcat()"></a>strcat()</h2><ul>
-<li>C 库函数 <strong>char *strcat(char *dest, const char *src)</strong> 把 <strong>src</strong> 所指向的字符串追加到 <strong>dest</strong> 所指向的字符串的结尾。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">char *strcat(char *dest, const char *src)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>dest</strong> – 指向目标数组，该数组包含了一个 C 字符串，且足够容纳追加后的字符串。</p>
-</li>
-<li><p><strong>src</strong> – 指向要追加的字符串，该字符串不会覆盖目标字符串。</p>
-</li>
-<li><p>该函数返回一个指向最终的目标字符串 dest 的指针。</p>
-</li>
-</ul>
-<h2 id="strcmp"><a href="#strcmp" class="headerlink" title="strcmp()"></a>strcmp()</h2><ul>
-<li>C 库函数 <strong>int strcmp(const char *str1, const char *str2)</strong> 把 <strong>str1</strong> 所指向的字符串和 <strong>str2</strong> 所指向的字符串进行比较。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int strcmp(const char *str1, const char *str2)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str1</strong> – 要进行比较的第一个字符串。</li>
-<li><strong>str2</strong> – 要进行比较的第二个字符串。</li>
-</ul>
-<p>返回值</p>
-<ul>
-<li>如果返回值小于 0，则表示 str1 小于 str2。</li>
-<li>如果返回值大于 0，则表示 str1 大于 str2。</li>
-<li>如果返回值等于 0，则表示 str1 等于 str2。</li>
-</ul>
-<hr>
-<ul>
-<li>&lt;stdlib.h&gt;总目录 <a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-standard-library-stdlib-h.html">https://www.runoob.com/cprogramming/c-standard-library-stdlib-h.html</a></li>
-</ul>
-<h2 id="malloc"><a href="#malloc" class="headerlink" title="malloc()"></a>malloc()</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void *malloc(size_t size)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>size</strong> – 内存块的大小，以字节为单位。</li>
-<li>该函数返回一个指针 ，指向已分配大小的内存。如果请求失败，则返回 NULL。</li>
-</ul>
-<h2 id="calloc"><a href="#calloc" class="headerlink" title="calloc()"></a>calloc()</h2><p>C 库函数 <strong>void *calloc(size_t nitems, size_t size)</strong> 分配所需的内存空间，并返回一个指向它的指针。<strong>malloc</strong> 和 <strong>calloc</strong> 之间的不同点是，<strong>malloc 不会设置内存为零，而 calloc 会设置分配的内存为零。</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void *calloc(size_t nitems, size_t size)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>nitems</strong> – 要被分配的元素个数。</li>
-<li><strong>size</strong> – 元素的大小。</li>
-</ul>
-<h2 id="realloc"><a href="#realloc" class="headerlink" title="realloc()"></a>realloc()</h2><p>C 库函数 <strong>void *realloc(void *ptr, size_t size)</strong> 尝试<u>重新调整之前调用 <strong>malloc</strong> 或 <strong>calloc</strong> 所分配的 <strong>ptr</strong> 所指向的内存块的大小。</u></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void *realloc(void *ptr, size_t size)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>ptr</strong> – 指针指向一个要重新分配内存的内存块，该内存块之前是通过调用 malloc、calloc 或 realloc 进行分配内存的。如果为空指针，则会分配一个新的内存块，且函数返回一个指向它的指针。</li>
-<li><strong>size</strong> – 内存块的新的大小，以字节为单位。如果大小为 0，且 ptr 指向一个已存在的内存块，则 ptr 所指向的内存块会被释放，并返回一个空指针。</li>
-<li>该函数返回一个指针 ，指向重新分配大小的内存。如果请求失败，则返回 NULL。</li>
-</ul>
-<h2 id="free"><a href="#free" class="headerlink" title="free()"></a>free()</h2><p>C 库函数 <strong>void free(void *ptr)</strong> 释放之前调用 calloc、malloc 或 realloc 所分配的内存空间。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void free(void *ptr)</span><br></pre></td></tr></table></figure>
-
-<h2 id="system"><a href="#system" class="headerlink" title="system()"></a>system()</h2><p>C 库函数 <strong>int system(const char *command)</strong> 把 <strong>command</strong> 指定的命令名称或程序名称传给要被命令处理器执行的主机环境，并在命令完成后返回。(实际上就是在程序中执行Linux命令行的指令)</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int system(const char *command)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>command</strong> – 包含被请求变量名称的 C 字符串。</li>
-<li>如果发生错误，则返回值为 -1，否则返回命令的状态。</li>
-</ul>
-<h2 id="abs"><a href="#abs" class="headerlink" title="abs()"></a>abs()</h2><p>C 库函数 <strong>int abs(int x)</strong> 返回 <strong>x</strong> 的绝对值。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int abs(int x)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>x</strong> – 完整的值。</li>
-<li>该函数返回 x 的绝对值。</li>
-</ul>
-<h2 id="exit"><a href="#exit" class="headerlink" title="exit()"></a>exit()</h2><p>C 库函数 <strong>void exit(int status)</strong> 立即终止调用进程。任何属于该进程的打开的文件描述符都会被关闭，该进程的子进程由进程 1 继承，初始化，且会向父进程发送一个 SIGCHLD 信号。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void exit(int status)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>status</strong> – 返回给父进程的状态值。</li>
-<li>该函数不返回值。</li>
-</ul>
-<h2 id="abort"><a href="#abort" class="headerlink" title="abort()"></a>abort()</h2><p>C 库函数 <strong>void abort(void)</strong> <strong>中止程序执行，直接从调用的地方跳出。</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void abort(void)</span><br></pre></td></tr></table></figure>
-
-<h2 id="atof"><a href="#atof" class="headerlink" title="atof()"></a>atof()</h2><p>C 库函数 <strong>double atof(const char *str)</strong> 把参数 <strong>str</strong> 所指向的字符串转换为一个浮点数（类型为 double 型），<u><strong>根据字面意思，不是根据具体的字节进行转换</strong></u></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">double atof(const char *str)</span><br></pre></td></tr></table></figure>
-
-<h2 id="atoi"><a href="#atoi" class="headerlink" title="atoi()"></a>atoi()</h2><p>C 库函数 <strong>int atoi(const char *str)</strong> 把参数 <strong>str</strong> 所指向的字符串转换为一个整数（类型为 int 型）。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int atoi(const char *str)</span><br></pre></td></tr></table></figure>
-
-<h2 id="atol"><a href="#atol" class="headerlink" title="atol()"></a>atol()</h2><p>C 库函数 <strong>long int atol(const char *str)</strong> 把参数 <strong>str</strong> 所指向的字符串转换为一个长整数（类型为 long int 型）。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">long int atol(const char *str)</span><br></pre></td></tr></table></figure>
-
-<h2 id="strtod"><a href="#strtod" class="headerlink" title="strtod()"></a>strtod()</h2><p>C 库函数 *<em>double strtod(const char *str, char *<em>endptr)</em></em> 把参数 <strong>str</strong> 所指向的字符串转换为一个浮点数（类型为 double 型）。如果 <strong>endptr</strong> 不为空，则指向转换中最后一个字符后的字符的指针会存储在 endptr 引用的位置。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">double strtod(const char *str, char **endptr)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str</strong> – 要转换为双精度浮点数的字符串。</li>
-<li><strong>endptr</strong> – 对类型为 char* 的对象的引用，其值由函数设置为 <strong>str</strong> 中<u>数值后的下一个字符。</u></li>
-</ul>
-<h2 id="strtol"><a href="#strtol" class="headerlink" title="strtol()"></a>strtol()</h2><p>C 库函数 *<em>long int strtol(const char *str, char *<em>endptr, int base)</em></em> 把参数 <strong>str</strong> 所指向的字符串根据给定的 <strong>base</strong> 转换为一个长整数（类型为 long int 型），base 必须介于 2 和 36（包含）之间，或者是特殊值 0。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">long int strtol(const char *str, char **endptr, int base)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str</strong> – 要转换为长整数的字符串。</li>
-<li><strong>endptr</strong> – 对类型为 char* 的对象的引用，其值由函数设置为 <strong>str</strong> 中数值后的下一个字符。</li>
-<li><strong>base</strong> – 基数，必须介于 2 和 36（包含）之间，或者是特殊值 0。</li>
-</ul>
-<h2 id="strtoul"><a href="#strtoul" class="headerlink" title="strtoul()"></a>strtoul()</h2><p>C 库函数 *<em>unsigned long int strtoul(const char *str, char *<em>endptr, int base)</em></em> 把参数 <strong>str</strong> 所指向的字符串根据给定的 <strong>base</strong> 转换为一个无符号长整数（类型为 unsigned long int 型），base 必须介于 2 和 36（包含）之间，或者是特殊值 0。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">unsigned long int strtoul(const char *str, char **endptr, int base)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str</strong> – 要转换为无符号长整数的字符串。</li>
-<li><strong>endptr</strong> – 对类型为 char* 的对象的引用，其值由函数设置为 str 中数值后的下一个字符。</li>
-<li><strong>base</strong> – 基数，必须介于 2 和 36（包含）之间，或者是特殊值 0。</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-DSP28377相关知识"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/02/16/DSP28377%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/"
-    >DSP28377相关知识</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/02/16/DSP28377%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/" class="article-date">
-  <time datetime="2022-02-16T07:43:53.000Z" itemprop="datePublished">2022-02-16</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="DSP28377相关知识"><a href="#DSP28377相关知识" class="headerlink" title="DSP28377相关知识"></a>DSP28377相关知识</h1><h2 id="BLDC（PWM）相关"><a href="#BLDC（PWM）相关" class="headerlink" title="BLDC（PWM）相关"></a>BLDC（PWM）相关</h2><ul>
-<li>驱动的PWM中135为一组，246为一组</li>
-<li></li>
-</ul>
-<h2 id="串口相关"><a href="#串口相关" class="headerlink" title="串口相关"></a>串口相关</h2><ul>
-<li>中断：TXINT和RXINT</li>
-</ul>
-<h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2><p>开启中断的步骤</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> “DSP2833x_Device.h”</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> “DSP2833x_Examples.h”</span></span><br><span class="line"></span><br><span class="line">interrupt <span class="keyword">void</span> cpu_TImer0_isr（<span class="keyword">void</span>）;<span class="comment">//声明中断服务函数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main（）</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step1：初始化系统控制、PLL、看门狗、允许外设时钟</span></span><br><span class="line"></span><br><span class="line">    InitSysCtrl（）;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step2：初始化GPIO</span></span><br><span class="line"></span><br><span class="line">    InitGpio（）;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step3：清除所有中断，初始化PIE向量表</span></span><br><span class="line"></span><br><span class="line">    DINT;</span><br><span class="line"></span><br><span class="line">    InitPieCtrl（）; <span class="comment">//初始化PIE控制器</span></span><br><span class="line"></span><br><span class="line">    IER = <span class="number">0x0000</span>; <span class="comment">//禁止CPU中断</span></span><br><span class="line"></span><br><span class="line">    IFR = <span class="number">0x0000</span>; <span class="comment">//清除所有CPU中断标志</span></span><br><span class="line"></span><br><span class="line">    InitPieVectTable（）; <span class="comment">//初始化PIE中断向量表</span></span><br><span class="line"></span><br><span class="line">    EALLOW;</span><br><span class="line"></span><br><span class="line">    PieVectTable.TINT0 = &amp;cpu_TImer0_isr; <span class="comment">//重映射中断向量，指向中断服务程序</span></span><br><span class="line"></span><br><span class="line">    EDIS;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step4：初始化外设模块</span></span><br><span class="line"></span><br><span class="line">    InitCpuTImers（）;</span><br><span class="line"></span><br><span class="line">    ConfigCpuTimer（&amp;CpuTimer0，<span class="number">150</span>，<span class="number">1000000</span>）; <span class="comment">//150MHz，周期1秒</span></span><br><span class="line"></span><br><span class="line">    CpuTimer0Regs.TCR.all = <span class="number">0x4001</span>; <span class="comment">//允许定时器中断，且设置TSS为0启动定时器工作</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//step5：</span></span><br><span class="line"></span><br><span class="line">    IER |= M_INT1; <span class="comment">//允许CPU的INT1中断，该中断连接至TINT0</span></span><br><span class="line"></span><br><span class="line">    PieCtrlRegs.PIEIER1.bit.INTx7 = <span class="number">1</span>; <span class="comment">//在PIE中断组1中允许TINT0中断</span></span><br><span class="line"></span><br><span class="line">    EINT; <span class="comment">//清除全局屏蔽</span></span><br><span class="line"></span><br><span class="line">    ERTM; <span class="comment">//允许全局实时中断</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//step6：循环</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>（<span class="number">1</span>）;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interrupt <span class="keyword">void</span> cpu_timer0_isr（<span class="keyword">void</span>）</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    CpuTimer0.InterruptCount++;</span><br><span class="line"></span><br><span class="line">    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1; <span class="comment">//清除PIE中断组1的应答位，以便CPU再次响应</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-DSP28377d与无刷直流电机的接线方法"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/02/16/DSP28377d%E4%B8%8E%E6%97%A0%E5%88%B7%E7%9B%B4%E6%B5%81%E7%94%B5%E6%9C%BA%E7%9A%84%E6%8E%A5%E7%BA%BF%E6%96%B9%E6%B3%95/"
-    >DSP28377d与无刷直流电机的接线方法</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/02/16/DSP28377d%E4%B8%8E%E6%97%A0%E5%88%B7%E7%9B%B4%E6%B5%81%E7%94%B5%E6%9C%BA%E7%9A%84%E6%8E%A5%E7%BA%BF%E6%96%B9%E6%B3%95/" class="article-date">
-  <time datetime="2022-02-16T03:48:12.000Z" itemprop="datePublished">2022-02-16</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="DSP28377d与无刷直流电机的接线方法"><a href="#DSP28377d与无刷直流电机的接线方法" class="headerlink" title="DSP28377d与无刷直流电机的接线方法"></a>DSP28377d与无刷直流电机的接线方法</h1><h2 id="霍尔传感器："><a href="#霍尔传感器：" class="headerlink" title="霍尔传感器："></a>霍尔传感器：</h2><ul>
-<li>程序中指定的CAP霍尔传感器输入引脚为</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">InitECap1Gpio(<span class="number">20</span>);</span><br><span class="line">GPIO_SetupPinOptions(<span class="number">20</span>, GPIO_INPUT, GPIO_ASYNC);</span><br><span class="line">InitECap2Gpio(<span class="number">21</span>);</span><br><span class="line">GPIO_SetupPinOptions(<span class="number">21</span>, GPIO_INPUT, GPIO_ASYNC);</span><br><span class="line">InitECap3Gpio(<span class="number">23</span>);</span><br><span class="line">GPIO_SetupPinOptions(<span class="number">23</span>, GPIO_INPUT, GPIO_ASYNC);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>找到芯片的20，21和23脚，位置在</p>
-</li>
-<li><p><img src="/imgs/image-20220216115100394.png" alt="image-20220216115100394"></p>
-</li>
-</ul>
-<p>对应的是开发板上的外扩引脚</p>
-<ul>
-<li><p><img src="/imgs/image-20220216115209306.png" alt="image-20220216115209306"></p>
-</li>
-<li><p>所以电机驱动板上的<strong>中间霍尔传感器输出口的2，3，4pin</strong>分别连接开发板上<strong>J5的25，26，27引脚</strong>，同时利用J5的30和29脚分别是5V和GND给电机控制板提供5V电源，以上的排针倒数6pin中除了CAP4之外，都接到电机驱动板上的对应的引脚上了。</p>
-</li>
-</ul>
-<h2 id="电机驱动-PWM"><a href="#电机驱动-PWM" class="headerlink" title="电机驱动  PWM"></a>电机驱动  PWM</h2><ul>
-<li><p>PWM的连接比较简单，主要就是将开发板上的J5的前6个输出脚</p>
-</li>
-<li><p><img src="/imgs/image-20220216115439328.png" alt="image-20220216115439328"></p>
-</li>
-<li><p>按照1-6的顺序对应连接到电机驱动板上的长排针PWM1-6</p>
-</li>
-<li><p><img src="/imgs/image-20220216115526376.png" alt="image-20220216115526376"></p>
-</li>
-<li><p>如上，再加上供电即可</p>
-</li>
-<li><p>注意，假如传感器接线存在问题，电机会停在某一个相位不动（有力矩阻碍转动但是自身不转动）而且会产生大量的热，同时电源会发出一个电流声（猜测是电流太大引起的）。</p>
-</li>
-</ul>
-<h2 id="接线图"><a href="#接线图" class="headerlink" title="接线图"></a>接线图</h2><ul>
-<li><p><img src="/imgs/image-20220216120140369.png" alt="image-20220216120140369"></p>
-</li>
-<li><p><img src="/imgs/image-20220216120155122.png" alt="image-20220216120155122"></p>
 </li>
 </ul>
  
