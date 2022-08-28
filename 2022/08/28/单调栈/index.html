@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>pytorch入门笔记 |  Frank’s blogs</title>
+      <title>单调栈 |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -53,7 +53,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-pytorch入门笔记"
+  id="post-单调栈"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -64,7 +64,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  pytorch入门笔记
+  单调栈
 </h1>
  
 
@@ -72,15 +72,15 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/12/08/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/" class="article-date">
-  <time datetime="2021-12-08T13:59:11.000Z" itemprop="datePublished">2021-12-08</time>
+      <a href="/2022/08/28/%E5%8D%95%E8%B0%83%E6%A0%88/" class="article-date">
+  <time datetime="2022-08-28T13:32:21.000Z" itemprop="datePublished">2022-08-28</time>
 </a>   
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">607</span>
+            <span class="post-count">651</span>
         </span>
     </span>
 
@@ -104,35 +104,31 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h1 id="pytorch入门笔记及资源集合"><a href="#pytorch入门笔记及资源集合" class="headerlink" title="pytorch入门笔记及资源集合"></a>pytorch入门笔记及资源集合</h1><h2 id="教程手册"><a href="#教程手册" class="headerlink" title="教程手册"></a>教程手册</h2><p>莫烦 <a target="_blank" rel="noopener" href="https://mofanpy.com/tutorials/machine-learning/reinforcement-learning/">https://mofanpy.com/tutorials/machine-learning/reinforcement-learning/</a></p>
-<p>pytorch中文手册</p>
-<p><a target="_blank" rel="noopener" href="https://handbook.pytorch.wiki/">https://handbook.pytorch.wiki/</a></p>
-<h2 id="转移到GPU上训练"><a href="#转移到GPU上训练" class="headerlink" title="转移到GPU上训练"></a>转移到GPU上训练</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_18644873/article/details/86579147">https://blog.csdn.net/qq_18644873/article/details/86579147</a></p>
-<p>CPU代码转换为GPU代码的主要操作就是利用</p>
-<p><code>.cuda()</code></p>
-<p>实现变量迁移到GPU中</p>
-<p>torch变量后直接加cuda</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s0 = torch.tensor(s0, dtype=torch.<span class="built_in">float</span>).cuda()</span><br></pre></td></tr></table></figure>
-
-<p>假如一个类继承了<code>nn.Module</code>类的话，直接调用这个类的<code>.cuda()</code></p>
-<p>比如某个类定义如下</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Actor</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, input_size, hidden_size, output_size</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(Actor, self).__init__()</span><br><span class="line">        self.linear1 = nn.Linear(input_size, hidden_size)</span><br><span class="line">        self.linear2 = nn.Linear(hidden_size, hidden_size)</span><br><span class="line">        self.linear3 = nn.Linear(hidden_size, output_size)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, s</span>):</span></span><br><span class="line">    x = F.relu(self.linear1(s))</span><br><span class="line">    x = F.relu(self.linear2(x))</span><br><span class="line">    x = torch.tanh(self.linear3(x))</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
-<p>转换为GPU的方法是</p>
-<p><code>self.critic = Critic(s_dim + a_dim, 256, 1).cuda()</code><br>注意某些变量在转化为numpy数组之前必须用.cpu()拷贝回CPU才行</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s0 = torch.tensor(s0, dtype=torch.<span class="built_in">float</span>).cuda().unsqueeze(<span class="number">0</span>).cuda()  <span class="comment"># 这是个GPU张量</span></span><br><span class="line">a0 = self.actor(s0).squeeze(<span class="number">0</span>).detach().cpu().numpy() <span class="comment"># 将输出的结果(GPU数组)拷贝回CPU才能转化</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="detach函数"><a href="#detach函数" class="headerlink" title="detach函数"></a>detach函数</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_31244453/article/details/112473947">https://blog.csdn.net/qq_31244453/article/details/112473947</a></p>
-<p>返回一个新的tensor，从当前计算图中分离下来。但是仍指向原变量的存放位置，不同之处只是requirse_grad为false.得到的这个tensir永远不需要计算器梯度，不具有grad.</p>
-<h2 id="某博主的DDPG"><a href="#某博主的DDPG" class="headerlink" title="某博主的DDPG"></a>某博主的DDPG</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/blanokvaffy/article/details/86232658">https://blog.csdn.net/blanokvaffy/article/details/86232658</a></p>
-<h2 id="网络保存与加载"><a href="#网络保存与加载" class="headerlink" title="网络保存与加载"></a>网络保存与加载</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41680653/article/details/93768559">https://blog.csdn.net/weixin_41680653/article/details/93768559</a></p>
-<h2 id="torch-mean"><a href="#torch-mean" class="headerlink" title="torch.mean()"></a>torch.mean()</h2><p> mean()函数的参数：dim=0,按行求平均值，返回的形状是（1，列数）；dim=1,按列求平均值，返回的形状是（行数，1）,默认不设置dim的时候，返回的是所有元素的平均值。</p>
-<h2 id="torch的zero-grad-函数"><a href="#torch的zero-grad-函数" class="headerlink" title="torch的zero_grad()函数"></a>torch的zero_grad()函数</h2><p>调用backward()函数之前都要将梯度清零，因为如果梯度不清零，pytorch中会将上次计算的梯度和本次计算的梯度累加</p>
-<h2 id="torch-tensor的view函数"><a href="#torch-tensor的view函数" class="headerlink" title="torch tensor的view函数"></a>torch tensor的view函数</h2><p>view(*args) → Tensor<br>返回一个有相同数据但大小不同的tensor。 返回的tensor必须有与原tensor相同的数据和相同数目的元素，但可以有不同的大小。</p>
-<p>参数是-1的时候这个维度的长度从其他维度<strong>推算</strong></p>
-<h2 id="torch-tensor的-sequeeze和unsqueeze"><a href="#torch-tensor的-sequeeze和unsqueeze" class="headerlink" title="torch tensor的 sequeeze和unsqueeze"></a>torch tensor的 sequeeze和unsqueeze</h2><p>squeeze()：</p>
-<p><code>squeeze(arg)</code>表示第arg维的维度值为1，则去掉该维度。否则tensor不变。（即若<code>tensor.shape()[arg] = 1</code>，则去掉该维度）</p>
-<p>unsqueeze()：</p>
-<p><code>unsqueeze(arg)</code>与<code>squeeze(arg)</code>作用相反，表示在第arg维增加一个维度值为1的维度。</p>
+  <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
+<li>了解数组中的一个数，左边最近的比这个数大的数，和右边最近的比这个数大的数在哪</li>
+</ul>
+<h2 id="单调栈"><a href="#单调栈" class="headerlink" title="单调栈"></a>单调栈</h2><h3 id="无重复数字"><a href="#无重复数字" class="headerlink" title="无重复数字"></a>无重复数字</h3><ul>
+<li>求某个数字附近最近的比他大的数字：<ul>
+<li>使用一个栈，这个栈从下到上是由大到小的顺序</li>
+<li>新加入的数字符合单调性？直接加入</li>
+<li>不符合单调性？弹出栈顶的数字，此时记录，对于被弹出的这个数字而言：<ul>
+<li>左边最近的比他大的数字就是弹出这个数字之后的栈顶元素</li>
+<li>右边最近的比他大的数字就是正要进栈的数字</li>
+<li>直到符合单调性为止</li>
+</ul>
+</li>
+<li>最后结束的时候栈中还有数据怎么办？<ul>
+<li>栈中剩余的所有数据的右边最近比他大的数字都是无</li>
+<li>左边最近的比他大的数字都是他在栈中的下一个元素</li>
+<li>栈底的最后一个元素左右都是无<h3 id="有重复数字"><a href="#有重复数字" class="headerlink" title="有重复数字"></a>有重复数字</h3></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>栈中放的内容都是链表，每个位置链表结点存放index</li>
+<li>弹出的时候，右边最近比他大的数字是当前等待进栈的数字，左边最近的比他大的数字是栈中下面紧邻位置链表的最后一个位置</li>
+<li>同样数字进栈的时候，将同样的数字对应的index串联在进栈位置链表的下一个位置<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLessNoRepeat(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    <span class="comment">// 只存位置！</span></span><br><span class="line">    Stack&lt;Integer&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// 当遍历到i位置的数，arr[i]</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek()] &gt; arr[i]) &#123;</span><br><span class="line">            <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">            res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[j][<span class="number">1</span>] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">        res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">        res[j][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLess(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    Stack&lt;List&lt;Integer&gt;&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// i -&gt; arr[i] 进栈</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] &gt; arr[i]) &#123;</span><br><span class="line">            List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">                res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">                res[popi][<span class="number">1</span>] = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] == arr[i]) &#123;</span><br><span class="line">            stack.peek().add(Integer.valueOf(i));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            list.add(i);</span><br><span class="line">            stack.push(list);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">            res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[popi][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
  
       <!-- reward -->
       
@@ -185,30 +181,23 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2021/12/08/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2022/08/28/%E5%8D%95%E8%B0%83%E6%A0%88/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
     </footer>
   </div>
 
    
   <nav class="article-nav">
     
-      <a href="/2021/12/11/FreeRtos2/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            FreeRtos2
-          
-        </div>
-      </a>
     
-    
-      <a href="/2021/12/08/TD3%E7%BD%91%E7%BB%9C/" class="article-nav-link">
+      <a href="/2022/08/28/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC%E9%97%AE%E9%A2%98/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">TD3网络</div>
+        <div class="article-nav-title">滑动窗口的最大值问题</div>
       </a>
     
   </nav>

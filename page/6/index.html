@@ -141,6 +141,117 @@
     
     
     <article
+  id="post-manjaro停止应用程序"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/21/manjaro%E5%81%9C%E6%AD%A2%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/"
+    >manjaro停止应用程序</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/21/manjaro%E5%81%9C%E6%AD%A2%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/" class="article-date">
+  <time datetime="2022-01-21T01:33:34.000Z" itemprop="datePublished">2022-01-21</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="manjaro停止应用程序"><a href="#manjaro停止应用程序" class="headerlink" title="manjaro停止应用程序"></a>manjaro停止应用程序</h1><ul>
+<li><p>在命令行输入<code>xkill</code></p>
+</li>
+<li><p>然后鼠标光标变化，点击想关闭的窗口即可</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-堆排序和快排"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/20/%E5%A0%86%E6%8E%92%E5%BA%8F%E5%92%8C%E5%BF%AB%E6%8E%92/"
+    >堆排序和快排</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/20/%E5%A0%86%E6%8E%92%E5%BA%8F%E5%92%8C%E5%BF%AB%E6%8E%92/" class="article-date">
+  <time datetime="2022-01-20T14:27:30.000Z" itemprop="datePublished">2022-01-20</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"> <span class="comment">//heapSort 构建大顶堆或者小顶堆，将堆顶元素与堆尾元素交换后再调整，如此反复</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">heapSort</span><span class="params">(<span class="keyword">int</span>[] arr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//构建大顶堆 k为最后一个非叶子节点，逐渐-1，即从下向上，从右往左</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> k = arr.length/<span class="number">2</span> - <span class="number">1</span>;k&gt;=<span class="number">0</span>;k--)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">adjustHeap</span>(arr,k,arr.length);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//排序 交换+调整</span></span><br><span class="line">    <span class="keyword">int</span> temp =<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = arr.length<span class="number">-1</span>; i &gt;= <span class="number">0</span>; i--) </span><br><span class="line">    &#123;</span><br><span class="line">        temp =arr [<span class="number">0</span>];</span><br><span class="line">        arr[<span class="number">0</span>] = arr[i];</span><br><span class="line">        arr[i] = temp;</span><br><span class="line">        <span class="built_in">adjustHeap</span>(arr,<span class="number">0</span>,i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * @param arr 待调整数组</span></span><br><span class="line"><span class="comment">     * @param i 非叶子节点在数组中的索引</span></span><br><span class="line"><span class="comment">     * @param length 对多少个元素进行调整</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">adjustHeap</span><span class="params">(<span class="keyword">int</span>[] arr,<span class="keyword">int</span> i,<span class="keyword">int</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> temp = arr[i];<span class="comment">//取出当前非叶子叶结点的值</span></span><br><span class="line">    <span class="comment">//k为当前节点的左子节点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">2</span>*i+<span class="number">1</span>;k&lt;length;k=<span class="number">2</span>*k+<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(k+<span class="number">1</span>&lt;length &amp;&amp; arr[k+<span class="number">1</span>]&gt;arr[k])</span><br><span class="line">        &#123;<span class="comment">//右子节点大于左子节点</span></span><br><span class="line">            k++;<span class="comment">//k指向右子节点</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(arr[k]&gt;temp)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//如果当前节点大于父节点就交换</span></span><br><span class="line">            arr[i] = arr[k];</span><br><span class="line">            i = k;<span class="comment">//!!!!!!精髓，因为该子节点值大小发生了改变，可能会使其子根堆发生改变，索引要调整其子根堆</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">break</span>;<span class="comment">//否则直接退出，因为其后面的节点一定满足堆定义</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    arr[i] = temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>一个对象的下标为i，他的左右子节点分别是<code>2i+1</code>和<code>2i+2</code></li>
+<li>更换节点的时候</li>
+</ul>
+<h2 id="快排"><a href="#快排" class="headerlink" title="快排"></a>快排</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//quickSort 每次选择一个元素并且将整个数组以这个元素分为两部分，小于该元素的放右边，大于该元素的放左边</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span>[] arr,<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l&lt;r)&#123; <span class="comment">//跳出递归的条件</span></span><br><span class="line">        <span class="comment">//partition就是划分操作，将arr划分成满足条件的两个子表</span></span><br><span class="line">        <span class="keyword">int</span> pivotpos = <span class="built_in">partition</span>(arr,l,r);</span><br><span class="line">        <span class="comment">//依次对左右两个子表进行递归排序</span></span><br><span class="line">        <span class="built_in">quickSort</span>(arr,l,pivotpos);</span><br><span class="line">        <span class="built_in">quickSort</span>(arr,pivotpos+<span class="number">1</span>,r);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="keyword">int</span>[] arr,<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//以当前数组的最后一个元素作为中枢pivot，进行划分</span></span><br><span class="line">    <span class="keyword">int</span> pivot = arr[r];</span><br><span class="line">    <span class="keyword">while</span> (l&lt;r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">while</span> (l&lt;r &amp;&amp; arr[l]&lt;pivot) l++;</span><br><span class="line">        arr[r] = arr[l];<span class="comment">//将比中枢值大的移动到右端r处 由于r处为中枢或者该位置值已经被替换到l处，所以直接可以替换</span></span><br><span class="line">        <span class="keyword">while</span> (l&lt;r &amp;&amp; arr[r]&gt;=pivot) r--;</span><br><span class="line">        arr[l] = arr[r];<span class="comment">//将比中枢值小的移动到左端l处 由于前面l处的值已经换到r处，所以该位置值也可以替换掉</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//l==r时，重合，这个位置就是中枢的最终位置</span></span><br><span class="line">    arr[l] = pivot;</span><br><span class="line">    <span class="comment">//返回存放中枢的最终位置</span></span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>主要的思路是每次选择一个（实际上一般是最右边的那一个）元素作为标准，将比这个元素小的元素移动到数组的左边，大的移动到右边，最后实现这个元素的左边的所有元素都比这个元素小，右边的都比这个大。然后再分别对左边和右边的数组分别排序，实现递归。</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-修复manjaro不能识别外接显示器并且开启独显"
   class="article article-type-post"
   itemscope
@@ -309,6 +420,8 @@
     
     <footer class="article-footer">
        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
     </footer>
   </div>
 
@@ -627,450 +740,13 @@
 </article>
 
     
-    <article
-  id="post-Cpp复习和Qt（一）"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/13/Cpp%E5%A4%8D%E4%B9%A0%E5%92%8CQt%EF%BC%88%E4%B8%80%EF%BC%89/"
-    >C++复习和Qt（一）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/13/Cpp%E5%A4%8D%E4%B9%A0%E5%92%8CQt%EF%BC%88%E4%B8%80%EF%BC%89/" class="article-date">
-  <time datetime="2022-01-13T15:43:16.000Z" itemprop="datePublished">2022-01-13</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="C-复习和Qt（Ubuntu）"><a href="#C-复习和Qt（Ubuntu）" class="headerlink" title="C++复习和Qt（Ubuntu）"></a>C++复习和Qt（Ubuntu）</h1><h2 id="namespace"><a href="#namespace" class="headerlink" title="namespace"></a>namespace</h2><ul>
-<li>命名空间的定义</li>
-<li><code>namespace Ui &#123; class MainWindow; class myThread;&#125;</code></li>
-<li>一个命名空间的定义包含两部分：首先是关键字namespace，随后是命名空间的名字。</li>
-<li>在命名空间名字后面是<strong>一系列由花括号括起来的声明和定义</strong>。</li>
-<li>只要能出现在全局作用域中的声明就能置于命名空间内，主要包括：类、变量(及其初始化操作)、函数(及其定义)、模板和其它命名空间。</li>
-<li>命名空间<strong>结束后无须分号</strong>，这一点与块类似。</li>
-</ul>
-<p><strong>假如在一个类中使用在之后定义的类的对象或者其他内容的话，先在这个类之前使用<code>class &lt;被使用的类名&gt;;</code>声明一下类</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> &lt;</span><span class="class"><span class="keyword">class</span> <span class="title">name</span>&gt;</span> : &lt;访问权限修饰符&gt; &lt;super <span class="class"><span class="keyword">class</span>&gt;</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>不写权限默认private</li>
-</ul>
-<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><ul>
-<li>构造函数必须与类名同名；</li>
-<li>可以重载，（重载？新概念，后面学到什么是重载。）；</li>
-<li>没有返回类型，即使是 void 也不行。</li>
-</ul>
-<h2 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h2><ul>
-<li>析构函数的格式为~类名()；</li>
-<li>调用时释放内存（资源）；</li>
-<li>~类名()不能加参数；</li>
-<li>没有返回值，即使是 void 也不行。</li>
-</ul>
-<h2 id="this指针"><a href="#this指针" class="headerlink" title="this指针"></a>this指针</h2><ul>
-<li>this 指针记录对象的内存地址</li>
-<li>this 只能在<strong>成员函数中使用，全局函数、静态函数</strong>都不能使用 this。实际上，<strong>成员函数 默认第一个参数为 T * const this</strong>。也就是一个类里面的成员了函数 int func(int p)，func 的原 型<strong>在编译器看来应该是 int func(T * const this,int p)。</strong></li>
-<li>this 在成员函数的开始前构造，在成员函数的结束后清除。</li>
-<li>this 指针会因编译器不同而有不同的放置位置。可能是栈，也可能是寄存器，甚至全 局变量。</li>
-</ul>
-<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class &lt;class name&gt; : &lt;访问权限修饰符&gt; &lt;super class&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>公有继承（public）：当一个类派生继承公有基类时，基类的公有成员也是派生类的公有成 员，基类的保护成员也是派生类的保护成员，基类的私有成员不能直接被派生类访问，但 是可以通过调用基类的公有和保护成员来访问。</li>
-<li>保护继承（protected）： 当一个类派生继承保护基类时，基类的公有和保护成员将成为派 生类的保护成员。</li>
-<li>私有继承（private）：当一个类派生继承私有基类时，基类的公有和保护成员将成为派生类 的私有成员。</li>
-</ul>
-<h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><ul>
-<li>运算符重载的实质就是函数重载或函数多态。运算符重载是一种形式的 C++多态。目的在 于让人能够用同名的函数来完成不同的基本操作。</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&lt;返回类型说明符&gt; <span class="keyword">operator</span> &lt;运算符符号&gt;(&lt;参数表&gt;)</span><br><span class="line">&#123;</span><br><span class="line">	&lt;函数体&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>可重载的函数<ul>
-<li><img src="/imgs/image-20220114000140555.png" alt="image-20220114000140555"></li>
-<li><img src="/imgs/image-20220114000156524.png" alt="image-20220114000156524"></li>
-</ul>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">#比如有一个dog类，具有一个属性是体重weight</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	...</span><br><span class="line">    Dog <span class="keyword">operator</span>+(<span class="keyword">const</span> Dog &amp;d)</span><br><span class="line">    &#123;</span><br><span class="line">        Dog dog;</span><br><span class="line">        dog.weight = <span class="keyword">this</span>-&gt;weight+d.weight;</span><br><span class="line">        <span class="keyword">return</span> dog;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意传入的参数是引用传递</li>
-</ul>
-<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><ul>
-<li><p>C++多态意味着调用成员函数时，会根据调用函数的对象的类型来执行不同的函数</p>
-</li>
-<li><p>也就是说用<strong>基类的指针调用子类的对象</strong>的时候，会<strong>根据子类的具体类型进行具体的函数的选择</strong></p>
-</li>
-<li><p><strong>虚函数是 C++中用于实现多态(polymorphism)的机制。核心理念就是通过基类访 问派生类定义的函数</strong></p>
-</li>
-<li><p>多态的条件</p>
-<ul>
-<li>必须存在继承关系；</li>
-<li>继承关系必须有<strong>同名虚函数</strong>（其中虚函数是在基类中使用关键字 virtual 声明的函数，<strong>在派 生类中重新定义基类中定义的虚函数时，会告诉编译器不要静态链接到该函数</strong>）；</li>
-<li>存在基<strong>类类型的指针或者引用</strong>，通过该指针或引用调用虚函数。</li>
-</ul>
-</li>
-</ul>
-<h3 id="虚函数"><a href="#虚函数" class="headerlink" title="虚函数"></a>虚函数</h3><ul>
-<li>我们想要的是在程序中任意点可以根据所调用的对象类 型来选择调用的函数，这种操作被称为动态链接，或后期绑定。</li>
-<li><code>virtual  ReturnType FunctionName(Parameter)</code></li>
-</ul>
-<h3 id="纯虚函数"><a href="#纯虚函数" class="headerlink" title="纯虚函数"></a>纯虚函数</h3><ul>
-<li>若在基类中定义虚函数，以便在派生类中重新定义该函数更好地适用于对象，但是您在基 类中又不能对虚函数给出有意义的实现，这个时候就会用到纯虚函数。</li>
-<li><code>virtual void funtion1()=0</code></li>
-</ul>
-<h2 id="数据封装"><a href="#数据封装" class="headerlink" title="数据封装"></a>数据封装</h2><ul>
-<li><p>数据封装是一种把数据和操作数据的函数捆绑在一起的机制，数据抽象是一种仅向用户暴 露接口而把具体的实现细节隐藏起来的机制，C++ 通过创建类来支持封装和数据隐藏（public、 protected、private）。</p>
-</li>
-<li><p>简而言之就是不直接将变量暴露在用户的访问权限下而设置一个专门的函数处理用户对于变量的访问</p>
-</li>
-</ul>
-<h3 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h3><ul>
-<li>如 果类中至少有一个函数被声明为纯虚函数，则这个类就是抽象类</li>
-<li>设计抽象类（通常称为 ABC）的目的，是为了给其他类提供一个可以继承的适当的基类。 抽象类不能被用于实例化对象，它只能作为接口使用。如果试图实例化一个抽象类的对象，会 导致编译错误。</li>
-<li>如果一个 ABC 的子类需要被实例化，则<strong>必须实现每个虚函数</strong>，这也意味着 C++ 支 持使用 ABC 声明接口。如果没有在派生类中重写纯虚函数，就尝试实例化该类的对象，会导 致编译错误。可用于实例化对象的类被称为具体类。</li>
-</ul>
-<h2 id="Linux下安装Qt"><a href="#Linux下安装Qt" class="headerlink" title="Linux下安装Qt"></a>Linux下安装Qt</h2><ul>
-<li><p><a target="_blank" rel="noopener" href="https://download.qt.io/archive/qt/5.12/5.12.9/">https://download.qt.io/archive/qt/5.12/5.12.9/</a></p>
-</li>
-<li><p><img src="/_posts/image-20220114004101649.png" alt="image-20220114004101649"></p>
-</li>
-<li><p>然后shell基于执行权限（x)然后运行即可</p>
-</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chmod +x qt-opensource-linux-x64-5.12.9.run</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./qt-opensource-linux-x64-5.12.9.run</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>安装开始会要求登录，登录之后选择安装的内容</li>
-<li><img src="/_posts/image-20220114004230454.png" alt="image-20220114004230454"></li>
-</ul>
-<h2 id="信号与槽"><a href="#信号与槽" class="headerlink" title="信号与槽"></a>信号与槽</h2><ul>
-<li>信号（Signal）就是在特定情况下被发射的事件，例如 PushButton 最常见的信号就是鼠标 单击时发射的 clicked() 信号，一个 ComboBox 最常见的信号是选择的列表项变化时发射的 CurrentIndexChanged() 信号。</li>
-<li>槽（Slot）就是对信号响应的函数。槽就是一个函数，与一般的 C++函数是一样的，可以 定义在类的任何部分（public、private 或 protected），可以具有任何参数，也可以被直接调用。 槽函数与一般的函数不同的是：槽函数可以与一个信号关联，当信号被发射时，关联的槽函数 被自动执行。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QObject::connect(sender, SIGNAL(signal()), receiver, SLOT(slot()));</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>其中，sender 是发射信号的对象的名称，signal() 是信号名称。信号可以看做是特殊的函 数，需要带括号，有参数时还需要指明参数。receiver 是接收信号的对象名称，slot() 是槽函数 的名称，需要带括号，有参数时还需要指明参数。</p>
-</li>
-<li><p>使用例</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">QObject::connect(pushButton, SIGNAL(clicked()), MainWindow, SLOT(close()));</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>其中的pishButton是动作的发出者，MainWindow是信号的接收者</p>
-</li>
-<li><p>一个信号可以连接<strong>多个槽</strong></p>
-</li>
-<li><p>多个信号也可以链接同一个槽</p>
-</li>
-<li><p>一个信号可以连接另外一个信号</p>
-</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">connect(pushButton, SIGNAL(objectNameChanged(QString)),this, SIGNAL(windowTitelChanged(QString)));</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>当<strong>一个信号发射时，也会发射另外一个信号</strong>，实现某些特殊的功能。</p>
-</li>
-<li><p>断开连接使用<code>disconnect()</code>，此处略</p>
-</li>
-</ul>
-<h3 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h3><ul>
-<li>信号只需要声明，无需定义</li>
-<li>信号需要在<code>signals</code>里面进行声明</li>
-<li><img src="/imgs/image-20220114201719988.png" alt="image-20220114201719988"></li>
-</ul>
-<h3 id="槽"><a href="#槽" class="headerlink" title="槽"></a>槽</h3><ul>
-<li><p>创建槽的方法也很简单，也是直接在 mianwindow.h 里直接声明槽，在 mianwindow.cpp 里 实现槽的定义，声明槽<strong>必须写槽的定义(定义指函数体的实现)，否则编译器编译时将会报错</strong>。</p>
-</li>
-<li><p>槽可以是任何成员函数、普通全局函数、静态函数</p>
-</li>
-<li><p><strong><u>槽函数和信号</u>的参数和返回值要一致</strong></p>
-</li>
-<li><p><img src="/imgs/image-20220114201840110.png" alt="image-20220114201840110"></p>
-</li>
-</ul>
-<p><strong>举例</strong></p>
-<ul>
-<li>mainwindow.h</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MAINWINDOW_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAINWINDOW_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QMainWindow&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QPushButton&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainWindow</span> :</span> <span class="keyword">public</span> QMainWindow</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MainWindow</span>(QWidget *parent = <span class="literal">nullptr</span>);</span><br><span class="line">    ~<span class="built_in">MainWindow</span>();</span><br><span class="line"></span><br><span class="line">signals:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pushBtnTxtChanged</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> slots:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">changeBtnTxt</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pushBtnClicked</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    QPushButton *pushBtn;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// MAINWINDOW_H</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>mainwindow.cpp</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;mainwindow.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">MainWindow::<span class="built_in">MainWindow</span>(QWidget *parent)</span><br><span class="line">    : <span class="built_in">QMainWindow</span>(parent)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;<span class="built_in">resize</span>(<span class="number">800</span>, <span class="number">600</span>);</span><br><span class="line"></span><br><span class="line">    pushBtn = <span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    pushBtn-&gt;<span class="built_in">setText</span>(<span class="string">&quot;I am a Button&quot;</span>);</span><br><span class="line">    <span class="built_in">connect</span>(pushBtn, <span class="built_in">SIGNAL</span>(<span class="built_in">clicked</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">pushBtnClicked</span>()));</span><br><span class="line">    <span class="built_in">connect</span>(<span class="keyword">this</span>, <span class="built_in">SIGNAL</span>(<span class="built_in">pushBtnTxtChanged</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">changeBtnTxt</span>()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MainWindow::~<span class="built_in">MainWindow</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> pushBtn;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> MainWindow:: <span class="built_in">pushBtnClicked</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">emit <span class="title">pushBtnTxtChanged</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::changeBtnTxt</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    pushBtn-&gt;<span class="built_in">setText</span>(<span class="string">&quot;clicked!&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>上面的代码中实现了自定义一个信号<code>pushBtnTxtchanged()</code>，将其通过自定义的槽函数<code>pushBtnClicked()</code>emit出来，然后连接到<code>changeBtnTxt()</code>函数上。通过将自定义的槽函数<code>pushBtnClicked()</code>连接到按钮自带的<code>clicked()</code>信号上，实现按下之后修改按键文字的功能。</p>
-</li>
-<li><p><img src="/imgs/image-20220114203037162.png" alt="image-20220114203037162"></p>
-</li>
-<li><p><img src="/imgs/image-20220114203057405.png" alt="image-20220114203057405"></p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-C标准IO函数使用笔记"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/12/C%E6%A0%87%E5%87%86IO%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"
-    >C标准IO函数使用笔记</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/12/C%E6%A0%87%E5%87%86IO%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" class="article-date">
-  <time datetime="2022-01-12T14:20:06.000Z" itemprop="datePublished">2022-01-12</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="C标准IO函数使用笔记"><a href="#C标准IO函数使用笔记" class="headerlink" title="C标准IO函数使用笔记"></a>C标准IO函数使用笔记</h1><h2 id="文件读写"><a href="#文件读写" class="headerlink" title="文件读写"></a>文件读写</h2><ul>
-<li><p><img src="/imgs/image-20220112223547788.png" alt="image-20220112223547788"></p>
-</li>
-<li><p>上面的函数实现了将一个每个单元大小为4个byte的浮点数存储在文件中，并且再原样读取回来的功能。</p>
-</li>
-<li><p>写文件和读文件的参数分别是单个单元的大小为4字节，总长度为5.下面看结果</p>
-</li>
-<li><p><img src="/imgs/image-20220112223727041.png" alt="image-20220112223727041"></p>
-</li>
-<li><p>测试可知，文件读写函数用的是同一个文件偏移量，也就是随着文件的写入而顺次增加的偏移量，假如文件读取之前不将偏移量移动回初始位置的话，会什么也读不出来</p>
-</li>
-<li><p><strong>可见sizeof()函数读取数组的时候，读取的是数组的总空间大小而不是数组的元素个数。图上数组的读取结果是20，也就是5*4</strong></p>
-</li>
-<li><p>同时还可以推测文件写入模式<code>r+</code>的默认起始位置是0</p>
-</li>
-<li><p>在上述函数中的<code>fwrite</code>后面添加一个<code>ftell()</code>显示偏移量，可见<img src="/imgs/image-20220112224257063.png" alt="image-20220112224257063">fwrite函数执行完毕的时候文件的偏移量自动增加到了20字节处</p>
-</li>
-</ul>
-<h2 id="格式化文本函数的格式控制字符串"><a href="#格式化文本函数的格式控制字符串" class="headerlink" title="格式化文本函数的格式控制字符串"></a>格式化文本函数的格式控制字符串</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">%[flags][width][.precision][length]type</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>flags：标志，可包含 0 个或多个标志； </p>
-</li>
-<li><p>width：输出最小宽度，表示转换后输出字符串的最小宽度； </p>
-</li>
-<li><p>precision：精度，前面有一个点号” . “； </p>
-</li>
-<li><p>length：长度修饰符； </p>
-</li>
-<li><p>type：转换类型，指定待转换数据的类型。</p>
-</li>
-<li><p>type:</p>
-<ul>
-<li><img src="/imgs/image-20220112225548985.png" alt="image-20220112225548985"></li>
-<li><img src="/imgs/image-20220112225613496-16419994522663.png" alt="image-20220112225613496"></li>
-</ul>
-</li>
-<li><p>flags</p>
-<ul>
-<li><img src="/imgs/image-20220112225757743.png" alt="image-20220112225757743"></li>
-<li><img src="/imgs/image-20220112230005582.png" alt="image-20220112230005582"></li>
-</ul>
-</li>
-<li><p>width</p>
-<ul>
-<li>最小的输出宽度，用十进制数来表示输出的最小位数<strong>，若实际的输出位数大于指定的输出的最小位数， 则以实际的位数进行输出，若实际的位数小于指定输出的最小位数，则可按照指定的 flags 标志补 0 或补空 格。</strong></li>
-<li><img src="/imgs/image-20220113000901462.png" alt="image-20220113000901462"></li>
-</ul>
-</li>
-<li><p>precision 精度</p>
-<ul>
-<li>精度字段<strong>以点号” . “开头，后跟一个十进制正数</strong></li>
-<li><img src="/imgs/image-20220113000935320.png" alt="image-20220113000935320"></li>
-<li><img src="/imgs/image-20220113001001277.png" alt="image-20220113001001277"></li>
-</ul>
-</li>
-<li><p>length</p>
-<ul>
-<li>长度修饰符指明待转换数据的长度，因为 <strong>type 字段指定的的类型只有 int、unsigned int 以及 double</strong> 等 几种数据类型，<strong>但是 C 语言内置的数据类型不止这几种，譬如有 16bit 的 short、unsigned short，8bit 的 char、 unsigned char，也有 64bit 的 long long 等</strong>，为了能够区别不同长度的数据类型，于是乎，长度修饰符（length） 应运而生，成为转换说明的一部分。</li>
-<li><img src="/../../blogsPage/source/imgs/image-20220113001057843.png" alt="image-20220113001057843"></li>
-</ul>
-</li>
-</ul>
-<p>示例</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">printf(&quot;%hd\n&quot;, 12345); //将数据以 short int 类型进行转换</span><br><span class="line">printf(&quot;%ld\n&quot;, 12345); //将数据以 long int 类型进行转换</span><br><span class="line">printf(&quot;%lld\n&quot;, 12345); //将数据以 long long int 类型进行转换</span><br></pre></td></tr></table></figure>
-
-<h2 id="格式化输入"><a href="#格式化输入" class="headerlink" title="格式化输入"></a>格式化输入</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">scanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fscanf</span><span class="params">(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sscanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>可以看到，这 3 个格式化输入函数也是可变参函数，它们都有一个共同的参数 format，同样也称为格式 控制字符串，用于指定输入数据如何进行格式转换，与格式化输出函数中的 format 参数格式相似，但也有 所不同。 </p>
-</li>
-<li><p>每个函数除了固定参数之外，还可携带 0 个或多个可变参数。 </p>
-</li>
-<li><p>scanf()函数可将用户输入（标准输入）的数据进行格式化转换；fscanf()函数从 FILE 指针指定文件中读 取数据，并将数据进行格式化转换；sscanf()函数从参数 str 所指向的字符串中读取数据，并将数据进行格式 化转换。</p>
-</li>
-</ul>
-<h3 id="scanf"><a href="#scanf" class="headerlink" title="scanf"></a>scanf</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a, b, c;</span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>, &amp;a, &amp;b, &amp;c);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>函数调用成功后，将返回成功匹配和分配的输入项的数量；如果较早匹配失败，则该数目可能小于所提 供的数目，甚至为零。发生错误则返回负值。</li>
-</ul>
-<h3 id="fscanf"><a href="#fscanf" class="headerlink" title="fscanf"></a>fscanf</h3><ul>
-<li>注意，该函数的第一个参数可以是标准输入流，此时它的作用与scanf相同</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a, b, c;</span><br><span class="line"><span class="built_in">fscanf</span>(<span class="built_in">stdin</span>, <span class="string">&quot;%d %d %d&quot;</span>, &amp;a, &amp;b, &amp;c);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>函数调用成功后，将返回成功匹配和分配的输入项的数量；如果较早匹配失败，则该数目可能小于所提供的数目，甚至为零。发生错误则返回负值。</li>
-</ul>
-<h3 id="sscanf"><a href="#sscanf" class="headerlink" title="sscanf"></a>sscanf</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> *str = <span class="string">&quot;5454 hello&quot;</span>;</span><br><span class="line"><span class="keyword">char</span> buf[<span class="number">10</span>];</span><br><span class="line"><span class="keyword">int</span> a;</span><br><span class="line"><span class="built_in">sscanf</span>(str, <span class="string">&quot;%d %s&quot;</span>, &amp;a, buf);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>函数调用成功后，将返回成功匹配和分配的输入项的数量；如果较早匹配失败，则该数目可能小于所提 供的数目，甚至为零。发生错误则返回负值。</li>
-</ul>
-<h3 id="格式控制字符串"><a href="#格式控制字符串" class="headerlink" title="格式控制字符串"></a>格式控制字符串</h3><ul>
-<li>本小节的重点依然是这个 format 参数的格式，与格式化输出函数中的 format 参数格式、写法上比较相 似，但也有一些区别。format 字符串包含一个或多个转换说明，每一个转换说明都是以百分号”%”或者”%n$” 开头（n 是一个十进制数字），关于”%n$”这种开头的转换说明就不介绍了，实际上用的不多。</li>
-<li>以%百分号开头的转换说明一般格式如下(<code>[]</code>部分是可选的参数)</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">%[*][width][length]type</span><br><span class="line">%[m][width][length]type</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>%后面可选择性添加<strong>星号</strong><code>*</code>或**字母 <code>m</code>**，如果添加了星号<code>*</code>，格式化输入函数会按照转换说明的指示读取输 入，但是丢弃输入，意味着不需要对转换后的结果进行存储，所以也就不需要提供相应的指针参数。</li>
-<li>如果添加了 m，它只能与%s、%c 以及%[一起使用，调用者无需分配相应的缓冲区来保存格式转换后的 数据，原因在于添加了 m，这些格式化输入函数内部会自动分配足够大小的缓冲区，并将缓冲区的地址值通 过与该格式转换相对应的指针参数返回出来，该指针参数应该是指向 char *变量的指针。随后，当不再需要 此缓冲区时，调用者应调用 free()函数来释放此缓冲区。</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> *buf;</span><br><span class="line"></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%ms&quot;</span>, &amp;buf);</span><br><span class="line">......</span><br><span class="line"><span class="built_in">free</span>(buf);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>width：最大字符宽度；</p>
-</li>
-<li><p>length：长度修饰符，与格式化输出函数的 format 参数中的 length 字段意义相同。</p>
-</li>
-<li><p>type：指定输入数据的类型。</p>
-</li>
-<li><p><strong>type</strong></p>
-<ul>
-<li><img src="/imgs/image-20220113130730315.png" alt="image-20220113130730315"></li>
-<li><img src="/imgs/image-20220113130752642.png" alt="image-20220113130752641"></li>
-</ul>
-</li>
-<li><p><strong>width</strong>最大字符长度限制。</p>
-<ul>
-<li>是一个十进制表示的整数，用于指定最大字符宽度，当达到此最大值或发现不匹配的字符时（以先发生 者为准），字符的读取将停止。大多数 type 类型会丢弃初始的空白字符，并且这些丢弃的字符不会计入最 大字符宽度。对于字符串转换来说，scanf()会在字符串末尾自动添加终止符”\0”，最大字符宽度中不包括此 终止符。</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%4s&quot;</span>, buf); <span class="comment">//匹配字符串，字符串长度不超过 4 个字符</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>此时输入“abcdef”，存储的是“abcd”</li>
-<li><strong>length</strong>数据长度修饰符<ul>
-<li><img src="/imgs/image-20220113131301042.png" alt="image-20220113131301042"></li>
-</ul>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%hd&quot;</span>, var); <span class="comment">//匹配 short int 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%hhd&quot;</span>, var); <span class="comment">//匹配 signed char 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%ld&quot;</span>, var); <span class="comment">//匹配 long int 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%f&quot;</span>, var); <span class="comment">//匹配 float 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%lf&quot;</span>, var); <span class="comment">//匹配 double 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%Lf&quot;</span>, var); <span class="comment">//匹配 long double 类型数据</span></span><br></pre></td></tr></table></figure>
-
-<p>使用例：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> inputBuf;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%*10[A-Za-z]%f&quot;</span>, &amp;inputBuf);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%03.4f&quot;</span>, inputBuf);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意<code>[]</code>里面的内容的写法，比如想一次性收取所有字母，<strong>使用<code>[A-Za-z]</code>，连续写即可，数字写0-9，同</strong></li>
-<li>控制台测试输入</li>
-<li><img src="/imgs/image-20220113132156094.png" alt="image-20220113132156094"></li>
-<li>都能够正确接收到0.01，说明成功识别到了hello并且将其丢弃（因为指定了<code>*</code>符号）</li>
-</ul>
-<h2 id="I-O缓冲"><a href="#I-O缓冲" class="headerlink" title="I/O缓冲"></a>I/O缓冲</h2><p>略，详见原子教程《I.MX6U嵌入式Linux C应用编程指南》</p>
-<ul>
-<li>标准 I/O 所维护的 stdio 缓冲是用户空间 的缓冲区，当<u>应用程序中通过标准 I/O 操作磁盘文件时</u>，为了减少调用系统调用的次数，标准 I/O 函数会<u>将 用户写入或读取文件的数据缓存在 stdio 缓冲区</u>，然后<strong>再一次性</strong>将 stdio 缓冲区中缓存的数据通过调用系统 调用 I/O（文件 I/O）<u>写入到文件 I/O 内核缓冲区或者拷贝到应用程序的 buf</u> 中。</li>
-<li>通过这样的优化操作，当操作磁盘文件时，在用户空间缓存大块数据以减少调用系统调用的次数，使得 效率、性能得到优化。使用标准 I/O 可以使编程者免于自行处理对数据的缓冲，无论是调用 write()写入数 据、还是调用 read()读取数据。</li>
-<li>直接 I/O 方式效率、性能比较低，绝大部分应用程序不会使用直接 I/O 方式对文件进行 I/O 操作，通常 只在一些特殊的应用场合下才可能会使用，那我们<u>可以使用直接 I/O 方式来测试磁盘设备的读写速率</u>，这种 测试方式相比普通 I/O 方式就会更加准确。</li>
-</ul>
-<h2 id="文件描述符和FILE指针的转化"><a href="#文件描述符和FILE指针的转化" class="headerlink" title="文件描述符和FILE指针的转化"></a>文件描述符和FILE指针的转化</h2><ul>
-<li>在应用程序中，在同一个文件上执行 I/O 操作时，还可以<strong>将文件 I/O（系统调用 I/O）与标准 I/O 混合使 用</strong>，这个时候我们就需要将文件描述符和 FILE 指针对象之间进行转换，此时可以借助于库函数 <code>fdopen()</code>、 <code>fileno()</code>来完成。</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fileno</span><span class="params">(FILE *stream)</span></span>;</span><br><span class="line"><span class="function">FILE *<span class="title">fdopen</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span> *mode)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>对于 fileno()函数来说，根据传入的 FILE 指针得到整数文件描述符，<strong>通过返回值得到文件描述符</strong>，如果 转换<strong>错误将返回-1</strong>，并且会设置 errno 来指示错误原因。得到文件描述符之后，便可以使用诸如 read()、write()、 lseek()、fcntl()等文件 I/O 方式操作文件。</p>
-</li>
-<li><p>fdopen()函数与 fileno()功能相反，给定一个文件描述符，<strong>得到该文件对应的 FILE 指针</strong>，之后便可以使 用诸如 fread()、fwrite()等标准 I/O 方式操作文件了。参数 mode 与 fopen()函数中的 mode 参数含义相同如下表，<strong>若该参数与文件描述符 fd 的访问模式<u>不一致</u>，则会导致调用 fdopen()失败。</strong></p>
-<ul>
-<li><img src="/image-20220113163201525.png" alt="image-20220113163201525"></li>
-<li><img src="/image-20220113163221211.png" alt="image-20220113163221211"></li>
-</ul>
-</li>
-</ul>
-<h3 id="混用两种IO函数的时候的缓冲区问题"><a href="#混用两种IO函数的时候的缓冲区问题" class="headerlink" title="混用两种IO函数的时候的缓冲区问题"></a>混用两种IO函数的时候的缓冲区问题</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;print&quot;</span>);</span><br><span class="line">    write(STDOUT_FILENO, <span class="string">&quot;write\n&quot;</span>, <span class="number">6</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>当混合使用文件 I/O 和标准 I/O 时，需要特别注意缓冲的问题，<strong>文件 I/O 会直接将数据写入到内核缓冲 区进行高速缓存</strong>，而<strong>标准 I/O 则会将数据写入到 stdio 缓冲区，之后再调用 write()将 stdio 缓冲区中的数据写 入到内核缓冲区</strong>。</p>
-</li>
-<li><p>执行结果你会发现，<strong>先输出了”write”字符串信息，接着再输出了”print”字符串信息</strong></p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/5/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/7/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/5/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/7/">下一页</a>
   </nav>
   
 </section>

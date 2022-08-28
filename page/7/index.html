@@ -141,6 +141,443 @@
     
     
     <article
+  id="post-Cpp复习和Qt（一）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/13/Cpp%E5%A4%8D%E4%B9%A0%E5%92%8CQt%EF%BC%88%E4%B8%80%EF%BC%89/"
+    >C++复习和Qt（一）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/13/Cpp%E5%A4%8D%E4%B9%A0%E5%92%8CQt%EF%BC%88%E4%B8%80%EF%BC%89/" class="article-date">
+  <time datetime="2022-01-13T15:43:16.000Z" itemprop="datePublished">2022-01-13</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="C-复习和Qt（Ubuntu）"><a href="#C-复习和Qt（Ubuntu）" class="headerlink" title="C++复习和Qt（Ubuntu）"></a>C++复习和Qt（Ubuntu）</h1><h2 id="namespace"><a href="#namespace" class="headerlink" title="namespace"></a>namespace</h2><ul>
+<li>命名空间的定义</li>
+<li><code>namespace Ui &#123; class MainWindow; class myThread;&#125;</code></li>
+<li>一个命名空间的定义包含两部分：首先是关键字namespace，随后是命名空间的名字。</li>
+<li>在命名空间名字后面是<strong>一系列由花括号括起来的声明和定义</strong>。</li>
+<li>只要能出现在全局作用域中的声明就能置于命名空间内，主要包括：类、变量(及其初始化操作)、函数(及其定义)、模板和其它命名空间。</li>
+<li>命名空间<strong>结束后无须分号</strong>，这一点与块类似。</li>
+</ul>
+<p><strong>假如在一个类中使用在之后定义的类的对象或者其他内容的话，先在这个类之前使用<code>class &lt;被使用的类名&gt;;</code>声明一下类</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> &lt;</span><span class="class"><span class="keyword">class</span> <span class="title">name</span>&gt;</span> : &lt;访问权限修饰符&gt; &lt;super <span class="class"><span class="keyword">class</span>&gt;</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	&lt;函数定义&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>不写权限默认private</li>
+</ul>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><ul>
+<li>构造函数必须与类名同名；</li>
+<li>可以重载，（重载？新概念，后面学到什么是重载。）；</li>
+<li>没有返回类型，即使是 void 也不行。</li>
+</ul>
+<h2 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h2><ul>
+<li>析构函数的格式为~类名()；</li>
+<li>调用时释放内存（资源）；</li>
+<li>~类名()不能加参数；</li>
+<li>没有返回值，即使是 void 也不行。</li>
+</ul>
+<h2 id="this指针"><a href="#this指针" class="headerlink" title="this指针"></a>this指针</h2><ul>
+<li>this 指针记录对象的内存地址</li>
+<li>this 只能在<strong>成员函数中使用，全局函数、静态函数</strong>都不能使用 this。实际上，<strong>成员函数 默认第一个参数为 T * const this</strong>。也就是一个类里面的成员了函数 int func(int p)，func 的原 型<strong>在编译器看来应该是 int func(T * const this,int p)。</strong></li>
+<li>this 在成员函数的开始前构造，在成员函数的结束后清除。</li>
+<li>this 指针会因编译器不同而有不同的放置位置。可能是栈，也可能是寄存器，甚至全 局变量。</li>
+</ul>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class &lt;class name&gt; : &lt;访问权限修饰符&gt; &lt;super class&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>公有继承（public）：当一个类派生继承公有基类时，基类的公有成员也是派生类的公有成 员，基类的保护成员也是派生类的保护成员，基类的私有成员不能直接被派生类访问，但 是可以通过调用基类的公有和保护成员来访问。</li>
+<li>保护继承（protected）： 当一个类派生继承保护基类时，基类的公有和保护成员将成为派 生类的保护成员。</li>
+<li>私有继承（private）：当一个类派生继承私有基类时，基类的公有和保护成员将成为派生类 的私有成员。</li>
+</ul>
+<h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><ul>
+<li>运算符重载的实质就是函数重载或函数多态。运算符重载是一种形式的 C++多态。目的在 于让人能够用同名的函数来完成不同的基本操作。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&lt;返回类型说明符&gt; <span class="keyword">operator</span> &lt;运算符符号&gt;(&lt;参数表&gt;)</span><br><span class="line">&#123;</span><br><span class="line">	&lt;函数体&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可重载的函数<ul>
+<li><img src="/imgs/image-20220114000140555.png" alt="image-20220114000140555"></li>
+<li><img src="/imgs/image-20220114000156524.png" alt="image-20220114000156524"></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">#比如有一个dog类，具有一个属性是体重weight</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	...</span><br><span class="line">    Dog <span class="keyword">operator</span>+(<span class="keyword">const</span> Dog &amp;d)</span><br><span class="line">    &#123;</span><br><span class="line">        Dog dog;</span><br><span class="line">        dog.weight = <span class="keyword">this</span>-&gt;weight+d.weight;</span><br><span class="line">        <span class="keyword">return</span> dog;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意传入的参数是引用传递</li>
+</ul>
+<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><ul>
+<li><p>C++多态意味着调用成员函数时，会根据调用函数的对象的类型来执行不同的函数</p>
+</li>
+<li><p>也就是说用<strong>基类的指针调用子类的对象</strong>的时候，会<strong>根据子类的具体类型进行具体的函数的选择</strong></p>
+</li>
+<li><p><strong>虚函数是 C++中用于实现多态(polymorphism)的机制。核心理念就是通过基类访 问派生类定义的函数</strong></p>
+</li>
+<li><p>多态的条件</p>
+<ul>
+<li>必须存在继承关系；</li>
+<li>继承关系必须有<strong>同名虚函数</strong>（其中虚函数是在基类中使用关键字 virtual 声明的函数，<strong>在派 生类中重新定义基类中定义的虚函数时，会告诉编译器不要静态链接到该函数</strong>）；</li>
+<li>存在基<strong>类类型的指针或者引用</strong>，通过该指针或引用调用虚函数。</li>
+</ul>
+</li>
+</ul>
+<h3 id="虚函数"><a href="#虚函数" class="headerlink" title="虚函数"></a>虚函数</h3><ul>
+<li>我们想要的是在程序中任意点可以根据所调用的对象类 型来选择调用的函数，这种操作被称为动态链接，或后期绑定。</li>
+<li><code>virtual  ReturnType FunctionName(Parameter)</code></li>
+</ul>
+<h3 id="纯虚函数"><a href="#纯虚函数" class="headerlink" title="纯虚函数"></a>纯虚函数</h3><ul>
+<li>若在基类中定义虚函数，以便在派生类中重新定义该函数更好地适用于对象，但是您在基 类中又不能对虚函数给出有意义的实现，这个时候就会用到纯虚函数。</li>
+<li><code>virtual void funtion1()=0</code></li>
+</ul>
+<h2 id="数据封装"><a href="#数据封装" class="headerlink" title="数据封装"></a>数据封装</h2><ul>
+<li><p>数据封装是一种把数据和操作数据的函数捆绑在一起的机制，数据抽象是一种仅向用户暴 露接口而把具体的实现细节隐藏起来的机制，C++ 通过创建类来支持封装和数据隐藏（public、 protected、private）。</p>
+</li>
+<li><p>简而言之就是不直接将变量暴露在用户的访问权限下而设置一个专门的函数处理用户对于变量的访问</p>
+</li>
+</ul>
+<h3 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h3><ul>
+<li>如 果类中至少有一个函数被声明为纯虚函数，则这个类就是抽象类</li>
+<li>设计抽象类（通常称为 ABC）的目的，是为了给其他类提供一个可以继承的适当的基类。 抽象类不能被用于实例化对象，它只能作为接口使用。如果试图实例化一个抽象类的对象，会 导致编译错误。</li>
+<li>如果一个 ABC 的子类需要被实例化，则<strong>必须实现每个虚函数</strong>，这也意味着 C++ 支 持使用 ABC 声明接口。如果没有在派生类中重写纯虚函数，就尝试实例化该类的对象，会导 致编译错误。可用于实例化对象的类被称为具体类。</li>
+</ul>
+<h2 id="Linux下安装Qt"><a href="#Linux下安装Qt" class="headerlink" title="Linux下安装Qt"></a>Linux下安装Qt</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://download.qt.io/archive/qt/5.12/5.12.9/">https://download.qt.io/archive/qt/5.12/5.12.9/</a></p>
+</li>
+<li><p><img src="/_posts/image-20220114004101649.png" alt="image-20220114004101649"></p>
+</li>
+<li><p>然后shell基于执行权限（x)然后运行即可</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chmod +x qt-opensource-linux-x64-5.12.9.run</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./qt-opensource-linux-x64-5.12.9.run</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>安装开始会要求登录，登录之后选择安装的内容</li>
+<li><img src="/_posts/image-20220114004230454.png" alt="image-20220114004230454"></li>
+</ul>
+<h2 id="信号与槽"><a href="#信号与槽" class="headerlink" title="信号与槽"></a>信号与槽</h2><ul>
+<li>信号（Signal）就是在特定情况下被发射的事件，例如 PushButton 最常见的信号就是鼠标 单击时发射的 clicked() 信号，一个 ComboBox 最常见的信号是选择的列表项变化时发射的 CurrentIndexChanged() 信号。</li>
+<li>槽（Slot）就是对信号响应的函数。槽就是一个函数，与一般的 C++函数是一样的，可以 定义在类的任何部分（public、private 或 protected），可以具有任何参数，也可以被直接调用。 槽函数与一般的函数不同的是：槽函数可以与一个信号关联，当信号被发射时，关联的槽函数 被自动执行。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QObject::connect(sender, SIGNAL(signal()), receiver, SLOT(slot()));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>其中，sender 是发射信号的对象的名称，signal() 是信号名称。信号可以看做是特殊的函 数，需要带括号，有参数时还需要指明参数。receiver 是接收信号的对象名称，slot() 是槽函数 的名称，需要带括号，有参数时还需要指明参数。</p>
+</li>
+<li><p>使用例</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">QObject::connect(pushButton, SIGNAL(clicked()), MainWindow, SLOT(close()));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>其中的pishButton是动作的发出者，MainWindow是信号的接收者</p>
+</li>
+<li><p>一个信号可以连接<strong>多个槽</strong></p>
+</li>
+<li><p>多个信号也可以链接同一个槽</p>
+</li>
+<li><p>一个信号可以连接另外一个信号</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">connect(pushButton, SIGNAL(objectNameChanged(QString)),this, SIGNAL(windowTitelChanged(QString)));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>当<strong>一个信号发射时，也会发射另外一个信号</strong>，实现某些特殊的功能。</p>
+</li>
+<li><p>断开连接使用<code>disconnect()</code>，此处略</p>
+</li>
+</ul>
+<h3 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h3><ul>
+<li>信号只需要声明，无需定义</li>
+<li>信号需要在<code>signals</code>里面进行声明</li>
+<li><img src="/imgs/image-20220114201719988.png" alt="image-20220114201719988"></li>
+</ul>
+<h3 id="槽"><a href="#槽" class="headerlink" title="槽"></a>槽</h3><ul>
+<li><p>创建槽的方法也很简单，也是直接在 mianwindow.h 里直接声明槽，在 mianwindow.cpp 里 实现槽的定义，声明槽<strong>必须写槽的定义(定义指函数体的实现)，否则编译器编译时将会报错</strong>。</p>
+</li>
+<li><p>槽可以是任何成员函数、普通全局函数、静态函数</p>
+</li>
+<li><p><strong><u>槽函数和信号</u>的参数和返回值要一致</strong></p>
+</li>
+<li><p><img src="/imgs/image-20220114201840110.png" alt="image-20220114201840110"></p>
+</li>
+</ul>
+<p><strong>举例</strong></p>
+<ul>
+<li>mainwindow.h</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MAINWINDOW_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAINWINDOW_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QMainWindow&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QPushButton&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainWindow</span> :</span> <span class="keyword">public</span> QMainWindow</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MainWindow</span>(QWidget *parent = <span class="literal">nullptr</span>);</span><br><span class="line">    ~<span class="built_in">MainWindow</span>();</span><br><span class="line"></span><br><span class="line">signals:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pushBtnTxtChanged</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> slots:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">changeBtnTxt</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pushBtnClicked</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    QPushButton *pushBtn;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// MAINWINDOW_H</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>mainwindow.cpp</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;mainwindow.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">MainWindow::<span class="built_in">MainWindow</span>(QWidget *parent)</span><br><span class="line">    : <span class="built_in">QMainWindow</span>(parent)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;<span class="built_in">resize</span>(<span class="number">800</span>, <span class="number">600</span>);</span><br><span class="line"></span><br><span class="line">    pushBtn = <span class="keyword">new</span> <span class="built_in">QPushButton</span>(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    pushBtn-&gt;<span class="built_in">setText</span>(<span class="string">&quot;I am a Button&quot;</span>);</span><br><span class="line">    <span class="built_in">connect</span>(pushBtn, <span class="built_in">SIGNAL</span>(<span class="built_in">clicked</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">pushBtnClicked</span>()));</span><br><span class="line">    <span class="built_in">connect</span>(<span class="keyword">this</span>, <span class="built_in">SIGNAL</span>(<span class="built_in">pushBtnTxtChanged</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">changeBtnTxt</span>()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MainWindow::~<span class="built_in">MainWindow</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> pushBtn;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> MainWindow:: <span class="built_in">pushBtnClicked</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">emit <span class="title">pushBtnTxtChanged</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::changeBtnTxt</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    pushBtn-&gt;<span class="built_in">setText</span>(<span class="string">&quot;clicked!&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>上面的代码中实现了自定义一个信号<code>pushBtnTxtchanged()</code>，将其通过自定义的槽函数<code>pushBtnClicked()</code>emit出来，然后连接到<code>changeBtnTxt()</code>函数上。通过将自定义的槽函数<code>pushBtnClicked()</code>连接到按钮自带的<code>clicked()</code>信号上，实现按下之后修改按键文字的功能。</p>
+</li>
+<li><p><img src="/imgs/image-20220114203037162.png" alt="image-20220114203037162"></p>
+</li>
+<li><p><img src="/imgs/image-20220114203057405.png" alt="image-20220114203057405"></p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-C标准IO函数使用笔记"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/12/C%E6%A0%87%E5%87%86IO%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"
+    >C标准IO函数使用笔记</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/12/C%E6%A0%87%E5%87%86IO%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" class="article-date">
+  <time datetime="2022-01-12T14:20:06.000Z" itemprop="datePublished">2022-01-12</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="C标准IO函数使用笔记"><a href="#C标准IO函数使用笔记" class="headerlink" title="C标准IO函数使用笔记"></a>C标准IO函数使用笔记</h1><h2 id="文件读写"><a href="#文件读写" class="headerlink" title="文件读写"></a>文件读写</h2><ul>
+<li><p><img src="/imgs/image-20220112223547788.png" alt="image-20220112223547788"></p>
+</li>
+<li><p>上面的函数实现了将一个每个单元大小为4个byte的浮点数存储在文件中，并且再原样读取回来的功能。</p>
+</li>
+<li><p>写文件和读文件的参数分别是单个单元的大小为4字节，总长度为5.下面看结果</p>
+</li>
+<li><p><img src="/imgs/image-20220112223727041.png" alt="image-20220112223727041"></p>
+</li>
+<li><p>测试可知，文件读写函数用的是同一个文件偏移量，也就是随着文件的写入而顺次增加的偏移量，假如文件读取之前不将偏移量移动回初始位置的话，会什么也读不出来</p>
+</li>
+<li><p><strong>可见sizeof()函数读取数组的时候，读取的是数组的总空间大小而不是数组的元素个数。图上数组的读取结果是20，也就是5*4</strong></p>
+</li>
+<li><p>同时还可以推测文件写入模式<code>r+</code>的默认起始位置是0</p>
+</li>
+<li><p>在上述函数中的<code>fwrite</code>后面添加一个<code>ftell()</code>显示偏移量，可见<img src="/imgs/image-20220112224257063.png" alt="image-20220112224257063">fwrite函数执行完毕的时候文件的偏移量自动增加到了20字节处</p>
+</li>
+</ul>
+<h2 id="格式化文本函数的格式控制字符串"><a href="#格式化文本函数的格式控制字符串" class="headerlink" title="格式化文本函数的格式控制字符串"></a>格式化文本函数的格式控制字符串</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">%[flags][width][.precision][length]type</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>flags：标志，可包含 0 个或多个标志； </p>
+</li>
+<li><p>width：输出最小宽度，表示转换后输出字符串的最小宽度； </p>
+</li>
+<li><p>precision：精度，前面有一个点号” . “； </p>
+</li>
+<li><p>length：长度修饰符； </p>
+</li>
+<li><p>type：转换类型，指定待转换数据的类型。</p>
+</li>
+<li><p>type:</p>
+<ul>
+<li><img src="/imgs/image-20220112225548985.png" alt="image-20220112225548985"></li>
+<li><img src="/imgs/image-20220112225613496-16419994522663.png" alt="image-20220112225613496"></li>
+</ul>
+</li>
+<li><p>flags</p>
+<ul>
+<li><img src="/imgs/image-20220112225757743.png" alt="image-20220112225757743"></li>
+<li><img src="/imgs/image-20220112230005582.png" alt="image-20220112230005582"></li>
+</ul>
+</li>
+<li><p>width</p>
+<ul>
+<li>最小的输出宽度，用十进制数来表示输出的最小位数<strong>，若实际的输出位数大于指定的输出的最小位数， 则以实际的位数进行输出，若实际的位数小于指定输出的最小位数，则可按照指定的 flags 标志补 0 或补空 格。</strong></li>
+<li><img src="/imgs/image-20220113000901462.png" alt="image-20220113000901462"></li>
+</ul>
+</li>
+<li><p>precision 精度</p>
+<ul>
+<li>精度字段<strong>以点号” . “开头，后跟一个十进制正数</strong></li>
+<li><img src="/imgs/image-20220113000935320.png" alt="image-20220113000935320"></li>
+<li><img src="/imgs/image-20220113001001277.png" alt="image-20220113001001277"></li>
+</ul>
+</li>
+<li><p>length</p>
+<ul>
+<li>长度修饰符指明待转换数据的长度，因为 <strong>type 字段指定的的类型只有 int、unsigned int 以及 double</strong> 等 几种数据类型，<strong>但是 C 语言内置的数据类型不止这几种，譬如有 16bit 的 short、unsigned short，8bit 的 char、 unsigned char，也有 64bit 的 long long 等</strong>，为了能够区别不同长度的数据类型，于是乎，长度修饰符（length） 应运而生，成为转换说明的一部分。</li>
+<li><img src="/../../blogsPage/source/imgs/image-20220113001057843.png" alt="image-20220113001057843"></li>
+</ul>
+</li>
+</ul>
+<p>示例</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">printf(&quot;%hd\n&quot;, 12345); //将数据以 short int 类型进行转换</span><br><span class="line">printf(&quot;%ld\n&quot;, 12345); //将数据以 long int 类型进行转换</span><br><span class="line">printf(&quot;%lld\n&quot;, 12345); //将数据以 long long int 类型进行转换</span><br></pre></td></tr></table></figure>
+
+<h2 id="格式化输入"><a href="#格式化输入" class="headerlink" title="格式化输入"></a>格式化输入</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">scanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fscanf</span><span class="params">(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sscanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>可以看到，这 3 个格式化输入函数也是可变参函数，它们都有一个共同的参数 format，同样也称为格式 控制字符串，用于指定输入数据如何进行格式转换，与格式化输出函数中的 format 参数格式相似，但也有 所不同。 </p>
+</li>
+<li><p>每个函数除了固定参数之外，还可携带 0 个或多个可变参数。 </p>
+</li>
+<li><p>scanf()函数可将用户输入（标准输入）的数据进行格式化转换；fscanf()函数从 FILE 指针指定文件中读 取数据，并将数据进行格式化转换；sscanf()函数从参数 str 所指向的字符串中读取数据，并将数据进行格式 化转换。</p>
+</li>
+</ul>
+<h3 id="scanf"><a href="#scanf" class="headerlink" title="scanf"></a>scanf</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a, b, c;</span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>, &amp;a, &amp;b, &amp;c);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>函数调用成功后，将返回成功匹配和分配的输入项的数量；如果较早匹配失败，则该数目可能小于所提 供的数目，甚至为零。发生错误则返回负值。</li>
+</ul>
+<h3 id="fscanf"><a href="#fscanf" class="headerlink" title="fscanf"></a>fscanf</h3><ul>
+<li>注意，该函数的第一个参数可以是标准输入流，此时它的作用与scanf相同</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a, b, c;</span><br><span class="line"><span class="built_in">fscanf</span>(<span class="built_in">stdin</span>, <span class="string">&quot;%d %d %d&quot;</span>, &amp;a, &amp;b, &amp;c);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>函数调用成功后，将返回成功匹配和分配的输入项的数量；如果较早匹配失败，则该数目可能小于所提供的数目，甚至为零。发生错误则返回负值。</li>
+</ul>
+<h3 id="sscanf"><a href="#sscanf" class="headerlink" title="sscanf"></a>sscanf</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> *str = <span class="string">&quot;5454 hello&quot;</span>;</span><br><span class="line"><span class="keyword">char</span> buf[<span class="number">10</span>];</span><br><span class="line"><span class="keyword">int</span> a;</span><br><span class="line"><span class="built_in">sscanf</span>(str, <span class="string">&quot;%d %s&quot;</span>, &amp;a, buf);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>函数调用成功后，将返回成功匹配和分配的输入项的数量；如果较早匹配失败，则该数目可能小于所提 供的数目，甚至为零。发生错误则返回负值。</li>
+</ul>
+<h3 id="格式控制字符串"><a href="#格式控制字符串" class="headerlink" title="格式控制字符串"></a>格式控制字符串</h3><ul>
+<li>本小节的重点依然是这个 format 参数的格式，与格式化输出函数中的 format 参数格式、写法上比较相 似，但也有一些区别。format 字符串包含一个或多个转换说明，每一个转换说明都是以百分号”%”或者”%n$” 开头（n 是一个十进制数字），关于”%n$”这种开头的转换说明就不介绍了，实际上用的不多。</li>
+<li>以%百分号开头的转换说明一般格式如下(<code>[]</code>部分是可选的参数)</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">%[*][width][length]type</span><br><span class="line">%[m][width][length]type</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>%后面可选择性添加<strong>星号</strong><code>*</code>或**字母 <code>m</code>**，如果添加了星号<code>*</code>，格式化输入函数会按照转换说明的指示读取输 入，但是丢弃输入，意味着不需要对转换后的结果进行存储，所以也就不需要提供相应的指针参数。</li>
+<li>如果添加了 m，它只能与%s、%c 以及%[一起使用，调用者无需分配相应的缓冲区来保存格式转换后的 数据，原因在于添加了 m，这些格式化输入函数内部会自动分配足够大小的缓冲区，并将缓冲区的地址值通 过与该格式转换相对应的指针参数返回出来，该指针参数应该是指向 char *变量的指针。随后，当不再需要 此缓冲区时，调用者应调用 free()函数来释放此缓冲区。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> *buf;</span><br><span class="line"></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%ms&quot;</span>, &amp;buf);</span><br><span class="line">......</span><br><span class="line"><span class="built_in">free</span>(buf);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>width：最大字符宽度；</p>
+</li>
+<li><p>length：长度修饰符，与格式化输出函数的 format 参数中的 length 字段意义相同。</p>
+</li>
+<li><p>type：指定输入数据的类型。</p>
+</li>
+<li><p><strong>type</strong></p>
+<ul>
+<li><img src="/imgs/image-20220113130730315.png" alt="image-20220113130730315"></li>
+<li><img src="/imgs/image-20220113130752642.png" alt="image-20220113130752641"></li>
+</ul>
+</li>
+<li><p><strong>width</strong>最大字符长度限制。</p>
+<ul>
+<li>是一个十进制表示的整数，用于指定最大字符宽度，当达到此最大值或发现不匹配的字符时（以先发生 者为准），字符的读取将停止。大多数 type 类型会丢弃初始的空白字符，并且这些丢弃的字符不会计入最 大字符宽度。对于字符串转换来说，scanf()会在字符串末尾自动添加终止符”\0”，最大字符宽度中不包括此 终止符。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%4s&quot;</span>, buf); <span class="comment">//匹配字符串，字符串长度不超过 4 个字符</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>此时输入“abcdef”，存储的是“abcd”</li>
+<li><strong>length</strong>数据长度修饰符<ul>
+<li><img src="/imgs/image-20220113131301042.png" alt="image-20220113131301042"></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%hd&quot;</span>, var); <span class="comment">//匹配 short int 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%hhd&quot;</span>, var); <span class="comment">//匹配 signed char 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%ld&quot;</span>, var); <span class="comment">//匹配 long int 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%f&quot;</span>, var); <span class="comment">//匹配 float 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%lf&quot;</span>, var); <span class="comment">//匹配 double 类型数据</span></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%Lf&quot;</span>, var); <span class="comment">//匹配 long double 类型数据</span></span><br></pre></td></tr></table></figure>
+
+<p>使用例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> inputBuf;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%*10[A-Za-z]%f&quot;</span>, &amp;inputBuf);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%03.4f&quot;</span>, inputBuf);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意<code>[]</code>里面的内容的写法，比如想一次性收取所有字母，<strong>使用<code>[A-Za-z]</code>，连续写即可，数字写0-9，同</strong></li>
+<li>控制台测试输入</li>
+<li><img src="/imgs/image-20220113132156094.png" alt="image-20220113132156094"></li>
+<li>都能够正确接收到0.01，说明成功识别到了hello并且将其丢弃（因为指定了<code>*</code>符号）</li>
+</ul>
+<h2 id="I-O缓冲"><a href="#I-O缓冲" class="headerlink" title="I/O缓冲"></a>I/O缓冲</h2><p>略，详见原子教程《I.MX6U嵌入式Linux C应用编程指南》</p>
+<ul>
+<li>标准 I/O 所维护的 stdio 缓冲是用户空间 的缓冲区，当<u>应用程序中通过标准 I/O 操作磁盘文件时</u>，为了减少调用系统调用的次数，标准 I/O 函数会<u>将 用户写入或读取文件的数据缓存在 stdio 缓冲区</u>，然后<strong>再一次性</strong>将 stdio 缓冲区中缓存的数据通过调用系统 调用 I/O（文件 I/O）<u>写入到文件 I/O 内核缓冲区或者拷贝到应用程序的 buf</u> 中。</li>
+<li>通过这样的优化操作，当操作磁盘文件时，在用户空间缓存大块数据以减少调用系统调用的次数，使得 效率、性能得到优化。使用标准 I/O 可以使编程者免于自行处理对数据的缓冲，无论是调用 write()写入数 据、还是调用 read()读取数据。</li>
+<li>直接 I/O 方式效率、性能比较低，绝大部分应用程序不会使用直接 I/O 方式对文件进行 I/O 操作，通常 只在一些特殊的应用场合下才可能会使用，那我们<u>可以使用直接 I/O 方式来测试磁盘设备的读写速率</u>，这种 测试方式相比普通 I/O 方式就会更加准确。</li>
+</ul>
+<h2 id="文件描述符和FILE指针的转化"><a href="#文件描述符和FILE指针的转化" class="headerlink" title="文件描述符和FILE指针的转化"></a>文件描述符和FILE指针的转化</h2><ul>
+<li>在应用程序中，在同一个文件上执行 I/O 操作时，还可以<strong>将文件 I/O（系统调用 I/O）与标准 I/O 混合使 用</strong>，这个时候我们就需要将文件描述符和 FILE 指针对象之间进行转换，此时可以借助于库函数 <code>fdopen()</code>、 <code>fileno()</code>来完成。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fileno</span><span class="params">(FILE *stream)</span></span>;</span><br><span class="line"><span class="function">FILE *<span class="title">fdopen</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span> *mode)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>对于 fileno()函数来说，根据传入的 FILE 指针得到整数文件描述符，<strong>通过返回值得到文件描述符</strong>，如果 转换<strong>错误将返回-1</strong>，并且会设置 errno 来指示错误原因。得到文件描述符之后，便可以使用诸如 read()、write()、 lseek()、fcntl()等文件 I/O 方式操作文件。</p>
+</li>
+<li><p>fdopen()函数与 fileno()功能相反，给定一个文件描述符，<strong>得到该文件对应的 FILE 指针</strong>，之后便可以使 用诸如 fread()、fwrite()等标准 I/O 方式操作文件了。参数 mode 与 fopen()函数中的 mode 参数含义相同如下表，<strong>若该参数与文件描述符 fd 的访问模式<u>不一致</u>，则会导致调用 fdopen()失败。</strong></p>
+<ul>
+<li><img src="/image-20220113163201525.png" alt="image-20220113163201525"></li>
+<li><img src="/image-20220113163221211.png" alt="image-20220113163221211"></li>
+</ul>
+</li>
+</ul>
+<h3 id="混用两种IO函数的时候的缓冲区问题"><a href="#混用两种IO函数的时候的缓冲区问题" class="headerlink" title="混用两种IO函数的时候的缓冲区问题"></a>混用两种IO函数的时候的缓冲区问题</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;print&quot;</span>);</span><br><span class="line">    write(STDOUT_FILENO, <span class="string">&quot;write\n&quot;</span>, <span class="number">6</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>当混合使用文件 I/O 和标准 I/O 时，需要特别注意缓冲的问题，<strong>文件 I/O 会直接将数据写入到内核缓冲 区进行高速缓存</strong>，而<strong>标准 I/O 则会将数据写入到 stdio 缓冲区，之后再调用 write()将 stdio 缓冲区中的数据写 入到内核缓冲区</strong>。</p>
+</li>
+<li><p>执行结果你会发现，<strong>先输出了”write”字符串信息，接着再输出了”print”字符串信息</strong></p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-配置Linux开机启动脚本"
   class="article article-type-post"
   itemscope
@@ -1308,449 +1745,13 @@
 </article>
 
     
-    <article
-  id="post-解决Cube新建项目使用UART编译出错的问题"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/06/%E8%A7%A3%E5%86%B3Cube%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8UART%E7%BC%96%E8%AF%91%E5%87%BA%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98/"
-    >解决Cube新建项目使用UART编译出错的问题</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/06/%E8%A7%A3%E5%86%B3Cube%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8UART%E7%BC%96%E8%AF%91%E5%87%BA%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98/" class="article-date">
-  <time datetime="2022-01-06T14:07:10.000Z" itemprop="datePublished">2022-01-06</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="解决Cube新建项目使用UART编译出错的问题"><a href="#解决Cube新建项目使用UART编译出错的问题" class="headerlink" title="解决Cube新建项目使用UART编译出错的问题"></a>解决Cube新建项目使用UART编译出错的问题</h1><p>注意<code>stm32f4xx_hal_conf.h</code>中有一些宏定义</p>
-<p><img src="/imgs/image-20220106220834007.png" alt="image-20220106220834007"></p>
-<p>此处可能是系统没有将<code>#define HAL_UART_MODULE_ENABLED   </code>取消注释，此处自己删除注释即可正常编译</p>
-<p><img src="/imgs/image-20220106220934356.png" alt="image-20220106220934356"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-Linux初步学习（五）"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/05/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%94%EF%BC%89/"
-    >Linux初步学习（五）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/05/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%94%EF%BC%89/" class="article-date">
-  <time datetime="2022-01-05T03:21:36.000Z" itemprop="datePublished">2022-01-05</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Linux系统知识"><a href="#Linux系统知识" class="headerlink" title="Linux系统知识"></a>Linux系统知识</h1><h2 id="apt命令"><a href="#apt命令" class="headerlink" title="apt命令"></a>apt命令</h2><p>apt（Advanced Packaging Tool）是一个在 Debian 和 Ubuntu 中的 Shell 前端软件包管理器。</p>
-<p>apt 命令提供了查找、安装、升级、删除某一个、一组甚至全部软件包的命令，而且命令简洁而又好记。</p>
-<p>apt 命令执行需要超级管理员权限(root)。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt [options] [command] [package ...]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>options：</strong>可选，选项包括 -h（帮助），-y（当安装过程提示选择全部为”yes”），-q（不显示安装的过程）等等。</li>
-<li><strong>command：</strong>要进行的操作。</li>
-<li><strong>package</strong>：安装的包名。</li>
-</ul>
-<p><strong>用法：</strong></p>
-<ul>
-<li><p>列出所有可更新的软件清单命令：<strong>sudo apt update</strong></p>
-</li>
-<li><p>升级软件包：<strong>sudo apt upgrade</strong></p>
-<p>列出可更新的软件包及版本信息：<strong>apt list –upgradeable</strong></p>
-<p>升级软件包，升级前先删除需要更新软件包：<strong>sudo apt full-upgrade</strong></p>
-</li>
-<li><p>安装指定的软件命令：<strong>sudo apt install <package_name></strong></p>
-<p>安装多个软件包：<strong>sudo apt install <package_1> <package_2> <package_3></strong></p>
-</li>
-<li><p>更新指定的软件命令：<strong>sudo apt update <package_name></strong></p>
-</li>
-<li><p>显示软件包具体信息,例如：版本号，安装大小，依赖关系等等：<strong>sudo apt show <package_name></strong></p>
-</li>
-<li><p>删除软件包命令：<strong>sudo apt remove <package_name></strong></p>
-</li>
-<li><p>清理不再使用的依赖和库文件: <strong>sudo apt autoremove</strong></p>
-</li>
-<li><p>移除软件包及配置文件: <strong>sudo apt purge <package_name></strong></p>
-</li>
-<li><p>查找软件包命令： <strong>sudo apt search <keyword></strong></p>
-</li>
-<li><p>列出所有已安装的包：<strong>apt list –installed</strong></p>
-</li>
-<li><p>列出所有已安装的包的版本信息：<strong>apt list –all-versions</strong></p>
-</li>
-</ul>
-<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p><img src="/imgs/image-20220105113244292.png" alt="image-20220105113244292"></p>
-<ul>
-<li><p><strong>/bin</strong>：<br>bin 是 Binaries (二进制文件) 的缩写, 这个目录存放着<strong>最经常使用的命令</strong>。</p>
-</li>
-<li><p><strong>/boot：</strong><br>这里存放的是<strong>启动 Linux</strong> 时使用的一些<strong>核心文件</strong>，包括一些连接文件以及镜像文件。</p>
-</li>
-<li><p><strong>/dev ：</strong><br>dev 是 Device(设备) 的缩写, 该目录下存放的是 Linux 的<strong>外部设备</strong>，在 Linux 中**<u>访问设备的方式和访问文件的方式是相同的</u>**。</p>
-</li>
-<li><p><strong>/etc：</strong><br>etc 是 Etcetera(等等) 的缩写,这个目录用来存放所有的<strong>系统管理所需要的配置文件和子目录</strong>。</p>
-</li>
-<li><p><strong>/home</strong>：<br>用户的<strong>主目录</strong>，在 Linux 中，每个<strong>用户都有一个自己的目录</strong>，一般该目录名是以用户的账号命名的，如上图中的 alice、bob 和 eve。</p>
-</li>
-<li><p><strong>/lib</strong>：<br>lib 是 Library(库) 的缩写这个目录里存放着系统<strong>最基本的动态连接共享库</strong>，其作用<strong>类似于 Windows 里的 DLL 文件</strong>。几乎所有的应用程序都需要用到这些共享库。</p>
-</li>
-<li><p><strong>/lost+found</strong>：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
-</li>
-<li><p><strong>/media</strong>：<br>linux 系统会<strong>自动识别一些设备</strong>，例如U盘、光驱等等，当识别后，Linux 会把识别的设备<strong>挂载到这个目录下</strong>。</p>
-</li>
-<li><p><strong>/mnt</strong>：<br>系统提供该目录是为了让用户<strong>临时挂载别的文件系统</strong>的，我们可以将光驱挂载在 /mnt/ 上，然后进入该目录就可以查看光驱里的内容了。</p>
-</li>
-<li><p><strong>/opt</strong>：<br>opt 是 optional(可选) 的缩写，这是给主机<strong>额外安装软件</strong>所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
-</li>
-<li><p><strong>/proc</strong>：<br>proc 是 Processes(进程) 的缩写，/proc 是一种<strong>伪文件系统</strong>（也即虚拟文件系统），存储的是当前<strong>内核运行状态的一系列特殊文件</strong>，这个目录是一个虚拟的目录，它<strong>是系统内存的映射</strong>，我们可以通过直接访问这个目录来获取<strong>系统信息</strong>。<br>这个目录的内容<strong>不在硬盘</strong>上而是<strong>在内存里</strong>，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>/root</strong>：<br>该目录为系统管理员，也称作<strong>超级权限者的用户主目录</strong>。</p>
-</li>
-<li><p><strong>/sbin</strong>：<br>s 就是 Super User 的意思，是 Superuser Binaries (超级用户的二进制文件) 的缩写，这里存放的是系统<strong>管理员使用的系统管理程序</strong>。</p>
-</li>
-<li><p><strong>/selinux</strong>：<br> 这个目录是 Redhat/CentOS 所特有的目录，Selinux 是一个安全机制，类似于 windows 的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
-</li>
-<li><p><strong>/srv</strong>：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
-</li>
-<li><p><strong>/sys</strong>：</p>
-<p>这是 Linux2.6 内核的一个很大的变化。该目录下安装了 2.6 内核中新出现的一个文件系统 sysfs 。</p>
-<p>sysfs 文件系统集成了下面3种文件系统的信息：<strong>针对进程信息的 proc 文件系统、针对设备的 devfs 文件系统以及针对伪终端的 devpts 文件系统</strong>。</p>
-<p>该文件系统是<strong>内核设备树</strong>的一个直观反映。</p>
-<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
-</li>
-<li><p><strong>/tmp</strong>：<br>tmp 是 temporary(临时) 的缩写这个目录是用来存放一些<strong>临时文件</strong>的。</p>
-</li>
-<li><p><strong>/usr</strong>：<br> usr 是 unix shared resources(共享资源) 的缩写，这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，<strong>类似于 windows 下的 program files 目录</strong>。</p>
-</li>
-<li><p><strong>/usr/bin：</strong><br>系统用户使用的<strong>应用程序</strong>。</p>
-</li>
-<li><p><strong>/usr/sbin：</strong><br><strong>超级用户</strong>使用的比较高级的<strong>管理程序和系统守护程序</strong>。</p>
-</li>
-<li><p><strong>/usr/src：</strong><br><strong>内核源代码</strong>默认的放置目录。</p>
-</li>
-<li><p><strong>/var</strong>：<br>var 是 variable(变量) 的缩写，这个目录中存放着在不断扩充着的东西，我们习惯将那些<strong>经常被修改的目录</strong>放在这个目录下。包括各种日志文件。</p>
-</li>
-<li><p><strong>/run</strong>：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
-</li>
-<li><p><code>.</code>或者<code>./</code>代表当前目录，<code>..</code>或者<code>../</code>代表上一级目录</p>
-</li>
-<li><p>如果一个目录或文件名以一个点 . 开始，表示这个目录或文件是一个隐藏目录或文件(如：.bashrc)。即以默认方式查找时，不显示该目录或文件。</p>
-</li>
-<li><p><code>~/</code>的含义：<strong>主目录</strong>：</p>
-<ul>
-<li><img src="/imgs/image-20220105211153744.png" alt="image-20220105211153744"></li>
-<li></li>
-</ul>
-</li>
-</ul>
-<h2 id="文件属性"><a href="#文件属性" class="headerlink" title="文件属性"></a>文件属性</h2><ul>
-<li>chown (change owner) ： 修改所属用户与组。</li>
-<li>chmod (change mode) ： 修改用户的权限。</li>
-<li>使用 <strong>ll</strong> 或者 <strong>ls –l</strong> 命令来显示一个文件的属性以及文件所属的用户和组，如：</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@www /]# ls -l</span><br><span class="line">total 64</span><br><span class="line">dr-xr-xr-x   2 root root 4096 Dec 14  2012 bin</span><br><span class="line">dr-xr-xr-x   4 root root 4096 Apr 19  2012 boot</span><br><span class="line">……</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>文件属性的字符表示：</p>
-</li>
-<li><p>当为 <strong>d</strong> 则是目录</p>
-</li>
-<li><p>当为 <strong>-</strong> 则是文件；</p>
-</li>
-<li><p>若是 <strong>l</strong> 则表示为链接文档(link file)；</p>
-</li>
-<li><p>若是 <strong>b</strong> 则表示为装置文件里面的可供储存的接口设备(可随机存取装置)；</p>
-</li>
-<li><p>若是 <strong>c</strong> 则表示为装置文件里面的串行端口设备，例如键盘、鼠标(一次性读取装置)。</p>
-</li>
-<li><p>接下来的字符中，以三个为一组，且均为 <strong>rwx</strong> 的三个参数的组合。其中， <strong>r</strong> 代表可读(read)、 <strong>w</strong> 代表可写(write)、 <strong>x</strong> 代表可执行(execute)。 要注意的是，这三个权限的位置不会改变，如果没有权限，就会出现减号 <strong>-</strong> 而已。</p>
-</li>
-<li><p><img src="/imgs/image-20220105115020261.png" alt="image-20220105115020261"></p>
-</li>
-<li><p>文件类型的表示：<br><img src="/imgs/image-20220105115040437.png" alt="image-20220105115040437"></p>
-</li>
-<li><p>更改属性：</p>
-<ul>
-<li><p>chgrp：更改文件属组：<code>chgrp [-R] 属组名 文件名</code></p>
-</li>
-<li><p>-R：递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。</p>
-</li>
-<li><p>chown：更改文件属主，也可以同时更改文件属组</p>
-</li>
-<li><p><code>chown [–R] 属主名 文件名</code>和<code>chown [-R] 属主名：属组名 文件名</code></p>
-</li>
-<li><p>Linux文件属性有两种设置方法，一种是数字，一种是符号。</p>
-<p>Linux 文件的基本权限就有九个，分别是 <strong>owner/group/others(拥有者/组/其他)</strong> 三种身份各有自己的 <strong>read/write/execute</strong> 权限。</p>
-<p>先复习一下刚刚上面提到的数据：文件的权限字符为： <strong>-rwxrwxrwx</strong> ， 这九个权限是三个三个一组的！其中，我们可以使用数字来代表各个权限，各权限的分数对照表如下：</p>
-<ul>
-<li>r:4</li>
-<li>w:2</li>
-<li>x:1</li>
-</ul>
-</li>
-<li><p>语法：<code> chmod [-R] xyz 文件或目录</code></p>
-<ul>
-<li>xyz : 就是刚刚提到的<strong>数字类型</strong>的权限属性，为 rwx 属性数值的相加。</li>
-<li>-R : 进行递归(recursive)的持续变更，亦即连同次目录下的所有文件都会变更</li>
-</ul>
-</li>
-<li><p>比如<code>chmod 777 .bashrc</code>就是启用<code>.bashrc</code>文件的所有权限</p>
-</li>
-<li><p>还有一个改变权限的方法，从之前的介绍中我们可以发现，基本上就九个权限分别是：</p>
-<ul>
-<li>user：用户</li>
-<li>group：组</li>
-<li>others：其他</li>
-<li>此外， <strong>a</strong> 则代表 <strong>all</strong>，即全部的身份。读写的权限可以写成 <strong>r, w, x</strong></li>
-<li><code>+</code>代表添加，<code>-</code>代表除去，<code>=</code>代表指定（对应的权限）</li>
-</ul>
-</li>
-<li><p>方法为<code>chmod u=rwx,g=rx,o=r 文件名</code>来指定,其中的rwx等是对应的用户的权限</p>
-</li>
-<li><p>去掉权限：</p>
-<ul>
-<li>例如要拿掉全部人的可执行权限<code>chmod  a-x test1</code></li>
-</ul>
-</li>
-<li><p>比如</p>
-</li>
-<li><p><img src="/imgs/image-20220105202406126.png" alt="image-20220105202406126"></p>
-</li>
-<li><p>此处在<code>chmod a+x test.txt</code>之后，权限可以看见全部增加了x</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="处理目录"><a href="#处理目录" class="headerlink" title="处理目录"></a>处理目录</h2><ul>
-<li>ls（英文全拼：list files）: 列出目录及文件名</li>
-<li>cd（英文全拼：change directory）：切换目录</li>
-<li>pwd（英文全拼：print work directory）：显示目前的目录</li>
-<li>mkdir（英文全拼：make directory）：创建一个新的目录</li>
-<li>rmdir（英文全拼：remove directory）：删除一个空的目录</li>
-<li>cp（英文全拼：copy file）: 复制文件或目录</li>
-<li>rm（英文全拼：remove）: 删除文件或目录</li>
-<li>mv（英文全拼：move file）: 移动文件与目录，或修改文件与目录的名称</li>
-</ul>
-<h3 id="ls列出目录"><a href="#ls列出目录" class="headerlink" title="ls列出目录"></a>ls列出目录</h3><ul>
-<li>-a ：全部的文件，连同隐藏文件( 开头为 . 的文件) 一起列出来(常用)</li>
-<li>-d ：仅列出目录本身，而不是列出目录内的文件数据(常用)</li>
-<li>-l ：长数据串列出，包含文件的属性与权限等等数据；(常用)</li>
-</ul>
-<h3 id="cd变换路径"><a href="#cd变换路径" class="headerlink" title="cd变换路径"></a>cd变换路径</h3><ul>
-<li><code>cd [相对路径或绝对路径]</code></li>
-</ul>
-<h3 id="pwd（显示当前所在的目录）"><a href="#pwd（显示当前所在的目录）" class="headerlink" title="pwd（显示当前所在的目录）"></a>pwd（显示当前所在的目录）</h3><ul>
-<li><strong>-P</strong> ：显示出确实的路径，而非使用连结 (link) 路径。</li>
-<li><img src="/imgs/image-20220105203806376.png" alt="image-20220105203806376"></li>
-</ul>
-<h3 id="mkdir-创建新目录"><a href="#mkdir-创建新目录" class="headerlink" title="mkdir (创建新目录)"></a>mkdir (创建新目录)</h3><ul>
-<li><code>mkdir [-mp] 目录名称</code></li>
-<li>-m ：配置文件的权限喔！直接配置，不需要看默认权限 (umask) 的脸色～<ul>
-<li>比如<code>mkdir -m 711 test2</code></li>
-</ul>
-</li>
-<li>-p ：帮助你直接将所需要的目录(包含上一级目录)<strong>递归创建</strong>起来！<ul>
-<li>比如<code>mkdir test1/test2/test3/test4</code>不能创建的时候，使用<code>-p</code>选项即可</li>
-<li><img src="/imgs/image-20220105204407469.png" alt="image-20220105204407469"></li>
-</ul>
-</li>
-</ul>
-<h3 id="rmdir-删除空的目录"><a href="#rmdir-删除空的目录" class="headerlink" title="rmdir (删除空的目录)"></a>rmdir (删除空的目录)</h3><ul>
-<li><code>rmdir [-p] 目录名称</code></li>
-<li><strong>-p ：</strong>从该目录起，一次删除多级空目录<ul>
-<li><img src="/imgs/image-20220105205146656.png" alt="image-20220105205146656"></li>
-</ul>
-</li>
-</ul>
-<h3 id="cp-复制文件或目录"><a href="#cp-复制文件或目录" class="headerlink" title="cp (复制文件或目录)"></a>cp (复制文件或目录)</h3><ul>
-<li><code>cp [-adfilprsu] 来源档(source) 目标档(destination)</code></li>
-<li><code>cp [options] source1 source2 source3 .... directory</code></li>
-<li><strong>-a：</strong>相当於 -pdr 的意思，至於 pdr 请参考下列说明；(常用)</li>
-<li><strong>-d：</strong>若来源档为连结档的属性(link file)，则复制连结档属性而非文件本身；</li>
-<li><strong>-f：</strong>为强制(force)的意思，若目标文件已经存在且无法开启，则移除后再尝试一次；</li>
-<li><strong>-i：</strong>若目标档(destination)已经存在时，在覆盖时会先询问动作的进行(常用)</li>
-<li><strong>-l：</strong>进行硬式连结(hard link)的连结档创建，而非复制文件本身；</li>
-<li><strong>-p：</strong>连同文件的属性一起复制过去，而非使用默认属性(备份常用)；</li>
-<li><strong>-r：</strong>递归持续复制，用於目录的复制行为；(常用)</li>
-<li><strong>-s：</strong>复制成为符号连结档 (symbolic link)，亦即『捷径』文件；</li>
-<li><strong>-u：</strong>若 destination 比 source 旧才升级 destination ！</li>
-</ul>
-<h3 id="rm-移除文件或目录"><a href="#rm-移除文件或目录" class="headerlink" title="rm (移除文件或目录)"></a>rm (移除文件或目录)</h3><ul>
-<li><code>rm [-fir] 文件或目录</code></li>
-<li>-f ：就是 force 的意思，忽略不存在的文件，不会出现警告信息；</li>
-<li>-i ：互动模式，在删除前会询问使用者是否动作</li>
-<li>-r ：递归删除啊！最常用在目录的删除了！这是非常危险的选项！！！</li>
-</ul>
-<h3 id="mv-移动文件与目录，或修改名称"><a href="#mv-移动文件与目录，或修改名称" class="headerlink" title="mv (移动文件与目录，或修改名称)"></a>mv (移动文件与目录，或修改名称)</h3><ul>
-<li><code>mv [-fiu] source destination</code></li>
-<li><code>mv [options] source1 source2 source3 .... directory</code></li>
-<li>-f ：force 强制的意思，如果目标文件已经存在，不会询问而直接覆盖；</li>
-<li>-i ：若目标文件 (destination) 已经存在时，就会询问是否覆盖！</li>
-<li>-u ：若目标文件已经存在，且 source 比较新，才会升级 (update)</li>
-<li><strong>更改文件夹名称</strong>：<img src="/imgs/image-20220105212045584.png" alt="image-20220105212045584"><ul>
-<li>也就是<code>mv 原名称 现名称</code></li>
-</ul>
-</li>
-</ul>
-<h3 id="Linux-文件内容查看"><a href="#Linux-文件内容查看" class="headerlink" title="Linux 文件内容查看"></a>Linux 文件内容查看</h3><ul>
-<li>cat 由第一行开始显示文件内容</li>
-<li>tac 从最后一行开始显示，可以看出 tac 是 cat 的倒着写！</li>
-<li>nl  显示的时候，顺道输出行号！</li>
-<li>more 一页一页的显示文件内容</li>
-<li>less 与 more 类似，但是比 more 更好的是，他可以往前翻页！</li>
-<li>head 只看头几行</li>
-<li>tail 只看尾巴几行</li>
-</ul>
-<h2 id="Linux-文件链接"><a href="#Linux-文件链接" class="headerlink" title="Linux 文件链接"></a>Linux 文件链接</h2><h3 id="硬连接"><a href="#硬连接" class="headerlink" title="硬连接"></a><strong>硬连接</strong></h3><p>硬连接指通过索引节点来进行连接。在 Linux 的文件系统中，保存在磁盘分区中的文件<strong>不管是什么类型</strong>都给它<strong>分配一个编号</strong>，称为索引节点号(Inode Index)。在 Linux 中，<strong>多个文件名指向同一索引节点</strong>是存在的。比如：A 是 B 的硬链接（A 和 B 都是文件名），则 A 的目录项中的 inode 节点号与 B 的目录项中的 inode 节点号相同，即<strong>一个 inode 节点对应两个不同的文件名</strong>，<strong>两个</strong>文件名指向<strong>同一</strong>个文件，A 和 B 对文件系统来说是<strong>完全平等</strong>的。<strong>删除其中任何一个都不会影响另外一个的访问</strong>。</p>
-<p>硬连接的作用是<strong>允许一个文件拥有多个有效路径</strong>名，这样用户就可以<strong>建立硬连接到重要文件</strong>，以<strong>防止“误删”</strong>的功能。其原因如上所述，因为对应该目录的索引节点有一个以上的连接。只删除一个连接并不影响索引节点本身和其它的连接，只<strong>有当最后一个连接被删除后，文件的数据块及目录的连接才会被释放</strong>。也就是说，文件<strong>真正删除</strong>的条件是<strong>与之相关的所有硬连接文件均被删除</strong>。</p>
-<h3 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h3><p>另外一种连接称之为符号连接（Symbolic Link），也叫软连接。软链接文件<strong>有类似于 Windows 的快捷方式</strong>。它实际上是一个特殊的文件。在符号连接中，文件<strong>实际上</strong>是一个<strong>文本文件</strong>，其中包含的有另一文件的位置信息。比如：A 是 B 的软链接（A 和 B 都是文件名），A 的目录项中的 inode 节点号与 B 的目录项中的 inode 节点号不相同，A 和 B 指向的是<strong>两个不同的 inode</strong>，继而指向两块不同的数据块。但是 <strong>A 的数据块中存放的只是 B 的路径名</strong>（可以根据这个找到 B 的目录项）。A 和 B 之间是“主从”关系，<strong>如果 B 被删除了，A 仍然存在（因为两个是不同的文件），但指向的是一个无效的链接</strong>。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[oracle@Linux]$ touch f1          #创建一个测试文件f1</span><br><span class="line">[oracle@Linux]$ ln f1 f2          #创建f1的一个硬连接文件f2</span><br><span class="line">[oracle@Linux]$ ln -s f1 f3       #创建f1的一个符号连接文件f3</span><br><span class="line">[oracle@Linux]$ ls -li            # -i参数显示文件的inode节点信息</span><br><span class="line">total 0</span><br><span class="line">9797648 -rw-r--r--  2 oracle oinstall 0 Apr 21 08:11 f1</span><br><span class="line">9797648 -rw-r--r--  2 oracle oinstall 0 Apr 21 08:11 f2</span><br><span class="line">9797649 lrwxrwxrwx  1 oracle oinstall 2 Apr 21 08:11 f3 -&gt; f1</span><br></pre></td></tr></table></figure>
-
-<p>从上面的结果中可以看出，硬连接文件 f2 与原文件 f1 的 inode 节点相同，均为 9797648，然而符号连接文件的 inode 节点不同。</p>
-<ul>
-<li>注意创建硬链接文件的语法为<code>ln 文件 硬链接</code></li>
-<li>创建符号链接文件的语法为<code>ln -s 文件 符号链接</code></li>
-<li><code>ls -li</code>可以显示文件的inode节点信息</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[oracle@Linux]$ echo &quot;I am f1 file&quot; &gt;&gt;f1</span><br><span class="line">[oracle@Linux]$ cat f1</span><br><span class="line">I am f1 file</span><br><span class="line">[oracle@Linux]$ cat f2</span><br><span class="line">I am f1 file</span><br><span class="line">[oracle@Linux]$ cat f3</span><br><span class="line">I am f1 file</span><br><span class="line">[oracle@Linux]$ rm -f f1</span><br><span class="line">[oracle@Linux]$ cat f2</span><br><span class="line">I am f1 file</span><br><span class="line">[oracle@Linux]$ cat f3</span><br><span class="line">cat: f3: No such file or directory</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>通过上面的测试可以看出：当删除原始文件 f1 后，硬连接 f2 不受影响，但是符号连接 f3 文件无效</li>
-</ul>
-<h2 id="Linux-磁盘管理"><a href="#Linux-磁盘管理" class="headerlink" title="Linux 磁盘管理"></a>Linux 磁盘管理</h2><h3 id="df"><a href="#df" class="headerlink" title="df"></a>df</h3><p>检查<strong>文件系统</strong>的磁盘空间占用情况。可以利用该命令来获取硬盘被占用了多少空间，目前还剩下多少空间等信息。</p>
-<ul>
-<li><code>df [-ahikHTm] [目录或文件名]</code></li>
-<li>-a ：列出所有的文件系统，包括系统特有的 /proc 等文件系统；</li>
-<li>-k ：以 KBytes 的容量显示各文件系统；</li>
-<li>-m ：以 MBytes 的容量显示各文件系统；</li>
-<li>-h ：以人们较易阅读的 GBytes, MBytes, KBytes 等格式自行显示；</li>
-<li>-H ：以 M=1000K 取代 M=1024K 的进位方式；</li>
-<li>-T ：显示文件系统类型, 连同该 partition 的 filesystem 名称 (例如 ext3) 也列出；</li>
-<li>-i ：不用硬盘容量，而以 inode 的数量来显示</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@www ~]# df -h</span><br><span class="line">Filesystem            Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/hdc2             9.5G  3.7G  5.4G  41% /</span><br><span class="line">/dev/hdc3             4.8G  139M  4.4G   4% /home</span><br><span class="line">/dev/hdc1              99M   11M   83M  12% /boot</span><br><span class="line">tmpfs                 363M     0  363M   0% /dev/shm</span><br></pre></td></tr></table></figure>
-
-<h3 id="du"><a href="#du" class="headerlink" title="du"></a>du</h3><p>Linux du 命令也是查看使用空间的，但是与 df 命令不同的是 Linux du 命令是对<strong>文件和目录磁盘使用</strong>的空间的查看，还是和df命令有一些区别的，这里介绍 Linux du 命令。</p>
-<ul>
-<li><p><code>du [-ahskm] 文件或目录名称</code></p>
-</li>
-<li><p>-a ：列出所有的文件与目录容量，因为默认仅统计目录底下的文件量而已。</p>
-</li>
-<li><p>-h ：以人们较易读的容量格式 (G/M) 显示；</p>
-</li>
-<li><p>-s ：列出总量而已，而不列出每个各别的目录占用容量；</p>
-</li>
-<li><p>-S ：不包括子目录下的总计，与 -s 有点差别。</p>
-</li>
-<li><p>-k ：以 KBytes 列出容量显示；</p>
-</li>
-<li><p>-m ：以 MBytes 列出容量显示；</p>
-</li>
-</ul>
-<h3 id="fdisk"><a href="#fdisk" class="headerlink" title="fdisk"></a>fdisk</h3><p>fdisk 是 Linux 的磁盘分区表操作工具。</p>
-<ul>
-<li><p><code>fdisk [-l] 装置名称</code>需要超级用户（sudo）权限</p>
-</li>
-<li><p>-l ：输出后面接的装置所有的分区内容。若仅有 fdisk -l 时， 则系统将会把整个系统内能够搜寻到的装置的分区均列出来。</p>
-</li>
-<li><p><img src="/imgs/image-20220105221448829.png" alt="image-20220105221448829"></p>
-</li>
-</ul>
-<h3 id="磁盘格式化"><a href="#磁盘格式化" class="headerlink" title="磁盘格式化"></a>磁盘格式化</h3><ul>
-<li><code>mkfs [-t 文件系统格式] 装置文件名</code></li>
-<li><code>-t </code>：可以接文件系统格式，例如 ext3, ext2, vfat 等(系统有支持才会生效)</li>
-</ul>
-<h3 id="磁盘检验"><a href="#磁盘检验" class="headerlink" title="磁盘检验"></a>磁盘检验</h3><p>fsck（file system check）用来检查和维护不一致的文件系统。</p>
-<p>若系统掉电或磁盘发生问题，可利用fsck命令对文件系统进行检查。</p>
-<ul>
-<li><code>fsck [-t 文件系统] [-ACay] 装置名称</code></li>
-<li>-t : 给定档案系统的型式，若在 /etc/fstab 中已有定义或 kernel 本身已支援的则不需加上此参数</li>
-<li>-s : 依序一个一个地执行 fsck 的指令来检查</li>
-<li>-A : 对/etc/fstab 中所有列出来的 分区（partition）做检查</li>
-<li>-C : 显示完整的检查进度</li>
-<li>-d : 打印出 e2fsck 的 debug 结果</li>
-<li>-p : 同时有 -A 条件时，同时有多个 fsck 的检查一起执行</li>
-<li>-R : 同时有 -A 条件时，省略 / 不检查</li>
-<li>-V : 详细显示模式</li>
-<li>-a : 如果检查有错则自动修复</li>
-<li>-r : 如果检查有错则由使用者回答是否修复</li>
-<li>-y : 选项指定检测每个文件是自动输入yes，在不确定那些是不正常的时候，可以执行 # fsck -y 全部检查修复。</li>
-</ul>
-<h3 id="磁盘挂载和删除"><a href="#磁盘挂载和删除" class="headerlink" title="磁盘挂载和删除"></a>磁盘挂载和删除</h3><ul>
-<li>Linux 的磁盘挂载使用 <code>mount</code> 命令，卸载使用 <code>umount</code> 命令。</li>
-<li><code>mount [-t 文件系统] [-L Label名] [-o 额外选项] [-n]  装置文件名  挂载点</code></li>
-<li><code>umount [-fn] 装置文件名或挂载点</code></li>
-</ul>
-<p><strong>参考<a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-file-content-manage.html">https://www.runoob.com/linux/linux-file-content-manage.html</a></strong></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/6/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/8/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/6/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/8/">下一页</a>
   </nav>
   
 </section>

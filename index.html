@@ -141,6 +141,141 @@
     
     
     <article
+  id="post-单调栈"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/08/28/%E5%8D%95%E8%B0%83%E6%A0%88/"
+    >单调栈</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/08/28/%E5%8D%95%E8%B0%83%E6%A0%88/" class="article-date">
+  <time datetime="2022-08-28T13:32:21.000Z" itemprop="datePublished">2022-08-28</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
+<li>了解数组中的一个数，左边最近的比这个数大的数，和右边最近的比这个数大的数在哪</li>
+</ul>
+<h2 id="单调栈"><a href="#单调栈" class="headerlink" title="单调栈"></a>单调栈</h2><h3 id="无重复数字"><a href="#无重复数字" class="headerlink" title="无重复数字"></a>无重复数字</h3><ul>
+<li>求某个数字附近最近的比他大的数字：<ul>
+<li>使用一个栈，这个栈从下到上是由大到小的顺序</li>
+<li>新加入的数字符合单调性？直接加入</li>
+<li>不符合单调性？弹出栈顶的数字，此时记录，对于被弹出的这个数字而言：<ul>
+<li>左边最近的比他大的数字就是弹出这个数字之后的栈顶元素</li>
+<li>右边最近的比他大的数字就是正要进栈的数字</li>
+<li>直到符合单调性为止</li>
+</ul>
+</li>
+<li>最后结束的时候栈中还有数据怎么办？<ul>
+<li>栈中剩余的所有数据的右边最近比他大的数字都是无</li>
+<li>左边最近的比他大的数字都是他在栈中的下一个元素</li>
+<li>栈底的最后一个元素左右都是无<h3 id="有重复数字"><a href="#有重复数字" class="headerlink" title="有重复数字"></a>有重复数字</h3></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>栈中放的内容都是链表，每个位置链表结点存放index</li>
+<li>弹出的时候，右边最近比他大的数字是当前等待进栈的数字，左边最近的比他大的数字是栈中下面紧邻位置链表的最后一个位置</li>
+<li>同样数字进栈的时候，将同样的数字对应的index串联在进栈位置链表的下一个位置<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLessNoRepeat(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    <span class="comment">// 只存位置！</span></span><br><span class="line">    Stack&lt;Integer&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// 当遍历到i位置的数，arr[i]</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek()] &gt; arr[i]) &#123;</span><br><span class="line">            <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">            res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[j][<span class="number">1</span>] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">        res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">        res[j][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLess(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    Stack&lt;List&lt;Integer&gt;&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// i -&gt; arr[i] 进栈</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] &gt; arr[i]) &#123;</span><br><span class="line">            List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">                res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">                res[popi][<span class="number">1</span>] = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] == arr[i]) &#123;</span><br><span class="line">            stack.peek().add(Integer.valueOf(i));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            list.add(i);</span><br><span class="line">            stack.push(list);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">            res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[popi][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-滑动窗口的最大值问题"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/08/28/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC%E9%97%AE%E9%A2%98/"
+    >滑动窗口的最大值问题</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/08/28/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC%E9%97%AE%E9%A2%98/" class="article-date">
+  <time datetime="2022-08-28T11:26:32.000Z" itemprop="datePublished">2022-08-28</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="双端队列"><a href="#双端队列" class="headerlink" title="双端队列"></a>双端队列</h2><ul>
+<li>一种两端都可以进出的数据结构<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2></li>
+<li>保持双端队列的头部位置是窗口中最大的数字</li>
+<li>窗口的运动是随意的，不是固定窗口大小的</li>
+<li>将滑动窗口的右边界向右扩展的时候</li>
+<li>双端队列中存储的是双端队列中数字的index，但是使用的是index对应的数字<ul>
+<li>假如此时右边界新进入的数字比此时双端队列的末尾数字大的话就弹出此时双端队列末尾的数字，直到双端队列末尾的数字<strong>大于</strong>右边界新进入的数字（或者双端队列为空）。严格保证双端队列的单调性。</li>
+<li>假如此时窗口的左边界向右移动导致窗口内有数字被移出窗口，那么此时将被移出窗口的数字与双端队列头部的数字（也就是此时窗口的最大值）比较，假如二者相同（是同一个index对应的数字），则弹出双端队列头部的数字，否则不管。</li>
+<li>双端队列的信息实际上是<strong>假如此时滑动窗口的右边界不动，但是左边界前移，那么随着前移窗口中的最大值会是谁</strong></li>
+<li> 实际上是用<u>下标大的大数字</u>替换<u>下标小的小数字</u><h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2></li>
+</ul>
+</li>
+<li><u>平均</u>每个时刻都是O(1)<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getMaxWindow(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> w) &#123;</span><br><span class="line">    <span class="keyword">if</span> (arr == <span class="keyword">null</span> || w &lt; <span class="number">1</span> || arr.length &lt; w) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// qmax 窗口最大值的更新结构</span></span><br><span class="line">    <span class="comment">// 放下标</span></span><br><span class="line">    LinkedList&lt;Integer&gt; qmax = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">    <span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length - w + <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> R = <span class="number">0</span>; R &lt; arr.length; R++) &#123;</span><br><span class="line">        <span class="keyword">while</span> (!qmax.isEmpty() &amp;&amp; arr[qmax.peekLast()] &lt;= arr[R]) &#123;</span><br><span class="line">            qmax.pollLast();</span><br><span class="line">        &#125;</span><br><span class="line">        qmax.addLast(R);</span><br><span class="line">        <span class="keyword">if</span> (qmax.peekFirst() == R - w) &#123;</span><br><span class="line">            qmax.pollFirst();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (R &gt;= w - <span class="number">1</span>) &#123;</span><br><span class="line">            res[index++] = arr[qmax.peekFirst()];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-manacher算法"
   class="article article-type-post"
   itemscope
@@ -169,7 +304,51 @@
     <div class="article-entry" itemprop="articleBody">
        
   <h2 id="解决的问题"><a href="#解决的问题" class="headerlink" title="解决的问题"></a>解决的问题</h2><ul>
-<li>字符串的最长回文字串的问题（必须是连续的串）</li>
+<li>字符串的最长回文字串的问题（必须是连续的串）<h2 id="获得长度为奇数和偶数的字符串"><a href="#获得长度为奇数和偶数的字符串" class="headerlink" title="获得长度为奇数和偶数的字符串"></a>获得长度为奇数和偶数的字符串</h2></li>
+<li>奇数的话直接取每个字符向两边找扩展即可</li>
+<li>针对偶数可以在每两个字符之间<strong>加入一个虚拟的字符</strong>，向左右两边扩展得到偶数长度的回文字符串</li>
+<li><img src="/imgs/87935e4d8a92e959ccda8401cf31306762c0fe8418854a1eef92f8d09ee30dba.png" alt="图 2">  </li>
+<li>将处理得到的字符串的长度直接/2就可以得到实际的回文串的长度</li>
+<li>虚拟的字符可以是任意字符，即使是原串之中出现过的字符也可以</li>
+<li>时间复杂度是<code>O(N^2)</code><h2 id="Manacher"><a href="#Manacher" class="headerlink" title="Manacher"></a>Manacher</h2></li>
+<li>时间复杂度是<code>O(N)</code></li>
+<li>概念<ul>
+<li>回文直径和半径</li>
+<li><img src="/imgs/18ab4a39c4e691caf0301e6d309f1ff2c97f2fb100da73a20f5b55752ccd9afe.png" alt="图 3">  </li>
+<li>回文直径7半径4</li>
+<li>生成一个<code>回文半径数组</code></li>
+<li>之前扩展的所有位置中所到达过的回文最右边界，初始值是-1</li>
+<li>取得最远边界的时候的中心点的位置，与上一条同时更新</li>
+</ul>
+</li>
+<li>方法：<ul>
+<li>假如此时index没在最右回文右边界之内，直接向两边暴力计算即可</li>
+<li>假如在最右边界之内：<ul>
+<li>中心点一定在index的左侧</li>
+<li><img src="/imgs/694a11a5b4ed6114a4bfcf85d8d329c4db097e451e269ac5dec433e70d29ecab.png" alt="图 4">  </li>
+<li>C是此时的最右回文串的中心位置，L是左边界，R是右边界</li>
+<li>i’是i关于C的对称点，根据i’的回文状况分类：<ul>
+<li>假如i’的回文在L和R范围内（用回文半径数组得到）<ul>
+<li>i位置和i’位置的回文半径相同</li>
+</ul>
+</li>
+<li>假如i’的区域有一部分已经到L和R的外侧了<ul>
+<li><img src="/imgs/8e9b9549693606dccff649bf276d88d81e1451e3599734737c1a69b5dcd84765.png" alt="图 5">  </li>
+<li>此时i的答案是<strong>i到R的长度</strong></li>
+</ul>
+</li>
+<li>假如i’的左边界正好在L上<ul>
+<li><img src="/imgs/1e139074cc661226468bd6ddeddfc033b6f3ef39f085d9807868ff5839718773.png" alt="图 6">  </li>
+<li>首先i’自身的回文半径<strong>一定是回文</strong>，从R外的第一个字符开始继续验证即可</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><img src="/imgs/d89728ae0ac3bc388471df7088a5aeafcae7c8c3bab4533dd11e7dce4d1e2e7d.png" alt="图 7">  <h2 id="manacher代码"><a href="#manacher代码" class="headerlink" title="manacher代码"></a>manacher代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">manacher</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// &quot;12132&quot; -&gt; &quot;#1#2#1#3#2#&quot;</span></span><br><span class="line">    <span class="keyword">char</span>[] str = manacherString(s);</span><br><span class="line">    <span class="comment">// 回文半径的大小</span></span><br><span class="line">    <span class="keyword">int</span>[] pArr = <span class="keyword">new</span> <span class="keyword">int</span>[str.length];</span><br><span class="line">    <span class="keyword">int</span> C = -<span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 讲述中：R代表最右的扩成功的位置</span></span><br><span class="line">    <span class="comment">// coding：最右的扩成功位置的，再下一个位置</span></span><br><span class="line">    <span class="keyword">int</span> R = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> max = Integer.MIN_VALUE;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length; i++) &#123; <span class="comment">// 0 1 2</span></span><br><span class="line">        <span class="comment">// R第一个违规的位置，i&gt;= R</span></span><br><span class="line">        <span class="comment">// i位置扩出来的答案，i位置扩的区域，至少是多大。</span></span><br><span class="line">        pArr[i] = R &gt; i ? Math.min(pArr[<span class="number">2</span> * C - i], R - i) : <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (i + pArr[i] &lt; str.length &amp;&amp; i - pArr[i] &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (str[i + pArr[i]] == str[i - pArr[i]])</span><br><span class="line">                pArr[i]++;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (i + pArr[i] &gt; R) &#123;</span><br><span class="line">            R = i + pArr[i];</span><br><span class="line">            C = i;</span><br><span class="line">        &#125;</span><br><span class="line">        max = Math.max(max, pArr[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> max - <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">char</span>[] manacherString(String str) &#123;</span><br><span class="line">    <span class="keyword">char</span>[] charArr = str.toCharArray();</span><br><span class="line">    <span class="keyword">char</span>[] res = <span class="keyword">new</span> <span class="keyword">char</span>[str.length() * <span class="number">2</span> + <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i != res.length; i++) &#123;</span><br><span class="line">        res[i] = (i &amp; <span class="number">1</span>) == <span class="number">0</span> ? <span class="string">&#x27;#&#x27;</span> : charArr[index++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// for test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">right</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">char</span>[] str = manacherString(s);</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> L = i - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> R = i + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (L &gt;= <span class="number">0</span> &amp;&amp; R &lt; str.length &amp;&amp; str[L] == str[R]) &#123;</span><br><span class="line">            L--;</span><br><span class="line">            R++;</span><br><span class="line">        &#125;</span><br><span class="line">        max = Math.max(max, R - L - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> max / <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
  
       <!-- reward -->
@@ -717,162 +896,13 @@
 </article>
 
     
-    <article
-  id="post-C-二级指针和二维数组"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/15/C-%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88%E5%92%8C%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84/"
-    >C++二级指针和二维数组（不使用Vector）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/15/C-%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88%E5%92%8C%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84/" class="article-date">
-  <time datetime="2022-08-14T16:01:25.000Z" itemprop="datePublished">2022-08-15</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
-<li>不要将二级指针和二维数组混为一谈，二维数组再指针作为起始地址的基础上必须还知道第二维度的长度才可以，因为实际上的数组索引操作是<code>i*&lt;第二维度大小&gt; + j</code><h2 id="动态二维数组的创建和销毁-不使用Vector"><a href="#动态二维数组的创建和销毁-不使用Vector" class="headerlink" title="动态二维数组的创建和销毁(不使用Vector)"></a>动态二维数组的创建和销毁(不使用Vector)</h2></li>
-<li>创建<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">double</span> **dataMat;</span><br><span class="line">dataMat = <span class="keyword">new</span> <span class="keyword">double</span>* [x_size];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;xSize;i++)</span><br><span class="line">&#123;</span><br><span class="line">    dataMat[i] = <span class="keyword">new</span> <span class="keyword">double</span>[ySize];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wordwarwordwar/article/details/52558583">参考链接</a></li>
-<li>释放二维数组<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;数组第一维的数量&gt;;i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> dataMat[i];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">delete</span> dataMat;</span><br></pre></td></tr></table></figure></li>
-<li>先逐个释放数组的行，然后再释放整个数组<h2 id="动态二维数组的传参"><a href="#动态二维数组的传参" class="headerlink" title="动态二维数组的传参"></a>动态二维数组的传参</h2></li>
-<li>对于正常创建的二维数组（不是使用上文的方法创建的动态数组）<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//方法1：传递数组，注意第二维必须标明</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun1</span><span class="params">(<span class="keyword">int</span> arr[][<span class="number">3</span>],<span class="keyword">int</span> iRows)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;iRows;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">3</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout&lt;&lt;arr[i][j]&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 当作指针数组传递</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun2</span><span class="params">(<span class="keyword">int</span> (*arr)[<span class="number">3</span>],<span class="keyword">int</span> iRows)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;iRows;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">3</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout&lt;&lt;arr[i][j]&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 直接传递一级指针（强制类型转换）</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun3</span><span class="params">(<span class="keyword">int</span>*arr,<span class="keyword">int</span> iRows,<span class="keyword">int</span> iCols)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;iRows;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">3</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout&lt;&lt;*(arr+i*iRows+j)&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a[<span class="number">2</span>][<span class="number">3</span>]=&#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;,&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;&#125;;</span><br><span class="line">    <span class="built_in">fun1</span>(a,<span class="number">2</span>);</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">    <span class="built_in">fun2</span>(a,<span class="number">2</span>);</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">    <span class="comment">//此处必须进行强制类型转换，因为a是二维数组，而需要传入的是指针</span></span><br><span class="line">    <span class="comment">//所以必须强制转换成指针，如果a是一维数组则不必进行强制类型转换</span></span><br><span class="line">    <span class="comment">//为什么一维数组不用强制转换而二维数组必须转换，此问题还没解决，期待大牛！</span></span><br><span class="line">    <span class="built_in">fun3</span>((<span class="keyword">int</span>*)a,<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li>假如预先<strong>不知道数组的第二维度</strong>是多少的话，还是只能使用强制类型转换为<strong>一级指针</strong>的方法传递。</li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43036419/article/details/110490025">参考链接</a></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-基于WSL开发内核模块"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/08/%E5%9F%BA%E4%BA%8EWSL%E5%BC%80%E5%8F%91%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97/"
-    >基于WSL开发内核模块</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/08/%E5%9F%BA%E4%BA%8EWSL%E5%BC%80%E5%8F%91%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97/" class="article-date">
-  <time datetime="2022-08-08T15:10:15.000Z" itemprop="datePublished">2022-08-08</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="WSL内核更换为自定义版本（解决微软安装的内核版本源码找不到的问题）"><a href="#WSL内核更换为自定义版本（解决微软安装的内核版本源码找不到的问题）" class="headerlink" title="WSL内核更换为自定义版本（解决微软安装的内核版本源码找不到的问题）"></a>WSL内核更换为自定义版本（解决微软安装的内核版本源码找不到的问题）</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_46161993/article/details/109062992">编译自定义内核参考连接</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/chubbykkk/article/details/125216332">替换自定义内核参考</a></li>
-<li>效果<ul>
-<li><img src="/imgs/d543dbfb866f2ea29a9c8841d6d6100514d0bef1c8278ed300c480e03ac57786.png" alt="图 1">  </li>
-<li>注意，<strong>config-wsl</strong>文件中的<code>CONFIG_LOCALVERSION=&quot;-microsoft-wsl&quot;</code>是<strong>可以修改</strong>的<h2 id="模块的安装和卸载"><a href="#模块的安装和卸载" class="headerlink" title="模块的安装和卸载"></a>模块的安装和卸载</h2></li>
-</ul>
-</li>
-<li>安装：<code>sudo insmod &lt;模块文件名&gt;</code></li>
-<li>卸载：<code>rmmod &lt;模块文件名&gt;</code></li>
-<li>查看模块信息 <code>modinfo &lt;模块文件名&gt;</code></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/268363827">参考链接</a></li>
-<li>打开系统日志可见效果;</li>
-<li><img src="/imgs/01d831157a75cf187c848e60646f401dc4a953698b903fe4d961239b81c4f0da.png" alt="图 2">  <h2 id="在-proc下创建文件并且通过读写该文件实现与内核的交互"><a href="#在-proc下创建文件并且通过读写该文件实现与内核的交互" class="headerlink" title="在/proc下创建文件并且通过读写该文件实现与内核的交互"></a>在/proc下创建文件并且通过读写该文件实现与内核的交互</h2></li>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Ph-one/p/5530320.html">参考链接</a></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/486960022">参考链接</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2ddd32527367">参考连接</a></li>
-<li>上述参考链接由一些错误之处，比如需要include <code>#include &lt;linux/uaccess.h&gt;</code><ul>
-<li><code>proc_ops</code>的结构体ing不是<code>file_operations</code>，而是自己的结构<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">proc_ops</span> <span class="title">procOps</span> =</span> </span><br><span class="line">&#123;</span><br><span class="line">    .proc_open = demo_open,</span><br><span class="line">    .proc_write = demo_set,</span><br><span class="line">    <span class="comment">// .read = seq_read,</span></span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><code>create_proc_entry</code>函数往往找不到需要替换成<code>proc_create</code>函数</li>
-<li><code>single_open</code>实际上是<code>simple_open</code>等等</li>
-<li>需要自己通过查看相应的头文件进行修正<h2 id="添加内核服务器并连接"><a href="#添加内核服务器并连接" class="headerlink" title="添加内核服务器并连接"></a>添加内核服务器并连接</h2></li>
-<li><a target="_blank" rel="noopener" href="http://blog.chinaunix.net/uid-29043620-id-5843468.html">参考链接</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.freesion.com/article/7378816741/">参考链接</a></li>
-<li>基本方法与创建Socket类似，用户需要自己定义一个内核端口号用于跟用户程序通信，用户程序只要跟相同端口号通信即可。</li>
-</ul>
-<h2 id="内核线程的创建"><a href="#内核线程的创建" class="headerlink" title="内核线程的创建"></a>内核线程的创建</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Ph-one/p/6077787.html">参考链接</a></li>
-<li>主要是<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">struct task_struct *<span class="title">kthread_create</span><span class="params">(<span class="keyword">int</span> (*threadfn)(<span class="keyword">void</span> *data),</span></span></span><br><span class="line"><span class="params"><span class="function">                            <span class="keyword">void</span> *data,</span></span></span><br><span class="line"><span class="params"><span class="function">                            <span class="keyword">const</span> <span class="keyword">char</span> namefmt[], ...)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>和<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">wake_up_process</span><span class="params">(struct task_struct *tsk)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>两个函数</li>
-<li>因为使用<code>kthread_create</code>创建线程之后<strong>并不会立即开始执行</strong>，需要通过<code>wake_up_process</code>函数使其开始执行才可以。</li>
-</ul>
-<h2 id="内核互斥锁等"><a href="#内核互斥锁等" class="headerlink" title="内核互斥锁等"></a>内核互斥锁等</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.lmlphp.com/user/60011/article/item/607287/">参考链接</a><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/mutex.h&gt;</span></span></span><br></pre></td></tr></table></figure></li>
-<li>加锁<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mutex_lock</span><span class="params">(struct mutex *lock)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>解锁<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mutex_unlock</span><span class="params">(struct mutex *lock)</span></span>;</span><br></pre></td></tr></table></figure>
-<h2 id="内核动态内存分配"><a href="#内核动态内存分配" class="headerlink" title="内核动态内存分配"></a>内核动态内存分配</h2></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/W_shaolin/article/details/121070583">参考链接</a><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> __always_inline <span class="keyword">void</span> *<span class="title">kmalloc</span><span class="params">(<span class="keyword">size_t</span> size, <span class="keyword">gfp_t</span> flags)</span></span></span><br></pre></td></tr></table></figure>
-<h2 id="内核延时"><a href="#内核延时" class="headerlink" title="内核延时"></a>内核延时</h2></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/liangzc1124/article/details/121756964">参考链接</a></li>
-</ul>
-<h2 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://gitee.com/frankzhang0219/linuxKernelServer">仓库链接</a></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
   </nav>
   
 </section>

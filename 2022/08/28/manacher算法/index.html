@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">25</span>
+            <span class="post-count">775</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">1 min</span>
+            <span class="post-count">3 min</span>
         </span>
     </span>
 </div>
@@ -105,7 +105,51 @@
     <div class="article-entry" itemprop="articleBody">
        
   <h2 id="解决的问题"><a href="#解决的问题" class="headerlink" title="解决的问题"></a>解决的问题</h2><ul>
-<li>字符串的最长回文字串的问题（必须是连续的串）</li>
+<li>字符串的最长回文字串的问题（必须是连续的串）<h2 id="获得长度为奇数和偶数的字符串"><a href="#获得长度为奇数和偶数的字符串" class="headerlink" title="获得长度为奇数和偶数的字符串"></a>获得长度为奇数和偶数的字符串</h2></li>
+<li>奇数的话直接取每个字符向两边找扩展即可</li>
+<li>针对偶数可以在每两个字符之间<strong>加入一个虚拟的字符</strong>，向左右两边扩展得到偶数长度的回文字符串</li>
+<li><img src="/imgs/87935e4d8a92e959ccda8401cf31306762c0fe8418854a1eef92f8d09ee30dba.png" alt="图 2">  </li>
+<li>将处理得到的字符串的长度直接/2就可以得到实际的回文串的长度</li>
+<li>虚拟的字符可以是任意字符，即使是原串之中出现过的字符也可以</li>
+<li>时间复杂度是<code>O(N^2)</code><h2 id="Manacher"><a href="#Manacher" class="headerlink" title="Manacher"></a>Manacher</h2></li>
+<li>时间复杂度是<code>O(N)</code></li>
+<li>概念<ul>
+<li>回文直径和半径</li>
+<li><img src="/imgs/18ab4a39c4e691caf0301e6d309f1ff2c97f2fb100da73a20f5b55752ccd9afe.png" alt="图 3">  </li>
+<li>回文直径7半径4</li>
+<li>生成一个<code>回文半径数组</code></li>
+<li>之前扩展的所有位置中所到达过的回文最右边界，初始值是-1</li>
+<li>取得最远边界的时候的中心点的位置，与上一条同时更新</li>
+</ul>
+</li>
+<li>方法：<ul>
+<li>假如此时index没在最右回文右边界之内，直接向两边暴力计算即可</li>
+<li>假如在最右边界之内：<ul>
+<li>中心点一定在index的左侧</li>
+<li><img src="/imgs/694a11a5b4ed6114a4bfcf85d8d329c4db097e451e269ac5dec433e70d29ecab.png" alt="图 4">  </li>
+<li>C是此时的最右回文串的中心位置，L是左边界，R是右边界</li>
+<li>i’是i关于C的对称点，根据i’的回文状况分类：<ul>
+<li>假如i’的回文在L和R范围内（用回文半径数组得到）<ul>
+<li>i位置和i’位置的回文半径相同</li>
+</ul>
+</li>
+<li>假如i’的区域有一部分已经到L和R的外侧了<ul>
+<li><img src="/imgs/8e9b9549693606dccff649bf276d88d81e1451e3599734737c1a69b5dcd84765.png" alt="图 5">  </li>
+<li>此时i的答案是<strong>i到R的长度</strong></li>
+</ul>
+</li>
+<li>假如i’的左边界正好在L上<ul>
+<li><img src="/imgs/1e139074cc661226468bd6ddeddfc033b6f3ef39f085d9807868ff5839718773.png" alt="图 6">  </li>
+<li>首先i’自身的回文半径<strong>一定是回文</strong>，从R外的第一个字符开始继续验证即可</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><img src="/imgs/d89728ae0ac3bc388471df7088a5aeafcae7c8c3bab4533dd11e7dce4d1e2e7d.png" alt="图 7">  <h2 id="manacher代码"><a href="#manacher代码" class="headerlink" title="manacher代码"></a>manacher代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">manacher</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// &quot;12132&quot; -&gt; &quot;#1#2#1#3#2#&quot;</span></span><br><span class="line">    <span class="keyword">char</span>[] str = manacherString(s);</span><br><span class="line">    <span class="comment">// 回文半径的大小</span></span><br><span class="line">    <span class="keyword">int</span>[] pArr = <span class="keyword">new</span> <span class="keyword">int</span>[str.length];</span><br><span class="line">    <span class="keyword">int</span> C = -<span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 讲述中：R代表最右的扩成功的位置</span></span><br><span class="line">    <span class="comment">// coding：最右的扩成功位置的，再下一个位置</span></span><br><span class="line">    <span class="keyword">int</span> R = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> max = Integer.MIN_VALUE;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length; i++) &#123; <span class="comment">// 0 1 2</span></span><br><span class="line">        <span class="comment">// R第一个违规的位置，i&gt;= R</span></span><br><span class="line">        <span class="comment">// i位置扩出来的答案，i位置扩的区域，至少是多大。</span></span><br><span class="line">        pArr[i] = R &gt; i ? Math.min(pArr[<span class="number">2</span> * C - i], R - i) : <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (i + pArr[i] &lt; str.length &amp;&amp; i - pArr[i] &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (str[i + pArr[i]] == str[i - pArr[i]])</span><br><span class="line">                pArr[i]++;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (i + pArr[i] &gt; R) &#123;</span><br><span class="line">            R = i + pArr[i];</span><br><span class="line">            C = i;</span><br><span class="line">        &#125;</span><br><span class="line">        max = Math.max(max, pArr[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> max - <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">char</span>[] manacherString(String str) &#123;</span><br><span class="line">    <span class="keyword">char</span>[] charArr = str.toCharArray();</span><br><span class="line">    <span class="keyword">char</span>[] res = <span class="keyword">new</span> <span class="keyword">char</span>[str.length() * <span class="number">2</span> + <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i != res.length; i++) &#123;</span><br><span class="line">        res[i] = (i &amp; <span class="number">1</span>) == <span class="number">0</span> ? <span class="string">&#x27;#&#x27;</span> : charArr[index++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// for test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">right</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">char</span>[] str = manacherString(s);</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> L = i - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> R = i + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (L &gt;= <span class="number">0</span> &amp;&amp; R &lt; str.length &amp;&amp; str[L] == str[R]) &#123;</span><br><span class="line">            L--;</span><br><span class="line">            R++;</span><br><span class="line">        &#125;</span><br><span class="line">        max = Math.max(max, R - L - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> max / <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
  
       <!-- reward -->
@@ -171,6 +215,15 @@
 
    
   <nav class="article-nav">
+    
+      <a href="/2022/08/28/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC%E9%97%AE%E9%A2%98/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            滑动窗口的最大值问题
+          
+        </div>
+      </a>
     
     
       <a href="/2022/08/27/%E8%81%94%E6%83%B3y7000%E7%AD%89%E5%90%8C%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%94%B5%E8%84%91CPU%E8%A2%AB%E9%99%8D%E9%A2%91%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" class="article-nav-link">
