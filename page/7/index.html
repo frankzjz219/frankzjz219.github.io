@@ -141,6 +141,59 @@
     
     
     <article
+  id="post-配置Linux开机启动脚本"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/12/%E9%85%8D%E7%BD%AELinux%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC/"
+    >配置Linux开机启动脚本</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/12/%E9%85%8D%E7%BD%AELinux%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC/" class="article-date">
+  <time datetime="2022-01-12T09:28:21.000Z" itemprop="datePublished">2022-01-12</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="配置Linux开机启动脚本"><a href="#配置Linux开机启动脚本" class="headerlink" title="配置Linux开机启动脚本"></a>配置Linux开机启动脚本</h1><p>Linux开机启动脚本一般在<code>/etc/rc.d</code>目录下或者是<code>/etc</code>下的<code>rc.local</code>文件，此时使用vim工具在其后新增文本内容，执行用户指定的<code>.sh</code>脚本即可</p>
+<p><img src="/imgs/image-20220112173132465.png" alt="image-20220112173132465"></p>
+<p>在<code>exit 0</code>之前，添加下面两行脚本</p>
+<p><img src="/imgs/image-20220112173302603.png" alt="image-20220112173302603"></p>
+<p>第一行起到提示的作用，第二行开始执行对应的脚本，再次之前确定具有执行脚本的权限（<code>x</code>权限）。执行效果：</p>
+<p><img src="/imgs/image-20220112180339588.png" alt="image-20220112180339588"></p>
+<p>可见开机已经自动执行脚本</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Linux文件IO（二）"
   class="article article-type-post"
   itemscope
@@ -1691,104 +1744,6 @@
 </article>
 
     
-    <article
-  id="post-Linux初步学习（四）"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/04/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/"
-    >Linux初步学习（四）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/04/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/" class="article-date">
-  <time datetime="2022-01-04T08:39:24.000Z" itemprop="datePublished">2022-01-04</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Linux初步学习（四）"><a href="#Linux初步学习（四）" class="headerlink" title="Linux初步学习（四）"></a>Linux初步学习（四）</h1><h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[ <span class="keyword">function</span> ] funname [()]</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    action;</span><br><span class="line"></span><br><span class="line">    [<span class="built_in">return</span> int;]</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>1、可以带function fun() 定义，也可以直接fun() 定义,不带任何参数。</li>
-<li>2、参数返回，可以显示加：return 返回，如果不加，将以<strong>最后一条命令</strong>运行结果，作为返回值。 return后跟数值n(0-255)</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># author:菜鸟教程</span></span><br><span class="line"><span class="comment"># url:www.runoob.com</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">demoFun</span></span>()&#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;这是我的第一个 shell 函数!&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;-----函数开始执行-----&quot;</span></span><br><span class="line">demoFun</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;-----函数执行完毕-----&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="传递参数"><a href="#传递参数" class="headerlink" title="传递参数"></a>传递参数</h3><ul>
-<li>在Shell中，调用函数时可以向其传递参数。在函数体内部，通过 $n 的形式来获取参数的值，例如，$1表示第一个参数，$2表示第二个参数等等</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># author:菜鸟教程</span></span><br><span class="line"><span class="comment"># url:www.runoob.com</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">funWithParam</span></span>()&#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;第一个参数为 <span class="variable">$1</span> !&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;第二个参数为 <span class="variable">$2</span> !&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;第十个参数为 <span class="variable">$10</span> !&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;第十个参数为 <span class="variable">$&#123;10&#125;</span> !&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;第十一个参数为 <span class="variable">$&#123;11&#125;</span> !&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;参数总数有 <span class="variable">$#</span> 个!&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;作为一个字符串输出所有参数 $* !&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">funWithParam 1 2 3 4 5 6 7 8 9 34 73</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意，$10 不能获取第十个参数，获取第十个参数需要${10}。当n&gt;=10时，需要使用${n}来获取参数。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="left">参数处理</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">$#</td>
-<td align="left">传递到脚本或函数的参数个数</td>
-</tr>
-<tr>
-<td align="left">$*</td>
-<td align="left">以一个单字符串显示所有向脚本传递的参数</td>
-</tr>
-<tr>
-<td align="left">$$</td>
-<td align="left">脚本运行的当前进程ID号</td>
-</tr>
-<tr>
-<td align="left">$!</td>
-<td align="left">后台运行的最后一个进程的ID号</td>
-</tr>
-<tr>
-<td align="left">$@</td>
-<td align="left">与$*相同，但是使用时加引号，并在引号中返回每个参数。</td>
-</tr>
-<tr>
-<td align="left">$-</td>
-<td align="left">显示Shell使用的当前选项，与set命令功能相同。</td>
-</tr>
-<tr>
-<td align="left">$?</td>
-<td align="left">显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。</td>
-</tr>
-</tbody></table>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
@@ -1868,6 +1823,10 @@
     
     <li class="nav-item">
       <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
     </li>
     
   </ul>

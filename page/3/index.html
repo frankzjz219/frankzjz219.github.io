@@ -141,6 +141,68 @@
     
     
     <article
+  id="post-pytorch训练的模型导出数据或者部署到C-平台"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/06/28/pytorch%E8%AE%AD%E7%BB%83%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%87%BA%E6%95%B0%E6%8D%AE%E6%88%96%E8%80%85%E9%83%A8%E7%BD%B2%E5%88%B0C-%E5%B9%B3%E5%8F%B0/"
+    >pytorch训练的模型导出数据或者部署到C++平台</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/06/28/pytorch%E8%AE%AD%E7%BB%83%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%87%BA%E6%95%B0%E6%8D%AE%E6%88%96%E8%80%85%E9%83%A8%E7%BD%B2%E5%88%B0C-%E5%B9%B3%E5%8F%B0/" class="article-date">
+  <time datetime="2022-06-28T13:45:47.000Z" itemprop="datePublished">2022-06-28</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="pytorch训练的模型导出网格数据或者部署到C-平台"><a href="#pytorch训练的模型导出网格数据或者部署到C-平台" class="headerlink" title="pytorch训练的模型导出网格数据或者部署到C++平台"></a>pytorch训练的模型导出网格数据或者部署到C++平台</h1><h2 id="数据导出"><a href="#数据导出" class="headerlink" title="数据导出"></a>数据导出</h2><ul>
+<li>导出为<code>.csv</code>文件</li>
+<li>参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42464527/article/details/123688909">教程</a></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 定义和实例化网络</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Net</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(Net, self).__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">1</span>,<span class="number">30</span>,kernel_size=<span class="number">5</span>)</span><br><span class="line">        self.fc1 = nn.Linear(<span class="number">4320</span>,<span class="number">100</span>)</span><br><span class="line">        self.fc2 = nn.Linear(<span class="number">100</span>, <span class="number">10</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span></span><br><span class="line">        x = F.max_pool2d(F.relu(self.conv1(x)),<span class="number">2</span>)</span><br><span class="line">        x = x.view(-<span class="number">1</span>, <span class="number">4320</span>)</span><br><span class="line">        x = F.relu(self.fc1(x))</span><br><span class="line">        x = self.fc2(x)</span><br><span class="line">        <span class="keyword">return</span> F.log_softmax(x,dim=<span class="number">1</span>)</span><br><span class="line">network = Net()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存.csv格式的参数</span></span><br><span class="line"><span class="keyword">for</span> name,param <span class="keyword">in</span> network.named_parameters():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;name:<span class="subst">&#123;name&#125;</span>\t\t\t,shape:<span class="subst">&#123;param.shape&#125;</span>&quot;</span>)</span><br><span class="line">    data = pd.DataFrame(param.detach().numpy().reshape(<span class="number">1</span>, -<span class="number">1</span>))</span><br><span class="line">    filename = <span class="string">f&quot;<span class="subst">&#123;name&#125;</span>.csv&quot;</span></span><br><span class="line">    data.to_csv(<span class="string">f&quot;./<span class="subst">&#123;filename&#125;</span>&quot;</span>, index=<span class="literal">False</span>, header=<span class="literal">False</span>, sep=<span class="string">&#x27;,&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用Libtorch直接导出C-模型"><a href="#使用Libtorch直接导出C-模型" class="headerlink" title="使用Libtorch直接导出C++模型"></a>使用Libtorch直接导出C++模型</h2><ul>
+<li><p>参考 csdn<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43917589/article/details/124509964">文章</a></p>
+</li>
+<li><p>参考 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/263626686?ivk_sa=1024320u">知乎文章</a> 和 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/146453159">文章</a></p>
+</li>
+<li><p>部署 <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40198848/article/details/112872844?spm=1001.2014.3001.5506">yoloV5</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/advanced/cpp_export.html">官方教程</a></p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-python多线程以及线程同步"
   class="article article-type-post"
   itemscope
@@ -1146,198 +1208,6 @@
 </article>
 
     
-    <article
-  id="post-U-Boot入门"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/02/25/U-Boot%E5%85%A5%E9%97%A8/"
-    >U_Boot入门</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/02/25/U-Boot%E5%85%A5%E9%97%A8/" class="article-date">
-  <time datetime="2022-02-25T12:50:25.000Z" itemprop="datePublished">2022-02-25</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="U-Boot入门"><a href="#U-Boot入门" class="headerlink" title="U_Boot入门"></a>U_Boot入门</h1><h2 id="U-Boot简介"><a href="#U-Boot简介" class="headerlink" title="U_Boot简介"></a>U_Boot简介</h2><ul>
-<li>Linux 系统要启动就必须需要一个 bootloader 程序，也就说芯片上电以后先运行一段 bootloader程序。这段bootloader程序会先初始化DDR等外设，然后将Linux内核从flash(NAND， NOR FLASH，SD，MMC 等)拷贝到 DDR 中，最后启动 Linux 内核。当然了，bootloader 的实 际工作要复杂的多，但是它最主要的工作就是启动 Linux 内核，bootloader 和 Linux 内核的关系 就跟 PC 上的 BIOS 和 Windows 的关系一样，bootloader 就相当于 BIOS。所以我们要先搞定 bootloader，很庆幸，有很多现成的 bootloader 软件可以使用，比如 U-Boot、vivi、RedBoot 等 等，其中以 U-Boot 使用最为广泛，为了方便书写，本书会将 U-Boot 写为 uboot。</li>
-<li>uboot 的全称是 Universal Boot Loader，uboot 是一个遵循 GPL 协议的<strong>开源软件</strong>，uboot <strong>是一 个裸机代码，可以看作是一个裸机综合例程</strong>。现在的 uboot 已经支持液晶屏、网络、USB 等高 级功能。</li>
-<li>uboot 官网为 <a target="_blank" rel="noopener" href="http://www.denx.de/wiki/U-Boot/">http://www.denx.de/wiki/U-Boot/</a></li>
-</ul>
-<h2 id="UBoot顶层makefile"><a href="#UBoot顶层makefile" class="headerlink" title="UBoot顶层makefile"></a>UBoot顶层makefile</h2><ul>
-<li><p>编译需要的shell脚本</p>
-<ul>
-<li><img src="/imgs/image-20220225210752704.png" alt="image-20220225210752704"></li>
-<li>第 1 行是 shell 脚本要求的，必须是“#!/bin/bash”或者“#!/bin/sh”</li>
-<li>第 2 行使用了 make 命令，用于<u>清理工程</u>，也就是每次在编译 uboot 之前都清理一下工程。 这里的 make 命令带有三个参数，第一个是 ARCH，也就是指定架构，这里肯定是 arm；第二个 参数 CROSS_COMPILE 用于指定编译器，只需要<u>指明编译器前缀</u>就行了，比如 arm-linux-gnueabihf-gcc 编译器的前缀就是“arm-linux-gnueabihf-”；最后一个参数 distclean 就是清除工程。</li>
-<li>第 3 行也使用了 make 命令，用于配置 uboot。同样有三个参数，不同的是，最后一个参数是 mx6ull_14x14_ddr512_emmc_defconfig。<strong>前面说了 uboot 是 bootloader 的一种，可以用来引导 Linux，但是 uboot 除了引导 Linux 以外还可以引导其它的系统</strong>，<u>而且 uboot 还支持其它的架构 和外设，比如 USB、网络、SD 卡等。这些都是可以配置的，需要什么功能就使能什么功能</u>。所 以在编译 uboot 之前，一定要根据自己的需求配置 uboot。mx6ull_14x14_ddr512_emmc_defconfig 就是正点原子针对 I.MX6U-ALPHA 的 EMMC 核心板编写的配置文件，这个配置文件在 uboot 源码的 configs 目录中。在 uboot 中，通过“make xxx_defconfig”来配置 uboot，xxx_defconfig 就是不同板子的配置文件，这些配置文件都在 uboot/configs 目录中</li>
-<li>第 4 行有 4 个参数，用于编译 uboot，通过第 3 行配置好 uboot 以后就可以直接“make”编 译 uboot 了。其中 V=1 用于设置编译过程的信息输出级别；-j 用于设置主机使用多少线程编译 uboot，最好设置成我们虚拟机所设置的核心数，如果在 VMware 里面给虚拟就分配了 4 个核， 那么使用-j4 是最合适的，这样 4 个核都会一起编译</li>
-</ul>
-</li>
-<li><p>查看UBoot之前需要先进行一次编译</p>
-</li>
-<li><p>编译后的文件结构</p>
-</li>
-<li><p><img src="/imgs/image-20220225210424844.png" alt="image-20220225210424844"></p>
-</li>
-<li><p><img src="/imgs/image-20220225210443748.png" alt="image-20220225210443748"></p>
-</li>
-<li><p>makefile文件是可以嵌套的</p>
-</li>
-<li><p>也就是顶层 Makefile 可以<strong>调用子目录 中的 Makefile 文件</strong>。Makefile 嵌套在大项目中很常见，一般大项目里面所有的源代码都不会放 到同一个目录中，各个功能模块的源代码都是分开的，各自存放在各自的目录中。每个功能模 块目录下都有一个 Makefile，这个 Makefile 只处理本模块的编译链接工作，这样所有的编译链接工作就不用全部放到一个 Makefile 中，可以使得 Makefile 变得简洁明了。</p>
-</li>
-</ul>
-<h2 id="Makefile分析"><a href="#Makefile分析" class="headerlink" title="Makefile分析"></a>Makefile分析</h2><h3 id="版本号"><a href="#版本号" class="headerlink" title="版本号"></a>版本号</h3><ul>
-<li><p><img src="/imgs/image-20220225232512333.png" alt="image-20220225232512333"></p>
-</li>
-<li><p>顶层 Makefile 一开始是版本号，内容如下(为了方便分析，顶层 Makefile 代码段前段行号 采用 Makefile 中的行号，因为 uboot 会更新</p>
-</li>
-</ul>
-<h3 id="MAKEFLAGS变量"><a href="#MAKEFLAGS变量" class="headerlink" title="MAKEFLAGS变量"></a>MAKEFLAGS变量</h3><ul>
-<li>make 是支持递归调用的，也就是在 Makefile 中使用“make”命令来执行其他的 Makefile 文件，一般都是子目录中的 Makefile 文件。假如在当前目录下存在一个“subdir”子目录，这个 子目录中又有其对应的 Makefile 文件，那么这个工程在编译的时候其主目录中的 Makefile 就可 以调用子目录中的 Makefile，以此来完成所有子目录的编译。主目录的 Makefile 可以使用如下 代码来编译这个子目录：</li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="variable">$(MAKE)</span> -C subdir</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>$(MAKE)就是调用“make”命令，-C 指定子目录。有时候我们需要向子 make 传递变量， 这个时候使用“export”来导出要传递给子 make 的变量即可，如果不希望哪个变量传递给子 make 的话就使用“unexport”来声明不导出:</li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> VARIABLE …… //导出变量给子 make 。</span><br><span class="line"><span class="keyword">unexport</span> VARIABLE…… //不导出变量给子 make。</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>有两个特殊的变量：“SHELL”和“MAKEFLAGS”，这两个变量除非使用“unexport”声明， 否则的话在整个make的执行过程中，它们的值始终自动的传递给子make。在uboot的主Makefile 中有如下代码：</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MAKEFLAGS += -rR --include-dir=$(CURDIR)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>上述代码使用“+=”来给变量 MAKEFLAGS 追加了一些值，“-rR”表示禁止使用内置的隐 含规则和变量定义，“–include-dir”指明搜索路径，”$(CURDIR)”表示当前目录。</li>
-</ul>
-<h3 id="命令输出"><a href="#命令输出" class="headerlink" title="命令输出"></a>命令输出</h3><ul>
-<li><p>uboot 默认编译是不会在终端中显示完整的命令，都是短命令</p>
-</li>
-<li><p><img src="/imgs/image-20220225235732726.png" alt="image-20220225235732726"></p>
-</li>
-<li><p>上述代码中先使用 ifeq 来判断”$(origin V)”和”command line”是否相等。这里用到了 Makefile 中的函数 origin，origin 和其他的函数不一样，它不操作变量的值，origin 用于告诉你变量是哪 来的</p>
-</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(origin &lt;variable&gt;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>variable 是变量名，origin 函数的返回值就是变量来源，因此$(origin V)就是变量 V 的来源。 如果变量 V 是在命令行定义的那么它的来源就是”command line”，这样”$(origin V)”和”command  line”就相等了。当这两个相等的时候变量 KBUILD_VERBOSE 就等于 V 的值，比如在命令行中 输入“ V=1 “ 的 话 那 么 KBUILD_VERBOSE=1 。如果没有在命令行输入 V 的 话 KBUILD_VERBOSE=0</p>
-</li>
-<li><p>第 80 行判断 KBUILD_VERBOSE 是否为 1，如果 KBUILD_VERBOSE 为 1 的话变量 quiet</p>
-</li>
-<li><p>和 Q 都为空，如果 KBUILD_VERBOSE=0 的话变量 quiet 为“quiet_“，变量 Q 为“@”</p>
-<ul>
-<li><p>V=1 的话</p>
-</li>
-<li><p><img src="/imgs/image-20220226000158806.png" alt="image-20220226000158806"></p>
-</li>
-<li><p>V=0 或者命令行不定义 V 的话</p>
-</li>
-<li><p><img src="/imgs/image-20220226000426810.png" alt="image-20220226000426810"></p>
-</li>
-</ul>
-</li>
-<li><p>Makefile 中会用到变量 quiet 和 Q 来控制编译的时候是否在终端输出完整的命令，在顶层 Makefile 中有很多如下所示的命令</p>
-<ul>
-<li><code>$(Q)$(MAKE) $(build)=tools</code></li>
-</ul>
-</li>
-<li><p>如果 V=0 的话上述命令展开就是“@ make $(build)=tools”，make 在执行的时候默认会在终 端输出命令，但是在命令前面加上“@”就不会在终端输出命令了。当 V=1 的时候 Q 就为空， 上述命令就是“make $(build)=tools”，因此在 make 执行的过程，命令会被完整的输出在终端上</p>
-</li>
-<li><p>有些命令会有两个版本</p>
-<ul>
-<li><img src="/imgs/image-20220226000920939.png" alt="image-20220226000920939"></li>
-</ul>
-</li>
-<li><p>sym 命令分为“quiet_cmd_sym”和“cmd_sym”两个版本，这两个命令的功能都是一样的， 区别在于 make 执行的时候输出的命令不同。quiet_cmd_xxx 命令输出信息少，也就是短命令， 而 cmd_xxx 命令输出信息多，也就是完整的命令。</p>
-<ul>
-<li>如果变量 quiet 为空的话，整个命令都会输出。</li>
-<li> 如果变量 quiet 为“quiet_”的话，仅输出短版本。 _</li>
-<li>_如果变量 quiet 为“silent_”的话，整个命令都不会输出。</li>
-</ul>
-</li>
-</ul>
-<h3 id="静默输出"><a href="#静默输出" class="headerlink" title="静默输出"></a>静默输出</h3><ul>
-<li><p>上一小节讲了，设置 V=0 或者在命令行中不定义 V 的话，编译 uboot 的时候终端中显示的 短命令，但是还是会有命令输出，有时候我们在编译 uboot 的时候不需要输出命令，这个时候 就可以使用 uboot 的静默输出功能。编译的时候使用“make -s”即可实现静默输出</p>
-<ul>
-<li><img src="/imgs/image-20220226002019735.png" alt="image-20220226002019735"></li>
-<li><img src="/imgs/image-20220226002036927.png" alt="image-20220226002036927"></li>
-</ul>
-</li>
-<li><p>判断当前正在使用的编译器版本号是否为 4.x，判断$(filter 4.%,$(MAKE_VERSION)) 和“ ”(空)是否相等，如果不相等的话就成立，执行里面的语句。也就是说 $(filter  4.%,$(MAKE_VERSION))不为空的话条件就成立，这里用到了 Makefile 中的 filter 函数，这是 个过滤函数，函数格式如下</p>
-<ul>
-<li><img src="/imgs/image-20220226002617614.png" alt="image-20220226002617614"></li>
-<li>filter 函数表示以 pattern 模式过滤 text 字符串中的单词，仅保留符合模式 pattern 的单词， 可以有多个模式。函数返回值就是符合 pattern 的字符串。因此$(filter 4.%,$(MAKE_VERSION)) 的含义就是在字符串“MAKE_VERSION”中找出符合“4.%”的字符(%为通配符)， MAKE_VERSION 是make工具的版本号，ubuntu16.04里面默认自带的make工具版本号为4.1， 大家可以输入“make -v”查看。因此$(filter 4.%,$(MAKE_VERSION))不为空，条件成立</li>
-</ul>
-</li>
-<li><p>，如果$(filter %s ,$(firstword x$(MAKEFLAGS)))不为空的话条件 成立，变量 quiet 等于“silent_”。这里也用到了函数 filter，在$(firstword x$(MAKEFLAGS)))中 过滤出符合“%s”的单词。到了函数 firstword，函数 firstword 是获取首单词，函数格式如下</p>
-<ul>
-<li><p><code>$(firstword &lt;text&gt;)</code></p>
-</li>
-<li><p>firstword 函数用于取出 text 字符串中的第一个单词，函数的返回值就是获取到的单词。当 使用“make -s”编译的时候，“-s”会作为 MAKEFLAGS 变量的一部分传递给 Makefile。</p>
-</li>
-<li><p>添加如下内容</p>
-<ul>
-<li><img src="/imgs/image-20220226105110225.png" alt="image-20220226105110225"></li>
-</ul>
-</li>
-<li><p>可见增加<code>-s</code>之后，firstword变成了</p>
-<ul>
-<li><img src="/imgs/image-20220226110058265.png" alt="image-20220226110058265"></li>
-<li>可见也不是直接<code>-s</code>，但是filter的返回值肯定不为空</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="设置编译结果的输出目录"><a href="#设置编译结果的输出目录" class="headerlink" title="设置编译结果的输出目录"></a>设置编译结果的输出目录</h3><ul>
-<li><p>uboot 可以将编译出来的目标文件输出到单独的目录中，在 make 的时候使用“O”来指定 输出目录，比如“make O=out”就是设置目标文件输出到 out 目录中。这么做是为了将源文件 和编译产生的文件分开，当然也可以不指定 O 参数，不指定的话源文件和编译产生的文件都在 同一个目录内，一般我们不指定 O 参数。</p>
-</li>
-<li><p><img src="/imgs/image-20220226110625560.png" alt="image-20220226110625560"></p>
-</li>
-<li><p><img src="/imgs/image-20220226110641751.png" alt="image-20220226110641751"></p>
-</li>
-<li><p>第 124 行判断“O”是否来自于命令行，如果来自命令行的话条件成立，KBUILD_OUTPUT 就为$(O)，因此变量 KBUILD_OUTPUT 就是输出目录。 </p>
-</li>
-<li><p>第 135 行判断 KBUILD_OUTPUT 是否为空。 </p>
-</li>
-<li><p>第 139 行调用 mkdir 命令，创建 KBUILD_OUTPUT 目录，并且将创建成功以后的绝对路 径赋值给 KBUILD_OUTPUT。至此，通过 O 指定的输出目录就存在了。</p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
@@ -1417,6 +1287,10 @@
     
     <li class="nav-item">
       <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
     </li>
     
   </ul>
