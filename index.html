@@ -141,6 +141,321 @@
     
     
     <article
+  id="post-有序表"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/09/03/%E6%9C%89%E5%BA%8F%E8%A1%A8/"
+    >有序表</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/09/03/%E6%9C%89%E5%BA%8F%E8%A1%A8/" class="article-date">
+  <time datetime="2022-09-03T02:06:15.000Z" itemprop="datePublished">2022-09-03</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="有序表的实现"><a href="#有序表的实现" class="headerlink" title="有序表的实现"></a>有序表的实现</h2><ul>
+<li>底层：<ul>
+<li>红黑树</li>
+<li>AVL树</li>
+<li>SB树</li>
+<li>跳表</li>
+</ul>
+</li>
+<li>时间复杂度：O(log(N)) </li>
+<li>红黑树、AVL树、SB树是<em>平衡搜索二叉树</em><h3 id="搜索二叉树的插入和删除"><a href="#搜索二叉树的插入和删除" class="headerlink" title="搜索二叉树的插入和删除"></a>搜索二叉树的插入和删除</h3></li>
+<li>插入直接按照大小分支插入即可</li>
+<li>假如没有子节点的节点直接删除即可</li>
+<li>假如删除的节点只有一个孩子节点<ul>
+<li>直接让父节点的指针指向唯一的孩子即可</li>
+</ul>
+</li>
+<li>左右双全：<ul>
+<li>用左树最右的节点或者是右树最左的节点</li>
+<li>这样的节点必然不是两个孩子的节点</li>
+<li>先将这个节点的子节点（假如存在）移到这个节点原来的位置</li>
+<li>然后将这个节点移到被删除的具有两个孩子的节点的位置<h3 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h3></li>
+</ul>
+</li>
+<li>防止因为用户数据输入顺序的原因导致树左右不平衡使得搜索的时间复杂度上升</li>
+<li>左树和右树的体量差不多大</li>
+<li>AVL树在增删结点的时候会从这个节点的父节点开始向上查每个节点的平衡性<h2 id="跳表"><a href="#跳表" class="headerlink" title="跳表"></a>跳表</h2></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-动态规划"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/08/30/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"
+    >动态规划</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/08/30/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="article-date">
+  <time datetime="2022-08-30T12:30:22.000Z" itemprop="datePublished">2022-08-30</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="从递归到动态规划"><a href="#从递归到动态规划" class="headerlink" title="从递归到动态规划"></a>从递归到动态规划</h1><ul>
+<li>只要调用一个递归函数，总有参数不可变和参数可变的部分</li>
+<li>不可变的参数对结果没有影响因为都是一样的</li>
+<li>分析一个递归函数得到结果依赖下层递归返回什么内容</li>
+<li>为什么递归慢？因为会在不同的分支重复遍历相同的情况 <h2 id="递归到记忆化搜索"><a href="#递归到记忆化搜索" class="headerlink" title="递归到记忆化搜索"></a>递归到记忆化搜索</h2><h2 id="严格表结构的动态规划"><a href="#严格表结构的动态规划" class="headerlink" title="严格表结构的动态规划"></a>严格表结构的动态规划</h2></li>
+<li>解决重复遍历相同情况的问题</li>
+<li>利用缓存实现递归函数的可变部分到缓存结果的映射</li>
+<li>假如递归函数有k个参数可变，那么缓存的表具有k个维度</li>
+<li>缓存表能区分是否计算过这个位置的内容，比如用INT MIN或者-1一类</li>
+<li>缓存没命中的话就开始尝试，将尝试的结果存储到表中</li>
+<li>时间复杂度O(缓存表的尺寸)，本来的复杂度是二叉树的节点数<h2 id="计算动态规划表格"><a href="#计算动态规划表格" class="headerlink" title="计算动态规划表格"></a>计算动态规划表格</h2></li>
+<li>动态规划的顺序一定从递归函数的<strong>底层情况</strong>开始，或者说从递归的终止位置开始，知道不需要计算就直接出答案的位置</li>
+<li>从上面的推导得出计算的顺序</li>
+<li>利用递归函数的逻辑调用动态规划表格的内容</li>
+<li>将<u>调用下一级的递归函数</u>更改为从下一级的递归函数的<u>可变参数位置对应的缓存表的位置取出值</u></li>
+<li>也就是将<strong>递归调用的过程</strong>变成从<strong>动态规划表格中取值</strong>的过程</li>
+<li><strong>小心越界</strong><h3 id="斜率优化"><a href="#斜率优化" class="headerlink" title="斜率优化"></a>斜率优化</h3></li>
+<li>假如在递归的过程中出现<u>枚举行为</u>(比如计算一个格子的位置需要循环用到一系列从少到多的格子的信息)</li>
+<li>那么可以考虑使用<u>与这个格子临近的格子</u>寻找不需要进行循环就可以直接常数时间内就得到结果的方法</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-位运算相关"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/08/29/%E4%BD%8D%E8%BF%90%E7%AE%97%E7%9B%B8%E5%85%B3/"
+    >位运算相关</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/08/29/%E4%BD%8D%E8%BF%90%E7%AE%97%E7%9B%B8%E5%85%B3/" class="article-date">
+  <time datetime="2022-08-29T13:36:21.000Z" itemprop="datePublished">2022-08-29</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="用位运算实现两个数字比较大小"><a href="#用位运算实现两个数字比较大小" class="headerlink" title="用位运算实现两个数字比较大小"></a>用位运算实现两个数字比较大小</h2><ul>
+<li><img src="/imgs/5b30396bc4c925c4a2d0f65d7a86de89dcccc7806b6e29840618d0ae7245663a.png" alt="图 10">  </li>
+<li><img src="/imgs/184cb7228de5e0b605f23c4c637483504d7df504112e2c8a94421530324886d9.png" alt="图 11">  </li>
+<li><img src="/imgs/668bdcd3d4fdc36cbd51026abda0e132eb56f7f9be6c169cf611375060bcf97d.png" alt="图 12">  </li>
+<li>具体操作为获得a, b和a与b的差值的符号，然后<u>利用difSab和sameSab这两个互斥（一个为1的时候另一个必然是0）的变量实现if和else的功能</u></li>
+<li>利用<strong>加号左右两侧互斥</strong>的变量实现if else 的功能<h2 id="取出数字最右侧位置的1"><a href="#取出数字最右侧位置的1" class="headerlink" title="取出数字最右侧位置的1"></a>取出数字最右侧位置的1</h2><code>num &amp; (~num + 1)</code><h2 id="位运算加法实现"><a href="#位运算加法实现" class="headerlink" title="位运算加法实现"></a>位运算加法实现</h2></li>
+<li><img src="/imgs/4adcee55f38c883584f3880459a9d6ccf2f0bc8d8715703b710e65b4d6dec76a.png" alt="图 2">  </li>
+<li>a和b异或，得到<strong>无进位加法</strong>结果</li>
+<li>a和b与的结果左移一位，得到<strong>进位的位置</strong>，二者相加</li>
+<li>然后再把进位和无进位加法的结果求异或、与，左移一位，然后相加，重复上述步骤，<u>直到没有进位</u>为止<h2 id="位运算减法实现"><a href="#位运算减法实现" class="headerlink" title="位运算减法实现"></a>位运算减法实现</h2></li>
+<li>加一个数的相反数</li>
+<li>相反数等于一个数字取反再+1<h2 id="位运算乘法"><a href="#位运算乘法" class="headerlink" title="位运算乘法"></a>位运算乘法</h2></li>
+<li>假如一个数字二进制第k位是1，那么就将原始数字向左移k位，从k=0开始直到最大位，累加即可</li>
+<li><img src="/imgs/e5d721b23b0fd385e34a20224ccd1789cf6dd094b6a6c611fdb679d46dd72bed.png" alt="图 1">  <h2 id="位运算除法"><a href="#位运算除法" class="headerlink" title="位运算除法"></a>位运算除法</h2></li>
+<li>a/b</li>
+<li>b<u>尽可能左移，但是不能超过a</u>，假设移动了k1位，得到b’</li>
+<li>那么除法的第k位一定是1</li>
+<li>计算此时a-b’</li>
+<li>然后再次将b左移，但是不超过上次a-b’的结果，移动了k2位</li>
+<li>除法结果的第k2位也是1</li>
+<li>循环往复</li>
+<li><strong>实际操作是a右移k位，判断是否比b大</strong>，原因是<u>b左移可能溢出熬制不安全，符号位改变等等</u></li>
+<li><img src="/imgs/6ca3c8346b488611c993632c5fe8dfc65440940d700324d0b8ef35bb275b6b69.png" alt="图 3">  </li>
+<li>最后假如有余数的话丢弃（就是b不移位也不能减）</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-小空间词频统计"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/08/29/%E5%B0%8F%E7%A9%BA%E9%97%B4%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1/"
+    >小空间词频统计</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/08/29/%E5%B0%8F%E7%A9%BA%E9%97%B4%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1/" class="article-date">
+  <time datetime="2022-08-29T04:56:52.000Z" itemprop="datePublished">2022-08-29</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="大数据问题的一般思路"><a href="#大数据问题的一般思路" class="headerlink" title="大数据问题的一般思路"></a>大数据问题的一般思路</h2><ul>
+<li><img src="/imgs/de52034f9740d556c3569a224bb4bc6ba1d9926fdec348c89cfb28b7d82fd640.png" alt="图 9">  <h2 id="利用位数组"><a href="#利用位数组" class="headerlink" title="利用位数组"></a>利用位数组</h2></li>
+<li>利用基础类型（比如int）制作一个bit数组</li>
+<li>比如一个int是32位，那么10个int就是320位的位数组</li>
+<li>利用<u>每个位的1和0</u>计数数字的存在与否<h2 id="小空间词频统计"><a href="#小空间词频统计" class="headerlink" title="小空间词频统计"></a>小空间词频统计</h2></li>
+<li>假如用一个小空间计算40亿个数字中<code>unsigned int</code>中的<u>哪个不包括在内</u><ul>
+<li>先申请允许内存大小的数组，检查系统内存能够允许的数组长度，找<u>最近的长度为2的整数幂次</u>的数组长度作为长度</li>
+<li>然后按照数组的长度均分<code>unsigned int</code>范围得到小的范围长度</li>
+<li>遍历整个数组，每个元素除以小范围的长度，结果向下取整得到自己属于哪个小范围</li>
+<li>将词频数组对应的index位置（上一步计算的结果）<code>+1</code></li>
+<li>循环一遍之后，词频数组中肯定有某个位置的词频达不到理论上的小范围长度</li>
+<li>将整个统计范围的长度从整个<code>unsigned int</code>范围调整到上一个词频达不到满的小范围</li>
+<li><u>重复上述步骤</u>遍历整个数据，丢弃所有不在范围内的数字，其他数字按照第二次划分的小范围分类，统计结束之后再看哪个位置的词频达不到此时的小范围</li>
+</ul>
+</li>
+<li>统计巨量URL的访问次数<ul>
+<li>使用哈希函数将URL转换，然后分流到一定数量（按照服务器的内存资源决定）的小文件中，每个小文件使用一个利用<u>URL被访问次数</u>组织的大根堆</li>
+<li>将每个大根堆的堆顶组织成大根堆得到总堆</li>
+<li>结果就是依次将内容从总堆中弹出，弹出之后找到这个元素原来所在的大根堆，同样将这个元素弹出，然后弹出后的大根堆的头部放入总大根堆中。</li>
+</ul>
+</li>
+<li>利用位数组统计出现了两次的数字<ul>
+<li>用<strong>两位</strong>表示一个数字是否出现过</li>
+<li><code>00</code>没出现过，<code>01</code>出现一次，<code>10</code>出现两次，<code>11</code>出现大于2次</li>
+</ul>
+</li>
+<li>利用小空间找<strong>中位数</strong><ul>
+<li>同样利用小范围词频统计（第一种）操作</li>
+<li>统计到找出中位数在哪个小分区里</li>
+<li>然后对这个对应的小分区再等分找到具体的中位数的位置<h2 id="小空间给大数组"><a href="#小空间给大数组" class="headerlink" title="小空间给大数组"></a>小空间给大数组</h2></li>
+</ul>
+</li>
+<li>方法一<ul>
+<li>小空间使用小根堆</li>
+<li>小根堆存储的内容是&lt;数字，出现次数&gt;的元组，有小根堆中存在的数字的时候，相应的出现次数+1</li>
+<li>小根堆不能直接用一条记录的空间计算，<u>需要考虑一些额外的开销</u>，实际可用的空间可能是总空间/16或者其他数值</li>
+<li>堆的大小用最接近的2的整数次幂次</li>
+<li>然后按照被排序的内容/堆的大小得到被排序内容按大小分的小段</li>
+<li>第一次处理落在最小部分段内的数据，第二次处理第二小部分段内的数据…</li>
+<li>都处理完即可得到所有排序</li>
+</ul>
+</li>
+<li>方法二<ul>
+<li>使用一个大根堆存储此时数组中最小的几种数字</li>
+<li>假如此时一个新的数字小于此时大根堆中最大的数字，那么可以加入</li>
+<li>假如这个数字比大根堆中最大的数字还大，那么说明这个数字不属于整个数组中最小的k个数字之一，直接忽略（k为堆的大小）</li>
+<li>假如此时大根堆的数字超出数字限制，那么将最大的数字弹出然后将新的数字压入</li>
+<li>然后将大根堆内的所有数字逆序排出并清空堆，然后给堆设置最小值，等于上次弹出之前堆中最大的数字，以后只考虑大于这个数字的数</li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Morris遍历"
   class="article article-type-post"
   itemscope
@@ -202,6 +517,8 @@
     
     <footer class="article-footer">
        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
     </footer>
   </div>
 
@@ -453,7 +770,7 @@
        
 <h2 itemprop="name">
   <a class="article-title" href="/2022/08/27/%E8%81%94%E6%83%B3y7000%E7%AD%89%E5%90%8C%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%94%B5%E8%84%91CPU%E8%A2%AB%E9%99%8D%E9%A2%91%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"
-    >联想y7000等同系列笔记本电脑CPU被降频解决办法</a> 
+    >联想y7000等同系列笔记本电脑CPU被降频以及蓝牙设置丢失解决办法</a> 
 </h2>
  
 
@@ -468,8 +785,9 @@
       
     <div class="article-entry" itemprop="articleBody">
        
-  <h1 id="联想y7000等同系列笔记本电脑CPU被降频解决办法"><a href="#联想y7000等同系列笔记本电脑CPU被降频解决办法" class="headerlink" title="联想y7000等同系列笔记本电脑CPU被降频解决办法"></a>联想y7000等同系列笔记本电脑CPU被降频解决办法</h1><ul>
+  <h1 id="联想y7000等同系列笔记本电脑CPU被降频以及蓝牙设置丢失解决办法"><a href="#联想y7000等同系列笔记本电脑CPU被降频以及蓝牙设置丢失解决办法" class="headerlink" title="联想y7000等同系列笔记本电脑CPU被降频以及蓝牙设置丢失解决办法"></a>联想y7000等同系列笔记本电脑CPU被降频以及蓝牙设置丢失解决办法</h1><ul>
 <li>CPU被降频为0.78或者CPU的占用封顶34%，同时没有任何风扇转动声音的情况</li>
+<li>或者是蓝牙的设置直接丢失找不到，电脑失去蓝牙功能</li>
 <li>拔掉电脑一些外设，包括电源线</li>
 <li>关机</li>
 <li>长按电脑开机键20-30s释放静电，再重启即可</li>
@@ -561,337 +879,6 @@
 </li>
 </ul>
 </li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-并查集相关"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/26/%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%9B%B8%E5%85%B3/"
-    >并查集相关</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/26/%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%9B%B8%E5%85%B3/" class="article-date">
-  <time datetime="2022-08-26T12:52:15.000Z" itemprop="datePublished">2022-08-26</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h2><ul>
-<li><p>并查集支持<strong>集合合并</strong></p>
-</li>
-<li><p>提供的操作：</p>
-<ul>
-<li>查询两个样本是否属于同一个集合</li>
-<li>提供两个不同的集合的合并操作</li>
-</ul>
-</li>
-<li><p>实际上是给出一个<strong>向上指针</strong>的图结构，看一个元素<strong>向上指的指针一直到不能再往上找到代表元素</strong>，看是否是同一个元素</p>
-<ul>
-<li>合并集合的操作就是将内容少的集合直接通过指针连在内容多的集合下面即可（二者向上到最顶就会指向同一个元素）</li>
-</ul>
-</li>
-<li><p>并查集向上找最顶节点的优化：</p>
-<ul>
-<li>在每个元素向上遍历找最顶结点的之后，将遍历经过的整条链上的所有节点的父节点直接更改为最顶的节点</li>
-<li><img src="/imgs/71dc4c9665f1d746036fb857732b28b556ecbb705e1de924cb25ff4262704c78.png" alt="图 7">  </li>
-<li><img src="/imgs/c2e3e7dfcfa68bb6419a50e2a18a6a5f925a60ae043c1b830b51ea47d7941641.png" alt="图 8">  </li>
-<li>防止某一个链过长的问题<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> class14;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code05_UnionFind</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">		V value;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(V v)</span> </span>&#123;</span><br><span class="line">			value = v;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span>&lt;<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">        <span class="comment">// 样本对应的图中的node表</span></span><br><span class="line">		<span class="keyword">public</span> HashMap&lt;V, Node&lt;V&gt;&gt; nodes;</span><br><span class="line">        <span class="comment">// 一个元素对应的父是谁</span></span><br><span class="line">		<span class="keyword">public</span> HashMap&lt;Node&lt;V&gt;, Node&lt;V&gt;&gt; parents;</span><br><span class="line">        <span class="comment">// 图中代表元素（最顶上元素）对应的集合具有几个点</span></span><br><span class="line">		<span class="keyword">public</span> HashMap&lt;Node&lt;V&gt;, Integer&gt; sizeMap;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">(List&lt;V&gt; values)</span> </span>&#123;</span><br><span class="line">			nodes = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">			parents = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">			sizeMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">			<span class="keyword">for</span> (V cur : values) &#123;</span><br><span class="line">				Node&lt;V&gt; node = <span class="keyword">new</span> Node&lt;&gt;(cur);</span><br><span class="line">				nodes.put(cur, node);</span><br><span class="line">                <span class="comment">// 一个元素的父节点默认是自己</span></span><br><span class="line">				parents.put(node, node);</span><br><span class="line">                <span class="comment">// 每个元素都是代表元素</span></span><br><span class="line">				sizeMap.put(node, <span class="number">1</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 给你一个节点，请你往上到不能再往上，把代表返回</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> Node&lt;V&gt; <span class="title">findFather</span><span class="params">(Node&lt;V&gt; cur)</span> </span>&#123;</span><br><span class="line">			Stack&lt;Node&lt;V&gt;&gt; path = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">			<span class="keyword">while</span> (cur != parents.get(cur)) &#123;</span><br><span class="line">				path.push(cur);</span><br><span class="line">				cur = parents.get(cur);</span><br><span class="line">			&#125;</span><br><span class="line">            <span class="comment">// 优化父节点</span></span><br><span class="line">			<span class="keyword">while</span> (!path.isEmpty()) &#123;</span><br><span class="line">				parents.put(path.pop(), cur);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> cur;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSameSet</span><span class="params">(V a, V b)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// 此处应该增加判断a和b是否存在</span></span><br><span class="line">			<span class="keyword">return</span> findFather(nodes.get(a)) == findFather(nodes.get(b));</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(V a, V b)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// 此处应该增加判断a和b是否存在</span></span><br><span class="line">			Node&lt;V&gt; aHead = findFather(nodes.get(a));</span><br><span class="line">			Node&lt;V&gt; bHead = findFather(nodes.get(b));</span><br><span class="line">			<span class="keyword">if</span> (aHead != bHead) &#123;</span><br><span class="line">				<span class="keyword">int</span> aSetSize = sizeMap.get(aHead);</span><br><span class="line">				<span class="keyword">int</span> bSetSize = sizeMap.get(bHead);</span><br><span class="line">				Node&lt;V&gt; big = aSetSize &gt;= bSetSize ? aHead : bHead;</span><br><span class="line">				Node&lt;V&gt; small = big == aHead ? bHead : aHead;</span><br><span class="line">				parents.put(small, big);</span><br><span class="line">				sizeMap.put(big, aSetSize + bSetSize);</span><br><span class="line">                <span class="comment">// 小集合的头节点不在是头节点</span></span><br><span class="line">				sizeMap.remove(small);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sets</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> sizeMap.size();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>按照上面方式实现的并查集的实现，如果上面的findFather函数的调用次数达到了O(N)的水平，单次findFather调用的开销是O(1)水平</p>
-</li>
-<li><p>一般认为使用并查集的时间复杂度是O(1)的</p>
-<h2 id="并行计算问题"><a href="#并行计算问题" class="headerlink" title="并行计算问题"></a>并行计算问题</h2></li>
-<li><p><img src="/imgs/e29aff06d9eda4c8b36d408f5a222054e00312876b52a624ef0d4042ddba49bf.png" alt="图 6">  </p>
-</li>
-<li><p> 假如将一张大图直接划分成两个部分分别执行的话会因为两部分相互分割导致岛的数量变多</p>
-</li>
-<li><p>需要合并逻辑在执行结束之后合并多余的岛</p>
-<ul>
-<li> 搜集每个在<strong>矩阵被分割边界</strong>上的被统计点的最开始统计的点是哪个</li>
-<li> <img src="/imgs/5c6a91e4e1ecce59b214291d25caa18d291bb57a47912c05dfff599e4c14c1f4.png" alt="图 9">  </li>
-<li> 讨论边界相连的岛的情况，去并查集查询父亲的情况，不是同一个的话就<strong>合并并且总数-1</strong></li>
-</ul>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-一致性哈希"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/26/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C/"
-    >一致性哈希</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/26/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C/" class="article-date">
-  <time datetime="2022-08-26T11:06:11.000Z" itemprop="datePublished">2022-08-26</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="哈希函数"><a href="#哈希函数" class="headerlink" title="哈希函数"></a>哈希函数</h2><ul>
-<li><p>哈希函数的输入数据一般是<strong>巨量</strong>的，输出数据的的范围往往是<strong>有限</strong>的</p>
-</li>
-<li><p>哈希函数的输出存在<strong>均匀性</strong>，也就是无论输入是什么，输入是否接近，输出均匀分布在整个输出域之中。</p>
-<h2 id="哈希表处理冲突位置（映射）的方法"><a href="#哈希表处理冲突位置（映射）的方法" class="headerlink" title="哈希表处理冲突位置（映射）的方法"></a>哈希表处理冲突位置（映射）的方法</h2></li>
-<li><p>链接法：</p>
-<ul>
-<li>对于经过哈希函数得到<strong>同一个index</strong>的数据，利用链表（或者类似的形式）将其串联起来，寻找的时候先进行哈希得到index，然后再该index对应的位置逐个遍历链表得到要找的对象</li>
-</ul>
-</li>
-<li><p><em><strong>其他方法</strong></em>参考链接 <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_26567507/article/details/80167351">参考</a></p>
-<h2 id="一致性哈希"><a href="#一致性哈希" class="headerlink" title="一致性哈希"></a>一致性哈希</h2></li>
-<li><p>用在给服务器分配数据问题减少迁移数据的工作量</p>
-</li>
-<li><p>一般情况下将输入数据的<code>key</code>值进行哈希，哈希得到的结果对服务器的数量取模，按照取得的结果分配到不同的服务器上，但是此时假如增加或者减少了服务器，就会因为取模的数字变化导致整个系统的哈希取模的数字都需要重新计算和分配，进而整体前迁移，工作量很大</p>
-</li>
-<li><p>引入一致性哈希得目的是减少上文描述得<em>前移工作量</em></p>
-</li>
-<li><p><img src="/imgs/a906dd8694b2b5033a83f841abd7919f93a7e4dfb74e15f6a7af6663c9ba82d3.png" alt="图 1">  </p>
-</li>
-<li><p>将三个机器的特征名称进行哈希，哈希过后将三个机器放在一个由哈希结果范围组成的环上（最大值和最小值头尾相接）。此时得到一个数据，同样将数据进行哈希，哈希得到的结果在环上找距离最近（此处的算法可以更换）的服务器存储该数据，假如数据的哈希值比所有服务器的哈希值都大的话就找哈希值最小的服务器，因为大小首尾相接。</p>
-<h3 id="增加机器"><a href="#增加机器" class="headerlink" title="增加机器"></a>增加机器</h3></li>
-<li><p><img src="/imgs/c482331ba4e5bc111d2b96bf43bf9e04837530b69657f089fed48fda2b8626e3.png" alt="图 2">  </p>
-</li>
-<li><p>假如此时需要增加M4，那么只需要将M3和M4之间的数据迁移到M4即可，不需要将所有数据进行重新计算迁移。</p>
-</li>
-<li><p>潜在问题：</p>
-<ul>
-<li>一开始的时候因为机器的地址是哈希得到的，未必均衡</li>
-<li>增加机器之后可能导致局部机器比较密集，同样负载不均衡</li>
-</ul>
-</li>
-<li><p>解决上述问题的方法：<strong>虚拟节点技术</strong></p>
-<ul>
-<li><p><img src="/imgs/8e91c4642b1ac4809f2c2adda961253bb18c6d7baaf8e888115f4cc5a4fde64c.png" alt="图 3">  </p>
-</li>
-<li><p>给每个服务器分配多个用于哈希的序列，每个服务器在环上具有<strong>多个</strong>对应的序列哈希得到的节点位置，<strong>相对均匀</strong>，同时也比较方便虚拟节点之间的数据迁移</p>
-</li>
-<li><p>不同的机器可以根据机器性能和状态的不同分配<strong>不同数量</strong>的虚拟节点，实现对于负载比例的不同分配。</p>
-</li>
-</ul>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-图相关算法"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/24/%E5%9B%BE%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/"
-    >图相关算法</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/24/%E5%9B%BE%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/" class="article-date">
-  <time datetime="2022-08-23T16:20:38.000Z" itemprop="datePublished">2022-08-24</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="图对象的定义"><a href="#图对象的定义" class="headerlink" title="图对象的定义"></a>图对象的定义</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Graph</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> HashMap&lt;Integer, Node&gt; nodes;</span><br><span class="line">	<span class="keyword">public</span> HashSet&lt;Edge&gt; edges;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Graph</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		nodes = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">		edges = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="边对象的定义"><a href="#边对象的定义" class="headerlink" title="边对象的定义"></a>边对象的定义</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Edge</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> weight;</span><br><span class="line">	<span class="keyword">public</span> Node from;</span><br><span class="line">	<span class="keyword">public</span> Node to;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Edge</span><span class="params">(<span class="keyword">int</span> weight, Node from, Node to)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.weight = weight;</span><br><span class="line">		<span class="keyword">this</span>.from = from;</span><br><span class="line">		<span class="keyword">this</span>.to = to;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="节点对象的定义"><a href="#节点对象的定义" class="headerlink" title="节点对象的定义"></a>节点对象的定义</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 点结构的描述</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> value;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> in;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> out;</span><br><span class="line">	<span class="keyword">public</span> ArrayList&lt;Node&gt; nexts;</span><br><span class="line">	<span class="keyword">public</span> ArrayList&lt;Edge&gt; edges;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.value = value;</span><br><span class="line">		in = <span class="number">0</span>;</span><br><span class="line">		out = <span class="number">0</span>;</span><br><span class="line">		nexts = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">		edges = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="BFS"><a href="#BFS" class="headerlink" title="BFS"></a>BFS</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.LinkedList;</span><br><span class="line"><span class="keyword">import</span> java.util.Queue;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code01_BFS</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 从node出发，进行宽度优先遍历</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bfs</span><span class="params">(Node start)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (start == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		Queue&lt;Node&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">		HashSet&lt;Node&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">		queue.add(start);</span><br><span class="line">		set.add(start);</span><br><span class="line">		<span class="keyword">while</span> (!queue.isEmpty()) &#123;</span><br><span class="line">			Node cur = queue.poll();</span><br><span class="line">			System.out.println(cur.value);</span><br><span class="line">			<span class="keyword">for</span> (Node next : cur.nexts) &#123;</span><br><span class="line">				<span class="keyword">if</span> (!set.contains(next)) &#123;</span><br><span class="line">					set.add(next);</span><br><span class="line">					queue.add(next);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>主要是在添加一个节点的所有相邻节点到队列里的时候使用了一个set结构判断这个节点是否被添加过，防止无限循环的产生<h2 id="DFS"><a href="#DFS" class="headerlink" title="DFS"></a>DFS</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code02_DFS</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">		HashSet&lt;Node&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">		stack.add(node);</span><br><span class="line">		set.add(node);</span><br><span class="line">		System.out.println(node.value);</span><br><span class="line">		<span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">			Node cur = stack.pop();</span><br><span class="line">			<span class="keyword">for</span> (Node next : cur.nexts) &#123;</span><br><span class="line">				<span class="keyword">if</span> (!set.contains(next)) &#123;</span><br><span class="line">					stack.push(cur);</span><br><span class="line">					stack.push(next);</span><br><span class="line">					set.add(next);</span><br><span class="line">					System.out.println(next.value);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>使用一个栈的数据结构，每从栈中弹出一个节点的时候，遍历该节点的所有邻接点，如果不在已经遍历过的节点的set内，那么先将<strong>节点自身</strong>进栈，然后再将<strong>该邻接节点</strong>进栈<h2 id="最小生成树"><a href="#最小生成树" class="headerlink" title="最小生成树"></a>最小生成树</h2></li>
-<li>对于一个带权连通无向图G=(V,E)，生成树不同，每棵树的权（<strong>树中所有边上的权值和</strong>）也不同，设R为G的所有生成树的集合，若T为R中权值和最小的生成树，则T称为G的最小生成树（Minimum-Spanning-Tree，MST）<h2 id="kruskal算法"><a href="#kruskal算法" class="headerlink" title="kruskal算法"></a>kruskal算法</h2></li>
-<li>并查集：具有检查数据结构中的一些节点是否在同一个集合中、以及将不同的集合合并为一个集合的功能的数据结构<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Collection;</span><br><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.PriorityQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="comment">//undirected graph only</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code04_Kruskal</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Union-Find Set</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span> </span>&#123;</span><br><span class="line">		<span class="comment">// key 某一个节点， value key节点往上的节点</span></span><br><span class="line">		<span class="keyword">private</span> HashMap&lt;Node, Node&gt; fatherMap;</span><br><span class="line">		<span class="comment">// key 某一个集合的代表节点, value key所在集合的节点个数</span></span><br><span class="line">		<span class="keyword">private</span> HashMap&lt;Node, Integer&gt; sizeMap;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			fatherMap = <span class="keyword">new</span> HashMap&lt;Node, Node&gt;();</span><br><span class="line">			sizeMap = <span class="keyword">new</span> HashMap&lt;Node, Integer&gt;();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">makeSets</span><span class="params">(Collection&lt;Node&gt; nodes)</span> </span>&#123;</span><br><span class="line">			fatherMap.clear();</span><br><span class="line">			sizeMap.clear();</span><br><span class="line">			<span class="keyword">for</span> (Node node : nodes) &#123;</span><br><span class="line">				fatherMap.put(node, node);</span><br><span class="line">				sizeMap.put(node, <span class="number">1</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">private</span> Node <span class="title">findFather</span><span class="params">(Node n)</span> </span>&#123;</span><br><span class="line">			Stack&lt;Node&gt; path = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">			<span class="keyword">while</span>(n != fatherMap.get(n)) &#123;</span><br><span class="line">				path.add(n);</span><br><span class="line">				n = fatherMap.get(n);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">while</span>(!path.isEmpty()) &#123;</span><br><span class="line">				fatherMap.put(path.pop(), n);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> n;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSameSet</span><span class="params">(Node a, Node b)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> findFather(a) == findFather(b);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(Node a, Node b)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">if</span> (a == <span class="keyword">null</span> || b == <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			Node aDai = findFather(a);</span><br><span class="line">			Node bDai = findFather(b);</span><br><span class="line">			<span class="keyword">if</span> (aDai != bDai) &#123;</span><br><span class="line">				<span class="keyword">int</span> aSetSize = sizeMap.get(aDai);</span><br><span class="line">				<span class="keyword">int</span> bSetSize = sizeMap.get(bDai);</span><br><span class="line">				<span class="keyword">if</span> (aSetSize &lt;= bSetSize) &#123;</span><br><span class="line">					fatherMap.put(aDai, bDai);</span><br><span class="line">					sizeMap.put(bDai, aSetSize + bSetSize);</span><br><span class="line">					sizeMap.remove(aDai);</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					fatherMap.put(bDai, aDai);</span><br><span class="line">					sizeMap.put(aDai, aSetSize + bSetSize);</span><br><span class="line">					sizeMap.remove(bDai);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">EdgeComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Edge</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Edge o1, Edge o2)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> o1.weight - o2.weight;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Set&lt;Edge&gt; <span class="title">kruskalMST</span><span class="params">(Graph graph)</span> </span>&#123;</span><br><span class="line">		UnionFind unionFind = <span class="keyword">new</span> UnionFind();</span><br><span class="line">		unionFind.makeSets(graph.nodes.values());</span><br><span class="line">		<span class="comment">// 从小的边到大的边，依次弹出，小根堆！</span></span><br><span class="line">		PriorityQueue&lt;Edge&gt; priorityQueue = <span class="keyword">new</span> PriorityQueue&lt;&gt;(<span class="keyword">new</span> EdgeComparator());</span><br><span class="line">		<span class="keyword">for</span> (Edge edge : graph.edges) &#123; <span class="comment">// M 条边</span></span><br><span class="line">			priorityQueue.add(edge);  <span class="comment">// O(logM)</span></span><br><span class="line">		&#125;</span><br><span class="line">		Set&lt;Edge&gt; result = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">		<span class="keyword">while</span> (!priorityQueue.isEmpty()) &#123; <span class="comment">// M 条边</span></span><br><span class="line">			Edge edge = priorityQueue.poll(); <span class="comment">// O(logM)</span></span><br><span class="line">			<span class="keyword">if</span> (!unionFind.isSameSet(edge.from, edge.to)) &#123; <span class="comment">// O(1)</span></span><br><span class="line">				result.add(edge);</span><br><span class="line">				unionFind.union(edge.from, edge.to);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>findfFather函数是当一个节点具有多级的父亲的时候找到最高级别的父亲，并且修改一路上所有节点的父亲为最高级的父亲</li>
-<li>算法的思路是先按照权值将图中所有的边都放入小根堆中，将图中所有节点放入并查集中独立存在，然后从堆中依次弹出边，假如边链接的两端不是同一个集合，那么将边放入结果中，同时在并查集中合并两个集合，直到无可合并为止。<h2 id="prim算法"><a href="#prim算法" class="headerlink" title="prim算法"></a>prim算法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.PriorityQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="comment">// undirected graph only</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code05_Prim</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">EdgeComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Edge</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Edge o1, Edge o2)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> o1.weight - o2.weight;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Set&lt;Edge&gt; <span class="title">primMST</span><span class="params">(Graph graph)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// 解锁的边进入小根堆</span></span><br><span class="line">		PriorityQueue&lt;Edge&gt; priorityQueue = <span class="keyword">new</span> PriorityQueue&lt;&gt;(<span class="keyword">new</span> EdgeComparator());</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 哪些点被解锁出来了</span></span><br><span class="line">		HashSet&lt;Node&gt; nodeSet = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		Set&lt;Edge&gt; result = <span class="keyword">new</span> HashSet&lt;&gt;(); <span class="comment">// 依次挑选的的边在result里</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> (Node node : graph.nodes.values()) &#123; <span class="comment">// 随便挑了一个点</span></span><br><span class="line">			<span class="comment">// node 是开始点</span></span><br><span class="line">			<span class="keyword">if</span> (!nodeSet.contains(node)) &#123;</span><br><span class="line">				nodeSet.add(node);</span><br><span class="line">				<span class="keyword">for</span> (Edge edge : node.edges) &#123; <span class="comment">// 由一个点，解锁所有相连的边</span></span><br><span class="line">					priorityQueue.add(edge);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">while</span> (!priorityQueue.isEmpty()) &#123;</span><br><span class="line">					Edge edge = priorityQueue.poll(); <span class="comment">// 弹出解锁的边中，最小的边</span></span><br><span class="line">					Node toNode = edge.to; <span class="comment">// 可能的一个新的点</span></span><br><span class="line">					<span class="keyword">if</span> (!nodeSet.contains(toNode)) &#123; <span class="comment">// 不含有的时候，就是新的点</span></span><br><span class="line">						nodeSet.add(toNode);</span><br><span class="line">						result.add(edge);</span><br><span class="line">						<span class="keyword">for</span> (Edge nextEdge : toNode.edges) &#123;</span><br><span class="line">							priorityQueue.add(nextEdge);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// break;</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 请保证graph是连通图</span></span><br><span class="line">	<span class="comment">// graph[i][j]表示点i到点j的距离，如果是系统最大值代表无路</span></span><br><span class="line">	<span class="comment">// 返回值是最小连通图的路径之和</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">prim</span><span class="params">(<span class="keyword">int</span>[][] graph)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> size = graph.length;</span><br><span class="line">		<span class="keyword">int</span>[] distances = <span class="keyword">new</span> <span class="keyword">int</span>[size];</span><br><span class="line">		<span class="keyword">boolean</span>[] visit = <span class="keyword">new</span> <span class="keyword">boolean</span>[size];</span><br><span class="line">		visit[<span class="number">0</span>] = <span class="keyword">true</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">			distances[i] = graph[<span class="number">0</span>][i];</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; size; i++) &#123;</span><br><span class="line">			<span class="keyword">int</span> minPath = Integer.MAX_VALUE;</span><br><span class="line">			<span class="keyword">int</span> minIndex = -<span class="number">1</span>;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; size; j++) &#123;</span><br><span class="line">				<span class="keyword">if</span> (!visit[j] &amp;&amp; distances[j] &lt; minPath) &#123;</span><br><span class="line">					minPath = distances[j];</span><br><span class="line">					minIndex = j;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (minIndex == -<span class="number">1</span>) &#123;</span><br><span class="line">				<span class="keyword">return</span> sum;</span><br><span class="line">			&#125;</span><br><span class="line">			visit[minIndex] = <span class="keyword">true</span>;</span><br><span class="line">			sum += minPath;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; size; j++) &#123;</span><br><span class="line">				<span class="keyword">if</span> (!visit[j] &amp;&amp; distances[j] &gt; graph[minIndex][j]) &#123;</span><br><span class="line">					distances[j] = graph[minIndex][j];</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> sum;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;hello world!&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>prim算法主要用到一个存储边用的小根堆和一个记录哪些点被解锁的set</li>
-<li>首先在graph中随便选择一个点，将这个点加入记录解锁的点的集合，然后将这个<strong>点的所有边</strong>放入优先级队列中，然后开始while循环，每次从优先级队列中弹出一个权值最小的边，假如这个边指向的节点<strong>不在</strong>前面的set中的话就将这个边指向的节点放入点set中，将这条边放入结果中，然后将<strong>该节点延伸出的所有边</strong>放入优先级队列中。<h2 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h2></li>
-<li>该算法主要是找到指定起始点到图上剩余所有点的最近距离<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> class16;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.Map.Entry;</span><br><span class="line"></span><br><span class="line"><span class="comment">// no negative weight</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code06_Dijkstra</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> HashMap&lt;Node, Integer&gt; <span class="title">dijkstra1</span><span class="params">(Node from)</span> </span>&#123;</span><br><span class="line">    HashMap&lt;Node, Integer&gt; distanceMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    distanceMap.put(from, <span class="number">0</span>);</span><br><span class="line">    <span class="comment">// 打过对号的点</span></span><br><span class="line">    HashSet&lt;Node&gt; selectedNodes = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    Node minNode = getMinDistanceAndUnselectedNode(distanceMap, selectedNodes);</span><br><span class="line">    <span class="keyword">while</span> (minNode != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//  原始点  -&gt;  minNode(跳转点)   最小距离distance</span></span><br><span class="line">        <span class="keyword">int</span> distance = distanceMap.get(minNode);</span><br><span class="line">        <span class="keyword">for</span> (Edge edge : minNode.edges) &#123;</span><br><span class="line">            Node toNode = edge.to;</span><br><span class="line">            <span class="keyword">if</span> (!distanceMap.containsKey(toNode)) &#123;</span><br><span class="line">                distanceMap.put(toNode, distance + edge.weight);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// toNode </span></span><br><span class="line">                distanceMap.put(edge.to, Math.min(distanceMap.get(toNode), distance + edge.weight));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        selectedNodes.add(minNode);</span><br><span class="line">        minNode = getMinDistanceAndUnselectedNode(distanceMap, selectedNodes);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> distanceMap;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">getMinDistanceAndUnselectedNode</span><span class="params">(HashMap&lt;Node, Integer&gt; distanceMap, HashSet&lt;Node&gt; touchedNodes)</span> </span>&#123;</span><br><span class="line">    Node minNode = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">int</span> minDistance = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">for</span> (Entry&lt;Node, Integer&gt; entry : distanceMap.entrySet()) &#123;</span><br><span class="line">        Node node = entry.getKey();</span><br><span class="line">        <span class="keyword">int</span> distance = entry.getValue();</span><br><span class="line">        <span class="keyword">if</span> (!touchedNodes.contains(node) &amp;&amp; distance &lt; minDistance) &#123;</span><br><span class="line">            minNode = node;</span><br><span class="line">            minDistance = distance;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> minNode;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">NodeRecord</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Node node;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> distance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NodeRecord</span><span class="params">(Node node, <span class="keyword">int</span> distance)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.node = node;</span><br><span class="line">        <span class="keyword">this</span>.distance = distance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>算法主要依赖一个记录到对应节点最近距离的哈希表和一个记录某个节点是否已经被锁定的set</li>
-<li>在初始时刻将起始点到起始点放入哈希表，并且将其距离设置为0。</li>
-<li>然后的while循环每次都对找出的当前<strong>尚未被锁定</strong>而且在哈希表中到起始位置距离最小的点指向的所有尚未被锁定的节点的距离进行重算，假如被指向的节点之前的距离小于从该点出发到被指向的点的距离，将被指向点的距离更新为被选中的点出发的距离。（假如被指向的点<strong>不存在</strong>于哈希表中的话认为被指向的点的距离为<strong>正无穷</strong>，同样添加该点的距离条目进行更新）。然后将当前选中的点锁定，也就是假如被锁定的点的set中，然后找到当前未被锁定而且从总出发点开始距离最短的点，再次重复循环。</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-排序算法总结"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/23/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/"
-    >排序算法总结</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/23/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" class="article-date">
-  <time datetime="2022-08-23T12:12:15.000Z" itemprop="datePublished">2022-08-23</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p><a target="_blank" rel="noopener" href="https://github.com/algorithmzuo">zuochengyun参考链接</a></p>
-<h2 id="时间复杂度的计算"><a href="#时间复杂度的计算" class="headerlink" title="时间复杂度的计算"></a>时间复杂度的计算</h2><ul>
-<li><img src="/imgs/84e153d22a3de18ea0b798a365d4cc8db510526eedc7622eff3621eeb6a91838.png" alt="图 1">  <h2 id="稳定性"><a href="#稳定性" class="headerlink" title="稳定性"></a>稳定性</h2></li>
-<li>数组中相同的元素在排序前后的相对次序有没有变化？没有就是稳定的。</li>
-<li>语言为java，但是因为与C++类似，所以没有专门更改</li>
-<li>交换函数<ul>
-<li>位运算的交换函数<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">a = a^b;</span><br><span class="line">b = a^b;</span><br><span class="line">c = a^b;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li>普通交换函数<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> tmp = arr[j];</span><br><span class="line">	arr[j] = arr[i];</span><br><span class="line">	arr[i] = tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">selectSort</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> N = arr.length;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">		<span class="keyword">int</span> minValueIndex = i;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; N; j++) &#123;</span><br><span class="line">			minValueIndex = arr[j] &lt; arr[minValueIndex] ? j : minValueIndex;</span><br><span class="line">		&#125;</span><br><span class="line">		swap(arr, i, minValueIndex);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>时间复杂度O(N^2)， 空间复杂度O(1)，<em>不</em>稳定</li>
-<li>思路：大循环确定每次排序的第一个位置，每次确定一个数字，确定的方法是从还未确定的范围里选出一个最小的数字，将这个数字与排序的第一个位置原来的数字交换位置，然后确定该位置的数字，将排序的起始位置前移一个<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bubbleSort</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> N = arr.length;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> end = N - <span class="number">1</span>; end &gt;= <span class="number">0</span>; end--) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> second = <span class="number">1</span>; second &lt;= end; second++) &#123;</span><br><span class="line">			<span class="keyword">if</span> (arr[second - <span class="number">1</span>] &gt; arr[second]) &#123;</span><br><span class="line">				swap(arr, second - <span class="number">1</span>, second);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>时间复杂度O(N^2)，空间复杂度O(1)，稳定</li>
-<li>首先从数组的第一个到最后一个元素执行一次冒泡，冒泡的具体行为是假如数组下表前一个位置的数字比下表位置的数字大的话，交换这两个数字，然后一次冒泡结束之后将冒泡行为的后边界前移一。<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">insertSort1</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> N = arr.length;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> end = <span class="number">1</span>; end &lt; N; end++) &#123;</span><br><span class="line">		<span class="keyword">int</span> newNumIndex = end;</span><br><span class="line">		<span class="keyword">while</span> (newNumIndex - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; arr[newNumIndex - <span class="number">1</span>] &gt; arr[newNumIndex]) &#123;</span><br><span class="line">			swap(arr, newNumIndex - <span class="number">1</span>, newNumIndex);</span><br><span class="line">			newNumIndex--;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">insertSort2</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> N = arr.length;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> end = <span class="number">1</span>; end &lt; N; end++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> pre = end - <span class="number">1</span>; pre &gt;= <span class="number">0</span> &amp;&amp; arr[pre] &gt; arr[pre + <span class="number">1</span>]; pre--) &#123;</span><br><span class="line">			swap(arr, pre, pre + <span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>思路是从第二个元素开始，假如该元素比前一个元素小的话，就将这个元素向前移动，直到前一个元素不比这个元素小为止（类似于打扑克起牌的时候将大牌插入到前面）。然后将插入元素的起始位置向后移动一个。</li>
-<li>时间复杂度O(N^2)，空间复杂度O(1)，稳定<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 递归方法实现</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mergeSort1</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	process(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 请把arr[L..R]排有序</span></span><br><span class="line"><span class="comment">// l...r N</span></span><br><span class="line"><span class="comment">// T(N) = 2 * T(N / 2) + O(N)</span></span><br><span class="line"><span class="comment">// O(N * logN)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (L == R) &#123; <span class="comment">// base case</span></span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> mid = L + ((R - L) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">	process(arr, L, mid);</span><br><span class="line">	process(arr, mid + <span class="number">1</span>, R);</span><br><span class="line">	merge(arr, L, mid, R);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> M, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] help = <span class="keyword">new</span> <span class="keyword">int</span>[R - L + <span class="number">1</span>];</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> p1 = L;</span><br><span class="line">	<span class="keyword">int</span> p2 = M + <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (p1 &lt;= M &amp;&amp; p2 &lt;= R) &#123;</span><br><span class="line">		help[i++] = arr[p1] &lt;= arr[p2] ? arr[p1++] : arr[p2++];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 要么p1越界了，要么p2越界了</span></span><br><span class="line">	<span class="keyword">while</span> (p1 &lt;= M) &#123;</span><br><span class="line">		help[i++] = arr[p1++];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span> (p2 &lt;= R) &#123;</span><br><span class="line">		help[i++] = arr[p2++];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; help.length; i++) &#123;</span><br><span class="line">		arr[L + i] = help[i];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 非递归方法实现</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mergeSort2</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> N = arr.length;</span><br><span class="line">	<span class="comment">// 步长</span></span><br><span class="line">	<span class="keyword">int</span> mergeSize = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (mergeSize &lt; N) &#123; <span class="comment">// log N</span></span><br><span class="line">		<span class="comment">// 当前左组的，第一个位置</span></span><br><span class="line">		<span class="keyword">int</span> L = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">while</span> (L &lt; N) &#123;</span><br><span class="line">			<span class="keyword">if</span> (mergeSize &gt;= N - L) &#123;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">int</span> M = L + mergeSize - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">int</span> R = M + Math.min(mergeSize, N - M - <span class="number">1</span>);</span><br><span class="line">			merge(arr, L, M, R);</span><br><span class="line">			L = R + <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 防止溢出</span></span><br><span class="line">		<span class="keyword">if</span> (mergeSize &gt; N / <span class="number">2</span>) &#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		mergeSize &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>时间复杂度O(N*log(N))空间复杂度O(N)，稳定</li>
-<li>思路就是将数组分为左右两部分，然后对左边和右边分别递归执行，执行之后回溯到这一层的时候，左右两个数组已经是<strong>各自有序</strong>的了，然后将两个数组进行合并（merge），合并操作就是将两个数组的下表设置为各自最前，然后将两个下标位置对应的数字中较小的一个放入总的数组中，该数组的下标前进一位。假如执行到最后有一个数组的下标到达了最后，就将这个数组整个衔接在总的数组末尾（需要用到额外空间）。<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2></li>
-<li>递归版本<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 荷兰国旗问题</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] netherlandsFlag(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> R) &#123;</span><br><span class="line">	<span class="keyword">if</span> (L &gt; R) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; -<span class="number">1</span>, -<span class="number">1</span> &#125;;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (L == R) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; L, R &#125;;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> less = L - <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">int</span> more = R;</span><br><span class="line">	<span class="keyword">int</span> index = L;</span><br><span class="line">	<span class="keyword">while</span> (index &lt; more) &#123;</span><br><span class="line">		<span class="keyword">if</span> (arr[index] == arr[R]) &#123;</span><br><span class="line">			index++;</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (arr[index] &lt; arr[R]) &#123;</span><br><span class="line">			swap(arr, index++, ++less);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			swap(arr, index, --more);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	swap(arr, more, R);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; less + <span class="number">1</span>, more &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> tmp = arr[i];</span><br><span class="line">	arr[i] = arr[j];</span><br><span class="line">	arr[j] = tmp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 快排递归版本</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">quickSort1</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	process(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (L &gt;= R) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	swap(arr, L + (<span class="keyword">int</span>) (Math.random() * (R - L + <span class="number">1</span>)), R);</span><br><span class="line">	<span class="keyword">int</span>[] equalArea = netherlandsFlag(arr, L, R);</span><br><span class="line">	process(arr, L, equalArea[<span class="number">0</span>] - <span class="number">1</span>);</span><br><span class="line">	process(arr, equalArea[<span class="number">1</span>] + <span class="number">1</span>, R);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>时间复杂度O(Nlog(N))，空间复杂度O(log(N))，</li>
-<li>荷兰国旗问题：将整个数组分为三个部分，左边的部分比给定的flag小，中间的部分等于flag，右边的部分大于flag。（选择最右为分割标志）<ul>
-<li>其中的less是小于区的右边界，more是大于区的左边界</li>
-<li>假如index位置的数字和分割标志相等，直接index++</li>
-<li>假如index位置的数字比标志小，那么index位置的数字与小于区的左边界右边第一个数字交换，index和小于区的右边界各自++，相当于小于区推动等于区右移</li>
-<li>假如index位置的数字比标志大，那么将index位置的数字与大于区左边界的第一个数字交换，index不动，大于区的左边界左移一个位置。</li>
-<li>遍历结束之后，将数组最右边位置的数字与大于区左边界位置的数字进行交换（因为开始时候取的标志是最右的数字）</li>
-</ul>
-</li>
-<li>递归的时候，先调用一个分割函数（就是前面描述的荷兰国旗），然后将开始到小于区右边界和大于区左边界到数组结束的位置分别递归调用分割即可。<h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">	<span class="comment">// 堆排序额外空间复杂度O(1)</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapSort</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// O(N*logN)</span></span><br><span class="line"><span class="comment">//		for (int i = 0; i &lt; arr.length; i++) &#123; // O(N)</span></span><br><span class="line"><span class="comment">//			heapInsert(arr, i); // O(logN)</span></span><br><span class="line"><span class="comment">//		&#125;</span></span><br><span class="line">		<span class="comment">// O(N)</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = arr.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">			heapify(arr, i, arr.length);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> heapSize = arr.length;</span><br><span class="line">		swap(arr, <span class="number">0</span>, --heapSize);</span><br><span class="line">		<span class="comment">// O(N*logN)</span></span><br><span class="line">		<span class="keyword">while</span> (heapSize &gt; <span class="number">0</span>) &#123; <span class="comment">// O(N)</span></span><br><span class="line">			heapify(arr, <span class="number">0</span>, heapSize); <span class="comment">// O(logN)</span></span><br><span class="line">			swap(arr, <span class="number">0</span>, --heapSize); <span class="comment">// O(1)</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// arr[index]刚来的数，往上</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapInsert</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span> (arr[index] &gt; arr[(index - <span class="number">1</span>) / <span class="number">2</span>]) &#123;</span><br><span class="line">			swap(arr, index, (index - <span class="number">1</span>) / <span class="number">2</span>);</span><br><span class="line">			index = (index - <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// arr[index]位置的数，能否往下移动</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapify</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> index, <span class="keyword">int</span> heapSize)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> left = index * <span class="number">2</span> + <span class="number">1</span>; <span class="comment">// 左孩子的下标</span></span><br><span class="line">		<span class="keyword">while</span> (left &lt; heapSize) &#123; <span class="comment">// 下方还有孩子的时候</span></span><br><span class="line">			<span class="comment">// 两个孩子中，谁的值大，把下标给largest</span></span><br><span class="line">			<span class="comment">// 1）只有左孩子，left -&gt; largest</span></span><br><span class="line">			<span class="comment">// 2) 同时有左孩子和右孩子，右孩子的值&lt;= 左孩子的值，left -&gt; largest</span></span><br><span class="line">			<span class="comment">// 3) 同时有左孩子和右孩子并且右孩子的值&gt; 左孩子的值， right -&gt; largest</span></span><br><span class="line">			<span class="keyword">int</span> largest = left + <span class="number">1</span> &lt; heapSize &amp;&amp; arr[left + <span class="number">1</span>] &gt; arr[left] ? left + <span class="number">1</span> : left;</span><br><span class="line">			<span class="comment">// 父和较大的孩子之间，谁的值大，把下标给largest</span></span><br><span class="line">			largest = arr[largest] &gt; arr[index] ? largest : index;</span><br><span class="line">			<span class="keyword">if</span> (largest == index) &#123;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			swap(arr, largest, index);</span><br><span class="line">			index = largest;</span><br><span class="line">			left = index * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> tmp = arr[i];</span><br><span class="line">		arr[i] = arr[j];</span><br><span class="line">		arr[j] = tmp;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></li>
-<li>时间复杂度O(Nlog(N))，空间复杂度O(1)，不稳定</li>
-<li><code>heapInsert</code>是堆插入函数，将插入的数字向上看是否在需要的位置上</li>
-<li><code>heapify</code>是将数组中某个位置的数字向下移动，直到需要的位置（向下交换的时候与两个孩子中较大的那个交换）</li>
-<li>建堆的操作是从倒数第二个元素开始直到数组的第一个元素，执行向下调整函数，然后将整个数组的最后一个元素与第一个元素交换，执行向下调整函数，然后将数组的倒数第二个元素与第一个交换，执行向下调整，如此循环到数组的第二个元素与第一个元素交换并且调整结束。</li>
-</ul>
-<h2 id="建立堆"><a href="#建立堆" class="headerlink" title="建立堆"></a>建立堆</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyMaxHeap</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] heap;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> limit;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> heapSize;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyMaxHeap</span><span class="params">(<span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">        heap = <span class="keyword">new</span> <span class="keyword">int</span>[limit];</span><br><span class="line">        <span class="keyword">this</span>.limit = limit;</span><br><span class="line">        heapSize = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> heapSize == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isFull</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> heapSize == limit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (heapSize == limit) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;heap is full&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        heap[heapSize] = value;</span><br><span class="line">        <span class="comment">// value heapSize</span></span><br><span class="line">        heapInsert(heap, heapSize++);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用户此时，让你返回最大值，并且在大根堆中，把最大值删掉</span></span><br><span class="line">    <span class="comment">// 剩下的数，依然保持大根堆组织</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ans = heap[<span class="number">0</span>];</span><br><span class="line">        swap(heap, <span class="number">0</span>, --heapSize);</span><br><span class="line">        heapify(heap, <span class="number">0</span>, heapSize);</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 新加进来的数，现在停在了index位置，请依次往上移动，</span></span><br><span class="line">    <span class="comment">// 移动到0位置，或者干不掉自己的父亲了，停！</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">heapInsert</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// [index] [index-1]/2</span></span><br><span class="line">        <span class="comment">// index == 0</span></span><br><span class="line">        <span class="keyword">while</span> (arr[index] &gt; arr[(index - <span class="number">1</span>) / <span class="number">2</span>]) &#123;</span><br><span class="line">            swap(arr, index, (index - <span class="number">1</span>) / <span class="number">2</span>);</span><br><span class="line">            index = (index - <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从index位置，往下看，不断的下沉</span></span><br><span class="line">    <span class="comment">// 停：较大的孩子都不再比index位置的数大；已经没孩子了</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">heapify</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> index, <span class="keyword">int</span> heapSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> left = index * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (left &lt; heapSize) &#123; <span class="comment">// 如果有左孩子，有没有右孩子，可能有可能没有！</span></span><br><span class="line">            <span class="comment">// 把较大孩子的下标，给largest</span></span><br><span class="line">            <span class="keyword">int</span> largest = left + <span class="number">1</span> &lt; heapSize &amp;&amp; arr[left + <span class="number">1</span>] &gt; arr[left] ? left + <span class="number">1</span> : left;</span><br><span class="line">            largest = arr[largest] &gt; arr[index] ? largest : index;</span><br><span class="line">            <span class="keyword">if</span> (largest == index) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// index和较大孩子，要互换</span></span><br><span class="line">            swap(arr, largest, index);</span><br><span class="line">            index = largest;</span><br><span class="line">            left = index * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> tmp = arr[i];</span><br><span class="line">        arr[i] = arr[j];</span><br><span class="line">        arr[j] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>向堆插入数字的方法就是将堆的尺寸+1，然后从被插入数字开始上溯直到不比父亲大</li>
-<li>用户从堆顶弹出的方法是弹出之后将堆尺寸-1，然后将堆最后一个元素复制到以前堆顶的位置，然后执行heapify，也就是将该元素下沉直到不比儿子小为止</li>
 </ul>
  
       <!-- reward -->

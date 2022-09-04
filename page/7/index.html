@@ -141,6 +141,262 @@
     
     
     <article
+  id="post-Qt网络请求下载图片并且显示"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/18/Qt%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87%E5%B9%B6%E4%B8%94%E6%98%BE%E7%A4%BA/"
+    >Qt网络请求下载图片并且显示</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/18/Qt%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87%E5%B9%B6%E4%B8%94%E6%98%BE%E7%A4%BA/" class="article-date">
+  <time datetime="2022-01-17T16:45:02.000Z" itemprop="datePublished">2022-01-18</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Qt网络请求下载图片并且显示"><a href="#Qt网络请求下载图片并且显示" class="headerlink" title="Qt网络请求下载图片并且显示"></a>Qt网络请求下载图片并且显示</h1><h2 id="基本流程"><a href="#基本流程" class="headerlink" title="基本流程"></a>基本流程</h2><ul>
+<li>字符串通过<code>QUrl()</code>变成Url对象，然后<code>QNetworkRequest</code>通过<code>setUrl()</code>方法设置URL，然后<code>QNetworkManager</code>通过get方法访问并且返回回复</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">QNetworkReply *newReply = netWorkManager-&gt;<span class="built_in">get</span>(networkRequest);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>回复对象具有<code>downloadProgress(qint64, qint64)</code>，<code>readyRead()</code>，<code>finished()</code>，三个信号，其中<code>downloadProgress(qint64, qint64)</code>用来更新进度条，<code>readyRead()</code>表示此时已经有数据可以读取（可能<strong>还没结束</strong>），<code>finished()</code>表示此时接收<strong>已经结束</strong>可以读到完整的文件</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QByteArray data = reply-&gt;readAll();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>上面是读取到回复的全文内容</li>
+</ul>
+<h2 id="更新进度条"><a href="#更新进度条" class="headerlink" title="更新进度条"></a>更新进度条</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::imageDownloadProgress</span><span class="params">(qint64 bytes, qint64 totalBytes)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> qint8 count = <span class="number">0</span>;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="keyword">if</span>(count == <span class="number">1</span>)</span><br><span class="line">        progressBar-&gt;<span class="built_in">setMaximum</span>(totalBytes);</span><br><span class="line"></span><br><span class="line">    progressBar-&gt;<span class="built_in">setValue</span>(bytes);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="下载结束显示图片"><a href="#下载结束显示图片" class="headerlink" title="下载结束显示图片"></a>下载结束显示图片</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::replyFinished</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//QNetworkReply *reply = (QNetworkReply *)sender();</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//reply-&gt;deleteLater();</span></span><br><span class="line"></span><br><span class="line">    QNetworkReply *reply = (QNetworkReply *)<span class="built_in">sender</span>();</span><br><span class="line"></span><br><span class="line">    QByteArray data = reply-&gt;<span class="built_in">readAll</span>();</span><br><span class="line">    reply-&gt;<span class="built_in">deleteLater</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(data.<span class="built_in">isEmpty</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;data is null, please try it again!&quot;</span>&lt;&lt;endl;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    QPixmap pixmap;</span><br><span class="line">    pixmap.<span class="built_in">loadFromData</span>(data);</span><br><span class="line"></span><br><span class="line">    label[<span class="number">0</span>]-&gt;<span class="built_in">setPixmap</span>(pixmap);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="开始下载"><a href="#开始下载" class="headerlink" title="开始下载"></a>开始下载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::startDownload</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">QUrl <span class="title">newUrl</span><span class="params">(QUrl(lineEdit-&gt;text()))</span></span>;</span><br><span class="line">    <span class="keyword">if</span>(!newUrl.<span class="built_in">isValid</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        QMessageBox::<span class="built_in">information</span>(<span class="keyword">this</span>, <span class="string">&quot;error&quot;</span>, <span class="string">&quot;invalid url&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    QNetworkRequest networkRequest;</span><br><span class="line"></span><br><span class="line">    networkRequest.<span class="built_in">setUrl</span>(newUrl);</span><br><span class="line"></span><br><span class="line">    QNetworkReply *newReply = netWorkManager-&gt;<span class="built_in">get</span>(networkRequest);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">connect</span>(newReply, <span class="built_in">SIGNAL</span>(<span class="built_in">finished</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">replyFinished</span>()));</span><br><span class="line">    <span class="built_in">connect</span>(newReply, <span class="built_in">SIGNAL</span>(<span class="built_in">readyRead</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">readyReadData</span>()));</span><br><span class="line">    <span class="built_in">connect</span>(newReply, <span class="built_in">SIGNAL</span>(<span class="built_in">downloadProgress</span>(qint64, qint64)), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">imageDownloadProgress</span>(qint64, qint64)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-Qt网络编程"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/17/Qt%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"
+    >Qt网络编程</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/17/Qt%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="article-date">
+  <time datetime="2022-01-17T10:49:55.000Z" itemprop="datePublished">2022-01-17</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Qt网络编程"><a href="#Qt网络编程" class="headerlink" title="Qt网络编程"></a>Qt网络编程</h1><h2 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h2><h3 id="获取IP"><a href="#获取IP" class="headerlink" title="获取IP"></a>获取IP</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">getLocalHostIP</span>()</span><br><span class="line">&#123;</span><br><span class="line">    QList&lt;QNetworkInterface&gt; list = QNetworkInterface::<span class="built_in">allInterfaces</span>();</span><br><span class="line">    foreach (QNetworkInterface interface, list)</span><br><span class="line">    &#123;</span><br><span class="line">        QList&lt;QNetworkAddressEntry&gt; entryList = interface.<span class="built_in">addressEntries</span>();</span><br><span class="line">        foreach(QNetworkAddressEntry entry ,entryList)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(entry.<span class="built_in">ip</span>().<span class="built_in">protocol</span>() == QAbstractSocket::IPv4Protocol)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(entry.<span class="built_in">ip</span>().<span class="built_in">toString</span>() == <span class="string">&quot;127.0.0.1&quot;</span>)<span class="keyword">continue</span>;</span><br><span class="line">                comboBox-&gt;<span class="built_in">addItem</span>(entry.<span class="built_in">ip</span>().<span class="built_in">toString</span>());</span><br><span class="line">                IPlist&lt;&lt;entry.<span class="built_in">ip</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>allInterfaces()</code>获取本地的所有网络接口，比如wlan，本地连接等等，然后使用<code>addressEntries()</code>获取所有IP地址，使用<code>IPv4Protocol</code>筛选所有的IPv4地址，进行连接，同时在</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(entry.<span class="built_in">ip</span>().<span class="built_in">toString</span>() == <span class="string">&quot;127.0.0.1&quot;</span>)<span class="keyword">continue</span>;</span><br></pre></td></tr></table></figure>
+
+<p>中筛选去掉本地IP，只留下有意义的（可以从外部连接的）IP地址。</p>
+<h3 id="监听"><a href="#监听" class="headerlink" title="监听"></a>监听</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">startListen</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(comboBox-&gt;<span class="built_in">currentIndex</span>() != <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;start Listen&quot;</span>&lt;&lt;endl;</span><br><span class="line">        tcpServer-&gt;<span class="built_in">listen</span>(IPlist[comboBox-&gt;<span class="built_in">currentIndex</span>()], spinBox-&gt;<span class="built_in">value</span>());</span><br><span class="line">        btn1-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">        btn2-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">        comboBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">        spinBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">        clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;server IP address:&quot;</span>+comboBox-&gt;<span class="built_in">currentText</span>());</span><br><span class="line">        clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Listening port: &quot;</span>+spinBox-&gt;<span class="built_in">text</span>());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>监听就是使用<code>tcpServer</code>对象，监听IP和端口，通过函数传入，等待程序链接</p>
+<h3 id="停止监听"><a href="#停止监听" class="headerlink" title="停止监听"></a>停止监听</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">stopListen</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;stop listen&quot;</span>&lt;&lt;endl;</span><br><span class="line">    tcpServer-&gt;<span class="built_in">close</span>();</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket-&gt;<span class="built_in">state</span>() == tcpSocket-&gt;ConnectedState)</span><br><span class="line">    &#123;</span><br><span class="line">        tcpSocket-&gt;<span class="built_in">disconnectFromHost</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    btn1-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">    btn2-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Stopped Listening: &quot;</span>+spinBox-&gt;<span class="built_in">text</span>());</span><br><span class="line">    comboBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">    spinBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意，调用<code>tcpServer-&gt;close()</code>之后，已经连接的客户端还可以继续与主机进行通信，此时需要<code>tcpSocket-&gt;disconnectFromHost();</code>来断开当前连接的客户端与服务器的链接，**注意此时调用的tcpSocket对象是用户连接时候从下面的<code>tcpServer-&gt;nextPendingConnection()</code>获得的Socket对象 **。</p>
+<h3 id="应对用户链接"><a href="#应对用户链接" class="headerlink" title="应对用户链接"></a>应对用户链接</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">clientConnection</span>()</span><br><span class="line">&#123;</span><br><span class="line">    tcpSocket = tcpServer-&gt;<span class="built_in">nextPendingConnection</span>();</span><br><span class="line">    QString ip = tcpSocket-&gt;<span class="built_in">peerAddress</span>().<span class="built_in">toString</span>();</span><br><span class="line">    quint16 port = tcpSocket-&gt;<span class="built_in">peerPort</span>();</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Client IP: &quot;</span>+ip);</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Client port&quot;</span>+QString::<span class="built_in">number</span>(port));</span><br><span class="line"></span><br><span class="line">    <span class="built_in">connect</span>(tcpSocket, <span class="built_in">SIGNAL</span>(<span class="built_in">readyRead</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">recMessage</span>()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>注意用户链接的时候，可以通过<code>tcpServer-&gt;nextPendingConnection();</code>获取用户链接的Socket对象，进而获取<code>tcpSocket-&gt;peerAddress().toString();</code>IP和<code>tcpSocket-&gt;peerPort();</code>端口号</p>
+<h3 id="收取消息"><a href="#收取消息" class="headerlink" title="收取消息"></a>收取消息</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">recMessage</span>()</span><br><span class="line">&#123;</span><br><span class="line">    QString messages = tcpSocket-&gt;<span class="built_in">readAll</span>();</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(messages);</span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;messages&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sendMessage</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket-&gt;<span class="built_in">state</span>() == tcpSocket-&gt;ConnectedState)</span><br><span class="line">    &#123;</span><br><span class="line">        tcpSocket-&gt;<span class="built_in">write</span>(send-&gt;<span class="built_in">text</span>().<span class="built_in">toUtf8</span>().<span class="built_in">data</span>());</span><br><span class="line">        clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Server:&quot;</span>+send-&gt;<span class="built_in">text</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><p>此处仅仅强调客户端与服务器的区别</p>
+<h3 id="链接服务器"><a href="#链接服务器" class="headerlink" title="链接服务器"></a>链接服务器</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">toConnect</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket-&gt;<span class="built_in">state</span>()!=tcpSocket-&gt;ConnectedState)</span><br><span class="line">    &#123;</span><br><span class="line">        QHostAddress hostAdd;</span><br><span class="line">        hostAdd.<span class="built_in">setAddress</span>(ipInput-&gt;<span class="built_in">text</span>());</span><br><span class="line">        textBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Connecting: &quot;</span> + hostAdd.<span class="built_in">toString</span>() + <span class="string">&quot;  ...&quot;</span>);</span><br><span class="line">        tcpSocket-&gt;<span class="built_in">connectToHost</span>(hostAdd, spinBox-&gt;<span class="built_in">value</span>());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意<code>QHostAddress</code>具有从字符串0-255点分格式的IP地址中parse出IP地址的功能（<code>hostAdd.setAddress(ipInput-&gt;text());</code>)</li>
+</ul>
+<h3 id="断开连接"><a href="#断开连接" class="headerlink" title="断开连接"></a>断开连接</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">toDisconnect</span>()</span><br><span class="line">&#123;</span><br><span class="line">    tcpSocket-&gt;<span class="built_in">disconnectFromHost</span>();</span><br><span class="line">    tcpSocket-&gt;<span class="built_in">close</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其他与编写服务端类似，在此不再赘述。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-同一WiFi下两个Linux设备使用scp传输文件"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/17/%E5%90%8C%E4%B8%80WiFi%E4%B8%8B%E4%B8%A4%E4%B8%AALinux%E8%AE%BE%E5%A4%87%E4%BD%BF%E7%94%A8scp%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6/"
+    >同一WiFi下两个Linux设备使用scp传输文件</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/17/%E5%90%8C%E4%B8%80WiFi%E4%B8%8B%E4%B8%A4%E4%B8%AALinux%E8%AE%BE%E5%A4%87%E4%BD%BF%E7%94%A8scp%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6/" class="article-date">
+  <time datetime="2022-01-17T01:37:12.000Z" itemprop="datePublished">2022-01-17</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="同一WiFi下两个Linux设备使用scp传输文件"><a href="#同一WiFi下两个Linux设备使用scp传输文件" class="headerlink" title="同一WiFi下两个Linux设备使用scp传输文件"></a>同一WiFi下两个Linux设备使用scp传输文件</h1><p>首先要保证两个设备可以互相ping通</p>
+<p><img src="/imgs/image-20220117122232319.png" alt="image-20220117122232319"></p>
+<p>然后在主机上使用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">scp &lt;文件路径&gt; &lt;对方用户名&gt;@ip:&lt;要复制到的路径&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/imgs/image-20220117122635576.png" alt="image-20220117122635576"></p>
+<p>效果如上图</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-使用echo向文件写入数据"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/15/%E4%BD%BF%E7%94%A8echo%E5%90%91%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/"
+    >使用echo向文件写入数据</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/15/%E4%BD%BF%E7%94%A8echo%E5%90%91%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/" class="article-date">
+  <time datetime="2022-01-15T08:17:14.000Z" itemprop="datePublished">2022-01-15</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="使用echo向文件写入数据"><a href="#使用echo向文件写入数据" class="headerlink" title="使用echo向文件写入数据"></a>使用echo向文件写入数据</h1><ul>
+<li>主要是使用echo的<strong>输出重定向</strong>功能，也就是<code>&gt;</code>和<code>&gt;&gt;</code></li>
+<li>覆盖文件内容用<code>&gt;</code>，也就是<ul>
+<li><code>echo &quot;Raspberry&quot; &gt; test.txt</code></li>
+</ul>
+</li>
+<li>追加文件内容用<code>&gt;&gt;</code><ul>
+<li><code>echo &quot;string&quot; &gt;&gt; &lt;filename&gt;</code></li>
+<li>就是将string追加到filename文件的末尾</li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Linux下挂载U盘操作"
   class="article article-type-post"
   itemscope
@@ -1130,583 +1386,6 @@
 </li>
 <li><p>可以看出，在文件最后多出了四个字符串，可见每次写入的时候，文件的偏移量都自动移动到了文件的最后，即使文件在这个过程中并没有被保存。</p>
 </li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-DSP28377学习（一）"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/10/DSP28377%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/"
-    >DSP28377学习（一）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/10/DSP28377%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/" class="article-date">
-  <time datetime="2022-01-10T13:56:40.000Z" itemprop="datePublished">2022-01-10</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="DSP28377d学习（一）"><a href="#DSP28377d学习（一）" class="headerlink" title="DSP28377d学习（一）"></a>DSP28377d学习（一）</h1><h2 id="仿真器配置"><a href="#仿真器配置" class="headerlink" title="仿真器配置"></a>仿真器配置</h2><p><strong>此文档仅作为官方手册的补充</strong></p>
-<ul>
-<li>在开始烧录之前要先配置Target configuration file</li>
-<li><img src="/imgs/image-20220110221639291.png" alt="image-20220110221639291"></li>
-</ul>
-<p>打开后，选择</p>
-<ul>
-<li><img src="/imgs/image-20220110221716259.png" alt="image-20220110221716259"></li>
-</ul>
-<p>然后</p>
-<ul>
-<li><p><img src="/imgs/image-20220110221731391.png" alt="image-20220110221731391"></p>
-</li>
-<li><p><img src="/imgs/image-20220110221832321.png" alt="image-20220110221832321"></p>
-</li>
-<li><p>此处一般不需要修改</p>
-</li>
-</ul>
-<h2 id="板子链接"><a href="#板子链接" class="headerlink" title="板子链接"></a>板子链接</h2><ul>
-<li>先将仿真器和目标板链接然后再给板子上电</li>
-</ul>
-<h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><p><img src="/imgs/image-20220110222621315.png" alt="image-20220110222621315"></p>
-<ul>
-<li>点击下面的选项打开Target configuration面板</li>
-</ul>
-<p><img src="/imgs/image-20220111164750076.png" alt="image-20220111164750076"></p>
-<ul>
-<li>找到自己刚才新建的Target configuration，然后选择launch</li>
-</ul>
-<p><img src="/imgs/image-20220111165533087.png" alt="image-20220111165533087"></p>
-<p><img src="/imgs/image-20220111165625183.png" alt="image-20220111165625183"></p>
-<p><img src="/imgs/image-20220111165556571.png" alt="image-20220111165556571"></p>
-<ul>
-<li>在Flash烧写之前，需要手动新建一个predidined symbol，在其中（已经有一个CPU1）新建一个FLASH</li>
-<li>右键点击项目（图中红圈），然后选择“properties”</li>
-<li><img src="/imgs/image-20220111164926308.png" alt="image-20220111164926308"></li>
-</ul>
-<p><img src="/imgs/image-20220111165509718.png" alt="image-20220111165509718"></p>
-<ul>
-<li>debug的时候注意在<strong>链接CPU、下载程序、开始调试结束后执行程序之前再下断点</strong>，<u>不要带着断点进入调试</u>，否则<code>main()</code>函数可能没法运行</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-MakeFile基础"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/09/MakeFile%E5%9F%BA%E7%A1%80/"
-    >MakeFile基础</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/09/MakeFile%E5%9F%BA%E7%A1%80/" class="article-date">
-  <time datetime="2022-01-09T08:51:55.000Z" itemprop="datePublished">2022-01-09</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="gcc和MakeFile基础"><a href="#gcc和MakeFile基础" class="headerlink" title="gcc和MakeFile基础"></a>gcc和MakeFile基础</h1><h2 id="gcc常用参数"><a href="#gcc常用参数" class="headerlink" title="gcc常用参数"></a>gcc常用参数</h2><ul>
-<li><code>gcc -c </code>指的是只把源码编译为目标文件而不进行链接。如果GCC不带-C参数，编译一个源代码文件（test.c)。那么会自动将编译和链接一步完成，并生成可执行文件。对于多个文件，需要先编译成中间目标文件(一般是.o文件），在链接成可执行文件，一般习惯目标文件都是以.o后缀，也没有硬性规定可执行文件不能用.o文件。</li>
-<li><code>gcc -o</code>指的是output_filename，确定输出文件的名称为output_filename，同时这个名称不能和源文件同名。如果不给出这个选项，gcc就给出预设的可执行文件a.out。</li>
-<li>其他参数详见 <a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/gcc-parameter-detail.html">https://www.runoob.com/w3cnote/gcc-parameter-detail.html</a></li>
-</ul>
-<h2 id="MakeFile是什么"><a href="#MakeFile是什么" class="headerlink" title="MakeFile是什么"></a>MakeFile是什么</h2><ul>
-<li><p>使用 GCC 编译器在 Linux 进行 C 语言编译，通过在终端执行 gcc 命 令来完成 C 文件的编译，如果我们的工程只有一两个 C 文件还好，需要输入的命令不多，当文 件有几十、上百甚至上万个的时候用终端输入 GCC 命令的方法显然是不现实的。如果我们能够 编写一个文件，这个文件描述了编译哪些源码文件、如何编译那就好了，每次需要编译工程的 时只需要使用这个文件就行了。这种问题怎么可能难倒聪明的程序员，为此提出了一个解决大 工程编译的工具：make，描述哪些文件需要编译、哪些需要重新编译的文件就叫做 Makefile， Makefile 就跟脚本文件一样，Makefile 里面还可以执行系统命令。使用的时候只需要一个 <code>make</code>命令即可完成整个工程的自动编译，极大的提高了软件开发的效率。</p>
-</li>
-<li><p>在 Linux 下用的最多的是 GCC 编译器，这是个没有 UI 的编译器，因此 Makefile 就需要我们自己来编写了。</p>
-</li>
-</ul>
-<h2 id="应用举例"><a href="#应用举例" class="headerlink" title="应用举例"></a>应用举例</h2><ul>
-<li>我们完成这样一个小工程，通过键盘输入两个整形数字，然后计算他们的和并将结果显示在屏幕上，在这个工程中我们有 main.c、input.c 和 calcu.c 这三个 C 文件和 input.h、calcu.h 这 两个头文件。其中 main.c 是主体，input.c 负责接收从键盘输入的数值，calcu.c 进行任意两个数 相加，其中 main.c 文件内容如下：</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;input.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;calcu.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a, b, num;</span><br><span class="line"></span><br><span class="line">	input_int(&amp;a, &amp;b);</span><br><span class="line">	num = calcu(a, b);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d + %d = %d\r\n&quot;</span>, a, b, num);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>input.c 文件内容如下：</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//input.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;input.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">input_int</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> *b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;input two num:&quot;</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\r\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>calcu.c 文件内容如下：</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;calcu.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">calcu</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (a + b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>文件 input.h 内容如下：</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _INPUT_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _INPUT_H</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">input_int</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> *b)</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>文件 calcu.h 内容如下：</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _CALCU_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _CALCU_H</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">calcu</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>假如使用gcc编译程序，那么此时需要再命令行输入</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">gcc main.c calcu.c input.c -o main</span><br></pre></td></tr></table></figure>
-
-<p>上面命令的意思就是使用 gcc 编译器对 main.c、calcu.c 和 input.c 这三个文件进行编译，编 译生成的可执行文件叫做 <code>main</code>。</p>
-<p><img src="/imgs/image-20220109170757542.png" alt="image-20220109170757542"></p>
-<p>执行程序用到的命令是<code>./main</code>，含义是执行当前目录下的main文件</p>
-<h2 id="makefile的重要性"><a href="#makefile的重要性" class="headerlink" title="makefile的重要性"></a>makefile的重要性</h2><p>可以看出我们的代码按照我们所设想的工作了，使用命令“gcc main.c calcu.c input.c -o main” 看起来很简单是吧，只需要一行就可以完成编译，但是我们这个工程只有三个文件啊！如果几 千个文件呢？再就是如果<strong>有一个文件被修改了</strong>，使用上面的命令编译的时候<strong>所有的文件都会重新编译</strong>，如果工程有几万个文件(Linux 源码就有这么多文件！)，想想这几万个文件编译一次 所需要的时间就可怕。最好的办法肯定是<strong>哪个文件被修改了，只编译这个被修改的文件</strong>即可， 其它没有修改的文件就<strong>不需要再次重新编译了</strong>，为此我们改变我们的编译方法，如果第一次编译工程，我们先将工程中的文件都编译一遍，然后后面修改了哪个文件就编译哪个文件，命令 如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">gcc -c main.c</span><br><span class="line">gcc -c input.c</span><br><span class="line">gcc -c calcu.c</span><br><span class="line">gcc main.o input.o calcu.o -o main</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意，gcc的<code>-c</code>选项的意思是将程序编译为.o文件但是<strong>不链接</strong>为最终的可执行文件，最后一句<code>gcc main.o input.o calcu.o -o main</code>的意思是将三个.o文件链接为一个可执行文件</li>
-<li>假如我们现在修改了 calcu.c 这个文件，<strong>只需要将 caclue.c 这一个文件重新编译成.o 文件</strong>，然后在<strong>将所有的.o 文件链接成可执行文件</strong>，只需要下面两条命令即可：</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">gcc -c calcu.c</span><br><span class="line">gcc main.o input.o calcu.o -o main</span><br></pre></td></tr></table></figure>
-
-<h3 id="makefile的作用"><a href="#makefile的作用" class="headerlink" title="makefile的作用"></a>makefile的作用</h3><ul>
-<li>如果工程没有编译过，那么工程中的所有.c 文件都要被编译并且链接成可执行程序。</li>
-<li>如果工程中只有个别 C 文件被修改了，那么只编译这些被修改的 C 文件即可。</li>
-<li>如果工程的头文件被修改了，那么我们需要编译所有引用这个头文件的 C 文件，并且 链接成可执行文件。</li>
-</ul>
-<h2 id="makeFile的使用"><a href="#makeFile的使用" class="headerlink" title="makeFile的使用"></a>makeFile的使用</h2><ul>
-<li>在工程目录下创建名为“Makefile”的文件， 文件名一定要叫做“<strong>Makefile</strong>”！！！<strong>区分大小写</strong>的哦！</li>
-<li><img src="/imgs/image-20220109171722524.png" alt="image-20220109171722524"></li>
-</ul>
-<p><strong>Makefile文件：</strong></p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">main: main.o input.o calcu.o</span></span><br><span class="line">	gcc -o main main.o input.o calcu.o</span><br><span class="line"><span class="section">main.o: main.c</span></span><br><span class="line">	gcc -c main.c</span><br><span class="line"><span class="section">input.o: input.c</span></span><br><span class="line">	gcc -c input.c</span><br><span class="line"><span class="section">calcu.o: calcu.c</span></span><br><span class="line">	gcc -c calcu.c</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>上述代码中所有行首需要空出来的地方一定要使用<code>TAB</code>键！<strong>不要使用空格键</strong>！这是 Makefile 的语法要求</p>
-</li>
-<li><p><img src="/imgs/image-20220109172156926.png" alt="image-20220109172156926"></p>
-</li>
-<li><p>Makefile 编写好以后我们就可以使用 <code>make </code>命令来编译我们的工程了，直接<strong>在命令行中输入</strong><code>make</code>即可，make 命令会<strong>在当前目录下查找是否存在</strong><code>Makefile</code>这个文件，如果存在的 话就会按照 <code>Makefile</code> 里面定义的编译方式进行编译</p>
-</li>
-</ul>
-<p><img src="/imgs/image-20220109172335268.png" alt="image-20220109172335268"></p>
-<p><strong>MakeFile中一般存在的错误</strong></p>
-<ul>
-<li>Makefile 中命令缩进没有使用 TAB 键！</li>
-<li>VI/VIM 编辑器使用空格代替了 TAB 键，修改文件/etc/vim/vimrc，在文件最后面加上如 下所示代码：<ul>
-<li><code>set noexpandtab</code></li>
-</ul>
-</li>
-</ul>
-<p>此时修改一下<code>input.c</code>文件，重新编译看结果</p>
-<p><img src="/imgs/image-20220109172511759.png" alt="image-20220109172511759"></p>
-<p>可以看出因为我们修改了 input.c 这个文件，<strong>所以 input.c 和最后的可执行文 件 main 重新编译了</strong>，其它<strong>没有修改过的文件就没有编译</strong>。</p>
-<h2 id="Makefile语法"><a href="#Makefile语法" class="headerlink" title="Makefile语法"></a>Makefile语法</h2><p><img src="/imgs/image-20220109173249859.png" alt="image-20220109173249859"></p>
-<ul>
-<li>比如<img src="/imgs/image-20220109174534114.png" alt="image-20220109174534114"><ul>
-<li>这条规则的目标是 main，<strong>main.o、input.o 和 calcu.o 是生成 main 的依赖文件</strong>，如果<strong>要更新 目标 main，就必须先更新它的所有依赖文件</strong>，如果<strong>依赖文件中的任何一个有更新</strong>，那么<strong>目标也 必须更新</strong>，<strong>“更新”就是执行一遍规则中的命令列表</strong>。</li>
-<li>每条命令以tab开始</li>
-<li>make 命令会为 Makefile 中的每个以 TAB 开始的命令创建一个 Shell 进程去执行。</li>
-</ul>
-</li>
-<li>重新看一下上面的代码</li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">main: main.o input.o calcu.o</span></span><br><span class="line">	gcc -o main main.o input.o calcu.o</span><br><span class="line"><span class="section">main.o: main.c</span></span><br><span class="line">	gcc -c main.c</span><br><span class="line"><span class="section">input.o: input.c</span></span><br><span class="line">	gcc -c input.c</span><br><span class="line"><span class="section">calcu.o: calcu.c</span></span><br><span class="line">	gcc -c calcu.c</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>首先更新第一条规则中的 main，第一条规则的目标成为默认目标，只要默认目标更新了那 么就认为 Makefile 的工作。在第一次编译的时候<strong>由于 main 还不存在</strong>，因此<strong>第一条规则会执行</strong>， 第一条规则<strong>依赖于文件 main.o、input.o 和 calcu.o 这个三个.o 文件</strong>，这三个.o 文件<strong>目前还都没 有，因此必须先更新这三个文件</strong>。make <u><strong>会查找以这三个.o 文件为目标的规则并执行</strong></u>。<strong>以 main.o 为例，发现更新 main.o 的是第二条规则，因此会执行第二条规则</strong>，第二条规则里面的命令为“gcc –c main.c”，这行命令很熟悉了吧，就是不链接编译 main.c，生成 main.o，其它两个.o 文件同理。 最后一个规则目标是 clean，它<strong>没有依赖文件，因此会默认为依赖文件都是最新的</strong>，所以其<strong>对应 的命令不会执行</strong>，当我们<strong>想要执行 clean 的话可以直接使用命令<code>make clean</code><strong>，执行以后就会</strong>删 除当前目录下所有的.o 文件以及 main</strong>，因此 <strong>clean 的功能就是完成工程的清理</strong></li>
-<li><img src="/imgs/image-20220109180157902.png" alt="image-20220109180157902"></li>
-<li>可见这条命令将除了源文件和Makefile以外的编译产物都删除了</li>
-</ul>
-<p><strong>总结一下Makefile的编译过程</strong></p>
-<ul>
-<li>make 命令会在当前目录下查找以 Makefile(makefile 其实也可以)命名的文件。</li>
-<li>当找到 Makefile 文件以后就会按照 Makefile 中定义的规则去编译生成最终的目标文件。</li>
-<li>当发现目标文件不存在，或者目标所依赖的文件比目标文件新(也就是最后修改时间比 目标文件晚)的话就会执行后面的命令来更新目标。</li>
-</ul>
-<p>这就是 make 的执行过程，make 工具就是在 Makefile 中<strong>一层一层的查找依赖关系</strong>，并执行相应的命令。</p>
-<h3 id="Makefile-变量"><a href="#Makefile-变量" class="headerlink" title="Makefile 变量"></a>Makefile 变量</h3><ul>
-<li><p>Makefile 中的变量<strong>都是字符串</strong></p>
-</li>
-<li><p>实例</p>
-</li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Makefile 变量的使用</span></span><br><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>Makefile 中可以写注释，<strong>注释开头要 用符号“#”</strong></p>
-</li>
-<li><p>变量的引用方法是<code>$(变量名)</code></p>
-</li>
-</ul>
-<p><strong>不同赋值符号的区别</strong></p>
-<ul>
-<li>幅值符<code>=</code><ul>
-<li>类似于引用传参，幅值的变量的值会随着被赋给它的变量的值的改变去改变</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">name = zzk</span><br><span class="line">curname = <span class="variable">$(name)</span></span><br><span class="line">name = zuozhongkai</span><br><span class="line"><span class="section">print:</span></span><br><span class="line">	@echo curname: <span class="variable">$(curname)</span></span><br></pre></td></tr></table></figure>
-
-<p>​        此时输出的是<code>zuozhongkai</code>，意味着变量的内容随着变量的值<strong>更新而更新</strong></p>
-<p>​        <code>@</code>的意思是使得make在执行的过程中输出执行过程，否则不会输出</p>
-<ul>
-<li><p>幅值符<code>:=</code></p>
-<ul>
-<li>同样执行上面的代码，将<code>=</code>改为<code>:=</code>，则可见输出还是”zzk”，因为<code>:=</code>在幅值的时候不会采用变量修改后的值</li>
-</ul>
-</li>
-<li><p>幅值符<code>?=</code></p>
-<ul>
-<li><code>curname ?= zuozhongkai</code>的意思是，假如curname前面没有被赋值，那么此变量就是“zuozhongkai”， 如果前面已经赋过值了，那么就使用前面赋的值。</li>
-</ul>
-</li>
-<li><p>幅值符<code>+=</code></p>
-<ul>
-<li><p>Makefile 中的变量是字符串，有时候我们需要给前面已经定义好的变量添加一些字符串进 去，此时就要使用到符号“+=”，比如</p>
-</li>
-<li><p><code>objects = main.o inpiut.o</code>和<code>objects += calcu.o</code>执行完之后，objects就变成了<code>main.o input.o calcu.o</code></p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="Makefile模式规则"><a href="#Makefile模式规则" class="headerlink" title="Makefile模式规则"></a>Makefile模式规则</h3><ul>
-<li><p>自动匹配</p>
-<ul>
-<li><p>模式规则中，<strong>至少在规则的目标定定义中要包涵<code>%</code>，否则就是一般规则</strong>，目标中的<code>%</code> 表示对文件名的匹配，<code>%</code>表示长度任意的非空字符串，比如“%.c”就是所有的以.c 结尾的 文件，类似与通配符，<code>a.%.c</code> 就表示以 a.开头，以.c 结束的所有文件。</p>
-</li>
-<li><p>当“%”出现在目标中的时候，<strong>目标中“%”所代表的值决定了依赖中的“%”值</strong>，比如<code>%.o : %.c</code>中的<code>%</code>代表的是同样的内容</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>前面的代码可以修改如下：</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br><span class="line"></span><br><span class="line">%.o : %.c</span><br><span class="line">	<span class="comment">#命令</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br></pre></td></tr></table></figure>
-
-<h3 id="Makefile自动化变量"><a href="#Makefile自动化变量" class="headerlink" title="Makefile自动化变量"></a>Makefile自动化变量</h3><ul>
-<li>如何通过一行命令来从不同的依赖文件中生 成对应的目标？自动化变量就是完成这个功能的！所谓自动化变量就是<strong>这种变量会把模式中所 定义的一系列的文件自动的挨个取出，直至所有的符合模式的文件都取完</strong>，类似于python中的变量解包，将一个数组中的变量一个一个的拆出来。自动化变量只应该出现在规则的命令中。</li>
-<li><img src="/imgs/image-20220110002525509.png" alt="image-20220110002525509"></li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br><span class="line">%.o : %.c</span><br><span class="line">	gcc -c <span class="variable">$&lt;</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>上面的代码中，<code>$&lt;</code>代表依赖文件(.c)的一系列集合</p>
-</li>
-<li><p>上述规则中并没有创建文件 clean 的命令，因此工作目录下<strong>永远都不会存在文件 clean</strong>，当 我们输入“make clean”以后，后面的“rm *.o”和“rm main”总是会执行。<strong>可是如果我们“手贱”，在工作目录下创建一个名为“clean”的文件</strong>，那就不一样了，当执行“make clean”的时 候，<strong>规则因为没有依赖文件，所以目标被认为是最新的，因此后面的 rm 命令也就不会执行</strong>，我 们预先设想的清理工程的功能也就无法完成。为了避免这个问题，我们可以将 clean 声明为伪 目标，声明方式如下：</p>
-</li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">.PHONY : clean</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">objects = main.o input.o calcu.o</span><br><span class="line"><span class="section">main: <span class="variable">$(objects)</span></span></span><br><span class="line">	gcc -o main <span class="variable">$(objects)</span></span><br><span class="line"></span><br><span class="line">.PHONY : clean</span><br><span class="line"></span><br><span class="line">%.o : %.c</span><br><span class="line">	gcc -c <span class="variable">$&lt;</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br><span class="line">	rm main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>声明 clean 为伪目标，<strong>声明 clean 为伪目标以后不管当前目录下是否存在名 为“clean”的文件，输入“make clean”的话规则后面的 rm 命令都会执行</strong>。</li>
-</ul>
-<h3 id="Makefile条件判断"><a href="#Makefile条件判断" class="headerlink" title="Makefile条件判断"></a>Makefile条件判断</h3><p>语法</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">&lt;条件关键字&gt;</span><br><span class="line">	&lt;条件为真时执行的语句&gt;</span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
-
-<p>和</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;条件关键字&gt;</span><br><span class="line">	&lt;条件为真时执行的语句&gt;</span><br><span class="line">else</span><br><span class="line">	&lt;条件为假时执行的语句&gt;</span><br><span class="line">endif</span><br></pre></td></tr></table></figure>
-
-<p><strong>条件关键字的组成</strong></p>
-<ul>
-<li><code>ifeq</code>和<code>ifneq</code>，判断的是是否相等和是否不等<ul>
-<li>语法</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ifeq (&lt;参数 1&gt;, &lt;参数 2&gt;)</span><br><span class="line">ifeq ‘&lt;参数 1 &gt;’,‘ &lt;参数 2&gt;’</span><br><span class="line">ifeq “&lt;参数 1&gt;”, “&lt;参数 2&gt;”</span><br><span class="line">ifeq “&lt;参数 1&gt;”, ‘&lt;参数 2&gt;’</span><br><span class="line">ifeq ‘&lt;参数 1&gt;’, “&lt;参数 2&gt;”</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>ifdef</code>和<code>ifndef</code></li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ifdef &lt;变量名&gt;</span><br></pre></td></tr></table></figure>
-
-<p>​        如果“变量名”的值非空，那么表示表达式为真，否则表达式为假。“变量名”同样可以是 一个函数的返回值。ifndef 用法类似，但是含义用户 ifdef 相反。</p>
-<h3 id="Makefile函数"><a href="#Makefile函数" class="headerlink" title="Makefile函数"></a>Makefile函数</h3><ul>
-<li>Makefile 支持函数，类似 C 语言一样，<strong>Makefile 中的函数是已经定义好的，我们直接使用， 不支持我们自定义函数</strong>。make 所支持的函数不多，但是绝对够我们使用了</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(函数名 参数集合)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$&#123;函数名 参数集合&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>可以看出，调用函数和调用普通变量一样，<strong>使用符号“$”来标识</strong>。参数集合是函数的多个 参数，<strong>参数之间以逗号“,”隔开</strong>，<strong>函数名和参数之间以“空格”分隔开</strong>，函数的调用以“$”开 头。</li>
-</ul>
-<h4 id="sbust"><a href="#sbust" class="headerlink" title="sbust"></a>sbust</h4><ul>
-<li>函数 subst 用来完成字符串替换，调用形式如下：</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(subst &lt;from&gt;,&lt;to&gt;,&lt;text&gt;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>此函数的功能是将字符串<text>中的<from>内容替换为<to>，函数返回被替换以后的字符 串，比如如下示例：</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(subst zzk,ZZK,my name is zzk)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>把字符串“my name is zzk”中的“zzk”替换为“ZZK”，替换完成以后的字符串为“my name  is ZZK”。</li>
-</ul>
-<h4 id="patsubst"><a href="#patsubst" class="headerlink" title="patsubst"></a>patsubst</h4><ul>
-<li>函数 patsubst 用来完成模式字符串替换，使用方法如下：</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(patsubst &lt;pattern&gt;,&lt;replacement&gt;,&lt;text&gt;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>此函数查找字<strong>符串中的单词是否符合模式</strong><pattern>，如果匹配就用<replacement>来 替换掉，<pattern>可以使用通配符“%”，表示任意长度的字符串，函数返回值就是替换后的字 符串。如果<replacement>中也包涵“%”，那么<replacement>中的“%”将是<pattern>中的那个 “%”所代表的字符串,<strong>也就是说<code>%</code>代表的字符串的内容不变</strong></li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(patsubst %.c,%.o,a.c b.c c.c)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>将字符串<code>a.c b.c c.c</code>中的所有符合<code>%.c</code>的字符串，替换为<code>%.o</code>，替换完成以后的字 符串为“a.o b.o c.o”，注意此时a，b和c是不变的。</li>
-</ul>
-<h4 id="dir"><a href="#dir" class="headerlink" title="dir"></a>dir</h4><ul>
-<li>函数 dir 用来获取目录</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(dir &lt;names…&gt;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>此函数用来从文件名序列中提取出目录部分，返回值是文件名序列<names>的目录 部分</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(dir &lt;/src/a.c&gt;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>提取文件“/src/a.c”的目录部分，也就是“/src”。</li>
-</ul>
-<h4 id="notdir"><a href="#notdir" class="headerlink" title="notdir"></a>notdir</h4><ul>
-<li>函数 notdir 看名字就是知道去除文件中的目录部分，也就是提取文件名</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(notdir &lt;names…&gt;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>此函数用与从文件名序列<names>中提取出文件名非目录部分</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(notdir &lt;/src/a.c&gt;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>提取文件“/src/a.c”中的非目录部分，也就是文件名“a.c”。</li>
-</ul>
-<h4 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h4><ul>
-<li>foreach 函数用来完成循环</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(foreach &lt;var&gt;, &lt;list&gt;,&lt;text&gt;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>此函数的意思就是把参数<list>中的单词逐一取出来放到参数<var>中，然后再执行<text>所 包含的表达式。每次<text>都会返回一个字符串，循环的过程中，**<text>中所包含的每个字符串 会以空格隔开<strong>，最后当整个循环结束时，</strong><text>所返回的每个字符串所组成的整个字符串将会是 函数 foreach 函数的返回值**</li>
-</ul>
-<h4 id="wildcard"><a href="#wildcard" class="headerlink" title="wildcard"></a>wildcard</h4><ul>
-<li>通配符<strong>“%”只能用在规则中</strong>，<strong>只有在规则中它才会展开</strong>，如果在<strong>变量定义</strong>和<strong>函数使用</strong>时， 通配符<strong>不会自动展开</strong>，这个时候就要用到函数 wildcard</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(wildcard PATTERN…)</span><br></pre></td></tr></table></figure>
-
-<p>比如</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(wildcard *.c)</span><br></pre></td></tr></table></figure>
-
-<p>上面的代码是用来<strong>获取当前目录下所有的.c 文件，类似“%”</strong>。</p>
-<p><strong>使用例</strong></p>
-<p>（文件夹下有<code>a.c</code>, <code>b.c</code>和<code>c.c</code>三个文件）</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">list=<span class="variable">$(<span class="built_in">wildcard</span> *.c)</span></span><br><span class="line">files=<span class="variable">$(<span class="built_in">foreach</span> filename, <span class="variable">$(list)</span>, <span class="variable">$(filename)</span> hello)</span></span><br><span class="line"><span class="section">main: </span></span><br><span class="line">	</span><br><span class="line">	@echo $&#123;list&#125;</span><br><span class="line">	</span><br><span class="line">	@echo <span class="variable">$(files)</span></span><br><span class="line"></span><br><span class="line">.PHONY : clean</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm *.o</span><br></pre></td></tr></table></figure>
-
-<p>输出</p>
-<p><img src="/imgs/image-20220110111644323.png" alt="image-20220110111644323"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-修复删除双系统之后BIOS中存在多余启动引导项的问题"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/09/%E4%BF%AE%E5%A4%8D%E5%88%A0%E9%99%A4%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%90%8EBIOS%E4%B8%AD%E5%AD%98%E5%9C%A8%E5%A4%9A%E4%BD%99%E5%90%AF%E5%8A%A8%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9A%84%E9%97%AE%E9%A2%98/"
-    >修复删除双系统之后BIOS中存在多余启动引导项的问题</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/09/%E4%BF%AE%E5%A4%8D%E5%88%A0%E9%99%A4%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%90%8EBIOS%E4%B8%AD%E5%AD%98%E5%9C%A8%E5%A4%9A%E4%BD%99%E5%90%AF%E5%8A%A8%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9A%84%E9%97%AE%E9%A2%98/" class="article-date">
-  <time datetime="2022-01-08T16:10:33.000Z" itemprop="datePublished">2022-01-09</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="修复删除双系统之后BIOS中存在多余启动引导项的问题"><a href="#修复删除双系统之后BIOS中存在多余启动引导项的问题" class="headerlink" title="修复删除双系统之后BIOS中存在多余启动引导项的问题"></a>修复删除双系统之后BIOS中存在多余启动引导项的问题</h1><h2 id="下载DiskGenius"><a href="#下载DiskGenius" class="headerlink" title="下载DiskGenius"></a>下载DiskGenius</h2><p><a target="_blank" rel="noopener" href="http://www.diskgenius.cn/download.php">http://www.diskgenius.cn/download.php</a></p>
-<p>然后此处按下delete即可</p>
-<p><img src="/imgs/image-20220109001539680.png" alt="image-20220109001539680"></p>
-<p>可见启动引导项中已经没有了刚才删除的Manjaro选项</p>
-<p><img src="/imgs/image-20220109002008500.png" alt="image-20220109002008500"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-STM32实现W25Q16芯片的擦除、读和写"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/08/STM32%E5%AE%9E%E7%8E%B0W25Q16%E8%8A%AF%E7%89%87%E7%9A%84%E6%93%A6%E9%99%A4%E3%80%81%E8%AF%BB%E5%92%8C%E5%86%99/"
-    >STM32实现W25Q16芯片的擦除、读和写</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/08/STM32%E5%AE%9E%E7%8E%B0W25Q16%E8%8A%AF%E7%89%87%E7%9A%84%E6%93%A6%E9%99%A4%E3%80%81%E8%AF%BB%E5%92%8C%E5%86%99/" class="article-date">
-  <time datetime="2022-01-08T04:45:39.000Z" itemprop="datePublished">2022-01-08</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="STM32实现W25Q16芯片的擦除、读和写"><a href="#STM32实现W25Q16芯片的擦除、读和写" class="headerlink" title="STM32实现W25Q16芯片的擦除、读和写"></a>STM32实现W25Q16芯片的擦除、读和写</h1><h2 id="封装等待函数（通过读取状态寄存器）"><a href="#封装等待函数（通过读取状态寄存器）" class="headerlink" title="封装等待函数（通过读取状态寄存器）"></a>封装等待函数（通过读取状态寄存器）</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">delayBusy</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D05 = <span class="number">0x05</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> result;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D05, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Receive(&amp;hspi1, &amp;result, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">while</span>((result&amp;<span class="number">0x01</span>) == <span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// HAL_SPI_Transmit(&amp;hspi1, &amp;D05, 1, 1000);</span></span><br><span class="line">    HAL_SPI_Receive(&amp;hspi1, &amp;result, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意，手册上说明此处的状态寄存器可以连续读取，也就是在指令开始的时候发送一次<code>0x05</code>即可，之后<strong>循环读取</strong>，通过将片选信号<strong>CS置为高电平停止</strong></p>
-<h2 id="擦除函数"><a href="#擦除函数" class="headerlink" title="擦除函数"></a>擦除函数</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">EraseChip</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D60 = <span class="number">0x60</span>;</span><br><span class="line">  writeEnable();</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D60, <span class="number">1</span> ,<span class="number">1000</span>);</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">  delayBusy();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意，将芯片内容擦除之前需要<strong>先发送一个使能写</strong>的命令，在下面的函数中会封装这个功能</p>
-<p>然后在函数的最后增加等待芯片空闲的函数，该芯片的擦除时间大概1-2s，不同容量的芯片可能时间不同。</p>
-<ul>
-<li>擦除前的读取数据（第二行）：</li>
-<li><img src="/imgs/image-20220108130401292.png" alt="image-20220108130401292"></li>
-<li>擦除后的读取数据</li>
-<li><img src="/imgs/image-20220108130417022.png" alt="image-20220108130417022"></li>
-<li>可见擦除成功</li>
-</ul>
-<h2 id="写使能函数"><a href="#写使能函数" class="headerlink" title="写使能函数"></a>写使能函数</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">writeEnable</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D06 = <span class="number">0x06</span>;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D06, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>禁止写</strong>函数与写使能函数类似，将命令替换为0x04即可</p>
-<h2 id="读取函数"><a href="#读取函数" class="headerlink" title="读取函数"></a>读取函数</h2><p><img src="/imgs/image-20220108125308657.png" alt="image-20220108125308657"></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">readChip</span><span class="params">(<span class="keyword">uint32_t</span> addr, <span class="keyword">int32_t</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D03 = <span class="number">0x03</span>;</span><br><span class="line">  <span class="keyword">int32_t</span> count = length<span class="number">-1</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> Haddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Maddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Laddr;</span><br><span class="line">  Haddr = addr/<span class="number">256</span>/<span class="number">256</span>;</span><br><span class="line">  Maddr = (addr/<span class="number">256</span>)&amp;<span class="number">0xff</span>;</span><br><span class="line">  Laddr = addr&amp;<span class="number">0xff</span>;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D03, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Haddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Maddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Laddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">for</span>(count = length<span class="number">-1</span>; count&gt;=<span class="number">0</span>;count--)</span><br><span class="line">  &#123;</span><br><span class="line">    HAL_SPI_Receive(&amp;hspi1, recBuff+count, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中的<code>recBuff</code>是一个大小与length相同的byte数组</p>
-<p>注意，与上面类似的是，此处在发送一次读指令之后，芯片会从指定的地址开始自动向前串行发送往后的数据直到CS被置为高电平终止指令，严格的讲从发送的地址开始，可以<strong>只发送一次读取指令便读取到芯片的末尾存储空间</strong>。</p>
-<h2 id="写数据函数"><a href="#写数据函数" class="headerlink" title="写数据函数"></a>写数据函数</h2><p><img src="/imgs/image-20220108133158219.png" alt="image-20220108133158219"></p>
-<p>写函数的执行逻辑是：</p>
-<ul>
-<li>发送一个写使能信号</li>
-<li>CS置为低电平</li>
-<li>发送0x02</li>
-<li>发送24位地址</li>
-<li>连续发送写入的数据（1-256个，一次最多不超过256个，否则超出的会从头部开始覆盖）</li>
-<li>CS置为高电平</li>
-<li>等待芯片写完</li>
-<li>发送禁止写命令</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">writeChip</span><span class="params">(<span class="keyword">uint32_t</span> addr, <span class="keyword">uint16_t</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D02 = <span class="number">0x02</span>;</span><br><span class="line">  <span class="keyword">int32_t</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> Haddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Maddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Laddr;</span><br><span class="line">  Haddr = addr/<span class="number">256</span>/<span class="number">256</span>;</span><br><span class="line">  Maddr = (addr/<span class="number">256</span>)&amp;<span class="number">0xff</span>;</span><br><span class="line">  Laddr = addr&amp;<span class="number">0xff</span>;</span><br><span class="line">  writeEnable();</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D02, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Haddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Maddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Laddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">for</span>(count = <span class="number">0</span>; count&lt;length;count++)</span><br><span class="line">  &#123;</span><br><span class="line">    HAL_SPI_Transmit(&amp;hspi1, writeBuff+count, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">  delayBusy();</span><br><span class="line">  writeDisable();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>writeBuff</code>是一个长度为<code>length</code>的字节数组</p>
-<p>注意：</p>
-<ul>
-<li>假如一次写256个字节的话，地址的最后8位务必是0，假如不是的话会导致超出的部分从头部开始覆盖</li>
-<li>写入的字节数不能超出从地址位置开始剩余的字节量（比如地址后8位是0的话，剩余的字节就是256）</li>
-<li>注意在写完最后一个数据之后，比如将片选信号CS置为高电平，此时芯片会开始写入数据，写入的时候查询BUSY寄存器会得到1，所以使用等待函数等待</li>
-</ul>
-<p>执行效果</p>
-<ul>
-<li> 发送buff定义为<code>uint8_t writeBuff[] = &#123;1,2,3,4,5,6,7,8&#125;;</code><strong>注意数组初始化不要漏写</strong><code>[]</code></li>
-<li>发送函数和读取函数</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">writeChip(<span class="number">0x01</span>,<span class="number">8</span>);</span><br><span class="line">readChip(<span class="number">0x01</span>, <span class="number">8</span>);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>结果</li>
-<li><img src="/imgs/image-20220108133835422.png" alt="image-20220108133835422"></li>
-<li>可见已经成功写入</li>
 </ul>
  
       <!-- reward -->
