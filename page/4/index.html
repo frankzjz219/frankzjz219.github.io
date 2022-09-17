@@ -141,6 +141,315 @@
     
     
     <article
+  id="post-pytorch训练的模型导出数据或者部署到C-平台"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/06/28/pytorch%E8%AE%AD%E7%BB%83%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%87%BA%E6%95%B0%E6%8D%AE%E6%88%96%E8%80%85%E9%83%A8%E7%BD%B2%E5%88%B0C-%E5%B9%B3%E5%8F%B0/"
+    >pytorch训练的模型导出数据或者部署到C++平台</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/06/28/pytorch%E8%AE%AD%E7%BB%83%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%87%BA%E6%95%B0%E6%8D%AE%E6%88%96%E8%80%85%E9%83%A8%E7%BD%B2%E5%88%B0C-%E5%B9%B3%E5%8F%B0/" class="article-date">
+  <time datetime="2022-06-28T13:45:47.000Z" itemprop="datePublished">2022-06-28</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="pytorch训练的模型导出网格数据或者部署到C-平台"><a href="#pytorch训练的模型导出网格数据或者部署到C-平台" class="headerlink" title="pytorch训练的模型导出网格数据或者部署到C++平台"></a>pytorch训练的模型导出网格数据或者部署到C++平台</h1><h2 id="数据导出"><a href="#数据导出" class="headerlink" title="数据导出"></a>数据导出</h2><ul>
+<li>导出为<code>.csv</code>文件</li>
+<li>参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42464527/article/details/123688909">教程</a></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 定义和实例化网络</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Net</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(Net, self).__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">1</span>,<span class="number">30</span>,kernel_size=<span class="number">5</span>)</span><br><span class="line">        self.fc1 = nn.Linear(<span class="number">4320</span>,<span class="number">100</span>)</span><br><span class="line">        self.fc2 = nn.Linear(<span class="number">100</span>, <span class="number">10</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span></span><br><span class="line">        x = F.max_pool2d(F.relu(self.conv1(x)),<span class="number">2</span>)</span><br><span class="line">        x = x.view(-<span class="number">1</span>, <span class="number">4320</span>)</span><br><span class="line">        x = F.relu(self.fc1(x))</span><br><span class="line">        x = self.fc2(x)</span><br><span class="line">        <span class="keyword">return</span> F.log_softmax(x,dim=<span class="number">1</span>)</span><br><span class="line">network = Net()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存.csv格式的参数</span></span><br><span class="line"><span class="keyword">for</span> name,param <span class="keyword">in</span> network.named_parameters():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;name:<span class="subst">&#123;name&#125;</span>\t\t\t,shape:<span class="subst">&#123;param.shape&#125;</span>&quot;</span>)</span><br><span class="line">    data = pd.DataFrame(param.detach().numpy().reshape(<span class="number">1</span>, -<span class="number">1</span>))</span><br><span class="line">    filename = <span class="string">f&quot;<span class="subst">&#123;name&#125;</span>.csv&quot;</span></span><br><span class="line">    data.to_csv(<span class="string">f&quot;./<span class="subst">&#123;filename&#125;</span>&quot;</span>, index=<span class="literal">False</span>, header=<span class="literal">False</span>, sep=<span class="string">&#x27;,&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用Libtorch直接导出C-模型"><a href="#使用Libtorch直接导出C-模型" class="headerlink" title="使用Libtorch直接导出C++模型"></a>使用Libtorch直接导出C++模型</h2><ul>
+<li><p>参考 csdn<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43917589/article/details/124509964">文章</a></p>
+</li>
+<li><p>参考 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/263626686?ivk_sa=1024320u">知乎文章</a> 和 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/146453159">文章</a></p>
+</li>
+<li><p>部署 <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40198848/article/details/112872844?spm=1001.2014.3001.5506">yoloV5</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/advanced/cpp_export.html">官方教程</a></p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-python多线程以及线程同步"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/06/28/python%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BB%A5%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/"
+    >python多线程以及线程同步</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/06/28/python%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BB%A5%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/" class="article-date">
+  <time datetime="2022-06-28T01:22:29.000Z" itemprop="datePublished">2022-06-28</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="python多线程以及线程同步"><a href="#python多线程以及线程同步" class="headerlink" title="python多线程以及线程同步"></a>python多线程以及线程同步</h1><h2 id="多线程基础知识"><a href="#多线程基础知识" class="headerlink" title="多线程基础知识"></a>多线程基础知识</h2><ul>
+<li>python创建多线程主要依靠threading库</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>线程的创建使用<code>Thread()</code>函数，提供的参数为线程的函数指针和函数的参数（必须为可迭代的对象）</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>(<span class="params">num</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num):</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line"></span><br><span class="line">t1=threading.Thread(target=task, args=(<span class="number">3</span>,)) <span class="comment"># 注意此处不能使用args=(3)，否则会因为传入的参数不可迭代导致错误，必须加逗号</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>线程的开始使用<code>start()</code>，使用<code>join()</code>回收线程</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 多线程</span></span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br><span class="line">t3.start()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 回收线程</span></span><br><span class="line">t1.join()</span><br><span class="line">t2.join()</span><br><span class="line">t3.join()</span><br></pre></td></tr></table></figure>
+
+<h2 id="多线程时间测试"><a href="#多线程时间测试" class="headerlink" title="多线程时间测试"></a>多线程时间测试</h2><ul>
+<li>线程执行任务为控制台输出的</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>(<span class="params">num</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num):</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line"></span><br><span class="line">t1=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line">t2=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line">t3=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多线程</span></span><br><span class="line"></span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br><span class="line">t3.start()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 回收线程</span></span><br><span class="line">t1.join()</span><br><span class="line">t2.join()</span><br><span class="line">t3.join()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;多线程用时:%.8f\n&quot;</span>%(time.time()-start))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 单线程</span></span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    task(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">end = time.time()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;单线程用时:%.8f\n&quot;</span>%(end-start))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><img src="/imgs/image-20220628093137346.png" alt="image-20220628093137346"></p>
+<ul>
+<li>可见，多线程用时还更多一些</li>
+</ul>
+</li>
+<li><p>多线程执行不涉及IO的操作（比如加法）</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>(<span class="params">num</span>):</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num):</span><br><span class="line">        count+=<span class="number">1</span></span><br><span class="line"></span><br><span class="line">t1=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line">t2=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line">t3=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多线程</span></span><br><span class="line"></span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br><span class="line">t3.start()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 回收线程</span></span><br><span class="line">t1.join()</span><br><span class="line">t2.join()</span><br><span class="line">t3.join()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;多线程用时:%.8f\n&quot;</span>%(time.time()-start))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 单线程</span></span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    task(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">end = time.time()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;单线程用时:%.8f\n&quot;</span>%(end-start))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>输出结果为<ul>
+<li><img src="/imgs/image-20220628093356210.png" alt="image-20220628093356210"></li>
+<li>可见，单线程比多线程的优势更明显了</li>
+</ul>
+</li>
+</ul>
+<h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><ul>
+<li><p>你会发现多线程比单线程花费的时间还要更多，这是因为GIL的原因。</p>
+<p>GIL的全称是Global Interpreter Lock（全局解释器锁），Python最初的设计理念在于，<u>为了解决多线程之间数据完整性和状态同步的问题，设计为在任意时刻只能由一个线程在解释器中运行</u>。因此Python中的多线程是<strong>表面上的多线程</strong>（同一时刻只有一个线程），不是真正的多线程。</p>
+<p>但是如果是因为GIL的原因，就说多线程无用是不对的，对于IO密集的程序，多线程是要比单线程快的。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1715829331938364561&wfr=spider&for=pc">参考链接</a></p>
+</li>
+</ul>
+<h2 id="python线程同步"><a href="#python线程同步" class="headerlink" title="python线程同步"></a>python线程同步</h2><ul>
+<li>python线程同步具有一些与C类似的机制，比如各种锁和获取、释放锁等等</li>
+<li><a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1714105650396326932&wfr=spider&for=pc">参考链接</a></li>
+</ul>
+<h3 id="同步锁Lock"><a href="#同步锁Lock" class="headerlink" title="同步锁Lock"></a>同步锁Lock</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">lock = threading.Lock()</span><br><span class="line">lock.acquire()</span><br><span class="line">lock.release()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>用于保护临界区</p>
+</li>
+<li><p>由于<code>threading.Lock()</code>对象中实现了<strong>enter__()与__exit</strong>()方法，故我们可以使用<strong>with语句</strong>进行上下文管理形式的加锁解锁操作</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> lock:</span><br><span class="line">    <span class="comment"># 自动加锁</span></span><br><span class="line">    <span class="keyword">global</span> num</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10_000_000</span>):</span><br><span class="line">    num += <span class="number">1</span></span><br><span class="line">    <span class="comment"># 自动解锁</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="RLock-递归锁"><a href="#RLock-递归锁" class="headerlink" title="RLock() 递归锁"></a>RLock() 递归锁</h3><ul>
+<li><p>递归锁是同步锁的一个升级版本，在同步锁的基础上可以做到连续重复使用多次acquire()后再重复使用多次release()的操作，但是一定要注意加锁次数和解锁次数必须一致，否则也将引发死锁现象。</p>
+</li>
+<li><p>其他部分类似，不再详细赘述</p>
+</li>
+</ul>
+<h3 id="Condition-条件锁"><a href="#Condition-条件锁" class="headerlink" title="Condition() 条件锁"></a>Condition() 条件锁</h3><ul>
+<li><p>条件锁是在递归锁的基础上增加了能够暂停线程运行的功能。并且我们可以使用wait()与notify()来控制线程执行的个数。</p>
+<p>注意：条件锁可以自由设定一次放行几个线程。</p>
+</li>
+<li><p><img src="/imgs/838ba61ea8d3fd1fc946d753909e6e1694ca5f61.jpeg" alt="img"></p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">currentRunThreadNumber = <span class="number">0</span></span><br><span class="line">maxSubThreadNumber = <span class="number">10</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    <span class="keyword">global</span> currentRunThreadNumber</span><br><span class="line">    thName = threading.currentThread().name</span><br><span class="line"></span><br><span class="line">    condLock.acquire()  <span class="comment"># 上锁</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;start and wait run thread : %s&quot;</span> % thName)</span><br><span class="line"></span><br><span class="line">    condLock.wait()  <span class="comment"># 暂停线程运行、等待唤醒</span></span><br><span class="line">    currentRunThreadNumber += <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;carry on run thread : %s&quot;</span> % thName)</span><br><span class="line"></span><br><span class="line">    condLock.release()  <span class="comment"># 解锁</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    condLock = threading.Condition()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxSubThreadNumber):</span><br><span class="line">        subThreadIns = threading.Thread(target=task)</span><br><span class="line">        subThreadIns.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> currentRunThreadNumber &lt; maxSubThreadNumber:</span><br><span class="line">        notifyNumber = <span class="built_in">int</span>(</span><br><span class="line">            <span class="built_in">input</span>(<span class="string">&quot;Please enter the number of threads that need to be notified to run：&quot;</span>))</span><br><span class="line"></span><br><span class="line">        condLock.acquire()</span><br><span class="line">        condLock.notify(notifyNumber)  <span class="comment"># 放行</span></span><br><span class="line">        condLock.release()</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;main thread run end&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 先启动10个子线程，然后这些子线程会全部变为等待状态</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-1</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-2</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-3</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-4</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-5</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-6</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-7</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-8</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-9</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-10</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 批量发送通知，放行特定数量的子线程继续运行</span></span><br><span class="line"><span class="comment"># Please enter the number of threads that need to be notified to run：5  # 放行5个</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-4</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-3</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-1</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-2</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-5</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Please enter the number of threads that need to be notified to run：5  # 放行5个</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-8</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-10</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-6</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-9</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-7</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Please enter the number of threads that need to be notified to run：1</span></span><br><span class="line"><span class="comment"># main thread run end</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意，上面的代码中的线程在使用<code>acquire()</code>获取锁之后，进入了休眠状态（也就是<code>wait()</code>），然后等待锁的<code>notify()</code>函数<strong>唤醒相应数量的正在休眠的进程</strong></li>
+</ul>
+<h3 id="Event-事件锁"><a href="#Event-事件锁" class="headerlink" title="Event() 事件锁"></a>Event() 事件锁</h3><ul>
+<li><p>事件锁是基于条件锁来做的，它与条件锁的区别在于一次只能放行全部，不能放行任意个数量的子线程继续运行。</p>
+<p>我们可以将事件锁看为红绿灯，当红灯时所有子线程都暂停运行，并进入“等待”状态，当绿灯时所有子线程都恢复“运行”。</p>
+</li>
+<li><p><img src="/imgs/b3fb43166d224f4ae902e4228a27db5b9922d146.jpeg" alt="img"></p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line">maxSubThreadNumber = <span class="number">3</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    thName = threading.currentThread().name    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;start and wait run thread : %s&quot;</span> % thName)    </span><br><span class="line">    eventLock.wait()  <span class="comment"># 暂停运行，等待绿灯    </span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;green light, %s carry on run&quot;</span> % thName)    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;red light, %s stop run&quot;</span> % thName)    </span><br><span class="line">    eventLock.wait()  <span class="comment"># 暂停运行，等待绿灯    </span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;green light, %s carry on run&quot;</span> % thName)    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;sub thread %s run end&quot;</span> % thName)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:    </span><br><span class="line">    eventLock = threading.Event()    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxSubThreadNumber):        </span><br><span class="line">        subThreadIns = threading.Thread(target=task)        </span><br><span class="line">        subThreadIns.start()    </span><br><span class="line">        eventLock.<span class="built_in">set</span>()  <span class="comment"># 设置为绿灯    </span></span><br><span class="line">        eventLock.clear()  <span class="comment"># 设置为红灯    </span></span><br><span class="line">        eventLock.<span class="built_in">set</span>()  <span class="comment"># 设置为绿灯</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-1</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-2</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-3</span></span><br><span class="line"><span class="comment"># green light, Thread-1 carry on run</span></span><br><span class="line"><span class="comment"># red light, Thread-1 stop run</span></span><br><span class="line"><span class="comment"># green light, Thread-1 carry on run</span></span><br><span class="line"><span class="comment"># sub thread Thread-1 run end</span></span><br><span class="line"><span class="comment"># green light, Thread-3 carry on run</span></span><br><span class="line"><span class="comment"># red light, Thread-3 stop run</span></span><br><span class="line"><span class="comment"># green light, Thread-3 carry on run</span></span><br><span class="line"><span class="comment"># sub thread Thread-3 run end</span></span><br><span class="line"><span class="comment"># green light, Thread-2 carry on run</span></span><br><span class="line"><span class="comment"># red light, Thread-2 stop run</span></span><br><span class="line"><span class="comment"># green light, Thread-2 carry on run</span></span><br><span class="line"><span class="comment"># sub thread Thread-2 run end</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>不能使用<code>with</code>语句进行调用</strong></li>
+</ul>
+<h3 id="Semaphore-信号量锁"><a href="#Semaphore-信号量锁" class="headerlink" title="Semaphore() 信号量锁"></a>Semaphore() 信号量锁</h3><ul>
+<li><p>信号量锁也是根据条件锁来做的，它与条件锁和事件锁的区别如下：</p>
+<ul>
+<li>条件锁：一次可以放行任意个处于“等待”状态的线程</li>
+<li>事件锁：一次可以放行全部的处于“等待”状态的线程</li>
+<li>信号量锁：通过规定，成批的放行<strong>特定个处于“上锁”状态的线程</strong></li>
+</ul>
+</li>
+<li><p><img src="/imgs/0b55b319ebc4b74555e89af84b2c551e8b82153c.jpeg" alt="img"></p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">maxSubThreadNumber = <span class="number">6</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    thName = threading.currentThread().name</span><br><span class="line">    semaLock.acquire()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;run sub thread %s&quot;</span> % thName)</span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line">    semaLock.release()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 每次只能放行2个</span></span><br><span class="line">    semaLock = threading.Semaphore(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxSubThreadNumber):</span><br><span class="line">        subThreadIns = threading.Thread(target=task)</span><br><span class="line">        subThreadIns.start()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># run sub thread Thread-1</span></span><br><span class="line"><span class="comment"># run sub thread Thread-2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># run sub thread Thread-3</span></span><br><span class="line"><span class="comment"># run sub thread Thread-4</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># run sub thread Thread-6</span></span><br><span class="line"><span class="comment"># run sub thread Thread-5</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意调用<code>Semaphore()</code>初始化的时候传递参数<strong>指定同时能够放行的线程数量</strong></li>
+<li>也可以使用<code>with</code>语句</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">maxSubThreadNumber = <span class="number">6</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    thName = threading.currentThread().name</span><br><span class="line">    <span class="keyword">with</span> semaLock:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;run sub thread %s&quot;</span> % thName)</span><br><span class="line">        time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line"></span><br><span class="line">    semaLock = threading.Semaphore(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxSubThreadNumber):</span><br><span class="line">        subThreadIns = threading.Thread(target=task)</span><br><span class="line">        subThreadIns.start()</span><br></pre></td></tr></table></figure>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/06/27/WSL2%E4%B8%8A%E4%BD%BF%E7%94%A8matplotlib%E7%BB%93%E5%90%88VSCode%E8%BF%9C%E7%A8%8B%E4%B8%8D%E6%98%BE%E7%A4%BA%E8%BE%93%E5%87%BA%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"
+    >WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/06/27/WSL2%E4%B8%8A%E4%BD%BF%E7%94%A8matplotlib%E7%BB%93%E5%90%88VSCode%E8%BF%9C%E7%A8%8B%E4%B8%8D%E6%98%BE%E7%A4%BA%E8%BE%93%E5%87%BA%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="article-date">
+  <time datetime="2022-06-27T05:21:29.000Z" itemprop="datePublished">2022-06-27</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法"><a href="#WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法" class="headerlink" title="WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法"></a>WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法</h1><h2 id="报错信息"><a href="#报错信息" class="headerlink" title="报错信息"></a>报错信息</h2><h3 id="问题一般分为两种"><a href="#问题一般分为两种" class="headerlink" title="问题一般分为两种"></a>问题一般分为两种</h3><ul>
+<li>没有报错但是使用<code>plt.show()</code>之后<strong>没有任何输出</strong></li>
+<li>使用<code>matplotlib.use(&#39;Tkagg&#39;)</code>之后出现报错<code>Cannot load backend &#39;TkAgg&#39; which requires the &#39;tk&#39; interactive framework, as &#39;headless&#39; is currently running</code>，或者是<code>_tkinter.TclError: couldn&#39;t connect to display &quot;:0.0&quot;</code><ul>
+<li><img src="/imgs/image-20220627132430453.png" alt="image-20220627132430453"></li>
+</ul>
+</li>
+</ul>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ul>
+<li>开始Import的时候改变顺序</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line">matplotlib.use(<span class="string">&#x27;Tkagg&#x27;</span>) <span class="comment">#这一句修改使用的后端输出设备</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>然后在windows上安装<code>VcXsrv</code>服务器并且启动，具体下载地址为 <a target="_blank" rel="noopener" href="https://sourceforge.net/projects/vcxsrv/">sourceForge</a></p>
+</li>
+<li><p>安装过程中一路选择默认设置</p>
+</li>
+<li><p>然后通过桌面图标启动VcXsrv</p>
+</li>
+<li><p><img src="/imgs/3c06ab6204e183d7f8fcbf6507ef0822_r.jpg" alt="preview"></p>
+</li>
+<li><p><img src="/imgs/43f9d404f8d8db71b566a9d97439229d_r.jpg" alt="preview"></p>
+</li>
+<li><p><img src="/imgs/d0f6d5aaaa26b78d6af77e2a7094fff7_r.jpg" alt="preview"></p>
+</li>
+<li><p><img src="/imgs/v908aa4dd6a4dec03549efd26f418ca49_r.jpg" alt="preview"></p>
+</li>
+<li><p>然后正常情况会弹出Windows防火墙提示，允许访问即可</p>
+</li>
+<li><p>然后修改WSL端的环境</p>
+</li>
+<li><p>首先需要查看Windows系统和WSL2通信使用的<strong>虚拟网卡地址</strong></p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/resolv.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># nameserver后面的地址就是Windows系统虚拟网卡的地址,记一下</span></span><br><span class="line"><span class="comment"># 需要取消下面两行内容的注释,禁用自动重新生成配置文件,否则重启后这个地址会变</span></span><br><span class="line">[network]</span><br><span class="line">generateResolvConf = <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>然后修改<code>.bashrc</code></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim ~/.bashrc</span><br><span class="line"><span class="comment"># 在文件最后追加下面内容,地址使用上面查看到的</span></span><br><span class="line"><span class="built_in">export</span> DISPLAY=&lt;nameServer IP地址&gt;:0</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">source</span> ~/.bashrc </span><br></pre></td></tr></table></figure>
+
+<p>详细可以参考配置<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/150555651">VcXsrv</a></p>
+<ul>
+<li>最终效果</li>
+<li><img src="/imgs/image-20220627133421950.png" alt="image-20220627133421950"></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-C语言使用并行执行的for循环"
   class="article article-type-post"
   itemscope
@@ -880,479 +1189,6 @@
 <li> 第 1020 行，调用函数 prepare_namespace 来<strong>挂载根文件系统</strong>。根文件系统也是由命令行参 数指定的，就是 uboot 的 bootargs 环境变量。比如“root=/dev/mmcblk1p2 rootwait rw”就表示根 文件系统在/dev/mmcblk1p2 中，也就是 EMMC 的分区 2 中。</li>
 </ul>
 </li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-U-Boot入门"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/02/25/U-Boot%E5%85%A5%E9%97%A8/"
-    >U_Boot入门</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/02/25/U-Boot%E5%85%A5%E9%97%A8/" class="article-date">
-  <time datetime="2022-02-25T12:50:25.000Z" itemprop="datePublished">2022-02-25</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="U-Boot入门"><a href="#U-Boot入门" class="headerlink" title="U_Boot入门"></a>U_Boot入门</h1><h2 id="U-Boot简介"><a href="#U-Boot简介" class="headerlink" title="U_Boot简介"></a>U_Boot简介</h2><ul>
-<li>Linux 系统要启动就必须需要一个 bootloader 程序，也就说芯片上电以后先运行一段 bootloader程序。这段bootloader程序会先初始化DDR等外设，然后将Linux内核从flash(NAND， NOR FLASH，SD，MMC 等)拷贝到 DDR 中，最后启动 Linux 内核。当然了，bootloader 的实 际工作要复杂的多，但是它最主要的工作就是启动 Linux 内核，bootloader 和 Linux 内核的关系 就跟 PC 上的 BIOS 和 Windows 的关系一样，bootloader 就相当于 BIOS。所以我们要先搞定 bootloader，很庆幸，有很多现成的 bootloader 软件可以使用，比如 U-Boot、vivi、RedBoot 等 等，其中以 U-Boot 使用最为广泛，为了方便书写，本书会将 U-Boot 写为 uboot。</li>
-<li>uboot 的全称是 Universal Boot Loader，uboot 是一个遵循 GPL 协议的<strong>开源软件</strong>，uboot <strong>是一 个裸机代码，可以看作是一个裸机综合例程</strong>。现在的 uboot 已经支持液晶屏、网络、USB 等高 级功能。</li>
-<li>uboot 官网为 <a target="_blank" rel="noopener" href="http://www.denx.de/wiki/U-Boot/">http://www.denx.de/wiki/U-Boot/</a></li>
-</ul>
-<h2 id="UBoot顶层makefile"><a href="#UBoot顶层makefile" class="headerlink" title="UBoot顶层makefile"></a>UBoot顶层makefile</h2><ul>
-<li><p>编译需要的shell脚本</p>
-<ul>
-<li><img src="/imgs/image-20220225210752704.png" alt="image-20220225210752704"></li>
-<li>第 1 行是 shell 脚本要求的，必须是“#!/bin/bash”或者“#!/bin/sh”</li>
-<li>第 2 行使用了 make 命令，用于<u>清理工程</u>，也就是每次在编译 uboot 之前都清理一下工程。 这里的 make 命令带有三个参数，第一个是 ARCH，也就是指定架构，这里肯定是 arm；第二个 参数 CROSS_COMPILE 用于指定编译器，只需要<u>指明编译器前缀</u>就行了，比如 arm-linux-gnueabihf-gcc 编译器的前缀就是“arm-linux-gnueabihf-”；最后一个参数 distclean 就是清除工程。</li>
-<li>第 3 行也使用了 make 命令，用于配置 uboot。同样有三个参数，不同的是，最后一个参数是 mx6ull_14x14_ddr512_emmc_defconfig。<strong>前面说了 uboot 是 bootloader 的一种，可以用来引导 Linux，但是 uboot 除了引导 Linux 以外还可以引导其它的系统</strong>，<u>而且 uboot 还支持其它的架构 和外设，比如 USB、网络、SD 卡等。这些都是可以配置的，需要什么功能就使能什么功能</u>。所 以在编译 uboot 之前，一定要根据自己的需求配置 uboot。mx6ull_14x14_ddr512_emmc_defconfig 就是正点原子针对 I.MX6U-ALPHA 的 EMMC 核心板编写的配置文件，这个配置文件在 uboot 源码的 configs 目录中。在 uboot 中，通过“make xxx_defconfig”来配置 uboot，xxx_defconfig 就是不同板子的配置文件，这些配置文件都在 uboot/configs 目录中</li>
-<li>第 4 行有 4 个参数，用于编译 uboot，通过第 3 行配置好 uboot 以后就可以直接“make”编 译 uboot 了。其中 V=1 用于设置编译过程的信息输出级别；-j 用于设置主机使用多少线程编译 uboot，最好设置成我们虚拟机所设置的核心数，如果在 VMware 里面给虚拟就分配了 4 个核， 那么使用-j4 是最合适的，这样 4 个核都会一起编译</li>
-</ul>
-</li>
-<li><p>查看UBoot之前需要先进行一次编译</p>
-</li>
-<li><p>编译后的文件结构</p>
-</li>
-<li><p><img src="/imgs/image-20220225210424844.png" alt="image-20220225210424844"></p>
-</li>
-<li><p><img src="/imgs/image-20220225210443748.png" alt="image-20220225210443748"></p>
-</li>
-<li><p>makefile文件是可以嵌套的</p>
-</li>
-<li><p>也就是顶层 Makefile 可以<strong>调用子目录 中的 Makefile 文件</strong>。Makefile 嵌套在大项目中很常见，一般大项目里面所有的源代码都不会放 到同一个目录中，各个功能模块的源代码都是分开的，各自存放在各自的目录中。每个功能模 块目录下都有一个 Makefile，这个 Makefile 只处理本模块的编译链接工作，这样所有的编译链接工作就不用全部放到一个 Makefile 中，可以使得 Makefile 变得简洁明了。</p>
-</li>
-</ul>
-<h2 id="Makefile分析"><a href="#Makefile分析" class="headerlink" title="Makefile分析"></a>Makefile分析</h2><h3 id="版本号"><a href="#版本号" class="headerlink" title="版本号"></a>版本号</h3><ul>
-<li><p><img src="/imgs/image-20220225232512333.png" alt="image-20220225232512333"></p>
-</li>
-<li><p>顶层 Makefile 一开始是版本号，内容如下(为了方便分析，顶层 Makefile 代码段前段行号 采用 Makefile 中的行号，因为 uboot 会更新</p>
-</li>
-</ul>
-<h3 id="MAKEFLAGS变量"><a href="#MAKEFLAGS变量" class="headerlink" title="MAKEFLAGS变量"></a>MAKEFLAGS变量</h3><ul>
-<li>make 是支持递归调用的，也就是在 Makefile 中使用“make”命令来执行其他的 Makefile 文件，一般都是子目录中的 Makefile 文件。假如在当前目录下存在一个“subdir”子目录，这个 子目录中又有其对应的 Makefile 文件，那么这个工程在编译的时候其主目录中的 Makefile 就可 以调用子目录中的 Makefile，以此来完成所有子目录的编译。主目录的 Makefile 可以使用如下 代码来编译这个子目录：</li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="variable">$(MAKE)</span> -C subdir</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>$(MAKE)就是调用“make”命令，-C 指定子目录。有时候我们需要向子 make 传递变量， 这个时候使用“export”来导出要传递给子 make 的变量即可，如果不希望哪个变量传递给子 make 的话就使用“unexport”来声明不导出:</li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> VARIABLE …… //导出变量给子 make 。</span><br><span class="line"><span class="keyword">unexport</span> VARIABLE…… //不导出变量给子 make。</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>有两个特殊的变量：“SHELL”和“MAKEFLAGS”，这两个变量除非使用“unexport”声明， 否则的话在整个make的执行过程中，它们的值始终自动的传递给子make。在uboot的主Makefile 中有如下代码：</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MAKEFLAGS += -rR --include-dir=$(CURDIR)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>上述代码使用“+=”来给变量 MAKEFLAGS 追加了一些值，“-rR”表示禁止使用内置的隐 含规则和变量定义，“–include-dir”指明搜索路径，”$(CURDIR)”表示当前目录。</li>
-</ul>
-<h3 id="命令输出"><a href="#命令输出" class="headerlink" title="命令输出"></a>命令输出</h3><ul>
-<li><p>uboot 默认编译是不会在终端中显示完整的命令，都是短命令</p>
-</li>
-<li><p><img src="/imgs/image-20220225235732726.png" alt="image-20220225235732726"></p>
-</li>
-<li><p>上述代码中先使用 ifeq 来判断”$(origin V)”和”command line”是否相等。这里用到了 Makefile 中的函数 origin，origin 和其他的函数不一样，它不操作变量的值，origin 用于告诉你变量是哪 来的</p>
-</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$(origin &lt;variable&gt;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>variable 是变量名，origin 函数的返回值就是变量来源，因此$(origin V)就是变量 V 的来源。 如果变量 V 是在命令行定义的那么它的来源就是”command line”，这样”$(origin V)”和”command  line”就相等了。当这两个相等的时候变量 KBUILD_VERBOSE 就等于 V 的值，比如在命令行中 输入“ V=1 “ 的 话 那 么 KBUILD_VERBOSE=1 。如果没有在命令行输入 V 的 话 KBUILD_VERBOSE=0</p>
-</li>
-<li><p>第 80 行判断 KBUILD_VERBOSE 是否为 1，如果 KBUILD_VERBOSE 为 1 的话变量 quiet</p>
-</li>
-<li><p>和 Q 都为空，如果 KBUILD_VERBOSE=0 的话变量 quiet 为“quiet_“，变量 Q 为“@”</p>
-<ul>
-<li><p>V=1 的话</p>
-</li>
-<li><p><img src="/imgs/image-20220226000158806.png" alt="image-20220226000158806"></p>
-</li>
-<li><p>V=0 或者命令行不定义 V 的话</p>
-</li>
-<li><p><img src="/imgs/image-20220226000426810.png" alt="image-20220226000426810"></p>
-</li>
-</ul>
-</li>
-<li><p>Makefile 中会用到变量 quiet 和 Q 来控制编译的时候是否在终端输出完整的命令，在顶层 Makefile 中有很多如下所示的命令</p>
-<ul>
-<li><code>$(Q)$(MAKE) $(build)=tools</code></li>
-</ul>
-</li>
-<li><p>如果 V=0 的话上述命令展开就是“@ make $(build)=tools”，make 在执行的时候默认会在终 端输出命令，但是在命令前面加上“@”就不会在终端输出命令了。当 V=1 的时候 Q 就为空， 上述命令就是“make $(build)=tools”，因此在 make 执行的过程，命令会被完整的输出在终端上</p>
-</li>
-<li><p>有些命令会有两个版本</p>
-<ul>
-<li><img src="/imgs/image-20220226000920939.png" alt="image-20220226000920939"></li>
-</ul>
-</li>
-<li><p>sym 命令分为“quiet_cmd_sym”和“cmd_sym”两个版本，这两个命令的功能都是一样的， 区别在于 make 执行的时候输出的命令不同。quiet_cmd_xxx 命令输出信息少，也就是短命令， 而 cmd_xxx 命令输出信息多，也就是完整的命令。</p>
-<ul>
-<li>如果变量 quiet 为空的话，整个命令都会输出。</li>
-<li> 如果变量 quiet 为“quiet_”的话，仅输出短版本。 _</li>
-<li>_如果变量 quiet 为“silent_”的话，整个命令都不会输出。</li>
-</ul>
-</li>
-</ul>
-<h3 id="静默输出"><a href="#静默输出" class="headerlink" title="静默输出"></a>静默输出</h3><ul>
-<li><p>上一小节讲了，设置 V=0 或者在命令行中不定义 V 的话，编译 uboot 的时候终端中显示的 短命令，但是还是会有命令输出，有时候我们在编译 uboot 的时候不需要输出命令，这个时候 就可以使用 uboot 的静默输出功能。编译的时候使用“make -s”即可实现静默输出</p>
-<ul>
-<li><img src="/imgs/image-20220226002019735.png" alt="image-20220226002019735"></li>
-<li><img src="/imgs/image-20220226002036927.png" alt="image-20220226002036927"></li>
-</ul>
-</li>
-<li><p>判断当前正在使用的编译器版本号是否为 4.x，判断$(filter 4.%,$(MAKE_VERSION)) 和“ ”(空)是否相等，如果不相等的话就成立，执行里面的语句。也就是说 $(filter  4.%,$(MAKE_VERSION))不为空的话条件就成立，这里用到了 Makefile 中的 filter 函数，这是 个过滤函数，函数格式如下</p>
-<ul>
-<li><img src="/imgs/image-20220226002617614.png" alt="image-20220226002617614"></li>
-<li>filter 函数表示以 pattern 模式过滤 text 字符串中的单词，仅保留符合模式 pattern 的单词， 可以有多个模式。函数返回值就是符合 pattern 的字符串。因此$(filter 4.%,$(MAKE_VERSION)) 的含义就是在字符串“MAKE_VERSION”中找出符合“4.%”的字符(%为通配符)， MAKE_VERSION 是make工具的版本号，ubuntu16.04里面默认自带的make工具版本号为4.1， 大家可以输入“make -v”查看。因此$(filter 4.%,$(MAKE_VERSION))不为空，条件成立</li>
-</ul>
-</li>
-<li><p>，如果$(filter %s ,$(firstword x$(MAKEFLAGS)))不为空的话条件 成立，变量 quiet 等于“silent_”。这里也用到了函数 filter，在$(firstword x$(MAKEFLAGS)))中 过滤出符合“%s”的单词。到了函数 firstword，函数 firstword 是获取首单词，函数格式如下</p>
-<ul>
-<li><p><code>$(firstword &lt;text&gt;)</code></p>
-</li>
-<li><p>firstword 函数用于取出 text 字符串中的第一个单词，函数的返回值就是获取到的单词。当 使用“make -s”编译的时候，“-s”会作为 MAKEFLAGS 变量的一部分传递给 Makefile。</p>
-</li>
-<li><p>添加如下内容</p>
-<ul>
-<li><img src="/imgs/image-20220226105110225.png" alt="image-20220226105110225"></li>
-</ul>
-</li>
-<li><p>可见增加<code>-s</code>之后，firstword变成了</p>
-<ul>
-<li><img src="/imgs/image-20220226110058265.png" alt="image-20220226110058265"></li>
-<li>可见也不是直接<code>-s</code>，但是filter的返回值肯定不为空</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="设置编译结果的输出目录"><a href="#设置编译结果的输出目录" class="headerlink" title="设置编译结果的输出目录"></a>设置编译结果的输出目录</h3><ul>
-<li><p>uboot 可以将编译出来的目标文件输出到单独的目录中，在 make 的时候使用“O”来指定 输出目录，比如“make O=out”就是设置目标文件输出到 out 目录中。这么做是为了将源文件 和编译产生的文件分开，当然也可以不指定 O 参数，不指定的话源文件和编译产生的文件都在 同一个目录内，一般我们不指定 O 参数。</p>
-</li>
-<li><p><img src="/imgs/image-20220226110625560.png" alt="image-20220226110625560"></p>
-</li>
-<li><p><img src="/imgs/image-20220226110641751.png" alt="image-20220226110641751"></p>
-</li>
-<li><p>第 124 行判断“O”是否来自于命令行，如果来自命令行的话条件成立，KBUILD_OUTPUT 就为$(O)，因此变量 KBUILD_OUTPUT 就是输出目录。 </p>
-</li>
-<li><p>第 135 行判断 KBUILD_OUTPUT 是否为空。 </p>
-</li>
-<li><p>第 139 行调用 mkdir 命令，创建 KBUILD_OUTPUT 目录，并且将创建成功以后的绝对路 径赋值给 KBUILD_OUTPUT。至此，通过 O 指定的输出目录就存在了。</p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-DSP28377d开启fp_mode提高浮点数除法性能"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/02/19/DSP28377d%E5%BC%80%E5%90%AFfp_mode%E6%8F%90%E9%AB%98%E6%B5%AE%E7%82%B9%E6%95%B0%E9%99%A4%E6%B3%95%E6%80%A7%E8%83%BD/"
-    >DSP28377d开启--fp_mode提高浮点数除法性能</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/02/19/DSP28377d%E5%BC%80%E5%90%AFfp_mode%E6%8F%90%E9%AB%98%E6%B5%AE%E7%82%B9%E6%95%B0%E9%99%A4%E6%B3%95%E6%80%A7%E8%83%BD/" class="article-date">
-  <time datetime="2022-02-19T10:32:24.000Z" itemprop="datePublished">2022-02-19</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="DSP28377d开启–fp-mode提高浮点数除法性能"><a href="#DSP28377d开启–fp-mode提高浮点数除法性能" class="headerlink" title="DSP28377d开启–fp_mode提高浮点数除法性能"></a>DSP28377d开启–fp_mode提高浮点数除法性能</h1><p>在程序中执行浮点数除法比如</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Speed=(float)1000000/(float)count*speedTemp*15;</span><br></pre></td></tr></table></figure>
-
-<p>的时候会看到如下的提示：</p>
-<p><img src="/imgs/image-20220219183335144.png" alt="image-20220219183335144"></p>
-<ul>
-<li><p>此时需要在项目的<code>properties</code>中选择</p>
-</li>
-<li><p><img src="/imgs/image-20220219183408708.png" alt="image-20220219183408708"></p>
-</li>
-<li><p>选择<code>optimizations</code>中的<code>--fp_mode</code>为<code>relaxed</code>即可（如图）</p>
-</li>
-<li><p><img src="/imgs/image-20220219183528275.png" alt="image-20220219183528275"></p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-C语言常见内存操作函数"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/02/18/C%E8%AF%AD%E8%A8%80%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0/"
-    >C语言常见内存操作以及系统操作函数</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/02/18/C%E8%AF%AD%E8%A8%80%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0/" class="article-date">
-  <time datetime="2022-02-18T02:31:31.000Z" itemprop="datePublished">2022-02-18</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="C语言常见内存操作函数"><a href="#C语言常见内存操作函数" class="headerlink" title="C语言常见内存操作函数"></a>C语言常见内存操作函数</h1><ul>
-<li>&lt;string.h&gt;目录 <a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-standard-library-string-h.html">https://www.runoob.com/cprogramming/c-standard-library-string-h.html</a></li>
-</ul>
-<h2 id="memcpy"><a href="#memcpy" class="headerlink" title="memcpy()"></a>memcpy()</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">void *memcpy(void *str1, const void *str2, size_t n)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>str1</strong> – 指向用于存储复制内容的目标数组，类型强制转换为 void* 指针。</p>
-</li>
-<li><p><strong>str2</strong> – 指向要复制的数据源，类型强制转换为 void* 指针。</p>
-</li>
-<li><p><strong>n</strong> – 要被复制的字节数。</p>
-</li>
-<li><p>该函数返回一个指向目标存储区 str1 的指针。</p>
-</li>
-</ul>
-<h2 id="memchr"><a href="#memchr" class="headerlink" title="memchr()"></a>memchr()</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void *memchr(const void *str, int c, size_t n)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>str</strong> – 指向要执行搜索的内存块。</p>
-</li>
-<li><p><strong>c</strong> – 以 int 形式传递的值，但是函数在每次字节搜索时是使用该值的无符号字符形式。</p>
-</li>
-<li><p><strong>n</strong> – 要被分析的字节数。</p>
-</li>
-<li><p>该函数返回一个指向匹配字节的指针，如果在给定的内存区域未出现字符，则返回 NULL。</p>
-</li>
-</ul>
-<h2 id="memcmp"><a href="#memcmp" class="headerlink" title="memcmp()"></a>memcmp()</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int memcmp(const void *str1, const void *str2, size_t n)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str1</strong> – 指向内存块的指针。</li>
-<li><strong>str2</strong> – 指向内存块的指针。</li>
-<li><strong>n</strong> – 要被比较的字节数。</li>
-</ul>
-<p>返回值</p>
-<ul>
-<li>如果返回值 &lt; 0，则表示 str1 小于 str2。</li>
-<li>如果返回值 &gt; 0，则表示 str1 大于 str2。</li>
-<li>如果返回值 = 0，则表示 str1 等于 str2。</li>
-</ul>
-<h2 id="memmove"><a href="#memmove" class="headerlink" title="memmove()"></a>memmove()</h2><ul>
-<li>C 库函数 <strong>void *memmove(void *str1, const void *str2, size_t n)</strong> 从 <strong>str2</strong> 复制 <strong>n</strong> 个字符到 <strong>str1</strong>，但是在重叠内存块这方面，memmove() 是比 memcpy() <strong>更安全</strong>的方法。如果目标区域和源区域有重叠的话，memmove() 能够保证源串在被覆盖之前将重叠区域的字节拷贝到目标区域中，复制后源区域的内容会被更改。如果目标区域与源区域<strong>没有重叠</strong>，则和 memcpy() 函数<strong>功能相同</strong>。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void *memmove(void *str1, const void *str2, size_t n)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str1</strong> – 指向用于存储复制内容的目标数组，类型强制转换为 void* 指针。</li>
-<li><strong>str2</strong> – 指向要复制的数据源，类型强制转换为 void* 指针。</li>
-<li><strong>n</strong> – 要被复制的字节数。</li>
-<li>该函数返回一个指向目标存储区 str1 的指针。</li>
-</ul>
-<h2 id="memset"><a href="#memset" class="headerlink" title="memset()"></a>memset()</h2><ul>
-<li>C 库函数 <strong>void *memset(void *str, int c, size_t n)</strong> 复制字符 <strong>c</strong>（一个无符号字符）到参数 <strong>str</strong> 所指向的字符串的前 <strong>n</strong> 个字符。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void *memset(void *str, int c, size_t n)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str</strong> – 指向要填充的内存块。</li>
-<li><strong>c</strong> – 要被设置的值。该值以 int 形式传递，但是函数在填充内存块时是使用该值的无符号字符形式。</li>
-<li><strong>n</strong> – 要被设置为该值的字符数。</li>
-<li>该值返回一个指向存储区 str 的指针。</li>
-</ul>
-<h2 id="strcat"><a href="#strcat" class="headerlink" title="strcat()"></a>strcat()</h2><ul>
-<li>C 库函数 <strong>char *strcat(char *dest, const char *src)</strong> 把 <strong>src</strong> 所指向的字符串追加到 <strong>dest</strong> 所指向的字符串的结尾。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">char *strcat(char *dest, const char *src)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>dest</strong> – 指向目标数组，该数组包含了一个 C 字符串，且足够容纳追加后的字符串。</p>
-</li>
-<li><p><strong>src</strong> – 指向要追加的字符串，该字符串不会覆盖目标字符串。</p>
-</li>
-<li><p>该函数返回一个指向最终的目标字符串 dest 的指针。</p>
-</li>
-</ul>
-<h2 id="strcmp"><a href="#strcmp" class="headerlink" title="strcmp()"></a>strcmp()</h2><ul>
-<li>C 库函数 <strong>int strcmp(const char *str1, const char *str2)</strong> 把 <strong>str1</strong> 所指向的字符串和 <strong>str2</strong> 所指向的字符串进行比较。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int strcmp(const char *str1, const char *str2)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str1</strong> – 要进行比较的第一个字符串。</li>
-<li><strong>str2</strong> – 要进行比较的第二个字符串。</li>
-</ul>
-<p>返回值</p>
-<ul>
-<li>如果返回值小于 0，则表示 str1 小于 str2。</li>
-<li>如果返回值大于 0，则表示 str1 大于 str2。</li>
-<li>如果返回值等于 0，则表示 str1 等于 str2。</li>
-</ul>
-<hr>
-<ul>
-<li>&lt;stdlib.h&gt;总目录 <a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-standard-library-stdlib-h.html">https://www.runoob.com/cprogramming/c-standard-library-stdlib-h.html</a></li>
-</ul>
-<h2 id="malloc"><a href="#malloc" class="headerlink" title="malloc()"></a>malloc()</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void *malloc(size_t size)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>size</strong> – 内存块的大小，以字节为单位。</li>
-<li>该函数返回一个指针 ，指向已分配大小的内存。如果请求失败，则返回 NULL。</li>
-</ul>
-<h2 id="calloc"><a href="#calloc" class="headerlink" title="calloc()"></a>calloc()</h2><p>C 库函数 <strong>void *calloc(size_t nitems, size_t size)</strong> 分配所需的内存空间，并返回一个指向它的指针。<strong>malloc</strong> 和 <strong>calloc</strong> 之间的不同点是，<strong>malloc 不会设置内存为零，而 calloc 会设置分配的内存为零。</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void *calloc(size_t nitems, size_t size)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>nitems</strong> – 要被分配的元素个数。</li>
-<li><strong>size</strong> – 元素的大小。</li>
-</ul>
-<h2 id="realloc"><a href="#realloc" class="headerlink" title="realloc()"></a>realloc()</h2><p>C 库函数 <strong>void *realloc(void *ptr, size_t size)</strong> 尝试<u>重新调整之前调用 <strong>malloc</strong> 或 <strong>calloc</strong> 所分配的 <strong>ptr</strong> 所指向的内存块的大小。</u></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void *realloc(void *ptr, size_t size)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>ptr</strong> – 指针指向一个要重新分配内存的内存块，该内存块之前是通过调用 malloc、calloc 或 realloc 进行分配内存的。如果为空指针，则会分配一个新的内存块，且函数返回一个指向它的指针。</li>
-<li><strong>size</strong> – 内存块的新的大小，以字节为单位。如果大小为 0，且 ptr 指向一个已存在的内存块，则 ptr 所指向的内存块会被释放，并返回一个空指针。</li>
-<li>该函数返回一个指针 ，指向重新分配大小的内存。如果请求失败，则返回 NULL。</li>
-</ul>
-<h2 id="free"><a href="#free" class="headerlink" title="free()"></a>free()</h2><p>C 库函数 <strong>void free(void *ptr)</strong> 释放之前调用 calloc、malloc 或 realloc 所分配的内存空间。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void free(void *ptr)</span><br></pre></td></tr></table></figure>
-
-<h2 id="system"><a href="#system" class="headerlink" title="system()"></a>system()</h2><p>C 库函数 <strong>int system(const char *command)</strong> 把 <strong>command</strong> 指定的命令名称或程序名称传给要被命令处理器执行的主机环境，并在命令完成后返回。(实际上就是在程序中执行Linux命令行的指令)</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int system(const char *command)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>command</strong> – 包含被请求变量名称的 C 字符串。</li>
-<li>如果发生错误，则返回值为 -1，否则返回命令的状态。</li>
-</ul>
-<h2 id="abs"><a href="#abs" class="headerlink" title="abs()"></a>abs()</h2><p>C 库函数 <strong>int abs(int x)</strong> 返回 <strong>x</strong> 的绝对值。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int abs(int x)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>x</strong> – 完整的值。</li>
-<li>该函数返回 x 的绝对值。</li>
-</ul>
-<h2 id="exit"><a href="#exit" class="headerlink" title="exit()"></a>exit()</h2><p>C 库函数 <strong>void exit(int status)</strong> 立即终止调用进程。任何属于该进程的打开的文件描述符都会被关闭，该进程的子进程由进程 1 继承，初始化，且会向父进程发送一个 SIGCHLD 信号。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void exit(int status)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>status</strong> – 返回给父进程的状态值。</li>
-<li>该函数不返回值。</li>
-</ul>
-<h2 id="abort"><a href="#abort" class="headerlink" title="abort()"></a>abort()</h2><p>C 库函数 <strong>void abort(void)</strong> <strong>中止程序执行，直接从调用的地方跳出。</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void abort(void)</span><br></pre></td></tr></table></figure>
-
-<h2 id="atof"><a href="#atof" class="headerlink" title="atof()"></a>atof()</h2><p>C 库函数 <strong>double atof(const char *str)</strong> 把参数 <strong>str</strong> 所指向的字符串转换为一个浮点数（类型为 double 型），<u><strong>根据字面意思，不是根据具体的字节进行转换</strong></u></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">double atof(const char *str)</span><br></pre></td></tr></table></figure>
-
-<h2 id="atoi"><a href="#atoi" class="headerlink" title="atoi()"></a>atoi()</h2><p>C 库函数 <strong>int atoi(const char *str)</strong> 把参数 <strong>str</strong> 所指向的字符串转换为一个整数（类型为 int 型）。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int atoi(const char *str)</span><br></pre></td></tr></table></figure>
-
-<h2 id="atol"><a href="#atol" class="headerlink" title="atol()"></a>atol()</h2><p>C 库函数 <strong>long int atol(const char *str)</strong> 把参数 <strong>str</strong> 所指向的字符串转换为一个长整数（类型为 long int 型）。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">long int atol(const char *str)</span><br></pre></td></tr></table></figure>
-
-<h2 id="strtod"><a href="#strtod" class="headerlink" title="strtod()"></a>strtod()</h2><p>C 库函数 *<em>double strtod(const char *str, char *<em>endptr)</em></em> 把参数 <strong>str</strong> 所指向的字符串转换为一个浮点数（类型为 double 型）。如果 <strong>endptr</strong> 不为空，则指向转换中最后一个字符后的字符的指针会存储在 endptr 引用的位置。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">double strtod(const char *str, char **endptr)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str</strong> – 要转换为双精度浮点数的字符串。</li>
-<li><strong>endptr</strong> – 对类型为 char* 的对象的引用，其值由函数设置为 <strong>str</strong> 中<u>数值后的下一个字符。</u></li>
-</ul>
-<h2 id="strtol"><a href="#strtol" class="headerlink" title="strtol()"></a>strtol()</h2><p>C 库函数 *<em>long int strtol(const char *str, char *<em>endptr, int base)</em></em> 把参数 <strong>str</strong> 所指向的字符串根据给定的 <strong>base</strong> 转换为一个长整数（类型为 long int 型），base 必须介于 2 和 36（包含）之间，或者是特殊值 0。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">long int strtol(const char *str, char **endptr, int base)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str</strong> – 要转换为长整数的字符串。</li>
-<li><strong>endptr</strong> – 对类型为 char* 的对象的引用，其值由函数设置为 <strong>str</strong> 中数值后的下一个字符。</li>
-<li><strong>base</strong> – 基数，必须介于 2 和 36（包含）之间，或者是特殊值 0。</li>
-</ul>
-<h2 id="strtoul"><a href="#strtoul" class="headerlink" title="strtoul()"></a>strtoul()</h2><p>C 库函数 *<em>unsigned long int strtoul(const char *str, char *<em>endptr, int base)</em></em> 把参数 <strong>str</strong> 所指向的字符串根据给定的 <strong>base</strong> 转换为一个无符号长整数（类型为 unsigned long int 型），base 必须介于 2 和 36（包含）之间，或者是特殊值 0。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">unsigned long int strtoul(const char *str, char **endptr, int base)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>str</strong> – 要转换为无符号长整数的字符串。</li>
-<li><strong>endptr</strong> – 对类型为 char* 的对象的引用，其值由函数设置为 str 中数值后的下一个字符。</li>
-<li><strong>base</strong> – 基数，必须介于 2 和 36（包含）之间，或者是特殊值 0。</li>
 </ul>
  
       <!-- reward -->
