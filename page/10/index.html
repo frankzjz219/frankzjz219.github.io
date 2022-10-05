@@ -141,6 +141,91 @@
     
     
     <article
+  id="post-使用FreeRTOS和ILI9341点亮LCD屏幕"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/"
+    >使用FreeRTOS和ILI9341点亮LCD屏幕</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/" class="article-date">
+  <time datetime="2021-12-17T13:35:25.000Z" itemprop="datePublished">2021-12-17</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕"><a href="#使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕" class="headerlink" title="使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕"></a>使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕</h1><h2 id="CubeMX配置"><a href="#CubeMX配置" class="headerlink" title="CubeMX配置"></a>CubeMX配置</h2><ul>
+<li><p>SPI：</p>
+</li>
+<li><p><img src="/imgs/image-20211217213656004.png" alt="image-20211217213656004"></p>
+</li>
+<li><p>DMA：</p>
+</li>
+<li><p><img src="/imgs/image-20211217213717712.png" alt="image-20211217213717712"></p>
+</li>
+<li><p>NVIC（重要）：</p>
+</li>
+<li><p><img src="/imgs/image-20211217213754825.png" alt="image-20211217213754825"></p>
+</li>
+<li><p>注意此处SPI、TIM1和DMA<strong>不要使用FreeRTOS 的中断函数</strong>，将对勾去掉，同时将中断优先级<strong>改为一个比FreeRTOS小的数字</strong>，比如2。假如使用了FreeRTOS的中断的话在Cube中无法修改这个数字为更小的值</p>
+</li>
+<li><p>FreeRTOS:</p>
+</li>
+<li><p><img src="/imgs/image-20211217213921708.png" alt="image-20211217213921708"></p>
+</li>
+<li><p>注意此处使用的是<strong>v1</strong>，尚未测试v2是否可以，其他内容（比如每个线程的堆栈空间之类的没有修改，默认应该是128字节）</p>
+</li>
+</ul>
+<h2 id="程序配置"><a href="#程序配置" class="headerlink" title="程序配置"></a>程序配置</h2><p><strong>主程序</strong>中include如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ili9341.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ili9341_font.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ili9341_gfx.h&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>同时添加</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ili9341_t</span> *_lcd;</span><br><span class="line"><span class="keyword">ili9341_text_attr_t</span> fontSend1;</span><br><span class="line"><span class="keyword">ili9341_text_attr_t</span> fontSend2;</span><br><span class="line"><span class="function"><span class="keyword">ili9341_t</span> *<span class="title">screenReturn</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _lcd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>freeRTOS</strong>的C文件中添加上面的Include，此外还有</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">ili9341_text_attr_t</span> fontSend1;</span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">ili9341_text_attr_t</span> fontSend2;</span><br></pre></td></tr></table></figure>
+
+<p>freeRTOS的<strong>线程</strong>定义如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* USER CODE END Header_startScreenFill */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">startScreenFill</span><span class="params">(<span class="keyword">void</span> <span class="keyword">const</span> * argument)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN startScreenFill */</span></span><br><span class="line">  <span class="comment">/* Infinite loop */</span></span><br><span class="line">  <span class="keyword">for</span>(;;)</span><br><span class="line">  &#123;</span><br><span class="line">    ili9341_fill_screen(screenReturn(),ILI9341_BLUE);</span><br><span class="line">    osDelay(<span class="number">500</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/* USER CODE END startScreenFill */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意不同的线程要区分优先级，如图</li>
+<li><img src="/imgs/image-20211217220230058.png" alt="image-20211217220230058"></li>
+</ul>
+<h2 id="文中没有提到的按照上一篇博客的操作"><a href="#文中没有提到的按照上一篇博客的操作" class="headerlink" title="文中没有提到的按照上一篇博客的操作"></a>文中没有提到的按照上一篇博客的操作</h2><h2 id="效果如图"><a href="#效果如图" class="headerlink" title="效果如图"></a>效果如图</h2><p><img src="/imgs/20211217220332.gif" alt="20211217220332"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-STM32F4点亮ili9341驱动的屏幕（HAL库）2"
   class="article article-type-post"
   itemscope
@@ -491,6 +576,60 @@
 
     
     <article
+  id="post-FreeRtos2"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/11/FreeRtos2/"
+    >FreeRtos2</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/11/FreeRtos2/" class="article-date">
+  <time datetime="2021-12-11T10:03:10.000Z" itemprop="datePublished">2021-12-11</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="FreeRtos创建注意（使用CubeMX）"><a href="#FreeRtos创建注意（使用CubeMX）" class="headerlink" title="FreeRtos创建注意（使用CubeMX）"></a>FreeRtos创建注意（使用CubeMX）</h2><ul>
+<li><p>创建按照前篇知乎上的文章创建即可，注意此时会提示Systick的问题，设置为外部时钟晶振，而且设置为TIM1（或者其他timer可能也可以，没有尝试过）</p>
+</li>
+<li><p><img src="/imgs/image-20211214001535585.png" alt="image-20211214001535585"></p>
+</li>
+<li><p>然后另一个可能存在的问题是在<code>freertos.c</code> 文件中定义一些与<code>UART</code>相关的东西的时候会因为没有<code>#include &quot;usart.h&quot;</code>而出错，此时加上引用即可</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-FreeRtos1"
   class="article article-type-post"
   itemscope
@@ -557,60 +696,6 @@
 </li>
 </ul>
 <h2 id="待续"><a href="#待续" class="headerlink" title="待续"></a>待续</h2> 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-FreeRtos2"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/12/11/FreeRtos2/"
-    >FreeRtos2</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/12/11/FreeRtos2/" class="article-date">
-  <time datetime="2021-12-11T10:03:10.000Z" itemprop="datePublished">2021-12-11</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="FreeRtos创建注意（使用CubeMX）"><a href="#FreeRtos创建注意（使用CubeMX）" class="headerlink" title="FreeRtos创建注意（使用CubeMX）"></a>FreeRtos创建注意（使用CubeMX）</h2><ul>
-<li><p>创建按照前篇知乎上的文章创建即可，注意此时会提示Systick的问题，设置为外部时钟晶振，而且设置为TIM1（或者其他timer可能也可以，没有尝试过）</p>
-</li>
-<li><p><img src="/imgs/image-20211214001535585.png" alt="image-20211214001535585"></p>
-</li>
-<li><p>然后另一个可能存在的问题是在<code>freertos.c</code> 文件中定义一些与<code>UART</code>相关的东西的时候会因为没有<code>#include &quot;usart.h&quot;</code>而出错，此时加上引用即可</p>
-</li>
-</ul>
- 
       <!-- reward -->
       
     </div>
