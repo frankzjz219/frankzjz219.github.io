@@ -141,6 +141,79 @@
     
     
     <article
+  id="post-单调栈"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/08/28/%E5%8D%95%E8%B0%83%E6%A0%88/"
+    >单调栈</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/08/28/%E5%8D%95%E8%B0%83%E6%A0%88/" class="article-date">
+  <time datetime="2022-08-28T13:32:21.000Z" itemprop="datePublished">2022-08-28</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
+<li>了解数组中的一个数，左边最近的比这个数大的数，和右边最近的比这个数大的数在哪</li>
+</ul>
+<h2 id="单调栈"><a href="#单调栈" class="headerlink" title="单调栈"></a>单调栈</h2><h3 id="无重复数字"><a href="#无重复数字" class="headerlink" title="无重复数字"></a>无重复数字</h3><ul>
+<li>求某个数字附近最近的比他大的数字：<ul>
+<li>使用一个栈，这个栈从下到上是由大到小的顺序</li>
+<li>新加入的数字符合单调性？直接加入</li>
+<li>不符合单调性？弹出栈顶的数字，此时记录，对于被弹出的这个数字而言：<ul>
+<li>左边最近的比他大的数字就是弹出这个数字之后的栈顶元素</li>
+<li>右边最近的比他大的数字就是正要进栈的数字</li>
+<li>直到符合单调性为止</li>
+</ul>
+</li>
+<li>最后结束的时候栈中还有数据怎么办？<ul>
+<li>栈中剩余的所有数据的右边最近比他大的数字都是无</li>
+<li>左边最近的比他大的数字都是他在栈中的下一个元素</li>
+<li>栈底的最后一个元素左右都是无<h3 id="有重复数字"><a href="#有重复数字" class="headerlink" title="有重复数字"></a>有重复数字</h3></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>栈中放的内容都是链表，每个位置链表结点存放index</li>
+<li>弹出的时候，右边最近比他大的数字是当前等待进栈的数字，左边最近的比他大的数字是栈中下面紧邻位置链表的最后一个位置</li>
+<li>同样数字进栈的时候，将同样的数字对应的index串联在进栈位置链表的下一个位置<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLessNoRepeat(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    <span class="comment">// 只存位置！</span></span><br><span class="line">    Stack&lt;Integer&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// 当遍历到i位置的数，arr[i]</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek()] &gt; arr[i]) &#123;</span><br><span class="line">            <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">            res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[j][<span class="number">1</span>] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">        res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">        res[j][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLess(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    Stack&lt;List&lt;Integer&gt;&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// i -&gt; arr[i] 进栈</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] &gt; arr[i]) &#123;</span><br><span class="line">            List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">                res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">                res[popi][<span class="number">1</span>] = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] == arr[i]) &#123;</span><br><span class="line">            stack.peek().add(Integer.valueOf(i));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            list.add(i);</span><br><span class="line">            stack.push(list);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">            res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[popi][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-滑动窗口的最大值问题"
   class="article article-type-post"
   itemscope
@@ -824,69 +897,13 @@
 </article>
 
     
-    <article
-  id="post-C-二级指针和二维数组"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/15/C-%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88%E5%92%8C%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84/"
-    >C++二级指针和二维数组（不使用Vector）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/15/C-%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88%E5%92%8C%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84/" class="article-date">
-  <time datetime="2022-08-14T16:01:25.000Z" itemprop="datePublished">2022-08-15</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
-<li>不要将二级指针和二维数组混为一谈，二维数组再指针作为起始地址的基础上必须还知道第二维度的长度才可以，因为实际上的数组索引操作是<code>i*&lt;第二维度大小&gt; + j</code><h2 id="动态二维数组的创建和销毁-不使用Vector"><a href="#动态二维数组的创建和销毁-不使用Vector" class="headerlink" title="动态二维数组的创建和销毁(不使用Vector)"></a>动态二维数组的创建和销毁(不使用Vector)</h2></li>
-<li>创建<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">double</span> **dataMat;</span><br><span class="line">dataMat = <span class="keyword">new</span> <span class="keyword">double</span>* [x_size];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;xSize;i++)</span><br><span class="line">&#123;</span><br><span class="line">    dataMat[i] = <span class="keyword">new</span> <span class="keyword">double</span>[ySize];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wordwarwordwar/article/details/52558583">参考链接</a></li>
-<li>释放二维数组<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;数组第一维的数量&gt;;i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> dataMat[i];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">delete</span> dataMat;</span><br></pre></td></tr></table></figure></li>
-<li>先逐个释放数组的行，然后再释放整个数组<h2 id="动态二维数组的传参"><a href="#动态二维数组的传参" class="headerlink" title="动态二维数组的传参"></a>动态二维数组的传参</h2></li>
-<li>对于正常创建的二维数组（不是使用上文的方法创建的动态数组）<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//方法1：传递数组，注意第二维必须标明</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun1</span><span class="params">(<span class="keyword">int</span> arr[][<span class="number">3</span>],<span class="keyword">int</span> iRows)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;iRows;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">3</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout&lt;&lt;arr[i][j]&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 当作指针数组传递</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun2</span><span class="params">(<span class="keyword">int</span> (*arr)[<span class="number">3</span>],<span class="keyword">int</span> iRows)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;iRows;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">3</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout&lt;&lt;arr[i][j]&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 直接传递一级指针（强制类型转换）</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun3</span><span class="params">(<span class="keyword">int</span>*arr,<span class="keyword">int</span> iRows,<span class="keyword">int</span> iCols)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;iRows;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">3</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout&lt;&lt;*(arr+i*iRows+j)&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a[<span class="number">2</span>][<span class="number">3</span>]=&#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;,&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;&#125;;</span><br><span class="line">    <span class="built_in">fun1</span>(a,<span class="number">2</span>);</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">    <span class="built_in">fun2</span>(a,<span class="number">2</span>);</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">    <span class="comment">//此处必须进行强制类型转换，因为a是二维数组，而需要传入的是指针</span></span><br><span class="line">    <span class="comment">//所以必须强制转换成指针，如果a是一维数组则不必进行强制类型转换</span></span><br><span class="line">    <span class="comment">//为什么一维数组不用强制转换而二维数组必须转换，此问题还没解决，期待大牛！</span></span><br><span class="line">    <span class="built_in">fun3</span>((<span class="keyword">int</span>*)a,<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li>假如预先<strong>不知道数组的第二维度</strong>是多少的话，还是只能使用强制类型转换为<strong>一级指针</strong>的方法传递。</li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43036419/article/details/110490025">参考链接</a></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
+    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
   </nav>
   
 </section>
