@@ -141,6 +141,65 @@
     
     
     <article
+  id="post-二叉树的三种遍历的非递归实现"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/07/02/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%89%E7%A7%8D%E9%81%8D%E5%8E%86%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0/"
+    >二叉树的三种遍历的非递归实现</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/07/02/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%89%E7%A7%8D%E9%81%8D%E5%8E%86%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0/" class="article-date">
+  <time datetime="2022-07-02T03:58:26.000Z" itemprop="datePublished">2022-07-02</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="二叉树的三种遍历的非递归实现"><a href="#二叉树的三种遍历的非递归实现" class="headerlink" title="二叉树的三种遍历的非递归实现"></a>二叉树的三种遍历的非递归实现</h1><h2 id="前序遍历"><a href="#前序遍历" class="headerlink" title="前序遍历"></a>前序遍历</h2><ul>
+<li>主要思路是先将根节点入栈，然后每次循环从栈顶取出元素输出，同时将该元素的<strong>右节点</strong>和<strong>左节点</strong>压入栈中<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">preorderTraversal</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!root)<span class="keyword">return</span> vector&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line">        </span><br><span class="line">        stack&lt;TreeNode*&gt; s;</span><br><span class="line">        s.<span class="built_in">push</span>(root);</span><br><span class="line">        TreeNode* temp;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; ret;</span><br><span class="line">        <span class="keyword">while</span>(!s.<span class="built_in">empty</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            temp = s.<span class="built_in">top</span>();</span><br><span class="line">            s.<span class="built_in">pop</span>();</span><br><span class="line">            ret.<span class="built_in">push_back</span>(temp-&gt;val);</span><br><span class="line">            <span class="keyword">if</span>(temp-&gt;right)s.<span class="built_in">push</span>(temp-&gt;right);</span><br><span class="line">            <span class="keyword">if</span>(temp-&gt;left)s.<span class="built_in">push</span>(temp-&gt;left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h2></li>
+<li>主要思路是新建一个结构体，结构体包括二叉树的节点指针信息和是否被访问过的标记信息，标记默认是<code>false</code><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">nodeStruct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    TreeNode* p; </span><br><span class="line">    <span class="keyword">bool</span> flg; </span><br><span class="line">    <span class="built_in">nodeStruct</span>(TreeNode* ptr):<span class="built_in">p</span>(ptr),<span class="built_in">flg</span>(<span class="literal">false</span>)&#123;&#125;    </span><br><span class="line">    <span class="built_in">nodeStruct</span>(TreeNode* ptr, <span class="keyword">bool</span> flag):<span class="built_in">p</span>(ptr),<span class="built_in">flg</span>(flag)&#123;&#125;   </span><br><span class="line">&#125; nodeS;</span><br></pre></td></tr></table></figure></li>
+<li>每次从栈顶取出一个元素，如果该元素的标记提示被访问过，那么直接将元素输出</li>
+<li>如果该元素没有被访问过，那么现将该元素的访问标记置为<code>true</code>，然后将该元素的右子节点压入栈中，然后将节点自己压入栈中，最后将左子节点压入栈中<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">nodeStruct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    TreeNode* p; </span><br><span class="line">    <span class="keyword">bool</span> flg; </span><br><span class="line">    <span class="built_in">nodeStruct</span>(TreeNode* ptr):<span class="built_in">p</span>(ptr),<span class="built_in">flg</span>(<span class="literal">false</span>)&#123;&#125;    </span><br><span class="line">    <span class="built_in">nodeStruct</span>(TreeNode* ptr, <span class="keyword">bool</span> flag):<span class="built_in">p</span>(ptr),<span class="built_in">flg</span>(flag)&#123;&#125;   </span><br><span class="line">&#125; nodeS;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">inorderTraversal</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!root)<span class="keyword">return</span> vector&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; ret;</span><br><span class="line">        stack&lt;nodeS&gt; s;</span><br><span class="line">        s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(root));</span><br><span class="line">        <span class="function">nodeS <span class="title">temp</span><span class="params">(<span class="literal">NULL</span>)</span></span>;</span><br><span class="line">        <span class="keyword">while</span>(!s.<span class="built_in">empty</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            temp = s.<span class="built_in">top</span>();</span><br><span class="line">            s.<span class="built_in">pop</span>();</span><br><span class="line">            <span class="keyword">if</span>(!temp.flg)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(temp.p-&gt;right)s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(temp.p-&gt;right));</span><br><span class="line">                temp = <span class="built_in">nodeS</span>(temp.p, <span class="literal">true</span>);</span><br><span class="line">                s.<span class="built_in">push</span>(temp);</span><br><span class="line">                <span class="keyword">if</span>(temp.p-&gt;left)s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(temp.p-&gt;left));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ret.<span class="built_in">push_back</span>(temp.p-&gt;val);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>##后序遍历</p>
+<ul>
+<li>结构体方法同上，跟之前的主要区别是针对没有访问过的节点需要<strong>先将自己</strong>压入栈中，然后再将<strong>右节点</strong>和<strong>左节点</strong>压入栈中<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class"><span class="title">stackUnit</span>&#123;</span></span><br><span class="line">    TreeNode* p;</span><br><span class="line">    <span class="keyword">bool</span> flg;</span><br><span class="line">    <span class="built_in">stackUnit</span>(TreeNode* ptr, <span class="keyword">bool</span> flag):<span class="built_in">p</span>(ptr), <span class="built_in">flg</span>(flag)&#123;&#125;</span><br><span class="line">&#125; nodeS;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">postorderTraversal</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!root)<span class="keyword">return</span> vector&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; v;</span><br><span class="line">        stack&lt;nodeS&gt; s;</span><br><span class="line">        s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(root, <span class="literal">false</span>));</span><br><span class="line">        <span class="function">nodeS <span class="title">temp</span><span class="params">(<span class="literal">NULL</span>, <span class="literal">false</span>)</span></span>;</span><br><span class="line">        <span class="keyword">while</span>(!s.<span class="built_in">empty</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            temp = s.<span class="built_in">top</span>();</span><br><span class="line">            s.<span class="built_in">pop</span>();</span><br><span class="line">            <span class="keyword">if</span>(temp.flg)</span><br><span class="line">            &#123;</span><br><span class="line">                v.<span class="built_in">push_back</span>(temp.p-&gt;val);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(temp.p, <span class="literal">true</span>));</span><br><span class="line">                <span class="keyword">if</span>(temp.p-&gt;right)s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(temp.p-&gt;right,<span class="literal">false</span>));</span><br><span class="line">                <span class="keyword">if</span>(temp.p-&gt;left)s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(temp.p-&gt;left,<span class="literal">false</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-分析基于epoll的C-高性能webServer代码（三）"
   class="article article-type-post"
   itemscope
@@ -1159,101 +1218,6 @@
 <ul>
 <li>前端的要点是调用了<code>event.targetTouches</code>这一属性，获得手指按压或者是触控笔的位置</li>
 <li>此API在计算机端无法使用</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-Ubuntu配置VNC远程桌面连接Windows电脑"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/03/Ubuntu%E9%85%8D%E7%BD%AEVNC%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%BF%9E%E6%8E%A5Windows%E7%94%B5%E8%84%91/"
-    >Ubuntu配置VNC远程桌面连接Windows电脑</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/03/Ubuntu%E9%85%8D%E7%BD%AEVNC%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%BF%9E%E6%8E%A5Windows%E7%94%B5%E8%84%91/" class="article-date">
-  <time datetime="2022-03-03T09:54:22.000Z" itemprop="datePublished">2022-03-03</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Ubuntu配置VNC远程桌面连接Windows电脑"><a href="#Ubuntu配置VNC远程桌面连接Windows电脑" class="headerlink" title="Ubuntu配置VNC远程桌面连接Windows电脑"></a>Ubuntu配置VNC远程桌面连接Windows电脑</h1><ul>
-<li>参考指南<ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/295422718">https://zhuanlan.zhihu.com/p/295422718</a></li>
-</ul>
-</li>
-<li>考虑安装<code>xrdp</code>，通过<code>sudo apt-get install xrdp</code>安装</li>
-<li>安装好之后再安装<code>deconf-editor</code>，也就是<code>sudo apt-get install dconf-editor</code>安装</li>
-<li>在<code>deconf-editor</code>中关闭<strong>org-gnome-desktop-remote-access</strong>下面的<code>requlre-encryption</code>即可</li>
-<li>安装好之后配置vnc服务的开机自启动</li>
-<li>参考这篇博客</li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40723748/article/details/120013808">https://blog.csdn.net/qq_40723748/article/details/120013808</a></li>
-<li>主要就是要在<code>/etc/systemd/user</code>目录下创建一个systemd服务文件, 命名为<code>user-defined.service</code></li>
-<li>这个文件具有固定的格式，如下</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">After=network.service</span><br><span class="line"> </span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/home/&lt;username&gt;/&lt;usershell&gt;.sh</span><br><span class="line"> </span><br><span class="line">[Install]</span><br><span class="line">WantedBy=default.target</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>其中将<code>username</code>和<code>usershell</code>替换为自己的用户名和新建的脚本</li>
-<li>自己新建的脚本的第一行一定要注意带有<code>#!/bin/bash</code></li>
-<li>这个脚本启动过程中出错的话是不会报错的，比较难debug</li>
-<li>然后使用<code>sudo chmod</code>赋予自己新建的.sh文件和<code>user-defined.service</code>权限</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo chmod 744 ~/test.sh</span><br><span class="line">sudo chmod 664 /etc/systemd/user/user-defined.service</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>然后调用<strong>以下两行</strong>刷新系统服务</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br><span class="line">systemctl --user enable user-defined.service</span><br></pre></td></tr></table></figure>
-
-<p>然后reboot系统即可</p>
-<p>然后使用windows自带的远程桌面连接，在系统<strong>没有登陆</strong>的前提下进行远程桌面，<strong>否则会黑屏</strong></p>
-<ul>
-<li><p><img src="/imgs/image-20220303180321664.png" alt="image-20220303180321664"></p>
-</li>
-<li><p>此处保持设置不变，输入linux的用户名和密码</p>
-</li>
-<li><p>注意，假如卡顿的话可以修改设置为</p>
-</li>
-<li><p>点击最下的显示选项，点击体验，<strong>修改为LAN，会变流畅一些</strong></p>
-</li>
-<li><p><img src="/imgs/image-20220303180359964.png" alt="image-20220303180359964"></p>
-</li>
-<li><p>sudo reboot之后远程主机不需要登陆直接链接即可</p>
-</li>
-<li><p><img src="/imgs/image-20220303181038496.png" alt="image-20220303181038496"></p>
-</li>
-<li><p><img src="/imgs/image-20220303181046174.png" alt="image-20220303181046174"></p>
-</li>
 </ul>
  
       <!-- reward -->
