@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>强化学习复习（一） |  Frank’s blogs</title>
+      <title>强化学习复习（零） |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -53,7 +53,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-强化学习复习（一）"
+  id="post-强化学习复习（零）"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -64,7 +64,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  强化学习复习（一）
+  强化学习复习（零）
 </h1>
  
 
@@ -72,15 +72,15 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2022/10/06/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/" class="article-date">
-  <time datetime="2022-10-06T02:37:45.000Z" itemprop="datePublished">2022-10-06</time>
+      <a href="/2022/10/05/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E9%9B%B6%EF%BC%89/" class="article-date">
+  <time datetime="2022-10-05T08:05:13.000Z" itemprop="datePublished">2022-10-05</time>
 </a>   
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">382</span>
+            <span class="post-count">1.6k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">1 min</span>
+            <span class="post-count">5 min</span>
         </span>
     </span>
 </div>
@@ -104,67 +104,40 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h2 id="马尔可夫过程"><a href="#马尔可夫过程" class="headerlink" title="马尔可夫过程"></a>马尔可夫过程</h2><ul>
-<li><p><img src="/imgs/275a22ea5b6433abd04d8fbddb92f761a9057fd19afc2bda82cd131faac96110.png" alt="picture 9">  </p>
-</li>
-<li><p>注意，并不是说与之前的状态绝对意义上的无关，而是在t时刻之前的信息全部已知的情况下，只通过t时刻就可做出判断。也就是意味着，<strong>t时刻之前的状态对于待得到的t+1时刻的状态的影响全部体现在t时刻的信息中了</strong>。</p>
-</li>
-<li><p><img src="/imgs/25616d2b0e5fada3d0ddb5e6f129d381f59f79d37aa7e6a7a8dce0b8c53f8286.png" alt="picture 10">  </p>
-</li>
-<li><p> <img src="/imgs/97ecf9a445f6024b238f1963ab9937c56079595ca704644703cc74eb34e3f0b4.png" alt="picture 11">  </p>
-</li>
-<li><p>注意，非常关键的是在定义一个<code>状态</code>的时候，如何<u>让这个状态包含计算出下个状态所需要的所有信息</u></p>
-<h2 id="马尔可夫决策过程"><a href="#马尔可夫决策过程" class="headerlink" title="马尔可夫决策过程"></a>马尔可夫决策过程</h2></li>
-<li><p><img src="/imgs/a760aed68ebf4659099dfd844e95b9f3a3f8b3ff223bf295e101604e4dc6d1f6.png" alt="picture 12">  </p>
-</li>
-<li><p>时齐性</p>
-<ul>
-<li><img src="/imgs/296953f9cfc2fd8358fec39fb2dbb3e2a2bd59aabad95d2d1ccf7c8d9922a7fb.png" alt="picture 13">  </li>
+  <ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/468828804">原文链接</a><h2 id="Policy-gradient网络复习"><a href="#Policy-gradient网络复习" class="headerlink" title="Policy gradient网络复习"></a>Policy gradient网络复习</h2><h3 id="给出行为act的思路"><a href="#给出行为act的思路" class="headerlink" title="给出行为act的思路"></a>给出行为act的思路</h3></li>
+<li>一个特定的情况序列（时间从0时刻到一个回合结束的时刻）发生的概率是可以计算的</li>
+<li>平均的reward期望是每种情况发生的概率×每个情况对应的reward的和</li>
+<li>优化的目标是尽可能的提高总的reward的期望<ul>
+<li><img src="/imgs/4feeab02cc1f2e8f6da90219335c49438195381704a62f7f024966cc21afb95c.png" alt="picture 1">  </li>
+<li>在这个过程中，第一个等号是梯度的变换；第二三个等号是利用了log函数的特性；第四个等号将求和转化成期望的形式；期望又可以由我们采集到的数据序列进行近似；最后一个等号是将每一个数据序列展开成每个数据点上的形式</li>
+<li>总体上，我们希望更加靠近奖励比较大的那条序列（效果好的话语权自然要大一点嘛），因此用每条序列的奖励来加权平均他们的更新方向。<h3 id="critic函数"><a href="#critic函数" class="headerlink" title="critic函数"></a>critic函数</h3></li>
 </ul>
 </li>
-<li><p>时间连续的问题</p>
-<ul>
-<li><img src="/imgs/c5b9381536bf2a7d1c06608993b113ef85e4e666bed199eb8c81478b8e3a4d4d.png" alt="picture 14">  <h2 id="基于价值的思想"><a href="#基于价值的思想" class="headerlink" title="基于价值的思想"></a>基于价值的思想</h2></li>
+<li>按照上面的说法，针对一个回合的训练，必须等到这个回合结束之后才能利用这个回合的reward对其进行参数调整，而且这样会导致一个回合中的每个动作的reward都使用同样的数值，很不精确</li>
+<li>所以我们此时就使用critic网络计算出当前这个动作<code>st</code>开始到回合结束时刻的奖励</li>
+<li><img src="/imgs/6761c7b6f169bf09a7bb2f1fa02aefda9ca88190eea866d64e8c23e7d1983865.png" alt="picture 2">  </li>
+<li><img src="/imgs/37e7977a1b3bb1ddd032abbc85a0b8f2e3434f63bc30553fa3514d18099e42c8.png" alt="picture 3">  </li>
+<li>可以理解为<strong>在<code>st</code>时刻，采取<code>at</code>行动比采取其他行动的<u>优势有多大</u></strong><h2 id="PPO算法"><a href="#PPO算法" class="headerlink" title="PPO算法"></a>PPO算法</h2></li>
+<li>接着上面的讲，PG方法一个很大的缺点就是参数更新慢，因为我们每更新一次参数都需要进行重新的采样，这其实是中on-policy的策略，即我们想要训练的agent和与环境进行交互的agent是同一个agent；与之对应的就是off-policy的策略，即想要训练的agent和与环境进行交互的agent不是同一个agent，简单来说，就是拿别人的经验来训练自己。举个下棋的例子，如果你是通过自己下棋来不断提升自己的棋艺，那么就是on-policy的，如果是通过看别人下棋来提升自己，那么就是off-policy的<h3 id="重要性采样"><a href="#重要性采样" class="headerlink" title="重要性采样"></a>重要性采样</h3></li>
+<li><img src="/imgs/a2866fe3c26cb3e9cadb580633cf64cbd460f716b477298a502dad8a31f9d20d.png" alt="picture 4">  </li>
+<li>对于一个服从概率p分布的变量x， 我们要估计f(x) 的期望。直接想到的是，我们采用一个服从p的随机产生器，直接产生若干个变量x的采样，然后计算他们的函数值f(x)，最后求均值就得到结果。但这里有一个问题是，对于每一个给定点x，我们知道其发生的概率，但是我们<strong>并不知道p的分布</strong>，也就无法构建这个随机数发生器。因此需要转换思路：<u>从一个已知的分布q中进行采样。通过对采样点的概率进行比较，确定这个采样点的重要性</u>。也就是上图所描述的方法。</li>
+<li>当然通过这种采样方式的分布p和q不能差距过大，否则，会由于采样的偏离带来谬误。</li>
+<li><img src="/imgs/80ab8c305bddfe1ca4d308d47d3dac31f0c6680f78771b6f2d143b39f3ff5e0c.png" alt="picture 5">  </li>
+<li><img src="/imgs/7e6b526fff456a6ab6e2c7d0bbd627db5c02dcc44a0d91f328d699896fc02e87.png" alt="picture 6">  </li>
+<li>引入上文中说的优势函数可知</li>
+<li><img src="/imgs/68010df5b578a09b2108c3fe9b5260a1a78519f9cf2b69b996a320f272e0b6c9.png" alt="picture 7">  </li>
+<li><img src="/imgs/f27c7828a80a95923055fed1d923287388d472572ee176698179e56051f696f9.png" alt="picture 8">  <ul>
+<li>一套策略参数θ，他与环境交互收集批量数据，然后批量数据关联到  的副本中。他每次都会被更新。</li>
+<li>一套策略参数的副本θ’，他是策略参数与环境互动后收集的数据的关联参数，相当于重要性采样中的q分布。</li>
+<li>一套评价网络的参数Φ，他是基于收集到的数据，用监督学习的方式来更新对状态的评估。他也是每次都更新。</li>
 </ul>
 </li>
-<li><p><img src="/imgs/479e70e6bc4369176f625da5751f0441e661efa26fbdd5c58ed4ce30cb6bd7e7.png" alt="picture 15">  </p>
-<h2 id="基于策略还是基于价值"><a href="#基于策略还是基于价值" class="headerlink" title="基于策略还是基于价值"></a>基于策略还是基于价值</h2></li>
-<li><p><img src="/imgs/cbdbb4eb9c16b69076103a2ac2bb158d8f39a585dfab99c6a6ea07d94652535c.png" alt="picture 16">  </p>
-</li>
-<li><p><img src="/imgs/33b349b35b46437a9534c90b9413da8746623dacbf0088f7b7b918ddf4564109.png" alt="picture 17">  </p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3></li>
-<li><p><img src="/imgs/9d594da14c780d7661ffb48885f69868395727f058b72307354e60d84dc24f4d.png" alt="picture 18">  </p>
-<h2 id="基于价值的方法和基于策略的方法"><a href="#基于价值的方法和基于策略的方法" class="headerlink" title="基于价值的方法和基于策略的方法"></a>基于价值的方法和基于策略的方法</h2></li>
-<li><p><img src="/imgs/68fafbe4f4748b9a64b4e4f887ff8dde5027ccc14c163d653b0ebbbc91ef0273.png" alt="picture 19">  </p>
-</li>
-<li><p>基于价值方法的核心思想在于对时间的差分，是一种动态规划的思想；而基于策略的方法则没有这种思想，而是要通盘考虑策略在整个时间轨道内造成的影响</p>
-</li>
-<li><p><img src="/imgs/875139c62dc89d23eddfa472c90d0ae54e15a1131262fb19d6760bba66473d6b.png" alt="picture 20">  </p>
-<h2 id="Q值的思想"><a href="#Q值的思想" class="headerlink" title="Q值的思想"></a>Q值的思想</h2></li>
-<li><p><img src="/imgs/1945b19ede6c60ed56350f818e7389608fc3ac8fa27e8b96a5eb4f6e21b83941.png" alt="picture 21">  </p>
-</li>
-<li><p>基于价值的基本解决方法</p>
-<ul>
-<li><img src="/imgs/dfcab65f4922dd312a0d8692ddacbb771de87d15415ebf8b872108ac43353059.png" alt="picture 22">  </li>
-<li>其中的V是<img src="/imgs/e4c0e4a8934163161835e9940587e5e0c8151839ee6ef45e8c75dd645383d654.png" alt="picture 23">  </li>
-<li>P是状态转移方程<h2 id="Q-Learning-的思路"><a href="#Q-Learning-的思路" class="headerlink" title="Q Learning 的思路"></a>Q Learning 的思路</h2></li>
-</ul>
-</li>
-<li><p><img src="/imgs/b04e300913d76b79136dcab4ed6f4b49b6e4bd419410515b7c5ca2d4349c5101.png" alt="picture 24">  </p>
-</li>
-<li><p><img src="/imgs/f1ee7ec356f3485f5b817114d53e486b503bfb41f2b4c4df050f2cdea4774aa7.png" alt="picture 25">  </p>
-</li>
-<li><p>对于表格学习的QLearning实际上是一种用动态规划的方法每一步都修改一下对应位置的Q值的算法</p>
-</li>
-<li><p><img src="/imgs/75082e3ffd5b31058c285181a1d365e7fee8708e4b2750690269f9c2ee5edbb8.png" alt="picture 38">  </p>
-</li>
-<li><p>Q更新的思路：在每次尝试结束之后，将这次尝试得到的价值更新到Q网络预测的价值上</p>
-<h3 id="on-policy-和-off-policy的区别"><a href="#on-policy-和-off-policy的区别" class="headerlink" title="on policy 和 off policy的区别"></a>on policy 和 off policy的区别</h3></li>
-<li><p><img src="/imgs/771886329edaec68501b0228b4b93143c2531cae35b4a58842dfad2ae67c6444.png" alt="picture 26">  </p>
-</li>
-<li><p>一个通俗的比喻</p>
-<ul>
-<li><img src="/imgs/640211411248b69921d9fbe85c5c636b81ddef4728e4a2df15244a3897987b63.png" alt="picture 27">  </li>
+<li>更新的思路实际上是<ul>
+<li>0点时：我与环境进行互动，收集了很多数据。然后利用数据更新我的策略，此时我成为1点的我。当我被更新后，理论上，1点的我再次与环境互动，收集数据，然后把我更新到2点，然后这样往复迭代。</li>
+<li>但是如果我仍然想继续0点的我收集的数据来进行更新。因为这些数据是0点的我（而不是1点的我）所收集的。所以，我要对这些数据做一些重要性重采样，让这些数据看起来像是1点的我所收集的。当然这里仅仅是看起来像而已，所以我们要对这个“不像”的程度加以更新时的惩罚（KL）。</li>
+<li>其中，更新的方式是：我收集到的每个数据序列，对序列中每个（s, a）的优势程度做评估，<strong>评估越好的动作，将来就又在s状态时，让a出现的概率加大</strong>。这里评估优势程度的方法，可以用数据后面的总折扣奖励来表示。另外，考虑引入基线的Tip，我们就又引入一个评价者小明，让他跟我们一起学习，他只学习每个状态的期望折扣奖励的平均期望。这样，我们评估（s, a）时，我们就可以吧小明对 s 的评估结果就是 s 状态后续能获得的折扣期望，也就是我们的基线。注意哈：<u>优势函数中，前一半是实际数据中的折扣期望，后一半是估计的折扣期望（小明心中认为s应该得到的分数，即小明对s的期望奖励）</u>，如果你选取的动作得到的实际奖励比这个小明心中的奖励高，那小明为你打正分，认为可以提高这个动作的出现概率；如果选取的动作的实际得到的奖励比小明心中的期望还低，那小明为这个动作打负分，你应该减小这个动作的出现概率。这样，小明就成为了一个评判官。</li>
+<li>当然，作为评判官，小明自身也要提高自己的知识文化水平，也要在数据中不断的学习打分技巧，这就是对Φ的更新了</li>
 </ul>
 </li>
 </ul>
@@ -220,7 +193,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2022/10/06/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2022/10/05/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E9%9B%B6%EF%BC%89/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -233,19 +206,19 @@
    
   <nav class="article-nav">
     
-      <a href="/2022/10/06/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/" class="article-nav-link">
+      <a href="/2022/10/06/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            强化学习复习（二）
+            强化学习复习（一）
           
         </div>
       </a>
     
     
-      <a href="/2022/10/05/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E9%9B%B6%EF%BC%89/" class="article-nav-link">
+      <a href="/2022/09/17/Ubuntu%E4%B8%8B%E5%BC%80%E5%8F%91Linux%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">强化学习复习（零）</div>
+        <div class="article-nav-title">Ubuntu下开发Linux内核模块</div>
       </a>
     
   </nav>

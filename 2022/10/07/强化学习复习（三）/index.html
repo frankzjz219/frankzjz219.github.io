@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">1.5k</span>
+            <span class="post-count">1.6k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">6 min</span>
+            <span class="post-count">7 min</span>
         </span>
     </span>
 </div>
@@ -122,7 +122,7 @@
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/439220435">参考链接</a></p>
 </li>
-<li><p>给出策略的具体操作是先讲输入经过一系列网络的运算之后，经过softmax归一化，得到和为1的几个输出。然后在输出过程中对于具有这几种概率的输出进行随机取样，得到最终的输出动作。（<strong>离散动作</strong>）</p>
+<li><p>给出策略的具体操作是先将输入经过一系列网络的运算之后，经过softmax归一化，得到和为1的几个输出。然后在输出过程中对于具有这几种概率的输出进行随机取样，得到最终的输出动作。（<strong>离散动作</strong>）</p>
 </li>
 <li><p>针对<strong>连续动作</strong>，可以将整个网络的输出更改为输出一个高斯分布函数的μ值（均值），结合用户指定的σ（方差），即可形成一个高斯分布，然后通过类似的sample采样即可得出需要的动作。注意训练阶段为了实现有效的exploration，不要使用太小的σ，否则因为输出太集中没法找到实际上的最优解。</p>
 <ul>
@@ -147,9 +147,10 @@
 <li><img src="/imgs/1cdcd316476945548933f8ad5922351079bb5ee5808860489a251970aa3c805d.png" alt="picture 47">  </li>
 <li>实际上每个本地网络都是一个Actor-Critic的网络，损失分为动作网络<code>Actor</code>的loss和<code>Critic</code>网络的loss<ul>
 <li>Critic的loss可以先计算<code>td_error</code>，用Critic在此时的环境中计算出的值与实际上每一步得到的增加随时间衰减的因子之后的实际上的Reward做差，然后平方即可得到Critic的loss</li>
-<li>Actor的loss则是使用反向求出刚才动作的log_prob（怎么求上文有），然后再求出<code>entropy</code>，公式为<img src="/imgs/082feca831bedf90bf6c3253215c0e01b8c26b2ba406997eb4acb361db659f73.png" alt="`0.5 + 0.5 * math.log(2 * math.pi) + torch.log(m.scale)` 1">，然后log_prob×上文的td_error+一个系数×entropy，然后整个计算出来之后取相反数即可得到Actor的loss，然后将整个的两个loss取平均数，反向传播更新参数即可</li>
+<li>Actor的loss则是使用反向求出刚才动作的log_prob（怎么求上文有），然后再求出<code>entropy</code>，公式为<img src="/imgs/082feca831bedf90bf6c3253215c0e01b8c26b2ba406997eb4acb361db659f73.png" alt="`0.5 + 0.5 * math.log(2 * math.pi) + torch.log(m.scale)` 1">，然后log_prob×上文的td_error+一个系数×entropy，然后整个计算出来之后取相反数即可得到Actor的loss，然后将整个的两个loss取平均数，反向传播更新参数即可<u>（因为根据计算图倒推可以分别得到组成这个变量的两个变量分别的影响因素，所以不影响反向传播分别更新两个网络）</u>。<h3 id="torch中backword是怎么用的"><a href="#torch中backword是怎么用的" class="headerlink" title="torch中backword是怎么用的"></a>torch中backword是怎么用的</h3></li>
 </ul>
 </li>
+<li>针对<strong>标量</strong>做出的对计算图的反向传播，得到标量的值，算出计算图中每个变量对于得到这个标量的偏导数<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/168748668">参考</a></li>
 </ul>
  
       <!-- reward -->
@@ -215,6 +216,15 @@
 
    
   <nav class="article-nav">
+    
+      <a href="/2022/10/09/Anaconda%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Anaconda配置问题记录
+          
+        </div>
+      </a>
     
     
       <a href="/2022/10/06/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/" class="article-nav-link">

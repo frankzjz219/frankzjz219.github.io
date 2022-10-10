@@ -141,6 +141,139 @@
     
     
     <article
+  id="post-强化学习复习（四）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/10/09/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/"
+    >强化学习复习（四）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/10/09/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/" class="article-date">
+  <time datetime="2022-10-09T07:27:06.000Z" itemprop="datePublished">2022-10-09</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/sweetice/Deep-reinforcement-learning-with-pytorch">基于pytorch实现的强化学习网络</a></p>
+<h2 id="PPO"><a href="#PPO" class="headerlink" title="PPO"></a>PPO</h2></li>
+<li><p>PPO是基于Actor-Critic的算法</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/468828804">参考链接</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">from</span> torch.distributions <span class="keyword">import</span> Normal</span><br><span class="line"><span class="keyword">from</span> torch.utils.data.sampler <span class="keyword">import</span> BatchSampler, SubsetRandomSampler</span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">&#x27;Solve the Pendulum-v0 with PPO&#x27;</span>)</span><br><span class="line">parser.add_argument(</span><br><span class="line">    <span class="string">&#x27;--gamma&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">float</span>, default=<span class="number">0.9</span>, metavar=<span class="string">&#x27;G&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;discount factor (default: 0.9)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--seed&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">0</span>, metavar=<span class="string">&#x27;N&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;random seed (default: 0)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--render&#x27;</span>, action=<span class="string">&#x27;store_true&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;render the environment&#x27;</span>)</span><br><span class="line">parser.add_argument(</span><br><span class="line">    <span class="string">&#x27;--log-interval&#x27;</span>,</span><br><span class="line">    <span class="built_in">type</span>=<span class="built_in">int</span>,</span><br><span class="line">    default=<span class="number">10</span>,</span><br><span class="line">    metavar=<span class="string">&#x27;N&#x27;</span>,</span><br><span class="line">    <span class="built_in">help</span>=<span class="string">&#x27;interval between training status logs (default: 10)&#x27;</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">torch.manual_seed(args.seed)</span><br><span class="line"></span><br><span class="line">TrainingRecord = namedtuple(<span class="string">&#x27;TrainingRecord&#x27;</span>, [<span class="string">&#x27;ep&#x27;</span>, <span class="string">&#x27;reward&#x27;</span>])</span><br><span class="line">Transition = namedtuple(<span class="string">&#x27;Transition&#x27;</span>, [<span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;a_log_p&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;s_&#x27;</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ActorNet</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(ActorNet, self).__init__()</span><br><span class="line">        self.fc = nn.Linear(<span class="number">3</span>, <span class="number">100</span>)</span><br><span class="line">        self.mu_head = nn.Linear(<span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line">        self.sigma_head = nn.Linear(<span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = F.relu(self.fc(x))</span><br><span class="line">        mu = <span class="number">2.0</span> * F.tanh(self.mu_head(x))</span><br><span class="line">        sigma = F.softplus(self.sigma_head(x))</span><br><span class="line">        <span class="keyword">return</span> (mu, sigma)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CriticNet</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(CriticNet, self).__init__()</span><br><span class="line">        self.fc = nn.Linear(<span class="number">3</span>, <span class="number">100</span>)</span><br><span class="line">        self.v_head = nn.Linear(<span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = F.relu(self.fc(x))</span><br><span class="line">        state_value = self.v_head(x)</span><br><span class="line">        <span class="keyword">return</span> state_value</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Agent</span>():</span></span><br><span class="line"></span><br><span class="line">    clip_param = <span class="number">0.2</span></span><br><span class="line">    max_grad_norm = <span class="number">0.5</span></span><br><span class="line">    ppo_epoch = <span class="number">10</span></span><br><span class="line">    buffer_capacity, batch_size = <span class="number">1000</span>, <span class="number">32</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.training_step = <span class="number">0</span></span><br><span class="line">        self.anet = ActorNet().<span class="built_in">float</span>()</span><br><span class="line">        self.cnet = CriticNet().<span class="built_in">float</span>()</span><br><span class="line">        self.buffer = []</span><br><span class="line">        self.counter = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        self.optimizer_a = optim.Adam(self.anet.parameters(), lr=<span class="number">1e-4</span>)</span><br><span class="line">        self.optimizer_c = optim.Adam(self.cnet.parameters(), lr=<span class="number">3e-4</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select_action</span>(<span class="params">self, state</span>):</span></span><br><span class="line">        state = torch.from_numpy(state).<span class="built_in">float</span>().unsqueeze(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            (mu, sigma) = self.anet(state)</span><br><span class="line">        dist = Normal(mu, sigma)</span><br><span class="line">        action = dist.sample()</span><br><span class="line">        action_log_prob = dist.log_prob(action)</span><br><span class="line">        action = action.clamp(-<span class="number">2.0</span>, <span class="number">2.0</span>)</span><br><span class="line">        <span class="keyword">return</span> action.item(), action_log_prob.item()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span>(<span class="params">self, state</span>):</span></span><br><span class="line"></span><br><span class="line">        state = torch.from_numpy(state).<span class="built_in">float</span>().unsqueeze(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            state_value = self.cnet(state)</span><br><span class="line">        <span class="keyword">return</span> state_value.item()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save_param</span>(<span class="params">self</span>):</span></span><br><span class="line">        torch.save(self.anet.state_dict(), <span class="string">&#x27;param/ppo_anet_params.pkl&#x27;</span>)</span><br><span class="line">        torch.save(self.cnet.state_dict(), <span class="string">&#x27;param/ppo_cnet_params.pkl&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">store</span>(<span class="params">self, transition</span>):</span></span><br><span class="line">        self.buffer.append(transition)</span><br><span class="line">        self.counter += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> self.counter % self.buffer_capacity == <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.training_step += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        s = torch.tensor([t.s <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>)</span><br><span class="line">        a = torch.tensor([t.a <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        r = torch.tensor([t.r <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        s_ = torch.tensor([t.s_ <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>)</span><br><span class="line"></span><br><span class="line">        old_action_log_probs = torch.tensor(</span><br><span class="line">            [t.a_log_p <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        r = (r - r.mean()) / (r.std() + <span class="number">1e-5</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            target_v = r + args.gamma * self.cnet(s_)</span><br><span class="line"></span><br><span class="line">        adv = (target_v - self.cnet(s)).detach()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(self.ppo_epoch):</span><br><span class="line">            <span class="keyword">for</span> index <span class="keyword">in</span> BatchSampler(</span><br><span class="line">                    SubsetRandomSampler(<span class="built_in">range</span>(self.buffer_capacity)), self.batch_size, <span class="literal">False</span>):</span><br><span class="line"></span><br><span class="line">                (mu, sigma) = self.anet(s[index])</span><br><span class="line">                dist = Normal(mu, sigma)</span><br><span class="line">                action_log_probs = dist.log_prob(a[index])</span><br><span class="line">                ratio = torch.exp(action_log_probs - old_action_log_probs[index])</span><br><span class="line"></span><br><span class="line">                surr1 = ratio * adv[index]</span><br><span class="line">                surr2 = torch.clamp(ratio, <span class="number">1.0</span> - self.clip_param,</span><br><span class="line">                                    <span class="number">1.0</span> + self.clip_param) * adv[index]</span><br><span class="line">                action_loss = -torch.<span class="built_in">min</span>(surr1, surr2).mean()</span><br><span class="line"></span><br><span class="line">                self.optimizer_a.zero_grad()</span><br><span class="line">                action_loss.backward()</span><br><span class="line">                nn.utils.clip_grad_norm_(self.anet.parameters(), self.max_grad_norm)</span><br><span class="line">                self.optimizer_a.step()</span><br><span class="line"></span><br><span class="line">                value_loss = F.smooth_l1_loss(self.cnet(s[index]), target_v[index])</span><br><span class="line">                self.optimizer_c.zero_grad()</span><br><span class="line">                value_loss.backward()</span><br><span class="line">                nn.utils.clip_grad_norm_(self.cnet.parameters(), self.max_grad_norm)</span><br><span class="line">                self.optimizer_c.step()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">del</span> self.buffer[:]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    env = gym.make(<span class="string">&#x27;Pendulum-v0&#x27;</span>)</span><br><span class="line">    env.seed(args.seed)</span><br><span class="line"></span><br><span class="line">    agent = Agent()</span><br><span class="line"></span><br><span class="line">    training_records = []</span><br><span class="line">    running_reward = -<span class="number">1000</span></span><br><span class="line">    state = env.reset()</span><br><span class="line">    <span class="keyword">for</span> i_ep <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">        score = <span class="number">0</span></span><br><span class="line">        state = env.reset()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">200</span>):</span><br><span class="line">            action, action_log_prob = agent.select_action(state)</span><br><span class="line">            state_, reward, done, _ = env.step([action])</span><br><span class="line">            <span class="keyword">if</span> args.render:</span><br><span class="line">                env.render()</span><br><span class="line">            <span class="keyword">if</span> agent.store(Transition(state, action, action_log_prob, (reward + <span class="number">8</span>) / <span class="number">8</span>, state_)):</span><br><span class="line">                agent.update()</span><br><span class="line">            score += reward</span><br><span class="line">            state = state_</span><br><span class="line"></span><br><span class="line">        running_reward = running_reward * <span class="number">0.9</span> + score * <span class="number">0.1</span></span><br><span class="line">        training_records.append(TrainingRecord(i_ep, running_reward))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> i_ep % args.log_interval == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Ep &#123;&#125;\tMoving average score: &#123;:.2f&#125;\t&#x27;</span>.<span class="built_in">format</span>(i_ep, running_reward))</span><br><span class="line">        <span class="keyword">if</span> running_reward &gt; -<span class="number">200</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Solved! Moving average score is now &#123;&#125;!&quot;</span>.<span class="built_in">format</span>(running_reward))</span><br><span class="line">            env.close()</span><br><span class="line">            agent.save_param()</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;log/ppo_training_records.pkl&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                pickle.dump(training_records, f)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    plt.plot([r.ep <span class="keyword">for</span> r <span class="keyword">in</span> training_records], [r.reward <span class="keyword">for</span> r <span class="keyword">in</span> training_records])</span><br><span class="line">    plt.title(<span class="string">&#x27;PPO&#x27;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&#x27;Episode&#x27;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&#x27;Moving averaged episode reward&#x27;</span>)</span><br><span class="line">    plt.savefig(<span class="string">&quot;img/ppo.png&quot;</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></li>
+<li><p>产生动作的方式与一般的PG类似，就是使用PG输出一个μ和σ然后使用正态分布，然后进行采样输出真正的动作</p>
+<h3 id="网络更新"><a href="#网络更新" class="headerlink" title="网络更新"></a>网络更新</h3></li>
+<li><p>reward归一化，将reward-平均数/标准差</p>
+</li>
+<li><p>计算target价值，使用当前回合的reward+系数×Critic对于下一状态的分析</p>
+</li>
+<li><p>估计价值和实际价值的差：直接用估计当前状态的价值与上一步计算的价值做差</p>
+</li>
+<li><p>计算actor网络的loss的方法是</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(mu, sigma) = self.anet(s[index])</span><br><span class="line">dist = Normal(mu, sigma)</span><br><span class="line">action_log_probs = dist.log_prob(a[index])</span><br><span class="line">ratio = torch.exp(action_log_probs - old_action_log_probs[index])</span><br><span class="line"></span><br><span class="line">surr1 = ratio * adv[index]</span><br><span class="line">surr2 = torch.clamp(ratio, <span class="number">1.0</span> - self.clip_param,</span><br><span class="line">                    <span class="number">1.0</span> + self.clip_param) * adv[index]</span><br><span class="line">action_loss = -torch.<span class="built_in">min</span>(surr1, surr2).mean()</span><br></pre></td></tr></table></figure></li>
+<li><p>先利用当前的网络采样输出μ和σ，然后计算之前action的log_prob，，然后利用表达式<code>e^(这次网络计算出的log可能性-上次网络计算出的log可能性)</code>，实际上就是<code>这次网络计算出的可能性/上次网络计算出的可能性</code>与上一步算出的估计价值和实际价值的差值<strong>修正这个值</strong>，主要目的是用合理的方法<u>利用其他时刻动作的输出，增加一个动作的利用效率</u></p>
+</li>
+<li><p><img src="/imgs/f8606933037c3541da1fdedf4142d2a36bcb61ee2ddd0dba8b63febd43dfd75c.png" alt="picture 1">  </p>
+</li>
+<li><p>然后用一个参数×上面的数值，处理之后得到最终需要反向传播的值（actor）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">value_loss = F.smooth_l1_loss(self.cnet(s[index]), target_v[index])</span><br><span class="line">self.optimizer_c.zero_grad()</span><br><span class="line">value_loss.backward()</span><br><span class="line">nn.utils.clip_grad_norm_(self.cnet.parameters(), self.max_grad_norm)</span><br><span class="line">self.optimizer_c.step()</span><br></pre></td></tr></table></figure></li>
+<li><p>更新Critic的参数操作是将现在的Critic网络对价值的判断与前面算出的目标价值判断进行比较，将二者的差进行反向传播</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag">强化学习</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-Anaconda配置问题记录"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/10/09/Anaconda%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/"
+    >Anaconda配置问题记录</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/10/09/Anaconda%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" class="article-date">
+  <time datetime="2022-10-09T06:25:18.000Z" itemprop="datePublished">2022-10-09</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="找不到-condarc文件"><a href="#找不到-condarc文件" class="headerlink" title="找不到.condarc文件"></a>找不到<code>.condarc</code>文件</h2><ul>
+<li>先执行一次<code>conda config</code>就能找到了<h2 id="配置Anaconda使用clash代理"><a href="#配置Anaconda使用clash代理" class="headerlink" title="配置Anaconda使用clash代理"></a>配置Anaconda使用clash代理</h2></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43135178/article/details/124499250">链接</a><h2 id="修改Anaconda安装环境的默认位置"><a href="#修改Anaconda安装环境的默认位置" class="headerlink" title="修改Anaconda安装环境的默认位置"></a>修改Anaconda安装环境的默认位置</h2></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36455412/article/details/125347552">链接</a><h2 id="手动添加Anaconda到环境变量"><a href="#手动添加Anaconda到环境变量" class="headerlink" title="手动添加Anaconda到环境变量"></a>手动添加Anaconda到环境变量</h2></li>
+<li><a target="_blank" rel="noopener" href="http://news.sohu.com/a/446583263_120918998">链接</a><h2 id="配置pytorch使用CPU的多线程"><a href="#配置pytorch使用CPU的多线程" class="headerlink" title="配置pytorch使用CPU的多线程"></a>配置pytorch使用CPU的多线程</h2></li>
+<li><code>torch.set_num_threads(8)</code></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/a_piece_of_ppx/article/details/123714865">参考</a></li>
+<li>作用不大<h2 id="GYM-官方文档"><a href="#GYM-官方文档" class="headerlink" title="GYM 官方文档"></a>GYM 官方文档</h2></li>
+<li><a target="_blank" rel="noopener" href="https://www.gymlibrary.dev/">链接</a><h2 id="word中插入代码"><a href="#word中插入代码" class="headerlink" title="word中插入代码"></a>word中插入代码</h2></li>
+<li><a target="_blank" rel="noopener" href="https://highlightcode.com/">https://highlightcode.com/</a></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/anaconda/" rel="tag">anaconda</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-强化学习复习（三）"
   class="article article-type-post"
   itemscope
@@ -186,7 +319,7 @@
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/439220435">参考链接</a></p>
 </li>
-<li><p>给出策略的具体操作是先讲输入经过一系列网络的运算之后，经过softmax归一化，得到和为1的几个输出。然后在输出过程中对于具有这几种概率的输出进行随机取样，得到最终的输出动作。（<strong>离散动作</strong>）</p>
+<li><p>给出策略的具体操作是先将输入经过一系列网络的运算之后，经过softmax归一化，得到和为1的几个输出。然后在输出过程中对于具有这几种概率的输出进行随机取样，得到最终的输出动作。（<strong>离散动作</strong>）</p>
 </li>
 <li><p>针对<strong>连续动作</strong>，可以将整个网络的输出更改为输出一个高斯分布函数的μ值（均值），结合用户指定的σ（方差），即可形成一个高斯分布，然后通过类似的sample采样即可得出需要的动作。注意训练阶段为了实现有效的exploration，不要使用太小的σ，否则因为输出太集中没法找到实际上的最优解。</p>
 <ul>
@@ -211,9 +344,10 @@
 <li><img src="/imgs/1cdcd316476945548933f8ad5922351079bb5ee5808860489a251970aa3c805d.png" alt="picture 47">  </li>
 <li>实际上每个本地网络都是一个Actor-Critic的网络，损失分为动作网络<code>Actor</code>的loss和<code>Critic</code>网络的loss<ul>
 <li>Critic的loss可以先计算<code>td_error</code>，用Critic在此时的环境中计算出的值与实际上每一步得到的增加随时间衰减的因子之后的实际上的Reward做差，然后平方即可得到Critic的loss</li>
-<li>Actor的loss则是使用反向求出刚才动作的log_prob（怎么求上文有），然后再求出<code>entropy</code>，公式为<img src="/imgs/082feca831bedf90bf6c3253215c0e01b8c26b2ba406997eb4acb361db659f73.png" alt="`0.5 + 0.5 * math.log(2 * math.pi) + torch.log(m.scale)` 1">，然后log_prob×上文的td_error+一个系数×entropy，然后整个计算出来之后取相反数即可得到Actor的loss，然后将整个的两个loss取平均数，反向传播更新参数即可</li>
+<li>Actor的loss则是使用反向求出刚才动作的log_prob（怎么求上文有），然后再求出<code>entropy</code>，公式为<img src="/imgs/082feca831bedf90bf6c3253215c0e01b8c26b2ba406997eb4acb361db659f73.png" alt="`0.5 + 0.5 * math.log(2 * math.pi) + torch.log(m.scale)` 1">，然后log_prob×上文的td_error+一个系数×entropy，然后整个计算出来之后取相反数即可得到Actor的loss，然后将整个的两个loss取平均数，反向传播更新参数即可<u>（因为根据计算图倒推可以分别得到组成这个变量的两个变量分别的影响因素，所以不影响反向传播分别更新两个网络）</u>。<h3 id="torch中backword是怎么用的"><a href="#torch中backword是怎么用的" class="headerlink" title="torch中backword是怎么用的"></a>torch中backword是怎么用的</h3></li>
 </ul>
 </li>
+<li>针对<strong>标量</strong>做出的对计算图的反向传播，得到标量的值，算出计算图中每个变量对于得到这个标量的偏导数<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/168748668">参考</a></li>
 </ul>
  
       <!-- reward -->
@@ -430,7 +564,7 @@
 
     
     <article
-  id="post-PPO学习笔记"
+  id="post-强化学习复习（零）"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -441,8 +575,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2022/10/05/PPO%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
-    >PPO学习笔记</a> 
+  <a class="article-title" href="/2022/10/05/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E9%9B%B6%EF%BC%89/"
+    >强化学习复习（零）</a> 
 </h2>
  
 
@@ -450,7 +584,7 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2022/10/05/PPO%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="article-date">
+      <a href="/2022/10/05/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E9%9B%B6%EF%BC%89/" class="article-date">
   <time datetime="2022-10-05T08:05:13.000Z" itemprop="datePublished">2022-10-05</time>
 </a>    
     </div>
@@ -781,147 +915,6 @@
 <li>防止因为用户数据输入顺序的原因导致树左右不平衡使得搜索的时间复杂度上升</li>
 <li>左树和右树的体量差不多大</li>
 <li>AVL树在增删结点的时候会从这个节点的父节点开始向上查每个节点的平衡性</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-动态规划"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/30/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"
-    >动态规划</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/30/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="article-date">
-  <time datetime="2022-08-30T12:30:22.000Z" itemprop="datePublished">2022-08-30</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="从递归到动态规划"><a href="#从递归到动态规划" class="headerlink" title="从递归到动态规划"></a>从递归到动态规划</h1><ul>
-<li>只要调用一个递归函数，总有参数不可变和参数可变的部分</li>
-<li>不可变的参数对结果没有影响因为都是一样的</li>
-<li>分析一个递归函数得到结果依赖下层递归返回什么内容</li>
-<li>为什么递归慢？因为会在不同的分支重复遍历相同的情况 <h2 id="递归到记忆化搜索"><a href="#递归到记忆化搜索" class="headerlink" title="递归到记忆化搜索"></a>递归到记忆化搜索</h2><h2 id="严格表结构的动态规划"><a href="#严格表结构的动态规划" class="headerlink" title="严格表结构的动态规划"></a>严格表结构的动态规划</h2></li>
-<li>解决重复遍历相同情况的问题</li>
-<li>利用缓存实现递归函数的可变部分到缓存结果的映射</li>
-<li>假如递归函数有k个参数可变，那么缓存的表具有k个维度</li>
-<li>缓存表能区分是否计算过这个位置的内容，比如用INT MIN或者-1一类</li>
-<li>缓存没命中的话就开始尝试，将尝试的结果存储到表中</li>
-<li>时间复杂度O(缓存表的尺寸)，本来的复杂度是二叉树的节点数<h2 id="计算动态规划表格"><a href="#计算动态规划表格" class="headerlink" title="计算动态规划表格"></a>计算动态规划表格</h2></li>
-<li>动态规划的顺序一定从递归函数的<strong>底层情况</strong>开始，或者说从递归的终止位置开始，知道不需要计算就直接出答案的位置</li>
-<li>从上面的推导得出计算的顺序</li>
-<li>利用递归函数的逻辑调用动态规划表格的内容</li>
-<li>将<u>调用下一级的递归函数</u>更改为从下一级的递归函数的<u>可变参数位置对应的缓存表的位置取出值</u></li>
-<li>也就是将<strong>递归调用的过程</strong>变成从<strong>动态规划表格中取值</strong>的过程</li>
-<li><strong>小心越界</strong><h3 id="斜率优化"><a href="#斜率优化" class="headerlink" title="斜率优化"></a>斜率优化</h3></li>
-<li>假如在递归的过程中出现<u>枚举行为</u>(比如计算一个格子的位置需要循环用到一系列从少到多的格子的信息)</li>
-<li>那么可以考虑使用<u>与这个格子临近的格子</u>寻找不需要进行循环就可以直接常数时间内就得到结果的方法</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-位运算相关"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/29/%E4%BD%8D%E8%BF%90%E7%AE%97%E7%9B%B8%E5%85%B3/"
-    >位运算相关</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/29/%E4%BD%8D%E8%BF%90%E7%AE%97%E7%9B%B8%E5%85%B3/" class="article-date">
-  <time datetime="2022-08-29T13:36:21.000Z" itemprop="datePublished">2022-08-29</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="用位运算实现两个数字比较大小"><a href="#用位运算实现两个数字比较大小" class="headerlink" title="用位运算实现两个数字比较大小"></a>用位运算实现两个数字比较大小</h2><ul>
-<li><img src="/imgs/5b30396bc4c925c4a2d0f65d7a86de89dcccc7806b6e29840618d0ae7245663a.png" alt="图 10">  </li>
-<li><img src="/imgs/184cb7228de5e0b605f23c4c637483504d7df504112e2c8a94421530324886d9.png" alt="图 11">  </li>
-<li><img src="/imgs/668bdcd3d4fdc36cbd51026abda0e132eb56f7f9be6c169cf611375060bcf97d.png" alt="图 12">  </li>
-<li>具体操作为获得a, b和a与b的差值的符号，然后<u>利用difSab和sameSab这两个互斥（一个为1的时候另一个必然是0）的变量实现if和else的功能</u></li>
-<li>利用<strong>加号左右两侧互斥</strong>的变量实现if else 的功能<h2 id="取出数字最右侧位置的1"><a href="#取出数字最右侧位置的1" class="headerlink" title="取出数字最右侧位置的1"></a>取出数字最右侧位置的1</h2><code>num &amp; (~num + 1)</code><h2 id="位运算加法实现"><a href="#位运算加法实现" class="headerlink" title="位运算加法实现"></a>位运算加法实现</h2></li>
-<li><img src="/imgs/4adcee55f38c883584f3880459a9d6ccf2f0bc8d8715703b710e65b4d6dec76a.png" alt="图 2">  </li>
-<li>a和b异或，得到<strong>无进位加法</strong>结果</li>
-<li>a和b与的结果左移一位，得到<strong>进位的位置</strong>，二者相加</li>
-<li>然后再把进位和无进位加法的结果求异或、与，左移一位，然后相加，重复上述步骤，<u>直到没有进位</u>为止<h2 id="位运算减法实现"><a href="#位运算减法实现" class="headerlink" title="位运算减法实现"></a>位运算减法实现</h2></li>
-<li>加一个数的相反数</li>
-<li>相反数等于一个数字取反再+1<h2 id="位运算乘法"><a href="#位运算乘法" class="headerlink" title="位运算乘法"></a>位运算乘法</h2></li>
-<li>假如一个数字二进制第k位是1，那么就将原始数字向左移k位，从k=0开始直到最大位，累加即可</li>
-<li><img src="/imgs/e5d721b23b0fd385e34a20224ccd1789cf6dd094b6a6c611fdb679d46dd72bed.png" alt="图 1">  <h2 id="位运算除法"><a href="#位运算除法" class="headerlink" title="位运算除法"></a>位运算除法</h2></li>
-<li>a/b</li>
-<li>b<u>尽可能左移，但是不能超过a</u>，假设移动了k1位，得到b’</li>
-<li>那么除法的第k位一定是1</li>
-<li>计算此时a-b’</li>
-<li>然后再次将b左移，但是不超过上次a-b’的结果，移动了k2位</li>
-<li>除法结果的第k2位也是1</li>
-<li>循环往复</li>
-<li><strong>实际操作是a右移k位，判断是否比b大</strong>，原因是<u>b左移可能溢出熬制不安全，符号位改变等等</u></li>
-<li><img src="/imgs/6ca3c8346b488611c993632c5fe8dfc65440940d700324d0b8ef35bb275b6b69.png" alt="图 3">  </li>
-<li>最后假如有余数的话丢弃（就是b不移位也不能减）</li>
 </ul>
  
       <!-- reward -->

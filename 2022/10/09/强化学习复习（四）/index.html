@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+
+
+<html lang="Chinese">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>强化学习复习（四） |  Frank’s blogs</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/FLogo.png" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      
+<link rel="stylesheet" href="/css/fonts/remixicon.css">
+
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-强化学习复习（四）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  强化学习复习（四）
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/10/09/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/" class="article-date">
+  <time datetime="2022-10-09T07:27:06.000Z" itemprop="datePublished">2022-10-09</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">1.3k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">6 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/sweetice/Deep-reinforcement-learning-with-pytorch">基于pytorch实现的强化学习网络</a></p>
+<h2 id="PPO"><a href="#PPO" class="headerlink" title="PPO"></a>PPO</h2></li>
+<li><p>PPO是基于Actor-Critic的算法</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/468828804">参考链接</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">from</span> torch.distributions <span class="keyword">import</span> Normal</span><br><span class="line"><span class="keyword">from</span> torch.utils.data.sampler <span class="keyword">import</span> BatchSampler, SubsetRandomSampler</span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">&#x27;Solve the Pendulum-v0 with PPO&#x27;</span>)</span><br><span class="line">parser.add_argument(</span><br><span class="line">    <span class="string">&#x27;--gamma&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">float</span>, default=<span class="number">0.9</span>, metavar=<span class="string">&#x27;G&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;discount factor (default: 0.9)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--seed&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">0</span>, metavar=<span class="string">&#x27;N&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;random seed (default: 0)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--render&#x27;</span>, action=<span class="string">&#x27;store_true&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;render the environment&#x27;</span>)</span><br><span class="line">parser.add_argument(</span><br><span class="line">    <span class="string">&#x27;--log-interval&#x27;</span>,</span><br><span class="line">    <span class="built_in">type</span>=<span class="built_in">int</span>,</span><br><span class="line">    default=<span class="number">10</span>,</span><br><span class="line">    metavar=<span class="string">&#x27;N&#x27;</span>,</span><br><span class="line">    <span class="built_in">help</span>=<span class="string">&#x27;interval between training status logs (default: 10)&#x27;</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">torch.manual_seed(args.seed)</span><br><span class="line"></span><br><span class="line">TrainingRecord = namedtuple(<span class="string">&#x27;TrainingRecord&#x27;</span>, [<span class="string">&#x27;ep&#x27;</span>, <span class="string">&#x27;reward&#x27;</span>])</span><br><span class="line">Transition = namedtuple(<span class="string">&#x27;Transition&#x27;</span>, [<span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;a_log_p&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;s_&#x27;</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ActorNet</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(ActorNet, self).__init__()</span><br><span class="line">        self.fc = nn.Linear(<span class="number">3</span>, <span class="number">100</span>)</span><br><span class="line">        self.mu_head = nn.Linear(<span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line">        self.sigma_head = nn.Linear(<span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = F.relu(self.fc(x))</span><br><span class="line">        mu = <span class="number">2.0</span> * F.tanh(self.mu_head(x))</span><br><span class="line">        sigma = F.softplus(self.sigma_head(x))</span><br><span class="line">        <span class="keyword">return</span> (mu, sigma)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CriticNet</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(CriticNet, self).__init__()</span><br><span class="line">        self.fc = nn.Linear(<span class="number">3</span>, <span class="number">100</span>)</span><br><span class="line">        self.v_head = nn.Linear(<span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = F.relu(self.fc(x))</span><br><span class="line">        state_value = self.v_head(x)</span><br><span class="line">        <span class="keyword">return</span> state_value</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Agent</span>():</span></span><br><span class="line"></span><br><span class="line">    clip_param = <span class="number">0.2</span></span><br><span class="line">    max_grad_norm = <span class="number">0.5</span></span><br><span class="line">    ppo_epoch = <span class="number">10</span></span><br><span class="line">    buffer_capacity, batch_size = <span class="number">1000</span>, <span class="number">32</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.training_step = <span class="number">0</span></span><br><span class="line">        self.anet = ActorNet().<span class="built_in">float</span>()</span><br><span class="line">        self.cnet = CriticNet().<span class="built_in">float</span>()</span><br><span class="line">        self.buffer = []</span><br><span class="line">        self.counter = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        self.optimizer_a = optim.Adam(self.anet.parameters(), lr=<span class="number">1e-4</span>)</span><br><span class="line">        self.optimizer_c = optim.Adam(self.cnet.parameters(), lr=<span class="number">3e-4</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select_action</span>(<span class="params">self, state</span>):</span></span><br><span class="line">        state = torch.from_numpy(state).<span class="built_in">float</span>().unsqueeze(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            (mu, sigma) = self.anet(state)</span><br><span class="line">        dist = Normal(mu, sigma)</span><br><span class="line">        action = dist.sample()</span><br><span class="line">        action_log_prob = dist.log_prob(action)</span><br><span class="line">        action = action.clamp(-<span class="number">2.0</span>, <span class="number">2.0</span>)</span><br><span class="line">        <span class="keyword">return</span> action.item(), action_log_prob.item()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span>(<span class="params">self, state</span>):</span></span><br><span class="line"></span><br><span class="line">        state = torch.from_numpy(state).<span class="built_in">float</span>().unsqueeze(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            state_value = self.cnet(state)</span><br><span class="line">        <span class="keyword">return</span> state_value.item()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save_param</span>(<span class="params">self</span>):</span></span><br><span class="line">        torch.save(self.anet.state_dict(), <span class="string">&#x27;param/ppo_anet_params.pkl&#x27;</span>)</span><br><span class="line">        torch.save(self.cnet.state_dict(), <span class="string">&#x27;param/ppo_cnet_params.pkl&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">store</span>(<span class="params">self, transition</span>):</span></span><br><span class="line">        self.buffer.append(transition)</span><br><span class="line">        self.counter += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> self.counter % self.buffer_capacity == <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.training_step += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        s = torch.tensor([t.s <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>)</span><br><span class="line">        a = torch.tensor([t.a <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        r = torch.tensor([t.r <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        s_ = torch.tensor([t.s_ <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>)</span><br><span class="line"></span><br><span class="line">        old_action_log_probs = torch.tensor(</span><br><span class="line">            [t.a_log_p <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        r = (r - r.mean()) / (r.std() + <span class="number">1e-5</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            target_v = r + args.gamma * self.cnet(s_)</span><br><span class="line"></span><br><span class="line">        adv = (target_v - self.cnet(s)).detach()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(self.ppo_epoch):</span><br><span class="line">            <span class="keyword">for</span> index <span class="keyword">in</span> BatchSampler(</span><br><span class="line">                    SubsetRandomSampler(<span class="built_in">range</span>(self.buffer_capacity)), self.batch_size, <span class="literal">False</span>):</span><br><span class="line"></span><br><span class="line">                (mu, sigma) = self.anet(s[index])</span><br><span class="line">                dist = Normal(mu, sigma)</span><br><span class="line">                action_log_probs = dist.log_prob(a[index])</span><br><span class="line">                ratio = torch.exp(action_log_probs - old_action_log_probs[index])</span><br><span class="line"></span><br><span class="line">                surr1 = ratio * adv[index]</span><br><span class="line">                surr2 = torch.clamp(ratio, <span class="number">1.0</span> - self.clip_param,</span><br><span class="line">                                    <span class="number">1.0</span> + self.clip_param) * adv[index]</span><br><span class="line">                action_loss = -torch.<span class="built_in">min</span>(surr1, surr2).mean()</span><br><span class="line"></span><br><span class="line">                self.optimizer_a.zero_grad()</span><br><span class="line">                action_loss.backward()</span><br><span class="line">                nn.utils.clip_grad_norm_(self.anet.parameters(), self.max_grad_norm)</span><br><span class="line">                self.optimizer_a.step()</span><br><span class="line"></span><br><span class="line">                value_loss = F.smooth_l1_loss(self.cnet(s[index]), target_v[index])</span><br><span class="line">                self.optimizer_c.zero_grad()</span><br><span class="line">                value_loss.backward()</span><br><span class="line">                nn.utils.clip_grad_norm_(self.cnet.parameters(), self.max_grad_norm)</span><br><span class="line">                self.optimizer_c.step()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">del</span> self.buffer[:]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    env = gym.make(<span class="string">&#x27;Pendulum-v0&#x27;</span>)</span><br><span class="line">    env.seed(args.seed)</span><br><span class="line"></span><br><span class="line">    agent = Agent()</span><br><span class="line"></span><br><span class="line">    training_records = []</span><br><span class="line">    running_reward = -<span class="number">1000</span></span><br><span class="line">    state = env.reset()</span><br><span class="line">    <span class="keyword">for</span> i_ep <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">        score = <span class="number">0</span></span><br><span class="line">        state = env.reset()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">200</span>):</span><br><span class="line">            action, action_log_prob = agent.select_action(state)</span><br><span class="line">            state_, reward, done, _ = env.step([action])</span><br><span class="line">            <span class="keyword">if</span> args.render:</span><br><span class="line">                env.render()</span><br><span class="line">            <span class="keyword">if</span> agent.store(Transition(state, action, action_log_prob, (reward + <span class="number">8</span>) / <span class="number">8</span>, state_)):</span><br><span class="line">                agent.update()</span><br><span class="line">            score += reward</span><br><span class="line">            state = state_</span><br><span class="line"></span><br><span class="line">        running_reward = running_reward * <span class="number">0.9</span> + score * <span class="number">0.1</span></span><br><span class="line">        training_records.append(TrainingRecord(i_ep, running_reward))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> i_ep % args.log_interval == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Ep &#123;&#125;\tMoving average score: &#123;:.2f&#125;\t&#x27;</span>.<span class="built_in">format</span>(i_ep, running_reward))</span><br><span class="line">        <span class="keyword">if</span> running_reward &gt; -<span class="number">200</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Solved! Moving average score is now &#123;&#125;!&quot;</span>.<span class="built_in">format</span>(running_reward))</span><br><span class="line">            env.close()</span><br><span class="line">            agent.save_param()</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;log/ppo_training_records.pkl&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                pickle.dump(training_records, f)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    plt.plot([r.ep <span class="keyword">for</span> r <span class="keyword">in</span> training_records], [r.reward <span class="keyword">for</span> r <span class="keyword">in</span> training_records])</span><br><span class="line">    plt.title(<span class="string">&#x27;PPO&#x27;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&#x27;Episode&#x27;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&#x27;Moving averaged episode reward&#x27;</span>)</span><br><span class="line">    plt.savefig(<span class="string">&quot;img/ppo.png&quot;</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></li>
+<li><p>产生动作的方式与一般的PG类似，就是使用PG输出一个μ和σ然后使用正态分布，然后进行采样输出真正的动作</p>
+<h3 id="网络更新"><a href="#网络更新" class="headerlink" title="网络更新"></a>网络更新</h3></li>
+<li><p>reward归一化，将reward-平均数/标准差</p>
+</li>
+<li><p>计算target价值，使用当前回合的reward+系数×Critic对于下一状态的分析</p>
+</li>
+<li><p>估计价值和实际价值的差：直接用估计当前状态的价值与上一步计算的价值做差</p>
+</li>
+<li><p>计算actor网络的loss的方法是</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(mu, sigma) = self.anet(s[index])</span><br><span class="line">dist = Normal(mu, sigma)</span><br><span class="line">action_log_probs = dist.log_prob(a[index])</span><br><span class="line">ratio = torch.exp(action_log_probs - old_action_log_probs[index])</span><br><span class="line"></span><br><span class="line">surr1 = ratio * adv[index]</span><br><span class="line">surr2 = torch.clamp(ratio, <span class="number">1.0</span> - self.clip_param,</span><br><span class="line">                    <span class="number">1.0</span> + self.clip_param) * adv[index]</span><br><span class="line">action_loss = -torch.<span class="built_in">min</span>(surr1, surr2).mean()</span><br></pre></td></tr></table></figure></li>
+<li><p>先利用当前的网络采样输出μ和σ，然后计算之前action的log_prob，，然后利用表达式<code>e^(这次网络计算出的log可能性-上次网络计算出的log可能性)</code>，实际上就是<code>这次网络计算出的可能性/上次网络计算出的可能性</code>与上一步算出的估计价值和实际价值的差值<strong>修正这个值</strong>，主要目的是用合理的方法<u>利用其他时刻动作的输出，增加一个动作的利用效率</u></p>
+</li>
+<li><p><img src="/imgs/f8606933037c3541da1fdedf4142d2a36bcb61ee2ddd0dba8b63febd43dfd75c.png" alt="picture 1">  </p>
+</li>
+<li><p>然后用一个参数×上面的数值，处理之后得到最终需要反向传播的值（actor）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">value_loss = F.smooth_l1_loss(self.cnet(s[index]), target_v[index])</span><br><span class="line">self.optimizer_c.zero_grad()</span><br><span class="line">value_loss.backward()</span><br><span class="line">nn.utils.clip_grad_norm_(self.cnet.parameters(), self.max_grad_norm)</span><br><span class="line">self.optimizer_c.step()</span><br></pre></td></tr></table></figure></li>
+<li><p>更新Critic的参数操作是将现在的Critic网络对价值的判断与前面算出的目标价值判断进行比较，将二者的差进行反向传播</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2022/10/09/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag">强化学习</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2022/10/09/Anaconda%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Anaconda配置问题记录</div>
+      </a>
+    
+  </nav>
+
+  
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2021-2022
+        <i class="ri-heart-fill heart_icon"></i> FrankZhang
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>Visitors:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>Views:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/avatar.png" alt="Frank’s blogs"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>
