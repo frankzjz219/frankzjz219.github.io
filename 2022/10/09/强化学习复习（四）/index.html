@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">6 min</span>
+            <span class="post-count">7 min</span>
         </span>
     </span>
 </div>
@@ -106,6 +106,13 @@
        
   <ul>
 <li><p><a target="_blank" rel="noopener" href="https://github.com/sweetice/Deep-reinforcement-learning-with-pytorch">基于pytorch实现的强化学习网络</a></p>
+<ul>
+<li><strong>这个的PPO写的似乎有问题</strong></li>
+</ul>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/labmlai/annotated_deep_learning_paper_implementations">强化学习网络集合</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/thu-ml/tianshou">集合 2</a></p>
 <h2 id="PPO"><a href="#PPO" class="headerlink" title="PPO"></a>PPO</h2></li>
 <li><p>PPO是基于Actor-Critic的算法</p>
 </li>
@@ -128,6 +135,10 @@
 <li><p>然后用一个参数×上面的数值，处理之后得到最终需要反向传播的值（actor）</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">value_loss = F.smooth_l1_loss(self.cnet(s[index]), target_v[index])</span><br><span class="line">self.optimizer_c.zero_grad()</span><br><span class="line">value_loss.backward()</span><br><span class="line">nn.utils.clip_grad_norm_(self.cnet.parameters(), self.max_grad_norm)</span><br><span class="line">self.optimizer_c.step()</span><br></pre></td></tr></table></figure></li>
 <li><p>更新Critic的参数操作是将现在的Critic网络对价值的判断与前面算出的目标价值判断进行比较，将二者的差进行反向传播</p>
+<h2 id="BatchSampler和SubsetRamdomSampler"><a href="#BatchSampler和SubsetRamdomSampler" class="headerlink" title="BatchSampler和SubsetRamdomSampler"></a>BatchSampler和SubsetRamdomSampler</h2></li>
+<li><p><code>SubsetRandomSampler</code>实际上是将数据的顺序打乱做一个全排列</p>
+</li>
+<li><p><code>BatchSampler</code>实际上是根据设置的batch_size给数据分成一个个的batch</p>
 </li>
 </ul>
  
@@ -194,6 +205,15 @@
 
    
   <nav class="article-nav">
+    
+      <a href="/2022/10/13/HindsightExperienceReplay%EF%BC%88HER%EF%BC%89/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            HindsightExperienceReplay（HER）
+          
+        </div>
+      </a>
     
     
       <a href="/2022/10/09/Anaconda%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" class="article-nav-link">

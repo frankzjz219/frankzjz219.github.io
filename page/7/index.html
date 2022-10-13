@@ -141,6 +141,303 @@
     
     
     <article
+  id="post-Linux线程（二）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/22/Linux%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/"
+    >Linux线程（二）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/22/Linux%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/" class="article-date">
+  <time datetime="2022-01-22T04:15:28.000Z" itemprop="datePublished">2022-01-22</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Linux线程（二）"><a href="#Linux线程（二）" class="headerlink" title="Linux线程（二）"></a>Linux线程（二）</h1><h2 id="分离线程"><a href="#分离线程" class="headerlink" title="分离线程"></a>分离线程</h2><ul>
+<li>默认情况下，当线程终止时，其它线程可以通过调用 pthread_join()获取其返回状态、回收线程资源，有 时，程序员<strong>并不关心线程的返回状态，只是希望系统在线程终止时能够自动回收线程资源并将其移除</strong>。在这 种情况下，可以调用 pthread_detach()将指定线程进行分离，也就是分离线程</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_detach</span><span class="params">(<span class="keyword">pthread_t</span> thread)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>线程分离自己</li>
+<li><code>pthread_detach(pthread_self());</code></li>
+<li>一旦线程处于分离状态，<strong>就不能再使用 <code>pthread_join()</code>来获取其终止状态</strong>，此过程是不可逆的，一旦处于 分离状态之后便不能再恢复到之前的状态。处于<strong>分离状态的线程，当其终止后，能够自动回收线程资源</strong>。</li>
+</ul>
+<h2 id="注册线程清理处理函数"><a href="#注册线程清理处理函数" class="headerlink" title="注册线程清理处理函数"></a>注册线程清理处理函数</h2><ul>
+<li>当线程退出时也可以这样做，当线程终止退出时，去执行这样的处理函数， 我们把这个称为线程清理函数</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_cleanup_push</span><span class="params">(<span class="keyword">void</span> (*routine)(<span class="keyword">void</span> *), <span class="keyword">void</span> *arg)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_cleanup_pop</span><span class="params">(<span class="keyword">int</span> execute)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>当线程执行以下动作时，清理函数栈中的清理函数才会被执行：</p>
+<ul>
+<li>线程调用 pthread_exit()退出时；</li>
+<li>线程响应取消请求时； </li>
+<li>用非 0 参数调用 pthread_cleanup_pop()</li>
+</ul>
+<h2 id="线程属性"><a href="#线程属性" class="headerlink" title="线程属性"></a>线程属性</h2><ul>
+<li>在 Linux 下，使用 pthread_attr_t 数据类型定义线程的所有属性</li>
+</ul>
+<h3 id="线程栈属性"><a href="#线程栈属性" class="headerlink" title="线程栈属性"></a>线程栈属性</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_setstack</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">void</span> *stackaddr, <span class="keyword">size_t</span> stacksize)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_getstack</span><span class="params">(<span class="keyword">const</span> <span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">void</span> **stackaddr, <span class="keyword">size_t</span> *stacksize)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="分离状态属性"><a href="#分离状态属性" class="headerlink" title="分离状态属性"></a>分离状态属性</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_setdetachstate</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">int</span> detachstate)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_getdetachstate</span><span class="params">(<span class="keyword">const</span> <span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">int</span> *detachstate)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>​    具体略</p>
+<h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><ul>
+<li>当我们编写的程序是一个多线程应用程序时，就不得不考虑到线程安全的问题，确保我们编写的程序是 一个线程安全（thread-safe）的多线程应用程序，什么是线程安全以及如何保证线程安全？带着这些问题， 本小节将讨论线程安全相关的话题。</li>
+</ul>
+<h3 id="线程栈"><a href="#线程栈" class="headerlink" title="线程栈"></a>线程栈</h3><ul>
+<li>进程中创建的每个线程都有自己的栈地址空间，将其称为线程栈。譬如主线程调用 pthread_create()创建 了一个新的线程，那么这个新的线程有它自己独立的栈地址空间、而主线程也有它自己独立的栈地址空间。 在创建一个新的线程时，可以配置线程栈的大小以及起始地址，当然在大部分情况 下，保持默认即可！</li>
+<li>然每个线程都有自己的栈地址空间，那么每个线程<strong>运行过程中所定义的自动变量（局部变量）都是分 配在自己的线程栈中</strong>的，它们<strong>不会相互干扰</strong></li>
+</ul>
+<h3 id="可重入函数"><a href="#可重入函数" class="headerlink" title="可重入函数"></a>可重入函数</h3><ul>
+<li>单线程程序只有一条执行流（一个线程就是一条执行流），贯穿程序始终；而对于 多线程程序而言，同一进程却存在多条独立、并发的执行流。</li>
+<li>进程中执行流的数量除了与线程有关之外，与<strong>信号处理</strong>也有关联。因为信号是异步的，进程可能会在其 运行过程中的任何时间点收到信号，进而跳转、执行信号处理函数，从而在一个单线程进程（包含信号处理） 中形成了两条（即主程序和信号处理函数）独立的执行流。</li>
+<li>如果一个函数被同一进程的多个不同的执行流同时调用，每次函数 调用总是能产生正确的结果（或者叫产生预期的结果），把这样的函数就称为可重入函数。<strong>实质上也就是该函数被多个执行流并发/并行调用</strong></li>
+</ul>
+<p><strong>绝对可重入函数的特点</strong></p>
+<ul>
+<li>函数内所使用到的变量均为局部变量，换句话说，该函数内的操作的内存地址均为本地栈地址</li>
+<li> 函数参数和返回值均是值类型</li>
+<li>函数内调用的其它函数也均是绝对可重入函数</li>
+</ul>
+<p>很多的 C 库函数有两个版本：可重入版本和不可重入版本，可重入版本函数其名称后面加上了“_r”， 用于表明该函数是一个可重入函数；而不可重入版本函数其名称后面没有“_r”，前面章节内容中也已经遇 到过很多次了，譬如 <code>asctime()</code>/<code>asctime_r()</code>、<code>ctime()</code>/<code>ctime_r()</code>、<code>localtime()</code>/<code>localtime_r()</code>等。</p>
+<ul>
+<li>一个函数具有<strong>引用类型</strong>的函数，<strong>传入了一个指针</strong>，并在函数内部读写该指针所指向的内存地址，该函 数是一个可重入函数，但同样需要满足一定的条件；如果多个执行流同时调用该函数时，所传入的指针是<strong>共 享变量的地址，那么在这种情况，最终可能得不到预期的结果</strong>；因为在这种情况下，函数 func()所读写的便是<strong>多个执行流的共享数据</strong>，会出现数据不一致的情况，所以是不安全的。</li>
+<li>但如果每个执行流所传入的指针是其本地变量（局部变量）对应的地址，那就是没有问题的，所以呢， 这个函数就是一个带条件的可重入函数。</li>
+</ul>
+<h2 id="线程安全-1"><a href="#线程安全-1" class="headerlink" title="线程安全"></a>线程安全</h2><ul>
+<li>一个函数被多个线程（其实也是多个执行流，但是不包括由信号处理函数所产生的执行流）同时调用 时，它总会一直产生正确的结果，把这样的函数称为线程安全函数。线程安全函数包括可重入函数，可重入 函数是线程安全函数的一个真子集，也就是说可重入函数一定是线程安全函数，但线程安全函数不一定是 可重入函数</li>
+</ul>
+<h3 id="用来保证线程安全的函数"><a href="#用来保证线程安全的函数" class="headerlink" title="用来保证线程安全的函数"></a>用来保证线程安全的函数</h3><ul>
+<li>在多线程编程环境下，有些代码段只需要执行一次</li>
+<li>  <code>pthread_once()</code>函数保证函数只执行一次</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">pthread_once_t</span> once_control = PTHREAD_ONCE_INIT;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_once</span><span class="params">(<span class="keyword">pthread_once_t</span> *once_control, <span class="keyword">void</span> (*init_routine)(<span class="keyword">void</span>))</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>once_control：这是一个 pthread_once_t 类型指针，在调用 pthread_once()函数之前，我们<strong>需要定义了一 个 pthread_once_t 类型的静态变量</strong>，调用 pthread_once()时参数 once_control 指向该变量。<strong>通常在定义变量时会使用 PTHREAD_ONCE_INIT 宏对其进行初始化</strong></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">pthread_once_t</span> once_control = PTHREAD_ONCE_INIT;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>init_routine：一个函数指针，参数init_routine所指向的函数就是要求只能被执行一次的代码段， pthread_once()函数内部会调用 init_routine()，即使 pthread_once()函数会被多次执行，但它能保证 init_routine() 仅被执行一次。</p>
+</li>
+<li><p>返回值：调用成功返回 0；失败则返回错误编码以指示错误原因。</p>
+</li>
+<li><p>如果在一个线程调用 pthread_once()时，另外一个线程也调用了 pthread_once，则该线程将<strong>会被阻塞等待</strong>，直到第一个完成初始化后返回。换言之，当调用 pthread_once 成功返回时，调用总是能够肯定所有的状态已经初始化完成了。</p>
+</li>
+</ul>
+<h3 id="线程特有数据"><a href="#线程特有数据" class="headerlink" title="线程特有数据"></a>线程特有数据</h3><ul>
+<li><p>线程特有数据也称为线程私有数据，简单点说，就是<strong>为每个调用线程分别维护一份变量的副本（copy）</strong>， 每个线程通过特有数据键（key）访问时，这个<strong>特有数据键都会获取到本线程绑定的变量副本</strong>。这样就可以 <strong>避免变量成为多个线程间的共享数据</strong>。</p>
+</li>
+<li><p>线程特有数据的核心思想其实非常简单，就是<strong>为每一个调用线程（调用某函数的线程，该函数就是我们 要通过线程特有数据将其实现为线程安全的函数）分配属于该线程的私有数据区</strong>，为每个调用线程分别维 护一份变量的副本。</p>
+</li>
+<li><p><strong>pthread_key_create()函数</strong>。在为线程分配私有数据区之前，需要调用 pthread_key_create()函数创建一个特有数据键（key）</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_key_create</span><span class="params">(<span class="keyword">pthread_key_t</span> *key, <span class="keyword">void</span> (*destructor)(<span class="keyword">void</span>*))</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>key：调用该函数会创建一个特有数据键，并通过参数 key 所指向的缓冲区返回给调用者，参数 key 是 一个 pthread_key_t 类型的指针，可以把 pthread_key_t 称为 key 类型。调用 pthread_key_create()之前，需要 定义一个 pthread_key_t 类型变量，调用 pthread_key_create()时参数 key 指向 pthread_key_t 类型变量。</li>
+<li>destructor：参数 destructor 是一个函数指针，指向一个自定义的函数</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">destructor</span><span class="params">(<span class="keyword">void</span> *value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">/* code */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>调用 <code>pthread_key_create()</code>函数允许调用者指定一个<strong>自定义的解构函数</strong>（类似于 C++中的析构函数），使用参数 destructor 指向该函数；该函数通常用于<strong>释放与特有数据键关联的线程私有数据区占用的内存空间</strong>， 当使用线程特有数据的线程终止时，destructor()函数会被自动调用。</li>
+<li>返回值：成功返回 0；失败将返回一个错误编号以指示错误原因，返回的错误编号其实就是全局变量 errno，可以使用诸如 strerror()函数查看其错误字符串信息。</li>
+</ul>
+<p>调用 pthread_key_create()函数创建特有数据键（key）后通常需要为调用线程分配私有数据缓冲区，譬 如通过 malloc()（或类似函数）申请堆内存，每个调用线程分配一次，且只会在线程初次调用此函数时分配。为线程分配私有数据缓冲区之后，通常需要调用 pthread_setspecific()函数，pthread_setspecific()函数其实完成 了这样的操作：首先保存指向线程私有数据缓冲区的指针，并将其与特有数据键以及当前调用线程关联起 来</p>
+<ul>
+<li><strong>pthread_setspecific()函数</strong></li>
+<li>调用 <code>pthread_key_create()</code> 函数创建特有数据键（key）后通常需要为调用线程分配私有数据缓冲区，譬如通过<code>malloc()</code>（或类似函数）申请堆内存，每个调用线程分配一次，且只会在线程初次调用此函数时分配。 为线程分配私有数据缓冲区之后，通常需要调用 <code>pthread_setspecific()</code>函数，<code>pthread_setspecific()</code>函数其实完成了这样的操作：<strong>首先保存指向线程私有数据缓冲区的指针，并将其与特有数据键以及当前调用线程关联起来</strong>；</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_setspecific</span><span class="params">(<span class="keyword">pthread_key_t</span> key, <span class="keyword">const</span> <span class="keyword">void</span> *value)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>key：pthread_key_t 类型变量，参数 key 应赋值为调用 <code>pthread_key_create()</code>函数时创建的特有数据键， 也就是 <code>pthread_key_create()</code>函数的参数 key 所指向的 <code>pthread_key_t</code>变量。</li>
+<li>value：参数 value 是一个 void 类型的指针，指向<strong>由调用者分配的一块内存</strong>，<strong>作为线程的私有数据缓冲 区</strong>，当线程终止时，会<strong>自动调用</strong>参数 <strong>key 指定的特有数据键对应的解构函数</strong>来释放这一块动态申请的内存 空间。</li>
+<li>返回值：调用成功返回 0；失败将返回一个错误编码，可以使用诸如<code>strerror()</code>函数查看其错误字符串信 息。</li>
+</ul>
+<p>调用 pthread_setspecific()函数将线程私有数据缓冲区与调用线程以及特有数据键关联之后，便可以使用<br>pthread_getspecific()函数来获取调用线程的私有数据区了。</p>
+<ul>
+<li><strong>pthread_getspecific()函数</strong></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">pthread_getspecific</span><span class="params">(<span class="keyword">pthread_key_t</span> key)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>pthread_getspecific()</code>函数应返回当前调用线程关联到特有数据键的私有数据缓冲区，<strong>返回值是一个指针</strong>， 指向该缓冲区。如果当前调用线程<strong>并没有设置</strong>线程私有数据缓冲区与特有数据键进行关联，则<strong>返回值应为 NULL</strong>，函数中可以利用这一点来判断当前调用线程是否为初次调用该函数，如果是初次调用，则必须为该 线程分配私有数据缓冲区。</li>
+</ul>
+<p>如果需要删除一个特有数据键（key）可以使用函数 pthread_key_delete()， pthread_key_delete()函数删除先前由 pthread_key_create()创建的键</p>
+<ul>
+<li><strong>pthread_key_delete()函数</strong></li>
+<li>需要删除一个特有数据键（key）可以使用函数 pthread_key_delete()， pthread_key_delete()函数删除先前由 pthread_key_create()创建的键</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_key_delete</span><span class="params">(<span class="keyword">pthread_key_t</span> key)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>调用 <code>pthread_key_delete()</code>函数将释放参数 key 指定的特有数据键，可以供下一次调用 <code>pthread_key_create()</code> 时使用；调用 <code>pthread_key_delete()</code>时，它并不将查当前是否有线程正在使用该键所关联的线程私有数据缓冲 区，所以它并不会触发键的解构函数，也就不会释放键关联的线程私有数据区占用的内存资源，并且调用 <code>pthread_key_delete()</code>后，当线程终止时也不再执行键的解构函数。</li>
+<li>调用的条件<ul>
+<li><strong>所有线程已经释放了私有数据区</strong>（显式调用解构函数或线程终止）。</li>
+<li>参数 key 指定的特有数据键将不再使用。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _GNU_SOURCE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_ERROR_LEN 256</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">pthread_once_t</span> once = PTHREAD_ONCE_INIT;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">pthread_key_t</span> strerror_key;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">destructor</span><span class="params">(<span class="keyword">void</span> *buf)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">free</span>(buf); <span class="comment">//释放内存</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">create_key</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/* 创建一个键(key)，并且绑定键的解构函数 */</span></span><br><span class="line">    <span class="keyword">if</span> (pthread_key_create(&amp;strerror_key, destructor))</span><br><span class="line">        pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/******************************</span></span><br><span class="line"><span class="comment"> * 对 strerror 函数重写</span></span><br><span class="line"><span class="comment"> * 使其变成为一个线程安全函数</span></span><br><span class="line"><span class="comment"> ******************************/</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">char</span> *<span class="title">strerror</span><span class="params">(<span class="keyword">int</span> errnum)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *buf;</span><br><span class="line">    <span class="comment">/* 创建一个键(只执行一次 create_key) */</span></span><br><span class="line">    <span class="keyword">if</span> (pthread_once(&amp;once, create_key))</span><br><span class="line">        pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">/* 获取 */</span></span><br><span class="line">    buf = pthread_getspecific(strerror_key);</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">NULL</span> == buf)</span><br><span class="line">    &#123;                                <span class="comment">//首次调用 my_strerror 函数，则需给调用线程分配线程私有数据</span></span><br><span class="line">        buf = <span class="built_in">malloc</span>(MAX_ERROR_LEN); <span class="comment">//分配内存</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">NULL</span> == buf)</span><br><span class="line">            pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">        <span class="comment">/* 保存缓冲区地址,与键、线程关联起来 */</span></span><br><span class="line">        <span class="keyword">if</span> (pthread_setspecific(strerror_key, buf))</span><br><span class="line">            pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (errnum &lt; <span class="number">0</span> || errnum &gt;= _sys_nerr || <span class="literal">NULL</span> == _sys_errlist[errnum])</span><br><span class="line">        <span class="built_in">snprintf</span>(buf, MAX_ERROR_LEN, <span class="string">&quot;Unknown error %d&quot;</span>, errnum);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">strncpy</span>(buf, _sys_errlist[errnum], MAX_ERROR_LEN - <span class="number">1</span>);</span><br><span class="line">        buf[MAX_ERROR_LEN - <span class="number">1</span>] = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">//终止字符</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> buf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第一步是调用 pthread_once()，以确保只会执行一次 create_key()函数，而在 create_key()函数中便是调用 pthread_key_create()创建了一个键、并绑定了相应的解构函数 destructor()，解构 函数用于释放与键关联的所有线程私有数据所占的内存空间。</li>
+<li>函数 strerror()调用 pthread_getspecific()以<strong>获取该调用线程与键相关联的私有数据缓冲区地址</strong>，如 果返回为 NULL，则表明该线程是首次调用 strerror()函数，因为函数会调用 malloc()为其分配一个新的私有 数据缓冲区，并调用 pthread_setspecific()来保存缓冲区地址、并与键与该调用线程建立关联。如果 pthread_getspecific()函数的返回值并不等于 NULL，那么该值将指向以存在的私有数据缓冲区，此缓冲区由之前对 strerror()的调用所分配。</li>
+</ul>
+<p><strong>使用例</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_key_t</span> p_key;</span><br><span class="line"><span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">freeBuf</span><span class="params">(<span class="keyword">void</span> * p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">func</span><span class="params">(<span class="keyword">void</span> * str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    pthread_setspecific(p_key, &amp;a);</span><br><span class="line">    <span class="keyword">int</span>* ptr = (<span class="keyword">int</span>*)pthread_getspecific(p_key);</span><br><span class="line">    <span class="comment">//*ptr += 1;</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s %d\n&quot;</span>, str, p_key);</span><br><span class="line"></span><br><span class="line">    sleep(<span class="number">2</span>);</span><br><span class="line">    *ptr += <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s %d\n&quot;</span>, str, *ptr);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> pa, pb;</span><br><span class="line"></span><br><span class="line">    pthread_key_create(&amp;p_key, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    pthread_create(&amp;pa, <span class="literal">NULL</span>, func, <span class="string">&quot;thread1:&quot;</span>);</span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">    pthread_create(&amp;pb, <span class="literal">NULL</span>, func, <span class="string">&quot;thread2:&quot;</span>);</span><br><span class="line">    pthread_join(pa, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_join(pb, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>两个线程使用同一个key访问同一个全局变量，出现了线程不安全情况</p>
+<p><img src="/../imgs/image-20220123144524240.png" alt="image-20220123144524240"></p>
+<p>假如是使用两个不同的key：</p>
+<p>代码更改为</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">freeBuf</span><span class="params">(<span class="keyword">void</span> * p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">func</span><span class="params">(<span class="keyword">void</span> * str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// pthread_once_t val = PTHREAD_ONCE_INIT;</span></span><br><span class="line">    <span class="keyword">pthread_key_t</span> p_key;</span><br><span class="line">    pthread_key_create(&amp;p_key, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_setspecific(p_key, &amp;a);</span><br><span class="line">    <span class="keyword">int</span>* ptr = (<span class="keyword">int</span>*)pthread_getspecific(p_key);</span><br><span class="line">    <span class="comment">//*ptr += 1;</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s(key) %d\n&quot;</span>, str, p_key);</span><br><span class="line"></span><br><span class="line">    sleep(<span class="number">2</span>);</span><br><span class="line">    *ptr += <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s %d\n&quot;</span>, str, *ptr);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> pa, pb;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    pthread_create(&amp;pa, <span class="literal">NULL</span>, func, <span class="string">&quot;thread1:&quot;</span>);</span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">    pthread_create(&amp;pb, <span class="literal">NULL</span>, func, <span class="string">&quot;thread2:&quot;</span>);</span><br><span class="line">    pthread_join(pa, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_join(pb, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../imgs/image-20220123144850517.png" alt="image-20220123144850517"></p>
+<p>效果类似</p>
+<p><strong>但是对于同一个key，不同的线程set不同的内存位置，再在<u>不同</u>的线程中用<u>同样的key</u>调用get得到的是<u>各自的变量空间</u></strong></p>
+<p>如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> b = <span class="number">5</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">freeBuf</span><span class="params">(<span class="keyword">void</span> * p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">func</span><span class="params">(<span class="keyword">void</span> * str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_once_t</span> val = PTHREAD_ONCE_INIT;</span><br><span class="line">    <span class="keyword">pthread_key_t</span> p_key;</span><br><span class="line">    pthread_key_create(&amp;p_key, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_setspecific(p_key, str);</span><br><span class="line">    <span class="keyword">char</span>* ptr = pthread_getspecific(p_key);</span><br><span class="line">    <span class="comment">//*ptr += 1;</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s(key) %d\n&quot;</span>, str, p_key);</span><br><span class="line"></span><br><span class="line">    sleep(<span class="number">2</span>);</span><br><span class="line">    <span class="keyword">int</span> i = ptr[<span class="number">6</span>]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">    i += <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s %d\n&quot;</span>, ptr, i);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> pa, pb;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    pthread_create(&amp;pa, <span class="literal">NULL</span>, func, <span class="string">&quot;thread1:&quot;</span>);</span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">    pthread_create(&amp;pb, <span class="literal">NULL</span>, func, <span class="string">&quot;thread2:&quot;</span>);</span><br><span class="line">    pthread_join(pa, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_join(pb, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../imgs/image-20220123145927573.png" alt="image-20220123145927573"></p>
+<h3 id="线程局部变量"><a href="#线程局部变量" class="headerlink" title="线程局部变量"></a>线程局部变量</h3><ul>
+<li><p>通常情况下，程序中定义的全局变量是进程中所有线程共享的，所有线程都可以访问这些全局变量；而 线程局部存储在定义全局或静态变量时，使用__thread 修饰符修饰变量，此时，<strong>每个线程都会拥有一份对该 变量的拷贝</strong>。线程局部存储中的变量将<strong>一直存在，直至线程终止</strong>，届时会<strong>自动释放这一存储</strong>。</p>
+</li>
+<li><p>要创建线程局部变量，只需简单地在全 局或静态变量的声明中包含__thread 修饰符即可！</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> __thread <span class="keyword">char</span> buf[<span class="number">512</span>];</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>如果变量声明中使用了关键字 static 或 extern，那么关键字__thread 必须紧随其后。</li>
+<li>与一般的全局或静态变量申明一眼，线程局部变量在申明时可设置一个初始值。</li>
+<li>可以使用 C 语言取值操作符（&amp;）来获取线程局部变量的地址。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">static</span> __thread <span class="keyword">char</span> buf[<span class="number">100</span>];</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">thread_start</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">strcpy</span>(buf, <span class="string">&quot;Child Thread\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;子线程: buf (%p) = %s&quot;</span>, buf, buf);</span><br><span class="line">    pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> tid;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="built_in">strcpy</span>(buf, <span class="string">&quot;Main Thread\n&quot;</span>);</span><br><span class="line">    <span class="comment">/* 创建子线程 */</span></span><br><span class="line">    <span class="keyword">if</span> (ret = pthread_create(&amp;tid, <span class="literal">NULL</span>, thread_start, <span class="literal">NULL</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;pthread_create error: %d\n&quot;</span>, ret);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 等待回收子线程 */</span></span><br><span class="line">    <span class="keyword">if</span> (ret = pthread_join(tid, <span class="literal">NULL</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;pthread_join error: %d\n&quot;</span>, ret);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;主线程: buf (%p) = %s&quot;</span>, buf, buf);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../imgs/image-20220123185312283.png" alt="image-20220123185312283"></p>
+<p>可见主线程和子线程的buf<strong>不是同一个东西</strong></p>
+<h3 id="多线程信号处理"><a href="#多线程信号处理" class="headerlink" title="多线程信号处理"></a>多线程信号处理</h3><p>信号模型在一些方面是属于进程层面（由进程中的所有线程线程共享）的，而在另一些方面是属于单个 线程层面的</p>
+<ul>
+<li><p>信号的系统默认行为是属于进程层面。每一个信号都有其对应的系统默认动作， 当进程中的任一线程收到任何一个未经处理（忽略或捕获）的信号时，会执行该信号的默认操作， 信号的默认操作通常是停止或终止进程。</p>
+</li>
+<li><p>信号处理函数属于进程层面。进程中的所有线程共享程序中所注册的信号处理函数；</p>
+</li>
+<li><p>信号的发送既可针对整个进程，也可针对某个特定的线程。在满足以下三个条件中的任意一个时， 信号的发送针对的是某个线程</p>
+<ul>
+<li>产生了硬件异常相关信号，譬如 SIGBUS、SIGFPE、SIGILL 和 SIGSEGV 信号；这些硬件异 常信号在某个线程执行指令的过程中产生，也就是说这些硬件异常信号是由某个线程所引起； 那么在这种情况下，系统会将信号发送给该线程。</li>
+<li>当线程试图对已断开的管道进行写操作时所产生的 SIGPIPE 信号；</li>
+<li>由函数 pthread_kill()或 pthread_sigqueue()所发出的信号，稍后介绍这两个函数；这些函数允许 线程向同一进程下的其它线程发送一个指定的信号。</li>
+</ul>
+</li>
+<li><p>当一个多线程进程接收到一个信号时，且该信号绑定了信号处理函数时，内核会<strong>任选一个线程来接 收</strong>这个信号，意味着由该线程接收信号并调用信号处理函数对其进行处理，并不是每个线程都会接 收到该信号并调用信号处理函数</p>
+</li>
+<li><p>信号掩码其实是属于线程层面的，也就是说信号掩码是针对每个线程而言。8.9 小节向大家介绍了 信号掩码的概念，并介绍了 sigprocmask()函数，通过 sigprocmask()可以设置进程的信号掩码，事实 上，信号掩码是并不是针对整个进程来说，而是针对线程，<strong>对于一个多线程应用程序来说，并不存 在一个作用于整个进程范围内的信号掩码</strong>（管理进程中的所有线程）；那么在多线程环境下，各个 线程可以调用 pthread_sigmask()函数来设置它们各自的信号掩码，譬如设置线程可以接收哪些信号、 不接收哪些信号，各线程可独立阻止或放行各种信号。</p>
+</li>
+<li><p>针对整个进程所挂起的信号，以及针对每个线程所挂起的信号，内核都会分别进行维护、记录。 8.11.1 小节介绍到，调用 sigpending()会返回进程中所有被挂起的信号，事实上，sigpending()会返 回针对整个进程所挂起的信号，以及针对每个线程所挂起的信号的并集。</p>
+</li>
+<li><p>其他内容略</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-C语言函数指针"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/22/C%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/"
+    >C语言函数指针</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/22/C%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/" class="article-date">
+  <time datetime="2022-01-22T02:17:18.000Z" itemprop="datePublished">2022-01-22</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="C语言函数指针"><a href="#C语言函数指针" class="headerlink" title="C语言函数指针"></a>C语言函数指针</h1><ul>
+<li>函数指针是指向函数的指针变量</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;返回值类型&gt; (*函数指针名称)(&lt;输入参数类型&gt;,...)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>回调函数使用例：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">populate_array</span><span class="params">(<span class="keyword">int</span> *<span class="built_in">array</span>, <span class="keyword">size_t</span> arraySize, <span class="keyword">int</span> (*getNextValue)(<span class="keyword">void</span>))</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i=<span class="number">0</span>; i&lt;arraySize; i++)</span><br><span class="line">        <span class="built_in">array</span>[i] = getNextValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>传参：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">populate_array(myarray, <span class="number">10</span>, getNextRandomValue);</span><br></pre></td></tr></table></figure>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Linux线程（一）"
   class="article article-type-post"
   itemscope
@@ -1142,135 +1439,6 @@
 <p>点击edit-new-global shortcut-command/URL新建，设置trigger和action即可</p>
 <p><img src="/../imgs/image-20220120105715782.png" alt="image-20220120105715782"></p>
 <p><img src="/../imgs/image-20220120105729191.png" alt="image-20220120105729191"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-LRU缓存机制思路"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/19/LRU%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%80%9D%E8%B7%AF/"
-    >LRU缓存机制思路</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/19/LRU%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%80%9D%E8%B7%AF/" class="article-date">
-  <time datetime="2022-01-19T14:06:38.000Z" itemprop="datePublished">2022-01-19</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="LRU缓存"><a href="#LRU缓存" class="headerlink" title="LRU缓存"></a>LRU缓存</h1><h2 id="程序"><a href="#程序" class="headerlink" title="程序"></a>程序</h2><p>请你设计并实现一个满足  LRU (最近最少使用) 缓存的数据结构。</p>
-<ul>
-<li>LRUCache(int capacity) 以 正整数 作为容量 capacity 初始化 LRU 缓存</li>
-<li>int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。</li>
-<li>void put(int key, int value) 如果关键字 key 已经存在，则变更其数据值 value ；如果不存在，则向缓存中插入该组 key-value 。如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。</li>
-<li>函数 get 和 put 必须以 O(1) 的平均时间复杂度运行。</li>
-</ul>
-<h2 id="程序思路"><a href="#程序思路" class="headerlink" title="程序思路"></a>程序思路</h2><ul>
-<li>使用<strong>双向链表</strong>存储数据，<em>头节点</em>和<em>尾节点</em>另外存储</li>
-<li>使用一个<code>unordered_map</code>存储每一个键值对的指针</li>
-<li>每一次使用对应的指针，都将其移动到双向链表的头部</li>
-<li>容量超出的时候删除链表的末端节点</li>
-<li><img src="/imgs/image-12345678.png" alt="image-12345678"></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-Qt网络请求下载图片并且显示"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/18/Qt%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87%E5%B9%B6%E4%B8%94%E6%98%BE%E7%A4%BA/"
-    >Qt网络请求下载图片并且显示</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/18/Qt%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87%E5%B9%B6%E4%B8%94%E6%98%BE%E7%A4%BA/" class="article-date">
-  <time datetime="2022-01-17T16:45:02.000Z" itemprop="datePublished">2022-01-18</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Qt网络请求下载图片并且显示"><a href="#Qt网络请求下载图片并且显示" class="headerlink" title="Qt网络请求下载图片并且显示"></a>Qt网络请求下载图片并且显示</h1><h2 id="基本流程"><a href="#基本流程" class="headerlink" title="基本流程"></a>基本流程</h2><ul>
-<li>字符串通过<code>QUrl()</code>变成Url对象，然后<code>QNetworkRequest</code>通过<code>setUrl()</code>方法设置URL，然后<code>QNetworkManager</code>通过get方法访问并且返回回复</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">QNetworkReply *newReply = netWorkManager-&gt;<span class="built_in">get</span>(networkRequest);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>回复对象具有<code>downloadProgress(qint64, qint64)</code>，<code>readyRead()</code>，<code>finished()</code>，三个信号，其中<code>downloadProgress(qint64, qint64)</code>用来更新进度条，<code>readyRead()</code>表示此时已经有数据可以读取（可能<strong>还没结束</strong>），<code>finished()</code>表示此时接收<strong>已经结束</strong>可以读到完整的文件</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QByteArray data = reply-&gt;readAll();</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>上面是读取到回复的全文内容</li>
-</ul>
-<h2 id="更新进度条"><a href="#更新进度条" class="headerlink" title="更新进度条"></a>更新进度条</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::imageDownloadProgress</span><span class="params">(qint64 bytes, qint64 totalBytes)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> qint8 count = <span class="number">0</span>;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="keyword">if</span>(count == <span class="number">1</span>)</span><br><span class="line">        progressBar-&gt;<span class="built_in">setMaximum</span>(totalBytes);</span><br><span class="line"></span><br><span class="line">    progressBar-&gt;<span class="built_in">setValue</span>(bytes);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="下载结束显示图片"><a href="#下载结束显示图片" class="headerlink" title="下载结束显示图片"></a>下载结束显示图片</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::replyFinished</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//QNetworkReply *reply = (QNetworkReply *)sender();</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//reply-&gt;deleteLater();</span></span><br><span class="line"></span><br><span class="line">    QNetworkReply *reply = (QNetworkReply *)<span class="built_in">sender</span>();</span><br><span class="line"></span><br><span class="line">    QByteArray data = reply-&gt;<span class="built_in">readAll</span>();</span><br><span class="line">    reply-&gt;<span class="built_in">deleteLater</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(data.<span class="built_in">isEmpty</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;data is null, please try it again!&quot;</span>&lt;&lt;endl;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    QPixmap pixmap;</span><br><span class="line">    pixmap.<span class="built_in">loadFromData</span>(data);</span><br><span class="line"></span><br><span class="line">    label[<span class="number">0</span>]-&gt;<span class="built_in">setPixmap</span>(pixmap);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="开始下载"><a href="#开始下载" class="headerlink" title="开始下载"></a>开始下载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::startDownload</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">QUrl <span class="title">newUrl</span><span class="params">(QUrl(lineEdit-&gt;text()))</span></span>;</span><br><span class="line">    <span class="keyword">if</span>(!newUrl.<span class="built_in">isValid</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        QMessageBox::<span class="built_in">information</span>(<span class="keyword">this</span>, <span class="string">&quot;error&quot;</span>, <span class="string">&quot;invalid url&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    QNetworkRequest networkRequest;</span><br><span class="line"></span><br><span class="line">    networkRequest.<span class="built_in">setUrl</span>(newUrl);</span><br><span class="line"></span><br><span class="line">    QNetworkReply *newReply = netWorkManager-&gt;<span class="built_in">get</span>(networkRequest);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">connect</span>(newReply, <span class="built_in">SIGNAL</span>(<span class="built_in">finished</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">replyFinished</span>()));</span><br><span class="line">    <span class="built_in">connect</span>(newReply, <span class="built_in">SIGNAL</span>(<span class="built_in">readyRead</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">readyReadData</span>()));</span><br><span class="line">    <span class="built_in">connect</span>(newReply, <span class="built_in">SIGNAL</span>(<span class="built_in">downloadProgress</span>(qint64, qint64)), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">imageDownloadProgress</span>(qint64, qint64)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
  
       <!-- reward -->
       

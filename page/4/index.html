@@ -141,6 +141,184 @@
     
     
     <article
+  id="post-配置开发板通过网线连接本机WSL虚拟机"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/07/27/%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E6%9D%BF%E9%80%9A%E8%BF%87%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E6%9C%AC%E6%9C%BAWSL%E8%99%9A%E6%8B%9F%E6%9C%BA/"
+    >配置开发板通过网线连接本机WSL虚拟机</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/07/27/%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E6%9D%BF%E9%80%9A%E8%BF%87%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E6%9C%AC%E6%9C%BAWSL%E8%99%9A%E6%8B%9F%E6%9C%BA/" class="article-date">
+  <time datetime="2022-07-27T03:55:00.000Z" itemprop="datePublished">2022-07-27</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="配置开发板通过网线连接本机WSL虚拟机"><a href="#配置开发板通过网线连接本机WSL虚拟机" class="headerlink" title="配置开发板通过网线连接本机WSL虚拟机"></a>配置开发板通过网线连接本机WSL虚拟机</h1><ul>
+<li><p>开发板先正常启动到Linux系统方便调试</p>
+</li>
+<li><p>开发板用上面的网线接口连接到计算机的网口</p>
+</li>
+<li><p>此时在计算机Windows端命令行输入<code>ipconfig</code>可以看到“以太网”具有相应的IP地址等信息</p>
+</li>
+<li><p>打开WSL虚拟机</p>
+</li>
+<li><p>在WSL虚拟机使用<code>ifconfig</code>命令查看虚拟机的网络配置，IP地址，子网掩码，广播地址等等</p>
+</li>
+<li><p><img src="/imgs/61f4265dbfff438355aad4fbe7486a2eafda4b901f1dc691ab19f9d533f457b0.png" alt="图 1">  </p>
+</li>
+<li><p>虚拟机使用<code>netstat -rn</code>命令查看网关</p>
+</li>
+<li><p><img src="/imgs/4c7645d1ddf70738ba0b2481e06e64ba824a9cf41d4df016ae1d27d57c2c3747.png" alt="图 2">  </p>
+</li>
+<li><p>看到内核路由表的第一条的Gateway就是网关信息</p>
+</li>
+<li><p><strong>此时WSL处在NAT模式，没有开启桥接</strong></p>
+</li>
+<li><p>使用命令<code>Get-NetAdapter</code>查看网络设备</p>
+</li>
+<li><p>使用命令<code>Set-VMSwitch WSL -NetAdapterName &lt;桥接到的网卡名称&gt;</code>桥接WSL与以太网，如下(直接输入中文“以太网”即可)</p>
+</li>
+<li><p><img src="/imgs/ec8dfe21ae9cf0d454518137d0a9b8c4ac8759f610575c1012027702b0fbc280.png" alt="图 3">  </p>
+</li>
+<li><p>复位开发板，按下键盘打断Uboot启动Linux</p>
+</li>
+<li><p>使用Uboot的如下命令设置网络并保存环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">setenv ipaddr &lt;与WSL虚拟机在同一子网下的另一个IP地址&gt;</span><br><span class="line">setenv gatewayip &lt;WSL虚拟机上看到的网关&gt;</span><br><span class="line">setenv netmask &lt;WSL虚拟机看到的子网掩码&gt;</span><br><span class="line">setenv serverip &lt;WSL虚拟机上ifconfig看到的IP地址&gt;</span><br><span class="line">saveenv</span><br></pre></td></tr></table></figure></li>
+<li><p>然后尝试ping WSL虚拟机IP（也就是在WSL中ifconfig看到的IP）</p>
+</li>
+<li><p><img src="/imgs/5aa9ff0c921acd969021449f60b49a85e3d9597b1ed0c42f285dac9fb217856c.png" alt="图 4">  </p>
+</li>
+<li><p>然后开始使用tftp传输Linux内核</p>
+</li>
+<li><p><img src="/imgs/7aca547914f9f4056cbb698df2d99ecef6131cf615739af5b4c324fce75ade36.png" alt="图 5">  </p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-配置WSL2为桥接模式（原来是NAT模式）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/07/26/%E9%85%8D%E7%BD%AEWSL2%E4%B8%BA%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%8E%9F%E6%9D%A5%E6%98%AFNAT%E6%A8%A1%E5%BC%8F%EF%BC%89/"
+    >配置WSL2为桥接模式（原来是NAT模式）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/07/26/%E9%85%8D%E7%BD%AEWSL2%E4%B8%BA%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%8E%9F%E6%9D%A5%E6%98%AFNAT%E6%A8%A1%E5%BC%8F%EF%BC%89/" class="article-date">
+  <time datetime="2022-07-26T02:07:19.000Z" itemprop="datePublished">2022-07-26</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="配置WSL2为桥接模式（原来是NAT模式）"><a href="#配置WSL2为桥接模式（原来是NAT模式）" class="headerlink" title="配置WSL2为桥接模式（原来是NAT模式）"></a>配置WSL2为桥接模式（原来是NAT模式）</h1><ul>
+<li><p>配置为<strong>桥接模式</strong>之后局域网中的设备就可以<strong>直接访问WSL</strong>，不需要借助电脑的端口转发</p>
+</li>
+<li><p>首先在命令行（具有<strong>管理员权限</strong>）中输入<code>Get-NetAdapter</code>，查看电脑的网卡情况（此时可能看不到WSL的虚拟网卡）</p>
+</li>
+<li><p><img src="/imgs/2a1e4199284bb6f34b17e59acd90a47457a8270692ad41ad95f55a44156d3789.png" alt="图 1">  </p>
+</li>
+<li><p>然后使用命令<code>Set-VMSwitch WSL -NetAdapterName &lt;桥接到的网卡名称&gt;</code>，将其中的尖括号部分替换为需要桥接到的网卡，比如<strong>WLAN</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Set-VMSwitch WSL -NetAdapterName WLAN</span><br></pre></td></tr></table></figure></li>
+<li><p>然后再次使用<code>Get-NetAdapter</code>，输出如下</p>
+</li>
+<li><p><img src="/imgs/8ace140dd419539ff686b785950ad0bdf57c82012717a7bac6b33975b722d621.png" alt="图 2">  </p>
+</li>
+<li><p>可见增加了基于Hyper-V的WSL虚拟网卡</p>
+</li>
+<li><p>然后使用Windows的<code>ipconfig</code>查询计算机的网关等信息，同时在设置中查看计算机的DNS等信息，然后使用这些信息配置WSL的网络</p>
+</li>
+<li><p><img src="/imgs/10c4b7c405b29480c2d8b5b872eb6d84c2b5755f0cde537de5765af517962dcf.png" alt="图 4">  </p>
+</li>
+<li><p><img src="/imgs/90b8d5543f1531f630d77bea20a2c514681f8a4be4d7bd5f90f017df9811201e.png" alt="图 5">  </p>
+</li>
+<li><p>使用如下命令配置WSL的网络（WSL中）</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo ip addr del $(ip addr show eth0 | grep <span class="string">&#x27;inet\b&#x27;</span> | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> | head -n 1) dev eth0</span><br><span class="line">sudo ip addr add &lt;需要设置的IP地址&gt;/24 broadcast &lt;局域网广播地址（一般是网络号.网络号.网络号.255）&gt; dev eth0</span><br><span class="line">sudo ip route add 0.0.0.0/0 via &lt;默认网关&gt; dev eth0</span><br></pre></td></tr></table></figure></li>
+<li><p>然后WSL<code>ping</code>百度可以ping通</p>
+</li>
+<li><p><img src="/imgs/211a40fcd4e0364e16eff2edf904fa5feb73b3093a1105796ae967d2c1965262.png" alt="图 6">  </p>
+</li>
+<li><p>Windows<code>ping</code>WSL的IP也可以<code>ping</code>通</p>
+</li>
+<li><p><img src="/imgs/4742d27c3fd93d8907e7b0a501ac471f5c9876026ba066418a1faec43a047045.png" alt="图 7">  </p>
+</li>
+<li><p>参考链接 </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/488442403">知乎</a> </li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/chubbykkk/article/details/125216708">csdn</a><h2 id="更改WSL为桥接模式之后远程显示的问题"><a href="#更改WSL为桥接模式之后远程显示的问题" class="headerlink" title="更改WSL为桥接模式之后远程显示的问题"></a>更改WSL为桥接模式之后远程显示的问题</h2></li>
+</ul>
+</li>
+<li><p>因为更改WSL为桥接模式之后，WSL变为局域网下与Windows平级的设备，所以需要重新配置<code>.bashrc</code></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">vim ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>找到这一行</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> DISPLAY=&lt;IP地址&gt;:0</span><br></pre></td></tr></table></figure></li>
+<li><p>将这一行中尖括号的部分修改为<strong>计算机在局域网中的IP地址</strong>然后即可继续使用WSL桌面（比如<code>startxfce4</code>）</p>
+</li>
+<li><p><img src="/imgs/6ceb41155c3d371a919243c79169702e60f5b5bd66864aba5360198b3dc84a3d.png" alt="图 8">  </p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Linux下使用epoll的C语言服务端"
   class="article article-type-post"
   itemscope
@@ -999,191 +1177,6 @@
 <li>也可以使用<code>with</code>语句</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">maxSubThreadNumber = <span class="number">6</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    thName = threading.currentThread().name</span><br><span class="line">    <span class="keyword">with</span> semaLock:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;run sub thread %s&quot;</span> % thName)</span><br><span class="line">        time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line"></span><br><span class="line">    semaLock = threading.Semaphore(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxSubThreadNumber):</span><br><span class="line">        subThreadIns = threading.Thread(target=task)</span><br><span class="line">        subThreadIns.start()</span><br></pre></td></tr></table></figure>
-
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/06/27/WSL2%E4%B8%8A%E4%BD%BF%E7%94%A8matplotlib%E7%BB%93%E5%90%88VSCode%E8%BF%9C%E7%A8%8B%E4%B8%8D%E6%98%BE%E7%A4%BA%E8%BE%93%E5%87%BA%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"
-    >WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/06/27/WSL2%E4%B8%8A%E4%BD%BF%E7%94%A8matplotlib%E7%BB%93%E5%90%88VSCode%E8%BF%9C%E7%A8%8B%E4%B8%8D%E6%98%BE%E7%A4%BA%E8%BE%93%E5%87%BA%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="article-date">
-  <time datetime="2022-06-27T05:21:29.000Z" itemprop="datePublished">2022-06-27</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法"><a href="#WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法" class="headerlink" title="WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法"></a>WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法</h1><h2 id="报错信息"><a href="#报错信息" class="headerlink" title="报错信息"></a>报错信息</h2><h3 id="问题一般分为两种"><a href="#问题一般分为两种" class="headerlink" title="问题一般分为两种"></a>问题一般分为两种</h3><ul>
-<li>没有报错但是使用<code>plt.show()</code>之后<strong>没有任何输出</strong></li>
-<li>使用<code>matplotlib.use(&#39;Tkagg&#39;)</code>之后出现报错<code>Cannot load backend &#39;TkAgg&#39; which requires the &#39;tk&#39; interactive framework, as &#39;headless&#39; is currently running</code>，或者是<code>_tkinter.TclError: couldn&#39;t connect to display &quot;:0.0&quot;</code><ul>
-<li><img src="/imgs/image-20220627132430453.png" alt="image-20220627132430453"></li>
-</ul>
-</li>
-</ul>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ul>
-<li>开始Import的时候改变顺序</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line">matplotlib.use(<span class="string">&#x27;Tkagg&#x27;</span>) <span class="comment">#这一句修改使用的后端输出设备</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>然后在windows上安装<code>VcXsrv</code>服务器并且启动，具体下载地址为 <a target="_blank" rel="noopener" href="https://sourceforge.net/projects/vcxsrv/">sourceForge</a></p>
-</li>
-<li><p>安装过程中一路选择默认设置</p>
-</li>
-<li><p>然后通过桌面图标启动VcXsrv</p>
-</li>
-<li><p><img src="/imgs/3c06ab6204e183d7f8fcbf6507ef0822_r.jpg" alt="preview"></p>
-</li>
-<li><p><img src="/imgs/43f9d404f8d8db71b566a9d97439229d_r.jpg" alt="preview"></p>
-</li>
-<li><p><img src="/imgs/d0f6d5aaaa26b78d6af77e2a7094fff7_r.jpg" alt="preview"></p>
-</li>
-<li><p><img src="/imgs/v908aa4dd6a4dec03549efd26f418ca49_r.jpg" alt="preview"></p>
-</li>
-<li><p>然后正常情况会弹出Windows防火墙提示，允许访问即可</p>
-</li>
-<li><p>然后修改WSL端的环境</p>
-</li>
-<li><p>首先需要查看Windows系统和WSL2通信使用的<strong>虚拟网卡地址</strong></p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/resolv.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># nameserver后面的地址就是Windows系统虚拟网卡的地址,记一下</span></span><br><span class="line"><span class="comment"># 需要取消下面两行内容的注释,禁用自动重新生成配置文件,否则重启后这个地址会变</span></span><br><span class="line">[network]</span><br><span class="line">generateResolvConf = <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>然后修改<code>.bashrc</code></li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim ~/.bashrc</span><br><span class="line"><span class="comment"># 在文件最后追加下面内容,地址使用上面查看到的</span></span><br><span class="line"><span class="built_in">export</span> DISPLAY=&lt;nameServer IP地址&gt;:0</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">source</span> ~/.bashrc </span><br></pre></td></tr></table></figure>
-
-<p>详细可以参考配置<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/150555651">VcXsrv</a></p>
-<ul>
-<li>最终效果</li>
-<li><img src="/imgs/image-20220627133421950.png" alt="image-20220627133421950"></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-C语言使用并行执行的for循环"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/06/22/C%E8%AF%AD%E8%A8%80%E4%BD%BF%E7%94%A8%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C%E7%9A%84for%E5%BE%AA%E7%8E%AF/"
-    >C语言使用并行执行的for循环</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/06/22/C%E8%AF%AD%E8%A8%80%E4%BD%BF%E7%94%A8%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C%E7%9A%84for%E5%BE%AA%E7%8E%AF/" class="article-date">
-  <time datetime="2022-06-22T07:29:40.000Z" itemprop="datePublished">2022-06-22</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="C语言使用并行执行的for循环"><a href="#C语言使用并行执行的for循环" class="headerlink" title="C语言使用并行执行的for循环"></a>C语言使用并行执行的for循环</h1><h2 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;omp.h&gt;</span></span></span><br></pre></td></tr></table></figure>
-
-<h2 id="编译指令"><a href="#编译指令" class="headerlink" title="编译指令"></a>编译指令</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">g++ test111.cpp -o paraCpp111 -fopenmp</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意要添加<code>-fopenmp</code>选项</li>
-</ul>
-<h2 id="设置线程数量"><a href="#设置线程数量" class="headerlink" title="设置线程数量"></a>设置线程数量</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">omp_set_num_threads(<span class="number">2</span>); <span class="comment">//参数为线程的数量</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="使用parallel的for循环"><a href="#使用parallel的for循环" class="headerlink" title="使用parallel的for循环"></a>使用parallel的for循环</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意<code>#pragma omp parallel for</code>这句必须和for循环<strong>紧邻</strong>，中间不能有其他语句，否则会出错</li>
-</ul>
-<h2 id="执行效果"><a href="#执行效果" class="headerlink" title="执行效果"></a>执行效果</h2><p>不进行线程设置和线程设置为2的效果对比：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1线程\n&quot;</span>);</span><br><span class="line">    before = clock();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    timePeriod = clock()-before;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;timePeriod&lt;&lt;<span class="string">&#x27;!&#x27;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2线程\n&quot;</span>);</span><br><span class="line"><span class="comment">// 此处设置了2线程</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    omp_set_num_threads(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    before = clock();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    timePeriod = clock()-before;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;timePeriod&lt;&lt;<span class="string">&#x27;!&#x27;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
-
-<p>输出对比：</p>
-<ul>
-<li><p><img src="/imgs/image-20220622153605823.png" alt="image-20220622153605823"></p>
-</li>
-<li><p>注意到没有开启并行for循环的输出是按照顺序的，开启的输出是乱序的</p>
-</li>
-<li><p>同时经过尝试发现，假如开启了并行for循环的输出但是<strong>指定线程为1</strong>的，输出<strong>仍然是乱序</strong>的，暂时还不清楚原因</p>
-</li>
-</ul>
-<p>对比大量计算和多组计算：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;omp.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">1e8</span>;</span><br><span class="line">    <span class="keyword">int</span> before, timePeriod;</span><br><span class="line">    <span class="keyword">int</span> array1[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array2[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array4[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array8[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> count = <span class="number">0</span>;count&lt;<span class="number">100</span>;++count)</span><br><span class="line">    &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="comment">// printf(&quot;1线程\n&quot;);</span></span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;2线程\n&quot;);</span></span><br><span class="line">        array1[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">2</span>);</span><br><span class="line">        <span class="comment">// printf(&quot;2线程\n&quot;);</span></span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;4线程\n&quot;);</span></span><br><span class="line">        array2[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    </span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;8线程\n&quot;);</span></span><br><span class="line">        array4[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    </span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">8</span>);</span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>() - before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        array8[count] = timePeriod;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ofstream out;</span><br><span class="line">    out.<span class="built_in">open</span>(<span class="string">&quot;data.csv&quot;</span>, ios::out);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array1[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array2[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array4[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array8[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    out.<span class="built_in">close</span>();</span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;python3 showData.py&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>其中分别开启1、2、4、8线程，进行for循环的计算，对比所需时间（通过<code>clock()</code>进行测量），最后调用命令行脚本<code>system</code>，开启另外撰写的python脚本进行数据折线图的显示</p>
-</li>
-<li><p><img src="/imgs/image-20220622154102661.png" alt="image-20220622154102661"></p>
-<ul>
-<li>上图是分别开启1、2、4、8线程的计算结果</li>
-</ul>
-</li>
-<li><p>对于代码进行简单修改，在<strong>1线程的时候取消对于parallel的使用</strong>，实验结果如下图</p>
-</li>
-<li><p><img src="/imgs/image-20220622154349763.png" alt="image-20220622154349763"></p>
-<ul>
-<li>可见结果在1线程的时候，某些情况下会占用很长的时间</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;omp.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">1e8</span>;</span><br><span class="line">    <span class="keyword">int</span> before, timePeriod;</span><br><span class="line">    <span class="keyword">int</span> array1[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array2[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array4[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array8[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> count = <span class="number">0</span>;count&lt;<span class="number">100</span>;++count)</span><br><span class="line">    &#123;</span><br><span class="line"><span class="comment">// #pragma omp parallel</span></span><br><span class="line"><span class="comment">//         omp_set_num_threads(1);</span></span><br><span class="line">        <span class="comment">// printf(&quot;1线程\n&quot;);</span></span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="comment">// #pragma omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;2线程\n&quot;);</span></span><br><span class="line">        array1[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">2</span>);</span><br><span class="line">        <span class="comment">// printf(&quot;2线程\n&quot;);</span></span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;4线程\n&quot;);</span></span><br><span class="line">        array2[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    </span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;8线程\n&quot;);</span></span><br><span class="line">        array4[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    </span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">8</span>);</span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>() - before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        array8[count] = timePeriod;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ofstream out;</span><br><span class="line">    out.<span class="built_in">open</span>(<span class="string">&quot;data.csv&quot;</span>, ios::out);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array1[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array2[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array4[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array8[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    out.<span class="built_in">close</span>();</span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;python3 showData.py&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
  
       <!-- reward -->
