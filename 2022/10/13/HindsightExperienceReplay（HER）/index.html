@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">437</span>
+            <span class="post-count">539</span>
         </span>
     </span>
 
@@ -120,7 +120,11 @@
 </li>
 <li><a target="_blank" rel="noopener" href="https://github.com/ZYunfeii/DRL_algorithm_library/tree/master/DDPG/DDPG_spinningup_HER">HER举例</a></li>
 <li>这里episode_cache为存储transition的列表((s1,a1,r1,s1’),(s2,a2,r2,s2’)…)，枚举这个列表的元素。在第二句根据每个transition产生HER_SAMPLE_NUM个新的目标点new_goals，这些<strong>目标点时根据之后的transition的state推算得到的</strong>，当然一种简单的情况就是state。之后对这些new_goals做遍历，对每一个new_goal都重新计算reward，并将transition中s和s’的goal部分替换为new_goal，之后将这个新的transition存储入经验池buffer。这里之所以可以这么做是因为在动作a不变的情况下，改变goal是不会改变从原来的s转移到s’的转移概率的。</li>
-<li>简单说，就是在replay buffer中选出一部分，然后针对这部分用重新设定的reward函数，根据下一时刻或者之后的状态，算出一个新的reward，再放回经验池中计算</li>
+<li>先对每个回合中的所有输入做一个reward的评价</li>
+<li>然后在整个回合的数据后处理时，循环到i时，从i之后的数据里随机选出一部分作为新的goal，然后利用这些新的goal重新计算i这个数据的reward，然后将其放入到replay buffer中，可能导致replay buffer中包含多条由同一条数据而来但是reward不同的数据条目</li>
+<li>可以在每训练一个回合之后更换初始的goal（也就是在筛选之前针对所有对象的goal）达到多目标训练的效果</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ZYunfeii/DRL_algorithm_library/blob/master/DDPG/DDPG_spinningup_HER/main.py">示例代码</a></li>
+<li><img src="/imgs/000d30cf3c120ce06399c7b098681c9274e60a801893efe32854f09bf18d13d6.png" alt="picture 5">  </li>
 </ul>
  
       <!-- reward -->

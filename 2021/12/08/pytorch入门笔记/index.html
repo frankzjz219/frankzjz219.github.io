@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">607</span>
+            <span class="post-count">682</span>
         </span>
     </span>
 
@@ -133,6 +133,18 @@
 <p><code>squeeze(arg)</code>表示第arg维的维度值为1，则去掉该维度。否则tensor不变。（即若<code>tensor.shape()[arg] = 1</code>，则去掉该维度）</p>
 <p>unsqueeze()：</p>
 <p><code>unsqueeze(arg)</code>与<code>squeeze(arg)</code>作用相反，表示在第arg维增加一个维度值为1的维度。</p>
+<h2 id="matplotlib画图的时候出现横坐标标签重叠的问题"><a href="#matplotlib画图的时候出现横坐标标签重叠的问题" class="headerlink" title="matplotlib画图的时候出现横坐标标签重叠的问题"></a>matplotlib画图的时候出现横坐标标签重叠的问题</h2><ul>
+<li><p>比如<img src="/imgs/50c9faa8d6b6a76f26b9902c7a998ab59938bdfaf1117a6f3f81dc5b4a14700f.png" alt="picture 1">  </p>
+</li>
+<li><p>只需要在代码中加入<code>plt.tight_layout()</code>即可（在<code>plt.show()</code>之前）</p>
+</li>
+<li><p><img src="/imgs/cf4cc41c2b34494854a1c3662a1e16238ec21a10dd3d151b245477088b950a57.png" alt="picture 2">  </p>
+<h2 id="matplotlib添加希腊字母的latex方法"><a href="#matplotlib添加希腊字母的latex方法" class="headerlink" title="matplotlib添加希腊字母的latex方法"></a>matplotlib添加希腊字母的latex方法</h2></li>
+<li><p><code>plt.ylabel(&quot;cos(&quot;+r&#39;$\theta$&#39;+&quot;)&quot;)</code>，希腊字母用<code>r&#39;$\希腊字母$&#39;</code>即可</p>
+</li>
+<li><p>效果：<img src="/imgs/c0577006ba23e2df4a37e467756a55f016f0b2143078650c0daed7e891dba90f.png" alt="picture 3">  </p>
+</li>
+</ul>
  
       <!-- reward -->
       

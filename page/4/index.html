@@ -141,6 +141,123 @@
     
     
     <article
+  id="post-C语言实现BP神经网络的推理以及反向传播"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/08/07/C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E6%8E%A8%E7%90%86%E4%BB%A5%E5%8F%8A%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/"
+    >C语言实现BP神经网络的推理以及反向传播</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/08/07/C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E6%8E%A8%E7%90%86%E4%BB%A5%E5%8F%8A%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/" class="article-date">
+  <time datetime="2022-08-07T15:04:51.000Z" itemprop="datePublished">2022-08-07</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="C语言实现BP神经网络的推理以及反向传播"><a href="#C语言实现BP神经网络的推理以及反向传播" class="headerlink" title="C语言实现BP神经网络的推理以及反向传播"></a>C语言实现BP神经网络的推理以及反向传播</h1><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><ul>
+<li>头文件<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> BPNETWORK_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BPNETWORK_H</span></span><br><span class="line"><span class="comment">//所需头文件</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> f(x) Sigmoid(x)<span class="comment">//激活函数设定</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> f_(x) Sigmoidf(x)<span class="comment">//导函数</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">double</span>* ws;<span class="comment">//权重矩阵</span></span><br><span class="line">    <span class="keyword">double</span>* bs;<span class="comment">//偏置数组</span></span><br><span class="line">    <span class="keyword">double</span>* os;<span class="comment">//输出数组</span></span><br><span class="line">    <span class="keyword">double</span>* ss;<span class="comment">//误差(总误差关于加权和的偏导)</span></span><br><span class="line">&#125; Layer;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> lns;<span class="comment">//层数</span></span><br><span class="line">    <span class="keyword">int</span>* ns;<span class="comment">//每层神经元的数量</span></span><br><span class="line">    <span class="keyword">double</span>* is;<span class="comment">//神经网络输入</span></span><br><span class="line">    <span class="keyword">double</span>* ts;<span class="comment">//理想输出</span></span><br><span class="line">    Layer* las;<span class="comment">//神经网络各个层(不包括输入层)</span></span><br><span class="line">    <span class="keyword">double</span> ln;<span class="comment">//学习率</span></span><br><span class="line">&#125;BPNetWork;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//创建神经网络</span></span><br><span class="line"><span class="function">BPNetWork* <span class="title">BPCreate</span><span class="params">(<span class="keyword">int</span>* nums, <span class="keyword">int</span> len,<span class="keyword">double</span> ln)</span></span>;</span><br><span class="line"><span class="comment">//运行一次神经网络</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">RunOnce</span><span class="params">(BPNetWork* network)</span></span>;</span><br><span class="line"><span class="comment">//载入训练集</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">LoadIn</span><span class="params">(BPNetWork* network, <span class="keyword">double</span>* input, <span class="keyword">double</span>* putout)</span></span>;</span><br><span class="line"><span class="comment">//反向传播一次(训练一次)</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TrainOnce</span><span class="params">(BPNetWork* network)</span></span>;</span><br><span class="line"><span class="comment">//输出总误差</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">ETotal</span><span class="params">(BPNetWork* network)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//sigmoid激活函数</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Sigmoid(x)  (1 / (1 + exp(-(x))))</span></span><br><span class="line"><span class="comment">//sigmoid激活函数的导函数（用反函数的形式表示）,输入为sigmoid输出</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Sigmoidf(f)  ((f) * (1 - (f)))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Tanh(x) ((2 / (1 + exp(-2 * (x))))-1)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Tanhf(f) ((1+(f))*(1-(f)))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></li>
+<li>.c文件<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&quot;BPNetWork.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//神经网络的层数</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LS network-&gt;lns</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//输入层神经元的数量</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> INNS network-&gt;ns[0]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//输入层的第a个输入</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> INS(a) network-&gt;is[a-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//第a个理想输出</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TAS(a) network-&gt;ts[a-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//输出层神经元的数量</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> OUTNS network-&gt;ns[LS-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//第n层神经元的数量</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NS(n) network-&gt;ns[n-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//第n层第a个神经元的第p个权重</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> WF(n,a,p) network-&gt;las[n-2].ws[(p-1)+(a-1)*NS(n-1)]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//第n层的第a个神经元的偏置</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BF(n,a) network-&gt;las[n-2].bs[a-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//第n层第a个神经元的输出</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> OF(n,a) network-&gt;las[n-2].os[a-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//第n层第a个神经元的误差</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SF(n,a) network-&gt;las[n-2].ss[a-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//学习率</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LN network-&gt;ln</span></span><br><span class="line"></span><br><span class="line"><span class="function">BPNetWork* <span class="title">BPCreate</span><span class="params">(<span class="keyword">int</span>* nums, <span class="keyword">int</span> len,<span class="keyword">double</span> ln)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    BPNetWork* network = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(BPNetWork));</span><br><span class="line">    network-&gt;lns = len;</span><br><span class="line">    network-&gt;ns = <span class="built_in">malloc</span>(len * <span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    network-&gt;ln = ln;</span><br><span class="line">    <span class="built_in">memcpy</span>(network-&gt;ns, nums, len * <span class="keyword">sizeof</span>(<span class="keyword">int</span>)); <span class="comment">// nums传入的是每层的神经元数目，将其拷贝到储存每层神经元数量的ns</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    network-&gt;is = <span class="built_in">malloc</span>(nums[<span class="number">0</span>] * <span class="keyword">sizeof</span>(<span class="keyword">double</span>)); <span class="comment">// 神经网络输入</span></span><br><span class="line">    network-&gt;las = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Layer) * (len - <span class="number">1</span>)); <span class="comment">// 神经网络各个层</span></span><br><span class="line">    network-&gt;ts = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">double</span>) * nums[len - <span class="number">1</span>]); <span class="comment">// 神经网络理想输出</span></span><br><span class="line">    srand(&amp;network);<span class="comment">//用networkd的内存地址做为随机数种子</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> p = <span class="number">0</span>; p &lt; len - <span class="number">1</span>; p++) &#123;</span><br><span class="line">        <span class="keyword">int</span> lastnum = nums[p];<span class="comment">//上一层的神经元数量</span></span><br><span class="line">        <span class="keyword">int</span> num = nums[p + <span class="number">1</span>];<span class="comment">//当前层的神经元数量（从第二层开始）</span></span><br><span class="line">        network-&gt;las[p].bs = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">double</span>) * num); <span class="comment">//偏置数组</span></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        network-&gt;las[p].ws = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">double</span>) * num * lastnum); <span class="comment">//权重矩阵（大小是本层与上一层的节点数量的乘积）</span></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        network-&gt;las[p].os = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">double</span>) * num); <span class="comment">//输出数组</span></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        network-&gt;las[p].ss = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">double</span>) * num); <span class="comment">//误差</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> pp = <span class="number">0</span>; pp &lt; num; pp++) &#123;</span><br><span class="line">            <span class="comment">//这里rand()/2.0的意思是把整数除整数转换为浮点数除整数</span></span><br><span class="line">            <span class="comment">//如果是整数除整数,输出则为带余的商</span></span><br><span class="line">            network-&gt;las[p].bs[pp] = rand() / <span class="number">2.0</span> / RAND_MAX; <span class="comment">//偏置矩阵初始化随机数</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> ppp = <span class="number">0</span>; ppp &lt; lastnum; ppp++) &#123;</span><br><span class="line">                network-&gt;las[p].ws[ppp + pp * lastnum] = rand() / <span class="number">2.0</span> / RAND_MAX; <span class="comment">//权重矩阵初始化随机数</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> network;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">RunOnce</span><span class="params">(BPNetWork* network)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//计算输入层到第二层</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> a = <span class="number">1</span>; a &lt;= NS(<span class="number">2</span>); a++) &#123;</span><br><span class="line">        <span class="keyword">double</span> net = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">double</span>* o = &amp;OF(<span class="number">2</span>,a);<span class="comment">// 第2层的输出值指针</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> aa = <span class="number">1</span>; aa &lt;= INNS; aa++) &#123;</span><br><span class="line">            <span class="comment">// 和是向量积</span></span><br><span class="line">            net += INS(aa) * WF(<span class="number">2</span>, a, aa);<span class="comment">//输入层的某个输入*第一个全连接层中相应的权重*第一个全连接层的神经元数值</span></span><br><span class="line">        &#125;</span><br><span class="line">        *o = f(net + BF(<span class="number">2</span>,a)); <span class="comment">//加偏置计算最终结果，然后乘激活函数，写入第二层的输出数组中</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> n = <span class="number">2</span>; n &lt;= LS<span class="number">-1</span>; n++) &#123; <span class="comment">//LS是层数</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> a = <span class="number">1</span>; a &lt;= NS(n + <span class="number">1</span>); a++) &#123;<span class="comment">//NS是对应层神经元的数量，循环内容是针对下一层的每个神经元</span></span><br><span class="line">            <span class="keyword">double</span> net = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">double</span>* o = &amp;OF(n+<span class="number">1</span>,a);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> aa = <span class="number">1</span>; aa &lt;= NS(n); aa++) &#123; <span class="comment">// 计算向量积</span></span><br><span class="line">                <span class="keyword">double</span> oo = OF(n, aa); <span class="comment">// 上一层某个神经元的输出</span></span><br><span class="line">                <span class="keyword">double</span>* ww = &amp;WF(n + <span class="number">1</span>, a, aa); <span class="comment">// 第a个和第aa个的权重</span></span><br><span class="line">                net += oo * (*ww); <span class="comment">// 和是向量积</span></span><br><span class="line">            &#125;</span><br><span class="line">            *o = f(net + BF(n + <span class="number">1</span>, a));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TrainOnce</span><span class="params">(BPNetWork* network)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//计算输出层的误差函数</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> a = <span class="number">1</span>; a &lt;= OUTNS; a++) &#123;</span><br><span class="line">        <span class="keyword">double</span>* s = &amp;SF(LS,a);<span class="comment">//获取第a个神经元的误差</span></span><br><span class="line">        <span class="keyword">double</span>* b = &amp;BF(LS, a);<span class="comment">//获取第a个神经元的偏置</span></span><br><span class="line">        <span class="keyword">double</span> o = OF(LS, a);<span class="comment">//获取第a个神经元的输出</span></span><br><span class="line">        *s = (<span class="number">2.0</span> / OUTNS) * (o - TAS(a))* f_(o); <span class="comment">// 2/输出层元素数量*（某个神经元的输出-该位置的理想输出）* 斜率</span></span><br><span class="line">        *b = *b - LN * (*s); <span class="comment">//更新偏置</span></span><br><span class="line">        <span class="comment">//更新权重</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> aa = <span class="number">1</span>; aa &lt;=NS(LS<span class="number">-1</span>) ; aa++) &#123;</span><br><span class="line">            <span class="keyword">double</span>* w = &amp;WF(LS, a, aa); <span class="comment">// 获得最后一层权重矩阵的权重</span></span><br><span class="line">            *w = *w - LN * (*s) * OF(LS<span class="number">-1</span>, aa);  <span class="comment">// 权重减去  学习率*上面计算出的s*上一层该神经元的输出</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//计算隐藏层的误差</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> a = LS<span class="number">-1</span>; a &gt; <span class="number">2</span>; a--) &#123;</span><br><span class="line">        <span class="comment">//开始计算第a层每个神经元的误差</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> n = <span class="number">1</span>; n &lt;= NS(a); n++) &#123;<span class="comment">//当前层</span></span><br><span class="line">            <span class="keyword">double</span>* s = &amp;SF(a, n);<span class="comment">//获取第a个神经元的误差</span></span><br><span class="line">            *s = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">double</span>* b = &amp;BF(a, n);<span class="comment">//获取第a个神经元的偏置</span></span><br><span class="line">            <span class="keyword">double</span> o = OF(a, n);<span class="comment">//获取第a个神经元的输出</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> nn = <span class="number">1</span>; nn &lt;= NS(a+<span class="number">1</span>); nn++) &#123;<span class="comment">//下一层</span></span><br><span class="line">                <span class="keyword">double</span> lw = WF(a + <span class="number">1</span>, nn, n);<span class="comment">//获取下一层到当前神经元的权重</span></span><br><span class="line">                <span class="keyword">double</span> ls = SF(a + <span class="number">1</span>, nn);<span class="comment">//获取下一层第nn个神经元的误差</span></span><br><span class="line">                *s += ls * lw * f_(o); <span class="comment">// 权重*误差*激活函数斜率，和是向量积</span></span><br><span class="line">            &#125;</span><br><span class="line">            *b = *b - LN * (*s);<span class="comment">//更新偏置</span></span><br><span class="line">            <span class="comment">//更新权重</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> nn = <span class="number">1</span>; nn &lt;= NS(a - <span class="number">1</span>); nn++) &#123;<span class="comment">//上一层</span></span><br><span class="line">                <span class="keyword">double</span>* w = &amp;WF(a, n, nn); <span class="comment">// 更新上一层到这一层的权重矩阵</span></span><br><span class="line">                *w = *w - LN * (*s) *OF(a - <span class="number">1</span>, nn);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//计算第2层的误差函数（输入层到第一隐藏层）</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> n = <span class="number">1</span>; n &lt;= NS(<span class="number">2</span>); n++) &#123;<span class="comment">//当前层</span></span><br><span class="line">        <span class="keyword">double</span>* s = &amp;SF(<span class="number">2</span>, n);<span class="comment">//获取第a个神经元的误差</span></span><br><span class="line">        *s = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">double</span>* b = &amp;BF(<span class="number">2</span>, n);<span class="comment">//获取第a个神经元的偏置</span></span><br><span class="line">        <span class="keyword">double</span> o = OF(<span class="number">2</span>, n);<span class="comment">//获取第a个神经元的输出</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> nn = <span class="number">1</span>; nn &lt;= NS(<span class="number">3</span>); nn++) &#123;<span class="comment">//下一层</span></span><br><span class="line">            <span class="keyword">double</span> lw = WF(<span class="number">3</span>, nn, n);<span class="comment">//获取下一层到当前神经元的权重</span></span><br><span class="line">            <span class="keyword">double</span> ls = SF(<span class="number">3</span>, nn);<span class="comment">//获取下一层第nn个神经元的误差</span></span><br><span class="line">            *s += ls * lw * f_(o);</span><br><span class="line">        &#125;</span><br><span class="line">        *b = *b - LN * (*s);<span class="comment">//更新偏置</span></span><br><span class="line">        <span class="comment">//更新权重</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> nn = <span class="number">1</span>; nn &lt;= INNS; nn++) &#123;<span class="comment">//上一层</span></span><br><span class="line">            <span class="keyword">double</span>* w = &amp;WF(<span class="number">2</span>, n, nn);</span><br><span class="line">            *w = *w - LN * (*s) * INS(nn);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">LoadIn</span><span class="params">(BPNetWork* network,<span class="keyword">double</span>* input,<span class="keyword">double</span>* putout)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">memcpy</span>(network-&gt;is, input, INNS*<span class="keyword">sizeof</span>(<span class="keyword">double</span>));</span><br><span class="line">    <span class="built_in">memcpy</span>(network-&gt;ts, putout, OUTNS*<span class="keyword">sizeof</span>(<span class="keyword">double</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a[] = &#123; <span class="number">1</span>,<span class="number">20</span>,<span class="number">20</span>,<span class="number">1</span> &#125;;<span class="comment">//4层神经元,数量分别为1,20,20,1</span></span><br><span class="line">    <span class="keyword">double</span> in[<span class="number">1</span>] = &#123; <span class="number">0.9</span> &#125;;<span class="comment">//训练样本输入1</span></span><br><span class="line">    <span class="keyword">double</span> in1[<span class="number">1</span>] = &#123; <span class="number">0.1</span> &#125;;<span class="comment">//训练样本输入2</span></span><br><span class="line">    <span class="keyword">double</span> in2[<span class="number">1</span>] = &#123; <span class="number">0.5</span> &#125;;<span class="comment">//训练样本输入3</span></span><br><span class="line">    <span class="keyword">double</span> out[<span class="number">1</span>] = &#123; <span class="number">0.1</span> &#125;;<span class="comment">//理想输出</span></span><br><span class="line">    <span class="comment">//神经网络训练目标:</span></span><br><span class="line">    <span class="comment">//输入任意值,输出0.1</span></span><br><span class="line">    BPNetWork* network = BPCreate(a, <span class="number">4</span>, <span class="number">0.5</span>);</span><br><span class="line">    <span class="keyword">int</span> c = <span class="number">1000</span>;<span class="comment">//训练1000次</span></span><br><span class="line">    <span class="keyword">while</span> (c--) &#123;</span><br><span class="line">        LoadIn(network, in, out);</span><br><span class="line">        RunOnce(network);</span><br><span class="line">        TrainOnce(network);</span><br><span class="line">        LoadIn(network, in1, out);</span><br><span class="line">        RunOnce(network);</span><br><span class="line">        TrainOnce(network);</span><br><span class="line">        LoadIn(network, in2, out);</span><br><span class="line">        RunOnce(network);</span><br><span class="line">        TrainOnce(network);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//训练完后来一波测试</span></span><br><span class="line">    <span class="keyword">double</span> t[<span class="number">1</span>] = &#123; <span class="number">0.7</span> &#125;;<span class="comment">//输入</span></span><br><span class="line">    <span class="keyword">double</span> o[<span class="number">1</span>] = &#123; <span class="number">0.2</span> &#125;;<span class="comment">//凑数</span></span><br><span class="line">    LoadIn(network, t, o);</span><br><span class="line">    RunOnce(network);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;OK\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%g\n&quot;</span>, ETotal(network));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%g&quot;</span>, OF(<span class="number">4</span>, <span class="number">1</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><h3 id="正向"><a href="#正向" class="headerlink" title="正向"></a>正向</h3><ul>
+<li>正向推理的计算过程是某层的某个节点的输出数值等于<strong>该层上一层</strong>的某个节点的输出×<strong>这个节点到该层待求的节点的权重</strong>， 如上对上一层<strong>每个节点</strong>计算一遍并<strong>求和</strong>，然后加上该层该节点的偏置，并且带入激活函数计算得到这层这个节点的输出</li>
+<li><img src="/imgs/f90abed083088d4195ae18b30301ed39ea70dce182200ea6df9ee6df85a66d72.png" alt="图 1">  <h3 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h3></li>
+<li>反向传播的计算对于输出层到上一层的权重更新而言就是<strong>上一层到这一层某节点的权重</strong>减去输出层某节点的实际输出和理想输出的差×激活函数的导数×系数×学习率×<strong>上一层对应节点的输出</strong></li>
+<li>对于中间层的计算，某个节点的误差等于下一层某节点到该节点的权重×下一层对应节点的误差×该节点激活函数的斜率，如上计算求和得到该节点的误差，然后对于上一层每个节点到这一个节点的权重，更新方法为减去学习率×该节点的误差（前文计算的）×上一层对应节点的输出</li>
+<li><img src="/imgs/cb70a13bd33f56aa5a0522be2fccb8da78edbb49b0b66a2aa0d411cbe4f02952.png" alt="图 2">  </li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-开发板配置nfs踩坑"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/07/27/%E5%BC%80%E5%8F%91%E6%9D%BF%E9%85%8D%E7%BD%AEnfs%E8%B8%A9%E5%9D%91/"
+    >开发板配置nfs踩坑</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/07/27/%E5%BC%80%E5%8F%91%E6%9D%BF%E9%85%8D%E7%BD%AEnfs%E8%B8%A9%E5%9D%91/" class="article-date">
+  <time datetime="2022-07-27T05:38:52.000Z" itemprop="datePublished">2022-07-27</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="开发板配置nfs踩坑"><a href="#开发板配置nfs踩坑" class="headerlink" title="开发板配置nfs踩坑"></a>开发板配置nfs踩坑</h1><h2 id="配置好nfs服务器路径等之后重启nfs服务的时候可能无法重启遇到错误"><a href="#配置好nfs服务器路径等之后重启nfs服务的时候可能无法重启遇到错误" class="headerlink" title="配置好nfs服务器路径等之后重启nfs服务的时候可能无法重启遇到错误"></a>配置好nfs服务器路径等之后重启nfs服务的时候可能无法重启遇到错误</h2><ul>
+<li><img src="/imgs/1b64ed91879caed772df196df38cbd0e5638597e292ef9ddd9505a4126295e86.png" alt="图 1">  </li>
+<li>此时需要执行命令<code>sudo service rpcbind start</code></li>
+<li>然后再执行<code>sudo /etc/init.d/nfs-kernel-server restart</code><h2 id="从Uboot启动Linux可能ping不通WSL的问题"><a href="#从Uboot启动Linux可能ping不通WSL的问题" class="headerlink" title="从Uboot启动Linux可能ping不通WSL的问题"></a>从Uboot启动Linux可能ping不通WSL的问题</h2></li>
+<li>开发板Linux端使用命令<code>ifconfig eth0 172.20.98.200 netmask 255.255.240.0</code>，配置ip地址和子网掩码，配置到与WSL再<strong>同一个子网之下</strong>即可ping通<h2 id="Uboot可以通过tftp下载内核和设备树但是无法用nfs下载文件系统的问题"><a href="#Uboot可以通过tftp下载内核和设备树但是无法用nfs下载文件系统的问题" class="headerlink" title="Uboot可以通过tftp下载内核和设备树但是无法用nfs下载文件系统的问题"></a>Uboot可以通过tftp下载内核和设备树但是无法用nfs下载文件系统的问题</h2></li>
+<li>使用WSL<strong>安装旧版（比如18.04）</strong>的Ubuntu</li>
+<li>将Ubuntu移动到D盘（假如C盘空间不足）<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45700350/article/details/125227040">参考链接</a></li>
+<li>安装好之后安装完nfs服务之后，将服务的配置文件<code>/etc/default/nfs-kernel-server</code>文件进行修改如下<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">  <span class="comment"># Number of servers to start up</span></span><br><span class="line">RPCNFSDCOUNT=<span class="string">&quot;-V 2 8&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Runtime priority of server (see nice(1))</span></span><br><span class="line">RPCNFSDPRIORITY=0</span><br><span class="line"></span><br><span class="line"><span class="comment"># Options for rpc.mountd.</span></span><br><span class="line"><span class="comment"># If you have a port-based firewall, you might want to set up</span></span><br><span class="line"><span class="comment"># a fixed port here using the --port option. For more information,</span></span><br><span class="line"><span class="comment"># see rpc.mountd(8) or http://wiki.debian.org/SecuringNFS</span></span><br><span class="line"><span class="comment"># To disable NFSv4 on the server, specify &#x27;--no-nfs-version 4&#x27; here</span></span><br><span class="line">RPCMOUNTDOPTS=<span class="string">&quot;-V 2 --manage-gids&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Do you want to start the svcgssd daemon? It is only required for Kerberos</span></span><br><span class="line"><span class="comment"># exports. Valid alternatives are &quot;yes&quot; and &quot;no&quot;; the default is &quot;no&quot;.</span></span><br><span class="line">NEED_SVCGSSD=<span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Options for rpc.svcgssd.</span></span><br><span class="line">RPCSVCGSSDOPTS=<span class="string">&quot;--nfs-version 2,3,4 --debug --syslog&quot;</span></span><br><span class="line">RPCNFSDOPTS=<span class="string">&quot;--nfs-version 2,3,4 --debug --syslog&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li>然后<strong>重启WSL虚拟机</strong>，然后重启tftp、xinetd、rpcbind、nfs服务**</li>
+<li>注意重启之后WSL所处的<strong>网段、子网掩码、网关</strong>等都可能改变，，所以一定要使用WSL的<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ifconfig &lt;网卡号（比如eth0）&gt; &lt;指定的IP地址&gt;</span><br></pre></td></tr></table></figure>
+设置WSL系统的IP地址到同一个网段下，假如重启之后<strong>开发板ping不通虚拟机</strong>的话还需要重新按照之前的博客配置虚拟机网络与开发板的桥接</li>
+<li>成功结果如图</li>
+<li><img src="/imgs/f3d2319d4773d96e9331fba91ad296b376fd2e876dedefe74e05bd8bc1ae205b.png" alt="图 2">  </li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-配置开发板通过网线连接本机WSL虚拟机"
   class="article article-type-post"
   itemscope
@@ -961,223 +1078,6 @@
 <h2 id="epoll原理以及讲解"><a href="#epoll原理以及讲解" class="headerlink" title="epoll原理以及讲解"></a>epoll原理以及讲解</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/haogenmin/article/details/118527213">参考网页</a> <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/63179839">知乎原文</a></li>
 </ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-pytorch训练的模型导出数据或者部署到C-平台"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/06/28/pytorch%E8%AE%AD%E7%BB%83%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%87%BA%E6%95%B0%E6%8D%AE%E6%88%96%E8%80%85%E9%83%A8%E7%BD%B2%E5%88%B0C-%E5%B9%B3%E5%8F%B0/"
-    >pytorch训练的模型导出数据或者部署到C++平台</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/06/28/pytorch%E8%AE%AD%E7%BB%83%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%87%BA%E6%95%B0%E6%8D%AE%E6%88%96%E8%80%85%E9%83%A8%E7%BD%B2%E5%88%B0C-%E5%B9%B3%E5%8F%B0/" class="article-date">
-  <time datetime="2022-06-28T13:45:47.000Z" itemprop="datePublished">2022-06-28</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="pytorch训练的模型导出网格数据或者部署到C-平台"><a href="#pytorch训练的模型导出网格数据或者部署到C-平台" class="headerlink" title="pytorch训练的模型导出网格数据或者部署到C++平台"></a>pytorch训练的模型导出网格数据或者部署到C++平台</h1><h2 id="数据导出"><a href="#数据导出" class="headerlink" title="数据导出"></a>数据导出</h2><ul>
-<li>导出为<code>.csv</code>文件</li>
-<li>参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42464527/article/details/123688909">教程</a></li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 定义和实例化网络</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Net</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(Net, self).__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">1</span>,<span class="number">30</span>,kernel_size=<span class="number">5</span>)</span><br><span class="line">        self.fc1 = nn.Linear(<span class="number">4320</span>,<span class="number">100</span>)</span><br><span class="line">        self.fc2 = nn.Linear(<span class="number">100</span>, <span class="number">10</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span></span><br><span class="line">        x = F.max_pool2d(F.relu(self.conv1(x)),<span class="number">2</span>)</span><br><span class="line">        x = x.view(-<span class="number">1</span>, <span class="number">4320</span>)</span><br><span class="line">        x = F.relu(self.fc1(x))</span><br><span class="line">        x = self.fc2(x)</span><br><span class="line">        <span class="keyword">return</span> F.log_softmax(x,dim=<span class="number">1</span>)</span><br><span class="line">network = Net()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存.csv格式的参数</span></span><br><span class="line"><span class="keyword">for</span> name,param <span class="keyword">in</span> network.named_parameters():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;name:<span class="subst">&#123;name&#125;</span>\t\t\t,shape:<span class="subst">&#123;param.shape&#125;</span>&quot;</span>)</span><br><span class="line">    data = pd.DataFrame(param.detach().numpy().reshape(<span class="number">1</span>, -<span class="number">1</span>))</span><br><span class="line">    filename = <span class="string">f&quot;<span class="subst">&#123;name&#125;</span>.csv&quot;</span></span><br><span class="line">    data.to_csv(<span class="string">f&quot;./<span class="subst">&#123;filename&#125;</span>&quot;</span>, index=<span class="literal">False</span>, header=<span class="literal">False</span>, sep=<span class="string">&#x27;,&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="使用Libtorch直接导出C-模型"><a href="#使用Libtorch直接导出C-模型" class="headerlink" title="使用Libtorch直接导出C++模型"></a>使用Libtorch直接导出C++模型</h2><ul>
-<li><p>参考 csdn<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43917589/article/details/124509964">文章</a></p>
-</li>
-<li><p>参考 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/263626686?ivk_sa=1024320u">知乎文章</a> 和 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/146453159">文章</a></p>
-</li>
-<li><p>部署 <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40198848/article/details/112872844?spm=1001.2014.3001.5506">yoloV5</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/advanced/cpp_export.html">官方教程</a></p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-python多线程以及线程同步"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/06/28/python%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BB%A5%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/"
-    >python多线程以及线程同步</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/06/28/python%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BB%A5%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/" class="article-date">
-  <time datetime="2022-06-28T01:22:29.000Z" itemprop="datePublished">2022-06-28</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="python多线程以及线程同步"><a href="#python多线程以及线程同步" class="headerlink" title="python多线程以及线程同步"></a>python多线程以及线程同步</h1><h2 id="多线程基础知识"><a href="#多线程基础知识" class="headerlink" title="多线程基础知识"></a>多线程基础知识</h2><ul>
-<li>python创建多线程主要依靠threading库</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>线程的创建使用<code>Thread()</code>函数，提供的参数为线程的函数指针和函数的参数（必须为可迭代的对象）</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>(<span class="params">num</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num):</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line"></span><br><span class="line">t1=threading.Thread(target=task, args=(<span class="number">3</span>,)) <span class="comment"># 注意此处不能使用args=(3)，否则会因为传入的参数不可迭代导致错误，必须加逗号</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>线程的开始使用<code>start()</code>，使用<code>join()</code>回收线程</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 多线程</span></span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br><span class="line">t3.start()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 回收线程</span></span><br><span class="line">t1.join()</span><br><span class="line">t2.join()</span><br><span class="line">t3.join()</span><br></pre></td></tr></table></figure>
-
-<h2 id="多线程时间测试"><a href="#多线程时间测试" class="headerlink" title="多线程时间测试"></a>多线程时间测试</h2><ul>
-<li>线程执行任务为控制台输出的</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>(<span class="params">num</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num):</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line"></span><br><span class="line">t1=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line">t2=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line">t3=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多线程</span></span><br><span class="line"></span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br><span class="line">t3.start()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 回收线程</span></span><br><span class="line">t1.join()</span><br><span class="line">t2.join()</span><br><span class="line">t3.join()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;多线程用时:%.8f\n&quot;</span>%(time.time()-start))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 单线程</span></span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    task(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">end = time.time()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;单线程用时:%.8f\n&quot;</span>%(end-start))</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><img src="/imgs/image-20220628093137346.png" alt="image-20220628093137346"></p>
-<ul>
-<li>可见，多线程用时还更多一些</li>
-</ul>
-</li>
-<li><p>多线程执行不涉及IO的操作（比如加法）</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>(<span class="params">num</span>):</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num):</span><br><span class="line">        count+=<span class="number">1</span></span><br><span class="line"></span><br><span class="line">t1=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line">t2=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line">t3=threading.Thread(target=task, args=(<span class="number">3</span>,))</span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多线程</span></span><br><span class="line"></span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br><span class="line">t3.start()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 回收线程</span></span><br><span class="line">t1.join()</span><br><span class="line">t2.join()</span><br><span class="line">t3.join()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;多线程用时:%.8f\n&quot;</span>%(time.time()-start))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 单线程</span></span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    task(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">end = time.time()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;单线程用时:%.8f\n&quot;</span>%(end-start))</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>输出结果为<ul>
-<li><img src="/imgs/image-20220628093356210.png" alt="image-20220628093356210"></li>
-<li>可见，单线程比多线程的优势更明显了</li>
-</ul>
-</li>
-</ul>
-<h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><ul>
-<li><p>你会发现多线程比单线程花费的时间还要更多，这是因为GIL的原因。</p>
-<p>GIL的全称是Global Interpreter Lock（全局解释器锁），Python最初的设计理念在于，<u>为了解决多线程之间数据完整性和状态同步的问题，设计为在任意时刻只能由一个线程在解释器中运行</u>。因此Python中的多线程是<strong>表面上的多线程</strong>（同一时刻只有一个线程），不是真正的多线程。</p>
-<p>但是如果是因为GIL的原因，就说多线程无用是不对的，对于IO密集的程序，多线程是要比单线程快的。</p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1715829331938364561&wfr=spider&for=pc">参考链接</a></p>
-</li>
-</ul>
-<h2 id="python线程同步"><a href="#python线程同步" class="headerlink" title="python线程同步"></a>python线程同步</h2><ul>
-<li>python线程同步具有一些与C类似的机制，比如各种锁和获取、释放锁等等</li>
-<li><a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1714105650396326932&wfr=spider&for=pc">参考链接</a></li>
-</ul>
-<h3 id="同步锁Lock"><a href="#同步锁Lock" class="headerlink" title="同步锁Lock"></a>同步锁Lock</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">lock = threading.Lock()</span><br><span class="line">lock.acquire()</span><br><span class="line">lock.release()</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>用于保护临界区</p>
-</li>
-<li><p>由于<code>threading.Lock()</code>对象中实现了<strong>enter__()与__exit</strong>()方法，故我们可以使用<strong>with语句</strong>进行上下文管理形式的加锁解锁操作</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> lock:</span><br><span class="line">    <span class="comment"># 自动加锁</span></span><br><span class="line">    <span class="keyword">global</span> num</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10_000_000</span>):</span><br><span class="line">    num += <span class="number">1</span></span><br><span class="line">    <span class="comment"># 自动解锁</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="RLock-递归锁"><a href="#RLock-递归锁" class="headerlink" title="RLock() 递归锁"></a>RLock() 递归锁</h3><ul>
-<li><p>递归锁是同步锁的一个升级版本，在同步锁的基础上可以做到连续重复使用多次acquire()后再重复使用多次release()的操作，但是一定要注意加锁次数和解锁次数必须一致，否则也将引发死锁现象。</p>
-</li>
-<li><p>其他部分类似，不再详细赘述</p>
-</li>
-</ul>
-<h3 id="Condition-条件锁"><a href="#Condition-条件锁" class="headerlink" title="Condition() 条件锁"></a>Condition() 条件锁</h3><ul>
-<li><p>条件锁是在递归锁的基础上增加了能够暂停线程运行的功能。并且我们可以使用wait()与notify()来控制线程执行的个数。</p>
-<p>注意：条件锁可以自由设定一次放行几个线程。</p>
-</li>
-<li><p><img src="/imgs/838ba61ea8d3fd1fc946d753909e6e1694ca5f61.jpeg" alt="img"></p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">currentRunThreadNumber = <span class="number">0</span></span><br><span class="line">maxSubThreadNumber = <span class="number">10</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    <span class="keyword">global</span> currentRunThreadNumber</span><br><span class="line">    thName = threading.currentThread().name</span><br><span class="line"></span><br><span class="line">    condLock.acquire()  <span class="comment"># 上锁</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;start and wait run thread : %s&quot;</span> % thName)</span><br><span class="line"></span><br><span class="line">    condLock.wait()  <span class="comment"># 暂停线程运行、等待唤醒</span></span><br><span class="line">    currentRunThreadNumber += <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;carry on run thread : %s&quot;</span> % thName)</span><br><span class="line"></span><br><span class="line">    condLock.release()  <span class="comment"># 解锁</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    condLock = threading.Condition()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxSubThreadNumber):</span><br><span class="line">        subThreadIns = threading.Thread(target=task)</span><br><span class="line">        subThreadIns.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> currentRunThreadNumber &lt; maxSubThreadNumber:</span><br><span class="line">        notifyNumber = <span class="built_in">int</span>(</span><br><span class="line">            <span class="built_in">input</span>(<span class="string">&quot;Please enter the number of threads that need to be notified to run：&quot;</span>))</span><br><span class="line"></span><br><span class="line">        condLock.acquire()</span><br><span class="line">        condLock.notify(notifyNumber)  <span class="comment"># 放行</span></span><br><span class="line">        condLock.release()</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;main thread run end&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 先启动10个子线程，然后这些子线程会全部变为等待状态</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-1</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-2</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-3</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-4</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-5</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-6</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-7</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-8</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-9</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-10</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 批量发送通知，放行特定数量的子线程继续运行</span></span><br><span class="line"><span class="comment"># Please enter the number of threads that need to be notified to run：5  # 放行5个</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-4</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-3</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-1</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-2</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-5</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Please enter the number of threads that need to be notified to run：5  # 放行5个</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-8</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-10</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-6</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-9</span></span><br><span class="line"><span class="comment"># carry on run thread : Thread-7</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Please enter the number of threads that need to be notified to run：1</span></span><br><span class="line"><span class="comment"># main thread run end</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意，上面的代码中的线程在使用<code>acquire()</code>获取锁之后，进入了休眠状态（也就是<code>wait()</code>），然后等待锁的<code>notify()</code>函数<strong>唤醒相应数量的正在休眠的进程</strong></li>
-</ul>
-<h3 id="Event-事件锁"><a href="#Event-事件锁" class="headerlink" title="Event() 事件锁"></a>Event() 事件锁</h3><ul>
-<li><p>事件锁是基于条件锁来做的，它与条件锁的区别在于一次只能放行全部，不能放行任意个数量的子线程继续运行。</p>
-<p>我们可以将事件锁看为红绿灯，当红灯时所有子线程都暂停运行，并进入“等待”状态，当绿灯时所有子线程都恢复“运行”。</p>
-</li>
-<li><p><img src="/imgs/b3fb43166d224f4ae902e4228a27db5b9922d146.jpeg" alt="img"></p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line">maxSubThreadNumber = <span class="number">3</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    thName = threading.currentThread().name    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;start and wait run thread : %s&quot;</span> % thName)    </span><br><span class="line">    eventLock.wait()  <span class="comment"># 暂停运行，等待绿灯    </span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;green light, %s carry on run&quot;</span> % thName)    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;red light, %s stop run&quot;</span> % thName)    </span><br><span class="line">    eventLock.wait()  <span class="comment"># 暂停运行，等待绿灯    </span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;green light, %s carry on run&quot;</span> % thName)    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;sub thread %s run end&quot;</span> % thName)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:    </span><br><span class="line">    eventLock = threading.Event()    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxSubThreadNumber):        </span><br><span class="line">        subThreadIns = threading.Thread(target=task)        </span><br><span class="line">        subThreadIns.start()    </span><br><span class="line">        eventLock.<span class="built_in">set</span>()  <span class="comment"># 设置为绿灯    </span></span><br><span class="line">        eventLock.clear()  <span class="comment"># 设置为红灯    </span></span><br><span class="line">        eventLock.<span class="built_in">set</span>()  <span class="comment"># 设置为绿灯</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-1</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-2</span></span><br><span class="line"><span class="comment"># start and wait run thread : Thread-3</span></span><br><span class="line"><span class="comment"># green light, Thread-1 carry on run</span></span><br><span class="line"><span class="comment"># red light, Thread-1 stop run</span></span><br><span class="line"><span class="comment"># green light, Thread-1 carry on run</span></span><br><span class="line"><span class="comment"># sub thread Thread-1 run end</span></span><br><span class="line"><span class="comment"># green light, Thread-3 carry on run</span></span><br><span class="line"><span class="comment"># red light, Thread-3 stop run</span></span><br><span class="line"><span class="comment"># green light, Thread-3 carry on run</span></span><br><span class="line"><span class="comment"># sub thread Thread-3 run end</span></span><br><span class="line"><span class="comment"># green light, Thread-2 carry on run</span></span><br><span class="line"><span class="comment"># red light, Thread-2 stop run</span></span><br><span class="line"><span class="comment"># green light, Thread-2 carry on run</span></span><br><span class="line"><span class="comment"># sub thread Thread-2 run end</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>不能使用<code>with</code>语句进行调用</strong></li>
-</ul>
-<h3 id="Semaphore-信号量锁"><a href="#Semaphore-信号量锁" class="headerlink" title="Semaphore() 信号量锁"></a>Semaphore() 信号量锁</h3><ul>
-<li><p>信号量锁也是根据条件锁来做的，它与条件锁和事件锁的区别如下：</p>
-<ul>
-<li>条件锁：一次可以放行任意个处于“等待”状态的线程</li>
-<li>事件锁：一次可以放行全部的处于“等待”状态的线程</li>
-<li>信号量锁：通过规定，成批的放行<strong>特定个处于“上锁”状态的线程</strong></li>
-</ul>
-</li>
-<li><p><img src="/imgs/0b55b319ebc4b74555e89af84b2c551e8b82153c.jpeg" alt="img"></p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">maxSubThreadNumber = <span class="number">6</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    thName = threading.currentThread().name</span><br><span class="line">    semaLock.acquire()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;run sub thread %s&quot;</span> % thName)</span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line">    semaLock.release()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 每次只能放行2个</span></span><br><span class="line">    semaLock = threading.Semaphore(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxSubThreadNumber):</span><br><span class="line">        subThreadIns = threading.Thread(target=task)</span><br><span class="line">        subThreadIns.start()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># run sub thread Thread-1</span></span><br><span class="line"><span class="comment"># run sub thread Thread-2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># run sub thread Thread-3</span></span><br><span class="line"><span class="comment"># run sub thread Thread-4</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># run sub thread Thread-6</span></span><br><span class="line"><span class="comment"># run sub thread Thread-5</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意调用<code>Semaphore()</code>初始化的时候传递参数<strong>指定同时能够放行的线程数量</strong></li>
-<li>也可以使用<code>with</code>语句</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">maxSubThreadNumber = <span class="number">6</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    thName = threading.currentThread().name</span><br><span class="line">    <span class="keyword">with</span> semaLock:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;run sub thread %s&quot;</span> % thName)</span><br><span class="line">        time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line"></span><br><span class="line">    semaLock = threading.Semaphore(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxSubThreadNumber):</span><br><span class="line">        subThreadIns = threading.Thread(target=task)</span><br><span class="line">        subThreadIns.start()</span><br></pre></td></tr></table></figure>
-
  
       <!-- reward -->
       
