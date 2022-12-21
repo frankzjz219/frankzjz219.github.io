@@ -141,6 +141,91 @@
     
     
     <article
+  id="post-强化学习复习（零）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/10/05/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E9%9B%B6%EF%BC%89/"
+    >强化学习复习（零）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/10/05/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E9%9B%B6%EF%BC%89/" class="article-date">
+  <time datetime="2022-10-05T08:05:13.000Z" itemprop="datePublished">2022-10-05</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/468828804">原文链接</a><h2 id="Policy-gradient网络复习"><a href="#Policy-gradient网络复习" class="headerlink" title="Policy gradient网络复习"></a>Policy gradient网络复习</h2><h3 id="给出行为act的思路"><a href="#给出行为act的思路" class="headerlink" title="给出行为act的思路"></a>给出行为act的思路</h3></li>
+<li>一个特定的情况序列（时间从0时刻到一个回合结束的时刻）发生的概率是可以计算的</li>
+<li>平均的reward期望是每种情况发生的概率×每个情况对应的reward的和</li>
+<li>优化的目标是尽可能的提高总的reward的期望<ul>
+<li><img src="/imgs/4feeab02cc1f2e8f6da90219335c49438195381704a62f7f024966cc21afb95c.png" alt="picture 1">  </li>
+<li>在这个过程中，第一个等号是梯度的变换；第二三个等号是利用了log函数的特性；第四个等号将求和转化成期望的形式；期望又可以由我们采集到的数据序列进行近似；最后一个等号是将每一个数据序列展开成每个数据点上的形式</li>
+<li>总体上，我们希望更加靠近奖励比较大的那条序列（效果好的话语权自然要大一点嘛），因此用每条序列的奖励来加权平均他们的更新方向。<h3 id="critic函数"><a href="#critic函数" class="headerlink" title="critic函数"></a>critic函数</h3></li>
+</ul>
+</li>
+<li>按照上面的说法，针对一个回合的训练，必须等到这个回合结束之后才能利用这个回合的reward对其进行参数调整，而且这样会导致一个回合中的每个动作的reward都使用同样的数值，很不精确</li>
+<li>所以我们此时就使用critic网络计算出当前这个动作<code>st</code>开始到回合结束时刻的奖励</li>
+<li><img src="/imgs/6761c7b6f169bf09a7bb2f1fa02aefda9ca88190eea866d64e8c23e7d1983865.png" alt="picture 2">  </li>
+<li><img src="/imgs/37e7977a1b3bb1ddd032abbc85a0b8f2e3434f63bc30553fa3514d18099e42c8.png" alt="picture 3">  </li>
+<li>可以理解为<strong>在<code>st</code>时刻，采取<code>at</code>行动比采取其他行动的<u>优势有多大</u></strong><h2 id="PPO算法"><a href="#PPO算法" class="headerlink" title="PPO算法"></a>PPO算法</h2></li>
+<li>接着上面的讲，PG方法一个很大的缺点就是参数更新慢，因为我们每更新一次参数都需要进行重新的采样，这其实是中on-policy的策略，即我们想要训练的agent和与环境进行交互的agent是同一个agent；与之对应的就是off-policy的策略，即想要训练的agent和与环境进行交互的agent不是同一个agent，简单来说，就是拿别人的经验来训练自己。举个下棋的例子，如果你是通过自己下棋来不断提升自己的棋艺，那么就是on-policy的，如果是通过看别人下棋来提升自己，那么就是off-policy的<h3 id="重要性采样"><a href="#重要性采样" class="headerlink" title="重要性采样"></a>重要性采样</h3></li>
+<li><img src="/imgs/a2866fe3c26cb3e9cadb580633cf64cbd460f716b477298a502dad8a31f9d20d.png" alt="picture 4">  </li>
+<li>对于一个服从概率p分布的变量x， 我们要估计f(x) 的期望。直接想到的是，我们采用一个服从p的随机产生器，直接产生若干个变量x的采样，然后计算他们的函数值f(x)，最后求均值就得到结果。但这里有一个问题是，对于每一个给定点x，我们知道其发生的概率，但是我们<strong>并不知道p的分布</strong>，也就无法构建这个随机数发生器。因此需要转换思路：<u>从一个已知的分布q中进行采样。通过对采样点的概率进行比较，确定这个采样点的重要性</u>。也就是上图所描述的方法。</li>
+<li>当然通过这种采样方式的分布p和q不能差距过大，否则，会由于采样的偏离带来谬误。</li>
+<li><img src="/imgs/80ab8c305bddfe1ca4d308d47d3dac31f0c6680f78771b6f2d143b39f3ff5e0c.png" alt="picture 5">  </li>
+<li><img src="/imgs/7e6b526fff456a6ab6e2c7d0bbd627db5c02dcc44a0d91f328d699896fc02e87.png" alt="picture 6">  </li>
+<li>引入上文中说的优势函数可知</li>
+<li><img src="/imgs/68010df5b578a09b2108c3fe9b5260a1a78519f9cf2b69b996a320f272e0b6c9.png" alt="picture 7">  </li>
+<li><img src="/imgs/f27c7828a80a95923055fed1d923287388d472572ee176698179e56051f696f9.png" alt="picture 8">  <ul>
+<li>一套策略参数θ，他与环境交互收集批量数据，然后批量数据关联到  的副本中。他每次都会被更新。</li>
+<li>一套策略参数的副本θ’，他是策略参数与环境互动后收集的数据的关联参数，相当于重要性采样中的q分布。</li>
+<li>一套评价网络的参数Φ，他是基于收集到的数据，用监督学习的方式来更新对状态的评估。他也是每次都更新。</li>
+</ul>
+</li>
+<li>更新的思路实际上是<ul>
+<li>0点时：我与环境进行互动，收集了很多数据。然后利用数据更新我的策略，此时我成为1点的我。当我被更新后，理论上，1点的我再次与环境互动，收集数据，然后把我更新到2点，然后这样往复迭代。</li>
+<li>但是如果我仍然想继续0点的我收集的数据来进行更新。因为这些数据是0点的我（而不是1点的我）所收集的。所以，我要对这些数据做一些重要性重采样，让这些数据看起来像是1点的我所收集的。当然这里仅仅是看起来像而已，所以我们要对这个“不像”的程度加以更新时的惩罚（KL）。</li>
+<li>其中，更新的方式是：我收集到的每个数据序列，对序列中每个（s, a）的优势程度做评估，<strong>评估越好的动作，将来就又在s状态时，让a出现的概率加大</strong>。这里评估优势程度的方法，可以用数据后面的总折扣奖励来表示。另外，考虑引入基线的Tip，我们就又引入一个评价者小明，让他跟我们一起学习，他只学习每个状态的期望折扣奖励的平均期望。这样，我们评估（s, a）时，我们就可以吧小明对 s 的评估结果就是 s 状态后续能获得的折扣期望，也就是我们的基线。注意哈：<u>优势函数中，前一半是实际数据中的折扣期望，后一半是估计的折扣期望（小明心中认为s应该得到的分数，即小明对s的期望奖励）</u>，如果你选取的动作得到的实际奖励比这个小明心中的奖励高，那小明为你打正分，认为可以提高这个动作的出现概率；如果选取的动作的实际得到的奖励比小明心中的期望还低，那小明为这个动作打负分，你应该减小这个动作的出现概率。这样，小明就成为了一个评判官。</li>
+<li>当然，作为评判官，小明自身也要提高自己的知识文化水平，也要在数据中不断的学习打分技巧，这就是对Φ的更新了</li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag">强化学习</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Ubuntu下开发Linux内核模块"
   class="article article-type-post"
   itemscope
@@ -792,68 +877,6 @@
 <li>栈中放的内容都是链表，每个位置链表结点存放index</li>
 <li>弹出的时候，右边最近比他大的数字是当前等待进栈的数字，左边最近的比他大的数字是栈中下面紧邻位置链表的最后一个位置</li>
 <li>同样数字进栈的时候，将同样的数字对应的index串联在进栈位置链表的下一个位置<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLessNoRepeat(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    <span class="comment">// 只存位置！</span></span><br><span class="line">    Stack&lt;Integer&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// 当遍历到i位置的数，arr[i]</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek()] &gt; arr[i]) &#123;</span><br><span class="line">            <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">            res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[j][<span class="number">1</span>] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">        res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">        res[j][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLess(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    Stack&lt;List&lt;Integer&gt;&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// i -&gt; arr[i] 进栈</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] &gt; arr[i]) &#123;</span><br><span class="line">            List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">                res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">                res[popi][<span class="number">1</span>] = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] == arr[i]) &#123;</span><br><span class="line">            stack.peek().add(Integer.valueOf(i));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            list.add(i);</span><br><span class="line">            stack.push(list);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">            res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[popi][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-滑动窗口的最大值问题"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/28/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC%E9%97%AE%E9%A2%98/"
-    >滑动窗口的最大值问题</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/28/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC%E9%97%AE%E9%A2%98/" class="article-date">
-  <time datetime="2022-08-28T11:26:32.000Z" itemprop="datePublished">2022-08-28</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="双端队列"><a href="#双端队列" class="headerlink" title="双端队列"></a>双端队列</h2><ul>
-<li>一种两端都可以进出的数据结构<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2></li>
-<li>保持双端队列的头部位置是窗口中最大的数字</li>
-<li>窗口的运动是随意的，不是固定窗口大小的</li>
-<li>将滑动窗口的右边界向右扩展的时候</li>
-<li>双端队列中存储的是双端队列中数字的index，但是使用的是index对应的数字<ul>
-<li>假如此时右边界新进入的数字比此时双端队列的末尾数字大的话就弹出此时双端队列末尾的数字，直到双端队列末尾的数字<strong>大于</strong>右边界新进入的数字（或者双端队列为空）。严格保证双端队列的单调性。</li>
-<li>假如此时窗口的左边界向右移动导致窗口内有数字被移出窗口，那么此时将被移出窗口的数字与双端队列头部的数字（也就是此时窗口的最大值）比较，假如二者相同（是同一个index对应的数字），则弹出双端队列头部的数字，否则不管。</li>
-<li>双端队列的信息实际上是<strong>假如此时滑动窗口的右边界不动，但是左边界前移，那么随着前移窗口中的最大值会是谁</strong></li>
-<li> 实际上是用<u>下标大的大数字</u>替换<u>下标小的小数字</u><h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2></li>
-</ul>
-</li>
-<li><u>平均</u>每个时刻都是O(1)<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getMaxWindow(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> w) &#123;</span><br><span class="line">    <span class="keyword">if</span> (arr == <span class="keyword">null</span> || w &lt; <span class="number">1</span> || arr.length &lt; w) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// qmax 窗口最大值的更新结构</span></span><br><span class="line">    <span class="comment">// 放下标</span></span><br><span class="line">    LinkedList&lt;Integer&gt; qmax = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">    <span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length - w + <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> R = <span class="number">0</span>; R &lt; arr.length; R++) &#123;</span><br><span class="line">        <span class="keyword">while</span> (!qmax.isEmpty() &amp;&amp; arr[qmax.peekLast()] &lt;= arr[R]) &#123;</span><br><span class="line">            qmax.pollLast();</span><br><span class="line">        &#125;</span><br><span class="line">        qmax.addLast(R);</span><br><span class="line">        <span class="keyword">if</span> (qmax.peekFirst() == R - w) &#123;</span><br><span class="line">            qmax.pollFirst();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (R &gt;= w - <span class="number">1</span>) &#123;</span><br><span class="line">            res[index++] = arr[qmax.peekFirst()];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
  
       <!-- reward -->

@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">682</span>
+            <span class="post-count">828</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">2 min</span>
+            <span class="post-count">3 min</span>
         </span>
     </span>
 </div>
@@ -143,6 +143,17 @@
 <li><p><code>plt.ylabel(&quot;cos(&quot;+r&#39;$\theta$&#39;+&quot;)&quot;)</code>，希腊字母用<code>r&#39;$\希腊字母$&#39;</code>即可</p>
 </li>
 <li><p>效果：<img src="/imgs/c0577006ba23e2df4a37e467756a55f016f0b2143078650c0daed7e891dba90f.png" alt="picture 3">  </p>
+</li>
+</ul>
+<h2 id="将gym的输出保存为gif动画"><a href="#将gym的输出保存为gif动画" class="headerlink" title="将gym的输出保存为gif动画"></a>将gym的输出保存为gif动画</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">saveAsGIF</span>(<span class="params">frames</span>):</span></span><br><span class="line">    patch = plt.imshow(frames[<span class="number">0</span>])</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">animate</span>(<span class="params">i</span>):</span></span><br><span class="line">        patch.set_data(frames[i])</span><br><span class="line"></span><br><span class="line">    anim = animation.FuncAnimation(plt.gcf(), animate, frames=<span class="built_in">len</span>(frames), interval=<span class="number">5</span>)</span><br><span class="line">    anim.save(<span class="string">&quot;./CartPole_v1_result.gif&quot;</span>, writer=<span class="string">&quot;pillow&quot;</span>, fps=<span class="number">30</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>此外，还需要在创建gym环境的时候进行一些操作（<strong>此处新版的gym和旧版的不太相同</strong>）<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">env = gym.make(<span class="string">&#x27;Pendulum-v1&#x27;</span>, render_mode=<span class="string">&quot;rgb_array&quot;</span>)</span><br><span class="line">frames = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">    frames.append(env.render())</span><br></pre></td></tr></table></figure></li>
+<li>然后再将<code>frames</code>当作参数传入前面的函数<code>saveAsGIF()</code>中</li>
+<li><img src="/imgs/4b4706ade3cd854f191da16b2a009e2f3be50d13fc63410581fece37afe1d1f5.gif" alt="picture 5">  <h2 id="python中的"><a href="#python中的" class="headerlink" title="python中的@"></a>python中的<code>@</code></h2></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/daniumiqi/p/12162192.html">参考链接</a><h2 id="python中的None"><a href="#python中的None" class="headerlink" title="python中的None"></a>python中的<code>None</code></h2></li>
+<li><a target="_blank" rel="noopener" href="https://m.php.cn/article/419082.html">参考链接</a><ul>
+<li>就是空对象，无类型</li>
+</ul>
 </li>
 </ul>
  
@@ -208,11 +219,11 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/12/11/FreeRtos1/" class="article-nav-link">
+      <a href="/2021/12/11/FreeRtos2/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            FreeRtos1
+            FreeRtos2
           
         </div>
       </a>

@@ -141,6 +141,95 @@
     
     
     <article
+  id="post-Unity学习笔记"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/12/21/Unity%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+    >Unity学习笔记</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/12/21/Unity%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="article-date">
+  <time datetime="2022-12-20T16:21:08.000Z" itemprop="datePublished">2022-12-21</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Unity学习笔记"><a href="#Unity学习笔记" class="headerlink" title="Unity学习笔记"></a>Unity学习笔记</h1><h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV16W411D7sC?p=14&vd_source=2ad101445b39a9dac0437fdcd408895e">入门教程</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.unity3d.com/2022.1/Documentation/ScriptReference/">官方文档</a></p>
+<h2 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h2></li>
+<li><p>用将对象拖拽到这个位置<img src="/imgs/fd77db333d98e6cb810a31c94a1629c8359b6da349617469610875b303c9798a.png" alt="picture 4"><br>的方式给<code>public</code>对象赋值，包括<code>GameObject</code>和<code>RigidBody</code>，这两个得<u>分开赋值</u></p>
+</li>
+<li><p><code>RigidBody</code>的<code>AddForce</code>不能开启<img src="/imgs/fdedeaddbfac4dea740aae258bcd25e49c578e1b4a6cc61b9238483bb50d35d8.png" alt="picture 2">  </p>
+</li>
+<li><p>is Kinematic的<a target="_blank" rel="noopener" href="https://blog.csdn.net/iiiiiiimp/article/details/126822387">教程</a></p>
+<ul>
+<li>isKinematic<strong>不会对碰撞和力做出反应</strong>，不受物理系统影响，但依然<strong>会对其他刚体产生物理影响</strong>（比如可以撞击其他刚体）。</li>
+<li>isKinematic只能在脚本中修改物体的Transform属性来移动。</li>
+<li>用在经常需要移动等变化物理状态的碰撞体上。一个刚体碰撞体，可以随时开启或关闭Is Kinematic选项，不会像静态碰撞体的enabled开启或关闭那样引起物理系统的问题。</li>
+</ul>
+</li>
+<li><p>给一个物理系统的刚体添加一个瞬时的速度的方法</p>
+<ul>
+<li><code>wbRd.AddForce(new Vector3(x, y, z) * 1.0f, ForceMode.Impulse);</code></li>
+<li>或者ForceMode设置为<code>VelocityChange</code>，可以直接改变速度，类似于碰撞的效果</li>
+</ul>
+</li>
+<li><p>获取时间用<code>TIme</code>类，unity有支持</p>
+</li>
+<li><p>复位一个场景用<code>SceneManager.LoadScene(index);</code>，index是这个scene在最终的序列里拍第几个，从0开始</p>
+</li>
+<li><p>一个<code>Vector3.normalized</code>给出同方向的一个单位向量</p>
+</li>
+<li><p><code>transform.LookAt(transform)</code>是让当前对象的z轴指向目标对象（z轴是相机的拍照方向）</p>
+</li>
+<li><p>不规则物体生成碰撞体：<img src="/imgs/d2d0ca79325ddcc42b7949239c75d296bb0b0b5bdd12eb91330d0a4f2f44c5e6.png" alt="picture 3">  </p>
+</li>
+<li><p>数学计算用<code>Mathf</code>对象下面的操作函数，其中的三角函数是角度制（0-360°）的</p>
+</li>
+<li><p>鼠标位置用<code>Input.mousePosition</code>得到一个Vector2</p>
+</li>
+<li><p>键盘用<code>Input.GetKeyDown(KeyCode.按键名)</code>或者其他，可以查手册，KeyCode包含的内容也查手册</p>
+</li>
+<li><p><code>Transform.translate()</code>函数可以指定运动的坐标系是自身的还是世界的</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Unity/" rel="tag">Unity</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-机器学习知识帖"
   class="article article-type-post"
   itemscope
@@ -195,6 +284,8 @@
 <li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/78798251?utm_source=qq">KMeans</a></p>
 <h2 id="Dueling-DQN"><a href="#Dueling-DQN" class="headerlink" title="Dueling DQN"></a>Dueling DQN</h2></li>
 <li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/110807201">Dueling DQN</a></p>
+<h2 id="文章链接"><a href="#文章链接" class="headerlink" title="文章链接"></a>文章链接</h2></li>
+<li><p><a target="_blank" rel="noopener" href="https://openai.com/blog/vpt/">openai用强化学习玩我的世界</a></p>
 </li>
 </ul>
  
@@ -811,91 +902,6 @@
 <li><p>一个通俗的比喻</p>
 <ul>
 <li><img src="/imgs/640211411248b69921d9fbe85c5c636b81ddef4728e4a2df15244a3897987b63.png" alt="picture 27">  </li>
-</ul>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag">强化学习</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-强化学习复习（零）"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/10/05/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E9%9B%B6%EF%BC%89/"
-    >强化学习复习（零）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/10/05/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E9%9B%B6%EF%BC%89/" class="article-date">
-  <time datetime="2022-10-05T08:05:13.000Z" itemprop="datePublished">2022-10-05</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/468828804">原文链接</a><h2 id="Policy-gradient网络复习"><a href="#Policy-gradient网络复习" class="headerlink" title="Policy gradient网络复习"></a>Policy gradient网络复习</h2><h3 id="给出行为act的思路"><a href="#给出行为act的思路" class="headerlink" title="给出行为act的思路"></a>给出行为act的思路</h3></li>
-<li>一个特定的情况序列（时间从0时刻到一个回合结束的时刻）发生的概率是可以计算的</li>
-<li>平均的reward期望是每种情况发生的概率×每个情况对应的reward的和</li>
-<li>优化的目标是尽可能的提高总的reward的期望<ul>
-<li><img src="/imgs/4feeab02cc1f2e8f6da90219335c49438195381704a62f7f024966cc21afb95c.png" alt="picture 1">  </li>
-<li>在这个过程中，第一个等号是梯度的变换；第二三个等号是利用了log函数的特性；第四个等号将求和转化成期望的形式；期望又可以由我们采集到的数据序列进行近似；最后一个等号是将每一个数据序列展开成每个数据点上的形式</li>
-<li>总体上，我们希望更加靠近奖励比较大的那条序列（效果好的话语权自然要大一点嘛），因此用每条序列的奖励来加权平均他们的更新方向。<h3 id="critic函数"><a href="#critic函数" class="headerlink" title="critic函数"></a>critic函数</h3></li>
-</ul>
-</li>
-<li>按照上面的说法，针对一个回合的训练，必须等到这个回合结束之后才能利用这个回合的reward对其进行参数调整，而且这样会导致一个回合中的每个动作的reward都使用同样的数值，很不精确</li>
-<li>所以我们此时就使用critic网络计算出当前这个动作<code>st</code>开始到回合结束时刻的奖励</li>
-<li><img src="/imgs/6761c7b6f169bf09a7bb2f1fa02aefda9ca88190eea866d64e8c23e7d1983865.png" alt="picture 2">  </li>
-<li><img src="/imgs/37e7977a1b3bb1ddd032abbc85a0b8f2e3434f63bc30553fa3514d18099e42c8.png" alt="picture 3">  </li>
-<li>可以理解为<strong>在<code>st</code>时刻，采取<code>at</code>行动比采取其他行动的<u>优势有多大</u></strong><h2 id="PPO算法"><a href="#PPO算法" class="headerlink" title="PPO算法"></a>PPO算法</h2></li>
-<li>接着上面的讲，PG方法一个很大的缺点就是参数更新慢，因为我们每更新一次参数都需要进行重新的采样，这其实是中on-policy的策略，即我们想要训练的agent和与环境进行交互的agent是同一个agent；与之对应的就是off-policy的策略，即想要训练的agent和与环境进行交互的agent不是同一个agent，简单来说，就是拿别人的经验来训练自己。举个下棋的例子，如果你是通过自己下棋来不断提升自己的棋艺，那么就是on-policy的，如果是通过看别人下棋来提升自己，那么就是off-policy的<h3 id="重要性采样"><a href="#重要性采样" class="headerlink" title="重要性采样"></a>重要性采样</h3></li>
-<li><img src="/imgs/a2866fe3c26cb3e9cadb580633cf64cbd460f716b477298a502dad8a31f9d20d.png" alt="picture 4">  </li>
-<li>对于一个服从概率p分布的变量x， 我们要估计f(x) 的期望。直接想到的是，我们采用一个服从p的随机产生器，直接产生若干个变量x的采样，然后计算他们的函数值f(x)，最后求均值就得到结果。但这里有一个问题是，对于每一个给定点x，我们知道其发生的概率，但是我们<strong>并不知道p的分布</strong>，也就无法构建这个随机数发生器。因此需要转换思路：<u>从一个已知的分布q中进行采样。通过对采样点的概率进行比较，确定这个采样点的重要性</u>。也就是上图所描述的方法。</li>
-<li>当然通过这种采样方式的分布p和q不能差距过大，否则，会由于采样的偏离带来谬误。</li>
-<li><img src="/imgs/80ab8c305bddfe1ca4d308d47d3dac31f0c6680f78771b6f2d143b39f3ff5e0c.png" alt="picture 5">  </li>
-<li><img src="/imgs/7e6b526fff456a6ab6e2c7d0bbd627db5c02dcc44a0d91f328d699896fc02e87.png" alt="picture 6">  </li>
-<li>引入上文中说的优势函数可知</li>
-<li><img src="/imgs/68010df5b578a09b2108c3fe9b5260a1a78519f9cf2b69b996a320f272e0b6c9.png" alt="picture 7">  </li>
-<li><img src="/imgs/f27c7828a80a95923055fed1d923287388d472572ee176698179e56051f696f9.png" alt="picture 8">  <ul>
-<li>一套策略参数θ，他与环境交互收集批量数据，然后批量数据关联到  的副本中。他每次都会被更新。</li>
-<li>一套策略参数的副本θ’，他是策略参数与环境互动后收集的数据的关联参数，相当于重要性采样中的q分布。</li>
-<li>一套评价网络的参数Φ，他是基于收集到的数据，用监督学习的方式来更新对状态的评估。他也是每次都更新。</li>
-</ul>
-</li>
-<li>更新的思路实际上是<ul>
-<li>0点时：我与环境进行互动，收集了很多数据。然后利用数据更新我的策略，此时我成为1点的我。当我被更新后，理论上，1点的我再次与环境互动，收集数据，然后把我更新到2点，然后这样往复迭代。</li>
-<li>但是如果我仍然想继续0点的我收集的数据来进行更新。因为这些数据是0点的我（而不是1点的我）所收集的。所以，我要对这些数据做一些重要性重采样，让这些数据看起来像是1点的我所收集的。当然这里仅仅是看起来像而已，所以我们要对这个“不像”的程度加以更新时的惩罚（KL）。</li>
-<li>其中，更新的方式是：我收集到的每个数据序列，对序列中每个（s, a）的优势程度做评估，<strong>评估越好的动作，将来就又在s状态时，让a出现的概率加大</strong>。这里评估优势程度的方法，可以用数据后面的总折扣奖励来表示。另外，考虑引入基线的Tip，我们就又引入一个评价者小明，让他跟我们一起学习，他只学习每个状态的期望折扣奖励的平均期望。这样，我们评估（s, a）时，我们就可以吧小明对 s 的评估结果就是 s 状态后续能获得的折扣期望，也就是我们的基线。注意哈：<u>优势函数中，前一半是实际数据中的折扣期望，后一半是估计的折扣期望（小明心中认为s应该得到的分数，即小明对s的期望奖励）</u>，如果你选取的动作得到的实际奖励比这个小明心中的奖励高，那小明为你打正分，认为可以提高这个动作的出现概率；如果选取的动作的实际得到的奖励比小明心中的期望还低，那小明为这个动作打负分，你应该减小这个动作的出现概率。这样，小明就成为了一个评判官。</li>
-<li>当然，作为评判官，小明自身也要提高自己的知识文化水平，也要在数据中不断的学习打分技巧，这就是对Φ的更新了</li>
 </ul>
 </li>
 </ul>
