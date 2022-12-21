@@ -168,7 +168,12 @@
       
     <div class="article-entry" itemprop="articleBody">
        
-  <h1 id="Unity学习笔记"><a href="#Unity学习笔记" class="headerlink" title="Unity学习笔记"></a>Unity学习笔记</h1><h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
+  <h1 id="Unity学习笔记"><a href="#Unity学习笔记" class="headerlink" title="Unity学习笔记"></a>Unity学习笔记</h1><p><u><strong>先安装hub再安装Unity！！！</strong></u></p>
+<h2 id="环境变量配置（建议用VS一步到位，VSCode配置环境太麻烦）"><a href="#环境变量配置（建议用VS一步到位，VSCode配置环境太麻烦）" class="headerlink" title="环境变量配置（建议用VS一步到位，VSCode配置环境太麻烦）"></a>环境变量配置（建议用VS一步到位，VSCode配置环境太麻烦）</h2><ul>
+<li>右键文件管理器-&gt;属性-&gt;<img src="/imgs/7a45dd2b4ae080fe76c4387e1d39b34498f2d3b18611f42a1274bc17a4d2e25c.png" alt="picture 5">  </li>
+<li>然后环境变量，添加<img src="/imgs/047fbdff8062f0b8d0fe2806b51cccd884cadc4c8be1c8fb6cddd968ea217925.png" alt="picture 6">  看这俩有没有，然后试一下命令行输入<code>dotnet --info</code></li>
+</ul>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
 <li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV16W411D7sC?p=14&vd_source=2ad101445b39a9dac0437fdcd408895e">入门教程</a></p>
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://docs.unity3d.com/2022.1/Documentation/ScriptReference/">官方文档</a></p>
@@ -177,10 +182,12 @@
 </li>
 <li><p><code>RigidBody</code>的<code>AddForce</code>不能开启<img src="/imgs/fdedeaddbfac4dea740aae258bcd25e49c578e1b4a6cc61b9238483bb50d35d8.png" alt="picture 2">  </p>
 </li>
+<li><p>刚体的<a target="_blank" rel="noopener" href="https://blog.csdn.net/LOVE_Me__/article/details/125851048">教程</a></p>
+</li>
 <li><p>is Kinematic的<a target="_blank" rel="noopener" href="https://blog.csdn.net/iiiiiiimp/article/details/126822387">教程</a></p>
 <ul>
-<li>isKinematic<strong>不会对碰撞和力做出反应</strong>，不受物理系统影响，但依然<strong>会对其他刚体产生物理影响</strong>（比如可以撞击其他刚体）。</li>
-<li>isKinematic只能在脚本中修改物体的Transform属性来移动。</li>
+<li>isKinematic<strong>不会对碰撞和力做出反应</strong>，不受物理系统影响，但依然<strong>会对其他刚体产生物理影响</strong>（比如可以<strong>阻挡</strong>其他刚体）。</li>
+<li>isKinematic只能<u>在脚本中修改物体的Transform属性来移动</u>。</li>
 <li>用在经常需要移动等变化物理状态的碰撞体上。一个刚体碰撞体，可以随时开启或关闭Is Kinematic选项，不会像静态碰撞体的enabled开启或关闭那样引起物理系统的问题。</li>
 </ul>
 </li>
@@ -190,7 +197,7 @@
 <li>或者ForceMode设置为<code>VelocityChange</code>，可以直接改变速度，类似于碰撞的效果</li>
 </ul>
 </li>
-<li><p>获取时间用<code>TIme</code>类，unity有支持</p>
+<li><p>获取时间用<code>Time</code>类，unity有支持</p>
 </li>
 <li><p>复位一个场景用<code>SceneManager.LoadScene(index);</code>，index是这个scene在最终的序列里拍第几个，从0开始</p>
 </li>
