@@ -141,6 +141,393 @@
     
     
     <article
+  id="post-分析基于epoll的C-高性能webServer代码（三）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81%EF%BC%88%E4%B8%89%EF%BC%89/"
+    >分析基于epoll的C++高性能webServer代码（三）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81%EF%BC%88%E4%B8%89%EF%BC%89/" class="article-date">
+  <time datetime="2022-06-29T11:39:45.000Z" itemprop="datePublished">2022-06-29</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="分析基于epoll的C-高性能webServer代码（三）"><a href="#分析基于epoll的C-高性能webServer代码（三）" class="headerlink" title="分析基于epoll的C++高性能webServer代码（三）"></a>分析基于epoll的C++高性能webServer代码（三）</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/goosse/article/details/124495526">epoll用法参考</a></p>
+<h2 id="Socket类"><a href="#Socket类" class="headerlink" title="Socket类"></a>Socket类</h2><ul>
+<li><p>Socket类基于C语言的tcp通信库实现，将C语言提供的Socket相关操作函数利用C++的面向对象进行了包装</p>
+</li>
+<li><p>成员数据对象只有一个<code>int serverfd_;</code></p>
+</li>
+</ul>
+<h3 id="构造函数Socket-args"><a href="#构造函数Socket-args" class="headerlink" title="构造函数Socket(/* args */)"></a>构造函数Socket(/* args */)</h3><ul>
+<li>创建<code>socket</code>对象</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">Socket::<span class="built_in">Socket</span>(<span class="comment">/* args */</span>)</span><br><span class="line">&#123;</span><br><span class="line">    serverfd_ = <span class="built_in">socket</span>(AF_INET, SOCK_STREAM, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="number">-1</span> == serverfd_)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;socket create fail!&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;server create socket&quot;</span> &lt;&lt; serverfd_ &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h3><ul>
+<li>关闭<code>socket</code>文件描述符</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">Socket::~<span class="built_in">Socket</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">close</span>(serverfd_);</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;server close...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="SetReuseAddr"><a href="#SetReuseAddr" class="headerlink" title="SetReuseAddr()"></a>SetReuseAddr()</h3><ul>
+<li>设置地址</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Socket::SetReuseAddr</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> on = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">setsockopt</span>(serverfd_, SOL_SOCKET, SO_REUSEADDR, &amp;on, <span class="built_in"><span class="keyword">sizeof</span></span>(on));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Setnonblocking"><a href="#Setnonblocking" class="headerlink" title="Setnonblocking()"></a>Setnonblocking()</h3><ul>
+<li>设置为非阻塞模式</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Socket::Setnonblocking</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> opts = <span class="built_in">fcntl</span>(serverfd_, F_GETFL);</span><br><span class="line">    <span class="keyword">if</span> (opts&lt;<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;fcntl(serverfd_,GETFL)&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">fcntl</span>(serverfd_, F_SETFL, opts | O_NONBLOCK) &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;fcntl(serverfd_,SETFL,opts)&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;server setnonblocking...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="BindAddress-int-serverport"><a href="#BindAddress-int-serverport" class="headerlink" title="BindAddress(int serverport)"></a>BindAddress(int serverport)</h3><ul>
+<li>将主机对应的端口号与<code>socket</code>进行绑定</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Socket::BindAddress</span><span class="params">(<span class="keyword">int</span> serverport)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">serveraddr</span>;</span></span><br><span class="line">	<span class="built_in">memset</span>(&amp;serveraddr, <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(serveraddr));</span><br><span class="line">	serveraddr.sin_family = AF_INET;</span><br><span class="line">	serveraddr.sin_addr.s_addr = <span class="built_in">htonl</span>(INADDR_ANY);<span class="comment">//inet_addr(_ServerIP.c_str());</span></span><br><span class="line">	serveraddr.sin_port = <span class="built_in">htons</span>(serverport);</span><br><span class="line">	<span class="keyword">int</span> resval = <span class="built_in">bind</span>(serverfd_, (struct sockaddr*)&amp;serveraddr, <span class="built_in"><span class="keyword">sizeof</span></span>(serveraddr));</span><br><span class="line">	<span class="keyword">if</span> (resval == <span class="number">-1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">close</span>(serverfd_);</span><br><span class="line">		<span class="built_in">perror</span>(<span class="string">&quot;error bind&quot;</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;server bindaddress...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Listen"><a href="#Listen" class="headerlink" title="Listen()"></a>Listen()</h3><ul>
+<li>就是调用C提供的<code>Listen</code>函数</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Socket::Listen</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;    </span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">listen</span>(serverfd_, <span class="number">2048</span>) &lt; <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">perror</span>(<span class="string">&quot;error listen&quot;</span>);</span><br><span class="line">		<span class="built_in">close</span>(serverfd_);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;server listenning...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Accept-struct-sockaddr-in-amp-clientaddr"><a href="#Accept-struct-sockaddr-in-amp-clientaddr" class="headerlink" title="Accept(struct sockaddr_in &amp;clientaddr)"></a>Accept(struct sockaddr_in &amp;clientaddr)</h3><ul>
+<li>调用C提供的<code>Accept()</code>函数</li>
+<li>返回用户<code>socket</code>的文件描述符</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Socket::Accept</span><span class="params">(struct sockaddr_in &amp;clientaddr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">socklen_t</span> lengthofsockaddr = <span class="built_in"><span class="keyword">sizeof</span></span>(clientaddr);</span><br><span class="line">    <span class="keyword">int</span> clientfd = <span class="built_in">accept</span>(serverfd_, (struct sockaddr*)&amp;clientaddr, &amp;lengthofsockaddr);</span><br><span class="line">    <span class="keyword">if</span> (clientfd &lt; <span class="number">0</span>) </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//perror(&quot;error accept&quot;);</span></span><br><span class="line">        <span class="comment">//if(errno == EAGAIN)</span></span><br><span class="line">            <span class="comment">//return 0;</span></span><br><span class="line">		<span class="comment">//std::cout &lt;&lt; &quot;error accept:there is no new connection accept...&quot; &lt;&lt; std::endl;</span></span><br><span class="line">        <span class="keyword">return</span> clientfd;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot;server accept,clientfd: &quot; &lt;&lt; clientfd &lt;&lt; std::endl;</span></span><br><span class="line">    <span class="keyword">return</span> clientfd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Close"><a href="#Close" class="headerlink" title="Close()"></a>Close()</h3><ul>
+<li>关闭对应的文件描述符</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Socket::Close</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">close</span>(serverfd_);</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;server close...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Epoll介绍"><a href="#Epoll介绍" class="headerlink" title="Epoll介绍"></a>Epoll介绍</h2><h3 id="等待队列"><a href="#等待队列" class="headerlink" title="等待队列"></a>等待队列</h3><ul>
+<li>当进程A执行到创建socket的语句时，操作系统会创建一个由文件系统管理的socket对象（如下图）。这个socket对象包含了发送缓冲区、接收缓冲区、等待队列等成员。<u>等待队列是个非常重要的结构，它指向所有需要等待该socket事件的进程</u>。</li>
+</ul>
+<p><img src="/imgs/v2-7ce207c92c9dd7085fb7b823e2aa5872_720w.jpg" alt="img"></p>
+<ul>
+<li>当程序执行到<strong>recv时</strong>，操作系统会将进程A从工作队列移动到该socket的等待队列中（如下图）。由于工作队列只剩下了进程B和C，依据进程调度，cpu会轮流执行这两个进程的程序，不会执行进程A的程序。<strong>所以进程A被阻塞，不会往下执行代码，也不会占用cpu资源</strong>。</li>
+</ul>
+<p><img src="/imgs/v2-1c7a96c8da16f123388e46f88772e6d8_720w.jpg" alt="img"></p>
+<ul>
+<li>ps：操作系统添加等待队列只是添加了对这个“等待中”进程的引用，以便在接收到数据时获取进程对象、将其唤醒，而非直接将进程管理纳入自己之下。上图为了方便说明，直接将进程挂到等待队列之下。</li>
+<li>当socket接收到数据后，操作系统将该socket等待队列上的进程<strong>重新放回到工作队列</strong>，该进程变成运行状态，继续执行代码。也由于<u>socket的接收缓冲区已经有了数据，recv可以返回接收到的数据</u>。</li>
+</ul>
+<h3 id="内核接收网络数据全过程"><a href="#内核接收网络数据全过程" class="headerlink" title="内核接收网络数据全过程"></a>内核接收网络数据全过程</h3><ul>
+<li>如下图所示，进程在recv阻塞期间，计算机收到了对端传送的数据（步骤①）。数据经由网卡传送到内存（步骤②），然后网卡通过中断信号通知cpu有数据到达，cpu执行中断程序（步骤③）。此处的中断程序主要有两项功能，先将网络数据写入到对应socket的接收缓冲区里面（步骤④），再唤醒进程A（步骤⑤），重新将进程A放入工作队列中。</li>
+</ul>
+<p><img src="/imgs/v2-696b131cae434f2a0b5ab4d6353864af_720w.jpg" alt="img"></p>
+<ul>
+<li>一个socket对应着一个端口号，而网络数据包中包含了ip和端口的信息，内核可以通过端口号找到对应的socket。当然，为了提高处理速度，操作系统会维护端口号到socket的索引结构，以快速读取。</li>
+</ul>
+<h3 id="同时监视多个socket的简单方法"><a href="#同时监视多个socket的简单方法" class="headerlink" title="同时监视多个socket的简单方法"></a><strong>同时监视多个socket的简单方法</strong></h3><ul>
+<li>服务端需要管理多个客户端连接，而recv只能监视单个socket，这种矛盾下，人们开始寻找监视多个socket的方法。epoll的要义是<strong>高效</strong>的监视多个socket。从历史发展角度看，必然先出现一种不太高效的方法，人们再加以改进。只有先理解了不太高效的方法，才能够理解epoll的本质。</li>
+<li>假如能够预先传入一个socket列表，<strong>如果列表中的socket都没有数据，挂起进程，直到有一个socket收到数据，唤醒进程</strong>。这种方法很直接，也是select的设计思想。</li>
+<li>为方便理解，我们先复习select的用法。在如下的代码中，先准备一个数组（下面代码中的fds），让fds存放着所有需要监视的socket。然后调用select，如果fds中的所有socket都没有数据，select会阻塞，直到有一个socket接收到数据，select返回，唤醒进程。用户可以遍历fds，通过FD_ISSET判断具体哪个socket收到数据，然后做出处理。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> s = <span class="built_in">socket</span>(AF_INET, SOCK_STREAM, <span class="number">0</span>);  </span><br><span class="line"><span class="built_in">bind</span>(s, ...)</span><br><span class="line"><span class="built_in">listen</span>(s, ...)</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> fds[] =  存放需要监听的socket</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">    <span class="keyword">int</span> n = <span class="built_in">select</span>(..., fds, ...)</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; fds.count; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">FD_ISSET</span>(fds[i], ...))&#123;</span><br><span class="line">            <span class="comment">//fds[i]的数据处理</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="select的流程"><a href="#select的流程" class="headerlink" title="select的流程"></a>select的流程</h3><ul>
+<li>select的实现思路很直接。假如程序同时监视如下图的sock1、sock2和sock3三个socket，那么在调用select之后，操作系统把进程A分别加入这三个socket的等待队列中。</li>
+</ul>
+<p><img src="/imgs/v2-0cccb4976f8f2c2f8107f2b3a5bc46b3_720w.jpg" alt="img"></p>
+<ul>
+<li>当任何一个socket收到数据后，中断程序将唤起进程。下图展示了sock2接收到了数据的处理流程。</li>
+</ul>
+<p><img src="/imgs/v2-85dba5430f3c439e4647ea4d97ba54fc_720w.jpg" alt="img"></p>
+<ul>
+<li>所谓唤起进程，就是将进程从所有的等待队列中移除，加入到工作队列里面。如下图所示。</li>
+</ul>
+<p><img src="/imgs/v2-a86b203b8d955466fff34211d965d9eb_720w.jpg" alt="img"></p>
+<ul>
+<li><p>经由这些步骤，当进程A被唤醒后，它知道至少有一个socket接收了数据。程序只需遍历一遍socket列表，就可以得到就绪的socket。</p>
+</li>
+<li><p>这种简单方式<strong>行之有效</strong>，在几乎所有操作系统都有对应的实现。</p>
+</li>
+</ul>
+<p><strong>select的缺点</strong></p>
+<ul>
+<li>其一，每次调用select都需要将进程加入到所有监视socket的等待队列，每次唤醒都需要从每个队列中移除。这里涉及了两次遍历，而且每次都要将整个fds列表传递给内核，有一定的开销。正是因为遍历操作开销大，出于效率的考量，才会规定select的最大监视数量，默认只能监视1024个socket。</li>
+<li>其二，进程被唤醒后，程序并不知道哪些socket收到数据，还需要遍历一次。</li>
+</ul>
+<h3 id="epoll的设计思路"><a href="#epoll的设计思路" class="headerlink" title="epoll的设计思路"></a>epoll的设计思路</h3><ul>
+<li>epoll是在select出现N多年后才被发明的，是select和poll的增强版本。epoll通过以下一些措施来改进效率。</li>
+<li>select低效的原因之一是将“维护等待队列”和“阻塞进程”两个步骤合二为一。如下图所示，每次调用select都需要这两步操作，然而大多数应用场景中，需要监视的socket相对固定，并不需要每次都修改。epoll将这两个操作分开，先用epoll_ctl维护等待队列，再调用epoll_wait阻塞进程。显而易见的，效率就能得到提升。</li>
+</ul>
+<p><img src="/imgs/eb0153cf87170138262d2109a7e59a447a4b085e7092880892bc91c9652d95c7.png" alt="图 1">  </p>
+<ul>
+<li>为方便理解后续的内容，我们先复习下epoll的用法。如下的代码中，先用epoll_create创建一个epoll对象epfd，再通过epoll_ctl将需要监视的socket添加到epfd中，最后调用epoll_wait等待数据。<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> s = <span class="built_in">socket</span>(AF_INET, SOCK_STREAM, <span class="number">0</span>);   </span><br><span class="line"><span class="built_in">bind</span>(s, ...)</span><br><span class="line"><span class="built_in">listen</span>(s, ...)</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> epfd = <span class="built_in">epoll_create</span>(...);</span><br><span class="line"><span class="built_in">epoll_ctl</span>(epfd, ...); <span class="comment">//将所有需要监听的socket添加到epfd中</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">    <span class="keyword">int</span> n = <span class="built_in">epoll_wait</span>(...)</span><br><span class="line">    <span class="keyword">for</span>(接收到数据的socket)&#123;</span><br><span class="line">        <span class="comment">//处理</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>select低效的另一个原因在于程序不知道哪些socket收到数据，只能一个个遍历。如果内核维护一个“就绪列表”，引用收到数据的socket，就能避免遍历。如下图所示，计算机共有三个socket，收到数据的sock2和sock3被rdlist（就绪列表）所引用。当进程被唤醒后，只要获取rdlist的内容，就能够知道哪些socket收到数据。</li>
+</ul>
+<p><img src="/imgs/8727b6a09712ba48bc3aa42bc9a8d91213668b9c71e598c66b38952ac63188f0.png" alt="图 2">  </p>
+<h3 id="epoll的原理和流程"><a href="#epoll的原理和流程" class="headerlink" title="epoll的原理和流程"></a>epoll的原理和流程</h3><ul>
+<li>创建epoll对象<ul>
+<li>如下图所示，当某个进程调用epoll_create方法时，内核会创建一个eventpoll对象（也就是程序中epfd所代表的对象）。eventpoll对象也是文件系统中的一员，和socket一样，它也会有等待队列。</li>
+<li><img src="/imgs/91c0d033282976eae916544255575d9624bb815e6c1035da670e0b290b4bcece.png" alt="图 3">  </li>
+<li>创建一个代表该epoll的eventpoll对象是必须的，因为内核要维护“就绪列表”等数据，“就绪列表”可以作为eventpoll的成员。</li>
+</ul>
+</li>
+<li>维护监视列表<ul>
+<li>创建epoll对象后，可以用epoll_ctl添加或删除所要监听的socket。以添加socket为例，如下图，如果通过epoll_ctl添加sock1、sock2和sock3的监视，内核会将eventpoll添加到这三个socket的等待队列中。</li>
+<li><img src="/imgs/8a1343796174bd11a6f73f1b52799e0ed22a766d022325d3d5cf02503a4a3ead.png" alt="图 4">  </li>
+<li>当socket收到数据后，中断程序会操作eventpoll对象，而不是直接操作进程。</li>
+</ul>
+</li>
+<li>接收数据<ul>
+<li>当socket收到数据后，中断程序会给eventpoll的“就绪列表”添加socket引用。如下图展示的是sock2和sock3收到数据后，中断程序让rdlist引用这两个socket。</li>
+<li><img src="/imgs/cc63dd25307e424248a1d6bea9b932f785332bf7af15817f058b6a2884fd6444.png" alt="图 5">  </li>
+<li>eventpoll对象相当于是socket和进程之间的中介，socket的数据接收并不直接影响进程，而是通过改变eventpoll的就绪列表来改变进程状态。</li>
+<li>当程序执行到epoll_wait时，如果rdlist已经引用了socket，那么epoll_wait直接返回，如果rdlist为空，阻塞进程。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Channel类"><a href="#Channel类" class="headerlink" title="Channel类"></a>Channel类</h2><ul>
+<li>该类主要用于处理服务器用到的<code>epoll</code>的各种事件以及该做出反应</li>
+<li>主要内容包括设置各种回调函数的操作函数</li>
+<li><code>void SetReadHandle(Callback cb)</code>, <code>void SetWriteHandle(Callback cb)</code>, <code>void SetErrorHandle(Callback cb)</code>, <code>void SetCloseHandle(Callback cb)</code>等</li>
+<li>另一个是<code>epoll</code>事件的处理函数，负责检测<code>epoll</code>的<strong>读、写、对方关闭或者连接错误</strong>等情况<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Channel::HandleEvent</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(events_ &amp; EPOLLRDHUP)<span class="comment">//对方异常关闭事件</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Event EPOLLRDHUP&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="built_in">closehandler_</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(events_ &amp; (EPOLLIN | EPOLLPRI))<span class="comment">//读事件，对端有数据或者正常关闭</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//std::cout &lt;&lt; &quot;Event EPOLLIN&quot; &lt;&lt; std::endl;</span></span><br><span class="line">        <span class="built_in">readhandler_</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(events_ &amp; EPOLLOUT)<span class="comment">//写事件</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Event EPOLLOUT&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="built_in">writehandler_</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Event error&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="built_in">errorhandler_</span>();<span class="comment">//连接错误</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Poller"><a href="#Poller" class="headerlink" title="Poller"></a>Poller</h2><ul>
+<li><p>这个类使用面向对象的方式封装了C传统提供的<code>epoll</code>相关的方法</p>
+<h3 id="构造函数-Poller-args"><a href="#构造函数-Poller-args" class="headerlink" title="构造函数 Poller(/* args */)"></a>构造函数 Poller(/* args */)</h3></li>
+<li><p>使用初始化列表初始化了一个内容为<code>epoll_event</code>的<code>vector</code>，其中<code>epoll_event</code>的结构体定义为</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="keyword">uint32_t</span> events;	<span class="comment">/* Epoll events */</span></span><br><span class="line">  <span class="keyword">epoll_data_t</span> data;	<span class="comment">/* User data variable */</span></span><br><span class="line">&#125; __EPOLL_PACKED;</span><br></pre></td></tr></table></figure></li>
+<li><p>初始化列表创建了一个映射关系为<code>&lt;int, Channel*&gt;</code>的map对象</p>
+</li>
+<li><p>然后调用<code>epoll_create</code>函数创建<code>epoll</code>对象， <code>epoll_create(int)</code>函数的参数含义是监听socket的数量</p>
+<h3 id="poll-ChannelList-amp-activechannellist"><a href="#poll-ChannelList-amp-activechannellist" class="headerlink" title="poll(ChannelList &amp;activechannellist)"></a>poll(ChannelList &amp;activechannellist)</h3></li>
+<li><p>等待IO事件的函数</p>
+</li>
+<li><p>开始使用<code>epoll_wait</code>函数等待IO事件</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> nfds = <span class="built_in">epoll_wait</span>(pollfd_, &amp;*eventlist_.<span class="built_in">begin</span>(), (<span class="keyword">int</span>)eventlist_.<span class="built_in">capacity</span>(), timeout);</span><br></pre></td></tr></table></figure></li>
+<li><p>然后就是从等待得到的事件列表中逐个遍历处理，包括从事件数组中取出数据、寻找数据对应的文件描述符，找到之后通过<code>Channel</code>对象的<code>SetEvents</code>设置事件类型，同时将将其加入<code>activechannellist</code>。如果没找到的话就显示未找到的提示</p>
+</li>
+<li><p>同时还包括假如事件数组的大小不足的时候进行扩容的部分</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Poller::poll</span><span class="params">(ChannelList &amp;activechannellist)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> timeout = TIMEOUT;</span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot;epoll_wait...&quot; &lt;&lt; std::endl;(int)eventlist_.capacity()</span></span><br><span class="line">    <span class="keyword">int</span> nfds = <span class="built_in">epoll_wait</span>(pollfd_, &amp;*eventlist_.<span class="built_in">begin</span>(), (<span class="keyword">int</span>)eventlist_.<span class="built_in">capacity</span>(), timeout);</span><br><span class="line">    <span class="comment">//int nfds = epoll_wait(pollfd_, &amp;*eventlist_.begin(), (int)channelmap_.size()*0.7+1, timeout);</span></span><br><span class="line">    <span class="keyword">if</span>(nfds == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;error code is:%d&quot;</span>, errno);</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;epoll wait error&quot;</span>);</span><br><span class="line">        <span class="comment">//exit(1);</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//printf(&quot;event num:%d\n&quot;, nfds);</span></span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot;event num:&quot; &lt;&lt; nfds &lt;&lt; &quot;\n&quot;;// &lt;&lt; std::endl;</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nfds; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> events = eventlist_[i].events;</span><br><span class="line">        <span class="comment">//int fd = eventlist_[i].data.fd;</span></span><br><span class="line">        Channel *pchannel = (Channel*)eventlist_[i].data.ptr;</span><br><span class="line">        <span class="keyword">int</span> fd = pchannel-&gt;<span class="built_in">GetFd</span>();</span><br><span class="line">        <span class="keyword">if</span>(channelmap_.<span class="built_in">find</span>(fd) != channelmap_.<span class="built_in">end</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            pchannel-&gt;<span class="built_in">SetEvents</span>(events);</span><br><span class="line">            activechannellist.<span class="built_in">push_back</span>(pchannel);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;not find channel!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(nfds == (<span class="keyword">int</span>)eventlist_.<span class="built_in">capacity</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;resize:&quot;</span> &lt;&lt; nfds &lt;&lt; std::endl;</span><br><span class="line">        eventlist_.<span class="built_in">resize</span>(nfds * <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//eventlist_.clear();</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="AddChannel-Channel-pchannel-、RemoveChannel-Channel-pchannel-、UpdateChannel-Channel-pchannel"><a href="#AddChannel-Channel-pchannel-、RemoveChannel-Channel-pchannel-、UpdateChannel-Channel-pchannel" class="headerlink" title="AddChannel(Channel *pchannel)、RemoveChannel(Channel *pchannel)、UpdateChannel(Channel *pchannel)"></a>AddChannel(Channel *pchannel)、RemoveChannel(Channel *pchannel)、UpdateChannel(Channel *pchannel)</h3></li>
+<li><p>三个函数大体的代码逻辑相同，都是利用传入的<code>Channel</code>参数获取文件描述符<code>fd</code>，然后将前文提到的映射的<code>map</code>中相应的对象做出修改。然后使用<code>epoll_ctl</code>修改epoll对其的监视。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//添加事件</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Poller::AddChannel</span><span class="params">(Channel *pchannel)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd = pchannel-&gt;<span class="built_in">GetFd</span>();</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> <span class="title">ev</span>;</span></span><br><span class="line">    ev.events = pchannel-&gt;<span class="built_in">GetEvents</span>();</span><br><span class="line">    <span class="comment">//data是联合体</span></span><br><span class="line">    <span class="comment">//ev.data.fd = fd;</span></span><br><span class="line">    ev.data.ptr = pchannel;</span><br><span class="line">    channelmap_[fd] = pchannel;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">epoll_ctl</span>(pollfd_, EPOLL_CTL_ADD, fd, &amp;ev) == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;epoll add error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot;addchannel!&quot; &lt;&lt; std::endl;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//删除事件</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Poller::RemoveChannel</span><span class="params">(Channel *pchannel)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd = pchannel-&gt;<span class="built_in">GetFd</span>();</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> <span class="title">ev</span>;</span></span><br><span class="line">    ev.events = pchannel-&gt;<span class="built_in">GetEvents</span>();</span><br><span class="line">    <span class="comment">///ev.data.fd = fd;</span></span><br><span class="line">    ev.data.ptr = pchannel;</span><br><span class="line">    channelmap_.<span class="built_in">erase</span>(fd);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">epoll_ctl</span>(pollfd_, EPOLL_CTL_DEL, fd, &amp;ev) == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;epoll del error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot;removechannel!&quot; &lt;&lt; std::endl;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//更新事件</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Poller::UpdateChannel</span><span class="params">(Channel *pchannel)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd = pchannel-&gt;<span class="built_in">GetFd</span>();</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> <span class="title">ev</span>;</span></span><br><span class="line">    ev.events = pchannel-&gt;<span class="built_in">GetEvents</span>();</span><br><span class="line">    <span class="comment">//ev.data.fd = fd;</span></span><br><span class="line">    ev.data.ptr = pchannel;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">epoll_ctl</span>(pollfd_, EPOLL_CTL_MOD, fd, &amp;ev) == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;epoll update error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot;updatechannel!&quot; &lt;&lt; std::endl;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="epoll结构体的定义"><a href="#epoll结构体的定义" class="headerlink" title="epoll结构体的定义"></a>epoll结构体的定义</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">union</span> <span class="title">epoll_data</span> &#123;</span></span><br><span class="line">    <span class="keyword">void</span> *ptr;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    <span class="keyword">__uint32_t</span> u32;</span><br><span class="line">    <span class="keyword">__uint64_t</span> u64;</span><br><span class="line">&#125; <span class="keyword">epoll_data_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> &#123;</span></span><br><span class="line">    <span class="keyword">__uint32_t</span> events; <span class="comment">/* Epoll events */</span></span><br><span class="line">    <span class="keyword">epoll_data_t</span> data; <span class="comment">/* User data variable */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li><p>events的定义</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>事件宏</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>EPOLLIN</td>
+<td>表示对应的文件描述符可以读（包括对端SOCKET正常关闭）</td>
+</tr>
+<tr>
+<td>EPOLLOUT</td>
+<td>表示对应的文件描述符可以写</td>
+</tr>
+<tr>
+<td>EPOLLPRI</td>
+<td>表示对应的文件描述符有紧急的数据可读（这里应该表示有带外数据到来）</td>
+</tr>
+<tr>
+<td>EPOLLERR</td>
+<td>表示对应的文件描述符发生错误</td>
+</tr>
+<tr>
+<td>EPOLLHUP</td>
+<td>表示对应的文件描述符被挂断</td>
+</tr>
+<tr>
+<td>EPOLLET</td>
+<td>将EPOLL设为边缘触发(Edge Triggered)模式，这是相对于水平触发(Level Triggered)来说的。</td>
+</tr>
+<tr>
+<td>EPOLLONESHOT</td>
+<td>只监听一次事件，当监听完这次事件之后，如果还需要继续监听这个socket的话，需要再次把这个socket加入到EPOLL队列里</td>
+</tr>
+</tbody></table>
+<h2 id="EventLoop"><a href="#EventLoop" class="headerlink" title="EventLoop"></a>EventLoop</h2><ul>
+<li><p>这个类的主要作用是维护一个处理网络事件的循环，将<code>Channel</code>从<code>activechannellist</code>中取出，然后处理事件。</p>
+<h3 id="构造函数-EventLoop-args"><a href="#构造函数-EventLoop-args" class="headerlink" title="构造函数 EventLoop(/* args */)"></a>构造函数 EventLoop(/* args */)</h3></li>
+<li><p>构造<code>vector&lt;Functor&gt; functorlist_</code>，其中<code>functor</code>是<code>function&lt;void()&gt; Functor</code>，同时还构造两个<code>vector&lt;Channel*&gt; ChannelList</code>的数组对象，再构造一个<code>Poller</code>对象，然后将自身的<code>bool</code>标记置为true。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">EventLoop::<span class="built_in">EventLoop</span>(<span class="comment">/* args */</span>)</span><br><span class="line">    : <span class="built_in">functorlist_</span>(),</span><br><span class="line">    <span class="built_in">channellist_</span>(),</span><br><span class="line">    <span class="built_in">activechannellist_</span>(),</span><br><span class="line">    <span class="built_in">poller_</span>(),</span><br><span class="line">    <span class="built_in">quit</span>(<span class="literal">true</span>)</span><br><span class="line">&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="循环函数-EventLoop-loop"><a href="#循环函数-EventLoop-loop" class="headerlink" title="循环函数 EventLoop::loop()"></a>循环函数 EventLoop::loop()</h3></li>
+<li><p>主要作用是循环调用前面的<code>epoll</code>类的<code>poll</code>函数，然后从<code>activechannellist</code>中遍历处理每个的事件。然后清空<code>activechannellist</code>，并且执行函数列表里的函数完成任务。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">EventLoop::loop</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    quit = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">while</span>(!quit)</span><br><span class="line">    &#123;</span><br><span class="line">        poller_.<span class="built_in">poll</span>(activechannellist_);</span><br><span class="line">        <span class="comment">//std::cout &lt;&lt; &quot;server HandleEvent&quot; &lt;&lt; std::endl;</span></span><br><span class="line">        <span class="keyword">for</span>(Channel *pchannel : activechannellist_)</span><br><span class="line">        &#123;            </span><br><span class="line">            pchannel-&gt;<span class="built_in">HandleEvent</span>();<span class="comment">//处理事件</span></span><br><span class="line">        &#125;</span><br><span class="line">        activechannellist_.<span class="built_in">clear</span>();</span><br><span class="line">        <span class="built_in">ExecuteTask</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="TcpServer"><a href="#TcpServer" class="headerlink" title="TcpServer"></a>TcpServer</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="http://naotu.baidu.com/file/1c993feb2c86cb9e3caf273d19c9d54d?token=f68ea843fc2470f4">成员对象以及函数思维导图</a></p>
+</li>
+<li><p>注册业务函数函数指针的部分<em>在此处略去</u></em></p>
+</li>
+</ul>
+<h3 id="构造函数-TcpServer-EventLoop-loop-int-port"><a href="#构造函数-TcpServer-EventLoop-loop-int-port" class="headerlink" title="构造函数 TcpServer(EventLoop* loop, int port)"></a>构造函数 TcpServer(EventLoop* loop, int port)</h3><ul>
+<li>利用初始化列表初始化<code>Socket</code>的<code>Serversocket</code>对象，初始化循环体<code>loop</code>对象，初始化<code>Channel</code>类型的<code>serverchannel</code>对象，初始化链接计数<code>conncount</code>对象</li>
+<li><code>serversocket</code>分别进行<code>SetReuseAddr()</code>、<code>BindAddress(port)</code>, <code>Listen()</code>, <code>Setnonblocking()</code></li>
+<li><code>serverchannel_</code>初始化并且设置<code>ReadHandle</code>和<code>ErrorHandle</code><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">TcpServer::<span class="built_in">TcpServer</span>(EventLoop* loop, <span class="keyword">int</span> port)</span><br><span class="line">    : <span class="built_in">serversocket_</span>(),</span><br><span class="line">    <span class="built_in">loop_</span>(loop),</span><br><span class="line">    <span class="built_in">serverchannel_</span>(),</span><br><span class="line">    <span class="built_in">conncount_</span>(<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//serversocket_.SetSocketOption(); </span></span><br><span class="line">    serversocket_.<span class="built_in">SetReuseAddr</span>();   </span><br><span class="line">    serversocket_.<span class="built_in">BindAddress</span>(port);</span><br><span class="line">    serversocket_.<span class="built_in">Listen</span>();</span><br><span class="line">    serversocket_.<span class="built_in">Setnonblocking</span>();</span><br><span class="line"></span><br><span class="line">    serverchannel_.<span class="built_in">SetFd</span>(serversocket_.<span class="built_in">fd</span>());</span><br><span class="line">    serverchannel_.<span class="built_in">SetReadHandle</span>(std::<span class="built_in">bind</span>(&amp;TcpServer::OnNewConnection, <span class="keyword">this</span>));</span><br><span class="line">    serverchannel_.<span class="built_in">SetErrorHandle</span>(std::<span class="built_in">bind</span>(&amp;TcpServer::OnConnectionError, <span class="keyword">this</span>));</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Start-函数"><a href="#Start-函数" class="headerlink" title="Start()函数"></a>Start()函数</h3></li>
+<li>设置channel的events，同时将channel添加到循环loop中<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TcpServer::Start</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    serverchannel_.<span class="built_in">SetEvents</span>(EPOLLIN | EPOLLET);</span><br><span class="line">    loop_-&gt;<span class="built_in">AddChannelToPoller</span>(&amp;serverchannel_);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="建立新连接的处理函数"><a href="#建立新连接的处理函数" class="headerlink" title="建立新连接的处理函数"></a>建立新连接的处理函数</h3><ul>
+<li>主要功能是接受客户端的连接请求，然后利用接收到的文件描述符创建新的控制链接的成员对象，注册业务函数并且完成调用。<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//新TCP连接处理,核心功能，业务功能注册，任务分发</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TcpServer::OnNewConnection</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//循环调用accept，获取所有的建立好连接的客户端fd</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">clientaddr</span>;</span></span><br><span class="line">    <span class="keyword">int</span> clientfd;</span><br><span class="line">    <span class="keyword">while</span>( (clientfd = serversocket_.<span class="built_in">Accept</span>(clientaddr)) &gt; <span class="number">0</span>) </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//std::cout &lt;&lt; &quot;New client from IP:&quot; &lt;&lt; inet_ntoa(clientaddr.sin_addr) </span></span><br><span class="line">        <span class="comment">//    &lt;&lt; &quot;:&quot; &lt;&lt; ntohs(clientaddr.sin_port) &lt;&lt; std::endl;</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(++conncount_ &gt;= MAXCONNECTION)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">close</span>(clientfd);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">Setnonblocking</span>(clientfd);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建连接，注册业务函数</span></span><br><span class="line">        TcpConnection *ptcpconnection = <span class="keyword">new</span> <span class="built_in">TcpConnection</span>(loop_, clientfd, clientaddr);</span><br><span class="line">        ptcpconnection-&gt;<span class="built_in">SetMessaeCallback</span>(messagecallback_);</span><br><span class="line">        ptcpconnection-&gt;<span class="built_in">SetSendCompleteCallback</span>(sendcompletecallback_);</span><br><span class="line">        ptcpconnection-&gt;<span class="built_in">SetCloseCallback</span>(closecallback_);</span><br><span class="line">        ptcpconnection-&gt;<span class="built_in">SetErrorCallback</span>(errorcallback_);</span><br><span class="line">        ptcpconnection-&gt;<span class="built_in">SetConnectionCleanUp</span>(std::<span class="built_in">bind</span>(&amp;TcpServer::RemoveConnection, <span class="keyword">this</span>, ptcpconnection));</span><br><span class="line">        tcpconnlist_[clientfd] = ptcpconnection;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">newconnectioncallback_</span>(ptcpconnection);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="RemoveConnection-TcpConnection-ptcpconnection"><a href="#RemoveConnection-TcpConnection-ptcpconnection" class="headerlink" title="RemoveConnection(TcpConnection *ptcpconnection)"></a>RemoveConnection(TcpConnection *ptcpconnection)</h3><ul>
+<li>连接断开的操作<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//连接清理</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TcpServer::RemoveConnection</span><span class="params">(TcpConnection *ptcpconnection)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     --conncount_;</span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot;clean up connection, conncount is&quot; &lt;&lt; conncount_ &lt;&lt; std::endl;   </span></span><br><span class="line">    tcpconnlist_.<span class="built_in">erase</span>(ptcpconnection-&gt;<span class="built_in">fd</span>());</span><br><span class="line">    <span class="keyword">delete</span> ptcpconnection;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="OnConnectionError"><a href="#OnConnectionError" class="headerlink" title="OnConnectionError()"></a>OnConnectionError()</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TcpServer::OnConnectionError</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;    </span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;UNKNOWN EVENT&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    serversocket_.<span class="built_in">Close</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Setnonblocking-int-fd"><a href="#Setnonblocking-int-fd" class="headerlink" title="Setnonblocking(int fd)"></a>Setnonblocking(int fd)</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Setnonblocking</span><span class="params">(<span class="keyword">int</span> fd)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> opts = <span class="built_in">fcntl</span>(fd, F_GETFL);</span><br><span class="line">    <span class="keyword">if</span> (opts &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;fcntl(fd,GETFL)&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">fcntl</span>(fd, F_SETFL, opts | O_NONBLOCK) &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;fcntl(fd,SETFL,opts)&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-分析基于epoll的C-高性能webServer代码（二）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81%EF%BC%88%E4%BA%8C%EF%BC%89/"
+    >分析基于epoll的C++高性能webServer代码（二）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81%EF%BC%88%E4%BA%8C%EF%BC%89/" class="article-date">
+  <time datetime="2022-06-29T04:43:03.000Z" itemprop="datePublished">2022-06-29</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="分析基于epoll的C-高性能webServer代码（二）"><a href="#分析基于epoll的C-高性能webServer代码（二）" class="headerlink" title="分析基于epoll的C++高性能webServer代码（二）"></a>分析基于epoll的C++高性能webServer代码（二）</h1><h2 id="C-bind-函数用法"><a href="#C-bind-函数用法" class="headerlink" title="C++bind()函数用法"></a>C++<code>bind()</code>函数用法</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dongkun152/article/details/123992292">参考链接</a></p>
+</li>
+<li><p>std::bind()函数作为<strong>函数的适配器</strong>，它可以<strong>扩大函数是使用场合</strong>，使得函数更加灵活的被使用。<br>template&lt;class F, class… Args&gt;</p>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">bind</span>(F&amp;&amp;f, Args&amp;&amp;… args);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数：<br>f 可以是function object，函数指针，函数引用，成员函数指针，或者数据成员的指针。</li>
+<li>返回值：<br>function object</li>
+</ul>
+<h3 id="可以用std-placeholders-1等替换函数本身的输入参数"><a href="#可以用std-placeholders-1等替换函数本身的输入参数" class="headerlink" title="可以用std::placeholders::_1等替换函数本身的输入参数"></a>可以用<code>std::placeholders::_1</code>等替换函数本身的输入参数</h3><ul>
+<li>举例：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std::placeholders;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; (a -b -c) &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> fn1 = <span class="built_in">bind</span>(func, _1, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">auto</span> fn2 = <span class="built_in">bind</span>(func, <span class="number">2</span>, _1, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">fn1</span>(<span class="number">10</span>);</span><br><span class="line">    <span class="built_in">fn2</span>(<span class="number">10</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出</span></span><br><span class="line"><span class="comment">5</span></span><br><span class="line"><span class="comment">-11</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意上面的三输入函数<code>func</code>使用<code>bind</code>替换掉了其中的两个输入参数，仅仅在<code>placeholder</code>的位置提供一个输入</li>
+<li>注意，当具有多个输入的时候，输入的顺序是按照<code>std::placeholders::_1</code>、<code>std::placeholders::_2</code>、<code>std::placeholders::_3</code>等的顺序</li>
+<li>举例：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std::placeholders;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; (a - b -c) &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> fn1= <span class="built_in">bind</span>(func, _2, <span class="number">2</span>, _1);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;the value of function is :&quot;</span>;</span><br><span class="line">    <span class="built_in">fn1</span>(<span class="number">1</span>, <span class="number">13</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> fn2 = <span class="built_in">bind</span>(func, _1, <span class="number">2</span>, _2);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;the value of function after changing placeholder position is :&quot;</span>;</span><br><span class="line">    <span class="built_in">fn2</span>(<span class="number">1</span>, <span class="number">13</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出</span></span><br><span class="line"><span class="comment">the value of function is :10</span></span><br><span class="line"><span class="comment">the value of function after changing placeholder position is :-14</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意上面的函数中，fn1的实际输入到func中的参数是<code>func(13, 2, 1)</code>，而输入到fn2中的参数实际上是<code>func(1, 2, 13)</code></li>
+</ul>
+<h2 id="httpServer的成员函数分析"><a href="#httpServer的成员函数分析" class="headerlink" title="httpServer的成员函数分析"></a>httpServer的成员函数分析</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://naotu.baidu.com/file/5affaf781a1d7a139d281fba48af613a?token=e03c48870d07da80">类结构思维导图</a></li>
+</ul>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><ul>
+<li>使用初始化列表初始化成员<code>tcpserver_</code>，然后将<code>tcpserver_</code>的函数接口全部初始化为HttpServer提供的处理函数</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">HttpServer::<span class="built_in">HttpServer</span>(EventLoop *loop, <span class="keyword">int</span> port)</span><br><span class="line">    : <span class="built_in">tcpserver_</span>(loop, port),</span><br><span class="line">    <span class="built_in">cnt</span>(<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    tcpserver_.<span class="built_in">SetNewConnCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleNewConnection, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetMessageCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleMessage, <span class="keyword">this</span>, std::placeholders::_1, std::placeholders::_2));</span><br><span class="line">    tcpserver_.<span class="built_in">SetSendCompleteCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleSendComplete, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetCloseCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleClose, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetErrorCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleError, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="HandleNewConnection-TcpConnection-ptcpconn"><a href="#HandleNewConnection-TcpConnection-ptcpconn" class="headerlink" title="HandleNewConnection(TcpConnection *ptcpconn)"></a>HandleNewConnection(TcpConnection *ptcpconn)</h3><ul>
+<li>处理新建立的http连接请求</li>
+<li>新建一个<code>HttpSession</code>对象</li>
+<li>将该对象放入<code>httpsessionlist_</code>中(<code>httpsessionlist_</code>是一个map，通过TcpConnection映射到httpSession对象)</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleNewConnection</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//std::string msg(s);</span></span><br><span class="line">    HttpSession *phttpsession = <span class="keyword">new</span> <span class="built_in">HttpSession</span>();</span><br><span class="line">    httpsessionnlist_[ptcpconn] = phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="HandleMessage-TcpConnection-ptcpconn-std-string-amp-s"><a href="#HandleMessage-TcpConnection-ptcpconn-std-string-amp-s" class="headerlink" title="HandleMessage(TcpConnection *ptcpconn, std::string &amp;s)"></a>HandleMessage(TcpConnection *ptcpconn, std::string &amp;s)</h3><ul>
+<li>调用<code>httpsessionlist_</code>中的对象处理信息</li>
+<li>将同样的数据发送回发送方（回显）</li>
+<li>处理短链接问题</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleMessage</span><span class="params">(TcpConnection *ptcpconn, std::string &amp;s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot;http num is:&quot; &lt;&lt; ++cnt &lt;&lt; std::endl;   </span></span><br><span class="line">    HttpSession *phttpsession =  httpsessionnlist_[ptcpconn];</span><br><span class="line">    phttpsession-&gt;<span class="built_in">PraseHttpRequest</span>(s);</span><br><span class="line">    phttpsession-&gt;<span class="built_in">HttpProcess</span>();</span><br><span class="line">    std::string msg;</span><br><span class="line">    phttpsession-&gt;<span class="built_in">AddToBuf</span>(msg);</span><br><span class="line">    ptcpconn-&gt;<span class="built_in">Send</span>(msg);</span><br><span class="line">    <span class="keyword">if</span>(!phttpsession-&gt;<span class="built_in">KeepAlive</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//短连接，可以告诉框架层数据发完就可以关掉TCP连接，不过这里注释掉，还是交给客户端主动关闭吧</span></span><br><span class="line">        <span class="comment">//ptcpconn-&gt;HandleClose();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>HttpProcess()</code>的行为：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpSession::HttpProcess</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">&quot;GET&quot;</span> == httprequestcontext_.method)</span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;POST&quot;</span> == httprequestcontext_.method)</span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;HttpServer::HttpParser&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        errormsg = <span class="string">&quot;Method Not Implemented&quot;</span>;</span><br><span class="line">        <span class="built_in">HttpError</span>(<span class="number">501</span>, <span class="string">&quot;Method Not Implemented&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">size_t</span> pos = httprequestcontext_.url.<span class="built_in">find</span>(<span class="string">&quot;?&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(pos != std::string::npos)</span><br><span class="line">    &#123;</span><br><span class="line">        path_ = httprequestcontext_.url.<span class="built_in">substr</span>(<span class="number">0</span>, pos);</span><br><span class="line">        querystring_ = httprequestcontext_.url.<span class="built_in">substr</span>(pos+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        path_ = httprequestcontext_.url;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//keepalive判断处理</span></span><br><span class="line">    std::map&lt;std::string, std::string&gt;::const_iterator iter = httprequestcontext_.header.<span class="built_in">find</span>(<span class="string">&quot;Connection&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        keepalive_ = (iter-&gt;second == <span class="string">&quot;Keep-Alive&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(httprequestcontext_.version == <span class="string">&quot;HTTP/1.1&quot;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            keepalive_ = <span class="literal">true</span>;<span class="comment">//HTTP/1.1默认长连接</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            keepalive_ = <span class="literal">false</span>;<span class="comment">//HTTP/1.0默认短连接</span></span><br><span class="line">        &#125;            </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    responsebody_.<span class="built_in">clear</span>();</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">&quot;/&quot;</span> == path_)</span><br><span class="line">    &#123;        </span><br><span class="line">        path_ = <span class="string">&quot;/index.html&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;/hello&quot;</span> == path_)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//Wenbbench 测试用</span></span><br><span class="line">        std::string <span class="built_in">filetype</span>(<span class="string">&quot;text/html&quot;</span>);</span><br><span class="line">        responsebody_ = (<span class="string">&quot;hello world&quot;</span>);</span><br><span class="line">        responsecontext_ += httprequestcontext_.version + <span class="string">&quot; 200 OK\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Server: Chen Shuaihao&#x27;s NetServer/0.1\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Content-Type: &quot;</span> + filetype + <span class="string">&quot;; charset=utf-8\r\n&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            responsecontext_ += <span class="string">&quot;Connection: &quot;</span> + iter-&gt;second + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Content-Length: &quot;</span> + std::<span class="built_in">to_string</span>(responsebody_.<span class="built_in">size</span>()) + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += responsebody_;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;    </span><br><span class="line"></span><br><span class="line">    <span class="comment">//std::string responsebody;    </span></span><br><span class="line">    path_.<span class="built_in">insert</span>(<span class="number">0</span>,<span class="string">&quot;.&quot;</span>);</span><br><span class="line">    FILE* fp = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span>((fp = <span class="built_in">fopen</span>(path_.<span class="built_in">c_str</span>(), <span class="string">&quot;rb&quot;</span>)) == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//perror(&quot;error fopen&quot;);</span></span><br><span class="line">        <span class="comment">//404 NOT FOUND</span></span><br><span class="line">        <span class="built_in">HttpError</span>(<span class="number">404</span>, <span class="string">&quot;Not Found&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">char</span> buffer[<span class="number">4096</span>];</span><br><span class="line">        <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer));</span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">fread</span>(buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), <span class="number">1</span>, fp) == <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            responsebody_.<span class="built_in">append</span>(buffer);</span><br><span class="line">            <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">feof</span>(fp))</span><br><span class="line">        &#123;</span><br><span class="line">            responsebody_.<span class="built_in">append</span>(buffer);</span><br><span class="line">        &#125;        </span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;error fread&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        &#125;        	</span><br><span class="line">        <span class="built_in">fclose</span>(fp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">std::string <span class="title">filetype</span><span class="params">(<span class="string">&quot;text/html&quot;</span>)</span></span>; <span class="comment">//暂时固定为html</span></span><br><span class="line">    responsecontext_ += httprequestcontext_.version + <span class="string">&quot; 200 OK\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Server: Chen Shuaihao&#x27;s NetServer/0.1\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Content-Type: &quot;</span> + filetype + <span class="string">&quot;; charset=utf-8\r\n&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Connection: &quot;</span> + iter-&gt;second + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Content-Length: &quot;</span> + std::<span class="built_in">to_string</span>(responsebody_.<span class="built_in">size</span>()) + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += responsebody_;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="HttpServer-HandleClose-TcpConnection-ptcpconn"><a href="#HttpServer-HandleClose-TcpConnection-ptcpconn" class="headerlink" title="HttpServer::HandleClose(TcpConnection *ptcpconn)"></a>HttpServer::HandleClose(TcpConnection *ptcpconn)</h2><ul>
+<li>通过传入的参数<code>TcpConnecton</code>和map映射找到对应的<code>httpSession</code></li>
+<li>将<code>httpSession</code>从列表中删除</li>
+<li>释放<code>httpSession</code>占用的内存空间</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleClose</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HttpSession *phttpsession = httpsessionnlist_[ptcpconn];</span><br><span class="line">    httpsessionnlist_.<span class="built_in">erase</span>(ptcpconn);</span><br><span class="line">    <span class="keyword">delete</span> phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="HttpServer-HandleError-TcpConnection-ptcpconn"><a href="#HttpServer-HandleError-TcpConnection-ptcpconn" class="headerlink" title="HttpServer::HandleError(TcpConnection *ptcpconn)"></a>HttpServer::HandleError(TcpConnection *ptcpconn)</h2><ul>
+<li>删除对应的<code>httpSession</code>同上</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleError</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HttpSession *phttpsession = httpsessionnlist_[ptcpconn];</span><br><span class="line">    httpsessionnlist_.<span class="built_in">erase</span>(ptcpconn);</span><br><span class="line">    <span class="keyword">delete</span> phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="HttpServer-Start"><a href="#HttpServer-Start" class="headerlink" title="HttpServer::Start()"></a>HttpServer::Start()</h2><ul>
+<li>直接调用内部的<code>tcpserver</code>成员的<code>start</code>函数</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::Start</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    tcpserver_.<span class="built_in">Start</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-分析基于epoll的C-高性能webServer代码"
   class="article article-type-post"
   itemscope
@@ -886,228 +1273,13 @@
 </article>
 
     
-    <article
-  id="post-在固态和机械盘上安装Ubuntu"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/02/%E5%9C%A8%E5%9B%BA%E6%80%81%E5%92%8C%E6%9C%BA%E6%A2%B0%E7%9B%98%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu/"
-    >在固态和机械盘上安装Ubuntu</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/02/%E5%9C%A8%E5%9B%BA%E6%80%81%E5%92%8C%E6%9C%BA%E6%A2%B0%E7%9B%98%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu/" class="article-date">
-  <time datetime="2022-03-02T03:43:09.000Z" itemprop="datePublished">2022-03-02</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="在固态和机械盘上安装Ubuntu"><a href="#在固态和机械盘上安装Ubuntu" class="headerlink" title="在固态和机械盘上安装Ubuntu"></a>在固态和机械盘上安装Ubuntu</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
-<li>挂载系统不同分区的时候，注意/和/home的空间大小是按照/来计算的，也就是说假如/home是另外挂载在容量更大的机械硬盘上的话，是无法使用的，同样会因为空间超出而导致无法继续使用</li>
-</ul>
-<h2 id="系统映像烧写"><a href="#系统映像烧写" class="headerlink" title="系统映像烧写"></a>系统映像烧写</h2><ul>
-<li>使用UltraISO点击此处打开.iso文件</li>
-<li><img src="/imgs/image-20220302114757775.png" alt="image-20220302114757775"></li>
-<li>打开之后选择启动–写入硬盘映像</li>
-<li><img src="/imgs/image-20220302114830381.png" alt="image-20220302114830381"></li>
-<li>然后选择插入的U盘</li>
-<li><img src="/imgs/image-20220302114901025.png" alt="image-20220302114901025"></li>
-<li>开始写入即可</li>
-</ul>
-<hr>
-<ul>
-<li>系统安装参考链接<a target="_blank" rel="noopener" href="https://www.cnblogs.com/booturbo/p/10265039.html">https://www.cnblogs.com/booturbo/p/10265039.html</a></li>
-</ul>
-<h2 id="磁盘空间划分"><a href="#磁盘空间划分" class="headerlink" title="磁盘空间划分"></a>磁盘空间划分</h2><ul>
-<li>在C盘划分大约<strong>40G</strong>的空闲空间，在机械盘划分<strong>150G</strong>的空闲空间，然后开始安装</li>
-</ul>
-<h3 id="进入BIOS并且使用U盘启动"><a href="#进入BIOS并且使用U盘启动" class="headerlink" title="进入BIOS并且使用U盘启动"></a>进入BIOS并且使用U盘启动</h3><ul>
-<li><p>我的电脑是微星主板，按下开机键之后连续按下delete直到进入BIOS界面</p>
-</li>
-<li><p>无论是简易模式还是高级模式都能找到这个拖动条</p>
-</li>
-<li><p><img src="/imgs/image-20220302115447406.png" alt="image-20220302115447406"></p>
-</li>
-<li><p>用鼠标将U盘拖动到第一个即可</p>
-</li>
-<li><p>点击右上角<code>x</code>保存并退出</p>
-</li>
-<li><p>选择normal installation</p>
-</li>
-<li><p>点击continue，等待一段时间</p>
-</li>
-<li><p>此处选择something else</p>
-</li>
-<li><p><img src="/imgs/image-20220302115923889.png" alt="image-20220302115923889"></p>
-</li>
-<li><p>首先选中free space ，划分/boot分区512M即可</p>
-</li>
-<li><p><img src="/imgs/image-20220302120523616.png" alt="image-20220302120523616"></p>
-</li>
-<li><p>此时划分交换空间8G</p>
-</li>
-<li><p><img src="/imgs/image-20220302120719950.png" alt="image-20220302120719950"></p>
-</li>
-<li><p>C盘的剩余空间划分给系统<code>/</code>目录</p>
-</li>
-<li><p><img src="/imgs/image-20220302121047750.png" alt="image-20220302121047750"></p>
-</li>
-<li><p>机械盘上的空间划分给/home</p>
-</li>
-<li><p><img src="/imgs/image-20220302121132920.png" alt="image-20220302121132920"></p>
-</li>
-<li><p><strong>注意，device for boot loader installation选择/boot所在的分区，否则有可能<u>安装好后系统无法启动</u></strong></p>
-</li>
-<li><p><img src="/imgs/image-20220302122927538.png" alt="image-20220302122927538"></p>
-</li>
-</ul>
-<hr>
-<ul>
-<li><p>有时候，安装好Ubuntu之后，微星主板启动的时候<strong>还是会直接进入Windows，无法进入Ubuntu</strong>，这是因为<strong>硬盘启动项</strong>的原因</p>
-</li>
-<li><p><img src="/imgs/image-20220302153254474.png" alt="image-20220302153254474"></p>
-<ul>
-<li><p>顺序为，先点击顶部的倒梯形切换到高级模式，然后点击设置-启动-底部的<code>UEFI硬盘BBS优先权</code></p>
-</li>
-<li><p><img src="/imgs/image-20220302153411158.png" alt="image-20220302153411158"></p>
-</li>
-<li><p>将第一个选择为Ubuntu即可</p>
-</li>
-</ul>
-</li>
-<li><p>退出BIOS设置，重新启动，可见已经可以进入ubuntu提供的系统选择的界面了</p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-Linux根文件系统"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/02/27/Linux%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"
-    >Linux根文件系统</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/02/27/Linux%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="article-date">
-  <time datetime="2022-02-27T08:33:12.000Z" itemprop="datePublished">2022-02-27</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Linux根文件系统"><a href="#Linux根文件系统" class="headerlink" title="Linux根文件系统"></a>Linux根文件系统</h1><h2 id="什么是文件系统"><a href="#什么是文件系统" class="headerlink" title="什么是文件系统"></a>什么是文件系统</h2><ul>
-<li><p>根文件系统一般也叫做 rootfs，那么什么叫根文件系统？看到“文件系统”这四个字，很多 人，包括我第一反应就是 FATFS、FAT、EXT4、YAFFS 和 NTFS 等这样的文件系统。在这里， 根文件系统<u>并不是 FATFS 这样的文件系统代码</u>，EXT4 这样的<u>文件系统代码属于 Linux 内核的 一部分</u>。Linux 中的根文件系统更像是<strong>一个文件夹或者叫做目录</strong>(在我看来就是一个文件夹，只 不过是特殊的文件夹)，在这个目录里面<strong>会有很多的子目录。根目录下和子目录中会有很多的文件</strong>，这些文件是 Linux 运行所必须的，比如库、常用的软件和命令、设备文件、配置文件等等。</p>
-</li>
-<li><p>根文件系统首先是内核启动时所 <strong>mount(挂载)的第一个文件系统</strong>，内核代码映像文件保存在 根文件系统中，而系统引导启动程序会在根文件系统挂载之后从中把一些基本的初始化脚本和 服务等加载到内存中去运行。</p>
-</li>
-<li><p>嵌入式 Linux 并没有将内 核代码镜像保存在根文件系统中，而是保存到了其他地方。比如 <u>NAND Flash 的指定存储地址、 EMMC 专用分区中</u>。根文件系统是 Linux 内核启动以后挂载(mount)的第一个文件系统，然后从 根文件系统中读取初始化脚本，比如 rcS，inittab 等。根文件系统和 Linux 内核是分开的，单独 的 Linux 内核是没法正常工作的，必须要搭配根文件系统。如果不提供根文件系统，Linux 内核 在启动的时候就会提示内核崩溃(Kernel panic)的提示</p>
-</li>
-<li><p>根文件系统是其他文件系统的根，没有这个“根”，其他的文件系统或者软件就别想工作。比如我们<strong>常用的 ls、mv、ifconfig 等命令 其实就是一个个小软件</strong>，只是这些<u>软件没有图形界面</u>，而且需要输入命令来运行。这些<strong>小软件就保存在根文件系统中</strong></p>
-</li>
-<li><p>以 Ubuntu 为例，根文件系统的目录名字为‘/’，没看错就是一个斜杠，所以输入如下命令就可以进入根目录中</p>
-</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd / //进入根目录</span><br></pre></td></tr></table></figure>
-
-<h3 id="bin"><a href="#bin" class="headerlink" title="/bin"></a>/bin</h3><ul>
-<li>bin 文件就是<strong>可执行文件</strong>。所以此目录下存放着系统 需要的可执行文件，一般都是一些命令，比如 ls、mv 等命令。此目录下的命令所有的客户都可 以使用。</li>
-</ul>
-<h3 id="dev-目录"><a href="#dev-目录" class="headerlink" title="/dev 目录"></a>/dev 目录</h3><ul>
-<li>dev 是 device 的缩写，所以此目录下的文件都是和设备有关的，此目录下的文件都是<strong>设备文件</strong>。在 <strong>Linux 下一切皆文件</strong>，即使是<strong>硬件设备，也是以文件的形式存在的</strong>，比如 /dev/ttymxc0(I.MX6ULL 根目录会有此文件)就表示 I.MX6ULL 的串口 0，我们**要想通过串口 0 发送或者接收数据就要操作文件/dev/ttymxc0，通过对文件/dev/ttymxc0 的<u>读写操作</u>来实现串口 0 的<u>数据收发</u>**。</li>
-</ul>
-<h3 id="etc-目录"><a href="#etc-目录" class="headerlink" title="/etc 目录"></a>/etc 目录</h3><ul>
-<li>此目录下存放着<strong>各种配置文件</strong>，大家可以进入 Ubuntu 的 etc 目录看一下，里面的配置文件 非常多！但是在嵌入式 Linux 下此目录会很简洁。</li>
-</ul>
-<h3 id="lib-目录"><a href="#lib-目录" class="headerlink" title="/lib 目录"></a>/lib 目录</h3><ul>
-<li>lib 是 library 的简称，也就是库的意思，因此此目录下<strong>存放着 Linux 所必须的库文件</strong>。这些 库文件是<strong>共享库</strong>，命令和用户编写的应用程序要使用这些库文件。</li>
-</ul>
-<h3 id="mnt-目录"><a href="#mnt-目录" class="headerlink" title="/mnt 目录"></a>/mnt 目录</h3><ul>
-<li>临时挂载目录，一般是空目录，可以在此目录下创建空的子目录，比如/mnt/sd、/mnt/usb， 这样就可以将 SD 卡或者 U 盘挂载到/mnt/sd 或者/mnt/usb 目录中。</li>
-</ul>
-<h3 id="proc-目录"><a href="#proc-目录" class="headerlink" title="/proc 目录"></a>/proc 目录</h3><ul>
-<li>此目录一般是空的，当 Linux 系统启动以后会将此目录作为 proc 文件系统的挂载点，proc 是个<strong>虚拟文件系统</strong>，没有实际的存储设备。proc 里面的文件都是临时存在的，一般用来存储系 统运行信息文件。</li>
-</ul>
-<h3 id="usr-目录"><a href="#usr-目录" class="headerlink" title="/usr 目录"></a>/usr 目录</h3><ul>
-<li>usr 不是 user 的缩写，而是 <u>Unix Software Resource</u> 的缩写，也就是 Unix 操作系统 软件资源目录。这里有个小知识点，那就是 <u>Linux 一般被称为类 Unix 操作系统</u>，苹果的 MacOS 也是类 Unix 操作系统。关于 Linux 和 Unix 操作系统的渊源大家可以直接在网上找 Linux 的发 展历史来看。既然是软件资源目录，因此**/usr 目录下也存放着很多软件**，一般系统安装完成以 后此目录占用的空间最多。</li>
-</ul>
-<h3 id="var-目录"><a href="#var-目录" class="headerlink" title="/var 目录"></a>/var 目录</h3><ul>
-<li>此目录存放一些<u>可以改变的数据</u>。</li>
-</ul>
-<h3 id="sbin-目录"><a href="#sbin-目录" class="headerlink" title="/sbin 目录"></a>/sbin 目录</h3><ul>
-<li>此目录页<u>用户存放一些可执行文件</u>，但是此目录下的文件或者说命令只有管理员才能使用， 主要用户系统管理。</li>
-</ul>
-<h3 id="sys-目录"><a href="#sys-目录" class="headerlink" title="/sys 目录"></a>/sys 目录</h3><ul>
-<li>系统启动以后此目录作为 <strong>sysfs 文件系统的挂载点</strong>，sysfs 是一个类似于 proc 文件系统的特 殊文件系统，<u>sysfs 也是基于 ram 的文件系统，也就是说它也没有实际的存储设备</u>。此目录是系 统设备管理的重要目录，此目录通过一定的组织结构向用户提供详细的内核数据结构信息。</li>
-</ul>
-<h3 id="opt目录"><a href="#opt目录" class="headerlink" title="/opt目录"></a>/opt目录</h3><ul>
-<li>可选的文件、软件存放区，由用户选择将哪些文件或软件放到此目录中。</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/4/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/6/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/4/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/6/">下一页</a>
   </nav>
   
 </section>
@@ -1118,7 +1290,7 @@
     <ul>
       <li>
         Copyrights &copy;
-        2021-2022
+        2021-2023
         <i class="ri-heart-fill heart_icon"></i> FrankZhang
       </li>
     </ul>
