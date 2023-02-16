@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>git常用命令 |  Frank’s blogs</title>
+      <title>yolo学习 |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -53,7 +53,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-git常用命令"
+  id="post-yolo学习"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -64,7 +64,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  git常用命令
+  yolo学习
 </h1>
  
 
@@ -72,15 +72,15 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/12/13/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="article-date">
-  <time datetime="2021-12-13T06:56:17.000Z" itemprop="datePublished">2021-12-13</time>
+      <a href="/2023/02/15/yolo%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time datetime="2023-02-15T03:05:28.000Z" itemprop="datePublished">2023-02-15</time>
 </a>   
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">192</span>
+            <span class="post-count">445</span>
         </span>
     </span>
 
@@ -104,20 +104,39 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h1 id="git-常见命令"><a href="#git-常见命令" class="headerlink" title="git 常见命令"></a>git 常见命令</h1><p><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/896043488029600">https://www.liaoxuefeng.com/wiki/896043488029600</a></p>
-<p>一次添加目录下所有文件（ <strong>包括gitignore</strong> 的文件）：</p>
-<p><code>git add . -f</code></p>
-<p>一次添加目录下的所有文件（ <strong>不包括gitignore</strong> 的文件）：</p>
-<p><code> git add .</code></p>
-<p>一次<code>commit</code> 所有东西</p>
-<p><code> git commit -a -m &lt;信息&gt;</code></p>
-<p>一次添加目录下的所有东西：</p>
-<p><code>git add 文件夹名/*</code></p>
-<p>上传出问题的时候（上传 <strong>被拒绝</strong> 的时候）的解决方法：</p>
-<p><code>git push -u origin master -f</code></p>
-<p>这个会 <strong>丢弃</strong> 所有远程仓库领先于本地仓库的部分， <strong>强行</strong> 将本地仓库的内容推送到远端 </p>
-<p>或下面这个，但是这个可能会 <strong>覆盖一些本地的文件</strong> （主要是多人开发的情况下可能会出现）</p>
-<p><code>git pull origin master --allow-unrelated-histories</code></p>
+  <h1 id="yolo"><a href="#yolo" class="headerlink" title="yolo"></a>yolo</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1XW4y1a7f4?p=3&vd_source=2ad101445b39a9dac0437fdcd408895e">链接</a><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2></li>
+<li><code>recall</code>的意思是图中有多个物体的情况下，检测出来几个，<u>是不是都检测到了</u>，与单个物体的检测精度一定程度上是矛盾的</li>
+<li>如何计算map值？<ul>
+<li><img src="/imgs/f2ac77ad1f300ceeb12d960b2d783ca6bc27890c09260406411abc07927a178b.png" alt="picture 1">  </li>
+<li><img src="/imgs/9adbe17541f64fa45e32075ad0aa51fd3e53c90f00db60a2599c10b2629a1491.png" alt="picture 2">  </li>
+<li>TP是真阳，FP是假阳，FN是假阴，TN是真阴</li>
+<li>precision是准确性，就是真阳性和假阳性中的真阳性比例</li>
+<li>recall是召回率，就是真阳性和假阴性中的真阳性比重，就是所有目标中到底有多大比例是正确的找到了的</li>
+<li><code>map</code>值就是以精度和召回率为横纵坐标，取precision最大值之后画的图<strong>与坐标轴围成的面积</strong><ul>
+<li><img src="/imgs/bc31a50f5578d4b0e6d1c048e55eb3e31d5d8256e70e681430d3058296539b29.png" alt="picture 3">  </li>
+</ul>
+</li>
+<li>各种框(anchor box等)的<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_46110834/article/details/111410923">介绍</a></li>
+<li>此处的anchor框是在最终13*13的特征图中的初始框的位置和大小，需要先调整成正确的框，然后按照比例换算回原来的图片中的框<img src="/imgs/5860584e70659abda7452430f8bfb458380ebeb6ef851acd370703521c4b23d6.png" alt="picture 4">  <h3 id="YOLO-V3-针对不同大小的物体的改进"><a href="#YOLO-V3-针对不同大小的物体的改进" class="headerlink" title="YOLO V3 针对不同大小的物体的改进"></a>YOLO V3 针对不同大小的物体的改进</h3></li>
+</ul>
+</li>
+<li><img src="/imgs/debc8519b0b11604ca6f2c8c73fe70bd006f1bf3e9f1d02f5b4cd11e27e10404.png" alt="picture 5">  <ul>
+<li>利用不同感受野的卷积分别预测不同大小的目标物体</li>
+<li>三种不同大小的特征图分别对应三种不同的框，做到九种不同的形状</li>
+</ul>
+</li>
+<li>此处的26<em>26的图的特征是13</em>13的图进行插值得到26*26然后融合得到的<ul>
+<li><img src="/imgs/bb79ec3d85f4cb0a586a7a45946fd1187b65f5bab92ac42b99115f39db516291.png" alt="picture 6">  </li>
+</ul>
+</li>
+<li>残差链接：<ul>
+<li><img src="/imgs/ebd8e8003e5fd991bc9d397dd0f66141f5e0f8fd6b239f4f19397245a98afdc2.png" alt="picture 7">  </li>
+<li>实际上就是对于中间的两层， 假如加上这两层的效果变好了，那么会使得这两层具有正常的参数。但是假如加上这两层效果反而变差了，那么这两层的参数会逐渐趋向于0，使得这两层失去价值，<u>最终结果不可能比原来差</u></li>
+<li>yolo V3不需要池化层，通过stride增加为2将其特征图缩小</li>
+</ul>
+</li>
+</ul>
  
       <!-- reward -->
       
@@ -170,30 +189,23 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2021/12/13/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2023/02/15/yolo%E5%AD%A6%E4%B9%A0/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/yolo/" rel="tag">yolo</a></li></ul>
+
     </footer>
   </div>
 
    
   <nav class="article-nav">
     
-      <a href="/2021/12/14/freeRtos%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            FreeRtos内存分配
-          
-        </div>
-      </a>
     
-    
-      <a href="/2021/12/11/FreeRtos1/" class="article-nav-link">
+      <a href="/2023/01/19/VMWare%E5%AE%89%E8%A3%85%E5%AE%89%E5%8D%93%E8%99%9A%E6%8B%9F%E6%9C%BA/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">FreeRtos1</div>
+        <div class="article-nav-title">VMWare安装安卓虚拟机</div>
       </a>
     
   </nav>

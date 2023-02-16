@@ -141,6 +141,87 @@
     
     
     <article
+  id="post-yolo学习"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/02/15/yolo%E5%AD%A6%E4%B9%A0/"
+    >yolo学习</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/02/15/yolo%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time datetime="2023-02-15T03:05:28.000Z" itemprop="datePublished">2023-02-15</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="yolo"><a href="#yolo" class="headerlink" title="yolo"></a>yolo</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1XW4y1a7f4?p=3&vd_source=2ad101445b39a9dac0437fdcd408895e">链接</a><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2></li>
+<li><code>recall</code>的意思是图中有多个物体的情况下，检测出来几个，<u>是不是都检测到了</u>，与单个物体的检测精度一定程度上是矛盾的</li>
+<li>如何计算map值？<ul>
+<li><img src="/imgs/f2ac77ad1f300ceeb12d960b2d783ca6bc27890c09260406411abc07927a178b.png" alt="picture 1">  </li>
+<li><img src="/imgs/9adbe17541f64fa45e32075ad0aa51fd3e53c90f00db60a2599c10b2629a1491.png" alt="picture 2">  </li>
+<li>TP是真阳，FP是假阳，FN是假阴，TN是真阴</li>
+<li>precision是准确性，就是真阳性和假阳性中的真阳性比例</li>
+<li>recall是召回率，就是真阳性和假阴性中的真阳性比重，就是所有目标中到底有多大比例是正确的找到了的</li>
+<li><code>map</code>值就是以精度和召回率为横纵坐标，取precision最大值之后画的图<strong>与坐标轴围成的面积</strong><ul>
+<li><img src="/imgs/bc31a50f5578d4b0e6d1c048e55eb3e31d5d8256e70e681430d3058296539b29.png" alt="picture 3">  </li>
+</ul>
+</li>
+<li>各种框(anchor box等)的<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_46110834/article/details/111410923">介绍</a></li>
+<li>此处的anchor框是在最终13*13的特征图中的初始框的位置和大小，需要先调整成正确的框，然后按照比例换算回原来的图片中的框<img src="/imgs/5860584e70659abda7452430f8bfb458380ebeb6ef851acd370703521c4b23d6.png" alt="picture 4">  <h3 id="YOLO-V3-针对不同大小的物体的改进"><a href="#YOLO-V3-针对不同大小的物体的改进" class="headerlink" title="YOLO V3 针对不同大小的物体的改进"></a>YOLO V3 针对不同大小的物体的改进</h3></li>
+</ul>
+</li>
+<li><img src="/imgs/debc8519b0b11604ca6f2c8c73fe70bd006f1bf3e9f1d02f5b4cd11e27e10404.png" alt="picture 5">  <ul>
+<li>利用不同感受野的卷积分别预测不同大小的目标物体</li>
+<li>三种不同大小的特征图分别对应三种不同的框，做到九种不同的形状</li>
+</ul>
+</li>
+<li>此处的26<em>26的图的特征是13</em>13的图进行插值得到26*26然后融合得到的<ul>
+<li><img src="/imgs/bb79ec3d85f4cb0a586a7a45946fd1187b65f5bab92ac42b99115f39db516291.png" alt="picture 6">  </li>
+</ul>
+</li>
+<li>残差链接：<ul>
+<li><img src="/imgs/ebd8e8003e5fd991bc9d397dd0f66141f5e0f8fd6b239f4f19397245a98afdc2.png" alt="picture 7">  </li>
+<li>实际上就是对于中间的两层， 假如加上这两层的效果变好了，那么会使得这两层具有正常的参数。但是假如加上这两层效果反而变差了，那么这两层的参数会逐渐趋向于0，使得这两层失去价值，<u>最终结果不可能比原来差</u></li>
+<li>yolo V3不需要池化层，通过stride增加为2将其特征图缩小</li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/yolo/" rel="tag">yolo</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-VMWare安装安卓虚拟机"
   class="article article-type-post"
   itemscope
@@ -261,7 +342,15 @@
        
   <h2 id="matplotlib"><a href="#matplotlib" class="headerlink" title="matplotlib"></a>matplotlib</h2><ul>
 <li>基本框架<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;SimHei&#x27;</span>]  <span class="comment"># 指定默认字体</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span>  <span class="comment"># 解决保存图像时符号-显示为方块的2问题</span></span><br><span class="line">plt.plot(xs, yx, label=<span class="string">&quot;x随迭代次数的变化&quot;</span>)</span><br><span class="line">plt.plot(xs, yy, label=<span class="string">&quot;y随迭代次数的变化&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.xlabel(<span class="string">&quot;迭代次数&quot;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;x以及f(x)的数值&quot;</span>)</span><br><span class="line">plt.title(<span class="string">r&quot;$x_0$ = 1&quot;</span>)</span><br><span class="line">plt.show()  </span><br></pre></td></tr></table></figure></li>
-<li>使用latex语法：<code>r&quot;$&lt;latex语法&gt;$&quot;</code></li>
+<li>使用latex语法：<code>r&quot;$&lt;latex语法&gt;$&quot;</code><h2 id="pycharm配置项目的python解释器"><a href="#pycharm配置项目的python解释器" class="headerlink" title="pycharm配置项目的python解释器"></a>pycharm配置项目的python解释器</h2></li>
+<li>设置下面找到项目然后更改解释器<ul>
+<li><img src="/imgs/73243950c62d71fd56e29802053af5f4ce772fb1ac73bfc9098e862fdd88ee36.png" alt="picture 1">  </li>
+</ul>
+</li>
+<li><strong>注意单独更改此处没有用</strong><ul>
+<li><img src="/imgs/ae6810ecdb55ecf83bab089970463402519d5ed979d75e1d7005bed717d6c11d.png" alt="picture 2">  </li>
+</ul>
+</li>
 </ul>
  
       <!-- reward -->
@@ -776,102 +865,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/anaconda/" rel="tag">anaconda</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-强化学习复习（三）"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/10/07/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89/"
-    >强化学习复习（三）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/10/07/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89/" class="article-date">
-  <time datetime="2022-10-07T13:12:05.000Z" itemprop="datePublished">2022-10-07</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
-<li><p><a target="_blank" rel="noopener" href="https://github.com/pytorch/examples/tree/main/reinforcement_learning">pytorch关于强化学习的示例</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/_modules/torch/distributions/normal.html">pytorch源码</a></p>
-<h2 id="Policy-Gradient"><a href="#Policy-Gradient" class="headerlink" title="Policy Gradient"></a>Policy Gradient</h2></li>
-<li><p>基本上就是通过动作获得的奖励或者惩罚信息反向传播，给<code>Actor</code>网络进行指导</p>
-</li>
-<li><p><code>Critic</code>实际上是一个类似于<code>QNetwork</code>的网络，它的作用是对Actor的动作做出每个时刻的评价，之前只能在回合结束的时候根据给出的回报进行更新，但是拥有<code>Critic</code>之后就可以在每个时刻进行更新了，也就是**在一个回合结束之前，猜测出这个动作可能导致的reward，并以此指导<code>Actor</code>**。</p>
-</li>
-<li><p>例子</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> count</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">from</span> torch.distributions <span class="keyword">import</span> Categorical</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">&#x27;PyTorch REINFORCE example&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--gamma&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">float</span>, default=<span class="number">0.99</span>, metavar=<span class="string">&#x27;G&#x27;</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;discount factor (default: 0.99)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--seed&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">543</span>, metavar=<span class="string">&#x27;N&#x27;</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;random seed (default: 543)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--render&#x27;</span>, action=<span class="string">&#x27;store_true&#x27;</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;render the environment&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--log-interval&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">10</span>, metavar=<span class="string">&#x27;N&#x27;</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;interval between training status logs (default: 10)&#x27;</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">env = gym.make(<span class="string">&#x27;CartPole-v1&#x27;</span>)</span><br><span class="line">env.seed(args.seed)</span><br><span class="line">torch.manual_seed(args.seed)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Policy</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(Policy, self).__init__()</span><br><span class="line">        self.affine1 = nn.Linear(<span class="number">4</span>, <span class="number">128</span>)</span><br><span class="line">        self.dropout = nn.Dropout(p=<span class="number">0.6</span>)</span><br><span class="line">        self.affine2 = nn.Linear(<span class="number">128</span>, <span class="number">2</span>)</span><br><span class="line"> </span><br><span class="line">        self.saved_log_probs = []</span><br><span class="line">        self.rewards = []</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = self.affine1(x)</span><br><span class="line">        x = self.dropout(x)</span><br><span class="line">        x = F.relu(x)</span><br><span class="line">        action_scores = self.affine2(x)</span><br><span class="line">        <span class="keyword">return</span> F.softmax(action_scores, dim=<span class="number">1</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">policy = Policy()</span><br><span class="line">optimizer = optim.Adam(policy.parameters(), lr=<span class="number">1e-2</span>)</span><br><span class="line">eps = np.finfo(np.float64).eps.item()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">select_action</span>(<span class="params">state</span>):</span></span><br><span class="line">    state = torch.from_numpy(state).<span class="built_in">float</span>().unsqueeze(<span class="number">0</span>)</span><br><span class="line">    probs = policy(state)</span><br><span class="line">    m = Categorical(probs)</span><br><span class="line">    action = m.sample()</span><br><span class="line">    policy.saved_log_probs.append(m.log_prob(action))</span><br><span class="line">    <span class="keyword">return</span> action.item()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">finish_episode</span>():</span></span><br><span class="line">    R = <span class="number">0</span></span><br><span class="line">    policy_loss = []</span><br><span class="line">    returns = []</span><br><span class="line">    <span class="keyword">for</span> r <span class="keyword">in</span> policy.rewards[::-<span class="number">1</span>]:</span><br><span class="line">        R = r + args.gamma * R</span><br><span class="line">        returns.insert(<span class="number">0</span>, R)</span><br><span class="line">    returns = torch.tensor(returns)</span><br><span class="line">    returns = (returns - returns.mean()) / (returns.std() + eps)</span><br><span class="line">    <span class="keyword">for</span> log_prob, R <span class="keyword">in</span> <span class="built_in">zip</span>(policy.saved_log_probs, returns):</span><br><span class="line">        policy_loss.append(-log_prob * R)</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    policy_loss = torch.cat(policy_loss).<span class="built_in">sum</span>()</span><br><span class="line">    policy_loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="keyword">del</span> policy.rewards[:]</span><br><span class="line">    <span class="keyword">del</span> policy.saved_log_probs[:]</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    running_reward = <span class="number">10</span></span><br><span class="line">    <span class="keyword">for</span> i_episode <span class="keyword">in</span> count(<span class="number">1</span>):</span><br><span class="line">        state, ep_reward = env.reset(), <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">10000</span>):  <span class="comment"># Don&#x27;t infinite loop while learning</span></span><br><span class="line">            action = select_action(state)</span><br><span class="line">            state, reward, done, _ = env.step(action)</span><br><span class="line">            <span class="keyword">if</span> args.render:</span><br><span class="line">                env.render()</span><br><span class="line">            policy.rewards.append(reward)</span><br><span class="line">            ep_reward += reward</span><br><span class="line">            <span class="keyword">if</span> done:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"> </span><br><span class="line">        running_reward = <span class="number">0.05</span> * ep_reward + (<span class="number">1</span> - <span class="number">0.05</span>) * running_reward</span><br><span class="line">        finish_episode()</span><br><span class="line">        <span class="keyword">if</span> i_episode % args.log_interval == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Episode &#123;&#125;\tLast reward: &#123;:.2f&#125;\tAverage reward: &#123;:.2f&#125;&#x27;</span>.<span class="built_in">format</span>(</span><br><span class="line">                  i_episode, ep_reward, running_reward))</span><br><span class="line">        <span class="keyword">if</span> running_reward &gt; env.spec.reward_threshold:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Solved! Running reward is now &#123;&#125; and &quot;</span></span><br><span class="line">                  <span class="string">&quot;the last episode runs to &#123;&#125; time steps!&quot;</span>.<span class="built_in">format</span>(running_reward, t))</span><br><span class="line">            torch.save(policy.state_dict(),<span class="string">&#x27;hello.pt&#x27;</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></li>
-<li><p><code>Categorical</code>：<img src="/imgs/bbff369c31599485cece0ecd1f86a3c2d5f7d254eeb1b8f76de5053a207275b2.png" alt="picture 49">  </p>
-<ul>
-<li><code>log_probs</code><img src="/imgs/b02e3510312ce797463f7218ef7fde86af78b655a54491b1bee2766aac44d92d.png" alt="picture 50">  ，实际上就是将对应动作发生的可能性求了log<h3 id="给出策略的具体操作"><a href="#给出策略的具体操作" class="headerlink" title="给出策略的具体操作"></a>给出策略的具体操作</h3></li>
-</ul>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/439220435">参考链接</a></p>
-</li>
-<li><p>给出策略的具体操作是先将输入经过一系列网络的运算之后，经过softmax归一化，得到和为1的几个输出。然后在输出过程中对于具有这几种概率的输出进行随机取样，得到最终的输出动作。（<strong>离散动作</strong>）</p>
-</li>
-<li><p>针对<strong>连续动作</strong>，可以将整个网络的输出更改为输出一个高斯分布函数的μ值（均值），结合用户指定的σ（方差），即可形成一个高斯分布，然后通过类似的sample采样即可得出需要的动作。注意训练阶段为了实现有效的exploration，不要使用太小的σ，否则因为输出太集中没法找到实际上的最优解。</p>
-<ul>
-<li>也可以让网络也输出σ</li>
-<li>反向传播的思路相似，也是直接利用<code>torch.Distributions.Normal</code>的<code>log_prob</code>函数输出概率的log值<img src="/imgs/da881cab2fe598db70c03731a3ec37aec64f13d6f84d04168d697c1aa1d390d6.png" alt="picture 51"></li>
-</ul>
-</li>
-</ul>
-<h3 id="网络更新"><a href="#网络更新" class="headerlink" title="网络更新"></a>网络更新</h3><ul>
-<li><img src="/imgs/b734753c9daa77b5104e2738198288151b8eafd8ec96a44556debd73f729b630.png" alt="picture 48">  <h2 id="DDPG"><a href="#DDPG" class="headerlink" title="DDPG"></a>DDPG</h2></li>
-<li>现在我们来说说 DDPG 中所用到的神经网络. 它其实和我们之前提到的 Actor-Critic 形式差不多, 也需要有基于 策略 Policy 的神经网络 和基于 价值 Value 的神经网络, 但是为了体现 DQN 的思想, 每种神经网络我们都需要再细分为两个, Policy Gradient 这边, 我们有估计网络和现实网络, 估计网络用来输出实时的动作, 供 actor 在现实中实行. 而现实网络则是用来更新价值网络系统的. 所以我们再来看看价值系统这边, 我们也有现实网络和估计网络, 他们都在输出这个状态的价值, 而输入端却有不同, <strong>状态现实网络这边会拿着从动作现实网络来的动作加上状态的观测值加以分析, 而状态估计网络则是拿着当时 Actor 施加的动作当做输入</strong>.在实际运用中, DDPG 的这种做法的确带来了更有效的学习过程.</li>
-<li><img src="/imgs/6a83e078a6bdb97f3a4cd97e1da8d01ea4068866f7bf6254e44e27d51c3f03ea.png" alt="picture 43">  <h3 id="学习的过程"><a href="#学习的过程" class="headerlink" title="学习的过程"></a>学习的过程</h3><h4 id="Critic网络"><a href="#Critic网络" class="headerlink" title="Critic网络"></a>Critic网络</h4></li>
-<li><code>y_true</code>是要学习的值，这个值是通过<code>Critci</code>的<code>target</code>网络对于下一时刻的<code>actor</code>的<code>target</code>网络的动作做出的评估加上这一时刻的汇报<code>reward</code>计算出来的，而它自身需要修改的值就是直接对当前的环境观测和动作做出的值的判断<code>y_pred</code><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">critic_learn</span>():</span></span><br><span class="line">    a1 = self.actor_target(s1).detach()</span><br><span class="line">    y_true = r1 + self.gamma * self.critic_target(s1, a1).detach()</span><br><span class="line">    </span><br><span class="line">    y_pred = self.critic(s0, a0)</span><br><span class="line">    </span><br><span class="line">    loss_fn = nn.MSELoss()</span><br><span class="line">    loss = loss_fn(y_pred, y_true)</span><br><span class="line">    self.critic_optim.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    self.critic_optim.step()</span><br></pre></td></tr></table></figure></li>
-<li>然后按照一定的比例<code>soft_update</code>对应的<code>target</code>网络即可<h4 id="Actor网络"><a href="#Actor网络" class="headerlink" title="Actor网络"></a>Actor网络</h4></li>
-<li>直接利用<code>critic</code>网络对于此刻环境的观测和在此刻环境下<code>actor</code>网络的行为做出评价，然后直接反向传播</li>
-<li>同样<code>soft_update</code>另一个<code>target</code>网络即可<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">actor_learn</span>():</span></span><br><span class="line">    loss = -torch.mean( self.critic(s0, self.actor(s0)) )</span><br><span class="line">    self.actor_optim.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    self.actor_optim.step()</span><br></pre></td></tr></table></figure>
-<h2 id="A3C"><a href="#A3C" class="headerlink" title="A3C"></a>A3C</h2></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/MorvanZhou/pytorch-A3C">pytorch A3C参考</a></li>
-<li><img src="/imgs/8bed5783887792cdbaffbae4046098a68b2539e3a7093d5a4624fb6bb1378a00.png" alt="picture 44">  </li>
-<li><img src="/imgs/bf942436af1a670b0ab91f0705dd4a8136963ade316c598d29a6a775f107841f.png" alt="picture 45">  </li>
-<li><img src="/imgs/daf4381936a5297b7e62f97c553d7c997f51b7ebbecfaee2b4b204c1dd156fba.png" alt="picture 46">  </li>
-<li><img src="/imgs/1cdcd316476945548933f8ad5922351079bb5ee5808860489a251970aa3c805d.png" alt="picture 47">  </li>
-<li>实际上每个本地网络都是一个Actor-Critic的网络，损失分为动作网络<code>Actor</code>的loss和<code>Critic</code>网络的loss<ul>
-<li>Critic的loss可以先计算<code>td_error</code>，用Critic在此时的环境中计算出的值与实际上每一步得到的增加随时间衰减的因子之后的实际上的Reward做差，然后平方即可得到Critic的loss</li>
-<li>Actor的loss则是使用反向求出刚才动作的log_prob（怎么求上文有），然后再求出<code>entropy</code>，公式为<img src="/imgs/082feca831bedf90bf6c3253215c0e01b8c26b2ba406997eb4acb361db659f73.png" alt="`0.5 + 0.5 * math.log(2 * math.pi) + torch.log(m.scale)` 1">，然后log_prob×上文的td_error+一个系数×entropy，然后整个计算出来之后取相反数即可得到Actor的loss，然后将整个的两个loss取平均数，反向传播更新参数即可<u>（因为根据计算图倒推可以分别得到组成这个变量的两个变量分别的影响因素，所以不影响反向传播分别更新两个网络）</u>。<h3 id="torch中backword是怎么用的"><a href="#torch中backword是怎么用的" class="headerlink" title="torch中backword是怎么用的"></a>torch中backword是怎么用的</h3></li>
-</ul>
-</li>
-<li>针对<strong>标量</strong>做出的对计算图的反向传播，得到标量的值，算出计算图中每个变量对于得到这个标量的偏导数<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/168748668">参考</a></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag">强化学习</a></li></ul>
 
     </footer>
   </div>
