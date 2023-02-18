@@ -351,6 +351,12 @@
 <li><img src="/imgs/ae6810ecdb55ecf83bab089970463402519d5ed979d75e1d7005bed717d6c11d.png" alt="picture 2">  </li>
 </ul>
 </li>
+<li>python得到当前路径<ul>
+<li><code>os.getcwd().replace(&#39;\\&#39;,&#39;/&#39;)</code>此处将<code>/</code>替换为了<code>\\</code>，实际上是单斜线<h3 id="数组切片"><a href="#数组切片" class="headerlink" title="数组切片"></a>数组切片</h3></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42782150/article/details/127014616">参考链接</a></li>
+<li>注意<code>数组[begin:end]</code>切到的是begin到<strong>end-1</strong>的内容<h3 id="重启程序"><a href="#重启程序" class="headerlink" title="重启程序"></a>重启程序</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 获取当前解释器路径</span></span><br><span class="line">p = sys.executable</span><br><span class="line"><span class="comment"># 启动新程序(解释器路径, 当前程序)</span></span><br><span class="line">os.execl(p, p, *sys.argv)</span><br><span class="line"><span class="comment"># 关闭当前程序</span></span><br><span class="line">sys.exit()</span><br></pre></td></tr></table></figure></li>
 </ul>
  
       <!-- reward -->
