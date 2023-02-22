@@ -141,6 +141,92 @@
     
     
     <article
+  id="post-强化学习复习（四）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/10/09/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/"
+    >强化学习复习（四）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/10/09/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/" class="article-date">
+  <time datetime="2022-10-09T07:27:06.000Z" itemprop="datePublished">2022-10-09</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/sweetice/Deep-reinforcement-learning-with-pytorch">基于pytorch实现的强化学习网络</a></p>
+<ul>
+<li><strong>这个的PPO写的似乎有问题</strong></li>
+</ul>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/labmlai/annotated_deep_learning_paper_implementations">强化学习网络集合</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/thu-ml/tianshou">集合 2</a></p>
+</li>
+<li><h2 id="PPO"><a href="#PPO" class="headerlink" title="PPO"></a>PPO</h2></li>
+<li><p>PPO是基于Actor-Critic的算法</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/468828804">参考链接</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">from</span> torch.distributions <span class="keyword">import</span> Normal</span><br><span class="line"><span class="keyword">from</span> torch.utils.data.sampler <span class="keyword">import</span> BatchSampler, SubsetRandomSampler</span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">&#x27;Solve the Pendulum-v0 with PPO&#x27;</span>)</span><br><span class="line">parser.add_argument(</span><br><span class="line">    <span class="string">&#x27;--gamma&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">float</span>, default=<span class="number">0.9</span>, metavar=<span class="string">&#x27;G&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;discount factor (default: 0.9)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--seed&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">0</span>, metavar=<span class="string">&#x27;N&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;random seed (default: 0)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--render&#x27;</span>, action=<span class="string">&#x27;store_true&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;render the environment&#x27;</span>)</span><br><span class="line">parser.add_argument(</span><br><span class="line">    <span class="string">&#x27;--log-interval&#x27;</span>,</span><br><span class="line">    <span class="built_in">type</span>=<span class="built_in">int</span>,</span><br><span class="line">    default=<span class="number">10</span>,</span><br><span class="line">    metavar=<span class="string">&#x27;N&#x27;</span>,</span><br><span class="line">    <span class="built_in">help</span>=<span class="string">&#x27;interval between training status logs (default: 10)&#x27;</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">torch.manual_seed(args.seed)</span><br><span class="line"></span><br><span class="line">TrainingRecord = namedtuple(<span class="string">&#x27;TrainingRecord&#x27;</span>, [<span class="string">&#x27;ep&#x27;</span>, <span class="string">&#x27;reward&#x27;</span>])</span><br><span class="line">Transition = namedtuple(<span class="string">&#x27;Transition&#x27;</span>, [<span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;a_log_p&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;s_&#x27;</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ActorNet</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(ActorNet, self).__init__()</span><br><span class="line">        self.fc = nn.Linear(<span class="number">3</span>, <span class="number">100</span>)</span><br><span class="line">        self.mu_head = nn.Linear(<span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line">        self.sigma_head = nn.Linear(<span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = F.relu(self.fc(x))</span><br><span class="line">        mu = <span class="number">2.0</span> * F.tanh(self.mu_head(x))</span><br><span class="line">        sigma = F.softplus(self.sigma_head(x))</span><br><span class="line">        <span class="keyword">return</span> (mu, sigma)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CriticNet</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(CriticNet, self).__init__()</span><br><span class="line">        self.fc = nn.Linear(<span class="number">3</span>, <span class="number">100</span>)</span><br><span class="line">        self.v_head = nn.Linear(<span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = F.relu(self.fc(x))</span><br><span class="line">        state_value = self.v_head(x)</span><br><span class="line">        <span class="keyword">return</span> state_value</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Agent</span>():</span></span><br><span class="line"></span><br><span class="line">    clip_param = <span class="number">0.2</span></span><br><span class="line">    max_grad_norm = <span class="number">0.5</span></span><br><span class="line">    ppo_epoch = <span class="number">10</span></span><br><span class="line">    buffer_capacity, batch_size = <span class="number">1000</span>, <span class="number">32</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.training_step = <span class="number">0</span></span><br><span class="line">        self.anet = ActorNet().<span class="built_in">float</span>()</span><br><span class="line">        self.cnet = CriticNet().<span class="built_in">float</span>()</span><br><span class="line">        self.buffer = []</span><br><span class="line">        self.counter = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        self.optimizer_a = optim.Adam(self.anet.parameters(), lr=<span class="number">1e-4</span>)</span><br><span class="line">        self.optimizer_c = optim.Adam(self.cnet.parameters(), lr=<span class="number">3e-4</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select_action</span>(<span class="params">self, state</span>):</span></span><br><span class="line">        state = torch.from_numpy(state).<span class="built_in">float</span>().unsqueeze(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            (mu, sigma) = self.anet(state)</span><br><span class="line">        dist = Normal(mu, sigma)</span><br><span class="line">        action = dist.sample()</span><br><span class="line">        action_log_prob = dist.log_prob(action)</span><br><span class="line">        action = action.clamp(-<span class="number">2.0</span>, <span class="number">2.0</span>)</span><br><span class="line">        <span class="keyword">return</span> action.item(), action_log_prob.item()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span>(<span class="params">self, state</span>):</span></span><br><span class="line"></span><br><span class="line">        state = torch.from_numpy(state).<span class="built_in">float</span>().unsqueeze(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            state_value = self.cnet(state)</span><br><span class="line">        <span class="keyword">return</span> state_value.item()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save_param</span>(<span class="params">self</span>):</span></span><br><span class="line">        torch.save(self.anet.state_dict(), <span class="string">&#x27;param/ppo_anet_params.pkl&#x27;</span>)</span><br><span class="line">        torch.save(self.cnet.state_dict(), <span class="string">&#x27;param/ppo_cnet_params.pkl&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">store</span>(<span class="params">self, transition</span>):</span></span><br><span class="line">        self.buffer.append(transition)</span><br><span class="line">        self.counter += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> self.counter % self.buffer_capacity == <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.training_step += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        s = torch.tensor([t.s <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>)</span><br><span class="line">        a = torch.tensor([t.a <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        r = torch.tensor([t.r <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        s_ = torch.tensor([t.s_ <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>)</span><br><span class="line"></span><br><span class="line">        old_action_log_probs = torch.tensor(</span><br><span class="line">            [t.a_log_p <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        r = (r - r.mean()) / (r.std() + <span class="number">1e-5</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            target_v = r + args.gamma * self.cnet(s_)</span><br><span class="line"></span><br><span class="line">        adv = (target_v - self.cnet(s)).detach()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(self.ppo_epoch):</span><br><span class="line">            <span class="keyword">for</span> index <span class="keyword">in</span> BatchSampler(</span><br><span class="line">                    SubsetRandomSampler(<span class="built_in">range</span>(self.buffer_capacity)), self.batch_size, <span class="literal">False</span>):</span><br><span class="line"></span><br><span class="line">                (mu, sigma) = self.anet(s[index])</span><br><span class="line">                dist = Normal(mu, sigma)</span><br><span class="line">                action_log_probs = dist.log_prob(a[index])</span><br><span class="line">                ratio = torch.exp(action_log_probs - old_action_log_probs[index])</span><br><span class="line"></span><br><span class="line">                surr1 = ratio * adv[index]</span><br><span class="line">                surr2 = torch.clamp(ratio, <span class="number">1.0</span> - self.clip_param,</span><br><span class="line">                                    <span class="number">1.0</span> + self.clip_param) * adv[index]</span><br><span class="line">                action_loss = -torch.<span class="built_in">min</span>(surr1, surr2).mean()</span><br><span class="line"></span><br><span class="line">                self.optimizer_a.zero_grad()</span><br><span class="line">                action_loss.backward()</span><br><span class="line">                nn.utils.clip_grad_norm_(self.anet.parameters(), self.max_grad_norm)</span><br><span class="line">                self.optimizer_a.step()</span><br><span class="line"></span><br><span class="line">                value_loss = F.smooth_l1_loss(self.cnet(s[index]), target_v[index])</span><br><span class="line">                self.optimizer_c.zero_grad()</span><br><span class="line">                value_loss.backward()</span><br><span class="line">                nn.utils.clip_grad_norm_(self.cnet.parameters(), self.max_grad_norm)</span><br><span class="line">                self.optimizer_c.step()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">del</span> self.buffer[:]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    env = gym.make(<span class="string">&#x27;Pendulum-v0&#x27;</span>)</span><br><span class="line">    env.seed(args.seed)</span><br><span class="line"></span><br><span class="line">    agent = Agent()</span><br><span class="line"></span><br><span class="line">    training_records = []</span><br><span class="line">    running_reward = -<span class="number">1000</span></span><br><span class="line">    state = env.reset()</span><br><span class="line">    <span class="keyword">for</span> i_ep <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">        score = <span class="number">0</span></span><br><span class="line">        state = env.reset()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">200</span>):</span><br><span class="line">            action, action_log_prob = agent.select_action(state)</span><br><span class="line">            state_, reward, done, _ = env.step([action])</span><br><span class="line">            <span class="keyword">if</span> args.render:</span><br><span class="line">                env.render()</span><br><span class="line">            <span class="keyword">if</span> agent.store(Transition(state, action, action_log_prob, (reward + <span class="number">8</span>) / <span class="number">8</span>, state_)):</span><br><span class="line">                agent.update()</span><br><span class="line">            score += reward</span><br><span class="line">            state = state_</span><br><span class="line"></span><br><span class="line">        running_reward = running_reward * <span class="number">0.9</span> + score * <span class="number">0.1</span></span><br><span class="line">        training_records.append(TrainingRecord(i_ep, running_reward))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> i_ep % args.log_interval == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Ep &#123;&#125;\tMoving average score: &#123;:.2f&#125;\t&#x27;</span>.<span class="built_in">format</span>(i_ep, running_reward))</span><br><span class="line">        <span class="keyword">if</span> running_reward &gt; -<span class="number">200</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Solved! Moving average score is now &#123;&#125;!&quot;</span>.<span class="built_in">format</span>(running_reward))</span><br><span class="line">            env.close()</span><br><span class="line">            agent.save_param()</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;log/ppo_training_records.pkl&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                pickle.dump(training_records, f)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    plt.plot([r.ep <span class="keyword">for</span> r <span class="keyword">in</span> training_records], [r.reward <span class="keyword">for</span> r <span class="keyword">in</span> training_records])</span><br><span class="line">    plt.title(<span class="string">&#x27;PPO&#x27;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&#x27;Episode&#x27;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&#x27;Moving averaged episode reward&#x27;</span>)</span><br><span class="line">    plt.savefig(<span class="string">&quot;img/ppo.png&quot;</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></li>
+<li><p>产生动作的方式与一般的PG类似，就是使用PG输出一个μ和σ然后使用正态分布，然后进行采样输出真正的动作</p>
+<h3 id="网络更新"><a href="#网络更新" class="headerlink" title="网络更新"></a>网络更新</h3></li>
+<li><p>reward归一化，将reward-平均数/标准差</p>
+</li>
+<li><p>计算target价值，使用当前回合的reward+系数×Critic对于下一状态的分析</p>
+</li>
+<li><p>估计价值和实际价值的差：直接用估计当前状态的价值与上一步计算的价值做差</p>
+</li>
+<li><p>计算actor网络的loss的方法是</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(mu, sigma) = self.anet(s[index])</span><br><span class="line">dist = Normal(mu, sigma)</span><br><span class="line">action_log_probs = dist.log_prob(a[index])</span><br><span class="line">ratio = torch.exp(action_log_probs - old_action_log_probs[index])</span><br><span class="line"></span><br><span class="line">surr1 = ratio * adv[index]</span><br><span class="line">surr2 = torch.clamp(ratio, <span class="number">1.0</span> - self.clip_param,</span><br><span class="line">                    <span class="number">1.0</span> + self.clip_param) * adv[index]</span><br><span class="line">action_loss = -torch.<span class="built_in">min</span>(surr1, surr2).mean()</span><br></pre></td></tr></table></figure></li>
+<li><p>先利用当前的网络采样输出μ和σ，然后计算之前action的log_prob，，然后利用表达式<code>e^(这次网络计算出的log可能性-上次网络计算出的log可能性)</code>，实际上就是<code>这次网络计算出的可能性/上次网络计算出的可能性</code>与上一步算出的估计价值和实际价值的差值<strong>修正这个值</strong>，主要目的是用合理的方法<u>利用其他时刻动作的输出，增加一个动作的利用效率</u></p>
+</li>
+<li><p><img src="/imgs/f8606933037c3541da1fdedf4142d2a36bcb61ee2ddd0dba8b63febd43dfd75c.png" alt="picture 1">  </p>
+</li>
+<li><p>然后用一个参数×上面的数值，处理之后得到最终需要反向传播的值（actor）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">value_loss = F.smooth_l1_loss(self.cnet(s[index]), target_v[index])</span><br><span class="line">self.optimizer_c.zero_grad()</span><br><span class="line">value_loss.backward()</span><br><span class="line">nn.utils.clip_grad_norm_(self.cnet.parameters(), self.max_grad_norm)</span><br><span class="line">self.optimizer_c.step()</span><br></pre></td></tr></table></figure></li>
+<li><p>更新Critic的参数操作是将现在的Critic网络对价值的判断与前面算出的目标价值判断进行比较，将二者的差进行反向传播</p>
+<h2 id="BatchSampler和SubsetRamdomSampler"><a href="#BatchSampler和SubsetRamdomSampler" class="headerlink" title="BatchSampler和SubsetRamdomSampler"></a>BatchSampler和SubsetRamdomSampler</h2></li>
+<li><p><code>SubsetRandomSampler</code>实际上是将数据的顺序打乱做一个全排列</p>
+</li>
+<li><p><code>BatchSampler</code>实际上是根据设置的batch_size给数据分成一个个的batch</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag">强化学习</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Anaconda配置问题记录"
   class="article article-type-post"
   itemscope
@@ -702,7 +788,19 @@
 <li>安装<code>remote-ssh</code>插件</li>
 <li>新建ssh链接，在命令框中输入<code>ssh 用户名@IP地址 -A</code></li>
 <li>然后保存配置开始链接</li>
-<li><img src="/imgs/31d0f7334ef200549eb81def8586ddaa1782230ba5b521a788ecc3a628f5bf32.png" alt="图 1">  </li>
+<li><img src="/imgs/31d0f7334ef200549eb81def8586ddaa1782230ba5b521a788ecc3a628f5bf32.png" alt="图 1">  <h2 id="卡死在创建SSH链接的时候的解决方法"><a href="#卡死在创建SSH链接的时候的解决方法" class="headerlink" title="卡死在创建SSH链接的时候的解决方法"></a>卡死在创建SSH链接的时候的解决方法</h2></li>
+<li><img src="/imgs/40583bbf36963874eb80477c2349df6fc91fe7b8926a95de0b3be06103ae96ee.png" alt="picture 1">  </li>
+<li>打开Vscode端的<code>SSH</code>插件设置</li>
+<li>找到这一项 勾上对勾<ul>
+<li><img src="/imgs/5f8624e28c4e47571f5d970e8ea4e3d43061d6dfc22e57ab0426a9221c46f130.png" alt="picture 2">  </li>
+</ul>
+</li>
+<li>此外注意<strong>不要让ubuntu自动锁屏</strong>，否则可能导致连接断开</li>
+<li>在此处<strong>创建新的控制台</strong><img src="/imgs/5bd56d67d175ef3acc137deca15dfa260e2bbf02963c7bb89335b55362e9b7c5.png" alt="picture 3">  <ul>
+<li>因为安装SSH的控制台一般无法继续用作其他用途</li>
+</ul>
+</li>
+<li>另外，可以考虑使用<code>rm -r ~/.vscode-server</code>命令删除原先下载的<code>vscode-server</code>（在dpkg搜不到）</li>
 </ul>
  
       <!-- reward -->
@@ -841,74 +939,6 @@
 <li>防止因为用户数据输入顺序的原因导致树左右不平衡使得搜索的时间复杂度上升</li>
 <li>左树和右树的体量差不多大</li>
 <li>AVL树在增删结点的时候会从这个节点的父节点开始向上查每个节点的平衡性</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-动态规划"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/30/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"
-    >动态规划</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/30/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="article-date">
-  <time datetime="2022-08-30T12:30:22.000Z" itemprop="datePublished">2022-08-30</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="从递归到动态规划"><a href="#从递归到动态规划" class="headerlink" title="从递归到动态规划"></a>从递归到动态规划</h1><ul>
-<li>只要调用一个递归函数，总有参数不可变和参数可变的部分</li>
-<li>不可变的参数对结果没有影响因为都是一样的</li>
-<li>分析一个递归函数得到结果依赖下层递归返回什么内容</li>
-<li>为什么递归慢？因为会在不同的分支重复遍历相同的情况 <h2 id="递归到记忆化搜索"><a href="#递归到记忆化搜索" class="headerlink" title="递归到记忆化搜索"></a>递归到记忆化搜索</h2><h2 id="严格表结构的动态规划"><a href="#严格表结构的动态规划" class="headerlink" title="严格表结构的动态规划"></a>严格表结构的动态规划</h2></li>
-<li>解决重复遍历相同情况的问题</li>
-<li>利用缓存实现递归函数的可变部分到缓存结果的映射</li>
-<li>假如递归函数有k个参数可变，那么缓存的表具有k个维度</li>
-<li>缓存表能区分是否计算过这个位置的内容，比如用INT MIN或者-1一类</li>
-<li>缓存没命中的话就开始尝试，将尝试的结果存储到表中</li>
-<li>时间复杂度O(缓存表的尺寸)，本来的复杂度是二叉树的节点数<h2 id="计算动态规划表格"><a href="#计算动态规划表格" class="headerlink" title="计算动态规划表格"></a>计算动态规划表格</h2></li>
-<li>动态规划的顺序一定从递归函数的<strong>底层情况</strong>开始，或者说从递归的终止位置开始，知道不需要计算就直接出答案的位置</li>
-<li>从上面的推导得出计算的顺序</li>
-<li>利用递归函数的逻辑调用动态规划表格的内容</li>
-<li>将<u>调用下一级的递归函数</u>更改为从下一级的递归函数的<u>可变参数位置对应的缓存表的位置取出值</u></li>
-<li>也就是将<strong>递归调用的过程</strong>变成从<strong>动态规划表格中取值</strong>的过程</li>
-<li><strong>小心越界</strong><h3 id="斜率优化"><a href="#斜率优化" class="headerlink" title="斜率优化"></a>斜率优化</h3></li>
-<li>假如在递归的过程中出现<u>枚举行为</u>(比如计算一个格子的位置需要循环用到一系列从少到多的格子的信息)</li>
-<li>那么可以考虑使用<u>与这个格子临近的格子</u>寻找不需要进行循环就可以直接常数时间内就得到结果的方法</li>
 </ul>
  
       <!-- reward -->
