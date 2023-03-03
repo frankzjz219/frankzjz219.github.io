@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>git常用命令 |  Frank’s blogs</title>
+      <title>Linux内核多线程计算 |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -53,7 +53,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-git常用命令"
+  id="post-Linux内核多线程计算"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -64,7 +64,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  git常用命令
+  Linux内核多线程计算
 </h1>
  
 
@@ -72,15 +72,15 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/12/13/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="article-date">
-  <time datetime="2021-12-13T06:56:17.000Z" itemprop="datePublished">2021-12-13</time>
+      <a href="/2023/03/03/Linux%E5%86%85%E6%A0%B8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97/" class="article-date">
+  <time datetime="2023-03-03T12:51:31.000Z" itemprop="datePublished">2023-03-03</time>
 </a>   
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">192</span>
+            <span class="post-count">415</span>
         </span>
     </span>
 
@@ -104,20 +104,26 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h1 id="git-常见命令"><a href="#git-常见命令" class="headerlink" title="git 常见命令"></a>git 常见命令</h1><p><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/896043488029600">https://www.liaoxuefeng.com/wiki/896043488029600</a></p>
-<p>一次添加目录下所有文件（ <strong>包括gitignore</strong> 的文件）：</p>
-<p><code>git add . -f</code></p>
-<p>一次添加目录下的所有文件（ <strong>不包括gitignore</strong> 的文件）：</p>
-<p><code> git add .</code></p>
-<p>一次<code>commit</code> 所有东西</p>
-<p><code> git commit -a -m &lt;信息&gt;</code></p>
-<p>一次添加目录下的所有东西：</p>
-<p><code>git add 文件夹名/*</code></p>
-<p>上传出问题的时候（上传 <strong>被拒绝</strong> 的时候）的解决方法：</p>
-<p><code>git push -u origin master -f</code></p>
-<p>这个会 <strong>丢弃</strong> 所有远程仓库领先于本地仓库的部分， <strong>强行</strong> 将本地仓库的内容推送到远端 </p>
-<p>或下面这个，但是这个可能会 <strong>覆盖一些本地的文件</strong> （主要是多人开发的情况下可能会出现）</p>
-<p><code>git pull origin master --allow-unrelated-histories</code></p>
+  <h2 id="Linux内核文档"><a href="#Linux内核文档" class="headerlink" title="Linux内核文档"></a>Linux内核文档</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.kernel.org/doc/html/">链接</a><h2 id="内核时间获取"><a href="#内核时间获取" class="headerlink" title="内核时间获取"></a>内核时间获取</h2></li>
+<li><a href="">参考链接</a></li>
+<li>使用<code>#include &lt;linux/jiffies.h&gt;</code>中的<code>jiffies</code>变量直接获取，该变量的定义为<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">volatile</span> __cacheline_aligned_in_smp __jiffy_arch_data jiffies;</span><br></pre></td></tr></table></figure></li>
+<li>将这个变量转化为时间的形式有很多函数，见<code>jiffies.h</code>中，比如<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">jiffies_to_msecs</span><span class="params">(<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> j)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">jiffies_to_usecs</span><span class="params">(<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> j)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>其中的参数直接传入<code>jiffies</code>即可<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3></li>
+<li><img src="/imgs/d7bc9e5d08b1f98d4c7fa931810f85bfc2e636bbe1a593df34b4386f03f51e73.png" alt="picture 1">  <ul>
+<li>可见并不是直接等于内核时间，而是与内核时间之间有一个<u>稳定的差值</u>，猜测是因为299s的时候内核出现了<code>taint</code>重新开始计时了<h2 id="使用多个文件时候的编译"><a href="#使用多个文件时候的编译" class="headerlink" title="使用多个文件时候的编译"></a>使用多个文件时候的编译</h2></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_52411900/article/details/129050107">参考</a></li>
+<li>当对应的模块需要多个源文件时，可以添加多个<code>.o</code>文件作为依赖，比如<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">obj-m := kThOut.o</span><br><span class="line"></span><br><span class="line">kThOut-objs := kTh.o task.o</span><br><span class="line"></span><br><span class="line">CURRENT_PATH := <span class="variable">$(<span class="built_in">shell</span> pwd)</span></span><br><span class="line">LINUX_KERNEL := <span class="variable">$(<span class="built_in">shell</span> uname -r)</span></span><br><span class="line">LINUX_KERNEL_PATH := /usr/src/linux-headers-<span class="variable">$(LINUX_KERNEL)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">	make -C <span class="variable">$(LINUX_KERNEL_PATH)</span> M=<span class="variable">$(CURRENT_PATH)</span> modules</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	make -C <span class="variable">$(LINUX_KERNEL_PATH)</span> M=<span class="variable">$(CURRENT_PATH)</span> clean</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>注意代码中<strong>不要有两个模块具有同样的名字</strong>，比如一个依赖项是<code>kTh</code>，即使这个模块包含了主要的函数比如<code>module_init</code>等，也不能这么做，输出模块必须单独取一个名字比如<code>kThOut</code>，否则输出的文件加载到内核后会出现<code>kTh: module license &#39;unspecified&#39; taints kernel.</code>之类的报错</li>
+<li>上述代码中需要编译的模块名字是<code>kThOut</code>，因此添加一行<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">&lt;模块名&gt;-objs := &lt;c源文件1&gt;.o &lt;c源文件2&gt;.o ...</span><br></pre></td></tr></table></figure></li>
+<li>注意，内核线程的返回类型必须是<code>int</code><h2 id="结果-1"><a href="#结果-1" class="headerlink" title="结果"></a>结果</h2></li>
+<li>向量长度为100000时</li>
+<li><img src="/imgs/0da2e22604527dfdba0c13b07686acc6f31d76704a4a96da15d27ceb374856e2.png" alt="picture 2">  </li>
+<li>可能是内核线程创建的代价较大导致的<h2 id="代码仓库"><a href="#代码仓库" class="headerlink" title="代码仓库"></a>代码仓库</h2></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/frankzjz219/linuxKernelThreads">仓库</a></li>
+</ul>
  
       <!-- reward -->
       
@@ -170,30 +176,23 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2021/12/13/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2023/03/03/Linux%E5%86%85%E6%A0%B8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%86%85%E6%A0%B8/" rel="tag">内核</a></li></ul>
+
     </footer>
   </div>
 
    
   <nav class="article-nav">
     
-      <a href="/2021/12/14/freeRtos%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            FreeRtos内存分配
-          
-        </div>
-      </a>
     
-    
-      <a href="/2021/12/11/FreeRtos1/" class="article-nav-link">
+      <a href="/2023/02/22/%E7%BC%96%E5%86%99C%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E7%A8%8B%E5%BA%8F%E5%B9%B6%E7%BB%9F%E8%AE%A1%E6%97%B6%E9%97%B4/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">FreeRtos1</div>
+        <div class="article-nav-title">编写C并行计算程序并统计时间</div>
       </a>
     
   </nav>

@@ -141,6 +141,65 @@
     
     
     <article
+  id="post-C语言函数指针"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/22/C%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/"
+    >C语言函数指针</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/22/C%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/" class="article-date">
+  <time datetime="2022-01-22T02:17:18.000Z" itemprop="datePublished">2022-01-22</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="C语言函数指针"><a href="#C语言函数指针" class="headerlink" title="C语言函数指针"></a>C语言函数指针</h1><ul>
+<li>函数指针是指向函数的指针变量</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;返回值类型&gt; (*函数指针名称)(&lt;输入参数类型&gt;,...)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>回调函数使用例：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">populate_array</span><span class="params">(<span class="keyword">int</span> *<span class="built_in">array</span>, <span class="keyword">size_t</span> arraySize, <span class="keyword">int</span> (*getNextValue)(<span class="keyword">void</span>))</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i=<span class="number">0</span>; i&lt;arraySize; i++)</span><br><span class="line">        <span class="built_in">array</span>[i] = getNextValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>传参：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">populate_array(myarray, <span class="number">10</span>, getNextRandomValue);</span><br></pre></td></tr></table></figure>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Linux线程（一）"
   class="article article-type-post"
   itemscope
@@ -1214,73 +1273,6 @@
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
 
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-Qt网络请求下载图片并且显示"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/18/Qt%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87%E5%B9%B6%E4%B8%94%E6%98%BE%E7%A4%BA/"
-    >Qt网络请求下载图片并且显示</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/18/Qt%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87%E5%B9%B6%E4%B8%94%E6%98%BE%E7%A4%BA/" class="article-date">
-  <time datetime="2022-01-17T16:45:02.000Z" itemprop="datePublished">2022-01-18</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Qt网络请求下载图片并且显示"><a href="#Qt网络请求下载图片并且显示" class="headerlink" title="Qt网络请求下载图片并且显示"></a>Qt网络请求下载图片并且显示</h1><h2 id="基本流程"><a href="#基本流程" class="headerlink" title="基本流程"></a>基本流程</h2><ul>
-<li>字符串通过<code>QUrl()</code>变成Url对象，然后<code>QNetworkRequest</code>通过<code>setUrl()</code>方法设置URL，然后<code>QNetworkManager</code>通过get方法访问并且返回回复</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">QNetworkReply *newReply = netWorkManager-&gt;<span class="built_in">get</span>(networkRequest);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>回复对象具有<code>downloadProgress(qint64, qint64)</code>，<code>readyRead()</code>，<code>finished()</code>，三个信号，其中<code>downloadProgress(qint64, qint64)</code>用来更新进度条，<code>readyRead()</code>表示此时已经有数据可以读取（可能<strong>还没结束</strong>），<code>finished()</code>表示此时接收<strong>已经结束</strong>可以读到完整的文件</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QByteArray data = reply-&gt;readAll();</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>上面是读取到回复的全文内容</li>
-</ul>
-<h2 id="更新进度条"><a href="#更新进度条" class="headerlink" title="更新进度条"></a>更新进度条</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::imageDownloadProgress</span><span class="params">(qint64 bytes, qint64 totalBytes)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> qint8 count = <span class="number">0</span>;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="keyword">if</span>(count == <span class="number">1</span>)</span><br><span class="line">        progressBar-&gt;<span class="built_in">setMaximum</span>(totalBytes);</span><br><span class="line"></span><br><span class="line">    progressBar-&gt;<span class="built_in">setValue</span>(bytes);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="下载结束显示图片"><a href="#下载结束显示图片" class="headerlink" title="下载结束显示图片"></a>下载结束显示图片</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::replyFinished</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//QNetworkReply *reply = (QNetworkReply *)sender();</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//reply-&gt;deleteLater();</span></span><br><span class="line"></span><br><span class="line">    QNetworkReply *reply = (QNetworkReply *)<span class="built_in">sender</span>();</span><br><span class="line"></span><br><span class="line">    QByteArray data = reply-&gt;<span class="built_in">readAll</span>();</span><br><span class="line">    reply-&gt;<span class="built_in">deleteLater</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(data.<span class="built_in">isEmpty</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;data is null, please try it again!&quot;</span>&lt;&lt;endl;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    QPixmap pixmap;</span><br><span class="line">    pixmap.<span class="built_in">loadFromData</span>(data);</span><br><span class="line"></span><br><span class="line">    label[<span class="number">0</span>]-&gt;<span class="built_in">setPixmap</span>(pixmap);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="开始下载"><a href="#开始下载" class="headerlink" title="开始下载"></a>开始下载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::startDownload</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">QUrl <span class="title">newUrl</span><span class="params">(QUrl(lineEdit-&gt;text()))</span></span>;</span><br><span class="line">    <span class="keyword">if</span>(!newUrl.<span class="built_in">isValid</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        QMessageBox::<span class="built_in">information</span>(<span class="keyword">this</span>, <span class="string">&quot;error&quot;</span>, <span class="string">&quot;invalid url&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    QNetworkRequest networkRequest;</span><br><span class="line"></span><br><span class="line">    networkRequest.<span class="built_in">setUrl</span>(newUrl);</span><br><span class="line"></span><br><span class="line">    QNetworkReply *newReply = netWorkManager-&gt;<span class="built_in">get</span>(networkRequest);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">connect</span>(newReply, <span class="built_in">SIGNAL</span>(<span class="built_in">finished</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">replyFinished</span>()));</span><br><span class="line">    <span class="built_in">connect</span>(newReply, <span class="built_in">SIGNAL</span>(<span class="built_in">readyRead</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">readyReadData</span>()));</span><br><span class="line">    <span class="built_in">connect</span>(newReply, <span class="built_in">SIGNAL</span>(<span class="built_in">downloadProgress</span>(qint64, qint64)), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">imageDownloadProgress</span>(qint64, qint64)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
     </footer>
   </div>
 

@@ -141,6 +141,76 @@
     
     
     <article
+  id="post-HindsightExperienceReplay（HER）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/10/13/HindsightExperienceReplay%EF%BC%88HER%EF%BC%89/"
+    >HindsightExperienceReplay（HER）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/10/13/HindsightExperienceReplay%EF%BC%88HER%EF%BC%89/" class="article-date">
+  <time datetime="2022-10-13T06:45:00.000Z" itemprop="datePublished">2022-10-13</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Hindsight-Experience-Replay"><a href="#Hindsight-Experience-Replay" class="headerlink" title="Hindsight Experience Replay"></a>Hindsight Experience Replay</h1><ul>
+<li>原文<ul>
+<li>Hindsight experience replay</li>
+<li>Advances in neural information processing systems</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43145941/article/details/119219436?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1-119219436-blog-79498248.pc_relevant_3mothn_strategy_and_data_recovery&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1-119219436-blog-79498248.pc_relevant_3mothn_strategy_and_data_recovery&utm_relevant_index=2">参考链接</a><h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2></li>
+<li>你得知道从状态S到目标goal的映射关系（以机械臂为例，状态可能是多个关节的角度，目标是三维空间一个点的坐标，如果知道状态，那么也能推算出机械臂末端在空间中的坐标）；</li>
+<li>你得建立一个新的reward计算机制，它取决于目标goal和状态S，一般当状态S映射的goal’与goal相近时给予奖励；</li>
+<li>你得创建一个记录每个episode transition的列表，它的作用是在每个episode结束后进行事后经验回放，具体回放方法之后讲；</li>
+<li>RL算法接受的状态维度相较于原始的维度增加了目标goal的维度，也就是RL接受：<ul>
+<li><img src="/imgs/dba2e2146bcea81c1cc62e3cafac2015a03a4b67fb2a29916283b8ea130ea278.png" alt="picture 2">  <h2 id="举例的github"><a href="#举例的github" class="headerlink" title="举例的github"></a>举例的github</h2></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ZYunfeii/DRL_algorithm_library/tree/master/DDPG/DDPG_spinningup_HER">HER举例</a></li>
+<li>这里episode_cache为存储transition的列表((s1,a1,r1,s1’),(s2,a2,r2,s2’)…)，枚举这个列表的元素。在第二句根据每个transition产生HER_SAMPLE_NUM个新的目标点new_goals，这些<strong>目标点时根据之后的transition的state推算得到的</strong>，当然一种简单的情况就是state。之后对这些new_goals做遍历，对每一个new_goal都重新计算reward，并将transition中s和s’的goal部分替换为new_goal，之后将这个新的transition存储入经验池buffer。这里之所以可以这么做是因为在动作a不变的情况下，改变goal是不会改变从原来的s转移到s’的转移概率的。</li>
+<li>先对每个回合中的所有输入做一个reward的评价</li>
+<li>然后在整个回合的数据后处理时，循环到i时，从i之后的数据里随机选出一部分作为新的goal，然后利用这些新的goal重新计算i这个数据的reward，然后将其放入到replay buffer中，可能导致replay buffer中包含多条由同一条数据而来但是reward不同的数据条目</li>
+<li>可以在每训练一个回合之后更换初始的goal（也就是在筛选之前针对所有对象的goal）达到多目标训练的效果</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ZYunfeii/DRL_algorithm_library/blob/master/DDPG/DDPG_spinningup_HER/main.py">示例代码</a></li>
+<li><img src="/imgs/000d30cf3c120ce06399c7b098681c9274e60a801893efe32854f09bf18d13d6.png" alt="picture 5">  </li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag">强化学习</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-强化学习复习（四）"
   class="article article-type-post"
   itemscope
@@ -689,25 +759,46 @@
     <div class="article-entry" itemprop="articleBody">
        
   <ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43455712/article/details/117468579">参考链接</a><h2 id="Ubuntu下开发Linux内核模块"><a href="#Ubuntu下开发Linux内核模块" class="headerlink" title="Ubuntu下开发Linux内核模块"></a>Ubuntu下开发Linux内核模块</h2></li>
-<li>Linux内核源码头文件位置<code>/usr/src/linux-headers-$(LINUX_KERNEL)</code></li>
-<li>其中的LINUX_KERNEL是Linux内核版本号，使用<code>uname -r</code>获得<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">obj-m := test.o</span><br><span class="line">CURRENT_PATH := <span class="variable">$(<span class="built_in">shell</span> pwd)</span></span><br><span class="line">LINUX_KERNEL := <span class="variable">$(<span class="built_in">shell</span> uname -r)</span></span><br><span class="line">LINUX_KERNEL_PATH := /usr/src/linux-headers-<span class="variable">$(LINUX_KERNEL)</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">	make -C <span class="variable">$(LINUX_KERNEL_PATH)</span> M=<span class="variable">$(CURRENT_PATH)</span> modules</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	make -C <span class="variable">$(LINUX_KERNEL_PATH)</span> M=<span class="variable">$(CURRENT_PATH)</span> clean</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43455712/article/details/117468579">参考链接</a></p>
+<h2 id="Ubuntu下开发Linux内核模块"><a href="#Ubuntu下开发Linux内核模块" class="headerlink" title="Ubuntu下开发Linux内核模块"></a>Ubuntu下开发Linux内核模块</h2></li>
+<li><p>Linux内核源码头文件位置<code>/usr/src/linux-headers-$(LINUX_KERNEL)</code></p>
+</li>
+<li><p>其中的LINUX_KERNEL是Linux内核版本号，使用<code>uname -r</code>获得</p>
+<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">obj-m := test.o</span><br><span class="line">CURRENT_PATH := <span class="variable">$(<span class="built_in">shell</span> pwd)</span></span><br><span class="line">LINUX_KERNEL := <span class="variable">$(<span class="built_in">shell</span> uname -r)</span></span><br><span class="line">LINUX_KERNEL_PATH := /usr/src/linux-headers-<span class="variable">$(LINUX_KERNEL)</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">	make -C <span class="variable">$(LINUX_KERNEL_PATH)</span> M=<span class="variable">$(CURRENT_PATH)</span> modules</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	make -C <span class="variable">$(LINUX_KERNEL_PATH)</span> M=<span class="variable">$(CURRENT_PATH)</span> clean</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h2 id="更新包含文件的目录"><a href="#更新包含文件的目录" class="headerlink" title="更新包含文件的目录"></a>更新包含文件的目录</h2></li>
-<li>在<u>远程端</u>安装C/C++等全套插件（<strong>不安装的话没有相应的选项</strong>）</li>
-<li>按<code>Ctrl+Shift+P</code>打开命令</li>
-<li>输入<code>C/C++</code></li>
-<li><img src="/imgs/3fadb8e8eb03dd521095a75961d71a0eaf8e0b8e404d5036369e33bffed6555b.png" alt="图 5">  </li>
-<li>然后在输入框里粘贴地址<code>/usr/src/linux-headers-&lt;uname -r的输出&gt;/include/</code></li>
-<li><img src="/imgs/2f6c1109ac8a8a9f6bec15b2c8a318c127c99afc9dc6a03c78ada574af7b8e60.png" alt="图 6">  </li>
-<li>然后即可找到printk等函数的定义<ul>
+<li><p>在<u>远程端</u>安装C/C++等全套插件（<strong>不安装的话没有相应的选项</strong>）</p>
+</li>
+<li><p>按<code>Ctrl+Shift+P</code>打开命令</p>
+</li>
+<li><p>输入<code>C/C++</code></p>
+</li>
+<li><p><img src="/imgs/3fadb8e8eb03dd521095a75961d71a0eaf8e0b8e404d5036369e33bffed6555b.png" alt="图 5">  </p>
+</li>
+<li><p>然后在输入框里粘贴地址<code>/usr/src/linux-headers-&lt;uname -r的输出&gt;/include/**</code></p>
+</li>
+<li><p><img src="/imgs/72be6f2fa0276b427f3032d5fd52b293863c7e1533ced15653e2f3286a30f78d.png" alt="picture 3">  </p>
+<ul>
+<li>重启设置之后<code>**</code>可能会消失</li>
+</ul>
+</li>
+<li><p>然后即可找到printk等函数的定义</p>
+<ul>
 <li><img src="/imgs/4eb3b08f44d7d9de7683b995f0a039fbb891857b050e26c607cce3733dc5db20.png" alt="图 7">  </li>
 </ul>
 </li>
 </ul>
-<h2 id="代码文件"><a href="#代码文件" class="headerlink" title="代码文件"></a>代码文件</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/init.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;Dual BSD/GPL&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hello_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	printk(KERN_ALERT <span class="string">&quot; Hello World enter\n&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hello_exit</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	printk(KERN_ALERT<span class="string">&quot; Hello World exit\n &quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">module_init(hello_init);</span><br><span class="line">module_exit(hello_exit);</span><br><span class="line"> </span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;Song Baohua&quot;</span>);</span><br><span class="line">MODULE_DESCRIPTION(<span class="string">&quot;A simple Hello World Module&quot;</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="但是还是有报错"><a href="#但是还是有报错" class="headerlink" title="但是还是有报错"></a>但是还是有报错</h3><ul>
+<li><img src="/imgs/c559b03e240382fdaea8cfeda7b97012bf360206024705575ce9fa6f259d614f.png" alt="picture 1">  </li>
+</ul>
+<h2 id="内核获取时间"><a href="#内核获取时间" class="headerlink" title="内核获取时间"></a>内核获取时间</h2><h2 id="代码文件"><a href="#代码文件" class="headerlink" title="代码文件"></a>代码文件</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/init.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;Dual BSD/GPL&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hello_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	printk(KERN_ALERT <span class="string">&quot; Hello World enter\n&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hello_exit</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	printk(KERN_ALERT<span class="string">&quot; Hello World exit\n &quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">module_init(hello_init);</span><br><span class="line">module_exit(hello_exit);</span><br><span class="line"> </span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;Song Baohua&quot;</span>);</span><br><span class="line">MODULE_DESCRIPTION(<span class="string">&quot;A simple Hello World Module&quot;</span>);</span><br></pre></td></tr></table></figure>
 <h2 id="编译结果"><a href="#编译结果" class="headerlink" title="编译结果"></a>编译结果</h2><ul>
 <li><img src="/imgs/bcffe914e1cdc23926f55b30fbf48854fe6645be5a7c614c63d7c5d294562232.png" alt="图 3">  </li>
-<li><code>insmod</code>安装模块，<code>rmmod</code>移除模块</li>
+<li><code>insmod</code>安装模块，<code>rmmod</code>移除模块<ul>
+<li><code>insmod</code>需要<code>sudo</code></li>
+<li>安装的是<code>.ko</code>文件</li>
+<li><img src="/imgs/d49222db17a55746e5d61c89182a737c6275304412c38ff3d9587f685f379c00.png" alt="picture 2">  </li>
+</ul>
+</li>
 <li>使用<code>dmesg</code>查看<strong>系统输出</strong></li>
 <li><img src="/imgs/6433a69aa1954041ecf4f563d8d6362a7365db8eaa4b83c234917c50fb663ba2.png" alt="图 4">  </li>
 </ul>
@@ -876,81 +967,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/" rel="tag">虚拟机</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-有序表"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/09/03/%E6%9C%89%E5%BA%8F%E8%A1%A8/"
-    >有序表</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/09/03/%E6%9C%89%E5%BA%8F%E8%A1%A8/" class="article-date">
-  <time datetime="2022-09-03T02:06:15.000Z" itemprop="datePublished">2022-09-03</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="有序表的实现"><a href="#有序表的实现" class="headerlink" title="有序表的实现"></a>有序表的实现</h2><ul>
-<li>底层：<ul>
-<li>红黑树</li>
-<li>AVL树</li>
-<li>SB树</li>
-<li>跳表</li>
-</ul>
-</li>
-<li>时间复杂度：O(log(N)) </li>
-<li>红黑树、AVL树、SB树是<em>平衡搜索二叉树</em><h3 id="搜索二叉树的插入和删除"><a href="#搜索二叉树的插入和删除" class="headerlink" title="搜索二叉树的插入和删除"></a>搜索二叉树的插入和删除</h3></li>
-<li>插入直接按照大小分支插入即可</li>
-<li>假如没有子节点的节点直接删除即可</li>
-<li>假如删除的节点只有一个孩子节点<ul>
-<li>直接让父节点的指针指向唯一的孩子即可</li>
-</ul>
-</li>
-<li>左右双全：<ul>
-<li>用左树最右的节点或者是右树最左的节点</li>
-<li>这样的节点必然不是两个孩子的节点</li>
-<li>先将这个节点的子节点（假如存在）移到这个节点原来的位置</li>
-<li>然后将这个节点移到被删除的具有两个孩子的节点的位置<h3 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h3></li>
-</ul>
-</li>
-<li>防止因为用户数据输入顺序的原因导致树左右不平衡使得搜索的时间复杂度上升</li>
-<li>左树和右树的体量差不多大</li>
-<li>AVL树在增删结点的时候会从这个节点的父节点开始向上查每个节点的平衡性</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
 
     </footer>
   </div>
