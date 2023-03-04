@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">280</span>
+            <span class="post-count">289</span>
         </span>
     </span>
 
@@ -120,9 +120,9 @@
 </li>
 <li><p><img src="/imgs/3fadb8e8eb03dd521095a75961d71a0eaf8e0b8e404d5036369e33bffed6555b.png" alt="图 5">  </p>
 </li>
-<li><p>然后在输入框里粘贴地址<code>/usr/src/linux-headers-&lt;uname -r的输出&gt;/include/**</code></p>
+<li><p>然后在输入框里粘贴地址<code>/usr/src/linux-headers-&lt;uname -r的输出&gt;/include/**</code>和<code>/usr/src/linux-headers-&lt;uname -r的输出&gt;/arch/x86/include/</code></p>
 </li>
-<li><p><img src="/imgs/72be6f2fa0276b427f3032d5fd52b293863c7e1533ced15653e2f3286a30f78d.png" alt="picture 3">  </p>
+<li><p><img src="/imgs/b578e50a48b4244960928d63e81d416ad4ebdb44bc237a25b504132ce59fc89f.png" alt="picture 4">  </p>
 <ul>
 <li>重启设置之后<code>**</code>可能会消失</li>
 </ul>
@@ -136,7 +136,7 @@
 <h3 id="但是还是有报错"><a href="#但是还是有报错" class="headerlink" title="但是还是有报错"></a>但是还是有报错</h3><ul>
 <li><img src="/imgs/c559b03e240382fdaea8cfeda7b97012bf360206024705575ce9fa6f259d614f.png" alt="picture 1">  </li>
 </ul>
-<h2 id="内核获取时间"><a href="#内核获取时间" class="headerlink" title="内核获取时间"></a>内核获取时间</h2><h2 id="代码文件"><a href="#代码文件" class="headerlink" title="代码文件"></a>代码文件</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/init.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;Dual BSD/GPL&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hello_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	printk(KERN_ALERT <span class="string">&quot; Hello World enter\n&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hello_exit</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	printk(KERN_ALERT<span class="string">&quot; Hello World exit\n &quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">module_init(hello_init);</span><br><span class="line">module_exit(hello_exit);</span><br><span class="line"> </span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;Song Baohua&quot;</span>);</span><br><span class="line">MODULE_DESCRIPTION(<span class="string">&quot;A simple Hello World Module&quot;</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="代码文件"><a href="#代码文件" class="headerlink" title="代码文件"></a>代码文件</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/init.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;Dual BSD/GPL&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hello_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	printk(KERN_ALERT <span class="string">&quot; Hello World enter\n&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hello_exit</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	printk(KERN_ALERT<span class="string">&quot; Hello World exit\n &quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">module_init(hello_init);</span><br><span class="line">module_exit(hello_exit);</span><br><span class="line"> </span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;Song Baohua&quot;</span>);</span><br><span class="line">MODULE_DESCRIPTION(<span class="string">&quot;A simple Hello World Module&quot;</span>);</span><br></pre></td></tr></table></figure>
 <h2 id="编译结果"><a href="#编译结果" class="headerlink" title="编译结果"></a>编译结果</h2><ul>
 <li><img src="/imgs/bcffe914e1cdc23926f55b30fbf48854fe6645be5a7c614c63d7c5d294562232.png" alt="图 3">  </li>
 <li><code>insmod</code>安装模块，<code>rmmod</code>移除模块<ul>
