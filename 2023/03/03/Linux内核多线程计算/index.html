@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">715</span>
+            <span class="post-count">838</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">2 min</span>
+            <span class="post-count">3 min</span>
         </span>
     </span>
 </div>
@@ -154,12 +154,14 @@
 <li><img src="/imgs/0da2e22604527dfdba0c13b07686acc6f31d76704a4a96da15d27ceb374856e2.png" alt="picture 2">  </li>
 <li>可能是内核线程创建的代价较大导致的</li>
 <li>将结果输出可以发现几乎是按照线程创建的顺序计算的<ul>
-<li><img src="/imgs/8bac466044d608f35d8877d46e1804008d5a73f689e6dbe87675978015925d71.png" alt="picture 3">  </li>
+<li><img src="/imgs/f2f68e0a98528cf710d07a7726cf82f6168c9b639d6b97921b67fdd9a404234e.png" alt="picture 10">  </li>
+<li>可以看到内核线程单个的计算时间比主线程两层循环的时间还长，目前原因<strong>未知</strong></li>
 </ul>
 </li>
 </ul>
 <h2 id="代码仓库"><a href="#代码仓库" class="headerlink" title="代码仓库"></a>代码仓库</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/frankzjz219/linuxKernelThreads">仓库</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/frankzjz219/linuxKernelThreads">仓库</a><h2 id="git提交脚本"><a href="#git提交脚本" class="headerlink" title="git提交脚本"></a>git提交脚本</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash </span></span><br><span class="line">git add .</span><br><span class="line">git add *</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;请输入commit信息：&quot;</span></span><br><span class="line"><span class="built_in">read</span> info</span><br><span class="line"><span class="comment"># 字符串非空判断等</span></span><br><span class="line"><span class="keyword">if</span> [[ -n <span class="string">&quot;<span class="variable">$info</span>&quot;</span> ]]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    <span class="comment"># echo &quot;正在commit: $info&quot;</span></span><br><span class="line">    git commit -m <span class="string">&quot;<span class="variable">$info</span>&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;正在push: <span class="variable">$info</span>&quot;</span></span><br><span class="line">    git push origin master</span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;使用非法， 未输入commit参数！&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure></li>
+<li>检测字符串是否是空的<code>if [[ -n &quot;$info&quot; ]]</code></li>
 </ul>
  
       <!-- reward -->
