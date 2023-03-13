@@ -141,6 +141,87 @@
     
     
     <article
+  id="post-图神经网络"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/03/13/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"
+    >图神经网络</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/03/13/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="article-date">
+  <time datetime="2023-03-13T02:21:19.000Z" itemprop="datePublished">2023-03-13</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="交叉熵损失函数"><a href="#交叉熵损失函数" class="headerlink" title="交叉熵损失函数"></a>交叉熵损失函数</h2><ul>
+<li><img src="/imgs/c3e1e205f945ee53affe5cab25bd8bede8ed5c8cdeb275f766c1e097ecd6257d.png" alt="picture 1">  <ul>
+<li>实际上就是判断对的<u>总概率乘积的对数取负号</u>（为了将问题从最大化问题转化为最小化问题）</li>
+</ul>
+</li>
+<li><img src="/imgs/99d08b2fa43eb240fec65f3f1452b319535fa92a87a9a7cea33cb11fc4fc3d00.png" alt="picture 2">  <ul>
+<li>此处在每个交叉熵层之前添加一个softmax，使得输出的概率之和为1</li>
+</ul>
+</li>
+<li><img src="/imgs/4324000b8fe7d098941678f0fdd1e381c08b2d64a827206a79710be9373762a9.png" alt="picture 3">  <ul>
+<li>优化的本质方式是（梯度下降法）交叉熵损失函数对各个参数求偏导数，然后根据学习率进行下降，以最小化损失函数<h2 id="下降的一些细节"><a href="#下降的一些细节" class="headerlink" title="下降的一些细节"></a>下降的一些细节</h2></li>
+</ul>
+</li>
+<li><img src="/imgs/2f599b49457b10b963d6c4a24319038a9f538e054fe4396e208f08f399964f6c.png" alt="picture 4">  <ul>
+<li>一般不会一次下降就将所有数据输入求梯度进行下降， 而是选择<code>mini- batch</code>多少的数据进行计算，求损失函数并且下降</li>
+</ul>
+</li>
+<li><img src="/imgs/6d2d633decf1b0459a7ebbe745096c54056d1d682c261912d664eb8c3df64049.png" alt="picture 5">  </li>
+<li><img src="/imgs/2daacbfb51d5ac783c19e8db11c41c00f3420c8b7e80150e41c8ddc8e7f096c5.png" alt="picture 6">  <h2 id="卷积"><a href="#卷积" class="headerlink" title="卷积"></a>卷积</h2></li>
+<li><img src="/imgs/3272e16d2757781267157095316a5b681cc51af8be1ea89dff3206e4ceb532ea.png" alt="picture 9">  <ul>
+<li>本质上是矩阵和卷积核的<u>对应位置相乘然后求和</u><h2 id="图神经网路做的事"><a href="#图神经网路做的事" class="headerlink" title="图神经网路做的事"></a>图神经网路做的事</h2></li>
+</ul>
+</li>
+<li><img src="/imgs/1361fea356f8550570bd9bfded9ca1513daea40007635e02fa492e0e09bcdd77.png" alt="picture 7">  </li>
+<li>本质上是将<strong>一个个的节点映射成低维空间中的点</strong>（向量），点之间的距离反映关联程度<ul>
+<li><img src="/imgs/1ffbacd78d483acc38f86dd0072e00036d043b3bbfcea1dd710ba836c6fb66d2.png" alt="picture 8">  </li>
+</ul>
+</li>
+<li>图神经网路得层数（不是其中神经网络得层数，而是每个节点的邻居的层数）不能太深，否则所有节点的最终总邻居都差不多，导致所有节点的最终结果都类似，称为过平滑<ul>
+<li><img src="/imgs/281e3fb46c6e7887157c463baae0682dd54932f023ad27d0ab9f854d1e2322cf.png" alt="picture 10">  </li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E8%B7%AF/" rel="tag">图神经网路</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-C语言获取命令行的返回内容"
   class="article article-type-post"
   itemscope
@@ -946,83 +1027,6 @@
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Unity/" rel="tag">Unity</a></li></ul>
 
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-机器学习知识帖"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/10/31/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9F%A5%E8%AF%86%E5%B8%96/"
-    >机器学习知识帖</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/10/31/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9F%A5%E8%AF%86%E5%B8%96/" class="article-date">
-  <time datetime="2022-10-31T07:45:40.000Z" itemprop="datePublished">2022-10-31</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2><ul>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33992985">梯度下降法</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/34842727">正规方程法(最小二乘法)</a></p>
-<h2 id="逻辑回归"><a href="#逻辑回归" class="headerlink" title="逻辑回归"></a>逻辑回归</h2></li>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28408516">逻辑回归</a></p>
-<h2 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h2></li>
-<li><p>在逻辑回归中，最常用的是代价函数是交叉熵(Cross Entropy)，交叉熵是一个常见的代价函数，在神经网络中也会用到。下面是《神经网络与深度学习》一书对交叉熵的解释：</p>
-</li>
-<li><p>交叉熵是对「出乎意料」（译者注：原文使用suprise）的度量。神经元的目标是去计算函数x→y=y(x)。但是我们让它取而代之计算函数x→a=a(x)。假设我们把a当作y等于1的概率，1−a是y等于0的概率。那么，交叉熵衡量的是我们在知道y的真实值时的平均「出乎意料」程度。当输出是我们期望的值，我们的「出乎意料」程度比较低；当输出不是我们期望的，我们的「出乎意料」程度就比较高。</p>
-</li>
-<li><p>在1948年，克劳德·艾尔伍德·香农将热力学的熵，引入到信息论，因此它又被称为香农熵(Shannon Entropy)，它是香农信息量(Shannon Information Content, SIC)的期望。香农信息量用来度量不确定性的大小：一个事件的香农信息量等于0，表示该事件的发生不会给我们提供任何新的信息，例如确定性的事件，发生的概率是1，发生了也不会引起任何惊讶；当不可能事件发生时，香农信息量为无穷大，这表示给我们提供了无穷多的新信息，并且使我们无限的惊讶</p>
-</li>
-<li><p>[交叉熵](<a target="_blank" rel="noopener" href="https://blog.csdn.net/rtygbwwwerr/article/details/50778098">https://blog.csdn.net/rtygbwwwerr/article/details/50778098</a></p>
-</li>
-<li><p><img src="/imgs/320549d4337620d61dd7b081632aa72e223e40cb5484ebaedd5756de3236de03.png" alt="picture 1">  </p>
-<ul>
-<li>上述式子是熵的期望（不同情况的熵的加权和）</li>
-</ul>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28415991">代价函数</a></p>
-<h2 id="SVM"><a href="#SVM" class="headerlink" title="SVM"></a>SVM</h2></li>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/v_july_v/article/details/7624837">SVM原理</a></p>
-<h2 id="KMeans"><a href="#KMeans" class="headerlink" title="KMeans"></a>KMeans</h2></li>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/78798251?utm_source=qq">KMeans</a></p>
-<h2 id="Dueling-DQN"><a href="#Dueling-DQN" class="headerlink" title="Dueling DQN"></a>Dueling DQN</h2></li>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/110807201">Dueling DQN</a></p>
-<h2 id="文章链接"><a href="#文章链接" class="headerlink" title="文章链接"></a>文章链接</h2></li>
-<li><p><a target="_blank" rel="noopener" href="https://openai.com/blog/vpt/">openai用强化学习玩我的世界</a></p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
     </footer>
   </div>
 
