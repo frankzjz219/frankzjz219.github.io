@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">838</span>
+            <span class="post-count">981</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">3 min</span>
+            <span class="post-count">4 min</span>
         </span>
     </span>
 </div>
@@ -156,6 +156,14 @@
 </ul>
 </li>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_53675977/article/details/128262957">激活函数</a></li>
+<li>其他的激活函数（比如<code>Leaky ReLU</code>）<ul>
+<li><img src="/imgs/4c60e86b0de8c2dbf449552f23d0b4e870f769bf39de1271825167ced38fc4e5.png" alt="picture 1">  <h2 id="梯度消失问题"><a href="#梯度消失问题" class="headerlink" title="梯度消失问题"></a>梯度消失问题</h2></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/3f35e555d5ba">参考链接1</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/268007336">参考链接2</a></li>
+<li>简而言之就是比如使用<code>sigmoid</code>函数作为激活函数，因为<code>sigmoid</code>函数的梯度小于1，导致随着反向传播的层数加深，往前的层因为连乘的<code>sigmoid</code>函数导数次数过多，使得<strong>梯度越来越小</strong>，实际上<u>起不到任何的训练效果</u>，网络实际有效的<strong>只有靠后的几层</strong>。</li>
+<li>也有其他方法来解决梯度消失的问题，比如ResNET等等</li>
 </ul>
  
       <!-- reward -->
@@ -220,11 +228,11 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/12/11/FreeRtos2/" class="article-nav-link">
+      <a href="/2021/12/11/FreeRtos1/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            FreeRtos2
+            FreeRtos1
           
         </div>
       </a>
