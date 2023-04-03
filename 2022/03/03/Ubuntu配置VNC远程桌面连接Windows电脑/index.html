@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">397</span>
+            <span class="post-count">942</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">1 min</span>
+            <span class="post-count">3 min</span>
         </span>
     </span>
 </div>
@@ -118,7 +118,7 @@
 <li>主要就是要在<code>/etc/systemd/user</code>目录下创建一个systemd服务文件, 命名为<code>user-defined.service</code></li>
 <li>这个文件具有固定的格式，如下</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">After=network.service</span><br><span class="line"> </span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/home/&lt;username&gt;/&lt;usershell&gt;.sh</span><br><span class="line"> </span><br><span class="line">[Install]</span><br><span class="line">WantedBy=default.target</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">After=network.service</span><br><span class="line"> </span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/home/&lt;username&gt;/&lt;usershell&gt;.sh</span><br><span class="line">ExecStop=echo &quot;anbox-session-manager is running&quot;</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=default.target</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>其中将<code>username</code>和<code>usershell</code>替换为自己的用户名和新建的脚本</li>
@@ -133,7 +133,13 @@
 </ul>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br><span class="line">systemctl --user enable user-defined.service</span><br></pre></td></tr></table></figure>
 
-<p>然后reboot系统即可</p>
+<ul>
+<li>如果<strong>上述方法不行</strong>的话采用这篇博客的内容<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42390300/article/details/126104299">博客</a></li>
+<li>将service文件创建到<code>/etc/systemd/system/user-defined.service</code></li>
+<li>然后开启服务直接<code>sudo systemctl enable user-defined.service</code>即可，避免报错</li>
+<li>该服务<strong>不可以</strong>简单的用系统的Service跟随Network启动，因为此时<strong>桌面还没有启动</strong>，会导致VNC找不到用户界面而启动失败<h3 id="使用-etc-init-lt-文件名-gt-conf"><a href="#使用-etc-init-lt-文件名-gt-conf" class="headerlink" title="使用/etc/init/&lt;文件名&gt;.conf"></a>使用/etc/init/&lt;文件名&gt;.conf</h3></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_33204522/article/details/116703967">参考</a></li>
+</ul>
 <p>然后使用windows自带的远程桌面连接，在系统<strong>没有登陆</strong>的前提下进行远程桌面，<strong>否则会黑屏</strong></p>
 <ul>
 <li><p><img src="/imgs/image-20220303180321664.png" alt="image-20220303180321664"></p>
@@ -152,6 +158,51 @@
 </li>
 <li><p><img src="/imgs/image-20220303181046174.png" alt="image-20220303181046174"></p>
 </li>
+</ul>
+<h2 id="如果Ubuntu没有自带VNC远程桌面"><a href="#如果Ubuntu没有自带VNC远程桌面" class="headerlink" title="如果Ubuntu没有自带VNC远程桌面"></a>如果Ubuntu没有自带VNC远程桌面</h2><h3 id="Ubuntu端"><a href="#Ubuntu端" class="headerlink" title="Ubuntu端"></a>Ubuntu端</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/xujgcn/article/details/121165902">参考</a></li>
+<li>安装x11vnc <code>sudo apt-get install x11vnc</code></li>
+<li>然后设置密码 <code>x11vnc -storepasswd</code></li>
+<li>将其保存到<code>~/.vnc/passwd</code>之后即可</li>
+<li>给予文件<code>~/.vnc/passwd</code>全部权限（777）即可不需要sudo也可以使用x11vnc的密码<ul>
+<li><code>x11vnc -forever -shared -rfbauth ~/.vnc/passwd -rfbport 5901</code></li>
+<li>上述语句中指定了端口为5901，也可以自己修改为合适的端口<h3 id="Windows端"><a href="#Windows端" class="headerlink" title="Windows端"></a>Windows端</h3></li>
+</ul>
+</li>
+<li>VNCViewer官网下载软件 <a target="_blank" rel="noopener" href="https://www.realvnc.com/en/connect/download/viewer/">此处</a></li>
+<li>找到对应的端口链接即可</li>
+<li>解决部分Windows防火墙导致的904问题<a target="_blank" rel="noopener" href="https://www.anyviewer.cn/how-to/remote-desktop-0x904-2111.html">参考</a></li>
+<li><img src="/imgs/29dbdd6c6fe84707161c4726db07c85b47f0f911e89a569fec13147e7b1144c2.png" alt="picture 1"> <h2 id="sudo不需要密码"><a href="#sudo不需要密码" class="headerlink" title="sudo不需要密码"></a>sudo不需要密码</h2></li>
+<li><a target="_blank" rel="noopener" href="https://zhidao.baidu.com/question/1312297028274411899.html">参考</a><h2 id="Linux执行一次性任务和循环任务"><a href="#Linux执行一次性任务和循环任务" class="headerlink" title="Linux执行一次性任务和循环任务"></a>Linux执行一次性任务和循环任务</h2></li>
+<li>一次性任务参考<code>at</code></li>
+<li>循环任务使用<code>cron</code></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43696529/article/details/120239947">参考</a></li>
+<li><a target="_blank" rel="noopener" href="https://haodiyw.com/i/124398.html">cron参考</a></li>
+<li><a target="_blank" rel="noopener" href="https://haodiyw.com/i/124398.html">at参考</a></li>
+<li>查看Linux的任务(service)：<ul>
+<li><code>systemctl -l</code><h3 id="实现Linux开机延时启动"><a href="#实现Linux开机延时启动" class="headerlink" title="实现Linux开机延时启动"></a>实现Linux开机延时启动</h3></li>
+</ul>
+</li>
+<li>at非交互式添加任务<a target="_blank" rel="noopener" href="https://www.likecs.com/show-306999776.html">参考</a></li>
+<li><code>echo &quot;需要执行的shell命令&quot; | at 时间</code></li>
+<li>一个可能的思路：<ul>
+<li>在<code>user-defined.service</code>中执行一个shell脚本（注意第一行必须是<code>#!/bin/bash</code>） ，这个脚本执行一个非交互式向at添加命令的语句（带有一定的延迟），但是这种方法可能并不成功，因为at的时间有一些问题</li>
+<li>之所以不直接把这句话放在service里执行是<strong>可能会影响<code>echo</code>的解析</strong>导致不能正确执行</li>
+<li>总之不建议在service里直接执行脚本</li>
+</ul>
+</li>
+<li><strong>但是x11vnc似乎并不支持开机自带启动，否则会导致权限问题（即使密码文件已经给了777权限</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://jiuaidu.com/jianzhan/1008052/">可能的解决方案</a></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://zhidao.baidu.com/question/1312297028274411899.html">修改参考</a></li>
+<li>验证是否启动的方法<ul>
+<li><code>sudo netstat -an | grep &lt;端口号&gt;</code></li>
+<li><code>ps -aux|grep vnc</code><h2 id="Linux的target"><a href="#Linux的target" class="headerlink" title="Linux的target"></a>Linux的target</h2></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_33939843/article/details/92236953">参考</a></li>
+<li>查看依赖关系<code>systemctl list-dependencies multi-user.target</code></li>
 </ul>
  
       <!-- reward -->
