@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>git常用命令 |  Frank’s blogs</title>
+      <title>编写基于Flask的mp4分块流式传输前后端 |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -53,7 +53,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-git常用命令"
+  id="post-编写基于Flask的mp4分块流式传输前后端"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -64,7 +64,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  git常用命令
+  编写基于Flask的mp4分块流式传输前后端
 </h1>
  
 
@@ -72,15 +72,15 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/12/13/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="article-date">
-  <time datetime="2021-12-13T06:56:17.000Z" itemprop="datePublished">2021-12-13</time>
+      <a href="/2023/04/14/%E7%BC%96%E5%86%99%E5%9F%BA%E4%BA%8EFlask%E7%9A%84mp4%E5%88%86%E5%9D%97%E6%B5%81%E5%BC%8F%E4%BC%A0%E8%BE%93%E5%89%8D%E5%90%8E%E7%AB%AF/" class="article-date">
+  <time datetime="2023-04-14T10:35:09.000Z" itemprop="datePublished">2023-04-14</time>
 </a>   
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">192</span>
+            <span class="post-count">292</span>
         </span>
     </span>
 
@@ -104,20 +104,38 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h1 id="git-常见命令"><a href="#git-常见命令" class="headerlink" title="git 常见命令"></a>git 常见命令</h1><p><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/896043488029600">https://www.liaoxuefeng.com/wiki/896043488029600</a></p>
-<p>一次添加目录下所有文件（ <strong>包括gitignore</strong> 的文件）：</p>
-<p><code>git add . -f</code></p>
-<p>一次添加目录下的所有文件（ <strong>不包括gitignore</strong> 的文件）：</p>
-<p><code> git add .</code></p>
-<p>一次<code>commit</code> 所有东西</p>
-<p><code> git commit -a -m &lt;信息&gt;</code></p>
-<p>一次添加目录下的所有东西：</p>
-<p><code>git add 文件夹名/*</code></p>
-<p>上传出问题的时候（上传 <strong>被拒绝</strong> 的时候）的解决方法：</p>
-<p><code>git push -u origin master -f</code></p>
-<p>这个会 <strong>丢弃</strong> 所有远程仓库领先于本地仓库的部分， <strong>强行</strong> 将本地仓库的内容推送到远端 </p>
-<p>或下面这个，但是这个可能会 <strong>覆盖一些本地的文件</strong> （主要是多人开发的情况下可能会出现）</p>
-<p><code>git pull origin master --allow-unrelated-histories</code></p>
+  <h2 id="Mp4视频文件相关信息的取得"><a href="#Mp4视频文件相关信息的取得" class="headerlink" title="Mp4视频文件相关信息的取得"></a>Mp4视频文件相关信息的取得</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26374202">参考1</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010164190/article/details/127798833">参考2</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34754747/article/details/122617904">参考3</a></li>
+<li>MP4文件具有几个关键的信息用于流式传输<ul>
+<li>AVCProfileIndication</li>
+<li>profile_compability</li>
+<li>AVCLevelIndication</li>
+</ul>
+</li>
+<li>使用十六进制文件浏览器读取MP4文件，chrome有<a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/hexreader/fejgbfmdlplhjkbpmnedfonifhajinck/related">相关插件</a><strong>HexReader</strong></li>
+<li>打开之后搜索<code>avcC</code><ul>
+<li><img src="/imgs/cd88851124ce1abe09da02e6c07c3503e1ebfccc23b739f0c6c382b09ac1f810.png" alt="picture 1">  </li>
+</ul>
+</li>
+<li>其后紧跟的第一个是<code>configurationVersion</code>，后面三个就是<code>AVCProfileIndication</code>, <code>profile_compatibility</code>和<code>AVCLevelIndication</code>三个十六进制数字比如本文中是<code>4D</code>, <code>40</code>和<code>28</code><h2 id="python读取部分文件并且使用生成器"><a href="#python读取部分文件并且使用生成器" class="headerlink" title="python读取部分文件并且使用生成器"></a>python读取部分文件并且使用生成器</h2></li>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-func-open.html">参考</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.python51.com/jc/73715.html">生成器参考</a><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">chunked_file_reader</span>(<span class="params">block_size=<span class="number">5</span>*<span class="number">1024</span>*<span class="number">1024</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;生成器函数：分块读取文件内容</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    fp = <span class="built_in">open</span>(<span class="string">&quot;文件地址&quot;</span>, <span class="string">&#x27;rb&#x27;</span>)</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        chunk = fp.read(block_size)</span><br><span class="line">        <span class="comment"># 当文件没有更多内容时，read 调用将会返回空字符串 &#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> chunk:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">yield</span> chunk</span><br></pre></td></tr></table></figure>
+<h2 id="后端FLask和前端JS"><a href="#后端FLask和前端JS" class="headerlink" title="后端FLask和前端JS"></a>后端FLask和前端JS</h2></li>
+<li><a target="_blank" rel="noopener" href="https://www.jb51.net/html5/726345.html">参考</a></li>
+<li>里面<code>mime</code>部分需要利用上文的方法进行一定的修改</li>
+<li>但是直接参考样例撰写会遇到问题如图(更正上述参数之后)</li>
+<li><img src="/imgs/b7f23ec7038f35bf7ee06f1d6d1c296df4629239b21ce797039e73e5a6f1cf38.png" alt="picture 2">  </li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/z591102/article/details/107687358">video标签的一些性质</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/maoxiaozhu/article/details/127036457">Audio/Video的各种事件</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.w3.org/TR/media-source/#mediasource">mediaSource参考</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_52148548/article/details/124703828">fetch参考</a></li>
+</ul>
+<hr>
+<ul>
+<li><strong>最终仍然没有解决，可能是MP4格式不支持导致的</strong></li>
+</ul>
  
       <!-- reward -->
       
@@ -170,30 +188,23 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2021/12/13/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2023/04/14/%E7%BC%96%E5%86%99%E5%9F%BA%E4%BA%8EFlask%E7%9A%84mp4%E5%88%86%E5%9D%97%E6%B5%81%E5%BC%8F%E4%BC%A0%E8%BE%93%E5%89%8D%E5%90%8E%E7%AB%AF/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Flask/" rel="tag">Flask</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Html/" rel="tag">Html</a></li></ul>
+
     </footer>
   </div>
 
    
   <nav class="article-nav">
     
-      <a href="/2021/12/14/freeRtos%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            FreeRtos内存分配
-          
-        </div>
-      </a>
     
-    
-      <a href="/2021/12/11/FreeRtos1/" class="article-nav-link">
+      <a href="/2023/04/13/Linux%E5%BC%80%E6%9C%BAtty%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">FreeRtos1</div>
+        <div class="article-nav-title">Linux开机tty自动登录</div>
       </a>
     
   </nav>
