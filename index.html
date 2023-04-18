@@ -212,7 +212,9 @@
 </ul>
 </li>
 <li><a target="_blank" rel="noopener" href="https://cloudconvert.com/mp4-to-webm">网站</a><h2 id="最终方案与代码逻辑"><a href="#最终方案与代码逻辑" class="headerlink" title="最终方案与代码逻辑"></a>最终方案与代码逻辑</h2></li>
-<li>JS的代码分同步和异步执行，异步执行的代码在时间上与其他代码的先后顺序是独立的。<ul>
+<li>JS的代码分同步和异步执行，异步执行的代码在时间上与其他代码的先后顺序是独立的。</li>
+<li>同步执行的代码可能因为多线程的原因，并、<u>不是严格的按照前后顺序执行的</u>，这可能导致一些问题</li>
+<li><strong>因此需要设法控制代码的执行时序和时机</strong><ul>
 <li><code>setTimeOut</code>是异步的</li>
 <li><code>sourceBuffer</code>的<code>appendBuffer</code>也是异步的</li>
 </ul>
