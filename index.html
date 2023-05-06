@@ -141,6 +141,72 @@
     
     
     <article
+  id="post-操作系统and编译随记"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/05/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0/"
+    >操作系统and编译随记</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/05/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0/" class="article-date">
+  <time datetime="2023-05-06T05:16:27.000Z" itemprop="datePublished">2023-05-06</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="编译随记"><a href="#编译随记" class="headerlink" title="编译随记"></a>编译随记</h2><h3 id="优化barrier"><a href="#优化barrier" class="headerlink" title="优化barrier"></a>优化barrier</h3><ul>
+<li><img src="/imgs/b62a8861fbeaa2635275bf41afb9890254b85016ebdec10ee15325b9d4157539.png" alt="picture 1">  <ul>
+<li><code>asm volatile (&quot;mfence&quot; :::&quot;memory)</code></li>
+<li>这句话的意思是该汇编语句可能访问内存的任何位置，因此任何内存相关的优化不能穿过这句话</li>
+</ul>
+</li>
+<li><img src="/imgs/1bdc777c42b9bf2b6299b3b511a5e5da5365d5d8f53e23bb99717f7277d5b8b5.png" alt="picture 2">  <ul>
+<li><code>__sync_synchronize()</code></li>
+<li>这是编译器直接提供的一个barrier</li>
+</ul>
+</li>
+<li>假如不写volatile的话，编译器可能直接不考虑变量的读写访存问题直接进行优化，比如优化等级选择<code>-O1</code>，<code>-O2</code>的话，<u>可能会直接略过循环，给变量赋值一个终值</u></li>
+<li><u>仅靠编译器是无法实现原子操作的，必须有处理器本身的支持</u></li>
+<li>PeterSon算法必须是使用原子操作的读写才可以，否则还是会出问题（虽然可能概率不大）<h3 id="手动原子指令"><a href="#手动原子指令" class="headerlink" title="手动原子指令"></a>手动原子指令</h3></li>
+<li><img src="/imgs/ae4caadb166a305bf7b5d731eae16311e296d579341496b1774b28fd801c4028.png" alt="picture 3">  </li>
+<li>在某一条汇编指令前面加<code>lock</code>，CPU对外有总线发送<code>LOCK</code>信号，会给予一个CPU内存的独占访问权限，直到这个信号结束，防止在指令执行完成期间内存被修改</li>
+<li>原子指令做的事实际上就是将系统所有的执行流分成atmoic指令之前，和atomic指令之后，这两个是不可逾越不可互相交错的，相当于原子指令执行的过程中世界停止了，对于所有CPU核心或者所有其他进程线程而言</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-使用crow在CPP环境下开发web服务器"
   class="article article-type-post"
   itemscope
@@ -787,111 +853,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FTP/" rel="tag">FTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-图神经网络"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/03/13/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"
-    >图神经网络</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/03/13/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="article-date">
-  <time datetime="2023-03-13T02:21:19.000Z" itemprop="datePublished">2023-03-13</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="交叉熵损失函数"><a href="#交叉熵损失函数" class="headerlink" title="交叉熵损失函数"></a>交叉熵损失函数</h2><ul>
-<li><img src="/imgs/c3e1e205f945ee53affe5cab25bd8bede8ed5c8cdeb275f766c1e097ecd6257d.png" alt="picture 1">  <ul>
-<li>实际上就是判断对的<u>总概率乘积的对数取负号</u>（为了将问题从最大化问题转化为最小化问题）</li>
-</ul>
-</li>
-<li><img src="/imgs/99d08b2fa43eb240fec65f3f1452b319535fa92a87a9a7cea33cb11fc4fc3d00.png" alt="picture 2">  <ul>
-<li>此处在每个交叉熵层之前添加一个softmax，使得输出的概率之和为1</li>
-</ul>
-</li>
-<li><img src="/imgs/4324000b8fe7d098941678f0fdd1e381c08b2d64a827206a79710be9373762a9.png" alt="picture 3">  <ul>
-<li>优化的本质方式是（梯度下降法）交叉熵损失函数对各个参数求偏导数，然后根据学习率进行下降，以最小化损失函数<h2 id="下降的一些细节"><a href="#下降的一些细节" class="headerlink" title="下降的一些细节"></a>下降的一些细节</h2></li>
-</ul>
-</li>
-<li><img src="/imgs/2f599b49457b10b963d6c4a24319038a9f538e054fe4396e208f08f399964f6c.png" alt="picture 4">  <ul>
-<li>一般不会一次下降就将所有数据输入求梯度进行下降， 而是选择<code>mini- batch</code>多少的数据进行计算，求损失函数并且下降</li>
-</ul>
-</li>
-<li><img src="/imgs/6d2d633decf1b0459a7ebbe745096c54056d1d682c261912d664eb8c3df64049.png" alt="picture 5">  </li>
-<li><img src="/imgs/2daacbfb51d5ac783c19e8db11c41c00f3420c8b7e80150e41c8ddc8e7f096c5.png" alt="picture 6">  <h2 id="卷积"><a href="#卷积" class="headerlink" title="卷积"></a>卷积</h2></li>
-<li><img src="/imgs/3272e16d2757781267157095316a5b681cc51af8be1ea89dff3206e4ceb532ea.png" alt="picture 9">  <ul>
-<li>本质上是矩阵和卷积核的<u>对应位置相乘然后求和</u><h2 id="图神经网路做的事"><a href="#图神经网路做的事" class="headerlink" title="图神经网路做的事"></a>图神经网路做的事</h2></li>
-</ul>
-</li>
-<li><img src="/imgs/1361fea356f8550570bd9bfded9ca1513daea40007635e02fa492e0e09bcdd77.png" alt="picture 7">  </li>
-<li>本质上是将<strong>一个个的节点映射成低维空间中的点</strong>（向量），点之间的距离反映关联程度<ul>
-<li><img src="/imgs/1ffbacd78d483acc38f86dd0072e00036d043b3bbfcea1dd710ba836c6fb66d2.png" alt="picture 8">  </li>
-</ul>
-</li>
-<li>图神经网路得层数（不是其中神经网络得层数，而是每个节点的邻居的层数）不能太深，否则所有节点的最终总邻居都差不多，导致所有节点的最终结果都类似，称为过平滑<ul>
-<li><img src="/imgs/281e3fb46c6e7887157c463baae0682dd54932f023ad27d0ab9f854d1e2322cf.png" alt="picture 10">  </li>
-</ul>
-</li>
-<li><img src="/imgs/275a596b0bccfbb2071c2f982ff6838463c38b0307a9639577e63f8cb6569f22.png" alt="picture 12">  <ul>
-<li>此处<strong>H矩阵左乘一个A阵</strong>做的事实际上是从H矩阵中选出与点邻接的点的嵌入，将其累加</li>
-<li><img src="/imgs/bbbf41392fc0b51350f6eb82b681012e66ec3765f0a0ee628ac44cf21ed3384e.png" alt="picture 13">  <ul>
-<li><code>D^-1A</code>实际上代表的是每个邻接节点相加的权重，比如三个节点就是每个点1/3，四个就是每个点1/4</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>经过矩阵线性变换方向不变的向量就是矩阵的特征向量，幅值变化的幅度就是矩阵的特征值</strong></li>
-<li><img src="/imgs/74fd3c2b073b662da1f8018a72ebe0b374168a295a1f86c0893551128f7cd4ef.png" alt="picture 14">  <ul>
-<li>上述矩阵是为了保证矩阵的最大特征值恒定是1，同时考虑到一个节点的下一个节点多少，比如一个节点项链的节点多，那么与这个节点相邻的节点的权重就会下降而不是随意平均分布</li>
-</ul>
-</li>
-<li><img src="/imgs/47ba41b2302f49ba2dcd4bfbfe7502d504ceb3a9d89aeef0ac2f3aa25ca04411.png" alt="picture 16">  <ul>
-<li>计算流程</li>
-<li><img src="/imgs/edbc989af48e46213dad734eacfcd0933ab4d1236b2dac9d1ea3460898fde126.png" alt="picture 17">  </li>
-</ul>
-</li>
-<li><img src="/imgs/a4ea27692228b51fd11407af888d18a0f647c602d28277bb1c4f34cbe8c63326.png" alt="picture 18">  </li>
-</ul>
-<h3 id="最简单的图卷积神经网路"><a href="#最简单的图卷积神经网路" class="headerlink" title="最简单的图卷积神经网路"></a>最简单的图卷积神经网路</h3><ul>
-<li><img src="/imgs/5aec50e2652e990dde38f90d053ee9df24645c0ef259dad872d96d1535c23602.png" alt="picture 11">  <h3 id="图卷积最终形式的计算图"><a href="#图卷积最终形式的计算图" class="headerlink" title="图卷积最终形式的计算图"></a>图卷积最终形式的计算图</h3></li>
-<li><img src="/imgs/6a086a8e9fc3fea9696beaf9ce57f55c60d388da3b25e61a9291ffd45f2729fb.png" alt="picture 15">  <h2 id="Alpha-Zero的操作"><a href="#Alpha-Zero的操作" class="headerlink" title="Alpha Zero的操作"></a>Alpha Zero的操作</h2></li>
-<li><img src="/imgs/1fca348d4e6bead3bbeb88771f7d96e891be63ff75595ce265d990ee25e572fc.png" alt="picture 19">  </li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E8%B7%AF/" rel="tag">图神经网路</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
 
     </footer>
   </div>
