@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">344</span>
+            <span class="post-count">416</span>
         </span>
     </span>
 
@@ -117,7 +117,12 @@
 </li>
 <li>假如不写volatile的话，编译器可能直接不考虑变量的读写访存问题直接进行优化，比如优化等级选择<code>-O1</code>，<code>-O2</code>的话，<u>可能会直接略过循环，给变量赋值一个终值</u></li>
 <li><u>仅靠编译器是无法实现原子操作的，必须有处理器本身的支持</u></li>
-<li>PeterSon算法必须是使用原子操作的读写才可以，否则还是会出问题（虽然可能概率不大）<h3 id="手动原子指令"><a href="#手动原子指令" class="headerlink" title="手动原子指令"></a>手动原子指令</h3></li>
+<li>PeterSon算法必须是使用原子操作的读写才可以，否则还是会出问题（虽然可能概率不大）</li>
+<li>注意， 代码编译优化的时候不能够将其挪动到临界区外面（需要barrier），否则整个就会出错<ul>
+<li><img src="/imgs/0516acbd54cb59a0a31ced244c4916b4cd530034275ae320a0a10361c73f2299.png" alt="picture 4">  </li>
+</ul>
+</li>
+<li>前一条原子指令之前发生的事件，后一条原子指令都可见（也就是在他开始之前都完成了）<h3 id="手动原子指令"><a href="#手动原子指令" class="headerlink" title="手动原子指令"></a>手动原子指令</h3></li>
 <li><img src="/imgs/ae4caadb166a305bf7b5d731eae16311e296d579341496b1774b28fd801c4028.png" alt="picture 3">  </li>
 <li>在某一条汇编指令前面加<code>lock</code>，CPU对外有总线发送<code>LOCK</code>信号，会给予一个CPU内存的独占访问权限，直到这个信号结束，防止在指令执行完成期间内存被修改</li>
 <li>原子指令做的事实际上就是将系统所有的执行流分成atmoic指令之前，和atomic指令之后，这两个是不可逾越不可互相交错的，相当于原子指令执行的过程中世界停止了，对于所有CPU核心或者所有其他进程线程而言</li>
@@ -186,6 +191,15 @@
 
    
   <nav class="article-nav">
+    
+      <a href="/2023/05/07/python%E8%BF%9B%E8%A1%8CSocket%E7%AE%80%E5%8D%95%E5%BC%80%E5%8F%91/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            python进行Socket简单开发
+          
+        </div>
+      </a>
     
     
       <a href="/2023/04/19/%E4%BD%BF%E7%94%A8crow%E5%9C%A8CPP%E7%8E%AF%E5%A2%83%E4%B8%8B%E5%BC%80%E5%8F%91web%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="article-nav-link">
