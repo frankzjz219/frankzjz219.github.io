@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">1.6k</span>
+            <span class="post-count">1.8k</span>
         </span>
     </span>
 
@@ -159,11 +159,29 @@
 </ul>
 </li>
 <li>并且，假如<strong>耗时的步骤完成</strong>之后，系统中正在有其他函数执行，那么会<strong>等到其他函数执行结束</strong>之后在进行回调</li>
-<li>所以不存在事件内与其他执行流并发的问题<h3 id="解决-ajax不便于维护的问题，引入Promise"><a href="#解决-ajax不便于维护的问题，引入Promise" class="headerlink" title="解决$.ajax不便于维护的问题，引入Promise"></a>解决$.ajax不便于维护的问题，引入Promise</h3></li>
+<li>所以不存在事件内与其他执行流并发的问题<h3 id="解决-ajax不便于维护的问题，引入Promise"><a href="#解决-ajax不便于维护的问题，引入Promise" class="headerlink" title="解决$.ajax不便于维护的问题，引入Promise"></a>解决$.ajax不便于维护的问题，引入<strong>Promise</strong></h3></li>
 <li><img src="/imgs/28f98465b87a62795b9a04222bd7f73d075b84409b55a3d137625f8e533ff399.png" alt="picture 12">  </li>
 <li><img src="/imgs/07c28b49b08e100c0c6b7251b21dea5e72194a38d16b2f17b24ee9e0d6d8b52a.png" alt="picture 13">  </li>
 <li><img src="/imgs/84d7d5d349fbfbc3822405a85aa96cf542b64471d46d33761ddb13f6e664eb9d.png" alt="picture 14">  </li>
-<li><a target="_blank" rel="noopener" href="https://www.runoob.com/js/js-promise.html">教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/js/js-promise.html">教程</a><h3 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h3></li>
+<li><img src="/imgs/eb42f65ed6435a4f320a66ba8f7813241f9376a7d6b64cbaf8d7c53b0cf8fbad.png" alt="picture 15">  </li>
+<li>比如解决哲学家吃饭问题，将所有的叉子从小到大编号，要求每个哲学家都先拿自己手边编号较小的叉子，再拿编号大的，所有人都按照同样的顺序拿叉子<h3 id="编译器的线程消毒器选项-fsanitize-thread"><a href="#编译器的线程消毒器选项-fsanitize-thread" class="headerlink" title="编译器的线程消毒器选项-fsanitize-thread"></a>编译器的线程消毒器选项<code>-fsanitize-thread</code></h3></li>
+<li><img src="/imgs/6b5f02292b0ab17f7f8d03a825d5f1262bbb791557018fc1ae048263b53ed754.png" alt="picture 16">  </li>
+<li>辅助检查并发bug<ul>
+<li><img src="/imgs/2d4ccec9c22dd7b01234d2cb3307300e66c8e5b17fde29f1b7a729b62d969257.png" alt="picture 17">  </li>
+<li>运行时检查内存访问</li>
+<li>基本假设是每个线程里面的事件是<U>顺序发生的</u></li>
+<li>假如不同的线程之间访问同一片内存，但是这两个操作之间不存在一个线程先解锁，另一个线程再上锁的操作的话，就会导致data race问题</li>
+</ul>
+</li>
+<li>其他的<code>sanitizer</code><ul>
+<li><img src="/imgs/40b41b03f179094f118eaeb700576cf28e695839cbb5927cd6dda3053e46f8d0.png" alt="picture 18">  </li>
+</ul>
+</li>
+<li>比如可以检查是否操作了已经释放过的内存<ul>
+<li><img src="/imgs/b07e5ca9137ff5a7b67f99b1ede88ea1e017087603cf67cbe9358f88a6eb8c0a.png" alt="picture 19">  </li>
+</ul>
+</li>
 </ul>
  
       <!-- reward -->
