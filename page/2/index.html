@@ -141,6 +141,68 @@
     
     
     <article
+  id="post-Linux使用环境变量无需路径执行自己的程序"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/04/04/Linux%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%97%A0%E9%9C%80%E8%B7%AF%E5%BE%84%E6%89%A7%E8%A1%8C%E8%87%AA%E5%B7%B1%E7%9A%84%E7%A8%8B%E5%BA%8F/"
+    >Linux使用环境变量无需路径执行自己的程序</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/04/04/Linux%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%97%A0%E9%9C%80%E8%B7%AF%E5%BE%84%E6%89%A7%E8%A1%8C%E8%87%AA%E5%B7%B1%E7%9A%84%E7%A8%8B%E5%BA%8F/" class="article-date">
+  <time datetime="2023-04-04T02:52:31.000Z" itemprop="datePublished">2023-04-04</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/gfdxx/article/details/127875066">参考</a><h2 id="添加环境变量"><a href="#添加环境变量" class="headerlink" title="添加环境变量"></a>添加环境变量</h2></li>
+<li><a target="_blank" rel="noopener" href="https://wap.sciencenet.cn/blog-3425629-1258887.html?mobile=1">参考</a></li>
+<li>编辑<code>/etc/profile</code>文件，在其最后一行添加<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:&lt;路径&gt;</span><br></pre></td></tr></table></figure></li>
+<li>相当于在环境变量后追加了新的内容</li>
+<li>然后使用<code>source /etc/profile</code>即可更新环境变量<h2 id="使用环境变量"><a href="#使用环境变量" class="headerlink" title="使用环境变量"></a>使用环境变量</h2></li>
+<li>在添加的环境变量目录下创建一个文件（比如test.sh）</li>
+<li>然后给test.sh可执行的权限</li>
+<li>然后直接在命令行输入<code>test.sh</code> 即可直接执行这个脚本的内容</li>
+<li>可以在环境变量中使用a<code>alias</code>给命令起别名，进一步简化命令的使用<ul>
+<li><img src="/imgs/30cdf759675eba53ff40ae74fe08b865daaa6ce6a6bc942d28302f6389eb2685.png" alt="picture 1">  </li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-解决因为重刷系统导致的key校验不通过VSCode无法远程Linux"
   class="article article-type-post"
   itemscope
@@ -921,97 +983,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/yolo/" rel="tag">yolo</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-VMWare安装安卓虚拟机"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/01/19/VMWare%E5%AE%89%E8%A3%85%E5%AE%89%E5%8D%93%E8%99%9A%E6%8B%9F%E6%9C%BA/"
-    >VMWare安装安卓虚拟机</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/01/19/VMWare%E5%AE%89%E8%A3%85%E5%AE%89%E5%8D%93%E8%99%9A%E6%8B%9F%E6%9C%BA/" class="article-date">
-  <time datetime="2023-01-19T02:02:30.000Z" itemprop="datePublished">2023-01-19</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="VMWare安装安卓虚拟机"><a href="#VMWare安装安卓虚拟机" class="headerlink" title="VMWare安装安卓虚拟机"></a>VMWare安装安卓虚拟机</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41930631/article/details/125922411">参考链接</a></li>
-<li><a target="_blank" rel="noopener" href="https://osdn.net/projects/android-x86/releases/66512">Android-x86下载地址</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.android-x86.org/">Android x86网站</a></li>
-<li>下载的文件：<strong>cm-x86-14.1-r5.iso</strong> 对应的版本：<img src="/imgs/9c996e27832f31e785c3ff0f754b076708d8c3a03bd70ffd5a84aac637f54ab3.png" alt="picture 11">  </li>
-<li>下载的文件:** android-x86_64-9.0-r2-k49.iso**对应的版本<img src="/imgs/3b670a9ec837461bbf26ce397d220bbf0338408339c34afa45bbdffeb1ea8d74.png" alt="picture 12">  </li>
-</ul>
-<h2 id="部分步骤截图"><a href="#部分步骤截图" class="headerlink" title="部分步骤截图"></a>部分步骤截图</h2><ul>
-<li>可能无法检测操作系统，此时只需要手动选择FreeBSD如图即可<ul>
-<li><img src="/imgs/dc56bcd5c5212c990e728b364b4501628587d7633b07f18a735cbd3904ca18c7.png" alt="picture 1">  </li>
-<li><img src="/imgs/820c7f377a64d81192f6d0f5d95bfd021fcfe23c53be10bf59e53e0533e9a95a.png" alt="picture 2">  </li>
-</ul>
-</li>
-<li>下一步磁盘记得勾选这个<ul>
-<li><img src="/imgs/dacecac03215b7a999b022bc6394b7590497df64d979e756401fded87a56d749.png" alt="picture 3">  </li>
-</ul>
-</li>
-<li>此时记得打开设置关闭CD驱动器等<ul>
-<li><img src="/imgs/810585dce08781495adb429f9dd926f58bbfec8f4359a18f3c253a3c16fd4b35.png" alt="picture 4">  </li>
-</ul>
-</li>
-<li>然后正常重启即可</li>
-<li>有时开机的时候回卡在黑屏界面，屏幕上角有光标但是卡住不动</li>
-<li>此时重启到debug模式<ul>
-<li><img src="/imgs/fc7bd905a97f9a932f1e545c4563f47540638ea4464aaa8520504f0da36b1452.png" alt="picture 5">  </li>
-<li>在命令行输入<code>vi /mnt/grub/menu.lst</code></li>
-<li>红线位置添加<img src="/imgs/64d3b05b4778357e2e701b7390061551a6a73383ce93ea2f4ef578eb843edf64.png" alt="picture 6">  </li>
-<li>添加完成之后再次利用VMWare手动重启即可打开图形界面<ul>
-<li><img src="/imgs/3841d33e89117672f772a6b0967f918a34e131b7c92b5f18ae9bf98d923cd436.png" alt="picture 7">  </li>
-</ul>
-</li>
-<li>编辑虚拟网络<ul>
-<li><img src="/imgs/da29b0f7a771e985201634fe3f05c8bc951f84f263a8ce49546beb0fa60b5983.png" alt="picture 8">  </li>
-</ul>
-</li>
-<li>更改虚拟机网络使得虚拟机可以访问互联网<ul>
-<li><img src="/imgs/5e5ab8ac742eec624c9639a85c96b6074b3907a6bd5266e170909180d38f49c4.png" alt="picture 9">  </li>
-</ul>
-</li>
-<li>此时会出现<img src="/imgs/efe0e0d718b98bc6debf0144694743d6f5cb27ed4ef4bacb1aca891f69bd5e45.png" alt="picture 10">  </li>
-</ul>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/" rel="tag">虚拟机</a></li></ul>
 
     </footer>
   </div>
