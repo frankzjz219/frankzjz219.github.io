@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Tag: Linux |  Frank’s blogs</title>
+      <title>操作系统and编译随记（4） |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -52,172 +52,157 @@
       
     <main class="content on">
       <section class="outer">
-  
-  
-  <article class="articles">
+  <article
+  id="post-操作系统and编译随记（4）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
     
-    
-    <h1 class="page-type-title">#&nbspLinux</h1>
-    
-    
-  
-  
-  
-  
-  
-  
-  <div class="archives-wrap">
-    <div class="archive-year-wrap">
-      <a href="/archives/2023" class="archive-year">2023</a>
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  操作系统and编译随记（4）
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0%EF%BC%884%EF%BC%89/" class="article-date">
+  <time datetime="2023-06-19T04:15:53.000Z" itemprop="datePublished">2023-06-19</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">463</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">1 min</span>
+        </span>
+    </span>
+</div>
+ 
     </div>
-    <div class="archives">
       
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/04/02/%E5%9C%A8Ubuntu%E5%88%9B%E5%BB%BAftp%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="archive-article-date">
-  <time datetime="2023-04-02T04:22:55.000Z" itemprop="datePublished">04/02</time>
-</a>
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
        
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/04/02/%E5%9C%A8Ubuntu%E5%88%9B%E5%BB%BAftp%E6%9C%8D%E5%8A%A1%E5%99%A8/"
-    >在Ubuntu创建ftp服务器</a> 
-</h2>
+  <h2 id="在操作系统上实现进程"><a href="#在操作系统上实现进程" class="headerlink" title="在操作系统上实现进程"></a>在操作系统上实现进程</h2><h3 id="Thread-OS"><a href="#Thread-OS" class="headerlink" title="Thread OS"></a>Thread OS</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;am.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;klib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;klib-macros.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NTASK 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">union</span> <span class="title">task</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> <span class="title">task</span> *<span class="title">next</span>;</span></span><br><span class="line">    <span class="keyword">void</span>      (*entry)(<span class="keyword">void</span> *);</span><br><span class="line">    Context    *context;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">uint8_t</span> <span class="built_in">stack</span>[<span class="number">8192</span>];</span><br><span class="line">&#125; Task;</span><br><span class="line"></span><br><span class="line">Task *current, tasks[NTASK];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">thread_entry</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    yield();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Context *<span class="title">on_interrupt</span><span class="params">(Event ev, Context *ctx)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!current) &#123;</span><br><span class="line">    current = &amp;tasks[<span class="number">0</span>];  <span class="comment">// First trap</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    current-&gt;context = ctx;</span><br><span class="line">    current = current-&gt;next;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> current-&gt;context;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  cte_init(on_interrupt);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; LENGTH(tasks); i++) &#123;</span><br><span class="line">    Task *task    = &amp;tasks[i];</span><br><span class="line">    Area <span class="built_in">stack</span>    = (Area) &#123; &amp;task-&gt;context + <span class="number">1</span>, task + <span class="number">1</span> &#125;;</span><br><span class="line">    task-&gt;context = kcontext(<span class="built_in">stack</span>, thread_entry, <span class="literal">NULL</span>);</span><br><span class="line">    task-&gt;next    = &amp;tasks[(i + <span class="number">1</span>) % LENGTH(tasks)];</span><br><span class="line">  &#125;</span><br><span class="line">  yield();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="上面的系统与真实的进程有什么区别"><a href="#上面的系统与真实的进程有什么区别" class="headerlink" title="上面的系统与真实的进程有什么区别"></a>上面的系统与真实的进程有什么区别</h3><ul>
+<li>每个进程都能看到<strong>所有变量</strong></li>
+<li>进程的地址空间<strong>不是独立的</strong><h3 id="如何解决"><a href="#如何解决" class="headerlink" title="如何解决"></a>如何解决</h3></li>
+<li>硬件对内存地址进行翻译，将虚拟内存地址翻译为物理内存地址</li>
+<li><img src="/imgs/645d35334ac80ab478cea330d373549cf3cebc9107209d7644b9c50756a24b5b.png" alt="picture 1">  </li>
+<li>用户态的程序不能够访问上述映射的数据结构</li>
+<li>系统虚拟地址空间映射到实际地址空间可能不是全部的（可能<u>没有分配物理页面</u>）<ul>
+<li>访问的没有分配的页面的时候会有缺页异常被调用</li>
+<li>只是在地址空间上做了一个标记</li>
+</ul>
+</li>
+<li>使用二叉搜索树找到某一个内存空间的位置（一个有序的集合）<h3 id="多个进程的不同虚拟地址映射到同一个位置"><a href="#多个进程的不同虚拟地址映射到同一个位置" class="headerlink" title="多个进程的不同虚拟地址映射到同一个位置"></a>多个进程的不同虚拟地址映射到同一个位置</h3></li>
+<li>比如很多进程都用到<code>libc</code>，但是所有进程都用的是同一个而且只读</li>
+<li>证明：找到映射的物理地址是同一个</li>
+<li>复制的不同进程中使用<code>malloc</code>分配的是不同的，但是代码部分的地址是相同的，不会真的复制<h3 id="fork-写时复制"><a href="#fork-写时复制" class="headerlink" title="fork()写时复制"></a><code>fork()</code>写时复制</h3></li>
+<li><img src="/imgs/b81fe55c1611965d77874e50f2a6f58a96dda8b596cc43c44295f53a81834b0b.png" alt="picture 2">  </li>
+<li>防止<code>fork</code>之后直接执行<code>execve</code>浪费时间</li>
+<li>只读的部分就不需要拷贝</li>
+<li></li>
+</ul>
  
-
-    </header>
-    
-    
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FTP/" rel="tag">FTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/03/11/C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E8%BF%94%E5%9B%9E%E5%86%85%E5%AE%B9/" class="archive-article-date">
-  <time datetime="2023-03-11T07:16:04.000Z" itemprop="datePublished">03/11</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/03/11/C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E8%BF%94%E5%9B%9E%E5%86%85%E5%AE%B9/"
-    >C语言和python获取命令行的返回内容</a> 
-</h2>
- 
-
-    </header>
-    
-    
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/03/04/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8VSCode%E6%90%9C%E7%B4%A2%E5%8C%85%E5%90%AB%E5%BC%95%E7%94%A8%E7%9A%84%E5%86%85%E5%AE%B9/" class="archive-article-date">
-  <time datetime="2023-03-04T14:44:41.000Z" itemprop="datePublished">03/04</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/03/04/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8VSCode%E6%90%9C%E7%B4%A2%E5%8C%85%E5%90%AB%E5%BC%95%E7%94%A8%E7%9A%84%E5%86%85%E5%AE%B9/"
-    >如何使用VSCode搜索包含引用的内容</a> 
-</h2>
- 
-
-    </header>
-    
-    
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VsCode/" rel="tag">VsCode</a></li></ul>
-
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/03/03/Linux%E5%86%85%E6%A0%B8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97/" class="archive-article-date">
-  <time datetime="2023-03-03T12:51:31.000Z" itemprop="datePublished">03/03</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/03/03/Linux%E5%86%85%E6%A0%B8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97/"
-    >Linux内核多线程计算</a> 
-</h2>
- 
-
-    </header>
-    
-    
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%86%85%E6%A0%B8/" rel="tag">内核</a></li></ul>
-
-    
-  </div>
-</article>
-      
-  
-  
-  
-  </div>
-  </div>
-  
-  
-  <div class="archives-wrap">
-    <div class="archive-year-wrap">
-      <a href="/archives/2022" class="archive-year">2022</a>
-    </div>
-    <div class="archives">
-      
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2022/09/17/Ubuntu%E4%B8%8B%E5%BC%80%E5%8F%91Linux%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97/" class="archive-article-date">
-  <time datetime="2022-09-17T11:46:38.000Z" itemprop="datePublished">09/17</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2022/09/17/Ubuntu%E4%B8%8B%E5%BC%80%E5%8F%91Linux%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97/"
-    >Ubuntu下开发Linux内核模块</a> 
-</h2>
- 
-
-    </header>
-    
-    
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    
-  </div>
-</article>
-      
+      <!-- reward -->
       
     </div>
-  </div>
-  
-  
-
-  
-  <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/tags/Linux/">上一页</a><a class="page-number" href="/tags/Linux/">1</a><span class="page-number current">2</span>
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0%EF%BC%884%EF%BC%89/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2023/06/05/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0%EF%BC%883%EF%BC%89/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">操作系统and编译随记（3）</div>
+      </a>
+    
   </nav>
+
   
+   
+     
+</article>
+
 </section>
       <footer class="footer">
   <div class="outer">
@@ -340,6 +325,22 @@
 <script src="/js/lazyload.min.js"></script>
 
 <!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
 
 <script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
 <link
