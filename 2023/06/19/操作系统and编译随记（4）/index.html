@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">463</span>
+            <span class="post-count">1k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">1 min</span>
+            <span class="post-count">3 min</span>
         </span>
     </span>
 </div>
@@ -123,7 +123,32 @@
 <li><img src="/imgs/b81fe55c1611965d77874e50f2a6f58a96dda8b596cc43c44295f53a81834b0b.png" alt="picture 2">  </li>
 <li>防止<code>fork</code>之后直接执行<code>execve</code>浪费时间</li>
 <li>只读的部分就不需要拷贝</li>
-<li></li>
+<li>写的时候触发一个缺页中断，写这个位置的进程在检查权限之后会拷贝一次这个页面</li>
+<li>注意是按页面拷贝的，而不是按变量拷贝的，比如在一个巨大的数组中修改一个值，只拷贝被修改的这个页面<h3 id="利用fork-创建内存的历史记录"><a href="#利用fork-创建内存的历史记录" class="headerlink" title="利用fork()创建内存的历史记录"></a>利用fork()创建内存的历史记录</h3></li>
+<li>一个长期执行的应用程序防止出现bug导致crash，可以每隔一段时间fork()一次，相当于记录了一个快照，如果出错的话可以回退<h3 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h3></li>
+<li><img src="/imgs/916913544eea956df2161d852a39cc09cd7f5620e890e2fdf1ac20ad1d2acc37.png" alt="picture 3"> <h4 id="手动控制CPU的调度"><a href="#手动控制CPU的调度" class="headerlink" title="手动控制CPU的调度"></a>手动控制CPU的调度</h4></li>
+<li>Linux没有硬实时的机制，只能体现在CPU资源获得的控制上</li>
+<li>使用<code>nice</code>分配CPU<h4 id="多级反馈调度队列"><a href="#多级反馈调度队列" class="headerlink" title="多级反馈调度队列"></a>多级反馈调度队列</h4></li>
+<li>如果一个程序是计算密集的，可以往后排，但是如果这个程序需要与用户交互那就需要往前排</li>
+<li>实现的方式是如果一个程序没有用完时间片就主动交出CPU，就提高它的优先级，否则降低<h4 id="尽量公平分配CPU"><a href="#尽量公平分配CPU" class="headerlink" title="尽量公平分配CPU"></a>尽量公平分配CPU</h4></li>
+<li><img src="/imgs/511133687f997c6d22afeb6849ce33292bf31547a629e42e3e02749e0da04ba9.png" alt="picture 4">  </li>
+<li>中断的时候补偿获得过CPU最少的进程</li>
+<li>使用红黑树把所有可以调度的进程的时间排序<h3 id="如何在公平的调度之下实现不同的优先级"><a href="#如何在公平的调度之下实现不同的优先级" class="headerlink" title="如何在公平的调度之下实现不同的优先级"></a>如何在公平的调度之下实现不同的优先级</h3></li>
+<li>不同进程运行的时间的计算方式不同，不同的人的时钟不一样快即可，优先级高的人的时钟慢，否则就快一些<h3 id="真实的CPU调度"><a href="#真实的CPU调度" class="headerlink" title="真实的CPU调度"></a>真实的CPU调度</h3></li>
+<li>低优先级的进程持有锁的时候被高优先级打断了怎么办</li>
+<li><u>实时操作系统的操作就是<strong>高优先级的进程可以无条件抢占低优先级</strong>的进程</u></li>
+<li>操作系统需要知道到底谁获得了什么锁，在什么时候释放</li>
+<li>优先级继承：<ul>
+<li>低优先级的任务阻碍了高优先级的任务，则低优先级的任务会继承高优先级任务的优先级</li>
+<li>优先级反转<ul>
+<li><img src="/imgs/a5a7267d9035709b1ea47c92a09a49894cdf6a2c4ea147ebedd896e83eee63ee.png" alt="picture 5">  <h3 id="多处理器调度"><a href="#多处理器调度" class="headerlink" title="多处理器调度"></a>多处理器调度</h3></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><img src="/imgs/37e5ea926bc0162e5b650495e824b86fd50f467606f81dc1bc08dee45038737d.png" alt="picture 6">  </li>
+<li><img src="/imgs/95e5c77318d5e738409d65367a3e4640140a2cd9f1a2b73441259b7c5804e6da.png" alt="picture 7">  </li>
+<li>处理器逻辑门跳变的时候会发热产生功耗，也就是所谓的动态功耗（另外还有静态功耗）</li>
 </ul>
  
       <!-- reward -->
