@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Archives |  Frank’s blogs</title>
+      <title>芯片的启动和bootLoader |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -52,141 +52,212 @@
       
     <main class="content on">
       <section class="outer">
-  
-  
-  <article class="articles">
+  <article
+  id="post-芯片的启动和bootLoader"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
     
-    
-    <h1 class="page-type-title">Archives</h1>
-    
-    
-  
-  
-  
-  
-  
-  
-  <div class="archives-wrap">
-    <div class="archive-year-wrap">
-      <a href="/archives/2021" class="archive-year">2021</a>
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  芯片的启动和bootLoader
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/06/20/%E8%8A%AF%E7%89%87%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8CbootLoader/" class="article-date">
+  <time datetime="2023-06-20T06:49:38.000Z" itemprop="datePublished">2023-06-20</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">736</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">2 min</span>
+        </span>
+    </span>
+</div>
+ 
     </div>
-    <div class="archives">
       
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/12/11/FreeRtos1/" class="archive-article-date">
-  <time datetime="2021-12-11T10:03:10.000Z" itemprop="datePublished">12/11</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/12/11/FreeRtos1/"
-    >FreeRtos1</a> 
-</h2>
- 
+    <div class="tocbot"></div>
 
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/12/11/FreeRtos2/" class="archive-article-date">
-  <time datetime="2021-12-11T10:03:10.000Z" itemprop="datePublished">12/11</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/12/11/FreeRtos2/"
-    >FreeRtos2</a> 
-</h2>
- 
 
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/12/08/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/" class="archive-article-date">
-  <time datetime="2021-12-08T13:59:11.000Z" itemprop="datePublished">12/08</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/12/08/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/"
-    >pytorch入门笔记</a> 
-</h2>
- 
 
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/12/08/TD3%E7%BD%91%E7%BB%9C/" class="archive-article-date">
-  <time datetime="2021-12-08T13:31:09.000Z" itemprop="datePublished">12/08</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/12/08/TD3%E7%BD%91%E7%BB%9C/"
-    >TD3网络</a> 
-</h2>
- 
 
-    </header>
-    
-    
-  </div>
-</article>
-      
   
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/12/08/%E5%AE%89%E8%A3%85NodeJS%E4%BB%A5%E5%8F%8Ahexo/" class="archive-article-date">
-  <time datetime="2021-12-08T13:00:13.000Z" itemprop="datePublished">12/08</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
        
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/12/08/%E5%AE%89%E8%A3%85NodeJS%E4%BB%A5%E5%8F%8Ahexo/"
-    >安装NodeJS以及hexo</a> 
-</h2>
+  <h2 id="bootloader"><a href="#bootloader" class="headerlink" title="bootloader"></a>bootloader</h2><h3 id="8086芯片"><a href="#8086芯片" class="headerlink" title="8086芯片"></a>8086芯片</h3><ul>
+<li>reset引脚跳变的时候</li>
+<li>CS（代码段寄存器）和IP（指令指针寄存器）分别初始化为<code>0xffff</code>和<code>0x0000</code>，组合成一个20位的长度地址，再从这个地址跳转到其他地址<h3 id="ARM芯片"><a href="#ARM芯片" class="headerlink" title="ARM芯片"></a>ARM芯片</h3></li>
+<li><img src="/imgs/57ec30a8f7250a218f23c72bb900a78037e9ac385daab274de33317068b72536.png" alt="picture 1">  </li>
+<li>PC直接复位到0地址，然后从中断向量表的<code>Reset</code>位置获取下一步跳转的地址</li>
+<li>直接将代码搬运到内存中执行</li>
+<li>之后再以此为基础运行别的代码</li>
+<li><strong>出场写好的，用于启动用户软件的软件称为boot ROM</strong><h3 id="修改这部分代码"><a href="#修改这部分代码" class="headerlink" title="修改这部分代码"></a>修改这部分代码</h3></li>
+<li><img src="/imgs/8c6d30b382db21109c773da02af6dad393f8ce0facdcfa01fda580153fad2087.png" alt="picture 2">  <ul>
+<li>大部分芯片是用外部电路手动配置的方式</li>
+<li>拨码开关的信号会被记录下来控制部分启动信息</li>
+<li>对于电脑而言就是<code>BIOS</code><h3 id="二次至多次引导代码-bootloader"><a href="#二次至多次引导代码-bootloader" class="headerlink" title="二次至多次引导代码(bootloader)"></a>二次至多次引导代码(bootloader)</h3></li>
+</ul>
+</li>
+<li>一般<code>bootloader</code>是说这个<h4 id="为什么需要"><a href="#为什么需要" class="headerlink" title="为什么需要"></a>为什么需要</h4></li>
+<li><code>boot rom</code>不够灵活</li>
+<li>用户可控<code>bootloader</code></li>
+<li>MCU<ul>
+<li>单核或者多核同构</li>
+<li>主频小于1GHz</li>
+<li>没有MMU</li>
+<li>最多运行RTOS</li>
+<li><img src="/imgs/d0c62019ce7041521e0657170d70f385d735469755cb91e6ef6fdc5d6e85a12f.png" alt="picture 3">  </li>
+<li>程序运行基本都是NOR Flash<ul>
+<li>有分离的地址线和数据线</li>
+<li>运行不需要拷贝到RAM中</li>
+</ul>
+</li>
+<li>STM32的启动<ul>
+<li>启动时会固定跳转到0地址位置</li>
+<li>通过两个boot引脚控制启动的代码映射<ul>
+<li>引脚01的时候可以映射system boot（arm中的boot rom）</li>
+<li>第二位是0的时候，可以把存放用户代码的internal Flash映射到0</li>
+<li>引脚11的时候将internal SRAM映射到0</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>boot loader需要完成的任务<ul>
+<li>关闭看门狗，初始化中断和trap向量表，进行时钟和外设初始化，让芯片正常运行起来</li>
+<li>提供CAN、UART、ETH等用于通讯功能的驱动，能够接收外部数据传输请求</li>
+<li>提供FLASH的读写与擦除驱动，设计服务来对通讯端口接收到的更新代码进行校验、存储，以及跳转操作系统或后续应用程序代码</li>
+<li>如有必要，还会开发一些基础诊断服务，串口交互程序等等</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>嵌入式Linux的SoC和计算机<ul>
+<li>系统一般存储在NAND Flash中（计算机一般是硬盘），运行前需要先将代码搬运到SRAM中</li>
+<li>主要任务就是将代码从NAND Flash或者硬盘中搬运到SRAM中</li>
+<li>转移的这部分内容就是<code>bootloader</code></li>
+<li>转移的内容包括SPL和uBoot<ul>
+<li>SPL是接力赛中的第二棒，初始化更大的外部DRAM，再将uBoot搬运到外部RAM中运行</li>
+<li>uBoot运行初始化程序，再将系统环境变量将OS内核搬运到DRAM中执行</li>
+<li>OS再完成根文件系统的加载等等<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>boot rom<ul>
+<li>硬件自检，部分初始化，提供外部配置引脚</li>
+</ul>
+</li>
+<li>自己写的boot loader<ul>
+<li>可以访问外部RAM，NAND Flash</li>
+<li>初始化时钟，通讯等</li>
+<li>接收，存储以及跳转代码</li>
+</ul>
+</li>
+<li>application层<ul>
+<li>操作系统，文件系统</li>
+<li>用户应用程序</li>
+<li>方便更新</li>
+</ul>
+</li>
+</ul>
  
-
-    </header>
-    
-    
-  </div>
-</article>
-      
+      <!-- reward -->
       
     </div>
-  </div>
-  
-  
-
-  
-  <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/archives/page/13/">上一页</a><a class="page-number" href="/archives/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/12/">12</a><a class="page-number" href="/archives/page/13/">13</a><span class="page-number current">14</span>
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2023/06/20/%E8%8A%AF%E7%89%87%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8CbootLoader/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%86%85%E6%A0%B8/" rel="tag">内核</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A9%B1%E5%8A%A8/" rel="tag">驱动</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0%EF%BC%884%EF%BC%89/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">操作系统and编译随记（4）</div>
+      </a>
+    
   </nav>
+
   
+   
+     
+</article>
+
 </section>
       <footer class="footer">
   <div class="outer">
@@ -309,6 +380,22 @@
 <script src="/js/lazyload.min.js"></script>
 
 <!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
 
 <script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
 <link

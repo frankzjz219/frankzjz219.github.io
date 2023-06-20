@@ -141,6 +141,70 @@
     
     
     <article
+  id="post-手动给Debian安装xfce桌面记录"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/04/11/%E6%89%8B%E5%8A%A8%E7%BB%99Debian%E5%AE%89%E8%A3%85xfce%E6%A1%8C%E9%9D%A2%E8%AE%B0%E5%BD%95/"
+    >手动给Debian安装xfce桌面记录</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/04/11/%E6%89%8B%E5%8A%A8%E7%BB%99Debian%E5%AE%89%E8%A3%85xfce%E6%A1%8C%E9%9D%A2%E8%AE%B0%E5%BD%95/" class="article-date">
+  <time datetime="2023-04-10T16:00:23.000Z" itemprop="datePublished">2023-04-11</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="安装桌面"><a href="#安装桌面" class="headerlink" title="安装桌面"></a>安装桌面</h2><ul>
+<li><code>sudo apt install xfce4-session</code></li>
+<li>然后执行，报错<code>exec :xinit :not found</code></li>
+<li>然后执行<code>sudo apt install xinit xserver-xorg</code></li>
+<li>报错<code>Failed to execute child process &quot;dbus-launch&quot;</code>（图形界面报错）</li>
+<li>执行<code>sudo apt install dbus-x11</code></li>
+<li>但是此时再执行<code>startxfce4</code>出现黑屏，无响应，无光标</li>
+<li>假如无法通过键盘切换回tty，可以用ssh远程控制命令行关闭桌面</li>
+<li>关闭桌面的命令是<code>killall xfce4-session</code></li>
+<li>查找进程：<code>ps -ef</code></li>
+<li>意外可以使用的方法<code>sudo apt-get install xorg slim xfce4</code>，但是缺失了一些功能<h2 id="一些shell技巧"><a href="#一些shell技巧" class="headerlink" title="一些shell技巧"></a>一些shell技巧</h2></li>
+<li><code>|</code>：输入了如下指令：<code>command0 | command1</code>，则command0的输出流入到command1中</li>
+<li><code>||</code>：与&amp;&amp;的作用正好相反，是在<strong>执行到成功的指令时停止后续指令的执行</strong>。<code>command0 || command1</code>，如果command0执行成功，则command1不再执行。如果command0执行失败，则继续执行command1</li>
+<li><code>&amp;</code>：输入了如下指令：<code>command0 &amp;</code>，则执行command0并使其<strong>进入后台</strong></li>
+<li><code>&amp;&amp;</code>：输入了如下指令：command0 &amp;&amp; command1，则先从command0开始执行。<u>如果command0执行失败，则不再继续执行command1。如果执行command0执行成功，则继续执行command1。</u><br>所以，&amp;&amp;的作用是<strong>在执行到失败的指令时停止后续指令的执行</strong>。</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-手动修复桌面反复登录（登不进去）以及开机自启桌面"
   class="article article-type-post"
   itemscope
@@ -804,118 +868,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%86%85%E6%A0%B8/" rel="tag">内核</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-编写C并行计算程序并统计时间"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/02/22/%E7%BC%96%E5%86%99C%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E7%A8%8B%E5%BA%8F%E5%B9%B6%E7%BB%9F%E8%AE%A1%E6%97%B6%E9%97%B4/"
-    >编写C并行计算程序并统计时间</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/02/22/%E7%BC%96%E5%86%99C%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E7%A8%8B%E5%BA%8F%E5%B9%B6%E7%BB%9F%E8%AE%A1%E6%97%B6%E9%97%B4/" class="article-date">
-  <time datetime="2023-02-22T14:58:23.000Z" itemprop="datePublished">2023-02-22</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> ret = pthread_create(ids+i, <span class="literal">NULL</span>, calc, (<span class="keyword">void</span>*)(seq+i));</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>如上强制类型转换修改指针类型的时候，假如指针与其他类型的变量有加减，需要先完成加减再进行修改，否则会先将指针类型转换为<code>void*</code>再计算，使得指针的位置出错</p>
-</li>
-<li><p>尽量避免使用<code>&amp;数组名[下标]</code>的方式传递指针</p>
-</li>
-<li><p>编译的时候记得再gcc最后加参数<code>-lpthread</code>比如</p>
-<ul>
-<li><code>gcc parallelCalc.c -o par -lpthread</code><h2 id="c语言计时"><a href="#c语言计时" class="headerlink" title="c语言计时"></a>c语言计时</h2></li>
-</ul>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lqtcsq/article/details/113189091">参考链接</a></p>
-</li>
-<li><p>都是<code>time.h</code>中的</p>
-<ul>
-<li>一种是<code>time_t time(time_t * timer)</code>，参数传递NULL即可</li>
-<li>另一种是直接计算硬件滴答数，要换算成秒，需要除以CLK_TCK或者 CLK_TCKCLOCKS_PER_SEC。</li>
-<li><code>clock_t clock(void);</code><h2 id="时间统计（开1000个线程）"><a href="#时间统计（开1000个线程）" class="headerlink" title="时间统计（开1000个线程）"></a>时间统计（开1000个线程）</h2></li>
-</ul>
-</li>
-<li><p>规模为100：</p>
-<ul>
-<li><img src="/imgs/b17dac56d785e2e078952f1308f910d85ee7f0bdd113c3a507dc266020db8881.png" alt="picture 6">  </li>
-</ul>
-</li>
-<li><p>1000：</p>
-<ul>
-<li><img src="/imgs/25e4f6a0c09f52871dc5bdb698ee75cd17834fc278fb923fdb877c40bb967b24.png" alt="picture 7">  </li>
-</ul>
-</li>
-<li><p>10000：</p>
-<ul>
-<li><img src="/imgs/df99bc87e5c1835ab73ead3e13575c9c4bd466248f24a456ada27084f011fe20.png" alt="picture 10">  </li>
-</ul>
-</li>
-<li><p>100000：</p>
-<ul>
-<li><img src="/imgs/e0053b8c364f57fc9a094e0fb0a894491a57b39115bd4c36558d8aa57da71243.png" alt="picture 11">  </li>
-</ul>
-</li>
-<li><p>1000000：</p>
-<ul>
-<li><img src="/imgs/9a59aa35ecb8631be1923c1a12f799fe35fc36f9157a645fd7251b395aa2dd83.png" alt="picture 12">  </li>
-</ul>
-</li>
-<li><p>10000000：</p>
-<ul>
-<li><img src="/imgs/55a5ef6b382f597fccd48eabbec78f86a72d3ba6047edcb5b2334f7c86cbc2a4.png" alt="picture 13">  <h4 id="CPU使用情况"><a href="#CPU使用情况" class="headerlink" title="CPU使用情况"></a>CPU使用情况</h4></li>
-</ul>
-</li>
-<li><p>设置VMWare虚拟机为8核心</p>
-<ul>
-<li><img src="/imgs/960c173c3e113b1171f5de5468539cc51829650c3437f6a6eb38bd083388fef2.png" alt="picture 14">  </li>
-<li>可以明显地观察到有8个核心的占用一下子升高</li>
-</ul>
-</li>
-<li><p>顺序执行</p>
-<ul>
-<li><img src="/imgs/7fb97d3fdba5362444d1d0cbb6ef173c4727e87ea068526a785ed597e3b4a30e.png" alt="picture 15">  </li>
-<li>没有明显的CPU使用（也或许是计算任务在不同的CPU之间来回变化），效率很低</li>
-<li><img src="/imgs/a38e06067cc496686d22f1b79dd2387661af485e449c1e918b8a4dd563c8e06a.png" alt="picture 16">  </li>
-</ul>
-</li>
-</ul>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIZEOFMAT 1000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIZEOFVEC 10000000</span></span><br><span class="line"><span class="comment">// int matrix[SIZEOFMAT][SIZEOFVEC];</span></span><br><span class="line"><span class="comment">// int vector[SIZEOFVEC];</span></span><br><span class="line"><span class="keyword">int</span> seq[SIZEOFMAT];</span><br><span class="line"><span class="keyword">int</span>* rets[SIZEOFMAT];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span>* <span class="title">calc</span><span class="params">(<span class="keyword">void</span> *input)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// printf(&quot;enter\n&quot;);</span></span><br><span class="line">    <span class="keyword">int</span> rowNum = *(<span class="keyword">int</span>*)input;</span><br><span class="line">    <span class="keyword">int</span> *sum = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>)); <span class="comment">// 分配内存 不使用临时变量</span></span><br><span class="line">    *sum = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// printf(&quot;线程%d: \n&quot;, rowNum);</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; SIZEOFVEC; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        *sum+=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// printf(&quot;sum: %d\n&quot;, *sum);</span></span><br><span class="line">    <span class="comment">// printf(&quot;exit\n&quot;);</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">void</span>*)sum;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">clock_t</span> start,end;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">pthread_t</span> ids[SIZEOFMAT];</span><br><span class="line">    <span class="keyword">int</span> outVec[SIZEOFMAT];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; SIZEOFMAT; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        seq[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// for(int i = 0;i&lt;SIZEOFMAT;i++)</span></span><br><span class="line">    <span class="comment">// &#123;</span></span><br><span class="line">    <span class="comment">//     for(int j = 0;j&lt;SIZEOFVEC;j++)</span></span><br><span class="line">    <span class="comment">//     &#123;</span></span><br><span class="line">    <span class="comment">//         matrix[i][j] = j;</span></span><br><span class="line">    <span class="comment">//         vector[j] = j;</span></span><br><span class="line">    <span class="comment">//     &#125;</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    start = clock();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; SIZEOFMAT; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> ret = pthread_create(ids+i, <span class="literal">NULL</span>, calc, (<span class="keyword">void</span>*)(seq+i));</span><br><span class="line">        <span class="comment">// printf(&quot;创建了%d\n&quot;, i);</span></span><br><span class="line">        <span class="keyword">if</span>(ret)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;创建发生错误！&quot;</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;SIZEOFMAT;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// printf(&quot;joining\n&quot;);</span></span><br><span class="line">        pthread_join(ids[i], (<span class="keyword">void</span>**)(rets+i));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;SIZEOFMAT;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// printf(&quot;%d, &quot;, *rets[i]);</span></span><br><span class="line">        <span class="built_in">free</span>(rets[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    end = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;并行计算经过的时间为 %d\n&quot;</span>, end-start);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// int stdSum = 0;</span></span><br><span class="line">    <span class="comment">// for(int i = 0;i&lt;SIZEOFVEC;i++)</span></span><br><span class="line">    <span class="comment">// &#123;</span></span><br><span class="line">    <span class="comment">//     stdSum+=i*i;</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    <span class="comment">// printf(&quot;\n参照: %d\n&quot;, stdSum);</span></span><br><span class="line">    </span><br><span class="line">    start = clock();</span><br><span class="line">    <span class="keyword">int</span> sumSeq[SIZEOFMAT] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;SIZEOFMAT; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j&lt;SIZEOFVEC; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            sumSeq[i]+=<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;SIZEOFMAT;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// printf(&quot;%d, &quot;, sumSeq[i]);</span></span><br><span class="line">    &#125;</span><br><span class="line">    end = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;循环计算经过的时间为:%d\n&quot;</span>, end - start);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
 
     </footer>
   </div>
