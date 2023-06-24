@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">1k</span>
+            <span class="post-count">2.1k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">3 min</span>
+            <span class="post-count">8 min</span>
         </span>
     </span>
 </div>
@@ -149,7 +149,75 @@
 <li><img src="/imgs/37e5ea926bc0162e5b650495e824b86fd50f467606f81dc1bc08dee45038737d.png" alt="picture 6">  </li>
 <li><img src="/imgs/95e5c77318d5e738409d65367a3e4640140a2cd9f1a2b73441259b7c5804e6da.png" alt="picture 7">  </li>
 <li>处理器逻辑门跳变的时候会发热产生功耗，也就是所谓的动态功耗（另外还有静态功耗）<h2 id="什么是core-dump"><a href="#什么是core-dump" class="headerlink" title="什么是core dump"></a>什么是core dump</h2></li>
-<li>将程序crash的时候的内存保存成elf文件，事后可以用gdb调试</li>
+<li>将程序crash的时候的内存保存成elf文件，事后可以用gdb调试<h2 id="输入输出设备"><a href="#输入输出设备" class="headerlink" title="输入输出设备"></a>输入输出设备</h2></li>
+<li>I/O是什么</li>
+<li>设备抽象成寄存器<ul>
+<li><img src="/imgs/4e0dcd5aa40f3a83efb5f928fc793bb1ffeda77c7e6d7dbb9f68dd5afbc8ec07.png" alt="picture 8">  </li>
+</ul>
+</li>
+<li>将设备寄存器<strong>映射到内粗地址</strong>上</li>
+<li>CPU<u>像访问内存一样访问寄存器</u><h2 id="设备树"><a href="#设备树" class="headerlink" title="设备树"></a>设备树</h2></li>
+<li>告诉系统任何设备在什么位置</li>
+<li><img src="/imgs/ce8514bb8c3ac03e14091fc35c0e7ad2700ad16545bf1225518cdef8c50bf2e3.png" alt="picture 9">  <h2 id="总线"><a href="#总线" class="headerlink" title="总线"></a>总线</h2></li>
+<li>如何在不增加系统IO设计的基础上扩展其他设备</li>
+<li>通过总线连接设备</li>
+<li>连接其他总线</li>
+<li>将所有的IO设备统一管理起来的设备</li>
+<li><img src="/imgs/e9a364661e7974eb38fdea09b042ab8bce8d67f21d8d3ba88c062c9d5383bf8f.png" alt="picture 10">  </li>
+<li><code>PCI</code>可以连接<code>USB</code>总线</li>
+<li>速度快的设备是直接连接在PCI总线上的<ul>
+<li> 显卡是直接挂载PCI总线上的</li>
+<li> 千兆网卡</li>
+<li> 桥接USB、SATA等控制器也可以<h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2></li>
+</ul>
+</li>
+<li>什么是中断？</li>
+<li>中断就是CPU上的一根线</li>
+<li>处理重要的中断的时候需要屏蔽掉其他的中断<h2 id="DMA"><a href="#DMA" class="headerlink" title="DMA"></a>DMA</h2></li>
+<li>大量的内存拷贝需要占用很长的CPU时间</li>
+<li><img src="/imgs/4d5162de01434b9faa779ed7a95a43295ccb4f91683202fe7b910bfa74f69d31.png" alt="picture 12">  </li>
+<li>此时引入一个专门的拷贝控制器</li>
+<li><img src="/imgs/2d4ca609192063157056dce1daeac7750787e6ea423218c89e279969719b3393.png" alt="picture 11">  </li>
+<li>此时内存复制不再需要CPU的直接参与，节约时间</li>
+<li>用于控制内存和设备之间传输数据<h2 id="GPU"><a href="#GPU" class="headerlink" title="GPU"></a>GPU</h2></li>
+<li><img src="/imgs/1d6d125acabe82b610e452fc49ab309f6106c9ac5f35ab55e4e17e16f3322b3c.png" alt="picture 13">  </li>
+<li>将通用计算简化，得到可以大量并行的计算<h3 id="如何绘制三维画面"><a href="#如何绘制三维画面" class="headerlink" title="如何绘制三维画面"></a>如何绘制三维画面</h3></li>
+<li>任何一个多边形都可以分为<code>n-2</code>个三角形</li>
+<li>为每个三角形贴图</li>
+<li>将三角形投射到摄像机的平面上</li>
+<li><img src="/imgs/f7b3d21cba0a06fe1a8f4106942e0df5ef32ee2641438873b0a6cc3dbc3d3539.png" alt="picture 14">  <h2 id="IO设备的抽象和分类"><a href="#IO设备的抽象和分类" class="headerlink" title="IO设备的抽象和分类"></a>IO设备的抽象和分类</h2></li>
+<li><img src="/imgs/772c552ea3472f7c2b691064f62ecf123e79793a371f26ef7d5fc3f19c73add5.png" alt="picture 15">  <h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3></li>
+<li>字节流，读取字符然后丢弃</li>
+<li>块设备，读取字节数组按块访问<h2 id="设备驱动是什么"><a href="#设备驱动是什么" class="headerlink" title="设备驱动是什么"></a>设备驱动是什么</h2></li>
+<li><img src="/imgs/7a797eb9b5c7c59ac577bdd012ecefd3240a3995529135c7f54a140f087d551d.png" alt="picture 16">  </li>
+<li>就是一段内核代码</li>
+<li>将系统对设备的<code>read</code>，<code>write</code>等操作翻译成设备对应的操作</li>
+<li>设备驱动程序完成的就是设备的通讯协议</li>
+<li><code>/dev</code>下就是设备文件<ul>
+<li><code>/dev/stdout</code>就是标准输出，还有<code>/dev/stdin</code>, <code>/dev/stderr</code></li>
+<li><code>echo Hello &gt; /dev/tty</code>这句话会把Hello输出到命令行上</li>
+<li><code>/dev/tty</code>就是命令行</li>
+<li>但是用户实际使用的是<strong>虚拟终端</strong>，也就是所谓的<code>/dev/pts/数字序号</code><ul>
+<li>不同的终端数字不同</li>
+</ul>
+</li>
+<li><code>/dev/zero</code>是一个0设备，不断生成0</li>
+<li><code>/dev/null</code>设备是一个NULL设备，将其他设备的输出重定向给这个设备，就会直接被扔掉<ul>
+<li>这个设备的<code>weite</code>函数什么都不做</li>
+</ul>
+</li>
+<li><code>/dev/random</code>生成随机数，认为是真的随机数</li>
+<li><code>/dev/urandom</code>是随机性不太高的随机数</li>
+</ul>
+</li>
+<li><img src="/imgs/62d42c205ed95d3f5e65209089d919fb2b0dd8cccab9f06b11a45456fc92de0d.png" alt="picture 17">  </li>
+<li><img src="/imgs/c4f7e1d7cd3e91d936f819aca7009d6cdf84aee7cf562aa4b91d32a9eac278cf.png" alt="picture 18">  <ul>
+<li>将一切额外的复杂性都丢给了<strong>控制</strong>，也就是<code>ioctl</code></li>
+<li>将所有的复杂性都丢给了<strong>文件系统</strong></li>
+<li>导致系统存在很多隐形的依赖关系，比如<code>/proc</code>等等</li>
+</ul>
+</li>
+<li>内核模块实例<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/kernel.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/init.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/cdev.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/device.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/fs.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/uaccess.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_DEV 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> dev_major = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="keyword">class</span> *<span class="title">lx_class</span> =</span> <span class="literal">NULL</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">cdev</span> <span class="title">cdev</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">ssize_t</span> <span class="title">lx_read</span><span class="params">(struct file *, <span class="keyword">char</span> __user *, <span class="keyword">size_t</span>, <span class="keyword">loff_t</span> *)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">ssize_t</span> <span class="title">lx_write</span><span class="params">(struct file *, <span class="keyword">const</span> <span class="keyword">char</span> __user *, <span class="keyword">size_t</span>, <span class="keyword">loff_t</span> *)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">fops</span> =</span> &#123;</span><br><span class="line">  .owner = THIS_MODULE,</span><br><span class="line">  .read = lx_read,</span><br><span class="line">  .write = lx_write,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">nuke</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">cdev</span> <span class="title">cdev</span>;</span></span><br><span class="line">&#125; devs[MAX_DEV];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> __init <span class="title">lx_init</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">dev_t</span> dev;</span><br><span class="line">  <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// allocate device range</span></span><br><span class="line">  alloc_chrdev_region(&amp;dev, <span class="number">0</span>, <span class="number">1</span>, <span class="string">&quot;nuke&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// create device major number</span></span><br><span class="line">  dev_major = MAJOR(dev);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// create class</span></span><br><span class="line">  lx_class = class_create(THIS_MODULE, <span class="string">&quot;nuke&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; MAX_DEV; i++) &#123;</span><br><span class="line">    <span class="comment">// register device</span></span><br><span class="line">    cdev_init(&amp;devs[i].cdev, &amp;fops);</span><br><span class="line">    cdev.owner = THIS_MODULE;</span><br><span class="line">    cdev_add(&amp;devs[i].cdev, MKDEV(dev_major, i), <span class="number">1</span>);</span><br><span class="line">    device_create(lx_class, <span class="literal">NULL</span>, MKDEV(dev_major, i), <span class="literal">NULL</span>, <span class="string">&quot;nuke%d&quot;</span>, i);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> __exit <span class="title">lx_exit</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  device_destroy(lx_class, MKDEV(dev_major, <span class="number">0</span>));</span><br><span class="line">  class_unregister(lx_class);</span><br><span class="line">  class_destroy(lx_class);</span><br><span class="line">  unregister_chrdev_region(MKDEV(dev_major, <span class="number">0</span>), MINORMASK);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">ssize_t</span> <span class="title">lx_read</span><span class="params">(struct file *file, <span class="keyword">char</span> __user *buf, <span class="keyword">size_t</span> count, <span class="keyword">loff_t</span> *offset)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (*offset != <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">uint8_t</span> *data = <span class="string">&quot;This is dangerous!\n&quot;</span>;</span><br><span class="line">    <span class="keyword">size_t</span> datalen = <span class="built_in">strlen</span>(data);</span><br><span class="line">    <span class="keyword">if</span> (count &gt; datalen) &#123;</span><br><span class="line">      count = datalen;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (copy_to_user(buf, data, count)) &#123;</span><br><span class="line">      <span class="keyword">return</span> -EFAULT;</span><br><span class="line">    &#125;</span><br><span class="line">    *offset += count;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">ssize_t</span> <span class="title">lx_write</span><span class="params">(struct file *file, <span class="keyword">const</span> <span class="keyword">char</span> __user *buf, <span class="keyword">size_t</span> count, <span class="keyword">loff_t</span> *offset)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">char</span> databuf[<span class="number">4</span>] = <span class="string">&quot;\0\0\0\0&quot;</span>;</span><br><span class="line">  <span class="keyword">if</span> (count &gt; <span class="number">4</span>) &#123;</span><br><span class="line">    count = <span class="number">4</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  copy_from_user(databuf, buf, count);</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">strncmp</span>(databuf, <span class="string">&quot;\x01\x14\x05\x14&quot;</span>, <span class="number">4</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *EXPLODE[] = &#123;</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣀⣀⠀⠀⣀⣤⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⣀⣠⣤⣤⣾⣿⣿⣿⣿⣷⣾⣿⣿⣿⣿⣿⣶⣿⣿⣿⣶⣤⡀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⢠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⡀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠟⠁⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠻⢿⡿⢿⣿⣿⣿⣿⠟⠛⠛⠋⣀⣀⠙⠻⠿⠿⠋⠻⢿⣿⣿⠟⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⠈⠉⣉⣠⣴⣷⣶⣿⣿⣿⣿⣶⣶⣶⣾⣶⠀⠀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠋⠈⠛⠿⠟⠉⠻⠿⠋⠉⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣶⣷⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⢀⣀⣠⣤⣤⣤⣤⣶⣿⣿⣷⣦⣤⣤⣤⣤⣀⣀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⢰⣿⠛⠉⠉⠁⠀⠀⠀⢸⣿⣿⣧⠀⠀⠀⠀⠉⠉⠙⢻⣷⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠙⠻⠷⠶⣶⣤⣤⣤⣿⣿⣿⣿⣦⣤⣤⣴⡶⠶⠟⠛⠁⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠒⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠓⠀⠀⠀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="keyword">sizeof</span>(EXPLODE) / <span class="keyword">sizeof</span>(EXPLODE[<span class="number">0</span>]); i++) &#123;</span><br><span class="line">      printk(<span class="string">&quot;\033[01;31m%s\033[0m\n&quot;</span>, EXPLODE[i]);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    printk(<span class="string">&quot;nuke: incorrect secret, cannot lanuch.\n&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module_init(lx_init);</span><br><span class="line">module_exit(lx_exit);</span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;GPL&quot;</span>);</span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;jyy&quot;</span>);</span><br></pre></td></tr></table></figure></li>
 </ul>
  
       <!-- reward -->
