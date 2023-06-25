@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">2.4k</span>
+            <span class="post-count">3k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">9 min</span>
+            <span class="post-count">11 min</span>
         </span>
     </span>
 </div>
@@ -260,6 +260,52 @@
 </ul>
 </li>
 <li><code>loop</code>是回环设备，将文件变为磁盘设备</li>
+<li><img src="/imgs/b5fc5c4fe32464e06fde01d003c8a6a28aa5a7424760e65facb62edc033340f2.png" alt="picture 29">  <h3 id="切换根文件系统"><a href="#切换根文件系统" class="headerlink" title="切换根文件系统"></a>切换根文件系统</h3></li>
+<li>使用<code>switch_root</code>命令</li>
+<li>执行的内容包括<ul>
+<li>删除根文件系统的全部内容，节省空间</li>
+<li>安装新的文件系统并切换到这个文件系统</li>
+<li>把<code>stdin</code>, <code>stdout</code>, <code>stderr</code>附加到新的<code>/dev/console</code>，然后执行新文件系统的<code>init</code>程序</li>
+</ul>
+</li>
+<li>命令格式</li>
+<li><code>switch_root [-c /dev/console] NEW_ROOT NEW_INIT [ARGUMENTS_TO_INIT]</code><ul>
+<li>其中<code>NEW_ROOT</code>是实际的根文件系统的挂载目录，执行<code>switch_root</code>命令前需要挂载到系统中</li>
+<li><code>NEW_INIT</code>是实际根文件系统的<code>init</code>程序的路径，一般是<code>/sbin/init</code></li>
+<li><code>-c /dev/console</code>是可选参数，用于重定向实际的根文件系统的设备文件，一般情况我们不会使用</li>
+<li>而<code>ARGUMENTS_TO_INIT</code>则是传递给实际的根文件系统的<code>init</code>程序的参数，也是可选的<h3 id="将一个磁盘映像文件挂载到文件系统之中"><a href="#将一个磁盘映像文件挂载到文件系统之中" class="headerlink" title="将一个磁盘映像文件挂载到文件系统之中"></a>将一个磁盘映像文件挂载到文件系统之中</h3></li>
+</ul>
+</li>
+<li><code>.img</code>文件</li>
+<li><code>mnt xxx.img /路径</code></li>
+<li>系统将这个文件使用一个<code>loop</code>创建为一个设备</li>
+<li>然后挂载这个设备<ul>
+<li><img src="/imgs/2886cc5713330f3abc84175c7476c53a6c2751b5a6a8080c74910eb23dd3b0e5.png" alt="picture 27">  <h2 id="Linux文件系统的标准"><a href="#Linux文件系统的标准" class="headerlink" title="Linux文件系统的标准"></a>Linux文件系统的标准</h2></li>
+</ul>
+</li>
+<li><img src="/imgs/d9c5ee68a7ec204d6df6d6c090c5e1924aa2b0afa0402f7e29af1a8814e0f693.png" alt="picture 28">  <h3 id="使用python访问目录"><a href="#使用python访问目录" class="headerlink" title="使用python访问目录"></a>使用python访问目录</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> Path(<span class="string">&#x27;/proc&#x27;</span>).glob(<span class="string">&#x27;*/status&#x27;</span>):</span><br><span class="line">    <span class="built_in">print</span>(f.parts[-<span class="number">2</span>], \</span><br><span class="line">        (f.parent / <span class="string">&#x27;cmdline&#x27;</span>).read_text() <span class="keyword">or</span> <span class="string">&#x27;[kernel]&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="创建链接"><a href="#创建链接" class="headerlink" title="创建链接"></a>创建链接</h3><h4 id="硬链接"><a href="#硬链接" class="headerlink" title="硬链接"></a>硬链接</h4></li>
+<li><code>ln [参数] [源文件或目录] [目标文件或目录]</code></li>
+<li>创建的是硬链接，实际上指向的是同一个文件，文件的编号都是相同的</li>
+<li>修改一个就是修改所有</li>
+<li>完全不可区分</li>
+<li>便于节省空间</li>
+<li><strong>仅仅存储指向实际文件数据的指针</strong></li>
+<li><strong>不可链接目录</strong></li>
+<li><strong>不可跨文件系统</strong><h4 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h4></li>
+<li>类似于快捷方式</li>
+<li>本身就是一个文件</li>
+<li>当引用这个文件时，去找另一个文件</li>
+<li>另一个文件的绝对/相对路径以文本形式存储在文件里</li>
+<li><strong>可以跨文件系统、可以链接目录</strong></li>
+<li>链接指向的位置当前不存在也没关系</li>
+<li><code>ln -s 目标 快捷方式</code></li>
+<li>允许创建一个到<u>上一级目录</u>的软连接</li>
+<li>允许成环<ul>
+<li>无限递归</li>
+<li>使用<code>find</code>寻找的时候，会报错检测到了文件系统回环</li>
+</ul>
+</li>
 </ul>
  
       <!-- reward -->
