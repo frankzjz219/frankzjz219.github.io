@@ -141,6 +141,66 @@
     
     
     <article
+  id="post-git常用命令"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/13/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"
+    >git常用命令</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/13/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="article-date">
+  <time datetime="2021-12-13T06:56:17.000Z" itemprop="datePublished">2021-12-13</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="git-常见命令"><a href="#git-常见命令" class="headerlink" title="git 常见命令"></a>git 常见命令</h1><p><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/896043488029600">https://www.liaoxuefeng.com/wiki/896043488029600</a></p>
+<p>一次添加目录下所有文件（ <strong>包括gitignore</strong> 的文件）：</p>
+<p><code>git add . -f</code></p>
+<p>一次添加目录下的所有文件（ <strong>不包括gitignore</strong> 的文件）：</p>
+<p><code> git add .</code></p>
+<p>一次<code>commit</code> 所有东西</p>
+<p><code> git commit -a -m &lt;信息&gt;</code></p>
+<p>一次添加目录下的所有东西：</p>
+<p><code>git add 文件夹名/*</code></p>
+<p>上传出问题的时候（上传 <strong>被拒绝</strong> 的时候）的解决方法：</p>
+<p><code>git push -u origin master -f</code></p>
+<p>这个会 <strong>丢弃</strong> 所有远程仓库领先于本地仓库的部分， <strong>强行</strong> 将本地仓库的内容推送到远端 </p>
+<p>或下面这个，但是这个可能会 <strong>覆盖一些本地的文件</strong> （主要是多人开发的情况下可能会出现）</p>
+<p><code>git pull origin master --allow-unrelated-histories</code></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-FreeRtos1"
   class="article article-type-post"
   itemscope
