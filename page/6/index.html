@@ -141,6 +141,96 @@
     
     
     <article
+  id="post-KMP算法"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/08/26/KMP%E7%AE%97%E6%B3%95/"
+    >KMP算法（子字符串快速匹配算法）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/08/26/KMP%E7%AE%97%E6%B3%95/" class="article-date">
+  <time datetime="2022-08-26T13:44:42.000Z" itemprop="datePublished">2022-08-26</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="KMP"><a href="#KMP" class="headerlink" title="KMP"></a>KMP</h2><ul>
+<li>求一个字符串是不是另一个字符串子串的问题</li>
+<li>暴力方法是O(N*M)的复杂度<h3 id="最长前缀和后缀的匹配长度"><a href="#最长前缀和后缀的匹配长度" class="headerlink" title="最长前缀和后缀的匹配长度"></a>最长前缀和后缀的匹配长度</h3></li>
+<li>一个字符位置存储的信息是匹配长度</li>
+<li><img src="/imgs/2196bf830f7b5db687473c79422ad7dfdec5d981f834054f9ac75eda56f6f7a0.png" alt="图 10">  <ul>
+<li>上图中前缀从最左算起，后缀从最右算起，等于3的时候相等</li>
+<li>将这个信息记录在K这个字符的位置</li>
+<li>这个长度必须小于整体的长度</li>
+</ul>
+</li>
+<li>以上这个信息需要对str2（也就是<strong>较短的字符串</strong>）求的<ul>
+<li><img src="/imgs/fb0d130530c2ce09057006d9d7424b35ea7456661bc3604cb0c91ef4823f5c67.png" alt="图 11">  </li>
+<li>第一个是<code>-1</code>是人为定义的<h3 id="加速过程"><a href="#加速过程" class="headerlink" title="加速过程"></a>加速过程</h3></li>
+</ul>
+</li>
+<li><img src="/imgs/a4b9841bb42c9a4e0047bfef0ba00cc98d660c07dc4212c2bd9f2dc4b2e584a5.png" alt="图 12">  <ul>
+<li>当长字符串的匹配进行到x位置的时候发现匹配不能继续，假如此时短字符串的匹配进行到了y位置，那么不需要回退x，只需要回退y到<strong>最长前缀的末尾位置（图中画框的位置）</strong>，相当于不需要从头开始匹配，而是从<strong>图上的j位置（下标三角）开始</strong>，只需要通过最长前缀和后缀跳过长字符串和短字符串中<strong>已经匹配过的段</strong>，实际上相当于将短字符串直接<strong>后移到最长前缀的位置</strong>，然后继续匹配即可。</li>
+<li> 另一个问题是从i到j位置之间不可能有任何一个位置能够配出短字符串</li>
+</ul>
+</li>
+<li>举例</li>
+<li><img src="/imgs/2809ae063ab9181ec086ffc99f622621c7cc923e0381e0a8ae7458c1d25dd66d.png" alt="图 13">  <ul>
+<li>团上的行为是先从两个字符串的头位置开始比对两个字符串，然后到第一个字符串的e位置发现不对，然后寻找此时短字符串的w位置的最长前缀位置的下一个位置也就是t，但是t于e仍然不相等，那么就寻找t位置的最长前缀的下一个位置，也就是s与e比较，但是还不相等，那么就<strong>选择s位置的最长前缀的下一个位置</strong>是短字符串的开始位置，也不行，此时将长字符串的比较位置后移一位到e的下一个位置，重新开始比较<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getIndexOf</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s1 == <span class="keyword">null</span> || s2 == <span class="keyword">null</span> || s2.length() &lt; <span class="number">1</span> || s1.length() &lt; s2.length()) &#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">char</span>[] str1 = s1.toCharArray();</span><br><span class="line">    <span class="keyword">char</span>[] str2 = s2.toCharArray();</span><br><span class="line">    <span class="keyword">int</span> x = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> y = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// O(M) m &lt;= n</span></span><br><span class="line">    <span class="keyword">int</span>[] next = getNextArray(str2);</span><br><span class="line">    <span class="comment">// O(N)</span></span><br><span class="line">    <span class="keyword">while</span> (x &lt; str1.length &amp;&amp; y &lt; str2.length) &#123;</span><br><span class="line">        <span class="keyword">if</span> (str1[x] == str2[y]) &#123;</span><br><span class="line">            x++;</span><br><span class="line">            y++;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (next[y] == -<span class="number">1</span>) &#123; <span class="comment">// y == 0</span></span><br><span class="line">            x++;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            y = next[y];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> y == str2.length ? x - y : -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getNextArray(<span class="keyword">char</span>[] str2) &#123;</span><br><span class="line">    <span class="keyword">if</span> (str2.length == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; -<span class="number">1</span> &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span>[] next = <span class="keyword">new</span> <span class="keyword">int</span>[str2.length];</span><br><span class="line">    next[<span class="number">0</span>] = -<span class="number">1</span>;</span><br><span class="line">    next[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">2</span>; <span class="comment">// 目前在哪个位置上求next数组的值</span></span><br><span class="line">    <span class="keyword">int</span> cn = <span class="number">0</span>; <span class="comment">// 当前是哪个位置的值再和i-1位置的字符比较</span></span><br><span class="line">    <span class="keyword">while</span> (i &lt; next.length) &#123;</span><br><span class="line">        <span class="keyword">if</span> (str2[i - <span class="number">1</span>] == str2[cn]) &#123; <span class="comment">// 配成功的时候</span></span><br><span class="line">            next[i++] = ++cn; <span class="comment">// cn +1 正好被i+1位置当作前缀字符串长度使用</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cn &gt; <span class="number">0</span>) &#123; <span class="comment">// 没成功但是还能往前跳</span></span><br><span class="line">            cn = next[cn];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            next[i++] = <span class="number">0</span>; <span class="comment">// 已经到头了</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><code>next</code>数组就是判断最长前缀后缀的数组<h3 id="跳出循环的方法：二者有一个越界"><a href="#跳出循环的方法：二者有一个越界" class="headerlink" title="跳出循环的方法：二者有一个越界"></a>跳出循环的方法：二者有一个越界</h3><ul>
+<li>长字符串越界：匹配失败</li>
+<li>短字符串越界：找到了长字符串中的短字符串<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3></li>
+</ul>
+</li>
+<li>O(N)<h3 id="求解next数组"><a href="#求解next数组" class="headerlink" title="求解next数组"></a>求解next数组</h3></li>
+<li><code>i</code>位置的信息怎么求：<ul>
+<li>利用<code>i-1</code>位置的信息求取，假如前缀字符串相等长度的最后一个位置和<code>i-1</code>位置的字符相同的话直接把<code>i-1</code>位置的最长前缀信息+1即可</li>
+<li>如果不一样？<ul>
+<li>获得前面字符串最长前缀的<strong>前缀最后一个位置的最长前缀信息</strong>，假如这个最长前缀的下一个位置与<code>i-1</code>位置的字符相同的话，就将上面获取到的<strong>最长前缀位置的最长前缀的长度+1</strong>，还不一样的话<strong>循环往复向前跳</strong>，找前缀的前缀的前缀长度等等…假如到0位置依然不相等，那么结果就是0</li>
+<li><img src="/imgs/cb5617fd12180ae2d31eb9ae5b863a1ec1fcb60556d4e96fe34a91db614c6f81.png" alt="图 1">  </li>
+<li>时间复杂度同样是线性的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-并查集相关"
   class="article article-type-post"
   itemscope
@@ -771,92 +861,6 @@
 设置WSL系统的IP地址到同一个网段下，假如重启之后<strong>开发板ping不通虚拟机</strong>的话还需要重新按照之前的博客配置虚拟机网络与开发板的桥接</li>
 <li>成功结果如图</li>
 <li><img src="/imgs/f3d2319d4773d96e9331fba91ad296b376fd2e876dedefe74e05bd8bc1ae205b.png" alt="图 2">  </li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-配置开发板通过网线连接本机WSL虚拟机"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/07/27/%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E6%9D%BF%E9%80%9A%E8%BF%87%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E6%9C%AC%E6%9C%BAWSL%E8%99%9A%E6%8B%9F%E6%9C%BA/"
-    >配置开发板通过网线连接本机WSL虚拟机</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/07/27/%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E6%9D%BF%E9%80%9A%E8%BF%87%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E6%9C%AC%E6%9C%BAWSL%E8%99%9A%E6%8B%9F%E6%9C%BA/" class="article-date">
-  <time datetime="2022-07-27T03:55:00.000Z" itemprop="datePublished">2022-07-27</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="配置开发板通过网线连接本机WSL虚拟机"><a href="#配置开发板通过网线连接本机WSL虚拟机" class="headerlink" title="配置开发板通过网线连接本机WSL虚拟机"></a>配置开发板通过网线连接本机WSL虚拟机</h1><ul>
-<li><p>开发板先正常启动到Linux系统方便调试</p>
-</li>
-<li><p>开发板用上面的网线接口连接到计算机的网口</p>
-</li>
-<li><p>此时在计算机Windows端命令行输入<code>ipconfig</code>可以看到“以太网”具有相应的IP地址等信息</p>
-</li>
-<li><p>打开WSL虚拟机</p>
-</li>
-<li><p>在WSL虚拟机使用<code>ifconfig</code>命令查看虚拟机的网络配置，IP地址，子网掩码，广播地址等等</p>
-</li>
-<li><p><img src="/imgs/61f4265dbfff438355aad4fbe7486a2eafda4b901f1dc691ab19f9d533f457b0.png" alt="图 1">  </p>
-</li>
-<li><p>虚拟机使用<code>netstat -rn</code>命令查看网关</p>
-</li>
-<li><p><img src="/imgs/4c7645d1ddf70738ba0b2481e06e64ba824a9cf41d4df016ae1d27d57c2c3747.png" alt="图 2">  </p>
-</li>
-<li><p>看到内核路由表的第一条的Gateway就是网关信息</p>
-</li>
-<li><p><strong>此时WSL处在NAT模式，没有开启桥接</strong></p>
-</li>
-<li><p>使用命令<code>Get-NetAdapter</code>查看网络设备</p>
-</li>
-<li><p>使用命令<code>Set-VMSwitch WSL -NetAdapterName &lt;桥接到的网卡名称&gt;</code>桥接WSL与以太网，如下(直接输入中文“以太网”即可)</p>
-</li>
-<li><p><img src="/imgs/ec8dfe21ae9cf0d454518137d0a9b8c4ac8759f610575c1012027702b0fbc280.png" alt="图 3">  </p>
-</li>
-<li><p>复位开发板，按下键盘打断Uboot启动Linux</p>
-</li>
-<li><p>使用Uboot的如下命令设置网络并保存环境变量</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">setenv ipaddr &lt;与WSL虚拟机在同一子网下的另一个IP地址&gt;</span><br><span class="line">setenv gatewayip &lt;WSL虚拟机上看到的网关&gt;</span><br><span class="line">setenv netmask &lt;WSL虚拟机看到的子网掩码&gt;</span><br><span class="line">setenv serverip &lt;WSL虚拟机上ifconfig看到的IP地址&gt;</span><br><span class="line">saveenv</span><br></pre></td></tr></table></figure></li>
-<li><p>然后尝试ping WSL虚拟机IP（也就是在WSL中ifconfig看到的IP）</p>
-</li>
-<li><p><img src="/imgs/5aa9ff0c921acd969021449f60b49a85e3d9597b1ed0c42f285dac9fb217856c.png" alt="图 4">  </p>
-</li>
-<li><p>然后开始使用tftp传输Linux内核</p>
-</li>
-<li><p><img src="/imgs/7aca547914f9f4056cbb698df2d99ecef6131cf615739af5b4c324fce75ade36.png" alt="图 5">  </p>
-</li>
 </ul>
  
       <!-- reward -->
