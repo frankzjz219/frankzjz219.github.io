@@ -153,7 +153,7 @@
        
 <h2 itemprop="name">
   <a class="article-title" href="/2023/07/01/gitClone%E6%97%B6%E6%8C%82%E4%BA%86%E6%A2%AF%E5%AD%90%E4%BB%8D%E7%84%B6%E6%8A%A5443%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/"
-    >gitClone时挂了梯子仍然报443错误的问题</a> 
+    >gitClone时挂了梯子仍然报443错误的问题和pip无法使用的问题</a> 
 </h2>
  
 
@@ -181,7 +181,9 @@
 </ul>
 <h2 id="git-clone时permission-denied的问题"><a href="#git-clone时permission-denied的问题" class="headerlink" title="git clone时permission denied的问题"></a>git clone时permission denied的问题</h2><ul>
 <li>可能原因很多，一个是本地的<code>ssh</code>密钥已经无法使用，需要本地生成之后在github上重新添加一个<code>ssh</code>密钥</li>
-<li>另一个是需要clone入的文件夹没有写入权限，此时需要使用管理员权限打开控制台即可</li>
+<li>另一个是需要clone入的文件夹没有写入权限，此时需要使用管理员权限打开控制台即可<h2 id="pip代理配置"><a href="#pip代理配置" class="headerlink" title="pip代理配置"></a>pip代理配置</h2></li>
+<li><code>pip config set global.HTTPS_PROXY https://127.0.0.1:7890</code></li>
+<li><code>pip config set global.HTTP_PROXY https://127.0.0.1:7890</code></li>
 </ul>
  
       <!-- reward -->

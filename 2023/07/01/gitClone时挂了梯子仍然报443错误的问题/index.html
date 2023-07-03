@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>gitClone时挂了梯子仍然报443错误的问题 |  Frank’s blogs</title>
+      <title>gitClone时挂了梯子仍然报443错误的问题和pip无法使用的问题 |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -64,7 +64,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  gitClone时挂了梯子仍然报443错误的问题
+  gitClone时挂了梯子仍然报443错误的问题和pip无法使用的问题
 </h1>
  
 
@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">133</span>
+            <span class="post-count">160</span>
         </span>
     </span>
 
@@ -117,7 +117,9 @@
 </ul>
 <h2 id="git-clone时permission-denied的问题"><a href="#git-clone时permission-denied的问题" class="headerlink" title="git clone时permission denied的问题"></a>git clone时permission denied的问题</h2><ul>
 <li>可能原因很多，一个是本地的<code>ssh</code>密钥已经无法使用，需要本地生成之后在github上重新添加一个<code>ssh</code>密钥</li>
-<li>另一个是需要clone入的文件夹没有写入权限，此时需要使用管理员权限打开控制台即可</li>
+<li>另一个是需要clone入的文件夹没有写入权限，此时需要使用管理员权限打开控制台即可<h2 id="pip代理配置"><a href="#pip代理配置" class="headerlink" title="pip代理配置"></a>pip代理配置</h2></li>
+<li><code>pip config set global.HTTPS_PROXY https://127.0.0.1:7890</code></li>
+<li><code>pip config set global.HTTP_PROXY https://127.0.0.1:7890</code></li>
 </ul>
  
       <!-- reward -->
