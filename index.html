@@ -141,6 +141,90 @@
     
     
     <article
+  id="post-如何在Win电脑上调试iOS设备的网页"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/07/27/%E5%A6%82%E4%BD%95%E5%9C%A8Win%E7%94%B5%E8%84%91%E4%B8%8A%E8%B0%83%E8%AF%95iOS%E8%AE%BE%E5%A4%87%E7%9A%84%E7%BD%91%E9%A1%B5/"
+    >如何在Win电脑上调试iOS设备的网页</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/07/27/%E5%A6%82%E4%BD%95%E5%9C%A8Win%E7%94%B5%E8%84%91%E4%B8%8A%E8%B0%83%E8%AF%95iOS%E8%AE%BE%E5%A4%87%E7%9A%84%E7%BD%91%E9%A1%B5/" class="article-date">
+  <time datetime="2023-07-27T02:21:28.000Z" itemprop="datePublished">2023-07-27</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44738381/article/details/109027446">参考</a></li>
+<li>微软应用商店安装<code>iTunes</code></li>
+<li>安装scoop<ul>
+<li>powershell输入<code>iwr -useb get.scoop.sh | iex</code></li>
+</ul>
+</li>
+<li>安装插件和环境<ul>
+<li><code>scoop bucket add extras</code></li>
+<li><code>scoop install ios-webkit-debug-proxy</code></li>
+</ul>
+</li>
+<li>安装调试器（需要node.js）<ul>
+<li><code>npm install remotedebug-ios-webkit-adapter -g</code><h2 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h2></li>
+</ul>
+</li>
+<li>打开iOS设备的<strong>设置—&gt;Safari浏览器—&gt;高级—&gt;将网页检查器打开</strong></li>
+<li>启动iTunes</li>
+<li>使用iPad数据线链接电脑的Type-C接口和iPad</li>
+<li>首次连接可能需要在iOS设备上信任本电脑</li>
+<li>开启插件<code>remotedebug_ios_webkit_adapter --port=9000</code><ul>
+<li><img src="/imgs/9447c904b98f9e27cfdbf22f9ee582b15e01deec1768a3fc1ca9bb51e45fc9cf.png" alt="picture 0">  </li>
+</ul>
+</li>
+<li>添加上面监听的端口9000<ul>
+<li><img src="/imgs/9d15f0e5aae7dfc05f62716638b6ae5f3a6d6a7befb88ab12f88a58218eacbd6.png" alt="picture 1">  </li>
+<li><img src="/imgs/96a9234b13a0b280eea2dda999178879e1240533f44388b13fe905e9bd136a2f.png" alt="picture 2">  </li>
+</ul>
+</li>
+<li>连接上iPad设备<ul>
+<li><img src="/imgs/5636a52cdf68b5a8049061f1dc80d75f9e3be0f245c60eb57ae416412ad9c1e0.png" alt="picture 3">  </li>
+<li>点击<code>inspect</code>查看网页</li>
+<li><img src="/imgs/37f71f0b6bb255c3ee37342a6d95b3f64bb232cad7a00a55c9cb8e036dce2b32.png" alt="picture 4">  </li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/" rel="tag">iOS</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-gitClone时挂了梯子仍然报443错误的问题"
   class="article article-type-post"
   itemscope
@@ -1150,208 +1234,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/socket/" rel="tag">socket</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-操作系统and编译随记"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/05/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0/"
-    >操作系统and编译随记</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/05/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0/" class="article-date">
-  <time datetime="2023-05-06T05:16:27.000Z" itemprop="datePublished">2023-05-06</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="编译随记"><a href="#编译随记" class="headerlink" title="编译随记"></a>编译随记</h2><h3 id="优化barrier"><a href="#优化barrier" class="headerlink" title="优化barrier"></a>优化barrier</h3><ul>
-<li><img src="/imgs/b62a8861fbeaa2635275bf41afb9890254b85016ebdec10ee15325b9d4157539.png" alt="picture 1">  <ul>
-<li><code>asm volatile (&quot;mfence&quot; :::&quot;memory)</code></li>
-<li>这句话的意思是该汇编语句可能访问内存的任何位置，因此任何内存相关的优化不能穿过这句话</li>
-</ul>
-</li>
-<li><img src="/imgs/1bdc777c42b9bf2b6299b3b511a5e5da5365d5d8f53e23bb99717f7277d5b8b5.png" alt="picture 2">  <ul>
-<li><code>__sync_synchronize()</code></li>
-<li>这是编译器直接提供的一个barrier</li>
-</ul>
-</li>
-<li>假如不写volatile的话，编译器可能直接不考虑变量的读写访存问题直接进行优化，比如优化等级选择<code>-O1</code>，<code>-O2</code>的话，<u>可能会直接略过循环，给变量赋值一个终值</u></li>
-<li><u>仅靠编译器是无法实现原子操作的，必须有处理器本身的支持</u></li>
-<li>PeterSon算法必须是使用原子操作的读写才可以，否则还是会出问题（虽然可能概率不大）</li>
-<li>注意， 代码编译优化的时候不能够将其挪动到临界区外面（需要barrier），否则整个就会出错<ul>
-<li><img src="/imgs/0516acbd54cb59a0a31ced244c4916b4cd530034275ae320a0a10361c73f2299.png" alt="picture 4">  </li>
-</ul>
-</li>
-<li>前一条原子指令之前发生的事件，后一条原子指令都可见（也就是在他开始之前都完成了）</li>
-<li><img src="/imgs/24b9121cda9dfdc899a4171279245802b54189c3b063ed8fdb72817b9c08f0aa.png" alt="picture 5">  <ul>
-<li>注意临界区使用自旋锁的条件，禁止执行流的切换<h3 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h3></li>
-</ul>
-</li>
-<li>互斥锁的操作实际上是能进入的时候就进入，<strong>不能进入的时候就进入等待队列，切换到别的线程</strong>，防止全部阻塞</li>
-<li>但是互斥锁在处理公用的锁的时候需要用到自旋锁来保护自己的状态不被打断</li>
-<li>互斥锁不自旋，不会因为自选浪费CPU</li>
-<li>实际上上互斥锁的操作比较复杂，对于短的临界区，使用互斥锁反而慢<ul>
-<li><img src="/imgs/091710405bd94d8758f1147cf688f64941f288df0339dbc2a989f722d3d95049.png" alt="picture 6">  </li>
-</ul>
-</li>
-<li>Unix系统中的<strong>管道</strong>是一个天然的既带有<strong>同步</strong>又带有<strong>数据传输</strong>的机制<h3 id="手动原子指令"><a href="#手动原子指令" class="headerlink" title="手动原子指令"></a>手动原子指令</h3></li>
-<li><img src="/imgs/ae4caadb166a305bf7b5d731eae16311e296d579341496b1774b28fd801c4028.png" alt="picture 3">  </li>
-<li>在某一条汇编指令前面加<code>lock</code>，CPU对外有总线发送<code>LOCK</code>信号，会给予一个CPU内存的独占访问权限，直到这个信号结束，防止在指令执行完成期间内存被修改</li>
-<li>原子指令做的事实际上就是将系统所有的执行流分成atmoic指令之前，和atomic指令之后，这两个是不可逾越不可互相交错的，相当于原子指令执行的过程中世界停止了，对于所有CPU核心或者所有其他进程线程而言<h3 id="如何解决并发的问题"><a href="#如何解决并发的问题" class="headerlink" title="如何解决并发的问题"></a>如何解决并发的问题</h3></li>
-<li><img src="/imgs/e67732194af677ffd935d440dac7defd78b388d1db242254869f301d8de35667.png" alt="picture 7">  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;thread.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;thread-sync.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> n, count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">mutex_t</span> lk = MUTEX_INIT();</span><br><span class="line"><span class="keyword">cond_t</span> cv = COND_INIT();</span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CAN_PRODUCE (count &lt; n)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CAN_CONSUME (count &gt; 0)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Tproduce</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    mutex_lock(&amp;lk);</span><br><span class="line">    <span class="keyword">while</span> (!CAN_PRODUCE) &#123;</span><br><span class="line">      cond_wait(&amp;cv, &amp;lk);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;(&quot;</span>); count++;</span><br><span class="line">    cond_broadcast(&amp;cv);</span><br><span class="line">    mutex_unlock(&amp;lk);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Tconsume</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    mutex_lock(&amp;lk);</span><br><span class="line">    <span class="keyword">while</span> (!CAN_CONSUME) &#123;</span><br><span class="line">      cond_wait(&amp;cv, &amp;lk);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;)&quot;</span>); count--;</span><br><span class="line">    cond_broadcast(&amp;cv);</span><br><span class="line">    mutex_unlock(&amp;lk);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">  assert(argc == <span class="number">3</span>);</span><br><span class="line">  n = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">  <span class="keyword">int</span> T = atoi(argv[<span class="number">2</span>]);</span><br><span class="line">  setbuf(<span class="built_in">stdout</span>, <span class="literal">NULL</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; T; i++) &#123;</span><br><span class="line">    create(Tproduce);</span><br><span class="line">    create(Tconsume);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="携程"><a href="#携程" class="headerlink" title="携程"></a>携程</h3></li>
-<li><img src="/imgs/28709dba035a9f9fb313ae889093ebd491fc0afdb44718a694306efe90bda4bd.png" alt="picture 8">  </li>
-<li>go语言对于线程的新处理方式（结合线程与携程）<ul>
-<li><img src="/imgs/b949111729348f37145baeaaf9a83b017673fc57ae0fd0b479269f0c7abaf4a4.png" alt="picture 9">  <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">&quot;fmt&quot;</span></span><br><span class="line">  <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">go</span> spinner(<span class="number">100</span> * time.Millisecond)</span><br><span class="line">  <span class="keyword">const</span> n = <span class="number">45</span></span><br><span class="line">  fibN := fib(n) <span class="comment">// slow</span></span><br><span class="line">  fmt.Printf(<span class="string">&quot;\rFibonacci(%d) = %d\n&quot;</span>, n, fibN)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">spinner</span><span class="params">(delay time.Duration)</span></span> &#123;</span><br><span class="line">  <span class="keyword">for</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> _, r := <span class="keyword">range</span> <span class="string">`-\|/`</span> &#123;</span><br><span class="line">      fmt.Printf(<span class="string">&quot;\r%c&quot;</span>, r)</span><br><span class="line">      time.Sleep(delay)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fib</span><span class="params">(x <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">  <span class="keyword">if</span> x &lt; <span class="number">2</span> &#123; <span class="keyword">return</span> x &#125;</span><br><span class="line">  <span class="keyword">return</span> fib(x - <span class="number">1</span>) + fib(x - <span class="number">2</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li>注意，打印<code>\r</code>实际上是使得光标回到行首，也就是可以实现在行首的同一个位置不停的重复打印字符的目的</li>
-<li>比如go语言中进程间通信就是管道的方式<code>channel</code><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> stream = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">10</span>)</span><br><span class="line"><span class="keyword">const</span> n = <span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">produce</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">for</span> i := <span class="number">0</span>; ; i++ &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;produce&quot;</span>, i)</span><br><span class="line">    stream &lt;- i</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">consume</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">for</span> &#123;</span><br><span class="line">    x := &lt;-stream</span><br><span class="line">    fmt.Println(<span class="string">&quot;consume&quot;</span>, x)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">    <span class="keyword">go</span> produce()</span><br><span class="line">  &#125;</span><br><span class="line">  consume()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="为cuda编写程序"><a href="#为cuda编写程序" class="headerlink" title="为cuda编写程序"></a>为cuda编写程序</h3></li>
-<li>编写的是类似与C或者cpp的程序，但是使用<code>nvcc</code>编译器进行编译，得到相应的结果</li>
-<li>cuda程序最好不要有分支<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_ITER 100</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DIM 12800</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">uint32_t</span> colors[MAX_ITER + <span class="number">1</span>];</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">uint32_t</span> data[DIM * DIM];</span><br><span class="line"></span><br><span class="line"><span class="function">__device__ <span class="keyword">uint32_t</span> <span class="title">mandelbrot</span><span class="params">(<span class="keyword">double</span> x, <span class="keyword">double</span> y)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">double</span> zr = <span class="number">0</span>, zi = <span class="number">0</span>, zrsqr = <span class="number">0</span>, zisqr = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; MAX_ITER; i++) &#123;</span><br><span class="line">    zi = zr * zi * <span class="number">2</span> + y;</span><br><span class="line">    zr = zrsqr - zisqr + x;</span><br><span class="line">    zrsqr = zr * zr;</span><br><span class="line">    zisqr = zi * zi;</span><br><span class="line">    <span class="keyword">if</span> (zrsqr + zisqr &gt; <span class="number">4.0</span>) &#123;</span><br><span class="line">      <span class="keyword">break</span>; <span class="comment">// SIMT threads diverges here!</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="keyword">void</span> <span class="title">mandelbrot_kernel</span><span class="params">(<span class="keyword">uint32_t</span> *data, <span class="keyword">double</span> xmin, <span class="keyword">double</span> ymin, <span class="keyword">double</span> step, <span class="keyword">uint32_t</span> *colors)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> pix_per_thread = DIM * DIM / (gridDim.x * blockDim.x);</span><br><span class="line">  <span class="keyword">int</span> tId = blockDim.x * blockIdx.x + threadIdx.x;</span><br><span class="line">  <span class="keyword">int</span> offset = pix_per_thread * tId;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = offset; i &lt; offset + pix_per_thread; i++) &#123;</span><br><span class="line">    <span class="keyword">int</span> x = i % DIM;</span><br><span class="line">    <span class="keyword">int</span> y = i / DIM;</span><br><span class="line">    <span class="keyword">double</span> cr = xmin + x * step;</span><br><span class="line">    <span class="keyword">double</span> ci = ymin + y * step;</span><br><span class="line">    data[y * DIM + x] = colors[mandelbrot(cr, ci)];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (gridDim.x * blockDim.x * pix_per_thread &lt; DIM * DIM</span><br><span class="line">      &amp;&amp; tId &lt; (DIM * DIM) - (blockDim.x * gridDim.x)) &#123;</span><br><span class="line">    <span class="keyword">int</span> i = blockDim.x * gridDim.x * pix_per_thread + tId;</span><br><span class="line">    <span class="keyword">int</span> x = i % DIM;</span><br><span class="line">    <span class="keyword">int</span> y = i / DIM;</span><br><span class="line">    <span class="keyword">double</span> cr = xmin + x * step;</span><br><span class="line">    <span class="keyword">double</span> ci = ymin + y * step;</span><br><span class="line">    data[y * DIM + x] = colors[mandelbrot(cr, ci)];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">float</span> freq = <span class="number">6.3</span> / MAX_ITER;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; MAX_ITER; i++) &#123;</span><br><span class="line">    <span class="keyword">char</span> r = <span class="built_in">sin</span>(freq * i + <span class="number">3</span>) * <span class="number">127</span> + <span class="number">128</span>;</span><br><span class="line">    <span class="keyword">char</span> g = <span class="built_in">sin</span>(freq * i + <span class="number">5</span>) * <span class="number">127</span> + <span class="number">128</span>;</span><br><span class="line">    <span class="keyword">char</span> b = <span class="built_in">sin</span>(freq * i + <span class="number">1</span>) * <span class="number">127</span> + <span class="number">128</span>;</span><br><span class="line">    colors[i] = b + <span class="number">256</span> * g + <span class="number">256</span> * <span class="number">256</span> * r;</span><br><span class="line">  &#125;</span><br><span class="line">  colors[MAX_ITER] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">uint32_t</span> *dev_colors, *dev_data;</span><br><span class="line">  cudaMalloc((<span class="keyword">void</span>**)&amp;dev_colors, <span class="keyword">sizeof</span>(colors));</span><br><span class="line">  cudaMalloc(&amp;dev_data, <span class="keyword">sizeof</span>(data));</span><br><span class="line">  cudaMemcpy(dev_colors, colors, <span class="keyword">sizeof</span>(colors), cudaMemcpyHostToDevice);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">double</span> xcen = <span class="number">-0.5</span>, ycen = <span class="number">0</span>, scale = <span class="number">3</span>;</span><br><span class="line">  mandelbrot_kernel&lt;&lt;&lt;<span class="number">512</span>, <span class="number">512</span>&gt;&gt;&gt;(</span><br><span class="line">    dev_data,</span><br><span class="line">    xcen - (scale / <span class="number">2</span>),</span><br><span class="line">    ycen - (scale / <span class="number">2</span>),</span><br><span class="line">    scale / DIM,</span><br><span class="line">    dev_colors</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  cudaMemcpy(data, dev_data, <span class="keyword">sizeof</span>(data), cudaMemcpyDeviceToHost);</span><br><span class="line">  cudaFree(dev_data);</span><br><span class="line">  cudaFree(dev_colors);</span><br><span class="line"></span><br><span class="line">  FILE *fp = fopen(<span class="string">&quot;mandelbrot.ppm&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line">  <span class="built_in">fprintf</span>(fp, <span class="string">&quot;P6\n%d %d 255\n&quot;</span>, DIM, DIM);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; DIM * DIM; i++) &#123;</span><br><span class="line">    fputc((data[i] &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xff</span>, fp);</span><br><span class="line">    fputc((data[i] &gt;&gt;  <span class="number">8</span>) &amp; <span class="number">0xff</span>, fp);</span><br><span class="line">    fputc((data[i] &gt;&gt;  <span class="number">0</span>) &amp; <span class="number">0xff</span>, fp);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="javaScript中的并发"><a href="#javaScript中的并发" class="headerlink" title="javaScript中的并发"></a>javaScript中的并发</h3></li>
-<li><img src="/imgs/45297a2f6ecf71272c074133f7719604052e3957e18d8f0e3ac01e04b406102e.png" alt="picture 10">  </li>
-<li>JS的时间轴是不会被打断的，一个函数一定要运行到结束位置</li>
-<li>假如函数中的有<strong>耗时</strong>的操作，这个耗时的操作会被移动到浏览器的后台执行，执行完成之后会有一个callback函数，此时浏览器切换到继续需要执行的回调函数<ul>
-<li><img src="/imgs/6f87d8e906c73da15374c01c013dc42a2d60f17ceb2de224d26749106e946a3a.png" alt="picture 11">  </li>
-<li>两个函数本质上都是回调函数</li>
-</ul>
-</li>
-<li>并且，假如<strong>耗时的步骤完成</strong>之后，系统中正在有其他函数执行，那么会<strong>等到其他函数执行结束</strong>之后在进行回调</li>
-<li>所以不存在事件内与其他执行流并发的问题<h3 id="解决-ajax不便于维护的问题，引入Promise"><a href="#解决-ajax不便于维护的问题，引入Promise" class="headerlink" title="解决$.ajax不便于维护的问题，引入Promise"></a>解决$.ajax不便于维护的问题，引入<strong>Promise</strong></h3></li>
-<li><img src="/imgs/28f98465b87a62795b9a04222bd7f73d075b84409b55a3d137625f8e533ff399.png" alt="picture 12">  </li>
-<li><img src="/imgs/07c28b49b08e100c0c6b7251b21dea5e72194a38d16b2f17b24ee9e0d6d8b52a.png" alt="picture 13">  </li>
-<li><img src="/imgs/84d7d5d349fbfbc3822405a85aa96cf542b64471d46d33761ddb13f6e664eb9d.png" alt="picture 14">  </li>
-<li><a target="_blank" rel="noopener" href="https://www.runoob.com/js/js-promise.html">教程</a><h3 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h3></li>
-<li><img src="/imgs/eb42f65ed6435a4f320a66ba8f7813241f9376a7d6b64cbaf8d7c53b0cf8fbad.png" alt="picture 15">  </li>
-<li>比如解决哲学家吃饭问题，将所有的叉子从小到大编号，要求每个哲学家都先拿自己手边编号较小的叉子，再拿编号大的，所有人都按照同样的顺序拿叉子<h3 id="编译器的线程消毒器选项-fsanitize-thread"><a href="#编译器的线程消毒器选项-fsanitize-thread" class="headerlink" title="编译器的线程消毒器选项-fsanitize-thread"></a>编译器的线程消毒器选项<code>-fsanitize-thread</code></h3></li>
-<li><img src="/imgs/6b5f02292b0ab17f7f8d03a825d5f1262bbb791557018fc1ae048263b53ed754.png" alt="picture 16">  </li>
-<li>辅助检查并发bug<ul>
-<li><img src="/imgs/2d4ccec9c22dd7b01234d2cb3307300e66c8e5b17fde29f1b7a729b62d969257.png" alt="picture 17">  </li>
-<li>运行时检查内存访问</li>
-<li>基本假设是每个线程里面的事件是<U>顺序发生的</u></li>
-<li>假如不同的线程之间访问同一片内存，但是这两个操作之间不存在一个线程先解锁，另一个线程再上锁的操作的话，就会导致data race问题</li>
-</ul>
-</li>
-<li>其他的<code>sanitizer</code><ul>
-<li><img src="/imgs/40b41b03f179094f118eaeb700576cf28e695839cbb5927cd6dda3053e46f8d0.png" alt="picture 18">  </li>
-</ul>
-</li>
-<li>比如可以检查是否操作了已经释放过的内存<ul>
-<li><img src="/imgs/b07e5ca9137ff5a7b67f99b1ede88ea1e017087603cf67cbe9358f88a6eb8c0a.png" alt="picture 19">  </li>
-</ul>
-</li>
-<li><img src="/imgs/64b32973af0e279a2eb77e982e1d0fffe1326f5c9c76959601e6a538d4cb293c.png" alt="picture 20">  <ul>
-<li><code>0xccccc...</code>字符串在<strong>gb</strong>解码下是“烫烫烫烫…”</li>
-<li><code>oxcdcdcdcd...</code>在<strong>gb</strong>解码下是“屯屯屯屯屯”</li>
-<li></li>
-</ul>
-</li>
-</ul>
-<h2 id="中断相关"><a href="#中断相关" class="headerlink" title="中断相关"></a>中断相关</h2><ul>
-<li><img src="/imgs/dfea478d59330419bdd5a897a6f0d1efdee99a178abfe0d5df469d2b87cd67ea.png" alt="picture 21">  <ul>
-<li>关中断</li>
-<li>在正常模式下，假如应用程序试图执行这个操作，CPU会直接产生中断，认为应用程序执行了非法操作</li>
-</ul>
-</li>
-<li><img src="/imgs/8f014eec5845cbb60d45e9b0fc0278c94c44a969c01dd200e056af02ecdbee48.png" alt="picture 22">  </li>
-<li>对于单处理器系统，关闭中断就可以实行互斥，再重新开中断之前都不会被打断</li>
-<li><strong>多处理器系统不适用</strong></li>
-<li>中断发生的时候中断处理程序会把所有的寄存器搬到内存里保存，再中断返回的时候又会把所有的寄存器数值搬回原来的位置<h2 id="50行代码实现一个操作系统"><a href="#50行代码实现一个操作系统" class="headerlink" title="50行代码实现一个操作系统"></a>50行代码实现一个操作系统</h2></li>
-<li>头文件<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// User-defined tasks</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    lock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Thread-%s on CPU #%d\n&quot;</span>, arg, cpu_current());</span><br><span class="line">    unlock();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> <span class="keyword">volatile</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) ;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Task tasks[] = &#123;</span><br><span class="line">  &#123; .name = <span class="string">&quot;A&quot;</span>, .entry = func &#125;,</span><br><span class="line">  &#123; .name = <span class="string">&quot;B&quot;</span>, .entry = func &#125;,</span><br><span class="line">  &#123; .name = <span class="string">&quot;C&quot;</span>, .entry = func &#125;,</span><br><span class="line">  &#123; .name = <span class="string">&quot;D&quot;</span>, .entry = func &#125;,</span><br><span class="line">  &#123; .name = <span class="string">&quot;E&quot;</span>, .entry = func &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-<li>.c文件<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;am.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;klib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;klib-macros.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_CPU 8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">union</span> <span class="title">task</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> <span class="title">task</span> *<span class="title">next</span>;</span></span><br><span class="line">    <span class="keyword">void</span>      (*entry)(<span class="keyword">void</span> *);</span><br><span class="line">    Context    *context;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">uint8_t</span> <span class="built_in">stack</span>[<span class="number">8192</span>];</span><br><span class="line">&#125; Task;  <span class="comment">// A &quot;state machine&quot;</span></span><br><span class="line"></span><br><span class="line">Task *currents[MAX_CPU];</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> current currents[cpu_current()]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> locked = <span class="number">0</span>;  <span class="comment">// A spin lock</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span>   </span>&#123; <span class="keyword">while</span> (atomic_xchg(&amp;locked, <span class="number">1</span>)); &#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span> </span>&#123; atomic_xchg(&amp;locked, <span class="number">0</span>); &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;tasks.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">Context *<span class="title">on_interrupt</span><span class="params">(Event ev, Context *ctx)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!current) current = &amp;tasks[<span class="number">0</span>];  <span class="comment">// First interrupt</span></span><br><span class="line">  <span class="keyword">else</span> current-&gt;context = ctx;  <span class="comment">// Save pointer to stack-saved context</span></span><br><span class="line">  <span class="keyword">do</span> &#123;</span><br><span class="line">    current = current-&gt;next;</span><br><span class="line">  &#125; <span class="keyword">while</span> ((current - tasks) % cpu_count() != cpu_current());</span><br><span class="line">  <span class="keyword">return</span> current-&gt;context;  <span class="comment">// Restore a new context</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mp_entry</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  yield();  <span class="comment">// Self-trap; never returns</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  cte_init(on_interrupt);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; LENGTH(tasks); i++) &#123;</span><br><span class="line">    Task *task    = &amp;tasks[i];</span><br><span class="line">    Area <span class="built_in">stack</span>    = (Area) &#123; &amp;task-&gt;context + <span class="number">1</span>, task + <span class="number">1</span> &#125;;</span><br><span class="line">    task-&gt;context = kcontext(<span class="built_in">stack</span>, task-&gt;entry, (<span class="keyword">void</span> *)task-&gt;name);</span><br><span class="line">    task-&gt;next    = &amp;tasks[(i + <span class="number">1</span>) % LENGTH(tasks)];</span><br><span class="line">  &#125;</span><br><span class="line">  mpe_init(mp_entry);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="防止循环被直接优化的方法"><a href="#防止循环被直接优化的方法" class="headerlink" title="防止循环被直接优化的方法"></a>防止循环被直接优化的方法</h3></li>
-<li>在for中使用<code>volatile</code>的计数变量<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> <span class="keyword">volatile</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>: i++);</span><br></pre></td></tr></table></figure></li>
-<li>上述代码中的<code>yield</code>实际上是原地产生一个处理器中断</li>
-<li>注意在Union中使用struct的方式<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">union</span> <span class="title">task</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> <span class="title">task</span> *<span class="title">next</span>;</span></span><br><span class="line">    <span class="keyword">void</span>      (*entry)(<span class="keyword">void</span> *);</span><br><span class="line">    Context    *context;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">uint8_t</span> <span class="built_in">stack</span>[<span class="number">8192</span>];</span><br><span class="line">&#125; Task;  <span class="comment">// A &quot;state machine&quot;</span></span><br></pre></td></tr></table></figure></li>
-<li>CPU是一种状态机的容器，操作系统的任务就是让CPU在不同的状态机之间轮换<h2 id="创建新的进程"><a href="#创建新的进程" class="headerlink" title="创建新的进程"></a>创建新的进程</h2></li>
-<li><img src="/imgs/af4d77a20992005f6b5f0ab01ca05f36efd57c920710634cc3c8391dcd767a5d.png" alt="picture 23">  </li>
-<li>命令行允许<code>:</code>作为标识符</li>
-<li>一变二、二变四创建新的进程<h3 id="进程树"><a href="#进程树" class="headerlink" title="进程树"></a>进程树</h3></li>
-<li>所有进程都是从上一个进程fork（复制）出来的，多有状态都被复制了，包括PC指针等等，因此存在父子关系</li>
-<li><img src="/imgs/a99d16e8b193deacd899533fa77553ee58d621403d318f5d438bb124b419c089.png" alt="image.png 1">  <ul>
-<li>会产生四个进程</li>
-<li>顺序不是确定的</li>
-<li><img src="/imgs/e0cec5dc228866f011701f15a75090abfa8ae6f99ebaa7c9922883874c442d9a.png" alt="picture 25">  </li>
-</ul>
-</li>
-<li><img src="/imgs/30cab2144ac9c75f96211c74ec404c56d873c3b2bfccf6eca078434cafd8bb71.png" alt="picture 26">  <ul>
-<li>上述代码会创建四个进程，最终输出6个hello</li>
-<li>但是，使用管道<code>|</code>讲程序输出到<code>cat</code>的时候，有时会产生八个输出<ul>
-<li>因为假如<code>printf</code>输出对应的是一个管道的话，可能会使得<strong>输出被buffer起来</strong>而不是直接打印到屏幕上，实际上是每次第一次创建的两个进程的buffer里有一个hello，<strong>这个hello随着fork被复制到了新的四个进程</strong>，进程又打印了一次hello，结果每个进程打印两个hello</li>
-<li><u>缓冲区会随着fork()被复制到新的进程中</u></li>
-<li>包括代码、库函数、<code>malloc</code>复制出来的内存等等，都会被复制到新的进程中<h3 id="重置状态机"><a href="#重置状态机" class="headerlink" title="重置状态机"></a>重置状态机</h3></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><code>execve()</code></li>
-<li>的行为是把一个静态的状态机重置为传递给<code>execve</code>的文件路径指向的可执行文件描述的初始状态，并且给<code>main()</code>函数传递<code>argc</code>, <code>argv</code>两个参数<ul>
-<li><img src="/imgs/b5fbd8c493f4dba68a92cbbde9be282587672ddba5dbbc982e07c740409b4609.png" alt="picture 27">  <h4 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h4></li>
-</ul>
-</li>
-<li><img src="/imgs/ac960cb9ba99d2a159d143a6c3de0d6729da419fac913222d251a6a101600421.png" alt="picture 28">  </li>
-<li>环境变量也是通过<code>execve</code>传进去的，会继承父进程的环境变量</li>
-<li>修改命令行的提示符<ul>
-<li><img src="/imgs/da120285da5ca0e9cf2b7da565681e3845821423086c9c39793f0f9a9000fa9b.png" alt="picture 29">  </li>
-<li><code>PS1</code>变量</li>
-</ul>
-</li>
-<li><img src="/imgs/95ff71d201b53be794d42cffe4784d1edc103cf5718579245f80f96d25d9d96c.png" alt="picture 30">  </li>
-<li><img src="/imgs/1e4dece047c5e8638245377f2367e8b3a2514e1d0ad89a8150e493b93cbe9def.png" alt="picture 31">  <ul>
-<li>这个代码<code>execve</code>成功的话就不会执行<code>printf</code>，因为已经重置了<h2 id="销毁状态机"><a href="#销毁状态机" class="headerlink" title="销毁状态机"></a>销毁状态机</h2></li>
-</ul>
-</li>
-<li><code>exit()</code></li>
-<li><img src="/imgs/656777a86704e16bc32a3fd9275778244894fccc7a489cc4309226af1700153c.png" alt="picture 32">  <ul>
-<li>与C语言的库函数<code>exit</code>区分开</li>
-</ul>
-</li>
-<li><img src="/imgs/7d7f359d2434f365b8b251bef01ddf04f6b1aff4aac9090d4f4129cbf62df8fc.png" alt="picture 33">  <ul>
-<li>这个的作用是exit hook，就是在退出的执行一些处理后事的程序</li>
-<li>这个程序只对C语言标准库中的<code>exit</code>函数起作用，假如直接用系统调用的<code>_exit</code>，那么不会打印任何东西直接退出</li>
-</ul>
-</li>
-<li><img src="/imgs/8eff125287d97617fe1b056b269fba3878f1e39c1f8e4e70209bcca344a0ed12.png" alt="picture 34">  <ul>
-<li>多线程和单线程也是有区别的</li>
-</ul>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
 
     </footer>
   </div>
