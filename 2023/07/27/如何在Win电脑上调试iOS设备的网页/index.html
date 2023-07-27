@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">228</span>
+            <span class="post-count">355</span>
         </span>
     </span>
 
@@ -141,7 +141,23 @@
 </li>
 <li>有时候safari无法捕捉到网页的控制台输出，导致chrome远程调试的时候无法输出JavaScript中的<code>console.log()</code>信息</li>
 <li><img src="/imgs/2fb611ababbcce3923c51b289a085ba1b0c34d0362d5c853cc110d8589a793ee.png" alt="picture 5">  </li>
-<li><code>console.error()</code>一样无法输出，此时只能在html中创建一个元素手动修改其<code>innerHTML</code>来显示输出</li>
+<li><code>console.error()</code>一样无法输出，此时只能在html中创建一个元素手动修改其<code>innerHTML</code>来显示输出<h2 id="DOM元素参考"><a href="#DOM元素参考" class="headerlink" title="DOM元素参考"></a>DOM元素参考</h2></li>
+<li><a target="_blank" rel="noopener" href="https://www.w3schools.com/tags/ref_av_dom.asp">w3school</a><h2 id="safari-iPad-端播放MP4的编码注意事项"><a href="#safari-iPad-端播放MP4的编码注意事项" class="headerlink" title="safari(iPad)端播放MP4的编码注意事项"></a>safari(iPad)端播放MP4的编码注意事项</h2></li>
+<li> H.264 视频编码和 AAC 音频编码</li>
+<li>MP4 文件的元数据（称为 moov box）应该位于文件的开头<ul>
+<li> ffmpeg选项为<code>-movflags faststart</code></li>
+</ul>
+</li>
+<li>将视频的声道设置为<strong>双声道</strong>（某些多声道的视频即使视频编码无问题也无法播放）<ul>
+<li> ffmpeg选项<code>-ac 2</code></li>
+</ul>
+</li>
+<li>html播放器遇到不支持的视频的时候可能会出现<code>video</code>标签的<ul>
+<li>networkState为<code>3</code></li>
+<li>readyState为<code>0</code></li>
+<li><code>error.code</code>为<code>4</code>也就是<code>MEDIA_ERR_SRC_NOT_SUPPORTED</code></li>
+</ul>
+</li>
 </ul>
  
       <!-- reward -->
