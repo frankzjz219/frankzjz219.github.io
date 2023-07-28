@@ -976,7 +976,10 @@
 <li>具体是双击文件打开的时候<strong>直接打开浏览器</strong></li>
 <li>原因是windows必须把FTP上的文件复制到本地之后才能打开，不能在服务器页面直接打开<h2 id="透穿"><a href="#透穿" class="headerlink" title="透穿"></a>透穿</h2></li>
 <li>透穿教程参考windows下的FTP服务配置即可<h2 id="硬盘挂载"><a href="#硬盘挂载" class="headerlink" title="硬盘挂载"></a>硬盘挂载</h2></li>
-<li>机械硬盘重启Linux系统的时候可能需要<strong>重新插拔</strong>，否则可能挂载不上，挂载不上可能导致链接FTP的时候<strong>访问被拒绝</strong></li>
+<li>机械硬盘重启Linux系统的时候可能需要<strong>重新插拔</strong>，否则可能挂载不上，挂载不上可能导致链接FTP的时候<strong>访问被拒绝</strong><h2 id="配置sudo无密码的非root用户"><a href="#配置sudo无密码的非root用户" class="headerlink" title="配置sudo无密码的非root用户"></a>配置sudo无密码的非root用户</h2></li>
+<li><code>sudo vim /etc/sudoers</code></li>
+<li>找到一行<code>%sudo   ALL=(ALL:ALL) ALL</code></li>
+<li>在其后加一行<code>&lt;用户名&gt; ALL=(ALL) NOPASSWD:ALL</code></li>
 </ul>
  
       <!-- reward -->
