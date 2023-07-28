@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">494</span>
+            <span class="post-count">602</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">1 min</span>
+            <span class="post-count">2 min</span>
         </span>
     </span>
 </div>
@@ -147,9 +147,14 @@
 <li>代码段，数据段和堆是相邻的</li>
 <li>栈在最大可用地址的位置，从大到小，堆从小到大</li>
 <li>程序运行加载的过程<ul>
-<li><img src="/imgs/bfeee56b7cc8a00a5c78d26ca8052c4d853c6cafa1619180b3fb062d5b29ceb4.png" alt="picture 2">  </li>
+<li><img src="/imgs/bfeee56b7cc8a00a5c78d26ca8052c4d853c6cafa1619180b3fb062d5b29ceb4.png" alt="picture 2">  <h4 id="Linux提供了一个在程序执行的过程中加载共享库的函数"><a href="#Linux提供了一个在程序执行的过程中加载共享库的函数" class="headerlink" title="Linux提供了一个在程序执行的过程中加载共享库的函数"></a>Linux提供了一个在程序执行的过程中加载共享库的函数</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">dlopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
+<li><code>flag</code>可以设置为<code>RTLD_LASY</code>，将代码推迟到执行的时候再符号解析</li>
+<li>还提供了一个获取共享库的符号地址的方法<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">dlsym</span><span class="params">(<span class="keyword">void</span>* handle, <span class="keyword">char</span>* symbol)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>其中的<code>handle</code>就是前面打开的共享库</li>
+<li>symbol就是其中的符号名称<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dlclose</span><span class="params">(<span class="keyword">void</span>* handle)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>卸载共享库</li>
 </ul>
  
       <!-- reward -->
