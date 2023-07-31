@@ -153,7 +153,7 @@
        
 <h2 itemprop="name">
   <a class="article-title" href="/2023/07/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/"
-    >操作系统知识笔记（1）</a> 
+    >CSAPP知识笔记（1）</a> 
 </h2>
  
 
@@ -178,7 +178,7 @@
 <li>存放文件的基本信息<h4 id="text段"><a href="#text段" class="headerlink" title=".text段"></a>.text段</h4></li>
 <li>存放编译好的机器代码<h4 id="data段"><a href="#data段" class="headerlink" title=".data段"></a>.data段</h4></li>
 <li>存放已经初始化的全局变量和静态变量<h4 id="bss段"><a href="#bss段" class="headerlink" title=".bss段"></a>.bss段</h4></li>
-<li>未初始化的静态变量和初始化为0的全局变量</li>
+<li>未初始化的全局变量和静态变量以及初始化为0的全局变量和静态变量</li>
 <li><code>better save space</code></li>
 <li>并不占据实际的空间，只是一个占位符</li>
 <li>系统真正运行的时候会分配空间并且初始化为0<h4 id="COMMON"><a href="#COMMON" class="headerlink" title="COMMON"></a>COMMON</h4></li>
@@ -211,14 +211,64 @@
 <li>代码段，数据段和堆是相邻的</li>
 <li>栈在最大可用地址的位置，从大到小，堆从小到大</li>
 <li>程序运行加载的过程<ul>
-<li><img src="/imgs/bfeee56b7cc8a00a5c78d26ca8052c4d853c6cafa1619180b3fb062d5b29ceb4.png" alt="picture 2">  <h4 id="Linux提供了一个在程序执行的过程中加载共享库的函数"><a href="#Linux提供了一个在程序执行的过程中加载共享库的函数" class="headerlink" title="Linux提供了一个在程序执行的过程中加载共享库的函数"></a>Linux提供了一个在程序执行的过程中加载共享库的函数</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">dlopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li><img src="/imgs/bfeee56b7cc8a00a5c78d26ca8052c4d853c6cafa1619180b3fb062d5b29ceb4.png" alt="picture 2">  </li>
 </ul>
 </li>
+<li>只编译不链接就得到<strong>可重定位目标文件</strong><h4 id="Linux提供了一个在程序执行的过程中加载共享库的函数"><a href="#Linux提供了一个在程序执行的过程中加载共享库的函数" class="headerlink" title="Linux提供了一个在程序执行的过程中加载共享库的函数"></a>Linux提供了一个在程序执行的过程中加载共享库的函数</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">dlopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure></li>
 <li><code>flag</code>可以设置为<code>RTLD_LASY</code>，将代码推迟到执行的时候再符号解析</li>
 <li>还提供了一个获取共享库的符号地址的方法<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">dlsym</span><span class="params">(<span class="keyword">void</span>* handle, <span class="keyword">char</span>* symbol)</span></span>;</span><br></pre></td></tr></table></figure></li>
 <li>其中的<code>handle</code>就是前面打开的共享库</li>
 <li>symbol就是其中的符号名称<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dlclose</span><span class="params">(<span class="keyword">void</span>* handle)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>卸载共享库</li>
+<li>卸载共享库<h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2></li>
+<li>异步中断<ul>
+<li>不是当前程序引起的，比如I/O操作引起的</li>
+</ul>
+</li>
+<li>同步中断<ul>
+<li>CPU中执行的指令引起的中断</li>
+</ul>
+</li>
+<li><img src="/imgs/7e0dd67349348712f8cb96c04ffe5cf2ac370b12d3ba3acec424f32e0786d17a.png" alt="picture 3">  <h3 id="程序异常"><a href="#程序异常" class="headerlink" title="程序异常"></a>程序异常</h3></li>
+<li><img src="/imgs/575b6666f04b2d0c34cb2a4318f2bcea71bc3332562735760362f99ce9e27063.png" alt="picture 4">  </li>
+<li>所谓的段错误（Segmentation Fault）就是程序试图访问一块未申请的内存空间引起的，也就是图中的13号</li>
+<li>18号异常时机器检查，一般是硬件错误引起的</li>
+<li><img src="/imgs/de6a53626cd9334b198037cd83d99a01ac1129536503a21c46b383bfe632033d.png" alt="picture 5">  <ul>
+<li>Linux系统调用号对应的是跳转表中内存的偏移量<h3 id="fork和execve"><a href="#fork和execve" class="headerlink" title="fork和execve"></a>fork和execve</h3></li>
+</ul>
+</li>
+<li><code>fork</code>调用一次返回两次<ul>
+<li>父进程和子进程各一次</li>
+</ul>
+</li>
+<li><code>execve</code>调用一次不返回<h3 id="程序执行的传参argv"><a href="#程序执行的传参argv" class="headerlink" title="程序执行的传参argv"></a>程序执行的传参<code>argv</code></h3></li>
+<li><img src="/imgs/6f9ee657579f945904321a75edc03b43c5e81b4b631a4b07136b87ea62c63e25.png" alt="picture 6">  <ul>
+<li>argv的第一个是可执行文件的名字</li>
+<li><code>argc</code>是参数的数量</li>
+</ul>
+</li>
+<li><img src="/imgs/7d15745c726c53d708323f43631998d02d44f069cdb33bf319be7ae6ca5a4e92.png" alt="picture 7">  <ul>
+<li>环境变量是<code>envp</code>，也类似</li>
+<li><code>execve</code>的作用就是调用加载器如图<ul>
+<li><img src="/imgs/fed85bf9602bec823fc921d9e6e095eb3d78863a584da55971933c8f1c392ca8.png" alt="picture 8">  <h3 id="僵尸进程"><a href="#僵尸进程" class="headerlink" title="僵尸进程"></a>僵尸进程</h3></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>终止运行但是没有被父进程回收的进程就是<code>zombie</code>进程<h3 id="回收进程"><a href="#回收进程" class="headerlink" title="回收进程"></a>回收进程</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">waitpid</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">int</span> *statusp,<span class="keyword">int</span> options)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>如果pid&gt;0，则回收该pid指定的某个确定的进程</li>
+<li>如果pid=-1，则回收该进程创建的所有子进程</li>
+<li>第二个参数是导致返回的子进程的状态信息（终止的原因是正常返回还是异常终止还是其他）</li>
+<li><code>waitpid</code>程序<strong>不会按照任何特定顺序</strong>回收子进程，除非明确指定<h3 id="发送信号"><a href="#发送信号" class="headerlink" title="发送信号"></a>发送信号</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kill</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">int</span> sig)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>如果pid为0，则发送信号给调用进程所在进程组中的所有进程，包括自己</li>
+<li>如果pid&gt;0，则发送信号给pid指定的进程</li>
+<li>如果pid&lt;0，则发送信号给进程组-pid的每个进程<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">alarm</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> secs)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>进程可以用<code>alarm</code>给自己发送信号，参数是在 secs秒之后给调用进程发送一个<code>SIGALRM</code></li>
+<li>secs为0就不会调用新的闹钟了<h3 id="信号处理"><a href="#信号处理" class="headerlink" title="信号处理"></a>信号处理</h3></li>
+<li>一个进程最多<strong>只有一个</strong>同类型的信号，等待处理的信号超过一个的时候会被<strong>直接丢弃</strong></li>
+<li>处理多个信号<ul>
+<li><img src="/imgs/5c2be80572109b2acf56dcd28d8f3fa0553db2cfeecab42a7de0588293a2b3e1.png" alt="picture 9">  </li>
+</ul>
+</li>
 </ul>
  
       <!-- reward -->
@@ -230,7 +280,7 @@
     
     <footer class="article-footer">
        
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li></ul>
 
     </footer>
   </div>
