@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>CSAPP知识笔记（1） |  Frank’s blogs</title>
+      <title>x86平台上向量化编程及实验 |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -53,7 +53,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-操作系统知识笔记（1）"
+  id="post-x86平台上向量化编程及实验"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -64,7 +64,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  CSAPP知识笔记（1）
+  x86平台上向量化编程及实验
 </h1>
  
 
@@ -72,15 +72,15 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2023/07/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/" class="article-date">
-  <time datetime="2023-07-28T07:45:25.000Z" itemprop="datePublished">2023-07-28</time>
+      <a href="/2023/08/01/x86%E5%B9%B3%E5%8F%B0%E4%B8%8A%E5%90%91%E9%87%8F%E5%8C%96%E7%BC%96%E7%A8%8B%E5%8F%8A%E5%AE%9E%E9%AA%8C/" class="article-date">
+  <time datetime="2023-08-01T02:19:06.000Z" itemprop="datePublished">2023-08-01</time>
 </a>   
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">1.1k</span>
+            <span class="post-count">580</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">4 min</span>
+            <span class="post-count">3 min</span>
         </span>
     </span>
 </div>
@@ -104,107 +104,19 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h2 id="编译、重定位、装入和链接"><a href="#编译、重定位、装入和链接" class="headerlink" title="编译、重定位、装入和链接"></a>编译、重定位、装入和链接</h2><ul>
-<li><img src="/imgs/1a721cc175df7718d8b31218f7b2b189263c723c2fbf683d67155c7de7ae0ece.png" alt="picture 0">  <ul>
-<li>编译是得到单个的程序模块</li>
-<li>链接是将程序中用到的模块链接在一起，组合他们的虚拟地址（逻辑地址）</li>
-<li>装入是得到真正的物理地址<h3 id="可重定位文件的结构"><a href="#可重定位文件的结构" class="headerlink" title="可重定位文件的结构"></a>可重定位文件的结构</h3><h4 id="Elf-Header部分"><a href="#Elf-Header部分" class="headerlink" title="Elf Header部分"></a>Elf Header部分</h4></li>
-</ul>
-</li>
-<li>存放文件的基本信息<h4 id="text段"><a href="#text段" class="headerlink" title=".text段"></a>.text段</h4></li>
-<li>存放编译好的机器代码<h4 id="data段"><a href="#data段" class="headerlink" title=".data段"></a>.data段</h4></li>
-<li>存放已经初始化的全局变量和静态变量<h4 id="bss段"><a href="#bss段" class="headerlink" title=".bss段"></a>.bss段</h4></li>
-<li>未初始化的全局变量和静态变量以及初始化为0的全局变量和静态变量</li>
-<li><code>better save space</code></li>
-<li>并不占据实际的空间，只是一个占位符</li>
-<li>系统真正运行的时候会分配空间并且初始化为0<h4 id="COMMON"><a href="#COMMON" class="headerlink" title="COMMON"></a>COMMON</h4></li>
-<li>存放未初始化的全局变量<h4 id="rodata"><a href="#rodata" class="headerlink" title=".rodata"></a>.rodata</h4></li>
-<li>存放<strong>只读</strong>数据</li>
-<li>比如字符串和<code>switch</code>的跳转表<h4 id="rel-text"><a href="#rel-text" class="headerlink" title=".rel.text"></a>.rel.text</h4></li>
-<li>存放需要重定位的代码<h4 id="rel-data"><a href="#rel-data" class="headerlink" title=".rel.data"></a>.rel.data</h4></li>
-<li>存放已初始化的数据的重定位<h3 id="可执行文件的结构"><a href="#可执行文件的结构" class="headerlink" title="可执行文件的结构"></a>可执行文件的结构</h3><h4 id="ELF-Header"><a href="#ELF-Header" class="headerlink" title="ELF Header"></a>ELF Header</h4></li>
-<li>文件的总体格式<h4 id="init"><a href="#init" class="headerlink" title=".init"></a>.init</h4></li>
-<li>初始化用的代码<h4 id="text-rodata和-data"><a href="#text-rodata和-data" class="headerlink" title=".text .rodata和.data"></a>.text .rodata和.data</h4></li>
-<li>与可重定位文件类似</li>
-</ul>
-<h3 id="强符号和弱符号"><a href="#强符号和弱符号" class="headerlink" title="强符号和弱符号"></a>强符号和弱符号</h3><ul>
-<li>强符号<ul>
-<li>函数和已经初始化的全局变量</li>
-</ul>
-</li>
-<li>弱符号<ul>
-<li>未初始化的全局变量</li>
-</ul>
-</li>
-<li>多个同名的强符号一起出现的时候会引起链接器错误</li>
-<li>强符号和弱符号一起出现的时候会同意认为是强符号，而不会报错<ul>
-<li>类型不同的强弱符号，在弱符号出现的模块中，类型会保留弱符号的类型，尽管实际上内存中存储的是强符号的类型</li>
-<li>给编译器<code>-fno-common</code>选项，会在多重定义时报错防止上述错误</li>
-</ul>
-</li>
-<li>多个弱符号也会认为是同一个变量<h3 id="运行时的内存映像"><a href="#运行时的内存映像" class="headerlink" title="运行时的内存映像"></a>运行时的内存映像</h3></li>
-<li><img src="/imgs/b632dd4bb03af638e7ba5dd009fece7b790e76771370df56204484709be1304e.png" alt="picture 1">  </li>
-<li>代码段，数据段和堆是相邻的</li>
-<li>栈在最大可用地址的位置，从大到小，堆从小到大</li>
-<li>程序运行加载的过程<ul>
-<li><img src="/imgs/bfeee56b7cc8a00a5c78d26ca8052c4d853c6cafa1619180b3fb062d5b29ceb4.png" alt="picture 2">  </li>
-</ul>
-</li>
-<li>只编译不链接就得到<strong>可重定位目标文件</strong><h4 id="Linux提供了一个在程序执行的过程中加载共享库的函数"><a href="#Linux提供了一个在程序执行的过程中加载共享库的函数" class="headerlink" title="Linux提供了一个在程序执行的过程中加载共享库的函数"></a>Linux提供了一个在程序执行的过程中加载共享库的函数</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">dlopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li><code>flag</code>可以设置为<code>RTLD_LASY</code>，将代码推迟到执行的时候再符号解析</li>
-<li>还提供了一个获取共享库的符号地址的方法<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">dlsym</span><span class="params">(<span class="keyword">void</span>* handle, <span class="keyword">char</span>* symbol)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>其中的<code>handle</code>就是前面打开的共享库</li>
-<li>symbol就是其中的符号名称<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dlclose</span><span class="params">(<span class="keyword">void</span>* handle)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>卸载共享库<h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2></li>
-<li>异步中断<ul>
-<li>不是当前程序引起的，比如I/O操作引起的</li>
-</ul>
-</li>
-<li>同步中断<ul>
-<li>CPU中执行的指令引起的中断</li>
-</ul>
-</li>
-<li><img src="/imgs/7e0dd67349348712f8cb96c04ffe5cf2ac370b12d3ba3acec424f32e0786d17a.png" alt="picture 3">  <h3 id="程序异常"><a href="#程序异常" class="headerlink" title="程序异常"></a>程序异常</h3></li>
-<li><img src="/imgs/575b6666f04b2d0c34cb2a4318f2bcea71bc3332562735760362f99ce9e27063.png" alt="picture 4">  </li>
-<li>所谓的段错误（Segmentation Fault）就是程序试图访问一块未申请的内存空间引起的，也就是图中的13号</li>
-<li>18号异常时机器检查，一般是硬件错误引起的</li>
-<li><img src="/imgs/de6a53626cd9334b198037cd83d99a01ac1129536503a21c46b383bfe632033d.png" alt="picture 5">  <ul>
-<li>Linux系统调用号对应的是跳转表中内存的偏移量<h3 id="fork和execve"><a href="#fork和execve" class="headerlink" title="fork和execve"></a>fork和execve</h3></li>
-</ul>
-</li>
-<li><code>fork</code>调用一次返回两次<ul>
-<li>父进程和子进程各一次</li>
-</ul>
-</li>
-<li><code>execve</code>调用一次不返回<h3 id="程序执行的传参argv"><a href="#程序执行的传参argv" class="headerlink" title="程序执行的传参argv"></a>程序执行的传参<code>argv</code></h3></li>
-<li><img src="/imgs/6f9ee657579f945904321a75edc03b43c5e81b4b631a4b07136b87ea62c63e25.png" alt="picture 6">  <ul>
-<li>argv的第一个是可执行文件的名字</li>
-<li><code>argc</code>是参数的数量</li>
-</ul>
-</li>
-<li><img src="/imgs/7d15745c726c53d708323f43631998d02d44f069cdb33bf319be7ae6ca5a4e92.png" alt="picture 7">  <ul>
-<li>环境变量是<code>envp</code>，也类似</li>
-<li><code>execve</code>的作用就是调用加载器如图<ul>
-<li><img src="/imgs/fed85bf9602bec823fc921d9e6e095eb3d78863a584da55971933c8f1c392ca8.png" alt="picture 8">  <h3 id="僵尸进程"><a href="#僵尸进程" class="headerlink" title="僵尸进程"></a>僵尸进程</h3></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>终止运行但是没有被父进程回收的进程就是<code>zombie</code>进程<h3 id="回收进程"><a href="#回收进程" class="headerlink" title="回收进程"></a>回收进程</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">waitpid</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">int</span> *statusp,<span class="keyword">int</span> options)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>如果pid&gt;0，则回收该pid指定的某个确定的进程</li>
-<li>如果pid=-1，则回收该进程创建的所有子进程</li>
-<li>第二个参数是导致返回的子进程的状态信息（终止的原因是正常返回还是异常终止还是其他）</li>
-<li><code>waitpid</code>程序<strong>不会按照任何特定顺序</strong>回收子进程，除非明确指定<h3 id="发送信号"><a href="#发送信号" class="headerlink" title="发送信号"></a>发送信号</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kill</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">int</span> sig)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>如果pid为0，则发送信号给调用进程所在进程组中的所有进程，包括自己</li>
-<li>如果pid&gt;0，则发送信号给pid指定的进程</li>
-<li>如果pid&lt;0，则发送信号给进程组-pid的每个进程<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">alarm</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> secs)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>进程可以用<code>alarm</code>给自己发送信号，参数是在 secs秒之后给调用进程发送一个<code>SIGALRM</code></li>
-<li>secs为0就不会调用新的闹钟了<h3 id="信号处理"><a href="#信号处理" class="headerlink" title="信号处理"></a>信号处理</h3></li>
-<li>一个进程最多<strong>只有一个</strong>同类型的信号，等待处理的信号超过一个的时候会被<strong>直接丢弃</strong></li>
-<li>处理多个信号<ul>
-<li><img src="/imgs/5c2be80572109b2acf56dcd28d8f3fa0553db2cfeecab42a7de0588293a2b3e1.png" alt="picture 9">  </li>
-</ul>
-</li>
+  <h2 id="向量化编程"><a href="#向量化编程" class="headerlink" title="向量化编程"></a>向量化编程</h2><ul>
+<li>使用向量化即“批量操作”，批量操作在物理生活中也很常见，在计算机中最常见的执行模型就是SIMD（Single Instruction Multiple Data），即对批量的数据同时进行同样的操作以提高效率。</li>
+<li><a target="_blank" rel="noopener" href="https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html">Intel向量化操作手册</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.codeproject.com/Articles/874396/Crunching-Numbers-with-AVX-and-AVX">Intel向量化编程示例</a><h2 id="代码案例"><a href="#代码案例" class="headerlink" title="代码案例"></a>代码案例</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;immintrin.h&gt;</span>  <span class="comment">// Header for AVX intrinsics</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">dot_productVec</span><span class="params">(<span class="keyword">float</span>* a, <span class="keyword">float</span>* b, <span class="keyword">int</span> length)</span> </span>&#123;</span><br><span class="line">    __m256 sum = _mm256_setzero_ps();</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i += <span class="number">8</span>) &#123;</span><br><span class="line">        __m256 vecA = _mm256_loadu_ps(&amp;a[i]);</span><br><span class="line">        __m256 vecB = _mm256_loadu_ps(&amp;b[i]);</span><br><span class="line">        __m256 mul = _mm256_mul_ps(vecA, vecB);</span><br><span class="line">        sum = _mm256_add_ps(sum, mul);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Sum the packed floats</span></span><br><span class="line">    <span class="keyword">float</span> result[<span class="number">8</span>];</span><br><span class="line">    _mm256_storeu_ps(result, sum);</span><br><span class="line">    <span class="keyword">return</span> result[<span class="number">0</span>] + result[<span class="number">1</span>] + result[<span class="number">2</span>] + result[<span class="number">3</span>] + result[<span class="number">4</span>] + result[<span class="number">5</span>] + result[<span class="number">6</span>] + result[<span class="number">7</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">dot_productLoop</span><span class="params">(<span class="keyword">float</span>* a, <span class="keyword">float</span>* b, <span class="keyword">int</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j&lt;length;j++)</span><br><span class="line">    &#123;</span><br><span class="line">        i+=a[j]*b[j];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Function to get the current time in nanoseconds</span></span><br><span class="line"><span class="function"><span class="keyword">int64_t</span> <span class="title">get_time_ns</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">ts</span>;</span></span><br><span class="line">    clock_gettime(CLOCK_MONOTONIC, &amp;ts);</span><br><span class="line">    <span class="keyword">return</span> ts.tv_sec * <span class="number">1000000000LL</span> + ts.tv_nsec;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">runTrial</span><span class="params">(<span class="keyword">int</span> length, <span class="keyword">int64_t</span>* tVec, <span class="keyword">int64_t</span>* tLoop)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(length == <span class="number">0</span>)&#123;*tVec = <span class="number">0</span>;*tLoop = <span class="number">0</span>;<span class="keyword">return</span>;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">float</span>* a = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">float</span>)*length);</span><br><span class="line">    <span class="keyword">float</span>* b = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">float</span>)*length);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// int length = sizeof(a) / sizeof(float);</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;length; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        a[i] = (<span class="keyword">float</span>)i/<span class="number">10</span>;</span><br><span class="line">        b[i] = (<span class="keyword">float</span>)(length-i)/<span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int64_t</span> tVec1, tVec2, tLoop1, tLoop2 = <span class="number">0</span>;</span><br><span class="line">    tVec1 = get_time_ns();</span><br><span class="line">    <span class="keyword">float</span> result = dot_productVec(a, b, length);</span><br><span class="line">    tVec2 = get_time_ns();</span><br><span class="line">    tLoop1 = get_time_ns();</span><br><span class="line">    <span class="keyword">float</span> result2 = dot_productLoop(a, b, length);</span><br><span class="line">    tLoop2 = get_time_ns();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">free</span>(a);</span><br><span class="line">    <span class="built_in">free</span>(b);</span><br><span class="line"></span><br><span class="line">    *tVec = tVec2 - tVec1;</span><br><span class="line">    *tLoop = tLoop2 - tLoop1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> maxCnt = <span class="number">5000</span>;</span><br><span class="line">    <span class="keyword">int64_t</span> tVecs[maxCnt];</span><br><span class="line">    <span class="keyword">int64_t</span> tLoops[maxCnt];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;maxCnt;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        runTrial(i, &amp;tVecs[i], &amp;tLoops[i]);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;length %d completed!\nVec: %ld, Loop: %ld\n&quot;</span>, i, tVecs[i], tLoops[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    FILE* file;</span><br><span class="line">    file = fopen(<span class="string">&quot;data.csv&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line">    <span class="built_in">fprintf</span>(file, <span class="string">&quot;tVec,tLoop\n&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;maxCnt; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(file, <span class="string">&quot;%ld, %ld\n&quot;</span>, tVecs[i], tLoops[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// fprintf(file, &quot;\n&quot;);</span></span><br><span class="line">    <span class="comment">// for(int i = 0;i&lt;maxCnt; i++)</span></span><br><span class="line">    <span class="comment">// &#123;</span></span><br><span class="line">    <span class="comment">//     fprintf(file, &quot;%ld, &quot;, tLoops[i]);</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    <span class="comment">// fprintf(file, &quot;\n&quot;);</span></span><br><span class="line">    fclose(file);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>编译指令<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc  -o dot_product vecCalc.c -O0 -mavx -lrt</span><br></pre></td></tr></table></figure>
+<h2 id="结果展示"><a href="#结果展示" class="headerlink" title="结果展示"></a>结果展示</h2></li>
+<li><img src="/imgs/0125a1119e3dc0117d438656545280dde59aa811769c00b583775a4e0a1be4e9.png" alt="picture 0">  </li>
+<li>上图是向量化计算和纯循环计算的时间比较，可见有一些毛刺，尚且不清楚原因</li>
+<li>下图是循环计算的时间/向量化计算的时间之商<h2 id="结果拟合"><a href="#结果拟合" class="headerlink" title="结果拟合"></a>结果拟合</h2></li>
+<li>向量化计算的斜率为<strong>0.9288296964491878</strong>，y轴的截距为172.55817372525428</li>
+<li>循环计算的斜率为<strong>5.851229649697184</strong>， y轴截距为236.63629058187928</li>
+<li>可见循环计算的斜率几乎是向量化计算的<strong>6.30</strong>倍</li>
+<li><img src="/imgs/24a5b8225c2975e6c9cbd7e00bce4d2abb49a2ad131b9549db8aaaa7e31b5cc4.png" alt="picture 1">  </li>
 </ul>
  
       <!-- reward -->
@@ -258,12 +170,12 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2023/07/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2023/08/01/x86%E5%B9%B3%E5%8F%B0%E4%B8%8A%E5%90%91%E9%87%8F%E5%8C%96%E7%BC%96%E7%A8%8B%E5%8F%8A%E5%AE%9E%E9%AA%8C/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c</a></li></ul>
 
     </footer>
   </div>
@@ -271,19 +183,10 @@
    
   <nav class="article-nav">
     
-      <a href="/2023/08/01/x86%E5%B9%B3%E5%8F%B0%E4%B8%8A%E5%90%91%E9%87%8F%E5%8C%96%E7%BC%96%E7%A8%8B%E5%8F%8A%E5%AE%9E%E9%AA%8C/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            x86平台上向量化编程及实验
-          
-        </div>
-      </a>
     
-    
-      <a href="/2023/07/27/%E5%A6%82%E4%BD%95%E5%9C%A8Win%E7%94%B5%E8%84%91%E4%B8%8A%E8%B0%83%E8%AF%95iOS%E8%AE%BE%E5%A4%87%E7%9A%84%E7%BD%91%E9%A1%B5/" class="article-nav-link">
+      <a href="/2023/07/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">如何在Win电脑上调试iOS设备的网页</div>
+        <div class="article-nav-title">CSAPP知识笔记（1）</div>
       </a>
     
   </nav>

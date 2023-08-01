@@ -141,6 +141,247 @@
     
     
     <article
+  id="post-Linux高级IO（二）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/25/Linux%E9%AB%98%E7%BA%A7IO%EF%BC%88%E4%BA%8C%EF%BC%89/"
+    >Linux高级IO（二）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/25/Linux%E9%AB%98%E7%BA%A7IO%EF%BC%88%E4%BA%8C%EF%BC%89/" class="article-date">
+  <time datetime="2022-01-25T05:47:22.000Z" itemprop="datePublished">2022-01-25</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Linux高级IO（二）"><a href="#Linux高级IO（二）" class="headerlink" title="Linux高级IO（二）"></a>Linux高级IO（二）</h1><h2 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h2><ul>
+<li>在异步 I/O 中，当文件描述符上可以执行 I/O 操作时，进程可以请求内核为自己发送一个信号。之后进程 就可以执行任何其它的任务直到文件描述符可以执行 I/O 操作为止，此时内核会发送信号给进程。</li>
+<li>要使用异步 I/O，程序需要按照如下步骤来执行：<ul>
+<li>通过指定 O_NONBLOCK 标志使能非阻塞 I/O。</li>
+<li>通过指定 O_ASYNC 标志使能异步 I/O。</li>
+<li>设置异步 I/O 事件的接收进程。也就是当文件描述符上可执行 I/O 操作时会发送信号通知该进程， 通常将调用进程设置为异步 I/O 事件的接收进程。</li>
+<li>为内核发送的通知信号注册一个信号处理函数。默认情况下，异步 I/O 的通知信号是 SIGIO，所以 内核会给进程发送信号 SIGIO。在 8.2 小节中简单地提到过该信号。</li>
+<li>以上步骤完成之后，进程就可以执行其它任务了，当 I/O 操作就绪时，内核会向进程发送一个 SIGIO 信号，当进程接收到信号时，会执行预先注册好的信号处理函数，我们就可以在信号处理函数中进 行 I/O 操作。</li>
+</ul>
+</li>
+<li><strong>O_ASYNC 标志</strong><ul>
+<li>O_ASYNC 标志可用于使能文件描述符的异步 I/O 事件，当文件描述符可执行 I/O 操作时，内核会向异 步 I/O 事件的接收进程发送 SIGIO 信号（默认情况下）。</li>
+<li>在调用 open()时<strong>无法通过</strong>指定 O_ASYNC 标志来使能异步 I/O，但可以<strong>使用 fcntl()函数 添加 O_ASYNC 标志使能异步 I/O</strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> flag;</span><br><span class="line">flag = fcntl(<span class="number">0</span>, F_GETFL); <span class="comment">//先获取原来的 flag</span></span><br><span class="line">flag |= O_ASYNC; <span class="comment">//将 O_ASYNC 标志添加到 flag</span></span><br><span class="line">fcntl(fd, F_SETFL, flag); <span class="comment">//重新设置 flag</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>设置异步 I/O 事件的接收进程</strong></p>
+<ul>
+<li>为文件描述符设置异步 I/O 事件的接收进程，也就是设置异步 I/O 的所有者。同样也是通过 fcntl()函数 进行设置，操作命令 cmd 设置为 F_SETOWN，第三个参数传入接收进程的进程 ID（PID），通常将调用进 程的 PID 传入</li>
+<li><code>fcntl(fd, F_SETOWN, getpid());</code></li>
+</ul>
+</li>
+<li><p><strong>注册 SIGIO 信号的处理函数</strong></p>
+<ul>
+<li>通过 signal()或 sigaction()函数为 SIGIO 信号注册一个信号处理函数，当进程接收到内核发送过来的 SIGIO 信号时，会执行该处理函数，所以我们应该在处理函数当中执行相应的 I/O 操作。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOUSE <span class="meta-string">&quot;/dev/input/event3&quot;</span></span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> fd;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sigio_handler</span><span class="params">(<span class="keyword">int</span> sig)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> loops = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="keyword">if</span> (SIGIO != sig)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    ret = read(fd, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &lt; ret)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;鼠标: 成功读取&lt;%d&gt;个字节数据\n&quot;</span>, ret);</span><br><span class="line">    loops--;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt;= loops)</span><br><span class="line">    &#123;</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> flag;</span><br><span class="line">    <span class="comment">/* 打开鼠标设备文件&lt;使能非阻塞 I/O&gt; */</span></span><br><span class="line">    fd = open(MOUSE, O_RDONLY | O_NONBLOCK);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 使能异步 I/O */</span></span><br><span class="line">    flag = fcntl(fd, F_GETFL);</span><br><span class="line">    flag |= O_ASYNC;</span><br><span class="line">    fcntl(fd, F_SETFL, flag);</span><br><span class="line">    <span class="comment">/* 设置异步 I/O 的所有者 */</span></span><br><span class="line">    fcntl(fd, F_SETOWN, getpid());</span><br><span class="line">    <span class="comment">/* 为 SIGIO 信号注册信号处理函数 */</span></span><br><span class="line">    signal(SIGIO, sigio_handler);</span><br><span class="line">    <span class="keyword">for</span> (;;)</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="异步IO的优化"><a href="#异步IO的优化" class="headerlink" title="异步IO的优化"></a>异步IO的优化</h2><ul>
+<li><p>在一个需要同时检查大量文件描述符（譬如数千个）的 应用程序中，例如某种类型的网络服务端程序，与 select()和 poll()相比，异步 I/O 能够提供显著的性能优势。 之所以如此，原因在于：对于异步 I/O，内核可以“记住”要检查的文件描述符，且仅当这些文件描述符上 可执行 I/O 操作时，内核才会向应用程序发送信号。</p>
+</li>
+<li><p>问题</p>
+<ul>
+<li>默认的异步 I/O 通知信号 SIGIO 是非排队信号。SIGIO 信号是标准信号（非实时信号、不可靠信 号），所以它不支持信号排队机制，譬如当前正在执行 SIGIO 信号的处理函数，此时内核又发送 多次 SIGIO 信号给进程，这些信号将会被阻塞，只有当信号处理函数执行完毕之后才会传递给进 程，并且只能传递一次，而其它后续的信号都会丢失。</li>
+<li>无法得知文件描述符发生了什么事件。在示例代码 13.3.1 的信号处理函数 sigio_handler()中，直接 调用了 read()函数读取鼠标，而并未判断文件描述符是否处于可读就绪态，事实上，示例代码 13.3.1 这种异步 I/O 方式并未告知应用程序文件描述符上发生了什么事件，是可读取还是可写入亦或者 发生异常等。</li>
+</ul>
+</li>
+<li><p><strong>使用实时信号替换默认信号 SIGIO</strong></p>
+</li>
+<li><p>SIGIO 作为异步 I/O 通知的默认信号，是一个非实时信号，我们可以设置不使用默认信号，指定一个实 时信号作为异步 I/O 通知信号，如何指定呢？同样也是使用 fcntl()函数进行设置，调用函数时将操作命令 cmd 参数设置为 F_SETSIG，第三个参数 arg 指定一个实时信号编号即可，表示将该信号作为异步 I/O 通知 信号</p>
+</li>
+<li><p><code>fcntl(fd, F_SETSIG, SIGRTMIN);</code></p>
+<ul>
+<li>如果第三个参数 arg 设置为 0，则表示指定 SIGIO 信号作为异步 I/O 通知信号，也就是回到了默认状态。</li>
+</ul>
+</li>
+<li><p><strong>使用 sigaction()函数注册信号处理函数</strong></p>
+<ul>
+<li><p>在应用程序当中需要为<strong>实时信号注册信号处理函数</strong>，使用 <strong>sigaction 函数进行注册</strong>，并为 sa_flags 参数指 定 SA_SIGINFO，表示使用 sa_sigaction 指向的函数作为信号处理函数，而不使用 sa_handler 指向的函数。</p>
+</li>
+<li><p><code>sigaction</code>函数的原型</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigaction</span><span class="params">(<span class="keyword">int</span> signum, <span class="keyword">const</span> struct sigaction *act, struct sigaction *oldact)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>函数参数中包括一个 siginfo_t 指针，指向 siginfo_t 类型对象，当触发信号时该对象由内核构建。siginfo_t 结构体中提供了很多信息，我们可以在信号处理函数中使用这些信息，具体定义请参考示例代码 8.4.3，就 对于异步 I/O 事件而言，传递给信号处理函数的 siginfo_t 结构体中与之相关的字段如下</p>
+<ul>
+<li>si_signo：引发处理函数被调用的信号。这个值与信号处理函数的第一个参数一致。</li>
+<li>si_fd：表示发生异步 I/O 事件的文件描述符；</li>
+<li>si_code：表示文件描述符 si_fd 发生了什么事件，读就绪态、写就绪态或者是异常事件等。该字段 中可能出现的值以及它们对应的描述信息参见表 13.4.1。</li>
+<li>si_band：是一个位掩码，其中包含的值与系统调用 poll()中返回的 revents 字段中的值相同。如表 13.4.1 所示，si_code 中可能出现的值与 si_band 中的位掩码有着一一对应关系。<ul>
+<li><img src="/../imgs/image-20220125210615175.png" alt="image-20220125210615175"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>可以在信号处理函数中通过对比 siginfo_t 结构体的 si_code 变量来<strong>检查文件描述符发 生了什么事件</strong>，以采取<strong>相应的 I/O</strong> 操作。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _GNU_SOURCE <span class="comment">//在源文件开头定义_GNU_SOURCE 宏</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOUSE <span class="meta-string">&quot;/dev/input/mouse0&quot;</span></span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> fd;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">io_handler</span><span class="params">(<span class="keyword">int</span> sig,</span></span></span><br><span class="line"><span class="params"><span class="function">                       <span class="keyword">siginfo_t</span> *info,</span></span></span><br><span class="line"><span class="params"><span class="function">                       <span class="keyword">void</span> *context)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> loops = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="keyword">if</span> (SIGRTMIN != sig)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">/* 判断鼠标是否可读 */</span></span><br><span class="line">    <span class="keyword">if</span> (POLL_IN == info-&gt;si_code)</span><br><span class="line">    &#123;</span><br><span class="line">        ret = read(fd, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> &lt; ret)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;鼠标: 成功读取&lt;%d&gt;个字节数据\n&quot;</span>, ret);</span><br><span class="line">        loops--;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> &gt;= loops)</span><br><span class="line">        &#123;</span><br><span class="line">            close(fd);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sigaction</span> <span class="title">act</span>;</span></span><br><span class="line">    <span class="keyword">int</span> flag;</span><br><span class="line">    <span class="comment">/* 打开鼠标设备文件&lt;使能非阻塞 I/O&gt; */</span></span><br><span class="line">    fd = open(MOUSE, O_RDONLY | O_NONBLOCK);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 使能异步 I/O */</span></span><br><span class="line">    flag = fcntl(fd, F_GETFL);</span><br><span class="line">    flag |= O_ASYNC;</span><br><span class="line">    fcntl(fd, F_SETFL, flag);</span><br><span class="line">    <span class="comment">/* 设置异步 I/O 的所有者 */</span></span><br><span class="line">    fcntl(fd, F_SETOWN, getpid());</span><br><span class="line">    <span class="comment">/* 指定实时信号 SIGRTMIN 作为异步 I/O 通知信号 */</span></span><br><span class="line">    fcntl(fd, F_SETSIG, SIGRTMIN);</span><br><span class="line">    <span class="comment">/* 为实时信号 SIGRTMIN 注册信号处理函数 */</span></span><br><span class="line">    act.sa_sigaction = io_handler;</span><br><span class="line">    act.sa_flags = SA_SIGINFO;</span><br><span class="line">    sigemptyset(&amp;act.sa_mask);</span><br><span class="line">    sigaction(SIGRTMIN, &amp;act, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">for</span> (;;)</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>经过了使能异步flag、设置所有者线程、指定实时信号的种类、对sigation的对应的成员指定内容，包括处理函数、flag等等。</li>
+<li><img src="/../imgs/image-20220125212351275.png" alt="image-20220125212351275"></li>
+</ul>
+<h2 id="存储映射I-O"><a href="#存储映射I-O" class="headerlink" title="存储映射I/O"></a>存储映射I/O</h2><ul>
+<li><p>存储映射 I/O（memory-mapped I/O）是一种基于内存区域的高级 I/O 操作，它能将一个文件映射到进程 地址空间中的一块内存区域中，当从<strong>这段内存中读数据时，就相当于读文件中的数据</strong>（对文件进行 read 操 作），将<strong>数据写入这段内存时，则相当于将数据直接写入文件中</strong>（对文件进行 write 操作）。这样就可以在 不使用基本 I/O 操作函数 read()和 write()的情况下执行 I/O 操作。</p>
+</li>
+<li><p>为了实现存储映射 I/O 这一功能，我们需要告诉内核将一个给定的文件映射到进程地址空间中的一块 内存区域中，这由系统调用 **mmap()**来实现。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length, <span class="keyword">int</span> prot, <span class="keyword">int</span> flags, <span class="keyword">int</span> fd, <span class="keyword">off_t</span> offset)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>addr：参数 addr 用于指定映射到内存区域的起始地址。通常将其设置为 NULL，这表示由系统选择该 映射区的起始地址，这是最常见的设置方式；如果参数 addr 不为 NULL，则表示由自己指定映射区的起始 地址，此函数的返回值是该映射区的起始地址。</p>
+</li>
+<li><p>length：参数 length 指定映射长度，表示将文件中的多大部分映射到内存区域中，以字节为单位，譬如 length=1024 * 4，表示将文件的 4K 字节大小映射到内存区域中。</p>
+</li>
+<li><p>offset：文件映射的偏移量，通常将其设置为 0，表示从文件头部开始映射；所以参数 offset 和参数 length 就确定了文件的起始位置和长度，将文件的这部分映射到内存区域中</p>
+<ul>
+<li><img src="/../imgs/image-20220125213944291.png" alt="image-20220125213944291"></li>
+</ul>
+</li>
+<li><p>fd：文件描述符，指定要映射到内存区域中的文件。</p>
+</li>
+<li><p>prot：参数 prot 指定了映射区的保护要求，可取值如下：</p>
+<ul>
+<li>PROT_EXEC：映射区可执行；</li>
+<li>PROT_READ：映射区可读；</li>
+<li>PROT_WRITE：映射区可写；</li>
+<li>PROT_NONE：映射区不可访问。</li>
+</ul>
+</li>
+<li><p>对指定映射区的保护要求不能超过文件 open()时的访问权限，譬 如，文件是以只读权限方式打开的，那么对映射区的不能指定为 PROT_WRITE。</p>
+</li>
+<li><p>flags：参数 flags 可影响映射区的多种属性，参数 flags 必须要指定以下两种标志之一：</p>
+<ul>
+<li><p><img src="/../imgs/image-20220125213454172.png" alt="image-20220125213454172"></p>
+</li>
+<li><p>通常情况下，参数 flags 中只指定了 MAP_SHARED</p>
+</li>
+</ul>
+</li>
+<li><p>返回值：成功情况下，函数的返回值便是映射区的起始地址；发生错误时，返回(void *)-1，通常使用 MAP_FAILED 来表示，并且会设置 errno 来指示错误原因。</p>
+</li>
+<li><p>对于 mmap()函数，参数 <code>addr</code> 和 <code>offset</code> 在不为 NULL 和 0 的情况下，addr 和 offset 的值通常被要求是系 统<strong>页大小的整数倍</strong>，可通过 sysconf()函数获取页大小</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">sysconf(_SC_PAGE_SIZE)</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line">sysconf(_SC_PAGESIZE)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>对于参数 length 任需要注意，参数 length 的值不能大于文件大小，即文件被映射的部分不能超出文件。</p>
+</li>
+<li><p><strong>munmap()解除映射</strong></p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">munmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>munmap()系统调用解除指定地址范围内的映射，参数 addr 指定待解除映射地址范围的起始地址，它必 须是系统页大小的整数倍；参数 length 是一个非负整数，指定了待解除映射区域的大小（字节数），被解除 映射的区域对应的大小也必须是系统页大小的整数倍，即使参数 length 并不等于系统页大小的整数倍，与 mmap()函数相似。</p>
+</li>
+<li><p>需要注意的是，当进程终止时也会自动解除映射（如果程序中没有显式调用 munmap()），但<strong>调用 close() 关闭文件时并不会解除映射</strong>。</p>
+</li>
+<li><p>通常将参数 addr 设置为 mmap()函数的返回值，将参数 length 设置为 mmap()函数的参数 length，表示解除整个由 mmap()函数所创建的映射。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> srcfd, dstfd;</span><br><span class="line">    <span class="keyword">void</span> *srcaddr;</span><br><span class="line">    <span class="keyword">void</span> *dstaddr;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">sbuf</span>;</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">3</span> != argc)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;usage: %s &lt;srcfile&gt; &lt;dstfile&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 打开源文件 */</span></span><br><span class="line">    srcfd = open(argv[<span class="number">1</span>], O_RDONLY);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == srcfd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 打开目标文件 */</span></span><br><span class="line">    dstfd = open(argv[<span class="number">2</span>], O_RDWR | O_CREAT | O_TRUNC, <span class="number">0664</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == dstfd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        ret = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">goto</span> out1;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 获取源文件的大小 */</span></span><br><span class="line">    fstat(srcfd, &amp;sbuf);</span><br><span class="line">    <span class="comment">/* 设置目标文件的大小 */</span></span><br><span class="line">    ftruncate(dstfd, sbuf.st_size);</span><br><span class="line">    <span class="comment">/* 将源文件映射到内存区域中 */</span></span><br><span class="line">    srcaddr = mmap(<span class="literal">NULL</span>, sbuf.st_size,</span><br><span class="line">                   PROT_READ, MAP_SHARED, srcfd, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (MAP_FAILED == srcaddr)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;mmap error&quot;</span>);</span><br><span class="line">        ret = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">goto</span> out2;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 将目标文件映射到内存区域中 */</span></span><br><span class="line">    dstaddr = mmap(<span class="literal">NULL</span>, sbuf.st_size,</span><br><span class="line">                   PROT_WRITE, MAP_SHARED, dstfd, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (MAP_FAILED == dstaddr)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;mmap error&quot;</span>);</span><br><span class="line">        ret = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">goto</span> out3;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 将源文件中的内容复制到目标文件中 */</span></span><br><span class="line">    <span class="built_in">memcpy</span>(dstaddr, srcaddr, sbuf.st_size);</span><br><span class="line">    <span class="comment">/* 程序退出前清理工作 */</span></span><br><span class="line">out4:</span><br><span class="line">    <span class="comment">/* 解除目标文件映射 */</span></span><br><span class="line">    munmap(dstaddr, sbuf.st_size);</span><br><span class="line">out3:</span><br><span class="line">    <span class="comment">/* 解除源文件映射 */</span></span><br><span class="line">    munmap(srcaddr, sbuf.st_size);</span><br><span class="line">out2:</span><br><span class="line">    <span class="comment">/* 关闭目标文件 */</span></span><br><span class="line">    close(dstfd);</span><br><span class="line">out1:</span><br><span class="line">    <span class="comment">/* 关闭源文件并退出 */</span></span><br><span class="line">    close(srcfd);</span><br><span class="line">    <span class="built_in">exit</span>(ret);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>当执行程序的时候，将源文件和目标文件传递给应用程序，该程序首先会将源文件和目标文件打开，源 文件以只读方式打开，而目标文件以可读、可写方式打开，如果目标文件不存在则创建它，并且将文件的大 小截断为 0。</p>
+</li>
+<li><p>然后使用 fstat()函数获取源文件的大小，接着调用 ftruncate()函数设置目标文件的大小与源文件大小保 持一致。</p>
+</li>
+<li><p>然后对源文件和目标文件分别调用 mmap()，将文件映射到内存当中；对于源文件，调用 mmap()时将参 数 prot 指定为 PROT_READ，表示对它的映射区会进行读取操作；对于目标文件，调用 mmap()时将参数 port 指定为 PROT_WRITE，表示对它的映射区会进行写入操作。最后调用 memcpy()将源文件映射区中的内容复 制到目标文件映射区中，完成文件的复制操作。</p>
+</li>
+<li><p>使用系统调用 mprotect()可以更改一个现有映射区的保护要求</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mprotect</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> len, <span class="keyword">int</span> prot)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数 prot 的取值与 mmap()函数的 prot 参数的一样，mprotect()函数会将指定地址范围的保护要求更改 为参数 prot 所指定的类型，参数 addr 指定该地址范围的起始地址，addr 的值必须是系统页大小的整数倍； 参数 len 指定该地址范围的大小。</li>
+<li>写入到文件映射区中的数据也<strong>不会立马刷新至磁盘设备中</strong>，而是会在我们 将数据写入到映射区之后的某个时刻将映射区中的数据写入磁盘中。所以会导致映射区中的内容与磁盘文 件中的内容<strong>不同步</strong>。我们可以调用 msync()函数将映射区中的数据<strong>刷写、更新至磁盘文件中（同步操作）</strong>， 系统调用 msync()类似于 fsync()函数，不过 msync()作用于映射区。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">msync</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>参数 addr 和 length 指定了需同步的内存区域的起始地址和大小。对于参数 addr 来说，同样也要求必须 是系统页大小的整数倍，也就是与系统页大小对齐。譬如，调用 msync()时，将 addr 设置为 mmap()函数的 返回值，将 length 设置为 mmap()函数的 length 参数，将对文件的整个映射区进行同步操作。</p>
+</li>
+<li><p>参数 flags 应指定为 MS_ASYNC 和 MS_SYNC 两个标志之一，除此之外，还可以根据需求选择是否指 定 MS_INVALIDATE 标志，作为一个可选标志。</p>
+<ul>
+<li>MS_ASYNC：以异步方式进行同步操作。调用 msync()函数之后，并不会等待数据完全写入磁盘之 后才返回。</li>
+<li>MS_SYNC：以同步方式进行同步操作。调用 msync()函数之后，需等待数据全部写入磁盘之后才 返回。</li>
+<li>MS_INVALIDATE：是一个可选标志，请求使同一文件的其它映射无效（以便可以用刚写入的新 值更新它们）。</li>
+</ul>
+</li>
+<li><p>munmap()函数<strong>并不影响被映射的文件</strong>，也就是说，当调用 munmap()解除映射时<strong>并不会将映射区中的内 容写到磁盘文件中</strong>。如果 mmap()指定了 MAP_SHARED 标志，对于文件的更新，会在我们将数据写入到映 射区之后的某个时刻将映射区中的数据更新到磁盘文件中，由内核根据虚拟存储算法自动进行。</p>
+</li>
+<li><p>如果 mmap()指定了 MAP_PRIVATE 标志，在解除映射之后，进程对映射区的修改将会丢弃！</p>
+</li>
+</ul>
+<h2 id="普通IO函数和存储映射IO的对比"><a href="#普通IO函数和存储映射IO的对比" class="headerlink" title="普通IO函数和存储映射IO的对比"></a>普通IO函数和存储映射IO的对比</h2><ul>
+<li><p>普通IO</p>
+</li>
+<li><p><img src="/../imgs/image-20220126122116008.png" alt="image-20220126122116008"></p>
+</li>
+<li><p>存储映射IO</p>
+</li>
+<li><p><img src="/../imgs/image-20220126122127642.png" alt="image-20220126122127642"></p>
+</li>
+<li><p>首先非常直观的一点就是，使用存储映射 I/O 减少了数据的复制操作，所以在效率上会比普通 I/O 要 高，其次上面也讲了，普通 I/O 中间涉及到了很多的函数调用过程，这些都会导致普通 I/O 在效率上会比存 储映射 I/O 要低。</p>
+</li>
+<li><p>应用层与内核 层是不能直接进行交互的，必须要通过操作系统提供的系统调用或库函数来与内核进行数据交互，包括操 作硬件。通过存储映射 I/O 将文件直接映射到应用程序地址空间中的一块内存区域中，也就是映射区；直接 将磁盘文件直接与映射区关联起来，不用调用 read()、write()系统调用，直接对映射区进行读写操作即可操 作磁盘上的文件，而磁盘文件中的数据也可反应到映射区中</p>
+</li>
+<li><p>映射区就是应用层 与内核层之间的共享内存。</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Linux高级IO"
   class="article article-type-post"
   itemscope
@@ -1748,65 +1989,13 @@
 </article>
 
     
-    <article
-  id="post-manjaro停止应用程序"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/21/manjaro%E5%81%9C%E6%AD%A2%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/"
-    >manjaro停止应用程序</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/21/manjaro%E5%81%9C%E6%AD%A2%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/" class="article-date">
-  <time datetime="2022-01-21T01:33:34.000Z" itemprop="datePublished">2022-01-21</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="manjaro停止应用程序"><a href="#manjaro停止应用程序" class="headerlink" title="manjaro停止应用程序"></a>manjaro停止应用程序</h1><ul>
-<li><p>在命令行输入<code>xkill</code></p>
-</li>
-<li><p>然后鼠标光标变化，点击想关闭的窗口即可</p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/9/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/11/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/9/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/11/">下一页</a>
   </nav>
   
 </section>
