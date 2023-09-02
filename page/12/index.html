@@ -141,6 +141,64 @@
     
     
     <article
+  id="post-使用echo向文件写入数据"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/15/%E4%BD%BF%E7%94%A8echo%E5%90%91%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/"
+    >使用echo向文件写入数据</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/15/%E4%BD%BF%E7%94%A8echo%E5%90%91%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/" class="article-date">
+  <time datetime="2022-01-15T08:17:14.000Z" itemprop="datePublished">2022-01-15</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="使用echo向文件写入数据"><a href="#使用echo向文件写入数据" class="headerlink" title="使用echo向文件写入数据"></a>使用echo向文件写入数据</h1><ul>
+<li>主要是使用echo的<strong>输出重定向</strong>功能，也就是<code>&gt;</code>和<code>&gt;&gt;</code></li>
+<li>覆盖文件内容用<code>&gt;</code>，也就是<ul>
+<li><code>echo &quot;Raspberry&quot; &gt; test.txt</code></li>
+</ul>
+</li>
+<li>追加文件内容用<code>&gt;&gt;</code><ul>
+<li><code>echo &quot;string&quot; &gt;&gt; &lt;filename&gt;</code></li>
+<li>就是将string追加到filename文件的末尾</li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Linux下挂载U盘操作"
   class="article article-type-post"
   itemscope
@@ -1607,107 +1665,6 @@
 <p><img src="/imgs/image-20220109001539680.png" alt="image-20220109001539680"></p>
 <p>可见启动引导项中已经没有了刚才删除的Manjaro选项</p>
 <p><img src="/imgs/image-20220109002008500.png" alt="image-20220109002008500"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-STM32实现W25Q16芯片的擦除、读和写"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/08/STM32%E5%AE%9E%E7%8E%B0W25Q16%E8%8A%AF%E7%89%87%E7%9A%84%E6%93%A6%E9%99%A4%E3%80%81%E8%AF%BB%E5%92%8C%E5%86%99/"
-    >STM32实现W25Q16芯片的擦除、读和写</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/08/STM32%E5%AE%9E%E7%8E%B0W25Q16%E8%8A%AF%E7%89%87%E7%9A%84%E6%93%A6%E9%99%A4%E3%80%81%E8%AF%BB%E5%92%8C%E5%86%99/" class="article-date">
-  <time datetime="2022-01-08T04:45:39.000Z" itemprop="datePublished">2022-01-08</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="STM32实现W25Q16芯片的擦除、读和写"><a href="#STM32实现W25Q16芯片的擦除、读和写" class="headerlink" title="STM32实现W25Q16芯片的擦除、读和写"></a>STM32实现W25Q16芯片的擦除、读和写</h1><h2 id="封装等待函数（通过读取状态寄存器）"><a href="#封装等待函数（通过读取状态寄存器）" class="headerlink" title="封装等待函数（通过读取状态寄存器）"></a>封装等待函数（通过读取状态寄存器）</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">delayBusy</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D05 = <span class="number">0x05</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> result;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D05, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Receive(&amp;hspi1, &amp;result, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">while</span>((result&amp;<span class="number">0x01</span>) == <span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// HAL_SPI_Transmit(&amp;hspi1, &amp;D05, 1, 1000);</span></span><br><span class="line">    HAL_SPI_Receive(&amp;hspi1, &amp;result, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意，手册上说明此处的状态寄存器可以连续读取，也就是在指令开始的时候发送一次<code>0x05</code>即可，之后<strong>循环读取</strong>，通过将片选信号<strong>CS置为高电平停止</strong></p>
-<h2 id="擦除函数"><a href="#擦除函数" class="headerlink" title="擦除函数"></a>擦除函数</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">EraseChip</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D60 = <span class="number">0x60</span>;</span><br><span class="line">  writeEnable();</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D60, <span class="number">1</span> ,<span class="number">1000</span>);</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">  delayBusy();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意，将芯片内容擦除之前需要<strong>先发送一个使能写</strong>的命令，在下面的函数中会封装这个功能</p>
-<p>然后在函数的最后增加等待芯片空闲的函数，该芯片的擦除时间大概1-2s，不同容量的芯片可能时间不同。</p>
-<ul>
-<li>擦除前的读取数据（第二行）：</li>
-<li><img src="/imgs/image-20220108130401292.png" alt="image-20220108130401292"></li>
-<li>擦除后的读取数据</li>
-<li><img src="/imgs/image-20220108130417022.png" alt="image-20220108130417022"></li>
-<li>可见擦除成功</li>
-</ul>
-<h2 id="写使能函数"><a href="#写使能函数" class="headerlink" title="写使能函数"></a>写使能函数</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">writeEnable</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D06 = <span class="number">0x06</span>;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D06, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>禁止写</strong>函数与写使能函数类似，将命令替换为0x04即可</p>
-<h2 id="读取函数"><a href="#读取函数" class="headerlink" title="读取函数"></a>读取函数</h2><p><img src="/imgs/image-20220108125308657.png" alt="image-20220108125308657"></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">readChip</span><span class="params">(<span class="keyword">uint32_t</span> addr, <span class="keyword">int32_t</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D03 = <span class="number">0x03</span>;</span><br><span class="line">  <span class="keyword">int32_t</span> count = length<span class="number">-1</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> Haddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Maddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Laddr;</span><br><span class="line">  Haddr = addr/<span class="number">256</span>/<span class="number">256</span>;</span><br><span class="line">  Maddr = (addr/<span class="number">256</span>)&amp;<span class="number">0xff</span>;</span><br><span class="line">  Laddr = addr&amp;<span class="number">0xff</span>;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D03, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Haddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Maddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Laddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">for</span>(count = length<span class="number">-1</span>; count&gt;=<span class="number">0</span>;count--)</span><br><span class="line">  &#123;</span><br><span class="line">    HAL_SPI_Receive(&amp;hspi1, recBuff+count, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中的<code>recBuff</code>是一个大小与length相同的byte数组</p>
-<p>注意，与上面类似的是，此处在发送一次读指令之后，芯片会从指定的地址开始自动向前串行发送往后的数据直到CS被置为高电平终止指令，严格的讲从发送的地址开始，可以<strong>只发送一次读取指令便读取到芯片的末尾存储空间</strong>。</p>
-<h2 id="写数据函数"><a href="#写数据函数" class="headerlink" title="写数据函数"></a>写数据函数</h2><p><img src="/imgs/image-20220108133158219.png" alt="image-20220108133158219"></p>
-<p>写函数的执行逻辑是：</p>
-<ul>
-<li>发送一个写使能信号</li>
-<li>CS置为低电平</li>
-<li>发送0x02</li>
-<li>发送24位地址</li>
-<li>连续发送写入的数据（1-256个，一次最多不超过256个，否则超出的会从头部开始覆盖）</li>
-<li>CS置为高电平</li>
-<li>等待芯片写完</li>
-<li>发送禁止写命令</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">writeChip</span><span class="params">(<span class="keyword">uint32_t</span> addr, <span class="keyword">uint16_t</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D02 = <span class="number">0x02</span>;</span><br><span class="line">  <span class="keyword">int32_t</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> Haddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Maddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Laddr;</span><br><span class="line">  Haddr = addr/<span class="number">256</span>/<span class="number">256</span>;</span><br><span class="line">  Maddr = (addr/<span class="number">256</span>)&amp;<span class="number">0xff</span>;</span><br><span class="line">  Laddr = addr&amp;<span class="number">0xff</span>;</span><br><span class="line">  writeEnable();</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D02, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Haddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Maddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Laddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">for</span>(count = <span class="number">0</span>; count&lt;length;count++)</span><br><span class="line">  &#123;</span><br><span class="line">    HAL_SPI_Transmit(&amp;hspi1, writeBuff+count, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">  delayBusy();</span><br><span class="line">  writeDisable();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>writeBuff</code>是一个长度为<code>length</code>的字节数组</p>
-<p>注意：</p>
-<ul>
-<li>假如一次写256个字节的话，地址的最后8位务必是0，假如不是的话会导致超出的部分从头部开始覆盖</li>
-<li>写入的字节数不能超出从地址位置开始剩余的字节量（比如地址后8位是0的话，剩余的字节就是256）</li>
-<li>注意在写完最后一个数据之后，比如将片选信号CS置为高电平，此时芯片会开始写入数据，写入的时候查询BUSY寄存器会得到1，所以使用等待函数等待</li>
-</ul>
-<p>执行效果</p>
-<ul>
-<li> 发送buff定义为<code>uint8_t writeBuff[] = &#123;1,2,3,4,5,6,7,8&#125;;</code><strong>注意数组初始化不要漏写</strong><code>[]</code></li>
-<li>发送函数和读取函数</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">writeChip(<span class="number">0x01</span>,<span class="number">8</span>);</span><br><span class="line">readChip(<span class="number">0x01</span>, <span class="number">8</span>);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>结果</li>
-<li><img src="/imgs/image-20220108133835422.png" alt="image-20220108133835422"></li>
-<li>可见已经成功写入</li>
-</ul>
  
       <!-- reward -->
       

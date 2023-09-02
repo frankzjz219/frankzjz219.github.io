@@ -141,6 +141,188 @@
     
     
     <article
+  id="post-linux进程（二）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/21/linux%E8%BF%9B%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/"
+    >linux进程（二）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/21/linux%E8%BF%9B%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/" class="article-date">
+  <time datetime="2022-01-21T13:13:28.000Z" itemprop="datePublished">2022-01-21</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Linux进程（二）"><a href="#Linux进程（二）" class="headerlink" title="Linux进程（二）"></a>Linux进程（二）</h1><h2 id="进程的状态"><a href="#进程的状态" class="headerlink" title="进程的状态"></a>进程的状态</h2><ul>
+<li>Linux 系统下进程通常存在 6 种不同的状态，分为：就绪态、运行态、僵尸态、可中断睡眠状态（浅度 睡眠）、不可中断睡眠状态（深度睡眠）以及暂停态。<ul>
+<li>就绪态（Ready）：指该进程<strong>满足被 CPU 调度的所有条件但此时并没有被调度执行</strong>，只要得到 CPU 就能够直接运行；意味着该进程已经准备好被 CPU 执行，当一个进程的时间片到达，操作系统调 度程序会从就绪态链表中调度一个进程；</li>
+<li>运行态：指该进程当前正在被 CPU 调度运行，处于就绪态的进程得到 CPU 调度就会进入运行态；</li>
+<li>僵尸态：僵尸态进程其实指的就是僵尸进程，指该进程已经结束、但其父进程还未给它“收尸”；</li>
+<li>可中断睡眠状态：可中断睡眠也称为浅度睡眠，表示睡的不够“死”，还可以被唤醒，一般来说可 以通过信号来唤醒；</li>
+<li>不可中断睡眠状态：不可中断睡眠称为深度睡眠，深度睡眠无法被信号唤醒，只能等待相应的条件 成立才能结束睡眠状态。把浅度睡眠和深度睡眠统称为等待态（或者叫阻塞态），表示进程处于一 种等待状态，等待某种条件成立之后便会进入到就绪态；所以，处于等待态的进程是无法参与进程 系统调度的。</li>
+<li>暂停态：暂停并不是进程的终止，表示进程暂停运行，一般可通过信号将进程暂停，譬如 SIGSTOP 信号；处于暂停态的进程是可以恢复进入到就绪态的，譬如收到 SIGCONT 信号。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/../imgs/image-20220121212212609.png" alt="image-20220121212212609"></p>
+<h3 id="进程组"><a href="#进程组" class="headerlink" title="进程组"></a>进程组</h3><ul>
+<li><p>每个进程除了有一个进程 ID、父进程 ID 之外，还有一个进程组 ID，用于标识该进程属于哪一个进程 组，进程组是一个或多个进程的集合，这些进程并不是孤立的，它们彼此之间或者存在父子、兄弟关系，或 者在功能上有联系。</p>
+</li>
+<li><p>Linux 系统设计进程组实质上是为了方便对进程进行管理。假设为了完成一个任务，需要并发运行 100 个进程，但当处于某种场景时需要终止这 100 个进程，若没有进程组就需要一个一个去终止，这样非常麻烦 且容易出现一些问题；有了进程组的概念之后，就可以将这 100 个进程设置为一个进程组，这些进程共享一 个进程组 ID，这样一来，终止这 100 个进程只需要终止该进程组即可。</p>
+</li>
+<li><p>进程组的特性</p>
+<ul>
+<li>每个进程必定属于某一个进程组、且只能属于一个进程组；</li>
+<li>每一个进程组有一个组长进程，组长进程的 ID 就等于进程组 ID；</li>
+<li>在组长进程的 ID 前面加上一个负号即是操作进程组；</li>
+<li>组长进程不能再创建新的进程组；</li>
+<li>只要进程组中还存在一个进程，则该进程组就存在，这与其组长进程是否终止无关；</li>
+<li>一个进程组可以包含一个或多个进程，进程组的生命周期从被创建开始，到其内所有进程终止或离 开该进程组；</li>
+<li>默认情况下，新创建的进程会继承父进程的进程组 ID。</li>
+</ul>
+</li>
+<li><p>通过系统调用 getpgrp()或 getpgid()可以获取进程对应的进程组 ID</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">getpgid</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>;<span class="comment">//对应的线程的进程组ID</span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">getpgrp</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>调用系统调用 setpgid()或 setpgrp()可以加入一个现有的进程组或创建一个新的进程组</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setpgid</span><span class="params">(<span class="keyword">pid_t</span> pid, <span class="keyword">pid_t</span> pgid)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setpgrp</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>setpgid()函数将参数 pid 指定的进程的进程组 ID 设置为参数 gpid。如果这两个参数相等（pid==gpid）， 则由 pid 指定的进程变成为进程组的组长进程，创建了一个新的进程；如果参数 pid <strong>等于 0，则使用调用者 的进程 ID</strong>；另外，<strong>如果参数 gpid 等于 0，则创建一个新的进程组，由参数 pid 指定的进程作为进程组组长 进程</strong>。</li>
+<li>setpgrp()函数等价于 setpgid(0, 0)。</li>
+<li>一个进程只能为<strong>它自己或它的子进程设置进程组 ID</strong>，在它的子进程<strong>调用 exec 函数后，它就不能更改该 子进程的进程组 ID 了</strong>。</li>
+</ul>
+<h3 id="会话"><a href="#会话" class="headerlink" title="会话"></a>会话</h3><ul>
+<li><p>会话是一个或多个进程组的集合</p>
+</li>
+<li><p><img src="/../imgs/image-20220121213639860.png" alt="image-20220121213639860"></p>
+</li>
+<li><p>一个会话可包含一个或多个进程组，但只能有一个前台进程组，其它的是后台进程组；每个会话都有一 个会话首领（leader），即创建会话的进程。</p>
+</li>
+<li><p>一个会话可以有控制终端、也可没有控制终端，在有控制终端的情况下也只能连接一个控制终端，这通常是登录到其上的终端设备（在终端登录情况下）或伪终端设备 （譬如通过 SSH 协议网络登录），一个会话中的进程组可被分为一个前台进程组以及一个或多个后台进程 组。</p>
+</li>
+<li><p>会话的首领进程连接一个终端之后，该终端就成为会话的控制终端，与控制终端建立连接的会话首领进 程被称为控制进程；产生在终端上的输入和信号将发送给会话的前台进程组中的所有进程，譬如 Ctrl + C（产 生 SIGINT 信号）、Ctrl + Z（产生 SIGTSTP 信号）、Ctrl + \（产生 SIGQUIT 信号）等等</p>
+</li>
+<li><p>一个进程组由组长进程的 ID 标识，而对于会话来说，<strong>会话的首领进程的进程组 ID 将作为该会话的标 识</strong>，也就是会话 ID（sid），在默认情况下，新创建的进程会继承父进程的会话 ID。通过系统调用 <code>getsid()</code>可 以获取进程的会话 ID</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">getsid</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用系统调用 setsid()可以创建一个会话，其函数原型如下所示</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">setsid</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果调用者进程<strong>不是进程组的组长进程</strong>，调用 setsid()<strong>将创建一个新的会话</strong>，<strong>调用者进程是新会话的首 领进程</strong>，同样也是一个新的进程组的组长进程，调用 setsid()创建的会话将没有控制终端。</li>
+</ul>
+<h3 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a>守护进程</h3><ul>
+<li><p>守护进程（Daemon）也称为精灵进程，是运行在后台的一种特殊进程，它独立于控制终端并且周期性 地执行某种任务或等待处理某些事情的发生</p>
+</li>
+<li><p><strong>长期运行。</strong>守护进程是一种生存期很长的一种进程，它们一般在系统启动时开始运行，除非强行终 止，否则直到系统关机都会保持运行。与守护进程相比，普通进程都是在用户登录或运行程序时创 建，在运行结束或用户注销时终止，但守护进程不受用户登录注销的影响，它们将会一直运行着、 直到系统关机。</p>
+</li>
+<li><p><strong>与控制终端脱离</strong>。在 Linux 中，系统与用户交互的界面称为终端，<strong>每一个从终端开始运行的进程都 会依附于这个终端</strong>，这是上一小节给大家介绍的控制终端，也就是会话的控制终端。当<strong>控制终端被 关闭的时候，该会话就会退出</strong>，由<strong>控制终端运行的所有进程都会被终止</strong>，这使得普通进程都是和运 行该进程的终端相绑定的；但守护进程能突破这种限制，它脱离终端并且在后台运行，脱离终端的 目的是为了避免进程在运行的过程中的信息在终端显示并且进程也不会被任何终端所产生的信息 所打断。</p>
+</li>
+<li><p>守护进程 Daemon，通常简称为 d，一般进程名后面带有 d 就表示它是一个守护进程。</p>
+</li>
+</ul>
+<p><strong>创建守护进程的步骤</strong></p>
+<ul>
+<li>创建子进程、终止父进程<ul>
+<li>父进程调用 fork()创建子进程，然后父进程使用 exit()退出，这样做实现了下面几点。第一，如果该守护 进程是作为一条简单地 shell 命令启动，那么父进程终止会让 shell 认为这条命令已经执行完毕。第二，虽然 子进程继承了父进程的进程组ID，但它有自己独立的进程ID，这保证了子进程不是一个进程组的组长进程， 这是下面将要调用 setsid 函数的先决条件！</li>
+</ul>
+</li>
+<li>子进程调用 setsid 创建会话<ul>
+<li>这步是关键，在子进程中调用上一小节给大家介绍的 setsid()函数创建新的会话，由于之前子进程并不 是进程组的组长进程，所以调用 setsid()会使得子进程创建一个新的会话，子进程成为新会话的首领进程， 同样也创建了新的进程组、子进程成为组长进程，此时创建的会话将没有控制终端。所以这里调用 setsid 有 三个作用：让子进程摆脱原会话的控制、让子进程摆脱原进程组的控制和让子进程摆脱原控制终端的控制。 在调用 fork 函数时，子进程继承了父进程的会话、进程组、控制终端等，虽然父进程退出了，但原先 的会话期、进程组、控制终端等并没有改变，因此，那还不是真正意义上使两者独立开来。<strong>setsid 函数能够 使子进程完全独立出来，从而脱离所有其他进程的控制</strong>。</li>
+</ul>
+</li>
+<li>将工作目录更改为根目录<ul>
+<li>子进程是继承了父进程的当前工作目录，由于在进程运行中，当前目录所在的文件系统是不能卸载的， 这对以后使用会造成很多的麻烦。因此通常的做法是让“/”作为守护进程的当前目录，当然也可以指定其 它目录来作为守护进程的工作目录。</li>
+</ul>
+</li>
+<li>重设文件权限掩码 umask<ul>
+<li>文件权限掩码 umask 用于对新建文件的权限位进行屏蔽，在 5.5.5 小节中有介绍。由于使用 fork 函数新 建的子进程继承了父进程的文件权限掩码，这就给子进程使用文件带来了诸多的麻烦。因此，把文件权限掩 码设置为 0，确保子进程有最大操作权限、这样可以大大增强该守护进程的灵活性。设置文件权限掩码的函 数是 umask，通常的使用方法为 umask(0)。</li>
+</ul>
+</li>
+<li>关闭不再需要的文件描述符<ul>
+<li>子进程继承了父进程的所有文件描述符，这些被打开的文件可能永远不会被守护进程（此时守护进程指 的就是子进程，父进程退出、子进程成为守护进程）读或写，但它们一样消耗系统资源，可能导致所在的文 件系统无法卸载，所以必须关闭这些文件，这使得守护进程不再持有从其父进程继承过来的任何文件描述 符。</li>
+</ul>
+</li>
+<li>将文件描述符号为 0、1、2 定位到/dev/null<ul>
+<li>将守护进程的标准输入、标准输出以及标准错误重定向到/dev/null，这使得守护进程的输出无处显示、 也无处从交互式用户那里接收输入。</li>
+</ul>
+</li>
+<li>其它：忽略 SIGCHLD 信号</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pid_t</span> pid;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="comment">/* 创建子进程 */</span></span><br><span class="line">    pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; pid)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;fork error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">0</span> &lt; pid) <span class="comment">//父进</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);      <span class="comment">//直接退出</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment"> *子进程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">    <span class="comment">/* 1.创建新的会话、脱离控制终端 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; setsid())</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;setsid error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 2.设置当前工作目录为根目录 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; chdir(<span class="string">&quot;/&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;chdir error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 3.重设文件权限掩码 umask */</span></span><br><span class="line">    umask(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">/* 4.关闭所有文件描述符 */</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; sysconf(_SC_OPEN_MAX); i++)</span><br><span class="line">        close(i);</span><br><span class="line">    <span class="comment">/* 5.将文件描述符号为 0、1、2 定位到/dev/null */</span></span><br><span class="line">    open(<span class="string">&quot;/dev/null&quot;</span>, O_RDWR);</span><br><span class="line">    dup(<span class="number">0</span>);</span><br><span class="line">    dup(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">/* 6.忽略 SIGCHLD 信号 */</span></span><br><span class="line">    signal(SIGCHLD, SIG_IGN);</span><br><span class="line">    <span class="comment">/* 正式进入到守护进程 */</span></span><br><span class="line">    <span class="keyword">for</span> (;;)</span><br><span class="line">    &#123;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">        <span class="built_in">puts</span>(<span class="string">&quot;守护进程运行中......&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../imgs/image-20220121223837693.png" alt="image-20220121223837693"></p>
+<ul>
+<li><p>可见没有输出，因为输出已经重定向到<code>dev/null</code>了</p>
+</li>
+<li><p>在<code>ps -ajx</code>中看到这个进程</p>
+</li>
+<li><p><img src="/../imgs/image-20220121224001123.png" alt="image-20220121224001123"></p>
+</li>
+<li><p>这个进程可以用<code>kill pid</code>停止</p>
+</li>
+</ul>
+<h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><ul>
+<li>对于有些程序设计来说，程序只能被执行一次，只要该程序没有结束，就无法 再次运行，我们把这种情况称为单例模式运行，多次同时运行并没有意义、甚至还会带来错误！。</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li>通过一个特定的文件存在与否进行判断（进程开始的时候新建一个文件，结束的时候删除）</li>
+<li>文件锁<ul>
+<li>当程序启动之后，首先打开该文件，调用 open 时一般使用 <code>O_WRONLY | O_CREAT </code>标志，当文件不存在则创建该文件，然后尝试去获取文件锁，若是成功，则将程序 的进程号（PID）写入到该文件中，写入后不要关闭文件或解锁（释放文件锁），保证进程一直持有该文件 锁；若是程序获取锁失败，代表程序已经被运行、则退出本次启动。</li>
+<li>通过系统调用 <code>flock()</code>、<code>fcntl()</code>或库函数 <code>lockf()</code>均可实现对文件进行上锁，本小节我们以系统调用flock()为例，系统调用 <code>flock() </code>产生的是咨询锁（建议性锁）、并不能产生强制性锁</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/file.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOCK_FILE <span class="meta-string">&quot;./testApp.pid&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> str[<span class="number">20</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    <span class="comment">/* 打开 lock 文件，如果文件不存在则创建 */</span></span><br><span class="line">    fd = open(LOCK_FILE, O_WRONLY | O_CREAT, <span class="number">0666</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 以非阻塞方式获取文件锁 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == flock(fd, LOCK_EX | LOCK_NB))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fputs</span>(<span class="string">&quot;不能重复执行该程序!\n&quot;</span>, <span class="built_in">stderr</span>);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;程序运行中...&quot;</span>);</span><br><span class="line">    ftruncate(fd, <span class="number">0</span>); <span class="comment">//将文件长度截断为 0</span></span><br><span class="line">    <span class="built_in">sprintf</span>(str, <span class="string">&quot;%d\n&quot;</span>, getpid());</span><br><span class="line">    write(fd, str, <span class="built_in">strlen</span>(str)); <span class="comment">//写入 pid</span></span><br><span class="line">    <span class="keyword">for</span> (;;)</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../imgs/image-20220121225414970.png" alt="image-20220121225414970"></p>
+<ul>
+<li>首先打开一个特定的文件，这里只是举例，以当前目录下的 testApp.pid 文件作为特定文件， 以 O_WRONLY | O_CREAT 方式打开，如果文件不存在则创建该文件；打开文件之后<strong>使用 flock 尝试获取文 件锁</strong>，调用 flock()时指定了<strong>互斥锁标志 LOCK_NB</strong>，意味着<strong>同时只能有一个进程拥有该锁</strong>，如果获取锁失败， 表示该程序已经启动了，无需再次执行，然后退出；如果获取锁成功，将进程的 PID 写入到该文件中，<strong>当程 序退出时，会自动解锁、关闭文件</strong>。</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-linux进程"
   class="article article-type-post"
   itemscope
@@ -929,64 +1111,6 @@
 <li>windows设备的用户名是C盘<code>用户</code>文件夹下的用户文件夹的名字</li>
 <li>密码是<code>微软账号</code>的密码</li>
 <li>目标地址路径<strong>不能带有空格，不能使用引号</strong></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-使用echo向文件写入数据"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/15/%E4%BD%BF%E7%94%A8echo%E5%90%91%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/"
-    >使用echo向文件写入数据</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/15/%E4%BD%BF%E7%94%A8echo%E5%90%91%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/" class="article-date">
-  <time datetime="2022-01-15T08:17:14.000Z" itemprop="datePublished">2022-01-15</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="使用echo向文件写入数据"><a href="#使用echo向文件写入数据" class="headerlink" title="使用echo向文件写入数据"></a>使用echo向文件写入数据</h1><ul>
-<li>主要是使用echo的<strong>输出重定向</strong>功能，也就是<code>&gt;</code>和<code>&gt;&gt;</code></li>
-<li>覆盖文件内容用<code>&gt;</code>，也就是<ul>
-<li><code>echo &quot;Raspberry&quot; &gt; test.txt</code></li>
-</ul>
-</li>
-<li>追加文件内容用<code>&gt;&gt;</code><ul>
-<li><code>echo &quot;string&quot; &gt;&gt; &lt;filename&gt;</code></li>
-<li>就是将string追加到filename文件的末尾</li>
-</ul>
-</li>
 </ul>
  
       <!-- reward -->

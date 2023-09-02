@@ -141,6 +141,105 @@
     
     
     <article
+  id="post-小空间词频统计"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/08/29/%E5%B0%8F%E7%A9%BA%E9%97%B4%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1/"
+    >小空间词频统计</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/08/29/%E5%B0%8F%E7%A9%BA%E9%97%B4%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1/" class="article-date">
+  <time datetime="2022-08-29T04:56:52.000Z" itemprop="datePublished">2022-08-29</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="大数据问题的一般思路"><a href="#大数据问题的一般思路" class="headerlink" title="大数据问题的一般思路"></a>大数据问题的一般思路</h2><ul>
+<li><img src="/imgs/de52034f9740d556c3569a224bb4bc6ba1d9926fdec348c89cfb28b7d82fd640.png" alt="图 9">  <h2 id="利用位数组"><a href="#利用位数组" class="headerlink" title="利用位数组"></a>利用位数组</h2></li>
+<li>利用基础类型（比如int）制作一个bit数组</li>
+<li>比如一个int是32位，那么10个int就是320位的位数组</li>
+<li>利用<u>每个位的1和0</u>计数数字的存在与否<h2 id="小空间词频统计"><a href="#小空间词频统计" class="headerlink" title="小空间词频统计"></a>小空间词频统计</h2></li>
+<li>假如用一个小空间计算40亿个数字中<code>unsigned int</code>中的<u>哪个不包括在内</u><ul>
+<li>先申请允许内存大小的数组，检查系统内存能够允许的数组长度，找<u>最近的长度为2的整数幂次</u>的数组长度作为长度</li>
+<li>然后按照数组的长度均分<code>unsigned int</code>范围得到小的范围长度</li>
+<li>遍历整个数组，每个元素除以小范围的长度，结果向下取整得到自己属于哪个小范围</li>
+<li>将词频数组对应的index位置（上一步计算的结果）<code>+1</code></li>
+<li>循环一遍之后，词频数组中肯定有某个位置的词频达不到理论上的小范围长度</li>
+<li>将整个统计范围的长度从整个<code>unsigned int</code>范围调整到上一个词频达不到满的小范围</li>
+<li><u>重复上述步骤</u>遍历整个数据，丢弃所有不在范围内的数字，其他数字按照第二次划分的小范围分类，统计结束之后再看哪个位置的词频达不到此时的小范围</li>
+</ul>
+</li>
+<li>统计巨量URL的访问次数<ul>
+<li>使用哈希函数将URL转换，然后分流到一定数量（按照服务器的内存资源决定）的小文件中，每个小文件使用一个利用<u>URL被访问次数</u>组织的大根堆</li>
+<li>将每个大根堆的堆顶组织成大根堆得到总堆</li>
+<li>结果就是依次将内容从总堆中弹出，弹出之后找到这个元素原来所在的大根堆，同样将这个元素弹出，然后弹出后的大根堆的头部放入总大根堆中。</li>
+</ul>
+</li>
+<li>利用位数组统计出现了两次的数字<ul>
+<li>用<strong>两位</strong>表示一个数字是否出现过</li>
+<li><code>00</code>没出现过，<code>01</code>出现一次，<code>10</code>出现两次，<code>11</code>出现大于2次</li>
+</ul>
+</li>
+<li>利用小空间找<strong>中位数</strong><ul>
+<li>同样利用小范围词频统计（第一种）操作</li>
+<li>统计到找出中位数在哪个小分区里</li>
+<li>然后对这个对应的小分区再等分找到具体的中位数的位置<h2 id="小空间给大数组"><a href="#小空间给大数组" class="headerlink" title="小空间给大数组"></a>小空间给大数组</h2></li>
+</ul>
+</li>
+<li>方法一<ul>
+<li>小空间使用小根堆</li>
+<li>小根堆存储的内容是&lt;数字，出现次数&gt;的元组，有小根堆中存在的数字的时候，相应的出现次数+1</li>
+<li>小根堆不能直接用一条记录的空间计算，<u>需要考虑一些额外的开销</u>，实际可用的空间可能是总空间/16或者其他数值</li>
+<li>堆的大小用最接近的2的整数次幂次</li>
+<li>然后按照被排序的内容/堆的大小得到被排序内容按大小分的小段</li>
+<li>第一次处理落在最小部分段内的数据，第二次处理第二小部分段内的数据…</li>
+<li>都处理完即可得到所有排序</li>
+</ul>
+</li>
+<li>方法二<ul>
+<li>使用一个大根堆存储此时数组中最小的几种数字</li>
+<li>假如此时一个新的数字小于此时大根堆中最大的数字，那么可以加入</li>
+<li>假如这个数字比大根堆中最大的数字还大，那么说明这个数字不属于整个数组中最小的k个数字之一，直接忽略（k为堆的大小）</li>
+<li>假如此时大根堆的数字超出数字限制，那么将最大的数字弹出然后将新的数字压入</li>
+<li>然后将大根堆内的所有数字逆序排出并清空堆，然后给堆设置最小值，等于上次弹出之前堆中最大的数字，以后只考虑大于这个数字的数</li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Morris遍历"
   class="article article-type-post"
   itemscope
@@ -807,94 +906,6 @@
 <li>算法主要依赖一个记录到对应节点最近距离的哈希表和一个记录某个节点是否已经被锁定的set</li>
 <li>在初始时刻将起始点到起始点放入哈希表，并且将其距离设置为0。</li>
 <li>然后的while循环每次都对找出的当前<strong>尚未被锁定</strong>而且在哈希表中到起始位置距离最小的点指向的所有尚未被锁定的节点的距离进行重算，假如被指向的节点之前的距离小于从该点出发到被指向的点的距离，将被指向点的距离更新为被选中的点出发的距离。（假如被指向的点<strong>不存在</strong>于哈希表中的话认为被指向的点的距离为<strong>正无穷</strong>，同样添加该点的距离条目进行更新）。然后将当前选中的点锁定，也就是假如被锁定的点的set中，然后找到当前未被锁定而且从总出发点开始距离最短的点，再次重复循环。</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-排序算法总结"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/23/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/"
-    >排序算法总结</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/23/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" class="article-date">
-  <time datetime="2022-08-23T12:12:15.000Z" itemprop="datePublished">2022-08-23</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p><a target="_blank" rel="noopener" href="https://github.com/algorithmzuo">zuochengyun参考链接</a></p>
-<h2 id="时间复杂度的计算"><a href="#时间复杂度的计算" class="headerlink" title="时间复杂度的计算"></a>时间复杂度的计算</h2><ul>
-<li><img src="/imgs/84e153d22a3de18ea0b798a365d4cc8db510526eedc7622eff3621eeb6a91838.png" alt="图 1">  <h2 id="稳定性"><a href="#稳定性" class="headerlink" title="稳定性"></a>稳定性</h2></li>
-<li>数组中相同的元素在排序前后的相对次序有没有变化？没有就是稳定的。</li>
-<li>语言为java，但是因为与C++类似，所以没有专门更改</li>
-<li>交换函数<ul>
-<li>位运算的交换函数<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">a = a^b;</span><br><span class="line">b = a^b;</span><br><span class="line">c = a^b;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li>普通交换函数<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> tmp = arr[j];</span><br><span class="line">	arr[j] = arr[i];</span><br><span class="line">	arr[i] = tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">selectSort</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> N = arr.length;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">		<span class="keyword">int</span> minValueIndex = i;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; N; j++) &#123;</span><br><span class="line">			minValueIndex = arr[j] &lt; arr[minValueIndex] ? j : minValueIndex;</span><br><span class="line">		&#125;</span><br><span class="line">		swap(arr, i, minValueIndex);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>时间复杂度O(N^2)， 空间复杂度O(1)，<em>不</em>稳定</li>
-<li>思路：大循环确定每次排序的第一个位置，每次确定一个数字，确定的方法是从还未确定的范围里选出一个最小的数字，将这个数字与排序的第一个位置原来的数字交换位置，然后确定该位置的数字，将排序的起始位置前移一个<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bubbleSort</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> N = arr.length;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> end = N - <span class="number">1</span>; end &gt;= <span class="number">0</span>; end--) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> second = <span class="number">1</span>; second &lt;= end; second++) &#123;</span><br><span class="line">			<span class="keyword">if</span> (arr[second - <span class="number">1</span>] &gt; arr[second]) &#123;</span><br><span class="line">				swap(arr, second - <span class="number">1</span>, second);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>时间复杂度O(N^2)，空间复杂度O(1)，稳定</li>
-<li>首先从数组的第一个到最后一个元素执行一次冒泡，冒泡的具体行为是假如数组下表前一个位置的数字比下表位置的数字大的话，交换这两个数字，然后一次冒泡结束之后将冒泡行为的后边界前移一。<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">insertSort1</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> N = arr.length;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> end = <span class="number">1</span>; end &lt; N; end++) &#123;</span><br><span class="line">		<span class="keyword">int</span> newNumIndex = end;</span><br><span class="line">		<span class="keyword">while</span> (newNumIndex - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; arr[newNumIndex - <span class="number">1</span>] &gt; arr[newNumIndex]) &#123;</span><br><span class="line">			swap(arr, newNumIndex - <span class="number">1</span>, newNumIndex);</span><br><span class="line">			newNumIndex--;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">insertSort2</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> N = arr.length;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> end = <span class="number">1</span>; end &lt; N; end++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> pre = end - <span class="number">1</span>; pre &gt;= <span class="number">0</span> &amp;&amp; arr[pre] &gt; arr[pre + <span class="number">1</span>]; pre--) &#123;</span><br><span class="line">			swap(arr, pre, pre + <span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>思路是从第二个元素开始，假如该元素比前一个元素小的话，就将这个元素向前移动，直到前一个元素不比这个元素小为止（类似于打扑克起牌的时候将大牌插入到前面）。然后将插入元素的起始位置向后移动一个。</li>
-<li>时间复杂度O(N^2)，空间复杂度O(1)，稳定<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 递归方法实现</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mergeSort1</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	process(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 请把arr[L..R]排有序</span></span><br><span class="line"><span class="comment">// l...r N</span></span><br><span class="line"><span class="comment">// T(N) = 2 * T(N / 2) + O(N)</span></span><br><span class="line"><span class="comment">// O(N * logN)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (L == R) &#123; <span class="comment">// base case</span></span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> mid = L + ((R - L) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">	process(arr, L, mid);</span><br><span class="line">	process(arr, mid + <span class="number">1</span>, R);</span><br><span class="line">	merge(arr, L, mid, R);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> M, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] help = <span class="keyword">new</span> <span class="keyword">int</span>[R - L + <span class="number">1</span>];</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> p1 = L;</span><br><span class="line">	<span class="keyword">int</span> p2 = M + <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (p1 &lt;= M &amp;&amp; p2 &lt;= R) &#123;</span><br><span class="line">		help[i++] = arr[p1] &lt;= arr[p2] ? arr[p1++] : arr[p2++];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 要么p1越界了，要么p2越界了</span></span><br><span class="line">	<span class="keyword">while</span> (p1 &lt;= M) &#123;</span><br><span class="line">		help[i++] = arr[p1++];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span> (p2 &lt;= R) &#123;</span><br><span class="line">		help[i++] = arr[p2++];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; help.length; i++) &#123;</span><br><span class="line">		arr[L + i] = help[i];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 非递归方法实现</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mergeSort2</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> N = arr.length;</span><br><span class="line">	<span class="comment">// 步长</span></span><br><span class="line">	<span class="keyword">int</span> mergeSize = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (mergeSize &lt; N) &#123; <span class="comment">// log N</span></span><br><span class="line">		<span class="comment">// 当前左组的，第一个位置</span></span><br><span class="line">		<span class="keyword">int</span> L = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">while</span> (L &lt; N) &#123;</span><br><span class="line">			<span class="keyword">if</span> (mergeSize &gt;= N - L) &#123;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">int</span> M = L + mergeSize - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">int</span> R = M + Math.min(mergeSize, N - M - <span class="number">1</span>);</span><br><span class="line">			merge(arr, L, M, R);</span><br><span class="line">			L = R + <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 防止溢出</span></span><br><span class="line">		<span class="keyword">if</span> (mergeSize &gt; N / <span class="number">2</span>) &#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		mergeSize &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>时间复杂度O(N*log(N))空间复杂度O(N)，稳定</li>
-<li>思路就是将数组分为左右两部分，然后对左边和右边分别递归执行，执行之后回溯到这一层的时候，左右两个数组已经是<strong>各自有序</strong>的了，然后将两个数组进行合并（merge），合并操作就是将两个数组的下表设置为各自最前，然后将两个下标位置对应的数字中较小的一个放入总的数组中，该数组的下标前进一位。假如执行到最后有一个数组的下标到达了最后，就将这个数组整个衔接在总的数组末尾（需要用到额外空间）。<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2></li>
-<li>递归版本<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 荷兰国旗问题</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] netherlandsFlag(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> R) &#123;</span><br><span class="line">	<span class="keyword">if</span> (L &gt; R) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; -<span class="number">1</span>, -<span class="number">1</span> &#125;;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (L == R) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; L, R &#125;;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> less = L - <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">int</span> more = R;</span><br><span class="line">	<span class="keyword">int</span> index = L;</span><br><span class="line">	<span class="keyword">while</span> (index &lt; more) &#123;</span><br><span class="line">		<span class="keyword">if</span> (arr[index] == arr[R]) &#123;</span><br><span class="line">			index++;</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (arr[index] &lt; arr[R]) &#123;</span><br><span class="line">			swap(arr, index++, ++less);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			swap(arr, index, --more);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	swap(arr, more, R);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; less + <span class="number">1</span>, more &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> tmp = arr[i];</span><br><span class="line">	arr[i] = arr[j];</span><br><span class="line">	arr[j] = tmp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 快排递归版本</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">quickSort1</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	process(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (L &gt;= R) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	swap(arr, L + (<span class="keyword">int</span>) (Math.random() * (R - L + <span class="number">1</span>)), R);</span><br><span class="line">	<span class="keyword">int</span>[] equalArea = netherlandsFlag(arr, L, R);</span><br><span class="line">	process(arr, L, equalArea[<span class="number">0</span>] - <span class="number">1</span>);</span><br><span class="line">	process(arr, equalArea[<span class="number">1</span>] + <span class="number">1</span>, R);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>时间复杂度O(Nlog(N))，空间复杂度O(log(N))，</li>
-<li>荷兰国旗问题：将整个数组分为三个部分，左边的部分比给定的flag小，中间的部分等于flag，右边的部分大于flag。（选择最右为分割标志）<ul>
-<li>其中的less是小于区的右边界，more是大于区的左边界</li>
-<li>假如index位置的数字和分割标志相等，直接index++</li>
-<li>假如index位置的数字比标志小，那么index位置的数字与小于区的左边界右边第一个数字交换，index和小于区的右边界各自++，相当于小于区推动等于区右移</li>
-<li>假如index位置的数字比标志大，那么将index位置的数字与大于区左边界的第一个数字交换，index不动，大于区的左边界左移一个位置。</li>
-<li>遍历结束之后，将数组最右边位置的数字与大于区左边界位置的数字进行交换（因为开始时候取的标志是最右的数字）</li>
-</ul>
-</li>
-<li>递归的时候，先调用一个分割函数（就是前面描述的荷兰国旗），然后将开始到小于区右边界和大于区左边界到数组结束的位置分别递归调用分割即可。<h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">	<span class="comment">// 堆排序额外空间复杂度O(1)</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapSort</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// O(N*logN)</span></span><br><span class="line"><span class="comment">//		for (int i = 0; i &lt; arr.length; i++) &#123; // O(N)</span></span><br><span class="line"><span class="comment">//			heapInsert(arr, i); // O(logN)</span></span><br><span class="line"><span class="comment">//		&#125;</span></span><br><span class="line">		<span class="comment">// O(N)</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = arr.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">			heapify(arr, i, arr.length);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> heapSize = arr.length;</span><br><span class="line">		swap(arr, <span class="number">0</span>, --heapSize);</span><br><span class="line">		<span class="comment">// O(N*logN)</span></span><br><span class="line">		<span class="keyword">while</span> (heapSize &gt; <span class="number">0</span>) &#123; <span class="comment">// O(N)</span></span><br><span class="line">			heapify(arr, <span class="number">0</span>, heapSize); <span class="comment">// O(logN)</span></span><br><span class="line">			swap(arr, <span class="number">0</span>, --heapSize); <span class="comment">// O(1)</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// arr[index]刚来的数，往上</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapInsert</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span> (arr[index] &gt; arr[(index - <span class="number">1</span>) / <span class="number">2</span>]) &#123;</span><br><span class="line">			swap(arr, index, (index - <span class="number">1</span>) / <span class="number">2</span>);</span><br><span class="line">			index = (index - <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// arr[index]位置的数，能否往下移动</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapify</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> index, <span class="keyword">int</span> heapSize)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> left = index * <span class="number">2</span> + <span class="number">1</span>; <span class="comment">// 左孩子的下标</span></span><br><span class="line">		<span class="keyword">while</span> (left &lt; heapSize) &#123; <span class="comment">// 下方还有孩子的时候</span></span><br><span class="line">			<span class="comment">// 两个孩子中，谁的值大，把下标给largest</span></span><br><span class="line">			<span class="comment">// 1）只有左孩子，left -&gt; largest</span></span><br><span class="line">			<span class="comment">// 2) 同时有左孩子和右孩子，右孩子的值&lt;= 左孩子的值，left -&gt; largest</span></span><br><span class="line">			<span class="comment">// 3) 同时有左孩子和右孩子并且右孩子的值&gt; 左孩子的值， right -&gt; largest</span></span><br><span class="line">			<span class="keyword">int</span> largest = left + <span class="number">1</span> &lt; heapSize &amp;&amp; arr[left + <span class="number">1</span>] &gt; arr[left] ? left + <span class="number">1</span> : left;</span><br><span class="line">			<span class="comment">// 父和较大的孩子之间，谁的值大，把下标给largest</span></span><br><span class="line">			largest = arr[largest] &gt; arr[index] ? largest : index;</span><br><span class="line">			<span class="keyword">if</span> (largest == index) &#123;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			swap(arr, largest, index);</span><br><span class="line">			index = largest;</span><br><span class="line">			left = index * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> tmp = arr[i];</span><br><span class="line">		arr[i] = arr[j];</span><br><span class="line">		arr[j] = tmp;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></li>
-<li>时间复杂度O(Nlog(N))，空间复杂度O(1)，不稳定</li>
-<li><code>heapInsert</code>是堆插入函数，将插入的数字向上看是否在需要的位置上</li>
-<li><code>heapify</code>是将数组中某个位置的数字向下移动，直到需要的位置（向下交换的时候与两个孩子中较大的那个交换）</li>
-<li>建堆的操作是从倒数第二个元素开始直到数组的第一个元素，执行向下调整函数，然后将整个数组的最后一个元素与第一个元素交换，执行向下调整函数，然后将数组的倒数第二个元素与第一个交换，执行向下调整，如此循环到数组的第二个元素与第一个元素交换并且调整结束。</li>
-</ul>
-<h2 id="建立堆"><a href="#建立堆" class="headerlink" title="建立堆"></a>建立堆</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyMaxHeap</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] heap;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> limit;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> heapSize;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyMaxHeap</span><span class="params">(<span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">        heap = <span class="keyword">new</span> <span class="keyword">int</span>[limit];</span><br><span class="line">        <span class="keyword">this</span>.limit = limit;</span><br><span class="line">        heapSize = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> heapSize == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isFull</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> heapSize == limit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (heapSize == limit) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;heap is full&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        heap[heapSize] = value;</span><br><span class="line">        <span class="comment">// value heapSize</span></span><br><span class="line">        heapInsert(heap, heapSize++);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用户此时，让你返回最大值，并且在大根堆中，把最大值删掉</span></span><br><span class="line">    <span class="comment">// 剩下的数，依然保持大根堆组织</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ans = heap[<span class="number">0</span>];</span><br><span class="line">        swap(heap, <span class="number">0</span>, --heapSize);</span><br><span class="line">        heapify(heap, <span class="number">0</span>, heapSize);</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 新加进来的数，现在停在了index位置，请依次往上移动，</span></span><br><span class="line">    <span class="comment">// 移动到0位置，或者干不掉自己的父亲了，停！</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">heapInsert</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// [index] [index-1]/2</span></span><br><span class="line">        <span class="comment">// index == 0</span></span><br><span class="line">        <span class="keyword">while</span> (arr[index] &gt; arr[(index - <span class="number">1</span>) / <span class="number">2</span>]) &#123;</span><br><span class="line">            swap(arr, index, (index - <span class="number">1</span>) / <span class="number">2</span>);</span><br><span class="line">            index = (index - <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从index位置，往下看，不断的下沉</span></span><br><span class="line">    <span class="comment">// 停：较大的孩子都不再比index位置的数大；已经没孩子了</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">heapify</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> index, <span class="keyword">int</span> heapSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> left = index * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (left &lt; heapSize) &#123; <span class="comment">// 如果有左孩子，有没有右孩子，可能有可能没有！</span></span><br><span class="line">            <span class="comment">// 把较大孩子的下标，给largest</span></span><br><span class="line">            <span class="keyword">int</span> largest = left + <span class="number">1</span> &lt; heapSize &amp;&amp; arr[left + <span class="number">1</span>] &gt; arr[left] ? left + <span class="number">1</span> : left;</span><br><span class="line">            largest = arr[largest] &gt; arr[index] ? largest : index;</span><br><span class="line">            <span class="keyword">if</span> (largest == index) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// index和较大孩子，要互换</span></span><br><span class="line">            swap(arr, largest, index);</span><br><span class="line">            index = largest;</span><br><span class="line">            left = index * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> tmp = arr[i];</span><br><span class="line">        arr[i] = arr[j];</span><br><span class="line">        arr[j] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>向堆插入数字的方法就是将堆的尺寸+1，然后从被插入数字开始上溯直到不比父亲大</li>
-<li>用户从堆顶弹出的方法是弹出之后将堆尺寸-1，然后将堆最后一个元素复制到以前堆顶的位置，然后执行heapify，也就是将该元素下沉直到不比儿子小为止</li>
 </ul>
  
       <!-- reward -->
