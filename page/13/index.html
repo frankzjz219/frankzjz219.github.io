@@ -141,6 +141,93 @@
     
     
     <article
+  id="post-DSP28377学习（一）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/10/DSP28377%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/"
+    >DSP28377学习（一）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/10/DSP28377%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/" class="article-date">
+  <time datetime="2022-01-10T13:56:40.000Z" itemprop="datePublished">2022-01-10</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="DSP28377d学习（一）"><a href="#DSP28377d学习（一）" class="headerlink" title="DSP28377d学习（一）"></a>DSP28377d学习（一）</h1><h2 id="仿真器配置"><a href="#仿真器配置" class="headerlink" title="仿真器配置"></a>仿真器配置</h2><p><strong>此文档仅作为官方手册的补充</strong></p>
+<ul>
+<li>在开始烧录之前要先配置Target configuration file</li>
+<li><img src="/imgs/image-20220110221639291.png" alt="image-20220110221639291"></li>
+</ul>
+<p>打开后，选择</p>
+<ul>
+<li><img src="/imgs/image-20220110221716259.png" alt="image-20220110221716259"></li>
+</ul>
+<p>然后</p>
+<ul>
+<li><p><img src="/imgs/image-20220110221731391.png" alt="image-20220110221731391"></p>
+</li>
+<li><p><img src="/imgs/image-20220110221832321.png" alt="image-20220110221832321"></p>
+</li>
+<li><p>此处一般不需要修改</p>
+</li>
+</ul>
+<h2 id="板子链接"><a href="#板子链接" class="headerlink" title="板子链接"></a>板子链接</h2><ul>
+<li>先将仿真器和目标板链接然后再给板子上电</li>
+</ul>
+<h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><p><img src="/imgs/image-20220110222621315.png" alt="image-20220110222621315"></p>
+<ul>
+<li>点击下面的选项打开Target configuration面板</li>
+</ul>
+<p><img src="/imgs/image-20220111164750076.png" alt="image-20220111164750076"></p>
+<ul>
+<li>找到自己刚才新建的Target configuration，然后选择launch</li>
+</ul>
+<p><img src="/imgs/image-20220111165533087.png" alt="image-20220111165533087"></p>
+<p><img src="/imgs/image-20220111165625183.png" alt="image-20220111165625183"></p>
+<p><img src="/imgs/image-20220111165556571.png" alt="image-20220111165556571"></p>
+<ul>
+<li>在Flash烧写之前，需要手动新建一个predidined symbol，在其中（已经有一个CPU1）新建一个FLASH</li>
+<li>右键点击项目（图中红圈），然后选择“properties”</li>
+<li><img src="/imgs/image-20220111164926308.png" alt="image-20220111164926308"></li>
+</ul>
+<p><img src="/imgs/image-20220111165509718.png" alt="image-20220111165509718"></p>
+<ul>
+<li>debug的时候注意在<strong>链接CPU、下载程序、开始调试结束后执行程序之前再下断点</strong>，<u>不要带着断点进入调试</u>，否则<code>main()</code>函数可能没法运行</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-MakeFile基础"
   class="article article-type-post"
   itemscope
@@ -1878,203 +1965,6 @@
 </tbody></table>
 </li>
 </ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-Linux初步学习（一）"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/"
-    >Linux初步学习（一）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/" class="article-date">
-  <time datetime="2022-01-02T03:36:20.000Z" itemprop="datePublished">2022-01-02</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Linux初步学习（一）"><a href="#Linux初步学习（一）" class="headerlink" title="Linux初步学习（一）"></a>Linux初步学习（一）</h1><p><strong>菜鸟教程入口：</strong><br><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-tutorial.html">https://www.runoob.com/linux/linux-tutorial.html</a></p>
-<h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><p><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-shell-variable.html">https://www.runoob.com/linux/linux-shell-variable.html</a></p>
-<ul>
-<li><p>Shell 是一个用 C 语言编写的程序，它是用户使用 Linux 的桥梁。Shell 既是一种命令语言，又是一种程序设计语言。</p>
-</li>
-<li><p>Shell 是指一种应用程序，这个应用程序提供了一个界面，用户通过这个界面访问操作系统内核的服务。</p>
-</li>
-<li><p>Ken Thompson 的 sh 是第一种 Unix Shell，Windows Explorer 是一个典型的图形界面 Shell。</p>
-</li>
-</ul>
-<h3 id="shell脚本的扩展名为-sh"><a href="#shell脚本的扩展名为-sh" class="headerlink" title="shell脚本的扩展名为.sh"></a>shell脚本的扩展名为.sh</h3><ul>
-<li>指定shell 解释器</li>
-</ul>
-<p>​        <code>#!/bin/bash</code></p>
-<p>​        <code>#!</code>符号后面指定</p>
-<ul>
-<li><p>运行脚本</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chmod +x ./test.sh  #使脚本具有执行权限</span><br><span class="line">./test.sh  #执行脚本</span><br></pre></td></tr></table></figure></li>
-<li><p>注意此处运行的时候<strong>必须写成</strong><code>./</code>文件名的形式，<strong>直接写</strong>的话<strong>Linux会去Path里面</strong>寻找这个文件，而只有 /bin, /sbin, /usr/bin，/usr/sbin 等在 PATH 里，你的当前目录通常不在 PATH 里，所以写成 test.sh 是会找不到命令的，要用 <code>./test.sh </code>告诉系统说，就在当前目录找。</p>
-</li>
-<li><p>或者作为解释器参数传给解释器以进行运行</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/bin/sh test.sh</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="第一个shell程序"><a href="#第一个shell程序" class="headerlink" title="第一个shell程序"></a>第一个shell程序</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">echo &quot;Hello World !&quot;</span><br></pre></td></tr></table></figure>
-
-<p><code>echo</code>是控制台输出</p>
-<p><img src="/imgs/image-20220102115757607.png" alt="image-20220102115757607"></p>
-<h3 id="shell-变量"><a href="#shell-变量" class="headerlink" title="shell 变量"></a>shell 变量</h3><ul>
-<li><p>变量名不能有<code>$</code></p>
-</li>
-<li><p>命名只能使用英文字母，数字和下划线，首个字符不能以数字开头。</p>
-</li>
-<li><p>中间不能有空格，可以使用下划线 **_**。</p>
-</li>
-<li><p>不能使用标点符号。</p>
-</li>
-<li><p>不能使用bash里的关键字（可用help命令查看保留关键字）。</p>
-</li>
-</ul>
-<h3 id="变量赋值"><a href="#变量赋值" class="headerlink" title="变量赋值"></a>变量赋值</h3><p>显式<code>=</code>，或者</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">for file in `ls /etc`</span><br><span class="line">或者</span><br><span class="line">for file in $(ls /etc)</span><br></pre></td></tr></table></figure>
-
-<p>以上语句将 /etc 下目录的文件名循环出来。</p>
-<h3 id="变量使用"><a href="#变量使用" class="headerlink" title="变量使用"></a>变量使用</h3><ul>
-<li>使用一个定义过的变量，只要在变量名前面加美元符号即可</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">your_name=&quot;qinjx&quot;</span><br><span class="line">echo $your_name</span><br><span class="line">echo $&#123;your_name&#125;</span><br></pre></td></tr></table></figure>
-
-<p>花括号的作用是提示编译器这是个变量名</p>
-<p>比如</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">for skill in Ada Coffe Action Java; do</span><br><span class="line">    echo &quot;I am good at $&#123;skill&#125;Script&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
-
-<p>如果不给skill变量加花括号，写成echo “I am good at $skillScript”，解释器就会把$skillScript当成一个变量（其值为空），代码执行结果就不是我们期望的样子了。</p>
-<ul>
-<li><p>加上：<img src="/imgs/image-20220102121030726.png" alt="image-20220102121030726"></p>
-</li>
-<li><p>不加但是加了空格：</p>
-</li>
-<li><p><img src="/imgs/image-20220102121227839.png" alt="image-20220102121227839"></p>
-</li>
-</ul>
-<p><strong>花括号加不加都行，不加的时候注意用空格区分开</strong></p>
-<h3 id="变量只读"><a href="#变量只读" class="headerlink" title="变量只读"></a>变量只读</h3><ul>
-<li>使用 readonly 命令可以将变量定义为只读变量，只读变量的值不能被改变。</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">myUrl=&quot;https://www.google.com&quot;</span><br><span class="line">readonly myUrl</span><br><span class="line">myUrl=&quot;https://www.runoob.com&quot;</span><br></pre></td></tr></table></figure>
-
-<h3 id="变量删除"><a href="#变量删除" class="headerlink" title="变量删除"></a>变量删除</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">unset variable_name</span><br></pre></td></tr></table></figure>
-
-<h3 id="变量类型"><a href="#变量类型" class="headerlink" title="变量类型"></a>变量类型</h3><ul>
-<li><strong>1) 局部变量</strong> 局部变量在脚本或命令中定义，仅在当前shell实例中有效，其他shell启动的程序不能访问局部变量。</li>
-<li><strong>2) 环境变量</strong> 所有的程序，包括shell启动的程序，都能访问环境变量，有些程序需要环境变量来保证其正常运行。必要的时候shell脚本也可以定义环境变量。</li>
-<li><strong>3) shell变量</strong> shell变量是由shell程序设置的特殊变量。shell变量中有一部分是环境变量，有一部分是局部变量，这些变量保证了shell的正常运行</li>
-</ul>
-<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p><strong>单引号</strong></p>
-<ul>
-<li>单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；</li>
-<li>单引号字串中不能出现单独一个的单引号（对单引号使用转义符后也不行），但可成对出现，作为字符串拼接使用。</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">str=&#x27;this is a string&#x27;</span><br></pre></td></tr></table></figure>
-
-<p><strong>双引号</strong></p>
-<ul>
-<li>双引号里可以有变量</li>
-<li>双引号里可以出现转义字符</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">your_name=<span class="string">&quot;runoob&quot;</span></span><br><span class="line">str=<span class="string">&quot;Hello, I know you are \&quot;<span class="variable">$your_name</span>\&quot;! \n&quot;</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="variable">$str</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>字符串拼接</strong></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">your_name=&quot;runoob&quot;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用双引号拼接</span></span><br><span class="line">greeting=&quot;hello, &quot;$your_name&quot; !&quot;</span><br><span class="line">greeting_1=&quot;hello, $&#123;your_name&#125; !&quot;</span><br><span class="line">echo $greeting  $greeting_1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用单引号拼接</span></span><br><span class="line">greeting_2=&#x27;hello, &#x27;$your_name&#x27; !&#x27;</span><br><span class="line">greeting_3=&#x27;hello, $&#123;your_name&#125; !&#x27;</span><br><span class="line">echo $greeting_2  $greeting_3</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>直接拼接，不需要逗号或者加号等</li>
-</ul>
-<p><strong>子字符串</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">string=&quot;runoob is a great site&quot;</span><br><span class="line">echo $&#123;string:1:4&#125; # 输出 unoo</span><br></pre></td></tr></table></figure>
-
-<p><strong>查找字符串</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">string=<span class="string">&quot;runoob is a great site&quot;</span></span><br><span class="line"><span class="built_in">echo</span> `expr index <span class="string">&quot;<span class="variable">$string</span>&quot;</span> io`  <span class="comment"># 输出 4</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意上面的expr…是反引号，不是单引号</li>
-</ul>
-<p><strong>字符串长度</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">string=<span class="string">&quot;abcd&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#string&#125;</span> <span class="comment">#输出 4</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>字符串长度的其他方法</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">string=<span class="string">&quot;hello,everyone my name is xiaoming&quot;</span></span><br><span class="line">expr length <span class="string">&quot;<span class="variable">$string</span>&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/imgs/image-20220102142331661.png" alt="image-20220102142331661"></p>
-<p>输出6</p>
-<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">数组名=(值1 值2 ... 值n)</span><br><span class="line">array_name=(value0 value1 value2 value3)</span><br><span class="line">array_name=(</span><br><span class="line">value0</span><br><span class="line">value1</span><br><span class="line">value2</span><br><span class="line">value3</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<p><strong>单独定义变量</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">array_name[0]=value0</span><br><span class="line">array_name[1]=value1</span><br><span class="line">array_name[n]=valuen</span><br></pre></td></tr></table></figure>
-
-<p><strong>读数组内容</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="variable">$&#123;数组名[下标]&#125;</span></span><br><span class="line">valuen=<span class="variable">$&#123;array_name[n]&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>取得数组全部内容</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo $&#123;array_name[@]&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>取得数组长度</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 取得数组元素的个数</span></span><br><span class="line">length=<span class="variable">$&#123;#array_name[@]&#125;</span></span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">length=<span class="variable">$&#123;#array_name[*]&#125;</span></span><br><span class="line"><span class="comment"># 取得数组单个元素的长度</span></span><br><span class="line">lengthn=<span class="variable">$&#123;#array_name[n]&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>注意，可能数组会出现<img src="/imgs/image-20220102141720725.png" alt="image-20220102141720725">这是因为 ubuntu 模式使用的是 dash 模式，如果<strong>不想报错使用 bash 模式</strong></p>
-<p>的报错，此时使用命令 <code>bash xxx.sh</code>  或者 将脚本第一行改为 <code>*#!/bin/bash</code>，执行<code>./example.sh</code>也可以</p>
-<p>输出数组长度的时候可能<strong>不对</strong>，此时输出的是1</p>
-<p><img src="/imgs/image-20220102142013809.png" alt="image-20220102142013809"></p>
-<p>此时也是1</p>
-<p><img src="/imgs/image-20220102142050921.png" alt="image-20220102142050921"></p>
-<p>此代码的输出为</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">array=(0,1,2,3,4,5,6)</span><br><span class="line">echo $&#123;#array[@]&#125;</span><br><span class="line">echo $array</span><br><span class="line">echo $&#123;array[*]&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/imgs/image-20220102142905800.png" alt="image-20220102142905800"></p>
-<ul>
-<li>可以通过给数组设置<strong>下标范围以外</strong>的单元的内容来增加数组的长度</li>
-</ul>
-<h4 id="注意，使用指定下标修改数组比如array-name-0-value0会丢弃该下标后面的其他内容"><a href="#注意，使用指定下标修改数组比如array-name-0-value0会丢弃该下标后面的其他内容" class="headerlink" title="注意，使用指定下标修改数组比如array_name[0]=value0会丢弃该下标后面的其他内容"></a>注意，使用指定下标修改数组比如<code>array_name[0]=value0</code>会丢弃该下标后面的其他内容</h4><h3 id="注意，代码不能随意包含空格，比如等号两边，可能会引起错误"><a href="#注意，代码不能随意包含空格，比如等号两边，可能会引起错误" class="headerlink" title="注意，代码不能随意包含空格，比如等号两边，可能会引起错误"></a>注意，代码不能随意包含空格，比如等号两边，可能会引起错误</h3><h4 id="字符串截取"><a href="#字符串截取" class="headerlink" title="字符串截取"></a>字符串截取</h4><p>参考 <a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-shell-variable.html">https://www.runoob.com/linux/linux-shell-variable.html</a> 第一篇笔记</p>
-<h3 id="读取用户输入"><a href="#读取用户输入" class="headerlink" title="读取用户输入"></a>读取用户输入</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">read</span> [-options] [variable...]</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">read -p &quot;input a val:&quot; a    #获取键盘输入的 a 变量数字</span><br><span class="line">read -p &quot;input b val:&quot; b    #获取键盘输入的 b 变量数字</span><br><span class="line">r=$[a+b]                    #计算a+b的结果 赋值给r  不能有空格</span><br><span class="line">echo &quot;result = $&#123;r&#125;&quot;        #输出显示结果 r</span><br></pre></td></tr></table></figure>
-
-<h3 id="shell注释"><a href="#shell注释" class="headerlink" title="shell注释"></a>shell注释</h3><p>以<code>#</code> 开头的行就是注释，会被解释器忽略。</p>
-<ul>
-<li>多行注释</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">:&lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">注释内容...</span></span><br><span class="line"><span class="string">注释内容...</span></span><br><span class="line"><span class="string">注释内容...</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
-
-<p>或者任何符号</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">:&lt;&lt;&#x27;</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">&#x27;</span><br><span class="line"></span><br><span class="line">:&lt;&lt;!</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">注释内容...</span><br><span class="line">!</span><br></pre></td></tr></table></figure>
  
       <!-- reward -->
       

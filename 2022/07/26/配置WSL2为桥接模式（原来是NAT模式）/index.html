@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">431</span>
+            <span class="post-count">681</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">1 min</span>
+            <span class="post-count">2 min</span>
         </span>
     </span>
 </div>
@@ -138,9 +138,11 @@
 <li><p>参考链接 </p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/488442403">知乎</a> </li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/chubbykkk/article/details/125216708">csdn</a><h2 id="更改WSL为桥接模式之后远程显示的问题"><a href="#更改WSL为桥接模式之后远程显示的问题" class="headerlink" title="更改WSL为桥接模式之后远程显示的问题"></a>更改WSL为桥接模式之后远程显示的问题</h2></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/chubbykkk/article/details/125216708">csdn</a></li>
 </ul>
 </li>
+<li><p><strong>注意这样实际上是整个电脑通过WSL的网卡在上网，使用的就是主机的IP地址</strong></p>
+<h2 id="更改WSL为桥接模式之后远程显示的问题"><a href="#更改WSL为桥接模式之后远程显示的问题" class="headerlink" title="更改WSL为桥接模式之后远程显示的问题"></a>更改WSL为桥接模式之后远程显示的问题</h2></li>
 <li><p>因为更改WSL为桥接模式之后，WSL变为局域网下与Windows平级的设备，所以需要重新配置<code>.bashrc</code></p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">vim ~/.bashrc</span><br></pre></td></tr></table></figure>
 <p>找到这一行</p>
@@ -148,6 +150,27 @@
 <li><p>将这一行中尖括号的部分修改为<strong>计算机在局域网中的IP地址</strong>然后即可继续使用WSL桌面（比如<code>startxfce4</code>）</p>
 </li>
 <li><p><img src="/imgs/6ceb41155c3d371a919243c79169702e60f5b5bd66864aba5360198b3dc84a3d.png" alt="图 8">  </p>
+<h2 id="修改DNS服务器"><a href="#修改DNS服务器" class="headerlink" title="修改DNS服务器"></a>修改DNS服务器</h2><p>您可以通过以下步骤在WSL中设置DNS服务器：</p>
+</li>
+<li><p>启动WSL，进入目录，创建<code>wsl.conf</code>文件。例如，您可以使用以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd ~/../../etc</span><br><span class="line">sudo vim wsl.conf</span><br><span class="line">sudo touch wsl.conf</span><br></pre></td></tr></table></figure></li>
+<li><p>将这些行添加到wsl.conf中：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[network]</span><br><span class="line">generateResolvConf=false</span><br></pre></td></tr></table></figure></li>
+<li><p>退出WSL，关闭WSL。您可以使用以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">exit</span><br><span class="line">wsl --shutdown</span><br></pre></td></tr></table></figure></li>
+<li><p>此时，由于有了wsl.conf，run/resolvconf应该不再存在，并且将不再被创建。</p>
+</li>
+<li><p>删除现有的符号链接文件。例如，您可以使用以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd ~/../../etc</span><br><span class="line">sudo rm resolv.conf</span><br></pre></td></tr></table></figure></li>
+<li><p>创建一个新的resolv.conf文件。例如，您可以使用以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo vim resolv.conf</span><br><span class="line">sudo touch resolv.conf</span><br></pre></td></tr></table></figure></li>
+<li><p>将自己的DNS添加到resolv.conf中。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nameserver 8.8.8.8</span><br></pre></td></tr></table></figure></li>
+<li><p>其中<code>8.8.8.8</code>是您想要使用的DNS服务器地址。</p>
+</li>
+<li><p>重启WSL。您可以使用以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">exit</span><br><span class="line">wsl --shutdown</span><br></pre></td></tr></table></figure></li>
+<li><p>再次启动WSL</p>
 </li>
 </ul>
  
