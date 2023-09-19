@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">4.2k</span>
+            <span class="post-count">4.5k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">15 min</span>
+            <span class="post-count">16 min</span>
         </span>
     </span>
 </div>
@@ -106,6 +106,15 @@
        
   <h1 id="inux线程（一）"><a href="#inux线程（一）" class="headerlink" title="inux线程（一）"></a>inux线程（一）</h1><h2 id="线程概念"><a href="#线程概念" class="headerlink" title="线程概念"></a>线程概念</h2><ul>
 <li>线程是参与系统调度的最小单位。它被包含在进程之中，是进程中的实际运行单位。一个线程指的是进 程中一个单一顺序的控制流（或者说是执行路线、执行流），一个进程中可以创建多个线程，多个线程实现 并发运行，每个线程执行不同的任务。譬如某应用程序设计了两个需要并发运行的任务 task1 和 task2，可将 两个不同的任务分别放置在两个线程中。</li>
+</ul>
+<h2 id="关于线程的更深层次的理解"><a href="#关于线程的更深层次的理解" class="headerlink" title="关于线程的更深层次的理解"></a>关于线程的更深层次的理解</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41167361/article/details/107990763">参考</a></li>
+<li>对于进程来说，相同的地址(同一个虚拟地址)在不同的进程中，反复使用而不冲突。原因是他们虽虚拟址一样，但是页目录、页表、物理页面各不相同。相同的虚拟址，映射到不同的物理页面内存单元，最终访问不同的物理页面。<br>但！线程不同！两个线程具有各自独立的PCB，但共享同一个页目录，也就共享同一个页表和物理页面。所以两个PCB共享一个地址空间。</li>
+<li>实际上，无论是创建进程的fork，还是创建线程的pthread_create，底层实现都是调用同一个内核函数clone</li>
+<li>如果复制对方的地址空间，那么就产出一个“进程”；如果共享对方的地址空间，就产生一个“线程”</li>
+<li>Linux<strong>内核是不区分进程和线程的</strong>。只在用户层面上进行区分。所以，线程所有操作函数 pthread_* 是<strong>库函数，而非系统调用</strong></li>
+<li>进程：独立地址空间，拥有PCB</li>
+<li>线程：<strong>也有PCB</strong>，但没有独立的地址空间</li>
 </ul>
 <h2 id="线程的创建"><a href="#线程的创建" class="headerlink" title="线程的创建"></a>线程的创建</h2><ul>
 <li>当一个程序启动时，就有一个进程被操作系统（OS）创建，与此同时一个线程也立刻运行，该线程通 常叫做程序的主线程（Main Thread），因为它是程序一开始时就运行的线程。应用程序都是以 main()做为 入口开始运行的，所以 main()函数就是主线程的入口函数，main()函数所执行的任务就是主线程需要执行的 任务。</li>
