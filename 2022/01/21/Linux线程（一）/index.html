@@ -104,7 +104,11 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h1 id="inux线程（一）"><a href="#inux线程（一）" class="headerlink" title="inux线程（一）"></a>inux线程（一）</h1><h2 id="线程概念"><a href="#线程概念" class="headerlink" title="线程概念"></a>线程概念</h2><ul>
+  <h1 id="Linux线程（一）"><a href="#Linux线程（一）" class="headerlink" title="Linux线程（一）"></a>Linux线程（一）</h1><h2 id="一些注意事项"><a href="#一些注意事项" class="headerlink" title="一些注意事项"></a>一些注意事项</h2><ul>
+<li>Linux的线程中，假如主线程（也就是<code>main</code>函数）执行结束退出（比如<code>exit()</code>或者<code>return 0</code>），会导致整个进程所有线程被<strong>强制停止</strong></li>
+<li>即使是正在执行尚且没有结束的线程也会被停止</li>
+</ul>
+<h2 id="线程概念"><a href="#线程概念" class="headerlink" title="线程概念"></a>线程概念</h2><ul>
 <li>线程是参与系统调度的最小单位。它被包含在进程之中，是进程中的实际运行单位。一个线程指的是进 程中一个单一顺序的控制流（或者说是执行路线、执行流），一个进程中可以创建多个线程，多个线程实现 并发运行，每个线程执行不同的任务。譬如某应用程序设计了两个需要并发运行的任务 task1 和 task2，可将 两个不同的任务分别放置在两个线程中。</li>
 </ul>
 <h2 id="关于线程的更深层次的理解"><a href="#关于线程的更深层次的理解" class="headerlink" title="关于线程的更深层次的理解"></a>关于线程的更深层次的理解</h2><ul>
