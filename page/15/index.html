@@ -141,6 +141,88 @@
     
     
     <article
+  id="post-STM32点亮ili9341驱动的屏幕（HAL库第一版）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/15/STM32%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%E7%AC%AC%E4%B8%80%E7%89%88%EF%BC%89/"
+    >STM32点亮ILI9341驱动的屏幕（HAL库）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/15/STM32%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%E7%AC%AC%E4%B8%80%E7%89%88%EF%BC%89/" class="article-date">
+  <time datetime="2021-12-15T11:48:42.000Z" itemprop="datePublished">2021-12-15</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="STM32F407点亮ILI9341驱动的屏幕"><a href="#STM32F407点亮ILI9341驱动的屏幕" class="headerlink" title="STM32F407点亮ILI9341驱动的屏幕"></a>STM32F407点亮ILI9341驱动的屏幕</h1><h2 id="驱动网址"><a href="#驱动网址" class="headerlink" title="驱动网址"></a>驱动网址</h2><p>（国内镜像）</p>
+<p><a target="_blank" rel="noopener" href="https://hub.fastgit.org/afiskon/stm32-ili9341">https://hub.fastgit.org/afiskon/stm32-ili9341</a></p>
+<h2 id="接线"><a href="#接线" class="headerlink" title="接线"></a>接线</h2><ul>
+<li>屏幕的供电是3.3V</li>
+<li>SCL是时钟，接SCK</li>
+<li>SDA是输入信号，接MOSI</li>
+<li>其他接对应的输出引脚即可</li>
+</ul>
+<h2 id="Cube配置"><a href="#Cube配置" class="headerlink" title="Cube配置"></a>Cube配置</h2><ul>
+<li>SPI设置（不需要设置为全双工 ，只需要设置为<strong>纯发送</strong>即可）</li>
+</ul>
+<p><img src="/imgs/image-20211215215305442.png" alt="image-20211215215305442"></p>
+<ul>
+<li>但是STM32F4使用HAL库配置的时候的结果与github上的驱动效果略有不同，也就是波特率位42.0MBits/s</li>
+<li><img src="/imgs/image-20211215201627479.png" alt="image-20211215201627479"></li>
+</ul>
+<h2 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h2><p>先把ili9341文件夹（在src文件夹中）复制到项目文件夹下</p>
+<p><img src="/imgs/image-20211215202205389.png" alt="image-20211215202205389"></p>
+<p>然后在此处将其添加到paths</p>
+<p><img src="/imgs/image-20211215202351571.png" alt="image-20211215202351571"></p>
+<p>然后通过add existing files to group… 添加ili9341目录下的文件</p>
+<ul>
+<li><p>然后修改ili9341的头文件</p>
+</li>
+<li><p><img src="/imgs/image-20211215215407292.png" alt="image-20211215215407292"></p>
+</li>
+<li><p>还有</p>
+</li>
+<li><p><img src="/imgs/image-20211215215423986.png" alt="image-20211215215423986"></p>
+</li>
+<li><p>然后在主程序中include相关的头文件</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ili9341.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;fonts.h&quot;</span></span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="粗略写程序如下"><a href="#粗略写程序如下" class="headerlink" title="粗略写程序如下"></a>粗略写程序如下</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN 1 */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE END 1 */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* MCU Configuration--------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Reset of all peripherals, Initializes the Flash interface and the Systick. */</span></span><br><span class="line">  HAL_Init();</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN Init */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE END Init */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Configure the system clock */</span></span><br><span class="line">  SystemClock_Config();</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN SysInit */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE END SysInit */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Initialize all configured peripherals */</span></span><br><span class="line">  MX_GPIO_Init();</span><br><span class="line">  MX_SPI1_Init();</span><br><span class="line">  MX_USART1_UART_Init();</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN 2 */</span></span><br><span class="line">  ILI9341_Init();</span><br><span class="line">  <span class="comment">/* USER CODE END 2 */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Infinite loop */</span></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN WHILE */</span></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">/* USER CODE END WHILE */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* USER CODE BEGIN 3 */</span></span><br><span class="line">    ILI9341_FillScreen(ILI9341_BLUE);</span><br><span class="line">    ILI9341_WriteString(<span class="number">0</span>,<span class="number">10</span>,<span class="string">&quot;Hello World!&quot;</span>, Font_7x10, ILI9341_WHITE, ILI9341_BLACK);</span><br><span class="line">    HAL_Delay(<span class="number">500</span>);</span><br><span class="line">    ILI9341_FillScreen(ILI9341_GREEN);</span><br><span class="line">    ILI9341_WriteString(<span class="number">0</span>,<span class="number">10</span>,<span class="string">&quot;Hello World!&quot;</span>, Font_7x10, ILI9341_WHITE, ILI9341_BLACK);</span><br><span class="line">    HAL_Delay(<span class="number">500</span>);</span><br><span class="line">    HAL_UART_Transmit(&amp;huart1,textSend,<span class="number">5</span>,<span class="number">500</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/* USER CODE END 3 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="但是这个驱动的效果不是特别好，刷新比较慢，会有明显的刷新过程"><a href="#但是这个驱动的效果不是特别好，刷新比较慢，会有明显的刷新过程" class="headerlink" title="但是这个驱动的效果不是特别好，刷新比较慢，会有明显的刷新过程"></a>但是这个驱动的效果不是特别好，刷新比较慢，会有明显的刷新过程</h3><p><img src="/imgs/1639576655398.gif" alt="image-20211215220004575"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-freeRtos内存分配"
   class="article article-type-post"
   itemscope
@@ -327,60 +409,6 @@
 
     
     <article
-  id="post-FreeRtos2"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/12/11/FreeRtos2/"
-    >FreeRtos2</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/12/11/FreeRtos2/" class="article-date">
-  <time datetime="2021-12-11T10:03:10.000Z" itemprop="datePublished">2021-12-11</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="FreeRtos创建注意（使用CubeMX）"><a href="#FreeRtos创建注意（使用CubeMX）" class="headerlink" title="FreeRtos创建注意（使用CubeMX）"></a>FreeRtos创建注意（使用CubeMX）</h2><ul>
-<li><p>创建按照前篇知乎上的文章创建即可，注意此时会提示Systick的问题，设置为外部时钟晶振，而且设置为TIM1（或者其他timer可能也可以，没有尝试过）</p>
-</li>
-<li><p><img src="/imgs/image-20211214001535585.png" alt="image-20211214001535585"></p>
-</li>
-<li><p>然后另一个可能存在的问题是在<code>freertos.c</code> 文件中定义一些与<code>UART</code>相关的东西的时候会因为没有<code>#include &quot;usart.h&quot;</code>而出错，此时加上引用即可</p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
   id="post-FreeRtos1"
   class="article article-type-post"
   itemscope
@@ -447,6 +475,60 @@
 </li>
 </ul>
 <h2 id="待续"><a href="#待续" class="headerlink" title="待续"></a>待续</h2> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-FreeRtos2"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/11/FreeRtos2/"
+    >FreeRtos2</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/11/FreeRtos2/" class="article-date">
+  <time datetime="2021-12-11T10:03:10.000Z" itemprop="datePublished">2021-12-11</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="FreeRtos创建注意（使用CubeMX）"><a href="#FreeRtos创建注意（使用CubeMX）" class="headerlink" title="FreeRtos创建注意（使用CubeMX）"></a>FreeRtos创建注意（使用CubeMX）</h2><ul>
+<li><p>创建按照前篇知乎上的文章创建即可，注意此时会提示Systick的问题，设置为外部时钟晶振，而且设置为TIM1（或者其他timer可能也可以，没有尝试过）</p>
+</li>
+<li><p><img src="/imgs/image-20211214001535585.png" alt="image-20211214001535585"></p>
+</li>
+<li><p>然后另一个可能存在的问题是在<code>freertos.c</code> 文件中定义一些与<code>UART</code>相关的东西的时候会因为没有<code>#include &quot;usart.h&quot;</code>而出错，此时加上引用即可</p>
+</li>
+</ul>
+ 
       <!-- reward -->
       
     </div>

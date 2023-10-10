@@ -141,6 +141,71 @@
     
     
     <article
+  id="post-gitClone时挂了梯子仍然报443错误的问题"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/07/01/gitClone%E6%97%B6%E6%8C%82%E4%BA%86%E6%A2%AF%E5%AD%90%E4%BB%8D%E7%84%B6%E6%8A%A5443%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/"
+    >gitClone时挂了梯子仍然报443错误的问题和pip无法使用的问题</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/07/01/gitClone%E6%97%B6%E6%8C%82%E4%BA%86%E6%A2%AF%E5%AD%90%E4%BB%8D%E7%84%B6%E6%8A%A5443%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/" class="article-date">
+  <time datetime="2023-06-30T16:26:38.000Z" itemprop="datePublished">2023-07-01</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="问题与解决"><a href="#问题与解决" class="headerlink" title="问题与解决"></a>问题与解决</h2><ul>
+<li>报错<ul>
+<li>git clone时虽然已经挂了clash全局，但是仍然访问github 443端口超时</li>
+</ul>
+</li>
+<li>解决<ul>
+<li>使用命令<code>git config --global http.proxy &quot;localhost:&lt;clash端口号&gt;&quot;</code></li>
+<li><img src="/imgs/66c3ecbedbc2b13e4c8394192f4e4f74cd7e2924069e7c01fc4a22a687ec043b.png" alt="picture 1">  </li>
+</ul>
+</li>
+</ul>
+<h2 id="git-clone时permission-denied的问题"><a href="#git-clone时permission-denied的问题" class="headerlink" title="git clone时permission denied的问题"></a>git clone时permission denied的问题</h2><ul>
+<li>可能原因很多，一个是本地的<code>ssh</code>密钥已经无法使用，需要本地生成之后在github上重新添加一个<code>ssh</code>密钥</li>
+<li>另一个是需要clone入的文件夹没有写入权限，此时需要使用管理员权限打开控制台即可<h2 id="pip代理配置"><a href="#pip代理配置" class="headerlink" title="pip代理配置"></a>pip代理配置</h2></li>
+<li><code>pip config set global.HTTPS_PROXY https://127.0.0.1:7890</code></li>
+<li><code>pip config set global.HTTP_PROXY https://127.0.0.1:7890</code></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/" rel="tag">git</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-解决Windows下Powershell无法执行脚本无法运行conda的问题"
   class="article article-type-post"
   itemscope
@@ -1287,82 +1352,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-使用crow在CPP环境下开发web服务器"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/04/19/%E4%BD%BF%E7%94%A8crow%E5%9C%A8CPP%E7%8E%AF%E5%A2%83%E4%B8%8B%E5%BC%80%E5%8F%91web%E6%9C%8D%E5%8A%A1%E5%99%A8/"
-    >使用crow在CPP环境下开发web服务器</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/04/19/%E4%BD%BF%E7%94%A8crow%E5%9C%A8CPP%E7%8E%AF%E5%A2%83%E4%B8%8B%E5%BC%80%E5%8F%91web%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="article-date">
-  <time datetime="2023-04-19T15:29:13.000Z" itemprop="datePublished">2023-04-19</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="下载与安装"><a href="#下载与安装" class="headerlink" title="下载与安装"></a>下载与安装</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://crowcpp.org/master/">官方网站</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/CrowCpp/Crow">github</a></li>
-<li>下载自己需要的relaease即可<ul>
-<li><img src="/imgs/9edcaefdfd3b82149dac42244821ed13f17edc338f633e9b1edb24d5ebf43a14.png" alt="picture 1">  <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2></li>
-</ul>
-</li>
-<li>C++包的头文件在<code>/usr/include</code>目录下</li>
-<li>但是出现错误<strong>fatal error: boost/optional.hpp: No such file or directory</strong></li>
-<li>此时安装<code>boost</code>，也就是<code>sudo apt-get install libboost-all-dev</code></li>
-<li>然后又报错<code>undefined reference to pthread_sigmask</code>，此时在编译后加参数<code>-lpthread</code>添加多线程库</li>
-<li>但是还有错误<code>undefined reference to boost::system::system_category()&#39;</code>之类的，需要添加参数<code>-lboost_system -lboost_thread</code></li>
-<li>最终的编译命令为<code>g++ ./crowHelloWorld.cpp -o helloWorld -lpthread -lboost_system -lboost_thread</code></li>
-<li>输出结果<ul>
-<li><img src="/imgs/dd4678720db50310c4cceaae5977b02902d56d5864021e62b06ff4a9b390b858.png" alt="picture 2">  </li>
-<li><img src="/imgs/9e2db2a339b05758e287d902bfd5a0984c784886dfffb2057440165ca6bb5ba3.png" alt="picture 3">  </li>
-</ul>
-</li>
-</ul>
-<h2 id="一个简单的包含前后端互换数据的案例"><a href="#一个简单的包含前后端互换数据的案例" class="headerlink" title="一个简单的包含前后端互换数据的案例"></a>一个简单的包含前后端互换数据的案例</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/yz2zcx/article/details/105758850">新手参考</a><h3 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;crow.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    crow::SimpleApp app;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">CROW_ROUTE</span>(app, <span class="string">&quot;/&quot;</span>)([]()&#123;</span><br><span class="line">        <span class="keyword">auto</span> page = crow::mustache::<span class="built_in">load_text</span>(<span class="string">&quot;./mainPage.html&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> page;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">CROW_ROUTE</span>(app, <span class="string">&quot;/data&quot;</span>).<span class="built_in">methods</span>(<span class="string">&quot;POST&quot;</span>_method)([](<span class="keyword">const</span> crow::request&amp; req)&#123;</span><br><span class="line">        <span class="keyword">auto</span> x = crow::json::<span class="built_in">load</span>(req.body);</span><br><span class="line">        std::cout&lt;&lt;x[<span class="string">&quot;data&quot;</span>]&lt;&lt;std::endl;</span><br><span class="line">        crow::json::wvalue retDict;</span><br><span class="line">        retDict[<span class="string">&quot;message&quot;</span>] = x[<span class="string">&quot;data&quot;</span>];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> crow::<span class="built_in">response</span>(retDict);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    app.<span class="built_in">port</span>(<span class="number">8080</span>).<span class="built_in">multithreaded</span>().<span class="built_in">run</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h3></li>
-<li>注意后端发送的JSON数据<strong>不需要解析（PARSE）</strong><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">placeholder</span>=<span class="string">&quot;send something...&quot;</span> <span class="attr">id</span>=<span class="string">&quot;input&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">&quot;sendAjax()&quot;</span>&gt;</span>send<span class="tag">&lt;/<span class="name">button</span>&gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div1&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> input = <span class="built_in">document</span>.getElementById(<span class="string">&quot;input&quot;</span>);</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">&quot;div1&quot;</span>);</span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="keyword">function</span> <span class="title">sendAjax</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">            <span class="attr">type</span>: <span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">            <span class="attr">url</span>: <span class="string">&quot;/data&quot;</span>,</span></span><br><span class="line"><span class="javascript">            <span class="attr">data</span>: <span class="built_in">JSON</span>.stringify(&#123; <span class="string">&#x27;data&#x27;</span>: input.value &#125;),</span></span><br><span class="line"><span class="javascript">            <span class="attr">success</span>: <span class="function"><span class="keyword">function</span> (<span class="params">datas</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">                <span class="built_in">console</span>.log(datas);</span></span><br><span class="line"><span class="javascript">                <span class="comment">// dataDict = JSON.parse(datas);</span></span></span><br><span class="line"><span class="javascript">                div1.innerHTML = datas[<span class="string">&#x27;message&#x27;</span>];</span></span><br><span class="line"><span class="javascript">            &#125;</span></span><br><span class="line"><span class="javascript">        &#125;);</span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="makefile"><a href="#makefile" class="headerlink" title="makefile"></a>makefile</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">main: </span></span><br><span class="line">	g++ ./crowHelloWorld.cpp -o main -lpthread -lboost_system -lboost_thread</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	<span class="comment"># rm *.o</span></span><br><span class="line">	rm main</span><br></pre></td></tr></table></figure>
-<h3 id="文件目录格式"><a href="#文件目录格式" class="headerlink" title="文件目录格式"></a>文件目录格式</h3></li>
-<li><code>.html</code>文件需要放在工作目录的<code>templates</code>文件夹下<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3></li>
-<li><img src="/imgs/d8207e1f2ed546fa746dc1773bbbab150bbadcb6bcdd8ddba15d407af9baa142.png" alt="picture 4">  </li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/crow/" rel="tag">crow</a></li></ul>
 
     </footer>
   </div>

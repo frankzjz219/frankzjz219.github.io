@@ -141,6 +141,254 @@
     
     
     <article
+  id="post-Linux线程（三）线程同步"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/23/Linux%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/"
+    >Linux线程（三）线程同步</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/23/Linux%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/" class="article-date">
+  <time datetime="2022-01-23T11:00:13.000Z" itemprop="datePublished">2022-01-23</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h1><h2 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h2><p>互斥锁（mutex）又叫互斥量，从本质上说是一把锁，在访问共享资源之前对互斥锁进行上锁，在访问 完成后释放互斥锁（解锁）；对互斥锁进行上锁之后，任何其它试图再次对互斥锁进行加锁的线程都会被阻塞，直到当前线程释放互斥锁</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><ul>
+<li>互 斥锁使 用 pthread_mutex_t 数 据类型 表示， pthread_mutex_t 其 实是一个 结构体 类型， 而宏 PTHREAD_MUTEX_INITIALIZER 其实是一个对结构体赋值操作的封装</li>
+<li>使用宏定义初始化互斥锁：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">pthread_mutex_t</span> mutex = PTHREAD_MUTEX_INITIALIZER</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用函数初始化互斥锁</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_init</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *mutex, <span class="keyword">const</span> <span class="keyword">pthread_mutexattr_t</span> *attr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>mutex：参数 mutex 是一个 pthread_mutex_t 类型指针，指向需要进行初始化操作的互斥锁对象；</li>
+<li>attr：参数 attr 是一个 pthread_mutexattr_t 类型指针，指向一个 pthread_mutexattr_t 类型对象，该对象用 于定义互斥锁的属性，若将参数 attr 设置为 NULL，则表示将互斥锁的属性设置为 <strong>默认值</strong>，在这种情况下其实就<strong>等价于 PTHREAD_MUTEX_INITIALIZER</strong> 这种方式初始化，而不同之处在于， 使用宏不进行错误检查。</li>
+<li>返回值：成功返回 0；失败将返回一个非 0 的错误码。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">pthread_mutex_t</span> mutex;</span><br><span class="line">pthread_mutex_init(&amp;mutex, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//或者</span></span><br><span class="line"><span class="keyword">pthread_mutex_t</span> *mutex = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">pthread_mutex_t</span>));</span><br><span class="line">pthread_mutex_init(mutex, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="互斥锁的属性"><a href="#互斥锁的属性" class="headerlink" title="互斥锁的属性"></a>互斥锁的属性</h4><ul>
+<li>如果不使用默认属性，在调用 pthread_mutex_init()函数时，参数 attr 必须要指向一个 pthread_mutexattr_t 对象，而不能使用 NULL。当定义 pthread_mutexattr_t 对象之后，需要使用 pthread_mutexattr_init()函数对该 对象进行初始化操作，当对象不再使用时，需要使用 pthread_mutexattr_destroy()将其销毁</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutexattr_destroy</span><span class="params">(<span class="keyword">pthread_mutexattr_t</span> *attr)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutexattr_init</span><span class="params">(<span class="keyword">pthread_mutexattr_t</span> *attr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>属性的类型<ul>
+<li>PTHREAD_MUTEX_NORMAL：一种标准的互斥锁类型，不做任何的错误检查或死锁检测。如果 线程试图对已经由自己锁定的互斥锁再次进行加锁，则发生死锁；互斥锁处于未锁定状态，或者已 由其它线程锁定，对其解锁会导致不确定结果。</li>
+<li>PTHREAD_MUTEX_ERRORCHECK：此类互斥锁会提供错误检查。譬如这三种情况都会导致返 回错误：线程试图对已经由自己锁定的互斥锁再次进行加锁（同一线程对同一互斥锁加锁两次）， 返回错误；线程对由其它线程锁定的互斥锁进行解锁，返回错误；线程对处于未锁定状态的互斥锁 进行解锁，返回错误。这类互斥锁运行起来比较慢，因为它需要做错误检查，不过可将其作为调试 工具，以发现程序哪里违反了互斥锁使用的基本原则。</li>
+<li>PTHREAD_MUTEX_RECURSIVE：此类互斥锁允许同一线程在互斥锁解锁之前对该互斥锁进行 多次加锁，然后维护互斥锁加锁的次数，把这种互斥锁称为递归互斥锁，但是如果解锁次数不等于加速次数，则是不会释放锁的；所以，如果对一个递归互斥锁加锁两次，然后解锁一次，那么这个 互斥锁依然处于锁定状态，对它再次进行解锁之前不会释放该锁。</li>
+<li>PTHREAD_MUTEX_DEFAULT ： 此 类 互 斥 锁 提 供 默 认 的 行 为 和 特 性 。 使 用 宏 PTHREAD_MUTEX_INITIALIZER 初 始 化 的 互 斥 锁 ， 或 者 调 用 参 数 arg 为 NULL 的 pthread_mutexattr_init()函数所创建的互斥锁，都属于此类型。此类锁意在为互斥锁的实现保留最大 灵活性， Linux 上 ， PTHREAD_MUTEX_DEFAULT 类 型 互 斥 锁 的 行 为 与 PTHREAD_MUTEX_NORMAL 类型相仿。</li>
+</ul>
+</li>
+</ul>
+<h3 id="互斥锁加锁和解锁"><a href="#互斥锁加锁和解锁" class="headerlink" title="互斥锁加锁和解锁"></a>互斥锁加锁和解锁</h3><ul>
+<li>互斥锁初始化之后，处于一个未锁定状态，调用函数 pthread_mutex_lock()可以对互斥锁加锁、获取互 斥锁，而调用函数 pthread_mutex_unlock()可以对互斥锁解锁、释放互斥锁。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="comment">//加锁</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_lock</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</span><br><span class="line"><span class="comment">//解锁</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_unlock</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>如果互斥锁处于未锁定状态，则此次调用会上锁成 功，函数调用将立马返回；如果互斥锁此时<strong>已经被其它线程锁定</strong>了，那么调用 pthread_mutex_lock()会<strong>一直 阻塞</strong>，直到该互斥锁<strong>被解锁</strong>，到那时，调用将锁定互斥锁并返回</p>
+</li>
+<li><p>调用 pthread_mutex_unlock()函数将已经处于锁定状态的互斥锁进行解锁。以下行为均属错误：</p>
+<ul>
+<li>对处于未锁定状态的互斥锁进行解锁操作；</li>
+<li>解锁由<strong>其它线程锁定</strong>的互斥锁。</li>
+</ul>
+</li>
+<li><p>如果线程加锁的时候不希望被阻塞，可以使用 <code>pthread_mutex_trylock()</code>函数</p>
+<ul>
+<li>如果 互斥锁已经被其它线程锁住，调用 pthread_mutex_trylock()加锁失败，但不会阻塞，而是返回错误码 EBUSY。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_trylock</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="销毁互斥锁"><a href="#销毁互斥锁" class="headerlink" title="销毁互斥锁"></a>销毁互斥锁</h3><ul>
+<li>调用 pthread_mutex_destroy()函数来销毁互斥锁</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_destroy</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>不能销毁还没有解锁的互斥锁，否则将会出现错误；</li>
+<li>没有初始化的互斥锁也不能销毁。</li>
+</ul>
+<h3 id="互斥锁死锁"><a href="#互斥锁死锁" class="headerlink" title="互斥锁死锁"></a>互斥锁死锁</h3><p>有时，一个线程需要同时访问两个或更多不同的共享资源，而每个资源又由不同的互斥锁管理。当超过 一个线程对同一组互斥锁（两个或两个以上的互斥锁）进行加锁时，就有可能发生死锁；譬如，程序中使用 一个以上的互斥锁，如果允许一个线程一直占有第一个互斥锁，并且在试图锁住第二个互斥锁时处于阻塞 状态，但是拥有第二个互斥锁的线程也在试图锁住第一个互斥锁。因为两个线程都在相互请求另一个线程 拥有的资源，所以这两个线程都无法向前运行，会被一直阻塞，于是就产生了死锁。</p>
+<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><p>条件变量是线程可用的另一种同步机制。条件变量用于自动阻塞线程，知道某个特定事件发生或某个条 件满足为止，通常情况下，条件变量是和互斥锁一起搭配使用的。条件变量包括</p>
+<ul>
+<li>一个线程等待某个条件满足而被阻塞</li>
+<li>另一个线程中，条件满足时发出“信号”</li>
+</ul>
+<h3 id="条件变量初始化"><a href="#条件变量初始化" class="headerlink" title="条件变量初始化"></a>条件变量初始化</h3><ul>
+<li>使用宏定义初始化条件变量</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">pthread_cond_t</span> cond = PTHREAD_COND_INITIALIZER;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>pthread_cond_init()函数原型如下所示</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_destroy</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_init</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">const</span> <span class="keyword">pthread_condattr_t</span> *attr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>使用这些函数需要包含头文件，使用 pthread_cond_init()函数初始化条件变量，当不再 使用时，使用 pthread_cond_destroy()销毁条件变量。</p>
+</li>
+<li><p>参数 cond 指向 pthread_cond_t 条件变量对象，对于 pthread_cond_init()函数，类似于互斥锁，在初始化 条件变量时设置条件变量的属性，参数 attr 指向一个 pthread_condattr_t 类型对象，pthread_condattr_t 数据类 型用于描述条件变量的属性。可将参数 attr 设置为 NULL，表示使用属性的默认值来初始化条件变量，与使 用 PTHREAD_COND_INITIALIZER 宏相同。</p>
+</li>
+<li><p>注意事项</p>
+<ul>
+<li>在使用条件变量之前必须对条件变量进行初始化操作，使用 PTHREAD_COND_INITIALIZER 宏或 者函数 pthread_cond_init()都行；</li>
+<li>对已经初始化的条件变量再次进行初始化，将可能会导致未定义行为；</li>
+<li>对没有进行初始化的条件变量进行销毁，也将可能会导致未定义行为；</li>
+<li>对某个条件变量而言，仅当没有任何线程等待它时，将其销毁才是最安全的；</li>
+<li>经 pthread_cond_destroy()销毁的条件变量，可以再次调用 pthread_cond_init()对其进行重新初始化。</li>
+</ul>
+</li>
+</ul>
+<h3 id="通知和等待"><a href="#通知和等待" class="headerlink" title="通知和等待"></a>通知和等待</h3><ul>
+<li>发送信号操作即是通知一个或多个处于等待状态 的线程，某个共享变量的状态已经改变，这些处于等待状态的线程收到通知之后便会被唤醒，唤醒之后再检 查条件是否满足。等待操作是指在收到一个通知前一直处于阻塞状态。</li>
+<li>函数 pthread_cond_signal()和 pthread_cond_broadcast()均可向指定的条件变量发送信号，通知一个或多 个处于等待状态的线程。调用 pthread_cond_wait()函数是线程阻塞，直到收到条件变量的通知。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_broadcast</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_signal</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>pthread_cond_signal()函数至少能唤醒一个线程，而 pthread_cond_broadcast()函数 则能唤醒所有线程。</li>
+<li>使用 pthread_cond_broadcast()函数总能产生正确的结果，唤醒所有等待状态的线程，但函数 pthread_cond_signal()会<strong>更为高效，因为它只需确保至少唤醒一个线程即可</strong></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_wait</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>当程序当中使用条件变量，当判断某个条件不满足时，调用 pthread_cond_wait()函数将线程设置为等待 状态（阻塞）。</p>
+</li>
+<li><p>cond：指向需要等待的条件变量，目标条件变量；</p>
+</li>
+<li><p>mutex：参数 mutex 是一个 pthread_mutex_t 类型指针，指向一个互斥锁对象；前面开头便给大家介绍 了，条件变量通常是和互斥锁一起使用，因为条件的检测（条件检测通常是需要访问共享资源的）是在互斥 锁的保护下进行的，也就是说<strong>条件本身是由互斥锁保护的</strong>。</p>
+<ul>
+<li>在 pthread_cond_wait()函数内部会对参数 mutex 所指定的互斥锁进行操作，通常情况下，条件判断以及 pthread_cond_wait()函数调用<strong>均在互斥锁的保护下</strong>，也就是说，<strong>在此之前线程已经对互斥锁加锁了</strong>。调用 pthread_cond_wait()函数时，<strong>调用者把互斥锁传递给函数</strong>，函数会<strong>自动把调用线程放到等待条件的线程列表 上，然后将互斥锁解锁；当 pthread_cond_wait()被唤醒返回时，会再次锁住互斥锁</strong>。</li>
+</ul>
+</li>
+<li><p>如果调用 pthread_cond_signal()和 pthread_cond_broadcast()向指定条件变量发送信号时，若无任何线程等待该条件变量， 这个信号也就会不了了之。</p>
+</li>
+<li><p>当调用 pthread_cond_broadcast()同时唤醒所有线程时，互斥锁也只能被某一线程锁住，其它线程获取锁 失败又会陷入阻塞。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">pthread_mutex_t</span> mutex; <span class="comment">//定义互斥锁</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">pthread_cond_t</span> cond;   <span class="comment">//定义条件变量</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> g_avail = <span class="number">0</span>;       <span class="comment">//全局共享资源</span></span><br><span class="line"><span class="comment">/* 消费者线程 */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">consumer_thread</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (;;)</span><br><span class="line">    &#123;</span><br><span class="line">        pthread_mutex_lock(&amp;mutex); <span class="comment">//上锁</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="number">0</span> &gt;= g_avail)</span><br><span class="line">            pthread_cond_wait(&amp;cond, &amp;mutex); <span class="comment">//等待条件满足</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="number">0</span> &lt; g_avail)</span><br><span class="line">            g_avail--;                <span class="comment">//消费</span></span><br><span class="line">        pthread_mutex_unlock(&amp;mutex); <span class="comment">//解锁</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">void</span> *)<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 主线程（生产者） */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> tid;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="comment">/* 初始化互斥锁和条件变量 */</span></span><br><span class="line">    pthread_mutex_init(&amp;mutex, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_cond_init(&amp;cond, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">/* 创建新线程 */</span></span><br><span class="line">    ret = pthread_create(&amp;tid, <span class="literal">NULL</span>, consumer_thread, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (ret)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;pthread_create error: %s\n&quot;</span>, strerror(ret));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (;;)</span><br><span class="line">    &#123;</span><br><span class="line">        pthread_mutex_lock(&amp;mutex);   <span class="comment">//上锁</span></span><br><span class="line">        g_avail++;                    <span class="comment">//生产</span></span><br><span class="line">        pthread_mutex_unlock(&amp;mutex); <span class="comment">//解锁</span></span><br><span class="line">        pthread_cond_signal(&amp;cond);   <span class="comment">//向条件变量发送信号</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>上面的程序实现的功能是主线程对一个变量上互斥锁，+1，解锁互斥锁，然后发送信号唤醒子线程，线程对变量进行加锁，等待信号量，然后对变量-1，然后在解锁。</li>
+</ul>
+<h2 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h2><p>如果在获取自旋锁时，自旋锁处于未锁定状态，那么将立即获得锁（对自旋锁上锁）；如果在获取自旋 锁时，自旋锁已经处于锁定状态了，那么获取锁操作将会在原地“自旋”，直到该自旋锁的持有者释放了锁。 由此介绍可知，自旋锁与互斥锁相似，但是互斥锁在无法获取到锁时会让线程陷入阻塞等待状态；而自旋锁 在无法获取到锁时，将会在原地“自旋”等待。“自旋”其实就是调用者一直在循环查看该自旋锁的持有者 是否已经释放了锁，“自旋”一词因此得名。</p>
+<ul>
+<li><p>自旋锁的不足之处在于：自旋锁一直占用的 CPU，它在未获得锁的情况下，一直处于运行状态（自旋）， 所以占着 CPU，如果不能在很短的时间内获取锁，这无疑会使 CPU 效率降低。</p>
+</li>
+<li><p>自旋锁通常用于以下情况：需要保护的代码段执行时间很短，这样就会使 得持有锁的线程会很快释放锁，而“自旋”等待的线程也只需等待很短的时间；在这种情况下就比较适合使 用自旋锁，效率高！</p>
+</li>
+<li><p>区别</p>
+<ul>
+<li>实现方式上的区别：互斥锁是基于自旋锁而实现的，所以自旋锁相较于互斥锁更加底层；</li>
+<li>开销上的区别：获取不到互斥锁会陷入阻塞状态（休眠），直到获取到锁时被唤醒；而获取不到自 旋锁会在原地“自旋”，直到获取到锁；休眠与唤醒开销是很大的，所以互斥锁的开销要远高于自 旋锁、自旋锁的效率远高于互斥锁；但如果长时间的“自旋”等待，会使得 CPU 使用效率降低， 故自旋锁不适用于等待时间比较长的情况。</li>
+<li>使用场景的区别：自旋锁在用户态应用程序中使用的比较少，通常在内核代码中使用比较多；因为 自旋锁可以在中断服务函数中使用，而互斥锁则不行，在执行中断服务函数时要求不能休眠、不能 被抢占（内核中使用自旋锁会自动禁止抢占），一旦休眠意味着执行中断服务函数时主动交出了 CPU 使用权，休眠结束时无法返回到中断服务函数中，这样就会导致死锁！</li>
+</ul>
+</li>
+</ul>
+<h3 id="初始化-1"><a href="#初始化-1" class="headerlink" title="初始化"></a>初始化</h3><ul>
+<li>使用 pthread_spin_init()函数对其 进行初始化，当不再使用自旋锁时，调用 pthread_spin_destroy()函数将其销毁</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_destroy</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_init</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock, <span class="keyword">int</span> pshared)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数 lock 指向了需要进行初始化或销毁的自旋锁对象，参数 pshared 表示自旋锁的进程共享属性，可以 取值如下：<ul>
+<li>PTHREAD_PROCESS_SHARED：共享自旋锁。该自旋锁可以在多个进程中的线程之间共享；</li>
+<li>PTHREAD_PROCESS_PRIVATE：私有自旋锁。只有本进程内的线程才能够使用该自旋锁。</li>
+</ul>
+</li>
+</ul>
+<h3 id="加锁和解锁"><a href="#加锁和解锁" class="headerlink" title="加锁和解锁"></a>加锁和解锁</h3><ul>
+<li>可以使用 pthread_spin_lock()函数或 pthread_spin_trylock()函数对自旋锁进行加锁，<strong>前者在未获取到锁时 一直“自旋”</strong>；对于后者，如果<strong>未能获取到锁，就立刻返回错误</strong>，错误码为 EBUSY。不管以何种方式加锁， 自旋锁都可以使用 pthread_spin_unlock()函数对自旋锁进行解锁</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_lock</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_trylock</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_unlock</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果自旋锁处于未锁定状态，调用 pthread_spin_lock()会将其锁定（上锁），如果其它线程已经将自旋 锁锁住了，那本次调用将会“自旋”等待；如果试图对同一自旋锁加锁两次必然会导致死锁。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">pthread_spinlock_t</span> spin; <span class="comment">//定义自旋锁</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> g_count = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">new_thread_start</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> loops = *((<span class="keyword">int</span> *)arg);</span><br><span class="line">    <span class="keyword">int</span> l_count, j;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; loops; j++)</span><br><span class="line">    &#123;</span><br><span class="line">        pthread_spin_lock(&amp;spin); <span class="comment">//自旋锁上锁</span></span><br><span class="line"></span><br><span class="line">        l_count = g_count;</span><br><span class="line">        l_count++;</span><br><span class="line">        g_count = l_count;</span><br><span class="line">        pthread_spin_unlock(&amp;spin); <span class="comment">//自旋锁解锁</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">void</span> *)<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> loops;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> tid1, tid2;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="comment">/* 获取用户传递的参数 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">2</span> &gt; argc)</span><br><span class="line">        loops = <span class="number">10000000</span>; <span class="comment">//没有传递参数默认为 1000 万次</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        loops = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="comment">/* 初始化自旋锁(私有) */</span></span><br><span class="line">    pthread_spin_init(&amp;spin, PTHREAD_PROCESS_PRIVATE);</span><br><span class="line">    <span class="comment">/* 创建 2 个新线程 */</span></span><br><span class="line">    ret = pthread_create(&amp;tid1, <span class="literal">NULL</span>, new_thread_start, &amp;loops);</span><br><span class="line">    <span class="keyword">if</span> (ret)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;pthread_create error: %s\n&quot;</span>, strerror(ret));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    ret = pthread_create(&amp;tid2, <span class="literal">NULL</span>, new_thread_start, &amp;loops);</span><br><span class="line">    <span class="keyword">if</span> (ret)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;pthread_create error: %s\n&quot;</span>, strerror(ret));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 等待线程结束 */</span></span><br><span class="line">    ret = pthread_join(tid1, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (ret)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;pthread_join error: %s\n&quot;</span>, strerror(ret));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    ret = pthread_join(tid2, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (ret)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;pthread_join error: %s\n&quot;</span>, strerror(ret));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;g_count = %d\n&quot;</span>, g_count);</span><br><span class="line">    <span class="comment">/* 销毁自旋锁 */</span></span><br><span class="line">    pthread_spin_destroy(&amp;spin);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><ul>
+<li><p>读写锁有如下两个规则：</p>
+<ul>
+<li>当读写锁处于写加锁状态时，在这个锁被解锁之前，所有试图对这个锁进行加锁操作（不管是以读 模式加锁还是以写模式加锁）的线程都会被阻塞。</li>
+<li>当读写锁处于读加锁状态时，所有试图以读模式对它进行加锁的线程都可以加锁成功；但是任何以 写模式对它进行加锁的线程都会被阻塞，直到所有持有读模式锁的线程释放它们的锁为止。</li>
+</ul>
+</li>
+<li><p>所以，读写锁非常适合于对共享数据读的次数远大于写的次数的情况。当读写锁处于写模式加锁状态 时，它所保护的数据可以被安全的修改，因为一次只有一个线程可以在写模式下拥有这个锁；当读写锁处于 读模式加锁状态时，它所保护的数据就可以被多个获取读模式锁的线程读取。</p>
+</li>
+</ul>
+<h3 id="初始化-2"><a href="#初始化-2" class="headerlink" title="初始化"></a>初始化</h3><ul>
+<li>使用宏定义初始化</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">pthread_rwlock_t</span> rwlock = PTHREAD_RWLOCK_INITIALIZER;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>其他方式可以使用 pthread_rwlock_init()函数对其进行初始化，当读写锁不再使用时，需要调用 pthread_rwlock_destroy()函数将其销毁</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_destroy</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> *rwlock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_init</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> *rwlock, <span class="keyword">const</span> <span class="keyword">pthread_rwlockattr_t</span> *attr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>若将参数 attr 设置为 NULL，则表示将读写锁的属性设置为默认值，在 这种情况下其实就等价于 PTHREAD_RWLOCK_INITIALIZER 这种方式初始化，而不同之处在于，使用宏 不进行错误检查。</li>
+</ul>
+<h3 id="上锁和解锁"><a href="#上锁和解锁" class="headerlink" title="上锁和解锁"></a>上锁和解锁</h3><ul>
+<li>以读模式对读写锁进行上锁，需要调用 pthread_rwlock_rdlock()函数；以写模式对读写锁进行上锁，需 要调用 pthread_rwlock_wrlock()函数。不管是以何种方式锁住读写锁，均可以调用 pthread_rwlock_unlock()函 数解锁</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_rdlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> *rwlock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_wrlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> *rwlock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_unlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> *rwlock)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>当读写锁处于写模式加锁状态时，其它线程调用 pthread_rwlock_rdlock()或 pthread_rwlock_wrlock()函数 均会获取锁失败，从而陷入阻塞等待状态；当读写锁处于读模式加锁状态时，其它线程调用 pthread_rwlock_rdlock()函数可以成功获取到锁，如果调用 pthread_rwlock_wrlock()函数则不能获取到锁，从 而陷入阻塞等待状态。</p>
+</li>
+<li><p>如果线程不希望被阻塞，可以调用 pthread_rwlock_tryrdlock()和 pthread_rwlock_trywrlock()来尝试加锁， 如果不可以获取锁时。这两个函数都会立马返回错误，错误码为 EBUSY。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_tryrdlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> *rwlock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_trywrlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> *rwlock)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>使用例</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">pthread_rwlock_t</span> rwlock; <span class="comment">//定义读写锁</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> g_count = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">read_thread</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> number = *((<span class="keyword">int</span> *)arg);</span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="number">10</span>; j++)</span><br><span class="line">    &#123;</span><br><span class="line">        pthread_rwlock_rdlock(&amp;rwlock); <span class="comment">//以读模式获取锁</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;读线程&lt;%d&gt;, g_count=%d\n&quot;</span>, number + <span class="number">1</span>, g_count);</span><br><span class="line">        pthread_rwlock_unlock(&amp;rwlock); <span class="comment">//解锁</span></span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">void</span> *)<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">write_thread</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> number = *((<span class="keyword">int</span> *)arg);</span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="number">10</span>; j++)</span><br><span class="line">    &#123;</span><br><span class="line">        pthread_rwlock_wrlock(&amp;rwlock); <span class="comment">//以写模式获取锁</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;写线程&lt;%d&gt;, g_count=%d\n&quot;</span>, number + <span class="number">1</span>, g_count += <span class="number">20</span>);</span><br><span class="line">        pthread_rwlock_unlock(&amp;rwlock); <span class="comment">//解锁</span></span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">void</span> *)<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> nums[<span class="number">5</span>] = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> tid[<span class="number">10</span>];</span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line">    <span class="comment">/* 对读写锁进行初始化 */</span></span><br><span class="line">    pthread_rwlock_init(&amp;rwlock, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">/* 创建 5 个读 g_count 变量的线程 */</span></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="number">5</span>; j++)</span><br><span class="line">        pthread_create(&amp;tid[j], <span class="literal">NULL</span>, read_thread, &amp;nums[j]);</span><br><span class="line">    <span class="comment">/* 创建 5 个写 g_count 变量的线程 */</span></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="number">5</span>; j++)</span><br><span class="line">        pthread_create(&amp;tid[j + <span class="number">5</span>], <span class="literal">NULL</span>, write_thread, &amp;nums[j]);</span><br><span class="line">    <span class="comment">/* 等待线程结束 */</span></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="number">10</span>; j++)</span><br><span class="line">        pthread_join(tid[j], <span class="literal">NULL</span>); <span class="comment">//回收线程</span></span><br><span class="line">    <span class="comment">/* 销毁自旋锁 */</span></span><br><span class="line">    pthread_rwlock_destroy(&amp;rwlock);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Linux线程（二）"
   class="article article-type-post"
   itemscope
@@ -1392,66 +1640,6 @@
 </li>
 </ul>
 <p><img src="/../imgs/image-20220120104437272.png" alt="image-20220120104437272"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-manjaro添加快捷键"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/20/manjaro%E6%B7%BB%E5%8A%A0%E5%BF%AB%E6%8D%B7%E9%94%AE/"
-    >manjaro添加快捷键</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/20/manjaro%E6%B7%BB%E5%8A%A0%E5%BF%AB%E6%8D%B7%E9%94%AE/" class="article-date">
-  <time datetime="2022-01-20T03:00:00.000Z" itemprop="datePublished">2022-01-20</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="manjaro添加快捷键"><a href="#manjaro添加快捷键" class="headerlink" title="manjaro添加快捷键"></a>manjaro添加快捷键</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/xingshen100/article/details/85014978">https://blog.csdn.net/xingshen100/article/details/85014978</a></li>
-</ul>
-<ul>
-<li><p>系统设置</p>
-</li>
-<li><p><img src="/../imgs/image-20220120105459575.png" alt="image-20220120105459575"></p>
-</li>
-<li><p><img src="/../imgs/image-20220120105605636.png" alt="image-20220120105605636"></p>
-</li>
-</ul>
-<p>点击edit-new-global shortcut-command/URL新建，设置trigger和action即可</p>
-<p><img src="/../imgs/image-20220120105715782.png" alt="image-20220120105715782"></p>
-<p><img src="/../imgs/image-20220120105729191.png" alt="image-20220120105729191"></p>
  
       <!-- reward -->
       
