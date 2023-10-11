@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">4.5k</span>
+            <span class="post-count">4.6k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">16 min</span>
+            <span class="post-count">17 min</span>
         </span>
     </span>
 </div>
@@ -105,6 +105,7 @@
     <div class="article-entry" itemprop="articleBody">
        
   <h1 id="Linux线程（一）"><a href="#Linux线程（一）" class="headerlink" title="Linux线程（一）"></a>Linux线程（一）</h1><h2 id="一些注意事项"><a href="#一些注意事项" class="headerlink" title="一些注意事项"></a>一些注意事项</h2><ul>
+<li>Linux中每个线程都有单独的进程ID，inux中每个线程都有单独的进程ID。在Linux中，线程其实是通过轻量级进程（LWP）实现的，因此<strong>Linux中每个线程都是一个进程</strong>，都拥有一个PID。换句话说，操作系统原理中的线程，对应的其实是Linux中的进程</li>
 <li>Linux的线程中，假如主线程（也就是<code>main</code>函数）执行结束退出（比如<code>exit()</code>或者<code>return 0</code>），会导致整个进程所有线程被<strong>强制停止</strong></li>
 <li>即使是正在执行尚且没有结束的线程也会被停止</li>
 </ul>
