@@ -198,17 +198,15 @@
 </li>
 <li><p><img src="/imgs/a2232f7f204bdc754b369d58bf58dd2d21fea4d41bdb77d2d4724cabf41d2c4d.png" alt="picture 5">  </p>
 </li>
-<li><p>还是并无明显区别，判断不是编译器优化导致的不同</p>
+<li><p>还是并无明显区别，判断不是编译器优化导致的不同，快了124.46倍</p>
 </li>
-<li><p>但是更换了不同的计算，可以看出时间出现了明显的不同</p>
+<li><p>更换需要外部空间的计算，也是C程序快非常多</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">arraySum</span>(<span class="params"><span class="built_in">int</span> m</span>):</span></span><br><span class="line">    cdef <span class="built_in">int</span> a[<span class="number">1000000</span>]</span><br><span class="line">    cdef long <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    cdef <span class="built_in">int</span> i = <span class="number">0</span></span><br><span class="line">    cdef <span class="built_in">int</span> j = <span class="number">0</span></span><br><span class="line">    cdef double t1 = time.time()</span><br><span class="line">    cdef double t2</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        a[i] = i</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        <span class="built_in">sum</span>+=a[j]</span><br><span class="line">    t2 = time.time()</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>, t2-t1</span><br></pre></td></tr></table></figure></li>
 <li><p>比较时间</p>
 </li>
-<li><p><img src="/imgs/40f1089a23f2368b511cf4ad5906207efec47adb19eb8df2efc0073773970383.png" alt="picture 2">  </p>
-</li>
-<li><p><img src="/imgs/2dff8fdce37f31dd47ebfaebc484bec9a18e9de61f60d04882e05c52d5015502.png" alt="picture 3">  </p>
+<li><p><img src="/imgs/8dc7e5fda4cb21da9aa39b6e66c5b7aff6156b77b92d45d8dbaf5dc9db8788d8.png" alt="picture 6">  </p>
 <ul>
-<li>无论是在程序内部还是外部测量，可见二者时间没有明显的差异</li>
+<li>无论是在程序内部还是外部测量，可见二者时间没有明显的差异，都比python程序快非常多，基本上快了50倍左右</li>
 </ul>
 </li>
 </ul>
