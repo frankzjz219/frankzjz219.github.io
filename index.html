@@ -141,6 +141,92 @@
     
     
     <article
+  id="post-使用Cython加速python程序计算"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/10/18/%E4%BD%BF%E7%94%A8Cython%E5%8A%A0%E9%80%9Fpython%E7%A8%8B%E5%BA%8F%E8%AE%A1%E7%AE%97/"
+    >使用Cython加速python程序计算</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/10/18/%E4%BD%BF%E7%94%A8Cython%E5%8A%A0%E9%80%9Fpython%E7%A8%8B%E5%BA%8F%E8%AE%A1%E7%AE%97/" class="article-date">
+  <time datetime="2023-10-18T10:55:52.000Z" itemprop="datePublished">2023-10-18</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://cython.readthedocs.io/en/latest/">cython</a></p>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2></li>
+<li><p>定义一个<code>.pyx</code>文件</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># try111.pyx</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">say_hello_to_c</span>(<span class="params">m</span>):</span></span><br><span class="line">    t1 = time.time()</span><br><span class="line">    <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        <span class="built_in">sum</span>+=i</span><br><span class="line">    t2 = time.time()</span><br><span class="line">    <span class="comment"># print(t2-t1)</span></span><br><span class="line">    <span class="keyword">return</span> t2-t1</span><br></pre></td></tr></table></figure></li>
+<li><p>创建<code>setup.py</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> setuptools <span class="keyword">import</span> setup</span><br><span class="line"><span class="keyword">from</span> Cython.Build <span class="keyword">import</span> cythonize</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=<span class="string">&#x27;Hello world app&#x27;</span>,</span><br><span class="line">    ext_modules=cythonize(<span class="string">&quot;try111.pyx&quot;</span>),</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
+<li><p>使用cython编译文件为一个<code>.so</code>模块</p>
+</li>
+<li><p><code>python3 setup.py build_ext --inplace</code></p>
+</li>
+<li><p>直接调用</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> try111 <span class="keyword">import</span> say_hello_to_c</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">say_hello_to_py</span>(<span class="params">m</span>):</span></span><br><span class="line">    t1 = time.time()</span><br><span class="line">    <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        <span class="built_in">sum</span>+=i</span><br><span class="line">    t2 = time.time()</span><br><span class="line">    <span class="comment"># print(t2-t1)</span></span><br><span class="line">    <span class="keyword">return</span> t2-t1</span><br><span class="line"></span><br><span class="line">t1s = []</span><br><span class="line">t2s = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> tqdm(<span class="built_in">range</span>(<span class="number">100</span>)):</span><br><span class="line">    t1s.append(say_hello_to_c(<span class="number">10000000</span>))</span><br><span class="line">    t2s.append(say_hello_to_py(<span class="number">10000000</span>))</span><br><span class="line"></span><br><span class="line">plt.plot(t1s, label=<span class="string">&quot;cython&quot;</span>)</span><br><span class="line">plt.plot(t2s, label=<span class="string">&quot;python&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.ylabel(<span class="string">&quot;time elapsed: s&quot;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;count of try&quot;</span>)</span><br><span class="line">avg1 = <span class="built_in">sum</span>(t1s)/<span class="built_in">len</span>(t1s)</span><br><span class="line">avg2 = <span class="built_in">sum</span>(t2s)/<span class="built_in">len</span>(t2s)</span><br><span class="line">plt.title(<span class="string">&quot;Cython average time: %03f, pythonaverage time: %03f&quot;</span>% (avg1, avg2))</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></li>
+<li><p><img src="/imgs/ac34bc5371e0a7c44304670157611ef0717929dd11f3237001517566579a2bf6.png" alt="picture 0">  </p>
+<ul>
+<li>可见cython有一定的速度优势</li>
+<li>简单修改程序之后发现性能有很大的提高，推测是编译器优化导致的</li>
+<li><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">say_hello_to_c</span>(<span class="params"><span class="built_in">int</span> m</span>):</span></span><br><span class="line">    cdef double t1 = time.time()</span><br><span class="line">    cdef long <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    cdef <span class="built_in">int</span> i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        <span class="built_in">sum</span>+=i</span><br><span class="line">    cdef double t2 = time.time()</span><br><span class="line">    <span class="comment"># print(t2-t1)</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>, t2-t1</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><img src="/imgs/0ab7640f35d15174084b37c7a0e1d12bd0fccebc55582a8730827d6591fc5c2b.png" alt="picture 4">  </p>
+</li>
+<li><p>可以看出<strong>增加了类型声明</strong>，会使得函数性能有很大的提高</p>
+</li>
+<li><p>给<code>sum</code>添加了<code>volatile</code>关键字<code>cdef volatile long sum = 0</code>，没有很大的变化</p>
+</li>
+<li><p>但是更换了不同的计算，可以看出时间出现了明显的不同</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">arraySum</span>(<span class="params"><span class="built_in">int</span> m</span>):</span></span><br><span class="line">    cdef <span class="built_in">int</span> a[<span class="number">1000000</span>]</span><br><span class="line">    cdef long <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    cdef <span class="built_in">int</span> i = <span class="number">0</span></span><br><span class="line">    cdef <span class="built_in">int</span> j = <span class="number">0</span></span><br><span class="line">    cdef double t1 = time.time()</span><br><span class="line">    cdef double t2</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        a[i] = i</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        <span class="built_in">sum</span>+=a[j]</span><br><span class="line">    t2 = time.time()</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>, t2-t1</span><br></pre></td></tr></table></figure></li>
+<li><p>比较时间</p>
+</li>
+<li><p><img src="/imgs/40f1089a23f2368b511cf4ad5906207efec47adb19eb8df2efc0073773970383.png" alt="picture 2">  </p>
+</li>
+<li><p><img src="/imgs/2dff8fdce37f31dd47ebfaebc484bec9a18e9de61f60d04882e05c52d5015502.png" alt="picture 3">  </p>
+<ul>
+<li>无论是在程序内部还是外部测量，可见二者时间没有明显的差异</li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cython/" rel="tag">cython</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Linux实时线程和进程调度"
   class="article article-type-post"
   itemscope
@@ -980,109 +1066,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-如何在Win电脑上调试iOS设备的网页"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/07/27/%E5%A6%82%E4%BD%95%E5%9C%A8Win%E7%94%B5%E8%84%91%E4%B8%8A%E8%B0%83%E8%AF%95iOS%E8%AE%BE%E5%A4%87%E7%9A%84%E7%BD%91%E9%A1%B5/"
-    >如何在Win电脑上调试iOS设备的网页</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/07/27/%E5%A6%82%E4%BD%95%E5%9C%A8Win%E7%94%B5%E8%84%91%E4%B8%8A%E8%B0%83%E8%AF%95iOS%E8%AE%BE%E5%A4%87%E7%9A%84%E7%BD%91%E9%A1%B5/" class="article-date">
-  <time datetime="2023-07-27T02:21:28.000Z" itemprop="datePublished">2023-07-27</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44738381/article/details/109027446">参考</a></li>
-<li>微软应用商店安装<code>iTunes</code></li>
-<li>安装scoop<ul>
-<li>powershell输入<code>iwr -useb get.scoop.sh | iex</code></li>
-</ul>
-</li>
-<li>安装插件和环境<ul>
-<li><code>scoop bucket add extras</code></li>
-<li><code>scoop install ios-webkit-debug-proxy</code></li>
-</ul>
-</li>
-<li>安装调试器（需要node.js）<ul>
-<li><code>npm install remotedebug-ios-webkit-adapter -g</code><h2 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h2></li>
-</ul>
-</li>
-<li>打开iOS设备的<strong>设置—&gt;Safari浏览器—&gt;高级—&gt;将网页检查器打开</strong></li>
-<li>启动iTunes</li>
-<li>使用iPad数据线链接电脑的Type-C接口和iPad</li>
-<li>首次连接可能需要在iOS设备上信任本电脑</li>
-<li>开启插件<code>remotedebug_ios_webkit_adapter --port=9000</code><ul>
-<li><img src="/imgs/9447c904b98f9e27cfdbf22f9ee582b15e01deec1768a3fc1ca9bb51e45fc9cf.png" alt="picture 0">  </li>
-</ul>
-</li>
-<li>添加上面监听的端口9000<ul>
-<li><img src="/imgs/9d15f0e5aae7dfc05f62716638b6ae5f3a6d6a7befb88ab12f88a58218eacbd6.png" alt="picture 1">  </li>
-<li><img src="/imgs/96a9234b13a0b280eea2dda999178879e1240533f44388b13fe905e9bd136a2f.png" alt="picture 2">  </li>
-</ul>
-</li>
-<li>连接上iPad设备<ul>
-<li><img src="/imgs/5636a52cdf68b5a8049061f1dc80d75f9e3be0f245c60eb57ae416412ad9c1e0.png" alt="picture 3">  </li>
-<li>点击<code>inspect</code>查看网页</li>
-<li><img src="/imgs/37f71f0b6bb255c3ee37342a6d95b3f64bb232cad7a00a55c9cb8e036dce2b32.png" alt="picture 4">  <h2 id="控制台传输问题"><a href="#控制台传输问题" class="headerlink" title="控制台传输问题"></a>控制台传输问题</h2></li>
-</ul>
-</li>
-<li>有时候safari无法捕捉到网页的控制台输出，导致chrome远程调试的时候无法输出JavaScript中的<code>console.log()</code>信息</li>
-<li><img src="/imgs/2fb611ababbcce3923c51b289a085ba1b0c34d0362d5c853cc110d8589a793ee.png" alt="picture 5">  </li>
-<li><code>console.error()</code>一样无法输出，此时只能在html中创建一个元素手动修改其<code>innerHTML</code>来显示输出<h2 id="DOM元素参考"><a href="#DOM元素参考" class="headerlink" title="DOM元素参考"></a>DOM元素参考</h2></li>
-<li><a target="_blank" rel="noopener" href="https://www.w3schools.com/tags/ref_av_dom.asp">w3school</a><h2 id="safari-iPad-端播放MP4的编码注意事项"><a href="#safari-iPad-端播放MP4的编码注意事项" class="headerlink" title="safari(iPad)端播放MP4的编码注意事项"></a>safari(iPad)端播放MP4的编码注意事项</h2></li>
-<li> H.264 视频编码和 AAC 音频编码</li>
-<li>MP4 文件的元数据（称为 moov box）应该位于文件的开头<ul>
-<li> ffmpeg选项为<code>-movflags faststart</code></li>
-</ul>
-</li>
-<li>将视频的声道设置为<strong>双声道</strong>（某些多声道的视频即使视频编码无问题也无法播放）<ul>
-<li> ffmpeg选项<code>-ac 2</code></li>
-</ul>
-</li>
-<li>html播放器遇到不支持的视频的时候可能会出现<code>video</code>标签的<ul>
-<li>networkState为<code>3</code></li>
-<li>readyState为<code>0</code></li>
-<li><code>error.code</code>为<code>4</code>也就是<code>MEDIA_ERR_SRC_NOT_SUPPORTED</code></li>
-</ul>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/" rel="tag">iOS</a></li></ul>
 
     </footer>
   </div>
