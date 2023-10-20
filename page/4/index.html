@@ -141,6 +141,77 @@
     
     
     <article
+  id="post-在Ubuntu创建ftp服务器"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/04/02/%E5%9C%A8Ubuntu%E5%88%9B%E5%BB%BAftp%E6%9C%8D%E5%8A%A1%E5%99%A8/"
+    >在Ubuntu创建ftp服务器</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/04/02/%E5%9C%A8Ubuntu%E5%88%9B%E5%BB%BAftp%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="article-date">
+  <time datetime="2023-04-02T04:22:55.000Z" itemprop="datePublished">2023-04-02</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="创建FTP并指定文件夹"><a href="#创建FTP并指定文件夹" class="headerlink" title="创建FTP并指定文件夹"></a>创建FTP并指定文件夹</h2><ul>
+<li>先安装<code>vsftpd</code>，使用<code>sudo apt install vsftpd</code>安装</li>
+<li>然后创建新用户<code>sudo useradd &lt;用户名&gt;</code></li>
+<li>然后设置新用户的密码<code>passwd &lt;用户名&gt;</code></li>
+<li><strong>指定新用户的根目录为你想使用的目录</strong><code>sudo usermod -d &lt;需要的路径&gt; &lt;用户名&gt;</code></li>
+<li>将这个目录的权限修改为全部允许，也就是<code>chmod 777 &lt;路径&gt;</code></li>
+<li>在<code>/etc/vsftpd.conf</code>中修改相应的选项给予相应的权限，<a target="_blank" rel="noopener" href="https://ubuntu.com/server/docs/service-ftp">参考</a><ul>
+<li><strong>不要乱改上述文件否则可能导致vsftpd服务无法启动</strong></li>
+<li>修改之前备份文件<code>sudo mv /etc/vsftpd.conf /etc/vsftpd.conf.bak</code></li>
+<li>查看FTP服务是否开启了<code>sudo netstat -antup | grep ftp</code></li>
+</ul>
+</li>
+<li>重启服务<code>sudo systemctl restart vsftpd</code></li>
+<li>在其他电脑使用<strong>刚才创建的用户和设置的密码登录FTP</strong>，打开直接就是根目录</li>
+<li>递归修改目录下的所有文件（夹）的权限<code>chmod -R 777 &lt;路径&gt;</code><h2 id="FTP目录下的文件无法打开的情况"><a href="#FTP目录下的文件无法打开的情况" class="headerlink" title="FTP目录下的文件无法打开的情况"></a>FTP目录下的文件无法打开的情况</h2></li>
+<li>具体是双击文件打开的时候<strong>直接打开浏览器</strong></li>
+<li>原因是windows必须把FTP上的文件复制到本地之后才能打开，不能在服务器页面直接打开<h2 id="透穿"><a href="#透穿" class="headerlink" title="透穿"></a>透穿</h2></li>
+<li>透穿教程参考windows下的FTP服务配置即可<h2 id="硬盘挂载"><a href="#硬盘挂载" class="headerlink" title="硬盘挂载"></a>硬盘挂载</h2></li>
+<li>机械硬盘重启Linux系统的时候可能需要<strong>重新插拔</strong>，否则可能挂载不上，挂载不上可能导致链接FTP的时候<strong>访问被拒绝</strong><h2 id="配置sudo无密码的非root用户"><a href="#配置sudo无密码的非root用户" class="headerlink" title="配置sudo无密码的非root用户"></a>配置sudo无密码的非root用户</h2></li>
+<li><code>sudo vim /etc/sudoers</code></li>
+<li>找到一行<code>%sudo   ALL=(ALL:ALL) ALL</code></li>
+<li>在其后加一行<code>&lt;用户名&gt; ALL=(ALL) NOPASSWD:ALL</code></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FTP/" rel="tag">FTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-图神经网络"
   class="article article-type-post"
   itemscope
@@ -969,102 +1040,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-Unity学习笔记"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/12/21/Unity%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
-    >Unity学习笔记</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/12/21/Unity%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="article-date">
-  <time datetime="2022-12-20T16:21:08.000Z" itemprop="datePublished">2022-12-21</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Unity学习笔记"><a href="#Unity学习笔记" class="headerlink" title="Unity学习笔记"></a>Unity学习笔记</h1><p><u><strong>先安装hub再安装Unity！！！</strong></u></p>
-<h2 id="环境变量配置（建议用VS一步到位，VSCode配置环境太麻烦）"><a href="#环境变量配置（建议用VS一步到位，VSCode配置环境太麻烦）" class="headerlink" title="环境变量配置（建议用VS一步到位，VSCode配置环境太麻烦）"></a>环境变量配置（建议用VS一步到位，VSCode配置环境太麻烦）</h2><ul>
-<li>右键文件管理器-&gt;属性-&gt;<img src="/imgs/7a45dd2b4ae080fe76c4387e1d39b34498f2d3b18611f42a1274bc17a4d2e25c.png" alt="picture 5">  </li>
-<li>然后环境变量，添加<img src="/imgs/047fbdff8062f0b8d0fe2806b51cccd884cadc4c8be1c8fb6cddd968ea217925.png" alt="picture 6">  看这俩有没有，然后试一下命令行输入<code>dotnet --info</code></li>
-</ul>
-<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
-<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV16W411D7sC?p=14&vd_source=2ad101445b39a9dac0437fdcd408895e">入门教程</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://docs.unity3d.com/2022.1/Documentation/ScriptReference/">官方文档</a></p>
-<h2 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h2></li>
-<li><p>用将对象拖拽到这个位置<img src="/imgs/fd77db333d98e6cb810a31c94a1629c8359b6da349617469610875b303c9798a.png" alt="picture 4"><br>的方式给<code>public</code>对象赋值，包括<code>GameObject</code>和<code>RigidBody</code>，这两个得<u>分开赋值</u></p>
-</li>
-<li><p><code>RigidBody</code>的<code>AddForce</code>不能开启<img src="/imgs/fdedeaddbfac4dea740aae258bcd25e49c578e1b4a6cc61b9238483bb50d35d8.png" alt="picture 2">  </p>
-</li>
-<li><p>刚体的<a target="_blank" rel="noopener" href="https://blog.csdn.net/LOVE_Me__/article/details/125851048">教程</a></p>
-</li>
-<li><p>is Kinematic的<a target="_blank" rel="noopener" href="https://blog.csdn.net/iiiiiiimp/article/details/126822387">教程</a></p>
-<ul>
-<li>isKinematic<strong>不会对碰撞和力做出反应</strong>，不受物理系统影响，但依然<strong>会对其他刚体产生物理影响</strong>（比如可以<strong>阻挡</strong>其他刚体）。</li>
-<li>isKinematic只能<u>在脚本中修改物体的Transform属性来移动</u>。</li>
-<li>用在经常需要移动等变化物理状态的碰撞体上。一个刚体碰撞体，可以随时开启或关闭Is Kinematic选项，不会像静态碰撞体的enabled开启或关闭那样引起物理系统的问题。</li>
-</ul>
-</li>
-<li><p>给一个物理系统的刚体添加一个瞬时的速度的方法</p>
-<ul>
-<li><code>wbRd.AddForce(new Vector3(x, y, z) * 1.0f, ForceMode.Impulse);</code></li>
-<li>或者ForceMode设置为<code>VelocityChange</code>，可以直接改变速度，类似于碰撞的效果</li>
-</ul>
-</li>
-<li><p>获取时间用<code>Time</code>类，unity有支持</p>
-</li>
-<li><p>复位一个场景用<code>SceneManager.LoadScene(index);</code>，index是这个scene在最终的序列里拍第几个，从0开始</p>
-</li>
-<li><p>一个<code>Vector3.normalized</code>给出同方向的一个单位向量</p>
-</li>
-<li><p><code>transform.LookAt(transform)</code>是让当前对象的z轴指向目标对象（z轴是相机的拍照方向）</p>
-</li>
-<li><p>不规则物体生成碰撞体：<img src="/imgs/d2d0ca79325ddcc42b7949239c75d296bb0b0b5bdd12eb91330d0a4f2f44c5e6.png" alt="picture 3">  </p>
-</li>
-<li><p>数学计算用<code>Mathf</code>对象下面的操作函数，其中的三角函数是角度制（0-360°）的</p>
-</li>
-<li><p>鼠标位置用<code>Input.mousePosition</code>得到一个Vector2</p>
-</li>
-<li><p>键盘用<code>Input.GetKeyDown(KeyCode.按键名)</code>或者其他，可以查手册，KeyCode包含的内容也查手册</p>
-</li>
-<li><p><code>Transform.translate()</code>函数可以指定运动的坐标系是自身的还是世界的</p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Unity/" rel="tag">Unity</a></li></ul>
 
     </footer>
   </div>

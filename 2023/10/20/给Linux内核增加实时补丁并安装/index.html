@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Tag: Ubuntu |  Frank’s blogs</title>
+      <title>给Linux内核增加实时补丁并安装 |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -52,106 +52,149 @@
       
     <main class="content on">
       <section class="outer">
-  
-  
-  <article class="articles">
+  <article
+  id="post-给Linux内核增加实时补丁并安装"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
     
-    
-    <h1 class="page-type-title">#&nbspUbuntu</h1>
-    
-    
-  
-  
-  
-  
-  
-  
-  <div class="archives-wrap">
-    <div class="archive-year-wrap">
-      <a href="/archives/2023" class="archive-year">2023</a>
-    </div>
-    <div class="archives">
-      
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/10/20/%E7%BB%99Linux%E5%86%85%E6%A0%B8%E5%A2%9E%E5%8A%A0%E5%AE%9E%E6%97%B6%E8%A1%A5%E4%B8%81%E5%B9%B6%E5%AE%89%E8%A3%85/" class="archive-article-date">
-  <time datetime="2023-10-20T05:18:56.000Z" itemprop="datePublished">10/20</time>
-</a>
+    <header class="article-header">
        
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/10/20/%E7%BB%99Linux%E5%86%85%E6%A0%B8%E5%A2%9E%E5%8A%A0%E5%AE%9E%E6%97%B6%E8%A1%A5%E4%B8%81%E5%B9%B6%E5%AE%89%E8%A3%85/"
-    >给Linux内核增加实时补丁并安装</a> 
-</h2>
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  给Linux内核增加实时补丁并安装
+</h1>
  
 
-    </header>
-    
-    
       
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/10/20/%E7%BB%99Linux%E5%86%85%E6%A0%B8%E5%A2%9E%E5%8A%A0%E5%AE%9E%E6%97%B6%E8%A1%A5%E4%B8%81%E5%B9%B6%E5%AE%89%E8%A3%85/" class="article-date">
+  <time datetime="2023-10-20T05:18:56.000Z" itemprop="datePublished">2023-10-20</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">280</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">1 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="为何要安装实时补丁"><a href="#为何要安装实时补丁" class="headerlink" title="为何要安装实时补丁"></a>为何要安装实时补丁</h2><ul>
+<li>Linux系统从原理上说并不是一个实时系统，因为Linux系统有很多状态是不可被抢占的，比如持有自旋锁的状态等等，在其他博客中有所涉及，这会导致Linux系统定时不准等一系列问题，对实时控制十分不利</li>
+<li>增加实时补丁不能完全使得Linux系统变为实时系统，但是可以使得Linux系统不可抢占的部分大为减少，增强实时性<h2 id="安装实时补丁"><a href="#安装实时补丁" class="headerlink" title="安装实时补丁"></a>安装实时补丁</h2></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44786250/article/details/125736966">参考</a><h3 id="对单个文件打补丁"><a href="#对单个文件打补丁" class="headerlink" title="对单个文件打补丁"></a>对单个文件打补丁</h3><ul>
+<li><code>patch -p1 &lt; 补丁文件.patch</code><h3 id="修改内核启动顺序"><a href="#修改内核启动顺序" class="headerlink" title="修改内核启动顺序"></a>修改内核启动顺序</h3></li>
+</ul>
+</li>
+<li>编辑<code>/etc/default/grub</code>文件</li>
+<li>GRUB_TIMEOUT=10  %超时时间，单位s</li>
+<li>GRUB_DEFAULT=”1&gt;2”  %1代表默认启动内核，2代表所启动内核位于列表中第2个（序号从0开始）<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="启动Ubuntu的时候bad-shim-signature"><a href="#启动Ubuntu的时候bad-shim-signature" class="headerlink" title="启动Ubuntu的时候bad shim signature"></a>启动Ubuntu的时候bad shim signature</h3></li>
+<li>因为BIOS里开启了安全启动，进入BIOS关闭<strong>secure boot</strong>即可<h3 id="遇到类似于memtest86-needs-a-16bit等等问题"><a href="#遇到类似于memtest86-needs-a-16bit等等问题" class="headerlink" title="遇到类似于memtest86+ needs a 16bit等等问题"></a>遇到类似于memtest86+ needs a 16bit等等问题</h3></li>
+<li>在<code>/etc/default/grub</code>文件中添加一行<code>GRUB_DISABLE_OS_PROBER=false</code>，但是<strong>未能解决问题</strong></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2023/10/20/%E7%BB%99Linux%E5%86%85%E6%A0%B8%E5%A2%9E%E5%8A%A0%E5%AE%9E%E6%97%B6%E8%A1%A5%E4%B8%81%E5%B9%B6%E5%AE%89%E8%A3%85/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%86%85%E6%A0%B8/" rel="tag">内核</a></li></ul>
 
-    
+    </footer>
   </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2023/10/18/%E4%BD%BF%E7%94%A8Cython%E5%8A%A0%E9%80%9Fpython%E7%A8%8B%E5%BA%8F%E8%AE%A1%E7%AE%97/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">使用Cython加速python程序计算</div>
+      </a>
+    
+  </nav>
+
+  
+   
+     
 </article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/09/18/Jetson%E4%B8%8D%E8%83%BD%E7%94%A8%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E7%94%B5%E8%84%91%E7%BD%91%E7%BB%9C%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="archive-article-date">
-  <time datetime="2023-09-18T02:37:20.000Z" itemprop="datePublished">09/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/09/18/Jetson%E4%B8%8D%E8%83%BD%E7%94%A8%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E7%94%B5%E8%84%91%E7%BD%91%E7%BB%9C%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"
-    >Jetson不能用网线连接电脑网络的解决方法</a> 
-</h2>
- 
 
-    </header>
-    
-    
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li></ul>
-
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/06/27/%E4%BF%AE%E6%94%B9-etc-sudoers%E6%96%87%E4%BB%B6%E5%87%BA%E9%94%99%E5%AF%BC%E8%87%B4%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="archive-article-date">
-  <time datetime="2023-06-27T08:36:10.000Z" itemprop="datePublished">06/27</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/06/27/%E4%BF%AE%E6%94%B9-etc-sudoers%E6%96%87%E4%BB%B6%E5%87%BA%E9%94%99%E5%AF%BC%E8%87%B4%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"
-    >修改/etc/sudoers文件出错导致问题解决方案</a> 
-</h2>
- 
-
-    </header>
-    
-    
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li></ul>
-
-    
-  </div>
-</article>
-      
-      
-    </div>
-  </div>
-  
-  
-
-  
 </section>
       <footer class="footer">
   <div class="outer">
@@ -274,6 +317,22 @@
 <script src="/js/lazyload.min.js"></script>
 
 <!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
 
 <script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
 <link
