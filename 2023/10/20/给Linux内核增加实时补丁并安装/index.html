@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">282</span>
+            <span class="post-count">417</span>
         </span>
     </span>
 
@@ -107,10 +107,9 @@
   <h2 id="为何要安装实时补丁"><a href="#为何要安装实时补丁" class="headerlink" title="为何要安装实时补丁"></a>为何要安装实时补丁</h2><ul>
 <li>Linux系统从原理上说并不是一个实时系统，因为Linux系统有很多状态是不可被抢占的，比如持有自旋锁的状态等等，在其他博客中有所涉及，这会导致Linux系统定时不准等一系列问题，对实时控制十分不利</li>
 <li>增加实时补丁不能完全使得Linux系统变为实时系统，但是可以使得Linux系统不可抢占的部分大为减少，增强实时性<h2 id="安装实时补丁"><a href="#安装实时补丁" class="headerlink" title="安装实时补丁"></a>安装实时补丁</h2></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44786250/article/details/125736966">参考</a><h3 id="对单个文件打补丁"><a href="#对单个文件打补丁" class="headerlink" title="对单个文件打补丁"></a>对单个文件打补丁</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44786250/article/details/125736966">参考</a><h3 id="对单个文件打补丁"><a href="#对单个文件打补丁" class="headerlink" title="对单个文件打补丁"></a>对单个文件打补丁</h3></li>
+<li>在内核源码根目录下</li>
 <li><code>patch -p1 &lt; 补丁文件.patch</code><h3 id="修改内核启动顺序"><a href="#修改内核启动顺序" class="headerlink" title="修改内核启动顺序"></a>修改内核启动顺序</h3></li>
-</ul>
-</li>
 <li>编辑<code>/etc/default/grub</code>文件</li>
 <li>GRUB_TIMEOUT=10  %超时时间，单位s</li>
 <li>GRUB_DEFAULT=”1&gt;2”  %1代表默认启动内核，2代表所启动内核位于列表中第2个（序号从0开始）</li>
@@ -120,7 +119,19 @@
 </ul>
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="启动Ubuntu的时候bad-shim-signature"><a href="#启动Ubuntu的时候bad-shim-signature" class="headerlink" title="启动Ubuntu的时候bad shim signature"></a>启动Ubuntu的时候bad shim signature</h3><ul>
 <li>因为BIOS里开启了安全启动，进入BIOS关闭<strong>secure boot</strong>即可<h3 id="遇到类似于memtest86-needs-a-16bit等等问题"><a href="#遇到类似于memtest86-needs-a-16bit等等问题" class="headerlink" title="遇到类似于memtest86+ needs a 16bit等等问题"></a>遇到类似于memtest86+ needs a 16bit等等问题</h3></li>
-<li>在<code>/etc/default/grub</code>文件中添加一行<code>GRUB_DISABLE_OS_PROBER=false</code>，但是<strong>未能解决问题</strong></li>
+<li>在<code>/etc/default/grub</code>文件中添加一行<code>GRUB_DISABLE_OS_PROBER=false</code>，但是<strong>未能解决问题</strong><h3 id="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"><a href="#更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块" class="headerlink" title="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"></a>更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块</h3></li>
+<li><code>insmod</code>报错为<code>insmod: ERROR: could not insert module ***.ko: Invalid module format</code></li>
+<li><code>dmesg</code>查看到报错为<code>disagrees about version of symbol module_layout</code></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wukongmingjing/article/details/81901927">可能的解决方法</a><ul>
+<li>编译内核的时候删去模块版本检查<code>module versioning support</code>，在<code>Enable loadable module support</code>下</li>
+</ul>
+</li>
+<li>另一个可能的解决办法<ul>
+<li><code>/usr/src/linux-headers-5.19.0-32-generic/.config</code>文件有一个<code>CONFIG_MODULE_SIG_FORMAT</code>，修改为<code>n</code></li>
+<li>关闭其他相关检查</li>
+<li><img src="/imgs/3c5c7045ed6177964b9e693262735b9903944575c872ae39ec20553b8b826d6b.png" alt="picture 1">  </li>
+</ul>
+</li>
 </ul>
  
       <!-- reward -->
