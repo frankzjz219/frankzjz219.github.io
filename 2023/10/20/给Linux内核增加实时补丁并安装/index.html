@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">417</span>
+            <span class="post-count">763</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">1 min</span>
+            <span class="post-count">3 min</span>
         </span>
     </span>
 </div>
@@ -118,19 +118,37 @@
 <li><img src="/imgs/77624abe0dcccbff9f91659a256034ba71294da78a837f76211681bf0f79806b.png" alt="picture 0">  </li>
 </ul>
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="启动Ubuntu的时候bad-shim-signature"><a href="#启动Ubuntu的时候bad-shim-signature" class="headerlink" title="启动Ubuntu的时候bad shim signature"></a>启动Ubuntu的时候bad shim signature</h3><ul>
-<li>因为BIOS里开启了安全启动，进入BIOS关闭<strong>secure boot</strong>即可<h3 id="遇到类似于memtest86-needs-a-16bit等等问题"><a href="#遇到类似于memtest86-needs-a-16bit等等问题" class="headerlink" title="遇到类似于memtest86+ needs a 16bit等等问题"></a>遇到类似于memtest86+ needs a 16bit等等问题</h3></li>
-<li>在<code>/etc/default/grub</code>文件中添加一行<code>GRUB_DISABLE_OS_PROBER=false</code>，但是<strong>未能解决问题</strong><h3 id="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"><a href="#更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块" class="headerlink" title="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"></a>更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块</h3></li>
-<li><code>insmod</code>报错为<code>insmod: ERROR: could not insert module ***.ko: Invalid module format</code></li>
-<li><code>dmesg</code>查看到报错为<code>disagrees about version of symbol module_layout</code></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wukongmingjing/article/details/81901927">可能的解决方法</a><ul>
-<li>编译内核的时候删去模块版本检查<code>module versioning support</code>，在<code>Enable loadable module support</code>下</li>
+<li><p>因为BIOS里开启了安全启动，进入BIOS关闭<strong>secure boot</strong>即可</p>
+<h3 id="遇到类似于memtest86-needs-a-16bit等等问题"><a href="#遇到类似于memtest86-needs-a-16bit等等问题" class="headerlink" title="遇到类似于memtest86+ needs a 16bit等等问题"></a>遇到类似于memtest86+ needs a 16bit等等问题</h3></li>
+<li><p>在<code>/etc/default/grub</code>文件中添加一行<code>GRUB_DISABLE_OS_PROBER=false</code>，但是<strong>未能解决问题</strong></p>
+<h3 id="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"><a href="#更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块" class="headerlink" title="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"></a>更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块</h3></li>
+<li><p><code>insmod</code>报错为<code>insmod: ERROR: could not insert module ***.ko: Invalid module format</code></p>
+</li>
+<li><p><code>dmesg</code>查看到报错为<code>disagrees about version of symbol module_layout</code></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wukongmingjing/article/details/81901927">可能的解决方法</a></p>
+<ul>
+<li><p>编译内核的时候删去模块版本检查<code>module versioning support</code>，在<code>Enable loadable module support</code>下</p>
+</li>
+<li><p>然后重新安装内核，重新编译模块安装，安装失败使用<code>sudo dmesg</code>查看内核log，得到<code>version magic &#39;6.2.0-rt3 SMP preempt mod_unload modversions &#39; should be &#39;6.2.0-rt3 SMP preempt_rt mod_unload &#39;</code></p>
+</li>
+<li><p>重新安装内核之后修改内核<code>/usr/src</code>下的内核源码</p>
+</li>
+<li><p><code>/usr/src/linux-headers-系统内核名称/include/generated</code>下的<code>utsrelease.h</code>中的选项</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> UTS_RELEASE <span class="meta-string">&quot;6.2.0-rt3&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> UTS_UBUNTU_RELEASE_ABI 35</span></span><br></pre></td></tr></table></figure></li>
+<li><p>第一个修改为需要的内核名称即可</p>
+</li>
+<li><p>然后修改<code>/usr/src/linux-headers-&lt;内核名称&gt;/include/config/kernel.release</code>文件，内容修改为</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">&lt;需要的内核名称&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>然后修改真正产生<code>version magic</code>字符串的文件<code>/usr/src/linux-headers-&lt;内核名称&gt;/include/linux/vermagic.h</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* SPDX-License-Identifier: GPL-2.0 */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _LINUX_VERMAGIC_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _LINUX_VERMAGIC_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> INCLUDE_VERMAGIC</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">error</span> <span class="meta-string">&quot;This header can be included from kernel/module.c or *.mod.c only&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;generated/utsrelease.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;asm/vermagic.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Simply sanity version stamp for modules. */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_SMP</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_SMP <span class="meta-string">&quot;SMP &quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_SMP <span class="meta-string">&quot;&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">#ifdef CONFIG_PREEMPT_BUILD</span></span><br><span class="line"><span class="comment">#define MODULE_VERMAGIC_PREEMPT &quot;preempt &quot;</span></span><br><span class="line"><span class="comment">#elif defined(CONFIG_PREEMPT_RT)</span></span><br><span class="line"><span class="comment">#define MODULE_VERMAGIC_PREEMPT &quot;preempt_rt &quot;</span></span><br><span class="line"><span class="comment">#else</span></span><br><span class="line"><span class="comment">#define MODULE_VERMAGIC_PREEMPT &quot;&quot;</span></span><br><span class="line"><span class="comment">#endif</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_PREEMPT <span class="meta-string">&quot;preempt_rt &quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_MODULE_UNLOAD</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_MODULE_UNLOAD <span class="meta-string">&quot;mod_unload &quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_MODULE_UNLOAD <span class="meta-string">&quot;&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_MODVERSIONS</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_MODVERSIONS <span class="meta-string">&quot;modversions &quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_MODVERSIONS <span class="meta-string">&quot;&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> RANDSTRUCT</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;generated/randstruct_hash.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_RANDSTRUCT <span class="meta-string">&quot;RANDSTRUCT_&quot;</span> RANDSTRUCT_HASHED_SEED</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_RANDSTRUCT</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VERMAGIC_STRING                \</span></span><br><span class="line"><span class="meta">        UTS_RELEASE <span class="meta-string">&quot; &quot;</span>                \</span></span><br><span class="line"><span class="meta">        MODULE_VERMAGIC_SMP            \</span></span><br><span class="line"><span class="meta">         MODULE_VERMAGIC_PREEMPT       \</span></span><br><span class="line"><span class="meta">        MODULE_VERMAGIC_MODULE_UNLOAD  \</span></span><br><span class="line"><span class="meta">        <span class="comment">// MODULE_VERMAGIC_MODVERSIONS \</span></span></span><br><span class="line"><span class="comment"><span class="meta">        MODULE_ARCH_VERMAGIC           \</span></span></span><br><span class="line"><span class="comment"><span class="meta">        MODULE_RANDSTRUCT</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* _LINUX_VERMAGIC_H */</span></span></span><br></pre></td></tr></table></figure></li>
+<li><p>找到<code>VERMAGIC_STRING</code>中的对应项，自己修改为需要的值或者顺序，注释掉不需要的即可</p>
+</li>
+<li><p>然后得到相同的<code>version magic</code>字符串，即可<code>insmod</code>了</p>
+<h3 id="找不到符号Unknown-symbol-mutex-init-err-2"><a href="#找不到符号Unknown-symbol-mutex-init-err-2" class="headerlink" title="找不到符号Unknown symbol __mutex_init (err -2)"></a>找不到符号<code>Unknown symbol __mutex_init (err -2)</code></h3></li>
 </ul>
 </li>
-<li>另一个可能的解决办法<ul>
-<li><code>/usr/src/linux-headers-5.19.0-32-generic/.config</code>文件有一个<code>CONFIG_MODULE_SIG_FORMAT</code>，修改为<code>n</code></li>
-<li>关闭其他相关检查</li>
-<li><img src="/imgs/3c5c7045ed6177964b9e693262735b9903944575c872ae39ec20553b8b826d6b.png" alt="picture 1">  </li>
-</ul>
+<li><p><code>todo</code></p>
 </li>
 </ul>
  
