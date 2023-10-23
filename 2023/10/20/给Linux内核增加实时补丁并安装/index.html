@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">836</span>
+            <span class="post-count">951</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">3 min</span>
+            <span class="post-count">4 min</span>
         </span>
     </span>
 </div>
@@ -123,14 +123,14 @@
 <li><p>在<code>/etc/default/grub</code>文件中添加一行<code>GRUB_DISABLE_OS_PROBER=false</code>，但是<strong>未能解决问题</strong></p>
 </li>
 <li><p>但是只要在开机的时候按下<code>Esc</code>到Ubuntu高级设置，找到需要的内核启动即可</p>
-<h3 id="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"><a href="#更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块" class="headerlink" title="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"></a>更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块</h3></li>
+<h2 id="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"><a href="#更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块" class="headerlink" title="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"></a>更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块</h2></li>
 <li><p><code>insmod</code>报错为<code>insmod: ERROR: could not insert module ***.ko: Invalid module format</code></p>
 </li>
 <li><p><code>dmesg</code>查看到报错为<code>disagrees about version of symbol module_layout</code></p>
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wukongmingjing/article/details/81901927">可能的解决方法</a></p>
 <ul>
-<li><p>编译内核的时候删去模块版本检查<code>module versioning support</code>，在<code>Enable loadable module support</code>下</p>
+<li><p>(不要执行这一步)编译内核的时候删去模块版本检查<code>module versioning support</code>，在<code>Enable loadable module support</code>下</p>
 </li>
 <li><p>然后重新安装内核，重新编译模块安装，安装失败使用<code>sudo dmesg</code>查看内核log，得到<code>version magic &#39;6.2.0-rt3 SMP preempt mod_unload modversions &#39; should be &#39;6.2.0-rt3 SMP preempt_rt mod_unload &#39;</code></p>
 </li>
@@ -152,7 +152,12 @@
 </li>
 <li><p>insmod报错<code>insmod: ERROR: could not insert module ***.ko: Unknown symbol in module</code></p>
 </li>
-<li></li>
+<li><p><strong>未能解决</strong></p>
+<h3 id="最终解决方案"><a href="#最终解决方案" class="headerlink" title="最终解决方案"></a>最终解决方案</h3></li>
+<li><p>在编译内核模块的时候，将内核模块目录下的<code>Makefile</code>文件中的<code>KDIR</code><strong>修改为自己编译当前内核源码的目录，不要用<code>/usr/src</code>下的源码</strong>，然后照常make即可<code>insmod</code></p>
+</li>
+<li><p><strong>不要</strong>在<code>make menuconfig</code>中关闭<code>module versioning support</code>选项，否则会因为<code>version magic</code>字符串不一致导致很多<u>预编译好的其他模组不能安装</u></p>
+</li>
 </ul>
  
       <!-- reward -->

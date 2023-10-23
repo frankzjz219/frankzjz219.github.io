@@ -187,14 +187,14 @@
 <li><p>在<code>/etc/default/grub</code>文件中添加一行<code>GRUB_DISABLE_OS_PROBER=false</code>，但是<strong>未能解决问题</strong></p>
 </li>
 <li><p>但是只要在开机的时候按下<code>Esc</code>到Ubuntu高级设置，找到需要的内核启动即可</p>
-<h3 id="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"><a href="#更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块" class="headerlink" title="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"></a>更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块</h3></li>
+<h2 id="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"><a href="#更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块" class="headerlink" title="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"></a>更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块</h2></li>
 <li><p><code>insmod</code>报错为<code>insmod: ERROR: could not insert module ***.ko: Invalid module format</code></p>
 </li>
 <li><p><code>dmesg</code>查看到报错为<code>disagrees about version of symbol module_layout</code></p>
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wukongmingjing/article/details/81901927">可能的解决方法</a></p>
 <ul>
-<li><p>编译内核的时候删去模块版本检查<code>module versioning support</code>，在<code>Enable loadable module support</code>下</p>
+<li><p>(不要执行这一步)编译内核的时候删去模块版本检查<code>module versioning support</code>，在<code>Enable loadable module support</code>下</p>
 </li>
 <li><p>然后重新安装内核，重新编译模块安装，安装失败使用<code>sudo dmesg</code>查看内核log，得到<code>version magic &#39;6.2.0-rt3 SMP preempt mod_unload modversions &#39; should be &#39;6.2.0-rt3 SMP preempt_rt mod_unload &#39;</code></p>
 </li>
@@ -216,7 +216,12 @@
 </li>
 <li><p>insmod报错<code>insmod: ERROR: could not insert module ***.ko: Unknown symbol in module</code></p>
 </li>
-<li></li>
+<li><p><strong>未能解决</strong></p>
+<h3 id="最终解决方案"><a href="#最终解决方案" class="headerlink" title="最终解决方案"></a>最终解决方案</h3></li>
+<li><p>在编译内核模块的时候，将内核模块目录下的<code>Makefile</code>文件中的<code>KDIR</code><strong>修改为自己编译当前内核源码的目录，不要用<code>/usr/src</code>下的源码</strong>，然后照常make即可<code>insmod</code></p>
+</li>
+<li><p><strong>不要</strong>在<code>make menuconfig</code>中关闭<code>module versioning support</code>选项，否则会因为<code>version magic</code>字符串不一致导致很多<u>预编译好的其他模组不能安装</u></p>
+</li>
 </ul>
  
       <!-- reward -->
@@ -268,6 +273,7 @@
        
   <h2 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://cython.readthedocs.io/en/latest/">cython</a><h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/traditional/p/13285339.html">参考</a></li>
 <li>定义一个<code>.pyx</code>文件<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># try111.pyx</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">say_hello_to_c</span>(<span class="params">m</span>):</span></span><br><span class="line">    t1 = time.time()</span><br><span class="line">    <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        <span class="built_in">sum</span>+=i</span><br><span class="line">    t2 = time.time()</span><br><span class="line">    <span class="comment"># print(t2-t1)</span></span><br><span class="line">    <span class="keyword">return</span> t2-t1</span><br></pre></td></tr></table></figure></li>
 <li>创建<code>setup.py</code><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># setup.py</span></span><br><span class="line"><span class="keyword">from</span> setuptools <span class="keyword">import</span> setup</span><br><span class="line"><span class="keyword">from</span> Cython.Build <span class="keyword">import</span> cythonize</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=<span class="string">&#x27;Hello world app&#x27;</span>,</span><br><span class="line">    ext_modules=cythonize(<span class="string">&quot;try111.pyx&quot;</span>),</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
 <li>使用cython<strong>编译</strong>文件为一个<code>.so</code>模块</li>
@@ -297,7 +303,7 @@
 <li>编译<code>cythonize -i -f useFunc.pyx -j8</code></li>
 <li>在python文件中使用<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> useFunc <span class="keyword">import</span> useFunc</span><br><span class="line">useFunc(<span class="number">5</span>)</span><br></pre></td></tr></table></figure></li>
 <li>执行结果<ul>
-<li><img src="/imgs/43fc6fe5a770a3ea885661862de05d62e6f47d9ebdc2d39e9c439434390c1b57.png" alt="picture 8">  <h4 id="cythonz中使用C-运算符重载和泛型"><a href="#cythonz中使用C-运算符重载和泛型" class="headerlink" title="cythonz中使用C++运算符重载和泛型"></a>cythonz中使用C++运算符重载和泛型</h4></li>
+<li><img src="/imgs/43fc6fe5a770a3ea885661862de05d62e6f47d9ebdc2d39e9c439434390c1b57.png" alt="picture 8">  <h4 id="cython中使用C-运算符重载和泛型"><a href="#cython中使用C-运算符重载和泛型" class="headerlink" title="cython中使用C++运算符重载和泛型"></a>cython中使用C++运算符重载和泛型</h4></li>
 </ul>
 </li>
 <li><a target="_blank" rel="noopener" href="https://cython.readthedocs.io/en/latest/src/userguide/wrapping_CPlusPlus.html#overloading-operators">参考</a></li>
