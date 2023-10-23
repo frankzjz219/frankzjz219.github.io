@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">951</span>
+            <span class="post-count">960</span>
         </span>
     </span>
 
@@ -123,7 +123,7 @@
 <li><p>在<code>/etc/default/grub</code>文件中添加一行<code>GRUB_DISABLE_OS_PROBER=false</code>，但是<strong>未能解决问题</strong></p>
 </li>
 <li><p>但是只要在开机的时候按下<code>Esc</code>到Ubuntu高级设置，找到需要的内核启动即可</p>
-<h2 id="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"><a href="#更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块" class="headerlink" title="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"></a>更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块</h2></li>
+<h2 id="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"><a href="#更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块" class="headerlink" title="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"></a>更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块</h2><h3 id="以下方法未解决问题"><a href="#以下方法未解决问题" class="headerlink" title="以下方法未解决问题"></a>以下方法未解决问题</h3></li>
 <li><p><code>insmod</code>报错为<code>insmod: ERROR: could not insert module ***.ko: Invalid module format</code></p>
 </li>
 <li><p><code>dmesg</code>查看到报错为<code>disagrees about version of symbol module_layout</code></p>
@@ -147,7 +147,7 @@
 <li><p>找到<code>VERMAGIC_STRING</code>中的对应项，自己修改为需要的值或者顺序，注释掉不需要的即可</p>
 </li>
 <li><p>然后得到与前面要求的相同的<code>version magic</code>字符串，即可<code>insmod</code>了</p>
-<h3 id="找不到符号Unknown-symbol-mutex-init-err-2"><a href="#找不到符号Unknown-symbol-mutex-init-err-2" class="headerlink" title="找不到符号Unknown symbol __mutex_init (err -2)"></a>找不到符号<code>Unknown symbol __mutex_init (err -2)</code></h3></li>
+<h4 id="找不到符号Unknown-symbol-mutex-init-err-2"><a href="#找不到符号Unknown-symbol-mutex-init-err-2" class="headerlink" title="找不到符号Unknown symbol __mutex_init (err -2)"></a>找不到符号<code>Unknown symbol __mutex_init (err -2)</code></h4></li>
 </ul>
 </li>
 <li><p>insmod报错<code>insmod: ERROR: could not insert module ***.ko: Unknown symbol in module</code></p>
