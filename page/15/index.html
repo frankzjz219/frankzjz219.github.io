@@ -637,60 +637,6 @@
 
     
     <article
-  id="post-FreeRtos2"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/12/11/FreeRtos2/"
-    >FreeRtos2</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/12/11/FreeRtos2/" class="article-date">
-  <time datetime="2021-12-11T10:03:10.000Z" itemprop="datePublished">2021-12-11</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="FreeRtos创建注意（使用CubeMX）"><a href="#FreeRtos创建注意（使用CubeMX）" class="headerlink" title="FreeRtos创建注意（使用CubeMX）"></a>FreeRtos创建注意（使用CubeMX）</h2><ul>
-<li><p>创建按照前篇知乎上的文章创建即可，注意此时会提示Systick的问题，设置为外部时钟晶振，而且设置为TIM1（或者其他timer可能也可以，没有尝试过）</p>
-</li>
-<li><p><img src="/imgs/image-20211214001535585.png" alt="image-20211214001535585"></p>
-</li>
-<li><p>然后另一个可能存在的问题是在<code>freertos.c</code> 文件中定义一些与<code>UART</code>相关的东西的时候会因为没有<code>#include &quot;usart.h&quot;</code>而出错，此时加上引用即可</p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
   id="post-FreeRtos1"
   class="article article-type-post"
   itemscope
@@ -757,6 +703,60 @@
 </li>
 </ul>
 <h2 id="待续"><a href="#待续" class="headerlink" title="待续"></a>待续</h2> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-FreeRtos2"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/11/FreeRtos2/"
+    >FreeRtos2</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/11/FreeRtos2/" class="article-date">
+  <time datetime="2021-12-11T10:03:10.000Z" itemprop="datePublished">2021-12-11</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="FreeRtos创建注意（使用CubeMX）"><a href="#FreeRtos创建注意（使用CubeMX）" class="headerlink" title="FreeRtos创建注意（使用CubeMX）"></a>FreeRtos创建注意（使用CubeMX）</h2><ul>
+<li><p>创建按照前篇知乎上的文章创建即可，注意此时会提示Systick的问题，设置为外部时钟晶振，而且设置为TIM1（或者其他timer可能也可以，没有尝试过）</p>
+</li>
+<li><p><img src="/imgs/image-20211214001535585.png" alt="image-20211214001535585"></p>
+</li>
+<li><p>然后另一个可能存在的问题是在<code>freertos.c</code> 文件中定义一些与<code>UART</code>相关的东西的时候会因为没有<code>#include &quot;usart.h&quot;</code>而出错，此时加上引用即可</p>
+</li>
+</ul>
+ 
       <!-- reward -->
       
     </div>

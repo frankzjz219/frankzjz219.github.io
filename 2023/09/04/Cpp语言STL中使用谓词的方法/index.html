@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">319</span>
+            <span class="post-count">462</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">1 min</span>
+            <span class="post-count">2 min</span>
         </span>
     </span>
 </div>
@@ -113,6 +113,9 @@
 <li>使用<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">set&lt;test, function&lt;<span class="keyword">bool</span>(<span class="keyword">const</span> test&amp;, <span class="keyword">const</span> test&amp;)&gt;&gt; <span class="built_in">setTest</span>(funComp);</span><br></pre></td></tr></table></figure></li>
 <li>注意，<strong>不显式的传入lambda表达式的时候不能向set中插入超过一个元素</strong>，否则会因为触发比较而报错<code>what():  bad_function_call</code></li>
 <li>根据<code>leetcode</code>的测试，使用内联函数作为STL标准库的函数的谓词，会比使用<code>static inline</code>但是功能相同的函数作为谓词快一些，比如<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span>&amp; a, <span class="keyword">int</span>&amp; b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a&gt;b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 更快的方法是</span></span><br><span class="line"><span class="keyword">auto</span> cmp = [](<span class="keyword">int</span> a, <span class="keyword">int</span> b)-&gt;<span class="keyword">bool</span>&#123;<span class="keyword">return</span> a&gt;b;&#125;;</span><br></pre></td></tr></table></figure></li>
+<li>此处注意使用<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> cmp = [](<span class="keyword">int</span> a, <span class="keyword">int</span> b)-&gt;<span class="keyword">bool</span>&#123;<span class="keyword">return</span> a&lt;b;&#125;;</span><br><span class="line"><span class="comment">// 以下二者结果不同，混用可能得到类型错误</span></span><br><span class="line"><span class="keyword">decltype</span>(cmp);function&lt;<span class="built_in"><span class="keyword">bool</span></span>(<span class="keyword">int</span>, <span class="keyword">int</span>)&gt;;</span><br></pre></td></tr></table></figure></li>
+<li>注意对于cpp的优先级队列而言，使用<strong>大于号作为比较符得到的是最小堆，小于号是最大堆</strong></li>
+<li>优先级队列在使用谓词之前必须先指定存储的数据结构，比如如下代码<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> cmp = [](<span class="keyword">int</span> a, <span class="keyword">int</span> b)-&gt;<span class="keyword">bool</span>&#123;<span class="keyword">return</span> a&lt;b;&#125;;</span><br><span class="line">priority_queue&lt;<span class="keyword">int</span>, vector&lt;<span class="keyword">int</span>&gt;, function&lt;<span class="keyword">bool</span>(<span class="keyword">int</span>, <span class="keyword">int</span>)&gt;&gt; <span class="built_in">pq</span>(cmp);</span><br></pre></td></tr></table></figure></li>
 </ul>
  
       <!-- reward -->
