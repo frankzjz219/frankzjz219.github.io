@@ -141,6 +141,57 @@
     
     
     <article
+  id="post-leetcode非数据结构类型题目题解"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/11/18/leetcode%E9%9D%9E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%B1%BB%E5%9E%8B%E9%A2%98%E7%9B%AE%E9%A2%98%E8%A7%A3/"
+    >leetcode非数据结构类型题目题解</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/11/18/leetcode%E9%9D%9E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%B1%BB%E5%9E%8B%E9%A2%98%E7%9B%AE%E9%A2%98%E8%A7%A3/" class="article-date">
+  <time datetime="2023-11-18T09:40:55.000Z" itemprop="datePublished">2023-11-18</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="leetcode-318-最大单词长度乘积"><a href="#leetcode-318-最大单词长度乘积" class="headerlink" title="leetcode 318. 最大单词长度乘积"></a>leetcode 318. 最大单词长度乘积</h2><ul>
+<li>此题主要是将26个字母映射为26个位，用位运算的形式寻找是否存在重复字母<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxProduct</span><span class="params">(vector&lt;string&gt;&amp; words)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">flags</span><span class="params">(words.size(), <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;words.<span class="built_in">size</span>(); i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">auto</span> j = words[i].<span class="built_in">begin</span>(); j!=words[i].<span class="built_in">end</span>(); j++)</span><br><span class="line">            &#123;</span><br><span class="line">                flags[i] |= <span class="number">1</span>&lt;&lt;<span class="built_in"><span class="keyword">int</span></span>(*j-<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> maxVal = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;words.<span class="built_in">size</span>()<span class="number">-1</span>; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>; j&lt;words.<span class="built_in">size</span>(); j++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>((flags[i]&amp;flags[j]) == <span class="number">0</span>)</span><br><span class="line">                maxVal = <span class="built_in">max</span>(maxVal, <span class="built_in"><span class="keyword">int</span></span>(words[i].<span class="built_in">size</span>()*words[j].<span class="built_in">size</span>()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxVal;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-leetcode树相关题解"
   class="article article-type-post"
   itemscope
@@ -1040,73 +1091,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gdb/" rel="tag">gdb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-VMWare扩容Ubuntu系统硬盘容量之后无法开机的截距"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/08/29/VMWare%E6%89%A9%E5%AE%B9Ubuntu%E7%B3%BB%E7%BB%9F%E7%A1%AC%E7%9B%98%E5%AE%B9%E9%87%8F%E4%B9%8B%E5%90%8E%E6%97%A0%E6%B3%95%E5%BC%80%E6%9C%BA%E7%9A%84%E6%88%AA%E8%B7%9D/"
-    >VMWare扩容Ubuntu系统硬盘容量之后无法开机的解决</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/08/29/VMWare%E6%89%A9%E5%AE%B9Ubuntu%E7%B3%BB%E7%BB%9F%E7%A1%AC%E7%9B%98%E5%AE%B9%E9%87%8F%E4%B9%8B%E5%90%8E%E6%97%A0%E6%B3%95%E5%BC%80%E6%9C%BA%E7%9A%84%E6%88%AA%E8%B7%9D/" class="article-date">
-  <time datetime="2023-08-28T17:12:00.000Z" itemprop="datePublished">2023-08-29</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
-<li>启动系统的时候在启动之前按F2进入VMWare的BIOS配置界面</li>
-<li>移动启动顺序，将CD-ROM移动到第一位</li>
-<li><img src="/imgs/1205e783fc644a3b1f1eebf36ad636ae69cdc72ff4cda95e5cd88f1889f5a184.png" alt="picture 0">  </li>
-<li>提示安装Ubuntu的时候取消安装，进入live系统</li>
-<li>找到<code>gparted</code></li>
-<li><img src="/imgs/22ec42ce149d277f4cd73706fc87218a5b21e774dde489316be44ad90927762b.png" alt="picture 1">  </li>
-<li><img src="/imgs/f7b120ebe049d2cc58d00112ec70a7b5461955d43c6fdb0872377364b8f57daa.png" alt="picture 2">  </li>
-<li>给已经存在的空间扩容</li>
-<li><img src="/imgs/efdb163f5b6f5ecba70ebc1b08783e2b1e5080ba81219b9d5bcbf7277f406e91.png" alt="picture 3">  </li>
-<li>apply<ul>
-<li><img src="/imgs/d02898d5c7ea5be1277130271789a7683df4532a76a426a77dcbcf597f204736.png" alt="picture 4">  </li>
-</ul>
-</li>
-<li>执行完成之后关机</li>
-<li>重启，将启动顺序<strong>改回之前的</strong></li>
-<li><img src="/imgs/d13fa9c4fd21610a94534ed3f1c6adc3c3833b36ad6c06fa4d095fc48270e1d9.png" alt="picture 5">  </li>
-<li>系统正常启动</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
 
     </footer>
   </div>
