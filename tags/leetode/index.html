@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>小空间词频统计 |  Frank’s blogs</title>
+      <title>Tag: leetode |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -52,196 +52,56 @@
       
     <main class="content on">
       <section class="outer">
-  <article
-  id="post-小空间词频统计"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
+  
+  
+  <article class="articles">
     
-    <header class="article-header">
+    
+    <h1 class="page-type-title">#&nbspleetode</h1>
+    
+    
+  
+  
+  
+  
+  
+  
+  <div class="archives-wrap">
+    <div class="archive-year-wrap">
+      <a href="/archives/2022" class="archive-year">2022</a>
+    </div>
+    <div class="archives">
+      
+      <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2022/07/02/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%89%E7%A7%8D%E9%81%8D%E5%8E%86%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0/" class="archive-article-date">
+  <time datetime="2022-07-02T03:58:26.000Z" itemprop="datePublished">07/02</time>
+</a>
        
-<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  小空间词频统计
-</h1>
+<h2 itemprop="name">
+  <a class="archive-article-title" href="/2022/07/02/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%89%E7%A7%8D%E9%81%8D%E5%8E%86%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0/"
+    >二叉树的三种遍历的非递归实现</a> 
+</h2>
  
 
-      
     </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/29/%E5%B0%8F%E7%A9%BA%E9%97%B4%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1/" class="article-date">
-  <time datetime="2022-08-29T04:56:52.000Z" itemprop="datePublished">2022-08-29</time>
-</a>   
-<div class="word_count">
-    <span class="post-time">
-        <span class="post-meta-item-icon">
-            <i class="ri-quill-pen-line"></i>
-            <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">1k</span>
-        </span>
-    </span>
-
-    <span class="post-time">
-        &nbsp; | &nbsp;
-        <span class="post-meta-item-icon">
-            <i class="ri-book-open-line"></i>
-            <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">3 min</span>
-        </span>
-    </span>
-</div>
- 
-    </div>
-      
-    <div class="tocbot"></div>
-
-
-
-
-  
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="大数据问题的一般思路"><a href="#大数据问题的一般思路" class="headerlink" title="大数据问题的一般思路"></a>大数据问题的一般思路</h2><ul>
-<li><img src="/imgs/de52034f9740d556c3569a224bb4bc6ba1d9926fdec348c89cfb28b7d82fd640.png" alt="图 9">  <h2 id="利用位数组"><a href="#利用位数组" class="headerlink" title="利用位数组"></a>利用位数组</h2></li>
-<li>利用基础类型（比如int）制作一个bit数组</li>
-<li>比如一个int是32位，那么10个int就是320位的位数组</li>
-<li>利用<u>每个位的1和0</u>计数数字的存在与否<h2 id="小空间词频统计"><a href="#小空间词频统计" class="headerlink" title="小空间词频统计"></a>小空间词频统计</h2></li>
-<li>假如用一个小空间计算40亿个数字中<code>unsigned int</code>中的<u>哪个不包括在内</u><ul>
-<li>先申请允许内存大小的数组，检查系统内存能够允许的数组长度，找<u>最近的长度为2的整数幂次</u>的数组长度作为长度</li>
-<li>然后按照数组的长度均分<code>unsigned int</code>范围得到小的范围长度</li>
-<li>遍历整个数组，每个元素除以小范围的长度，结果向下取整得到自己属于哪个小范围</li>
-<li>将词频数组对应的index位置（上一步计算的结果）<code>+1</code></li>
-<li>循环一遍之后，词频数组中肯定有某个位置的词频达不到理论上的小范围长度</li>
-<li>将整个统计范围的长度从整个<code>unsigned int</code>范围调整到上一个词频达不到满的小范围</li>
-<li><u>重复上述步骤</u>遍历整个数据，丢弃所有不在范围内的数字，其他数字按照第二次划分的小范围分类，统计结束之后再看哪个位置的词频达不到此时的小范围</li>
-</ul>
-</li>
-<li>统计巨量URL的访问次数<ul>
-<li>使用哈希函数将URL转换，然后分流到一定数量（按照服务器的内存资源决定）的小文件中，每个小文件使用一个利用<u>URL被访问次数</u>组织的大根堆</li>
-<li>将每个大根堆的堆顶组织成大根堆得到总堆</li>
-<li>结果就是依次将内容从总堆中弹出，弹出之后找到这个元素原来所在的大根堆，同样将这个元素弹出，然后弹出后的大根堆的头部放入总大根堆中。</li>
-</ul>
-</li>
-<li>利用位数组统计出现了两次的数字<ul>
-<li>用<strong>两位</strong>表示一个数字是否出现过</li>
-<li><code>00</code>没出现过，<code>01</code>出现一次，<code>10</code>出现两次，<code>11</code>出现大于2次</li>
-</ul>
-</li>
-<li>利用小空间找<strong>中位数</strong><ul>
-<li>同样利用小范围词频统计（第一种）操作</li>
-<li>统计到找出中位数在哪个小分区里</li>
-<li>然后对这个对应的小分区再等分找到具体的中位数的位置<h2 id="小空间给大数组"><a href="#小空间给大数组" class="headerlink" title="小空间给大数组"></a>小空间给大数组</h2></li>
-</ul>
-</li>
-<li>方法一<ul>
-<li>小空间使用小根堆</li>
-<li>小根堆存储的内容是&lt;数字，出现次数&gt;的元组，有小根堆中存在的数字的时候，相应的出现次数+1</li>
-<li>小根堆不能直接用一条记录的空间计算，<u>需要考虑一些额外的开销</u>，实际可用的空间可能是总空间/16或者其他数值</li>
-<li>堆的大小用最接近的2的整数次幂次</li>
-<li>然后按照被排序的内容/堆的大小得到被排序内容按大小分的小段</li>
-<li>第一次处理落在最小部分段内的数据，第二次处理第二小部分段内的数据…</li>
-<li>都处理完即可得到所有排序</li>
-</ul>
-</li>
-<li>方法二<ul>
-<li>使用一个大根堆存储此时数组中最小的几种数字</li>
-<li>假如此时一个新的数字小于此时大根堆中最大的数字，那么可以加入</li>
-<li>假如这个数字比大根堆中最大的数字还大，那么说明这个数字不属于整个数组中最小的k个数字之一，直接忽略（k为堆的大小）</li>
-<li>假如此时大根堆的数字超出数字限制，那么将最大的数字弹出然后将新的数字压入</li>
-<li>然后将大根堆内的所有数字逆序排出并清空堆，然后给堆设置最小值，等于上次弹出之前堆中最大的数字，以后只考虑大于这个数字的数</li>
-</ul>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
     
-
-    <!-- copyright -->
     
-    <footer class="article-footer">
-       
-<div class="share-btn">
-      <span class="share-sns share-outer">
-        <i class="ri-share-forward-line"></i>
-        分享
-      </span>
-      <div class="share-wrap">
-        <i class="arrow"></i>
-        <div class="share-icons">
-          
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="ri-weibo-fill"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="ri-wechat-fill"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="ri-qq-fill"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="ri-douban-line"></i>
-          </a>
-          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a> -->
-          
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="ri-facebook-circle-fill"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="ri-twitter-fill"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="ri-google-fill"></i>
-          </a>
-        </div>
-      </div>
-</div>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetode/" rel="tag">leetode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
 
-<div class="wx-share-modal">
-    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2022/08/29/%E5%B0%8F%E7%A9%BA%E9%97%B4%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
+    
   </div>
-
-   
-  <nav class="article-nav">
-    
-      <a href="/2022/08/29/%E4%BD%8D%E8%BF%90%E7%AE%97%E7%9B%B8%E5%85%B3/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            位运算相关
-          
-        </div>
-      </a>
-    
-    
-      <a href="/2022/08/29/Morris%E9%81%8D%E5%8E%86/" class="article-nav-link">
-        <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">Morris遍历</div>
-      </a>
-    
-  </nav>
+</article>
+      
+      
+    </div>
+  </div>
+  
+  
 
   
-   
-     
-</article>
-
 </section>
       <footer class="footer">
   <div class="outer">
@@ -364,22 +224,6 @@
 <script src="/js/lazyload.min.js"></script>
 
 <!-- Tocbot -->
- 
-<script src="/js/tocbot.min.js"></script>
-
-<script>
-  tocbot.init({
-    tocSelector: ".tocbot",
-    contentSelector: ".article-entry",
-    headingSelector: "h1, h2, h3, h4, h5, h6",
-    hasInnerContainers: true,
-    scrollSmooth: true,
-    scrollContainer: "main",
-    positionFixedSelector: ".tocbot",
-    positionFixedClass: "is-position-fixed",
-    fixedSidebarOffset: "auto",
-  });
-</script>
 
 <script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
 <link
