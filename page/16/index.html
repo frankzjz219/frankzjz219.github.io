@@ -141,6 +141,116 @@
     
     
     <article
+  id="post-pytorch入门笔记"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/08/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/"
+    >pytorch入门笔记</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/08/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/" class="article-date">
+  <time datetime="2021-12-08T13:59:11.000Z" itemprop="datePublished">2021-12-08</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="pytorch入门笔记及资源集合"><a href="#pytorch入门笔记及资源集合" class="headerlink" title="pytorch入门笔记及资源集合"></a>pytorch入门笔记及资源集合</h1><h2 id="教程手册"><a href="#教程手册" class="headerlink" title="教程手册"></a>教程手册</h2><p>莫烦 <a target="_blank" rel="noopener" href="https://mofanpy.com/tutorials/machine-learning/reinforcement-learning/">https://mofanpy.com/tutorials/machine-learning/reinforcement-learning/</a></p>
+<p>pytorch中文手册</p>
+<p><a target="_blank" rel="noopener" href="https://handbook.pytorch.wiki/">https://handbook.pytorch.wiki/</a></p>
+<h2 id="转移到GPU上训练"><a href="#转移到GPU上训练" class="headerlink" title="转移到GPU上训练"></a>转移到GPU上训练</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41012765/article/details/128089337">参考</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45354497/article/details/130346967">参考2</a></li>
+<li>主要操作是判断系统是否支持GPU训练并且指定设备<code>device</code><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">device = torch.device(<span class="string">&quot;cuda:0&quot;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span>) <span class="comment"># 设置使用GPU计算</span></span><br></pre></td></tr></table></figure></li>
+<li>对创建的模型执行<code>module.to(device)</code></li>
+<li>对创建的<code>torch.tensor()</code>也执行<code>.to(device)</code></li>
+<li>注意，CPU上的参数只能和CPU上的参数互相运算，GPU上的参数只能和GPU上的参数互相计算，不能混杂，<u>混杂的时候需要都迁移到GPU上计算或者都迁移到CPU上计算</u></li>
+<li>假如网络已经迁移到了GPU上，那么网络的输入参数也需要是GPU上的Tensor，输出也是GPU的</li>
+</ul>
+<h2 id="detach函数"><a href="#detach函数" class="headerlink" title="detach函数"></a>detach函数</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_31244453/article/details/112473947">https://blog.csdn.net/qq_31244453/article/details/112473947</a></p>
+<p>返回一个新的tensor，从当前计算图中分离下来。但是仍指向原变量的存放位置，不同之处只是requirse_grad为false.得到的这个tensir永远不需要计算器梯度，不具有grad.</p>
+<h2 id="某博主的DDPG"><a href="#某博主的DDPG" class="headerlink" title="某博主的DDPG"></a>某博主的DDPG</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/blanokvaffy/article/details/86232658">https://blog.csdn.net/blanokvaffy/article/details/86232658</a></p>
+<h2 id="网络保存与加载"><a href="#网络保存与加载" class="headerlink" title="网络保存与加载"></a>网络保存与加载</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41680653/article/details/93768559">https://blog.csdn.net/weixin_41680653/article/details/93768559</a></p>
+<h2 id="torch-mean"><a href="#torch-mean" class="headerlink" title="torch.mean()"></a>torch.mean()</h2><p> mean()函数的参数：dim=0,按行求平均值，返回的形状是（1，列数）；dim=1,按列求平均值，返回的形状是（行数，1）,默认不设置dim的时候，返回的是所有元素的平均值。</p>
+<h2 id="torch的zero-grad-函数"><a href="#torch的zero-grad-函数" class="headerlink" title="torch的zero_grad()函数"></a>torch的zero_grad()函数</h2><p>调用backward()函数之前都要将梯度清零，因为如果梯度不清零，pytorch中会将上次计算的梯度和本次计算的梯度累加</p>
+<h2 id="torch-tensor的view函数"><a href="#torch-tensor的view函数" class="headerlink" title="torch tensor的view函数"></a>torch tensor的view函数</h2><p>view(*args) → Tensor<br>返回一个有相同数据但大小不同的tensor。 返回的tensor必须有与原tensor相同的数据和相同数目的元素，但可以有不同的大小。</p>
+<p>参数是-1的时候这个维度的长度从其他维度<strong>推算</strong></p>
+<h2 id="torch-tensor的-sequeeze和unsqueeze"><a href="#torch-tensor的-sequeeze和unsqueeze" class="headerlink" title="torch tensor的 sequeeze和unsqueeze"></a>torch tensor的 sequeeze和unsqueeze</h2><p>squeeze()：</p>
+<p><code>squeeze(arg)</code>表示第arg维的维度值为1，则去掉该维度。否则tensor不变。（即若<code>tensor.shape()[arg] = 1</code>，则去掉该维度）</p>
+<p>unsqueeze()：</p>
+<p><code>unsqueeze(arg)</code>与<code>squeeze(arg)</code>作用相反，表示在第arg维增加一个维度值为1的维度。</p>
+<h2 id="matplotlib画图的时候出现横坐标标签重叠的问题"><a href="#matplotlib画图的时候出现横坐标标签重叠的问题" class="headerlink" title="matplotlib画图的时候出现横坐标标签重叠的问题"></a>matplotlib画图的时候出现横坐标标签重叠的问题</h2><ul>
+<li><p>比如<img src="/imgs/50c9faa8d6b6a76f26b9902c7a998ab59938bdfaf1117a6f3f81dc5b4a14700f.png" alt="picture 1">  </p>
+</li>
+<li><p>只需要在代码中加入<code>plt.tight_layout()</code>即可（在<code>plt.show()</code>之前）</p>
+</li>
+<li><p><img src="/imgs/cf4cc41c2b34494854a1c3662a1e16238ec21a10dd3d151b245477088b950a57.png" alt="picture 2">  </p>
+<h2 id="matplotlib添加希腊字母的latex方法"><a href="#matplotlib添加希腊字母的latex方法" class="headerlink" title="matplotlib添加希腊字母的latex方法"></a>matplotlib添加希腊字母的latex方法</h2></li>
+<li><p><code>plt.ylabel(&quot;cos(&quot;+r&#39;$\theta$&#39;+&quot;)&quot;)</code>，希腊字母用<code>r&#39;$\希腊字母$&#39;</code>即可</p>
+</li>
+<li><p>效果：<img src="/imgs/c0577006ba23e2df4a37e467756a55f016f0b2143078650c0daed7e891dba90f.png" alt="picture 3">  </p>
+</li>
+</ul>
+<h2 id="将gym的输出保存为gif动画"><a href="#将gym的输出保存为gif动画" class="headerlink" title="将gym的输出保存为gif动画"></a>将gym的输出保存为gif动画</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">saveAsGIF</span>(<span class="params">frames</span>):</span></span><br><span class="line">    patch = plt.imshow(frames[<span class="number">0</span>])</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">animate</span>(<span class="params">i</span>):</span></span><br><span class="line">        patch.set_data(frames[i])</span><br><span class="line"></span><br><span class="line">    anim = animation.FuncAnimation(plt.gcf(), animate, frames=<span class="built_in">len</span>(frames), interval=<span class="number">5</span>)</span><br><span class="line">    anim.save(<span class="string">&quot;./CartPole_v1_result.gif&quot;</span>, writer=<span class="string">&quot;pillow&quot;</span>, fps=<span class="number">30</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>此外，还需要在创建gym环境的时候进行一些操作（<strong>此处新版的gym和旧版的不太相同</strong>）<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">env = gym.make(<span class="string">&#x27;Pendulum-v1&#x27;</span>, render_mode=<span class="string">&quot;rgb_array&quot;</span>)</span><br><span class="line">frames = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">    frames.append(env.render())</span><br></pre></td></tr></table></figure></li>
+<li>然后再将<code>frames</code>当作参数传入前面的函数<code>saveAsGIF()</code>中</li>
+<li><img src="/imgs/4b4706ade3cd854f191da16b2a009e2f3be50d13fc63410581fece37afe1d1f5.gif" alt="picture 5">  <h2 id="python中的"><a href="#python中的" class="headerlink" title="python中的@"></a>python中的<code>@</code></h2></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/daniumiqi/p/12162192.html">参考链接</a><h2 id="python中的None"><a href="#python中的None" class="headerlink" title="python中的None"></a>python中的<code>None</code></h2></li>
+<li><a target="_blank" rel="noopener" href="https://m.php.cn/article/419082.html">参考链接</a><ul>
+<li>就是空对象，无类型<h2 id="各种激活函数"><a href="#各种激活函数" class="headerlink" title="各种激活函数"></a>各种激活函数</h2></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_53675977/article/details/128262957">激活函数</a></li>
+<li>其他的激活函数（比如<code>Leaky ReLU</code>）<ul>
+<li><img src="/imgs/4c60e86b0de8c2dbf449552f23d0b4e870f769bf39de1271825167ced38fc4e5.png" alt="picture 1">  <h2 id="梯度消失问题"><a href="#梯度消失问题" class="headerlink" title="梯度消失问题"></a>梯度消失问题</h2></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/3f35e555d5ba">参考链接1</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/268007336">参考链接2</a></li>
+<li>简而言之就是比如使用<code>sigmoid</code>函数作为激活函数，因为<code>sigmoid</code>函数的梯度小于1，导致随着反向传播的层数加深，往前的层因为连乘的<code>sigmoid</code>函数导数次数过多，使得<strong>梯度越来越小</strong>，实际上<u>起不到任何的训练效果</u>，网络实际有效的<strong>只有靠后的几层</strong>。</li>
+<li>也有其他方法来解决梯度消失的问题，比如ResNET等等<h2 id="Jetson开发板上找不到libomp-so文件的解决办法"><a href="#Jetson开发板上找不到libomp-so文件的解决办法" class="headerlink" title="Jetson开发板上找不到libomp.so文件的解决办法"></a>Jetson开发板上找不到<code>libomp.so</code>文件的解决办法</h2></li>
+<li>在Jetson开发板上安装<code>pytorch</code>之后，<code>import pytorch</code>的时候报错找不到<code>libomp.so</code>文件<ul>
+<li><img src="/imgs/e317ba90bc5aa315f81b9f9c7f8348c74ca3f4eef31244c81dfbbe3a3d90738f.png" alt="picture 2">  </li>
+</ul>
+</li>
+<li>但是同样的代码在命令行手动使用<code>python3 &lt;文件名&gt;</code>就<strong>可以执行</strong></li>
+<li>此时可以通过安装<code>sudo apt-get install libomp5 libomp-dev</code>解决，<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/632057827">参考</a><h2 id="python实现命令行进度条"><a href="#python实现命令行进度条" class="headerlink" title="python实现命令行进度条"></a>python实现命令行进度条</h2></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/390722326">参考</a><h2 id="python从图片生成gif"><a href="#python从图片生成gif" class="headerlink" title="python从图片生成gif"></a>python从图片生成gif</h2></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/634922656">参考</a></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-TD3网络"
   class="article article-type-post"
   itemscope

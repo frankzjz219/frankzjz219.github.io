@@ -141,6 +141,65 @@
     
     
     <article
+  id="post-使用使用Flask，Gunicorn和Nginx部署一个云端ubuntu上的服务器"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/11/21/%E4%BD%BF%E7%94%A8%E4%BD%BF%E7%94%A8Flask%EF%BC%8CGunicorn%E5%92%8CNginx%E9%83%A8%E7%BD%B2%E4%B8%80%E4%B8%AA%E4%BA%91%E7%AB%AFubuntu%E4%B8%8A%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8/"
+    >使用使用Flask，Gunicorn和Nginx部署一个云端ubuntu上的服务器</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/11/21/%E4%BD%BF%E7%94%A8%E4%BD%BF%E7%94%A8Flask%EF%BC%8CGunicorn%E5%92%8CNginx%E9%83%A8%E7%BD%B2%E4%B8%80%E4%B8%AA%E4%BA%91%E7%AB%AFubuntu%E4%B8%8A%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="article-date">
+  <time datetime="2023-11-21T14:26:50.000Z" itemprop="datePublished">2023-11-21</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="前期下载配置"><a href="#前期下载配置" class="headerlink" title="前期下载配置"></a>前期下载配置</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 更新软件包列表</span></span><br><span class="line">sudo apt-get update</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装Flask</span></span><br><span class="line">sudo pip3 install flask</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装Gunicorn</span></span><br><span class="line">sudo pip3 install gunicorn</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装Nginx</span></span><br><span class="line">sudo apt-get install nginx</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="创建一个Flask-app"><a href="#创建一个Flask-app" class="headerlink" title="创建一个Flask app"></a>创建一个Flask app</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># app.py</span></span><br><span class="line"><span class="comment"># 导入Flask模块</span></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建Flask应用实例</span></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义根路由和视图函数</span></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&quot;/&quot;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>():</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;&lt;h1&gt;Hello, World!&lt;/h1&gt;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果是主模块，运行Flask应用</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    app.run()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="创建gunicorn-conf-py"><a href="#创建gunicorn-conf-py" class="headerlink" title="创建gunicorn.conf.py"></a>创建<code>gunicorn.conf.py</code></h2><ul>
+<li>注意要在当期目录下创建<code>./logs</code>文件夹<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># gunicorn.conf.py</span></span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置日志的输出路径</span></span><br><span class="line">log_path = os.path.join(os.path.dirname(__file__), <span class="string">&#x27;logs&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(log_path):</span><br><span class="line">    os.mkdir(log_path)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置日志的格式</span></span><br><span class="line">log_format = <span class="string">&#x27;%(asctime)s %(levelname)s %(process)d %(message)s&#x27;</span></span><br><span class="line">date_format = <span class="string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置日志的级别</span></span><br><span class="line">log_level = <span class="string">&#x27;info&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置日志的文件名</span></span><br><span class="line">access_log_file = os.path.join(log_path, <span class="string">&#x27;access.log&#x27;</span>)</span><br><span class="line">error_log_file = os.path.join(log_path, <span class="string">&#x27;error.log&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置日志的配置项</span></span><br><span class="line">accesslog = access_log_file</span><br><span class="line">errorlog = error_log_file</span><br><span class="line">loglevel = log_level</span><br><span class="line"><span class="built_in">format</span> = log_format</span><br><span class="line">datefmt = date_format</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置绑定的IP和端口号</span></span><br><span class="line">bind = <span class="string">&#x27;0.0.0.0:5000&#x27;</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用上面的配置文件启动gunicorn"><a href="#使用上面的配置文件启动gunicorn" class="headerlink" title="使用上面的配置文件启动gunicorn"></a>使用上面的配置文件启动gunicorn</h2></li>
+<li><code>gunicorn -c gunicorn.conf.py app:app</code><h2 id="创建nginx的配置文件"><a href="#创建nginx的配置文件" class="headerlink" title="创建nginx的配置文件"></a>创建nginx的配置文件</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 定义一个名为flask的server块</span></span><br><span class="line">server &#123;</span><br><span class="line">    # 监听80端口</span><br><span class="line">    listen 80;</span><br><span class="line"></span><br><span class="line">    # 定义服务器名称，可以是域名或者IP地址</span><br><span class="line">    server_name 52.184.77.113;</span><br><span class="line"></span><br><span class="line">    # 定义根路由的处理方式</span><br><span class="line">    location / &#123;</span><br><span class="line">        # 转发请求到Gunicorn服务器，注意IP和端口要与Gunicorn绑定的一致</span><br><span class="line">        proxy_pass http://0.0.0.0:5000;</span><br><span class="line"></span><br><span class="line">        # 设置一些代理相关的头部信息</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>创建软连接<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建符号链接</span></span><br><span class="line">sudo ln -s /etc/nginx/sites-available/flask.conf /etc/nginx/sites-enabled/</span><br></pre></td></tr></table></figure></li>
+<li>重启nginx服务<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 重启Nginx服务</span></span><br><span class="line">sudo service nginx restart</span><br></pre></td></tr></table></figure></li>
+<li>如果服务器需要配置外网端口访问的话在相应的平台配置即可</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javaScript/" rel="tag">javaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-leetcode非数据结构类型题目题解"
   class="article article-type-post"
   itemscope
@@ -1003,96 +1062,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-使用gdb调试qemu上的Linux"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/09/02/%E4%BD%BF%E7%94%A8gdb%E8%B0%83%E8%AF%95qemu%E4%B8%8A%E7%9A%84Linux/"
-    >使用gdb调试qemu上的Linux</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/09/02/%E4%BD%BF%E7%94%A8gdb%E8%B0%83%E8%AF%95qemu%E4%B8%8A%E7%9A%84Linux/" class="article-date">
-  <time datetime="2023-09-02T02:16:35.000Z" itemprop="datePublished">2023-09-02</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="修改Linux内核编译选项"><a href="#修改Linux内核编译选项" class="headerlink" title="修改Linux内核编译选项"></a>修改Linux内核编译选项</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/166253161">参考</a></li>
-<li><strong>注意 这个选项可能找不到</strong><ul>
-<li><img src="/imgs/2ee2577f6c7c405d96172e5833fb425147c0302a31931a40aabd8d442b4c6e7a.png" alt="picture 0">  </li>
-</ul>
-</li>
-<li>还需要修改<code>menuconfig</code>中的一个设置<ul>
-<li><img src="/imgs/dd1841b9a0fa8141c4ff3fb858f75583499d12b45a14f0fccc780831fc798bbe.png" alt="picture 3">  </li>
-<li><strong>关闭下面这一条</strong>，否则也无法实现在规定的断点位置停下</li>
-<li><img src="/imgs/1baba0eab3a48ee885262a7d31a85a1e985d6312e43a6f46ab61d0506669a1a6.png" alt="picture 4">  </li>
-</ul>
-</li>
-</ul>
-<h2 id="进入内核"><a href="#进入内核" class="headerlink" title="进入内核"></a>进入内核</h2><ul>
-<li>使用qemu执行如下命令<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">qemu-system-x86_64 -s -S \</span><br><span class="line">-netdev &quot;user,id=eth0&quot; \</span><br><span class="line">-device &quot;e1000,netdev=eth0&quot; \</span><br><span class="line">-object &quot;filter-dump,id=eth0,netdev=eth0,file=dump.dat&quot; \</span><br><span class="line">-kernel $kernel_image \</span><br><span class="line">-append &quot;root=/dev/am rdinit=sbin/init ip=10.0.2.15::10.0.2.1:255.255.255.0 console=ttyS0&quot; \</span><br><span class="line">-nographic \</span><br><span class="line">-initrd $rootfs_img</span><br></pre></td></tr></table></figure></li>
-<li><code>-s</code>参数表示在<strong>1234</strong>端口接受GDB调试，<code>-S</code>参数表示冻结CPU直到远程GDB输入相应命令</li>
-<li>然后输入<code>gdb vmlinux</code></li>
-<li><code>target remote localhost:1234</code></li>
-<li>然后<img src="/imgs/71c87b1382680d5bb1847344512573a248089d9d81a673056c54bb3d8bc217ab.png" alt="picture 1">  </li>
-<li>然后输入<code>continue</code>或<code>c</code>继续执行<h2 id="gdb的使用"><a href="#gdb的使用" class="headerlink" title="gdb的使用"></a>gdb的使用</h2></li>
-<li><img src="/imgs/57a7dc71cdb839bd8c2fc4f7b3fb6ad2d8dba573f37c3b05d2a3613450910e8f.png" alt="picture 2">  <ul>
-<li><code>b &lt;函数名&gt;</code>在函数位置设置断点</li>
-</ul>
-</li>
-<li><img src="/imgs/ac23c0bf2e3b67199489f420b67c796717a94d0d4ae446839a1ce93354f2a33f.png" alt="picture 5">  </li>
-<li>使用<code>step</code>单步执行</li>
-<li><code>info locals</code>显示当前环境的局部变量</li>
-<li><code>info args</code>显示函数的传入参数等等</li>
-<li>有时候一些变量会因为编译过程中被优化掉了导致无法查看，显示为<code>&lt;optimized out&gt;</code><ul>
-<li><img src="/imgs/5471da4b10b1c3336482ef5f32336451062271e0c17c6facd064037a0cfee430.png" alt="picture 6">  </li>
-</ul>
-</li>
-<li>可以通过设置为<code>volatile</code>或者防止优化改变上述状况<h2 id="一些内核调试经验"><a href="#一些内核调试经验" class="headerlink" title="一些内核调试经验"></a>一些内核调试经验</h2><h3 id="warning-trace"><a href="#warning-trace" class="headerlink" title="warning trace"></a>warning trace</h3></li>
-<li>如下的trace<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[  111.555855] ------------[ cut here ]------------</span><br><span class="line">[  111.560683] WARNING: CPU: 0 PID: 129 at kernel/dma/mapping.c:533 dma_free_attrs+0x4a/0x60</span><br><span class="line">[  111.562335] Modules linked in: r4l_e1000_demo(OE)</span><br><span class="line">[  111.563461] CPU: 0 PID: 129 Comm: ip Tainted: G        W  OE      6.1.0-rc1 #38</span><br><span class="line">[  111.564123] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014</span><br><span class="line">[  111.564595] RIP: 0010:dma_free_attrs+0x4a/0x60</span><br><span class="line">[  111.565445] Code: 40 00 a9 00 02 00 00 74 21 48 85 d2 74 13 4d 85 c9 74 10 4d 8b 59 10 4d 85 db 74 05 e8 ef c0</span><br><span class="line">[  111.566470] RSP: 0018:ffffc90000673a80 EFLAGS: 00000046</span><br><span class="line">[  111.567058] RAX: 0000000000000046 RBX: ffff88800425a0d0 RCX: 000000000608b000</span><br><span class="line">[  111.567506] RDX: ffff88800608b000 RSI: 0000000000000080 RDI: ffff88800425a0d0</span><br><span class="line">[  111.568004] RBP: ffffc90000673a80 R08: 0000000000000000 R09: 0000000000000000</span><br><span class="line">[  111.568556] R10: ffffffff82ab6ff0 R11: ffffffff818fa860 R12: 0000000000000080</span><br><span class="line">[  111.569160] R13: 0000000000000041 R14: 000000000608b000 R15: ffff88800608b000</span><br><span class="line">[  111.569613] FS:  00000000024fa3c0(0000) GS:ffff888007600000(0000) knlGS:0000000000000000</span><br><span class="line">[  111.570234] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033</span><br><span class="line">[  111.570839] CR2: 00000000005305a1 CR3: 0000000006068000 CR4: 00000000000006f0</span><br><span class="line">[  111.571537] Call Trace:</span><br><span class="line">[  111.572137]  &lt;TASK&gt;</span><br><span class="line">[  111.573023]  rust_helper_dma_free_coherent+0x3c/0x50</span><br><span class="line">[  111.573691]  _RINvNtCs3yuwAp0waWO_4core3ptr13drop_in_placeINtNtCsa5tTp5JGY9w_14r4l_e1000_demo8ring_buf7RingBu]</span><br><span class="line">[  111.574911]  ? _RNvXs4_NtNtNtCs3yuwAp0waWO_4core3fmt3num3impxNtB9_7Display3fmt+0x30/0x30</span><br><span class="line">[  111.576226]  _RNvXs7_Csa5tTp5JGY9w_14r4l_e1000_demoNtB5_9NetDeviceNtNtCsfATHBUcknU9_6kernel3net16DeviceOperat]</span><br><span class="line">[  111.577870]  _RNvMs2_NtCsfATHBUcknU9_6kernel3netINtB5_12RegistrationNtCsa5tTp5JGY9w_14r4l_e1000_demo9NetDevic]</span><br><span class="line">[  111.579888]  __dev_close_many+0x124/0x170</span><br><span class="line">[  111.580119]  __dev_change_flags+0xf5/0x200</span><br><span class="line">[  111.580311]  dev_change_flags+0x27/0x60</span><br><span class="line">[  111.580567]  devinet_ioctl+0x4ec/0x600</span><br><span class="line">[  111.580943]  inet_ioctl+0xec/0x1a0</span><br><span class="line">[  111.581246]  ? _copy_to_user+0x1d/0x30</span><br><span class="line">[  111.581408]  ? put_user_ifreq+0x49/0x60</span><br><span class="line">[  111.581569]  ? sock_do_ioctl+0xae/0x100</span><br><span class="line">[  111.581925]  sock_do_ioctl+0x3e/0x100</span><br><span class="line">[  111.582206]  sock_ioctl+0x2ac/0x360</span><br><span class="line">[  111.582796]  __se_sys_ioctl+0x7c/0xc0</span><br><span class="line">[  111.583239]  __x64_sys_ioctl+0x1d/0x20</span><br><span class="line">[  111.583579]  do_syscall_64+0x62/0x90</span><br><span class="line">[  111.583833]  ? do_user_addr_fault+0x3b5/0x4f0</span><br><span class="line">[  111.584116]  ? exit_to_user_mode_prepare+0x3c/0xa0</span><br><span class="line">[  111.584622]  ? irqentry_exit_to_user_mode+0x9/0x20</span><br><span class="line">[  111.585147]  ? irqentry_exit+0x12/0x40</span><br><span class="line">[  111.585467]  ? exc_page_fault+0x8e/0x210</span><br><span class="line">[  111.585871]  entry_SYSCALL_64_after_hwframe+0x63/0xcd</span><br><span class="line">[  111.586505] RIP: 0033:0x4afa6f</span><br><span class="line">[  111.587134] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 40</span><br><span class="line">[  111.588324] RSP: 002b:00007ffe25bed850 EFLAGS: 00000246 ORIG_RAX: 0000000000000010</span><br><span class="line">[  111.589367] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00000000004afa6f</span><br><span class="line">[  111.589720] RDX: 00007ffe25bed910 RSI: 0000000000008914 RDI: 0000000000000003</span><br><span class="line">[  111.589961] RBP: 0000000000640287 R08: 0000000000000000 R09: 0000000000000000</span><br><span class="line">[  111.590853] R10: 00007ffe25beef40 R11: 0000000000000246 R12: 0000000000000003</span><br><span class="line">[  111.591466] R13: 00007ffe25bed910 R14: 0000000000000000 R15: 0000000000000000</span><br><span class="line">[  111.592168]  &lt;/TASK&gt;</span><br><span class="line">[  111.592524] ---[ end trace 0000000000000000 ]---</span><br></pre></td></tr></table></figure></li>
-<li>是Warning Trace，并不是内核出现错误，出现段错误一般会有<code>segmentation fault</code>或者<code>core dumped</code></li>
-<li>这个仅仅是警告</li>
-<li>触发原因是内核<code>dma_free_attrs</code>函数有一个语句<code>WARN_ON(irqs_disabled())</code><ul>
-<li>会在<code>irq</code>被禁止的条件下发出一条warning<h3 id="但是此时并不能看到Rust部分的调用栈，也没法使用Rust编译的模块中的符号设置断点"><a href="#但是此时并不能看到Rust部分的调用栈，也没法使用Rust编译的模块中的符号设置断点" class="headerlink" title="但是此时并不能看到Rust部分的调用栈，也没法使用Rust编译的模块中的符号设置断点"></a>但是此时并不能看到Rust部分的调用栈，也没法使用Rust编译的模块中的符号设置断点</h3></li>
-</ul>
-</li>
-<li><code>todo</code></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gdb/" rel="tag">gdb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li></ul>
 
     </footer>
   </div>
