@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">608</span>
+            <span class="post-count">952</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">3 min</span>
+            <span class="post-count">4 min</span>
         </span>
     </span>
 </div>
@@ -119,6 +119,14 @@
 <li>循环一次，每次寻找每个位置的前缀和</li>
 <li>然后寻找字典中是否存在<code>pre-k</code></li>
 <li>假如存在的话，意味着从<code>pre-k</code>的结束位置开始，到当前的位置结束的一段数组的和是k<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">subarraySum</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        unordered_map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; mp;</span><br><span class="line">        mp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">0</span>, pre = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; x:nums) &#123;</span><br><span class="line">            pre += x; <span class="comment">// 这一步是前缀和</span></span><br><span class="line">            <span class="keyword">if</span> (mp.<span class="built_in">find</span>(pre - k) != mp.<span class="built_in">end</span>()) &#123;</span><br><span class="line">                count += mp[pre - k]; <span class="comment">// 可行的计数加上这个计数</span></span><br><span class="line">            &#125;</span><br><span class="line">            mp[pre]++; <span class="comment">// 添加上当前计算的前缀和到字典</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="leetcode-239-滑动窗口最大值"><a href="#leetcode-239-滑动窗口最大值" class="headerlink" title="leetcode 239.滑动窗口最大值"></a>leetcode 239.滑动窗口最大值</h2><ul>
+<li>由于我们需要求出的是滑动窗口的最大值，一开始先把一个长度为k的滑动窗口的每个值加入队列</li>
+<li>在答案数组里加入优先级队列的头部元素</li>
+<li>然后开始移动滑动窗口，先把下一个元素加入队列，然后开始从队列弹出内容</li>
+<li>假如此时队列的头部是窗口的第一个index之前的位置（也就是<code>&lt;=i-k</code>）</li>
+<li>将其弹出直到遇到当前窗口的头部（<code>i-k+1</code>）在优先级队列的头部，那么此时这个元素一定是窗口中的最大值（不管还有没有滑动窗口值卡九年的元素，此时这个元素都是剩余的所有元素（包括窗口中的所有元素）中的最大值</li>
+<li>把此时优先级队列的头部元素加入答案数组（这是此时滑动窗口的最大元素）<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">maxSlidingWindow</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        priority_queue&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; q;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; ++i) &#123;</span><br><span class="line">            q.<span class="built_in">emplace</span>(nums[i], i);</span><br><span class="line">        &#125;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; ans = &#123;q.<span class="built_in">top</span>().first&#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = k; i &lt; n; ++i) &#123;</span><br><span class="line">            q.<span class="built_in">emplace</span>(nums[i], i);</span><br><span class="line">            <span class="keyword">while</span> (q.<span class="built_in">top</span>().second &lt;= i - k) &#123;</span><br><span class="line">                q.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            ans.<span class="built_in">push_back</span>(q.<span class="built_in">top</span>().first);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
 </ul>
  
       <!-- reward -->
