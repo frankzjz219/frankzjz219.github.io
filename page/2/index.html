@@ -666,8 +666,9 @@
 <h2 id="git-clone时permission-denied的问题"><a href="#git-clone时permission-denied的问题" class="headerlink" title="git clone时permission denied的问题"></a>git clone时permission denied的问题</h2><ul>
 <li>可能原因很多，一个是本地的<code>ssh</code>密钥已经无法使用，需要本地生成之后在github上重新添加一个<code>ssh</code>密钥</li>
 <li>另一个是需要clone入的文件夹没有写入权限，此时需要使用管理员权限打开控制台即可<h2 id="pip代理配置"><a href="#pip代理配置" class="headerlink" title="pip代理配置"></a>pip代理配置</h2></li>
-<li><code>pip config set global.HTTPS_PROXY https://127.0.0.1:7890</code></li>
-<li><code>pip config set global.HTTP_PROXY https://127.0.0.1:7890</code></li>
+<li><code>pip config set global.HTTPS_PROXY https://127.0.0.1:&lt;端口号&gt;</code></li>
+<li><code>pip config set global.HTTP_PROXY https://127.0.0.1:&lt;端口号&gt;</code></li>
+<li>如果遇到<code>WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by &#39;ProxyError(&#39;Cannot connect to proxy.&#39;, RemoteDisconnected(&#39;Remote end closed connection without response&#39;))&#39;</code>之类的错误，一般是因为代理配置有问题导致的，重新设置正确的端口号即可</li>
 </ul>
  
       <!-- reward -->
