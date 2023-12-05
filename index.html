@@ -141,6 +141,70 @@
     
     
     <article
+  id="post-Leetcode图相关遍历"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/12/05/Leetcode%E5%9B%BE%E7%9B%B8%E5%85%B3%E9%81%8D%E5%8E%86/"
+    >Leetcode图相关遍历</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/12/05/Leetcode%E5%9B%BE%E7%9B%B8%E5%85%B3%E9%81%8D%E5%8E%86/" class="article-date">
+  <time datetime="2023-12-05T08:25:50.000Z" itemprop="datePublished">2023-12-05</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="图的拓扑排序"><a href="#图的拓扑排序" class="headerlink" title="图的拓扑排序"></a>图的拓扑排序</h2><h3 id="广度优先搜索（Leetcode-207-课程表）"><a href="#广度优先搜索（Leetcode-207-课程表）" class="headerlink" title="广度优先搜索（Leetcode 207.课程表）"></a>广度优先搜索（Leetcode 207.课程表）</h3><ul>
+<li>用一个数组记录每个节点的进入边的数量</li>
+<li>开始的时候将所有入度为0的点加入队列</li>
+<li>依次从队列中弹出点，将从这个点出发指向的所有点的入度-1，然后将跟这个点相关的路径全部删除<ul>
+<li>假如此时遇到点的入度是0的话，将这个点加入队列</li>
+</ul>
+</li>
+<li>将队列中弹出的点加入输出序列中</li>
+<li>假如最后图上的<strong>所有点都在输出序列中</strong>，说明无环，否则有环<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">canFinish</span><span class="params">(<span class="keyword">int</span> numCourses, vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; prerequisites)</span> </span>&#123;</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">vMap</span>(numCourses);</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">inCnt</span><span class="params">(numCourses, <span class="number">0</span>)</span></span>;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; ans;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;prerequisites.<span class="built_in">size</span>(); i++)</span><br><span class="line">        &#123;</span><br><span class="line">            vMap[prerequisites[i][<span class="number">1</span>]].<span class="built_in">push_back</span>(prerequisites[i][<span class="number">0</span>]);</span><br><span class="line">            ++inCnt[prerequisites[i][<span class="number">0</span>]];</span><br><span class="line">        &#125;</span><br><span class="line">        queue&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;numCourses; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(inCnt[i] == <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                q.<span class="built_in">push</span>(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(q.<span class="built_in">size</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">auto</span> temp = q.<span class="built_in">front</span>();</span><br><span class="line">            q.<span class="built_in">pop</span>();</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; i:vMap[temp])</span><br><span class="line">            &#123;</span><br><span class="line">                --inCnt[i];</span><br><span class="line">                <span class="keyword">if</span>(inCnt[i] == <span class="number">0</span>)q.<span class="built_in">push</span>(i);</span><br><span class="line">            &#125;</span><br><span class="line">            vMap[temp] = vector&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line">            ans.<span class="built_in">push_back</span>(temp);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(ans.<span class="built_in">size</span>()&lt;numCourses)<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="深度优先搜索"><a href="#深度优先搜索" class="headerlink" title="深度优先搜索"></a>深度优先搜索</h3><ul>
+<li>遍历所有节点，先标记自己被遍历过了</li>
+<li>每个节点递归的遍历<strong>自己所有边</strong>指向的没有被打上遍历过的标签的节点</li>
+<li>回溯的时候（也就是之后的节点都遍历结束之后）将自己添加到拓扑顺序的栈中</li>
+<li>依次弹出栈中元素，得到顺序<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stack&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Graph</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> vertices;</span><br><span class="line">    vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; adjList;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Graph</span>(<span class="keyword">int</span> V) : <span class="built_in">vertices</span>(V), <span class="built_in">adjList</span>(V) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addEdge</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">        adjList[u].<span class="built_in">push_back</span>(v);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">topologicalSortUtil</span><span class="params">(<span class="keyword">int</span> v, vector&lt;<span class="keyword">bool</span>&gt;&amp; visited, stack&lt;<span class="keyword">int</span>&gt;&amp; result)</span> </span>&#123;</span><br><span class="line">        visited[v] = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> neighbor : adjList[v]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!visited[neighbor]) &#123;</span><br><span class="line">                <span class="built_in">topologicalSortUtil</span>(neighbor, visited, result);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        result.<span class="built_in">push</span>(v);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">topologicalSort</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        stack&lt;<span class="keyword">int</span>&gt; result;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">bool</span>&gt; <span class="title">visited</span><span class="params">(vertices, <span class="literal">false</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; vertices; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!visited[i]) &#123;</span><br><span class="line">                <span class="built_in">topologicalSortUtil</span>(i, visited, result);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Topological Sort: &quot;</span>;</span><br><span class="line">        <span class="keyword">while</span> (!result.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            cout &lt;&lt; result.<span class="built_in">top</span>() &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">            result.<span class="built_in">pop</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">Graph <span class="title">g</span><span class="params">(<span class="number">6</span>)</span></span>;</span><br><span class="line">    g.<span class="built_in">addEdge</span>(<span class="number">5</span>, <span class="number">2</span>);</span><br><span class="line">    g.<span class="built_in">addEdge</span>(<span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">    g.<span class="built_in">addEdge</span>(<span class="number">4</span>, <span class="number">0</span>);</span><br><span class="line">    g.<span class="built_in">addEdge</span>(<span class="number">4</span>, <span class="number">1</span>);</span><br><span class="line">    g.<span class="built_in">addEdge</span>(<span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line">    g.<span class="built_in">addEdge</span>(<span class="number">3</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    g.<span class="built_in">topologicalSort</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Leetcode/" rel="tag">Leetcode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-C和Cpp语言语法注意事项小结"
   class="article article-type-post"
   itemscope
@@ -1012,85 +1076,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/" rel="tag">多进程</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-Cpp中STL的一些使用指南"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/09/04/Cpp%E4%B8%ADSTL%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/"
-    >Cpp中STL的一些使用指南</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/09/04/Cpp%E4%B8%ADSTL%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" class="article-date">
-  <time datetime="2023-09-04T13:17:22.000Z" itemprop="datePublished">2023-09-04</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h2><ul>
-<li><code>unordered_map</code>不能在使用<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> &amp;i : m)&#123;m.<span class="built_in">erase</span>(<span class="comment">/*blabla*/</span>)&#125;</span><br></pre></td></tr></table></figure>
-类型的循环中删除元素，否则可能会因为删除了<u>i指向的元素</u><strong>导致迭代器失效</strong>，引起内存错误</li>
-<li>安全的删除方式为<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> it = m.<span class="built_in">begin</span>(); it != m.<span class="built_in">end</span>();) </span><br><span class="line">&#123;</span><br><span class="line">    it = m.<span class="built_in">erase</span>(it);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>对于方法erase而言<ul>
-<li><code>iterator erase(const_iterator position)</code>：删除迭代器 position 指向的元素，并返回指向下一个元素的迭代器</li>
-<li><code>size_type erase(const key_type&amp; k)</code>：删除容器中键为 k 的元素，并返回被删除的元素个数</li>
-<li><code>iterator erase(const_iterator first, const_iterator last)</code>删除迭代器范围 <strong>[first, last)</strong> 内的所有元素，并返回指向最后一个被删除元素之后的元素的迭代器</li>
-<li><code>template&lt; class K &gt; size_type erase( K&amp;&amp; x )</code>：C++23 引入了这种重载形式，它可以删除容器中与 x 等价的所有元素，并返回被删除的元素个数</li>
-</ul>
-</li>
-</ul>
-<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><ul>
-<li>使用<code>vector(对象值, 对象数量)</code>初始化vector的时候，会创建一个对象然后调用复制构造函数创建剩余的</li>
-</ul>
-<h2 id="其他技巧"><a href="#其他技巧" class="headerlink" title="其他技巧"></a>其他技巧</h2><ul>
-<li><strong>提取一个数字最右侧为1的位</strong>：<code>i &amp; (~i + 1)</code></li>
-</ul>
-<h3 id="cpp如何初始化一个类的静态数据成员"><a href="#cpp如何初始化一个类的静态数据成员" class="headerlink" title="cpp如何初始化一个类的静态数据成员"></a>cpp如何初始化一个类的静态数据成员</h3><ul>
-<li>类似于初始化全局变量<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> myStaticVar;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> MyClass::myStaticVar = <span class="number">0</span>; <span class="comment">// 初始化静态成员</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="string的一些用法"><a href="#string的一些用法" class="headerlink" title="string的一些用法"></a>string的一些用法</h2></li>
-<li>整数或者小数转换为字符串<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="built_in">to_string</span>(&lt;<span class="keyword">int</span> <span class="keyword">or</span> <span class="keyword">double</span>&gt;);</span><br></pre></td></tr></table></figure></li>
-<li>取子串<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">string.<span class="built_in">substr</span>(startPos, length);</span><br></pre></td></tr></table></figure></li>
-<li>删除特定位置的字符（串）<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">string.<span class="built_in">erase</span>(start, length);</span><br></pre></td></tr></table></figure></li>
-<li>在特定位置插入字符<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">string.<span class="built_in">insert</span>(index, <span class="number">1</span>, &lt;字符&gt;)</span><br></pre></td></tr></table></figure></li>
-<li>插入字符串<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">string.<span class="built_in">insert</span>(index, string);</span><br></pre></td></tr></table></figure>
-<h2 id="lower-bound函数"><a href="#lower-bound函数" class="headerlink" title="lower_bound函数"></a>lower_bound函数</h2></li>
-<li><code>lower_bound</code>函数在一个有序的序列中查找不小于给定值的最小值</li>
-<li>底层是二分查找</li>
-<li>如果没找到，会返回数组尾迭代器<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">searchMatrix</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; matrix, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; row: matrix) &#123;</span><br><span class="line">            <span class="keyword">auto</span> it = <span class="built_in">lower_bound</span>(row.<span class="built_in">begin</span>(), row.<span class="built_in">end</span>(), target);</span><br><span class="line">            <span class="keyword">if</span> (it != row.<span class="built_in">end</span>() &amp;&amp; *it == target) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li></ul>
 
     </footer>
   </div>
