@@ -141,6 +141,81 @@
     
     
     <article
+  id="post-有序表"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/09/03/%E6%9C%89%E5%BA%8F%E8%A1%A8/"
+    >有序表</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/09/03/%E6%9C%89%E5%BA%8F%E8%A1%A8/" class="article-date">
+  <time datetime="2022-09-03T02:06:15.000Z" itemprop="datePublished">2022-09-03</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="有序表的实现"><a href="#有序表的实现" class="headerlink" title="有序表的实现"></a>有序表的实现</h2><ul>
+<li>底层：<ul>
+<li>红黑树</li>
+<li>AVL树</li>
+<li>SB树</li>
+<li>跳表</li>
+</ul>
+</li>
+<li>时间复杂度：O(log(N)) </li>
+<li>红黑树、AVL树、SB树是<em>平衡搜索二叉树</em><h3 id="搜索二叉树的插入和删除"><a href="#搜索二叉树的插入和删除" class="headerlink" title="搜索二叉树的插入和删除"></a>搜索二叉树的插入和删除</h3></li>
+<li>插入直接按照大小分支插入即可</li>
+<li>假如没有子节点的节点直接删除即可</li>
+<li>假如删除的节点只有一个孩子节点<ul>
+<li>直接让父节点的指针指向唯一的孩子即可</li>
+</ul>
+</li>
+<li>左右双全：<ul>
+<li>用左树最右的节点或者是右树最左的节点</li>
+<li>这样的节点必然不是两个孩子的节点</li>
+<li>先将这个节点的子节点（假如存在）移到这个节点原来的位置</li>
+<li>然后将这个节点移到被删除的具有两个孩子的节点的位置<h3 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h3></li>
+</ul>
+</li>
+<li>防止因为用户数据输入顺序的原因导致树左右不平衡使得搜索的时间复杂度上升</li>
+<li>左树和右树的体量差不多大</li>
+<li>AVL树在增删结点的时候会从这个节点的父节点开始向上查每个节点的平衡性</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-动态规划"
   class="article article-type-post"
   itemscope
@@ -550,7 +625,8 @@
 <li>了解数组中的一个数，左边最近的比这个数大的数，和右边最近的比这个数大的数在哪</li>
 </ul>
 <h2 id="单调栈"><a href="#单调栈" class="headerlink" title="单调栈"></a>单调栈</h2><h3 id="无重复数字"><a href="#无重复数字" class="headerlink" title="无重复数字"></a>无重复数字</h3><ul>
-<li>求某个数字附近最近的比他大的数字：<ul>
+<li><p>求某个数字附近最近的比他大的数字：</p>
+<ul>
 <li>使用一个栈，这个栈从下到上是由大到小的顺序</li>
 <li>新加入的数字符合单调性？直接加入</li>
 <li>不符合单调性？弹出栈顶的数字，此时记录，对于被弹出的这个数字而言：<ul>
@@ -567,11 +643,21 @@
 </li>
 </ul>
 </li>
-<li>栈中放的内容都是链表，每个位置链表结点存放index</li>
-<li>弹出的时候，右边最近比他大的数字是当前等待进栈的数字，左边最近的比他大的数字是栈中下面紧邻位置链表的最后一个位置</li>
-<li>同样数字进栈的时候，将同样的数字对应的index串联在进栈位置链表的下一个位置<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLessNoRepeat(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    <span class="comment">// 只存位置！</span></span><br><span class="line">    Stack&lt;Integer&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// 当遍历到i位置的数，arr[i]</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek()] &gt; arr[i]) &#123;</span><br><span class="line">            <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">            res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[j][<span class="number">1</span>] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">        res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">        res[j][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLess(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    Stack&lt;List&lt;Integer&gt;&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// i -&gt; arr[i] 进栈</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] &gt; arr[i]) &#123;</span><br><span class="line">            List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">                res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">                res[popi][<span class="number">1</span>] = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] == arr[i]) &#123;</span><br><span class="line">            stack.peek().add(Integer.valueOf(i));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            list.add(i);</span><br><span class="line">            stack.push(list);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">            res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[popi][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>栈中放的内容都是链表，每个位置链表结点存放index</p>
+</li>
+<li><p>弹出的时候，右边最近比他大的数字是当前等待进栈的数字，左边最近的比他大的数字是栈中下面紧邻位置链表的最后一个位置</p>
+</li>
+<li><p>同样数字进栈的时候，将同样的数字对应的index串联在进栈位置链表的下一个位置</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLessNoRepeat(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    <span class="comment">// 只存位置！</span></span><br><span class="line">    Stack&lt;Integer&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// 当遍历到i位置的数，arr[i]</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek()] &gt; arr[i]) &#123;</span><br><span class="line">            <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">            res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[j][<span class="number">1</span>] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">        res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">        res[j][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLess(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    Stack&lt;List&lt;Integer&gt;&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// i -&gt; arr[i] 进栈</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] &gt; arr[i]) &#123;</span><br><span class="line">            List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">                res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">                res[popi][<span class="number">1</span>] = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] == arr[i]) &#123;</span><br><span class="line">            stack.peek().add(Integer.valueOf(i));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            list.add(i);</span><br><span class="line">            stack.push(list);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">            res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[popi][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Leetcode-155-最小栈"><a href="#Leetcode-155-最小栈" class="headerlink" title="Leetcode 155.最小栈"></a>Leetcode 155.最小栈</h2></li>
+<li><p>当一个元素要入栈时，我们取当前辅助栈的栈顶存储的最小值，与当前元素比较得出最小值，将这个最小值插入辅助栈中</p>
+</li>
+<li><p>当一个元素要出栈时，我们把辅助栈的栈顶元素也一并弹出</p>
+</li>
+<li><p>在任意一个时刻，栈内元素的最小值就存储在辅助栈的栈顶元素中</p>
+</li>
 </ul>
- 
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MinStack</span> &#123;</span></span><br><span class="line">    stack&lt;<span class="keyword">int</span>&gt; x_stack;</span><br><span class="line">    stack&lt;<span class="keyword">int</span>&gt; min_stack;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MinStack</span>() &#123;</span><br><span class="line">        min_stack.<span class="built_in">push</span>(INT_MAX);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        x_stack.<span class="built_in">push</span>(x);</span><br><span class="line">        min_stack.<span class="built_in">push</span>(<span class="built_in">min</span>(min_stack.<span class="built_in">top</span>(), x));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        x_stack.<span class="built_in">pop</span>();</span><br><span class="line">        min_stack.<span class="built_in">pop</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">top</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x_stack.<span class="built_in">top</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getMin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> min_stack.<span class="built_in">top</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure> 
       <!-- reward -->
       
     </div>
@@ -884,92 +970,6 @@
 <li>时间复杂度同样是线性的</li>
 </ul>
 </li>
-</ul>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-并查集相关"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/26/%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%9B%B8%E5%85%B3/"
-    >并查集相关</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/26/%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%9B%B8%E5%85%B3/" class="article-date">
-  <time datetime="2022-08-26T12:52:15.000Z" itemprop="datePublished">2022-08-26</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h2><ul>
-<li><p>并查集支持<strong>集合合并</strong></p>
-</li>
-<li><p>提供的操作：</p>
-<ul>
-<li>查询两个样本是否属于同一个集合</li>
-<li>提供两个不同的集合的合并操作</li>
-</ul>
-</li>
-<li><p>实际上是给出一个<strong>向上指针</strong>的图结构，看一个元素<strong>向上指的指针一直到不能再往上找到代表元素</strong>，看是否是同一个元素</p>
-<ul>
-<li>合并集合的操作就是将内容少的集合直接通过指针连在内容多的集合下面即可（二者向上到最顶就会指向同一个元素）</li>
-</ul>
-</li>
-<li><p>并查集向上找最顶节点的优化：</p>
-<ul>
-<li>在每个元素向上遍历找最顶结点的之后，将遍历经过的整条链上的所有节点的父节点直接更改为最顶的节点</li>
-<li><img src="/imgs/71dc4c9665f1d746036fb857732b28b556ecbb705e1de924cb25ff4262704c78.png" alt="图 7">  </li>
-<li><img src="/imgs/c2e3e7dfcfa68bb6419a50e2a18a6a5f925a60ae043c1b830b51ea47d7941641.png" alt="图 8">  </li>
-<li>防止某一个链过长的问题<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> class14;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code05_UnionFind</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">		V value;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(V v)</span> </span>&#123;</span><br><span class="line">			value = v;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span>&lt;<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">        <span class="comment">// 样本对应的图中的node表</span></span><br><span class="line">		<span class="keyword">public</span> HashMap&lt;V, Node&lt;V&gt;&gt; nodes;</span><br><span class="line">        <span class="comment">// 一个元素对应的父是谁</span></span><br><span class="line">		<span class="keyword">public</span> HashMap&lt;Node&lt;V&gt;, Node&lt;V&gt;&gt; parents;</span><br><span class="line">        <span class="comment">// 图中代表元素（最顶上元素）对应的集合具有几个点</span></span><br><span class="line">		<span class="keyword">public</span> HashMap&lt;Node&lt;V&gt;, Integer&gt; sizeMap;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">(List&lt;V&gt; values)</span> </span>&#123;</span><br><span class="line">			nodes = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">			parents = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">			sizeMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">			<span class="keyword">for</span> (V cur : values) &#123;</span><br><span class="line">				Node&lt;V&gt; node = <span class="keyword">new</span> Node&lt;&gt;(cur);</span><br><span class="line">				nodes.put(cur, node);</span><br><span class="line">                <span class="comment">// 一个元素的父节点默认是自己</span></span><br><span class="line">				parents.put(node, node);</span><br><span class="line">                <span class="comment">// 每个元素都是代表元素</span></span><br><span class="line">				sizeMap.put(node, <span class="number">1</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 给你一个节点，请你往上到不能再往上，把代表返回</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> Node&lt;V&gt; <span class="title">findFather</span><span class="params">(Node&lt;V&gt; cur)</span> </span>&#123;</span><br><span class="line">			Stack&lt;Node&lt;V&gt;&gt; path = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">			<span class="keyword">while</span> (cur != parents.get(cur)) &#123;</span><br><span class="line">				path.push(cur);</span><br><span class="line">				cur = parents.get(cur);</span><br><span class="line">			&#125;</span><br><span class="line">            <span class="comment">// 优化父节点</span></span><br><span class="line">			<span class="keyword">while</span> (!path.isEmpty()) &#123;</span><br><span class="line">				parents.put(path.pop(), cur);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> cur;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSameSet</span><span class="params">(V a, V b)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// 此处应该增加判断a和b是否存在</span></span><br><span class="line">			<span class="keyword">return</span> findFather(nodes.get(a)) == findFather(nodes.get(b));</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(V a, V b)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// 此处应该增加判断a和b是否存在</span></span><br><span class="line">			Node&lt;V&gt; aHead = findFather(nodes.get(a));</span><br><span class="line">			Node&lt;V&gt; bHead = findFather(nodes.get(b));</span><br><span class="line">			<span class="keyword">if</span> (aHead != bHead) &#123;</span><br><span class="line">				<span class="keyword">int</span> aSetSize = sizeMap.get(aHead);</span><br><span class="line">				<span class="keyword">int</span> bSetSize = sizeMap.get(bHead);</span><br><span class="line">				Node&lt;V&gt; big = aSetSize &gt;= bSetSize ? aHead : bHead;</span><br><span class="line">				Node&lt;V&gt; small = big == aHead ? bHead : aHead;</span><br><span class="line">				parents.put(small, big);</span><br><span class="line">				sizeMap.put(big, aSetSize + bSetSize);</span><br><span class="line">                <span class="comment">// 小集合的头节点不在是头节点</span></span><br><span class="line">				sizeMap.remove(small);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sets</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> sizeMap.size();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>按照上面方式实现的并查集的实现，如果上面的findFather函数的调用次数达到了O(N)的水平，单次findFather调用的开销是O(1)水平</p>
-</li>
-<li><p>一般认为使用并查集的时间复杂度是O(1)的</p>
-<h2 id="并行计算问题"><a href="#并行计算问题" class="headerlink" title="并行计算问题"></a>并行计算问题</h2></li>
-<li><p><img src="/imgs/e29aff06d9eda4c8b36d408f5a222054e00312876b52a624ef0d4042ddba49bf.png" alt="图 6">  </p>
-</li>
-<li><p> 假如将一张大图直接划分成两个部分分别执行的话会因为两部分相互分割导致岛的数量变多</p>
-</li>
-<li><p>需要合并逻辑在执行结束之后合并多余的岛</p>
-<ul>
-<li> 搜集每个在<strong>矩阵被分割边界</strong>上的被统计点的最开始统计的点是哪个</li>
-<li> <img src="/imgs/5c6a91e4e1ecce59b214291d25caa18d291bb57a47912c05dfff599e4c14c1f4.png" alt="图 9">  </li>
-<li> 讨论边界相连的岛的情况，去并查集查询父亲的情况，不是同一个的话就<strong>合并并且总数-1</strong></li>
 </ul>
 </li>
 </ul>
