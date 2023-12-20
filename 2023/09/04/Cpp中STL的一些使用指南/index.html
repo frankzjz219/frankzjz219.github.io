@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">546</span>
+            <span class="post-count">596</span>
         </span>
     </span>
 
@@ -115,8 +115,9 @@
 <li><code>template&lt; class K &gt; size_type erase( K&amp;&amp; x )</code>：C++23 引入了这种重载形式，它可以删除容器中与 x 等价的所有元素，并返回被删除的元素个数</li>
 </ul>
 </li>
-<li>遍历<code>map</code>:<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> it = m.<span class="built_in">begin</span>(); it != m.<span class="built_in">end</span>(); it++) </span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt; it-&gt;first &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; it-&gt;second &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2></li>
+<li>遍历<code>map</code>:<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> it = m.<span class="built_in">begin</span>(); it != m.<span class="built_in">end</span>(); it++) </span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt; it-&gt;first &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; it-&gt;second &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>随机获得容器中的第某个元素<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">unordered_set&lt;<span class="keyword">int</span>&gt; um;</span><br><span class="line"><span class="keyword">auto</span> it = um.<span class="built_in">begin</span>();</span><br><span class="line"><span class="built_in">advance</span>(it, <span class="built_in">rand</span>() % um.<span class="built_in">size</span>());</span><br><span class="line"><span class="keyword">return</span> *it;</span><br></pre></td></tr></table></figure></li>
+<li>注意此处不能直接it+数字，会出错，需要使用<code>advance</code>函数`<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2></li>
 <li>使用<code>vector(对象值, 对象数量)</code>初始化vector的时候，会创建一个对象然后调用复制构造函数创建剩余的</li>
 </ul>
 <h2 id="其他技巧"><a href="#其他技巧" class="headerlink" title="其他技巧"></a>其他技巧</h2><ul>
