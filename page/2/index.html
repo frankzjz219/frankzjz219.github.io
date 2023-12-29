@@ -523,7 +523,18 @@
       
     <div class="article-entry" itemprop="articleBody">
        
-  <h2 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h2><ul>
+  <h2 id="for循环的执行顺序"><a href="#for循环的执行顺序" class="headerlink" title="for循环的执行顺序"></a>for循环的执行顺序</h2><ul>
+<li><img src="/imgs/217590d6e6a6ee6ba77a0a62694f888b086d15034b97a4efe3df56e6f31a03e6.png" alt="picture 0">  <ul>
+<li>判断条件</li>
+<li>执行循环体</li>
+<li>执行循环表达式</li>
+</ul>
+</li>
+<li>循环</li>
+</ul>
+<h2 id="cin如何判断输入已经结束"><a href="#cin如何判断输入已经结束" class="headerlink" title="cin如何判断输入已经结束"></a>cin如何判断输入已经结束</h2><p>= <img src="/imgs/9c147de94e7509a616302b568c46b0db3e92e53d812e452bf967ab57b4c559de.png" alt="picture 1">  </p>
+<ul>
+<li>cin的返回值可以拿来判断用户是输入了还是退出了<h2 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h2></li>
 <li><code>unordered_map</code>不能在使用<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> &amp;i : m)&#123;m.<span class="built_in">erase</span>(<span class="comment">/*blabla*/</span>)&#125;</span><br></pre></td></tr></table></figure>
 类型的循环中删除元素，否则可能会因为删除了<u>i指向的元素</u><strong>导致迭代器失效</strong>，引起内存错误</li>
 <li>安全的删除方式为<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> it = m.<span class="built_in">begin</span>(); it != m.<span class="built_in">end</span>();) </span><br><span class="line">&#123;</span><br><span class="line">    it = m.<span class="built_in">erase</span>(it);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
