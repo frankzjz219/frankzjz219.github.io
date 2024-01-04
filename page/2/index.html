@@ -547,6 +547,13 @@
 <li>换行<code>\n</code>, 制表符横向<code>\t</code>, 报警符号<code>\a</code>, 纵向制表符<code>\v</code>, 退格符<code>\b</code>, 双引号<code>\&quot;</code>, 反斜线<code>\\</code>, 问号<code>\?</code>, 单引号<code>\&#39;</code>, 回车符<code>\r</code>, 进纸符<code>\f</code></li>
 <li>如果<code>\</code>后面是x说明是16进制数字转义，如果没有x说明是八进制的，<code>\115</code>和<code>\x4d</code>一样</li>
 </ul>
+<h3 id="switch-case"><a href="#switch-case" class="headerlink" title="switch case"></a>switch case</h3><ul>
+<li>case后面的必须是<strong>常量</strong>，不能是变量</li>
+<li>不可写初始化的语句<ul>
+<li>可以创建，但是不能初始化</li>
+</ul>
+</li>
+</ul>
 <h3 id="强制类型转换"><a href="#强制类型转换" class="headerlink" title="强制类型转换"></a>强制类型转换</h3><ul>
 <li><code>static_cast&lt;type&gt;</code>类似于C的强制类型转换<ul>
 <li>只要底层不包含const，都可以，速度快一些</li>
@@ -645,9 +652,19 @@
 <li>可以不给大小，初始化的时候使用花括号，<u>让编译器推断大小</u></li>
 <li>数组部分没给初始值的时候，会是0或者空字符串</li>
 <li>数组初始化不可以拷贝</li>
-<li>数组<strong>不存在引用</strong><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in"><span class="keyword">int</span></span> (*arr)[<span class="number">10</span>] = &amp;array;<span class="comment">// 指向一个含有十个元素的数组</span></span><br><span class="line"><span class="built_in"><span class="keyword">int</span></span> (&amp;arr)[<span class="number">10</span>] = array;<span class="comment">// 引用一个含有十个元素的数组</span></span><br><span class="line"><span class="keyword">int</span> *(&amp;arr)[<span class="number">10</span>] = ptrs; <span class="comment">// 引用一个含有十个int类型指针的数组</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li><strong>判断的时候从右往左，从里往外，离谁近先结合谁</strong>，<strong>先跟右边的结合再考虑左边的</strong>，结合后的部分可以删去，方便判断<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>];</span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">a1</span><span class="params">(a)</span></span>; <span class="comment">// 此时a1被推断为一个指针类型</span></span><br><span class="line"><span class="keyword">decltype</span>(a) a2; <span class="comment">// a2也是一个数组</span></span><br></pre></td></tr></table></figure>
-<h3 id="借用迭代器找到数组头尾"><a href="#借用迭代器找到数组头尾" class="headerlink" title="借用迭代器找到数组头尾"></a>借用迭代器找到数组头尾</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span> </span></span><br><span class="line"><span class="keyword">int</span> ia[] = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> *beg = std::<span class="built_in">begin</span>(ia);</span><br><span class="line"><span class="keyword">int</span> *end = std::<span class="built_in">end</span>(ia);</span><br><span class="line"><span class="comment">// 上述代码就找到了数组的头和尾部的位置</span></span><br></pre></td></tr></table></figure></li>
+<li>不存在<strong>引用数组</strong><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in"><span class="keyword">int</span></span> (*arr)[<span class="number">10</span>] = &amp;array;<span class="comment">// 指向一个含有十个元素的数组</span></span><br><span class="line"><span class="built_in"><span class="keyword">int</span></span> (&amp;arr)[<span class="number">10</span>] = array;<span class="comment">// 引用一个含有十个元素的数组</span></span><br><span class="line"><span class="keyword">int</span> *(&amp;arr)[<span class="number">10</span>] = ptrs; <span class="comment">// 引用一个含有十个int类型指针的数组</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>判断的时候从右往左，从里往外，离谁近先结合谁</strong>，<strong>先跟右边的结合再考虑左边的</strong>，结合后的部分可以删去，方便判断<h3 id="decltype和auto推断类型的不同"><a href="#decltype和auto推断类型的不同" class="headerlink" title="decltype和auto推断类型的不同"></a>decltype和auto推断类型的不同</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>];</span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">a1</span><span class="params">(a)</span></span>; <span class="comment">// 此时a1被推断为一个指针类型</span></span><br><span class="line"><span class="keyword">decltype</span>(a) a2; <span class="comment">// a2也是一个数组</span></span><br></pre></td></tr></table></figure>
+<h3 id="函数传参的时候传递数组的引用"><a href="#函数传参的时候传递数组的引用" class="headerlink" title="函数传参的时候传递数组的引用"></a>函数传参的时候传递数组的引用</h3></li>
+<li>形参设置为<code>int (&amp;a)[10]</code></li>
+<li>此时在函数内部可以像使用数组一样使用参数，比如使用<strong>范围for循环</strong>等等</li>
+<li>而不会退化为指针</li>
+<li>注意传递多维数组的时候除了最高维度别的必须给出明确大小<ul>
+<li><code>int matrix [][10]</code>或者<code>int (*matrix)[10]</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="借用迭代器找到数组头尾"><a href="#借用迭代器找到数组头尾" class="headerlink" title="借用迭代器找到数组头尾"></a>借用迭代器找到数组头尾</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span> </span></span><br><span class="line"><span class="keyword">int</span> ia[] = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> *beg = std::<span class="built_in">begin</span>(ia);</span><br><span class="line"><span class="keyword">int</span> *end = std::<span class="built_in">end</span>(ia);</span><br><span class="line"><span class="comment">// 上述代码就找到了数组的头和尾部的位置</span></span><br></pre></td></tr></table></figure>
+<ul>
 <li>数组的下标可以是负数<h3 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h3></li>
 <li>对多维数组非最低维度直接求加法，会跳行而不是连续往前</li>
 <li>也可以用范围for<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>][<span class="number">10</span>];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span>&amp; row:a)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; col:row)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// todo</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>

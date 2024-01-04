@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">100</span>
+            <span class="post-count">409</span>
         </span>
     </span>
 
@@ -107,8 +107,31 @@
   <h2 id="STL相关"><a href="#STL相关" class="headerlink" title="STL相关"></a>STL相关</h2><ul>
 <li>注意<code>vector&lt;&gt;.size()</code>返回的是无符号整数，<code>unsigned</code>与<strong>同样大小类型的有符号整数相加的时候会将这个有符号整数类型转换为无符号的，导致表示的意思出现区别</strong></li>
 </ul>
+<h3 id="initializer-list-lt-gt"><a href="#initializer-list-lt-gt" class="headerlink" title="initializer_list&lt;&gt;"></a>initializer_list&lt;&gt;</h3><ul>
+<li>用于不定参数个数的函数的传参</li>
+<li>只能传递同一个类型的参数</li>
+<li>复制的时候是浅拷贝</li>
+</ul>
 <h2 id="语法相关"><a href="#语法相关" class="headerlink" title="语法相关"></a>语法相关</h2><ul>
 <li>使用三目运算符<code>?:</code>的时候最好外加括号，否则会因为计算顺序的原因报错</li>
+</ul>
+<h3 id="函数返回值"><a href="#函数返回值" class="headerlink" title="函数返回值"></a>函数返回值</h3><ul>
+<li>不要返回局部对象的引用类型，否则会因为局部对象生命周期结束而失效</li>
+<li>返回指向某个数组的指针的函数<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in"><span class="keyword">int</span></span> (*<span class="built_in">func</span>(<span class="keyword">int</span> i))[<span class="number">10</span>];<span class="comment">// 看的时候从里往外看，先返回的是指针，指针指向的是int[10]</span></span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> arr[<span class="number">10</span>];</span><br><span class="line"><span class="function">arr* <span class="title">func</span><span class="params">(<span class="keyword">int</span> i)</span></span>;</span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> i)</span> -&gt; <span class="title">int</span><span class="params">(*)</span>[10]</span></span><br></pre></td></tr></table></figure></li>
+<li>也可以直接在返回值的位置使用decltype标出类型</li>
+</ul>
+<h3 id="Cpp函数重载"><a href="#Cpp函数重载" class="headerlink" title="Cpp函数重载"></a>Cpp函数重载</h3><ul>
+<li>函数重载只有在同一个级别的作用域才行<ul>
+<li>假如在某个函数内部声明了一个与外部函数同名的函数，会导致外部同名函数被屏蔽<h3 id="Cpp函数内联"><a href="#Cpp函数内联" class="headerlink" title="Cpp函数内联"></a>Cpp函数内联</h3></li>
+</ul>
+</li>
+<li>编译器可以选择忽略内联函数请求，也可以自动优化内联函数</li>
+</ul>
+<h3 id="是否是开发状态"><a href="#是否是开发状态" class="headerlink" title="是否是开发状态"></a>是否是开发状态</h3><ul>
+<li>定义<code>NDEBUG</code></li>
+<li>如果定义了就不能使用assert等debug用的工具</li>
+<li>也可以自己用<code>#ifndef NDEBUG</code>来控制自己写的代码哪些用在调试阶段</li>
+<li>可以用<code>__func__</code>打印<strong>当前函数的名字</strong></li>
 </ul>
  
       <!-- reward -->
