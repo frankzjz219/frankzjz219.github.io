@@ -451,16 +451,114 @@
 </ul>
 <h3 id="Cpp函数重载"><a href="#Cpp函数重载" class="headerlink" title="Cpp函数重载"></a>Cpp函数重载</h3><ul>
 <li>函数重载只有在同一个级别的作用域才行<ul>
-<li>假如在某个函数内部声明了一个与外部函数同名的函数，会导致外部同名函数被屏蔽<h3 id="Cpp函数内联"><a href="#Cpp函数内联" class="headerlink" title="Cpp函数内联"></a>Cpp函数内联</h3></li>
+<li>假如在某个函数内部声明了一个与外部函数同名的函数，会导致外部同名函数被屏蔽</li>
 </ul>
 </li>
+<li>假如有一组参数传入导致系统无法区分具体调用哪个的话会导致编译出错</li>
+<li>类型转换的分类</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>等级</th>
+<th>转换</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>精确匹配</td>
+</tr>
+<tr>
+<td>2</td>
+<td>const转换实现匹配</td>
+</tr>
+<tr>
+<td>3</td>
+<td>类型提升实现匹配</td>
+</tr>
+<tr>
+<td>4</td>
+<td>算数类型转换实现匹配</td>
+</tr>
+<tr>
+<td>5</td>
+<td>类类型转换实现匹配</td>
+</tr>
+</tbody></table>
+<h3 id="Cpp函数内联"><a href="#Cpp函数内联" class="headerlink" title="Cpp函数内联"></a>Cpp函数内联</h3><ul>
 <li>编译器可以选择忽略内联函数请求，也可以自动优化内联函数</li>
 </ul>
 <h3 id="是否是开发状态"><a href="#是否是开发状态" class="headerlink" title="是否是开发状态"></a>是否是开发状态</h3><ul>
 <li>定义<code>NDEBUG</code></li>
 <li>如果定义了就不能使用assert等debug用的工具</li>
-<li>也可以自己用<code>#ifndef NDEBUG</code>来控制自己写的代码哪些用在调试阶段</li>
+<li>也可以自己用<code>#ifndef NDEBUG</code>来控制自己写的代码哪些用在调试阶段<h3 id="调试输出"><a href="#调试输出" class="headerlink" title="调试输出"></a>调试输出</h3></li>
 <li>可以用<code>__func__</code>打印<strong>当前函数的名字</strong></li>
+<li><code>__FILE__</code>文件名</li>
+<li><code>__LINE__</code>行号</li>
+<li><code>__TIME__</code>编译时间</li>
+<li><code>__DATE__</code>编译日期<h3 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h3></li>
+<li>给函数指针赋值的时候加不加取地址符号都一样<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">&lt;<span class="keyword">return</span> type&gt; (*func name)(&lt;para&gt; parameters);</span><br></pre></td></tr></table></figure></li>
+<li><strong>不同种类的函数指针之间无法转换，即使形参列表能转换</strong>，也就是说必须是<em>返回类型</em>和<em>形参列表</em>与自身完全一样的函数才可以赋值给函数指针</li>
+<li>但是<strong>调用</strong>的时候可以发生类型转换</li>
+<li>返回的时候不能返回函数，因为函数不能拷贝，只能返回函数指针<h4 id="如何返回函数指针"><a href="#如何返回函数指针" class="headerlink" title="如何返回函数指针"></a>如何返回函数指针</h4></li>
+<li><code>int (*f1(int))(int, int);</code>返回的是一个<code>int(*)(int, int)</code>类型的函数指针</li>
+<li>或者写<code>auto f(int) -&gt; int(*)(int, int)</code><h2 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h2><h3 id="成员函数"><a href="#成员函数" class="headerlink" title="成员函数"></a>成员函数</h3></li>
+<li>常量成员函数<code>&lt;return type&gt; func() const &#123;&#125;</code><ul>
+<li>不修改类对象的函数</li>
+<li>对这个类的const实例的时候会调用const的成员函数</li>
+<li>但是假如某个成员有<code>mutable</code>关键字，那么也可以修改<h3 id="访问说明符"><a href="#访问说明符" class="headerlink" title="访问说明符"></a>访问说明符</h3></li>
+</ul>
+</li>
+<li><code>public</code>和<code>private</code>可以反复出现多次<h3 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h3></li>
+<li>类内声明</li>
+<li><code>friend &lt;return type&gt; func();</code><h3 id="作用域运算符"><a href="#作用域运算符" class="headerlink" title="作用域运算符::"></a>作用域运算符<code>::</code></h3></li>
+<li>访问全局作用域中的变量直接用<code>::&lt;variable&gt;</code>即可</li>
+<li>访问类的就用<code>&lt;class name&gt;::&lt;var&gt;</code><h3 id="类成员初始化"><a href="#类成员初始化" class="headerlink" title="类成员初始化"></a>类成员初始化</h3></li>
+<li>无论初始化列表里怎么写，类成员的初始化顺序是<strong>按照他们在类中定义的顺序的</strong><h3 id="委托构造函数"><a href="#委托构造函数" class="headerlink" title="委托构造函数"></a>委托构造函数</h3></li>
+<li>类的多个构造函数中一个构造函数借用类的其他功能强大的构造函数构造对象<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">test</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    string data;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">test</span>(string s):<span class="built_in">data</span>(s)&#123;&#125;</span><br><span class="line">    <span class="built_in">test</span>():<span class="built_in">test</span>(<span class="string">&quot;Hello World&quot;</span>)&#123;&#125; <span class="comment">// 这里是委托带参数的构造函数test(string s)构造对象</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>调用默认构造函数（无参数）的时候不能加括号，否则编译器会认为你想声明一个函数<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">className <span class="title">obj</span><span class="params">()</span></span>;<span class="comment">// 看起来就是声明一个叫obj的函数</span></span><br></pre></td></tr></table></figure>
+<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3></li>
+<li>如果类具有只接受一个参数的构造函数，那么编译器可以将<strong>这个参数类型的对象</strong>自动转换为这个类的对象<ul>
+<li>给构造函数增加一个<code>explicit</code>参数可以禁止这种转换</li>
+<li>但是static_cast可以调用<code>explicit</code>的构造函数<h3 id="聚合类"><a href="#聚合类" class="headerlink" title="聚合类"></a>聚合类</h3></li>
+</ul>
+</li>
+<li>所有成员public</li>
+<li>没有构造函数</li>
+<li>类内没给初始值</li>
+<li>没有基类和虚函数</li>
+<li><strong>可以用花括号直接初始化，类似于struct</strong><h3 id="字面值类"><a href="#字面值类" class="headerlink" title="字面值类"></a>字面值类</h3></li>
+<li>数据成员必须都是字面值类型</li>
+<li>至少有一个常量表达式的构造函数</li>
+<li>析构函数必须是默认的</li>
+<li>内置类型必须是常量表达式，类调用自己的常量构造函数</li>
+<li><code>constexpr</code>的构造函数的函数体必须是空的</li>
+<li>此时可以在构造的时候加一个<code>constexpr</code><h3 id="静态成员"><a href="#静态成员" class="headerlink" title="静态成员"></a>静态成员</h3></li>
+<li><code>static</code></li>
+<li>对象的内存不包含静态对象</li>
+<li>static函数不含有this指针</li>
+<li>可以使用类作用域直接调用，也可以用对象的<code>.</code>调用</li>
+<li>static关键字只出现在类内声明的场合，定义的时候不出现</li>
+<li>初始化<ul>
+<li>只有是constexpr的情况下可以在类内声明，但是无法在外部使用</li>
+<li><code>int &lt;class name&gt;:: var = blabla;</code></li>
+</ul>
+</li>
+<li>可以在一个类还没被初始化完的时候就声明它的静态对象<h3 id="IO流对象"><a href="#IO流对象" class="headerlink" title="IO流对象"></a>IO流对象</h3></li>
+<li><code>iostream</code>, <code>fstream</code>, <code>sstream</code> </li>
+<li>不能修改，赋值</li>
+<li>输出<code>endl</code>是刷新缓冲区附带一个回车，输出<code>flush</code>则只刷新缓冲区，输出<code>ends</code>刷新缓冲区的同时附带一个空格</li>
+<li>输入和输出流可以绑定，多个输入可以绑定到一个输出<ul>
+<li>用<code>.tie(&lt;some stream&gt;)</code>函数</li>
+<li>输入与输出绑定的时候，调用输入流的时候自动刷新输出缓冲区</li>
+</ul>
+</li>
+<li><code>fstream</code>可以用<code>open</code>或者<code>close</code>打开或者关闭文件</li>
+<li>析构的时候会自动close文件<h4 id="打开方式"><a href="#打开方式" class="headerlink" title="打开方式"></a>打开方式</h4>open函数flag|功能<br>|—|—|<br>in|读<br>out|写<br>app|追加(每次操作都从末尾开始)<br>ate|打开的时候定位到结尾<br>trunc|如果存在，丢弃内容<br>binary|二进制</li>
+<li>只有app和in方式可以保留原来的内容</li>
+<li>不指定的话是<code>out</code>和<code>trunc</code><h3 id="sstream"><a href="#sstream" class="headerlink" title="sstream"></a>sstream</h3></li>
+<li>自身就是个string</li>
+<li>可以初始化也可以不初始化<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 将一个整数转换为string</span></span><br><span class="line">    <span class="keyword">int</span> n = <span class="number">123</span>;</span><br><span class="line">    stringstream ss1;</span><br><span class="line">    ss1 &lt;&lt; n; <span class="comment">// 向stringstream写入整数</span></span><br><span class="line">    string s1 = ss1.<span class="built_in">str</span>(); <span class="comment">// 获取stringstream内部的string</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;s1 = &quot;</span> &lt;&lt; s1 &lt;&lt; endl; <span class="comment">// 输出s1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将一个string分割为单词</span></span><br><span class="line">    string s2 = <span class="string">&quot;Hello world!&quot;</span>;</span><br><span class="line">    <span class="function">stringstream <span class="title">ss2</span><span class="params">(s2)</span></span>; <span class="comment">// 用string初始化stringstream</span></span><br><span class="line">    string word;</span><br><span class="line">    <span class="keyword">while</span> (ss2 &gt;&gt; word) <span class="comment">// 从stringstream读取单词</span></span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;word = &quot;</span> &lt;&lt; word &lt;&lt; endl; <span class="comment">// 输出单词</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
 </ul>
  
       <!-- reward -->

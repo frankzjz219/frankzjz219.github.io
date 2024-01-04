@@ -576,7 +576,10 @@
 <li><strong>赋值操作同样可以用花括号，这样的话会严格检查是否有数据丢失，比如舍弃小数位等</strong><h3 id="变量的声明和定义"><a href="#变量的声明和定义" class="headerlink" title="变量的声明和定义"></a>变量的声明和定义</h3></li>
 <li>如果想声明一个变量而不是定义（在别处定义过），那就在变量前面添加<code>extern</code>关键字并且不要赋值</li>
 <li><code>extern int a = 0;</code>这句话是定义，但是不能放在任何函数的内部，这个语法的意思是这个变量是<u>给别的文件中的人用的</u>，放在函数中会导致这个变量只能在该函数的作用域中使用，无法被他人看到</li>
-<li>但是如果将<code>extern</code>的位置替换为<code>extern</code>，会使其无法被其他文件使用<code>extern</code>应用<h3 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h3></li>
+<li>但是如果将<code>extern</code>的位置替换为<code>extern</code>，会使其无法被其他文件使用<code>extern</code>应用</li>
+</ul>
+<p>数据类型    |字节数（16位编译器）|    字节数（32位编译器）    字节数|（64位编译器）|    总结<br>|—|—|—|—|—|<br>char    |1|    1    |1    |char一直占用1个字节<br>char*    |2    |4    |8    |char* 是指针位宽，N位系统含有N个位，占用N/8个字节<br>short    |2    |2    |2    |short一直占用2个字节<br>int    |2    |4    |4    |int在x86和x64都是4个字节<br>unsigned int    |2    |4    |4    |无符号int与int本身的占位一样，不区分编译器<br>long    |4    |4    |8    |long一直等同于float<br>long long|8    |8    |8    |long long一直等同于double<br>float    |4    |4    |8    |float由于带浮点至少需要4字节，在x64编译器里是8字节<br>double|    8    |8    |8    |double一直占8个字节</p>
+<h3 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h3><ul>
 <li>只能用数字，字母和下划线，数字不能开头</li>
 <li>不能用C++自己的关键字冲突</li>
 <li>不能与操作符的替代名冲突<h3 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h3></li>
@@ -604,7 +607,8 @@
 </li>
 <li><code>typedef a b;</code>是b定义为a的别名</li>
 <li><code>typedef a *b</code>是将b定义为<code>a*</code></li>
-<li>注意使用<code>const</code>关键字的时候，用法的不同特性<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">char</span>* cstr;</span><br><span class="line"><span class="keyword">const</span> cstr a;<span class="comment">// 指向恒定的某个对象</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span>* b;<span class="comment">// 指向的对象是常量</span></span><br></pre></td></tr></table></figure></li>
+<li>注意使用<code>const</code>关键字的时候，用法的不同特性</li>
+<li><code>typedef A B;</code>和<code>using B = A;</code>等价<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">char</span>* cstr;</span><br><span class="line"><span class="keyword">const</span> cstr a;<span class="comment">// 指向恒定的某个对象</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span>* b;<span class="comment">// 指向的对象是常量</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="auto"><a href="#auto" class="headerlink" title="auto"></a>auto</h3><ul>
 <li>让编译器使用初始值判断类型</li>
