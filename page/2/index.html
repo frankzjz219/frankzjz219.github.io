@@ -676,9 +676,16 @@
 <li>操作在<code>&lt;cstring&gt;</code>头文件中</li>
 <li>使用头文件中操作函数操作的话必须保证字符串是以<code>\0</code>结尾的</li>
 <li><code>string</code>类型的<code>.c_str()</code>函数会返回一个c风格的字符串<ul>
-<li>注意假如之后修改了string的话，会导致这个字符串失效<h2 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h2></li>
+<li>注意假如之后修改了string的话，会导致这个字符串失效</li>
 </ul>
 </li>
+</ul>
+<h2 id="STL库函数"><a href="#STL库函数" class="headerlink" title="STL库函数"></a>STL库函数</h2><h3 id="swap"><a href="#swap" class="headerlink" title="swap"></a>swap</h3><ul>
+<li><code>swap(a, b)</code>交换两个容器的元素，比拷贝快很多<h3 id="assign"><a href="#assign" class="headerlink" title="assign"></a>assign</h3></li>
+<li>清除原有内容</li>
+<li>接受两个参数，开始迭代器和结束迭代器</li>
+<li>或者接受一个初始化列表</li>
+<li>或者接受n和k两个参数，表示n个k元素，类似于赋初值的操作<h2 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h2></li>
 <li><code>unordered_map</code>不能在使用<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> &amp;i : m)&#123;m.<span class="built_in">erase</span>(<span class="comment">/*blabla*/</span>)&#125;</span><br></pre></td></tr></table></figure>
 类型的循环中删除元素，否则可能会因为删除了<u>i指向的元素</u><strong>导致迭代器失效</strong>，引起内存错误</li>
 <li>安全的删除方式为<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> it = m.<span class="built_in">begin</span>(); it != m.<span class="built_in">end</span>();) </span><br><span class="line">&#123;</span><br><span class="line">    it = m.<span class="built_in">erase</span>(it);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
@@ -693,16 +700,37 @@
 <li>随机获得容器中的第某个元素<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">unordered_set&lt;<span class="keyword">int</span>&gt; um;</span><br><span class="line"><span class="keyword">auto</span> it = um.<span class="built_in">begin</span>();</span><br><span class="line"><span class="built_in">advance</span>(it, <span class="built_in">rand</span>() % um.<span class="built_in">size</span>());</span><br><span class="line"><span class="keyword">return</span> *it;</span><br></pre></td></tr></table></figure></li>
 <li>注意此处不能直接it+数字，会出错，需要使用<code>advance</code>函数`<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2></li>
 <li>使用<code>vector(对象值, 对象数量)</code>初始化vector的时候，会创建一个对象然后调用复制构造函数创建剩余的<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 类似数组的初始化方法</span></span><br><span class="line">vector&lt;<span class="keyword">int</span>&gt; v&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h3></li>
+<h3 id="大小比较"><a href="#大小比较" class="headerlink" title="大小比较"></a>大小比较</h3></li>
+<li>逐个元素比较，都相同的时候看谁先没，没了的小</li>
+<li>前提是容器存储的元素本身是可以比较大小的<h3 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h3></li>
 <li>操作与指针类似</li>
+<li>不支持递减，只能递增</li>
 <li><code>vector.cbegin()</code>和<code>vector.cend()</code>是常量迭代器，不能修改其中的内容</li>
 <li>任何可能改变vector元素<code>capacity</code>（容量）的操作都会使得迭代器失效，因为内存位置变了</li>
-<li>迭代器可以像指针一样做差，得到的结果是相差的<strong>元素的个数</strong><h2 id="其他技巧"><a href="#其他技巧" class="headerlink" title="其他技巧"></a>其他技巧</h2></li>
+<li>迭代器可以像指针一样做差，得到的结果是相差的<strong>元素的个数</strong><h3 id="insert"><a href="#insert" class="headerlink" title="insert"></a>insert</h3></li>
+<li>insert会返回插入的元素的迭代器</li>
+<li>insert也可以用初始化列表的方式插入，只需指定位置和初始化列表即可</li>
+<li>也可以给定插入位置，迭代器开始和迭代器结束实现同样功能<h3 id="erase"><a href="#erase" class="headerlink" title="erase"></a>erase</h3></li>
+<li>删除某个迭代器指定位置的元素</li>
+<li>删除某两个迭代器指定范围的元素（不包括最后一个迭代器指定的元素）</li>
+<li>返回被删元素后的第一个元素<h3 id="clear"><a href="#clear" class="headerlink" title="clear"></a>clear</h3></li>
+<li>清空<h3 id="resize-size-val"><a href="#resize-size-val" class="headerlink" title="resize(size, val)"></a>resize(size, val)</h3></li>
+<li>假如超出的话，截断后面的元素</li>
+<li>假如没超出的话，用val填充多出来的<h3 id="emplace-back"><a href="#emplace-back" class="headerlink" title="emplace_back"></a>emplace_back</h3></li>
+<li>可以给定参数调用容器存储的类型的构造函数构造对象插入<h3 id="back-函数"><a href="#back-函数" class="headerlink" title="back()函数"></a>back()函数</h3></li>
+<li>返回的是尾元素的引用<h3 id="front-函数"><a href="#front-函数" class="headerlink" title="front()函数"></a>front()函数</h3></li>
+<li>返回的是首元素的引用<h3 id="at-n-函数"><a href="#at-n-函数" class="headerlink" title="at(n)函数"></a>at(n)函数</h3></li>
+<li>返回的是下标为n元素的引用</li>
+</ul>
+<h2 id="其他技巧"><a href="#其他技巧" class="headerlink" title="其他技巧"></a>其他技巧</h2><ul>
 <li><strong>提取一个数字最右侧为1的位</strong>：<code>i &amp; (~i + 1)</code></li>
 </ul>
 <h3 id="cpp如何初始化一个类的静态数据成员"><a href="#cpp如何初始化一个类的静态数据成员" class="headerlink" title="cpp如何初始化一个类的静态数据成员"></a>cpp如何初始化一个类的静态数据成员</h3><ul>
 <li>类似于初始化全局变量<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> myStaticVar;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> MyClass::myStaticVar = <span class="number">0</span>; <span class="comment">// 初始化静态成员</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="string的一些用法"><a href="#string的一些用法" class="headerlink" title="string的一些用法"></a>string的一些用法</h2><h3 id="初始化某个重复多次的字符"><a href="#初始化某个重复多次的字符" class="headerlink" title="初始化某个重复多次的字符"></a>初始化某个重复多次的字符</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">string <span class="title">s1</span><span class="params">(<span class="number">10</span>, <span class="string">&#x27;c&#x27;</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+<h2 id="string的一些用法"><a href="#string的一些用法" class="headerlink" title="string的一些用法"></a>string的一些用法</h2><h3 id="其他的初始化方法"><a href="#其他的初始化方法" class="headerlink" title="其他的初始化方法"></a>其他的初始化方法</h3></li>
+<li><code>string(&lt;char array&gt;, i)</code>从字符数组中拷贝i个字符</li>
+<li><code>string(s, pos)</code>s从pos开始的字符的拷贝</li>
+<li><code>string(s, pos, len)</code>s从pos开始长度为len的字符串<h3 id="初始化某个重复多次的字符"><a href="#初始化某个重复多次的字符" class="headerlink" title="初始化某个重复多次的字符"></a>初始化某个重复多次的字符</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">string <span class="title">s1</span><span class="params">(<span class="number">10</span>, <span class="string">&#x27;c&#x27;</span>)</span></span>;</span><br></pre></td></tr></table></figure>
 <h3 id="整数或者小数转换为字符串"><a href="#整数或者小数转换为字符串" class="headerlink" title="整数或者小数转换为字符串"></a>整数或者小数转换为字符串</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="built_in">to_string</span>(&lt;<span class="keyword">int</span> <span class="keyword">or</span> <span class="keyword">double</span>&gt;);</span><br></pre></td></tr></table></figure>
 <h3 id="字符串转化为整数或小数"><a href="#字符串转化为整数或小数" class="headerlink" title="字符串转化为整数或小数"></a>字符串转化为整数或小数</h3><table>
 <thead>
@@ -746,11 +774,15 @@
 </tbody></table>
 </li>
 </ul>
-<h3 id="取子串"><a href="#取子串" class="headerlink" title="取子串"></a>取子串</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">string.<span class="built_in">substr</span>(startPos, length);</span><br></pre></td></tr></table></figure>
-<h3 id="删除特定位置的字符（串）"><a href="#删除特定位置的字符（串）" class="headerlink" title="删除特定位置的字符（串）"></a>删除特定位置的字符（串）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">string.<span class="built_in">erase</span>(start, length);</span><br></pre></td></tr></table></figure>
-<h3 id="在特定位置插入字符"><a href="#在特定位置插入字符" class="headerlink" title="在特定位置插入字符"></a>在特定位置插入字符</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">string.<span class="built_in">insert</span>(index, <span class="number">1</span>, &lt;字符&gt;)</span><br></pre></td></tr></table></figure>
-<h3 id="插入字符串"><a href="#插入字符串" class="headerlink" title="插入字符串"></a>插入字符串</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">string.<span class="built_in">insert</span>(index, string);</span><br></pre></td></tr></table></figure>
-<h3 id="字符串字面量不支持直接相加，必须有至少一个string类型的量才行"><a href="#字符串字面量不支持直接相加，必须有至少一个string类型的量才行" class="headerlink" title="字符串字面量不支持直接相加，必须有至少一个string类型的量才行"></a>字符串字面量不支持直接相加，必须有至少一个string类型的量才行</h3><h2 id="lower-bound函数"><a href="#lower-bound函数" class="headerlink" title="lower_bound函数"></a>lower_bound函数</h2><ul>
+<h3 id="取子串"><a href="#取子串" class="headerlink" title="取子串"></a>取子串</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">string.<span class="built_in">substr</span>(startPos, length);</span><br><span class="line">string.<span class="built_in">substr</span>(startPos);<span class="comment">// 取到结束</span></span><br></pre></td></tr></table></figure>
+<h3 id="删除特定位置的字符（串）"><a href="#删除特定位置的字符（串）" class="headerlink" title="删除特定位置的字符（串）"></a>删除特定位置的字符（串）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">string.<span class="built_in">erase</span>(startIndex, length);</span><br></pre></td></tr></table></figure>
+<h3 id="在特定位置插入字符"><a href="#在特定位置插入字符" class="headerlink" title="在特定位置插入字符"></a>在特定位置插入字符</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">string.<span class="built_in">insert</span>(index, &lt;个数&gt;, &lt;字符&gt;);</span><br><span class="line">string.<span class="built_in">insert</span>(index, &lt;string&gt;);</span><br><span class="line">string.<span class="built_in">insert</span>(index, &lt;string&gt;, begin, len);<span class="comment">// 可以选取部分字符串</span></span><br></pre></td></tr></table></figure>
+<h3 id="寻找字符串位置"><a href="#寻找字符串位置" class="headerlink" title="寻找字符串位置"></a>寻找字符串位置</h3><ul>
+<li><code>find(s, index)</code>函数。从pos开始查找字符或者字符串在哪，返回第一次出现的下标(index默认是0，可以不给)</li>
+<li>没找到的话会返回一个<code>string::npos</code><h3 id="插入字符串"><a href="#插入字符串" class="headerlink" title="插入字符串"></a>插入字符串</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">string.<span class="built_in">insert</span>(index, string);</span><br></pre></td></tr></table></figure>
+<h3 id="字符串字面量不支持直接相加，必须有至少一个string类型的量才行"><a href="#字符串字面量不支持直接相加，必须有至少一个string类型的量才行" class="headerlink" title="字符串字面量不支持直接相加，必须有至少一个string类型的量才行"></a>字符串字面量不支持直接相加，必须有至少一个string类型的量才行</h3></li>
+</ul>
+<h2 id="lower-bound函数"><a href="#lower-bound函数" class="headerlink" title="lower_bound函数"></a>lower_bound函数</h2><ul>
 <li><code>lower_bound</code>函数在一个有序的序列中查找不小于给定值的最小值</li>
 <li>底层是二分查找</li>
 <li>如果没找到，会返回数组尾迭代器<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">searchMatrix</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; matrix, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; row: matrix) &#123;</span><br><span class="line">            <span class="keyword">auto</span> it = <span class="built_in">lower_bound</span>(row.<span class="built_in">begin</span>(), row.<span class="built_in">end</span>(), target);</span><br><span class="line">            <span class="keyword">if</span> (it != row.<span class="built_in">end</span>() &amp;&amp; *it == target) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>

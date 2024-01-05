@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">1.7k</span>
+            <span class="post-count">1.9k</span>
         </span>
     </span>
 
@@ -110,7 +110,16 @@
 <h3 id="initializer-list-lt-gt"><a href="#initializer-list-lt-gt" class="headerlink" title="initializer_list&lt;&gt;"></a>initializer_list&lt;&gt;</h3><ul>
 <li>用于不定参数个数的函数的传参</li>
 <li>只能传递同一个类型的参数</li>
-<li>复制的时候是浅拷贝</li>
+<li>复制的时候是浅拷贝<h3 id="algorithm"><a href="#algorithm" class="headerlink" title="algorithm"></a>algorithm</h3>函数|功能<br>|—|—|<br>find(begin, end, val)|在begin和end（不包括）之间找val，找不到返回end，找到返回位置迭代器，是<strong>线性查找</strong><br>stable_sort(begin, end, compare)|是稳定排序算法，会保证相等元素的顺序</li>
+</ul>
+<h2 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">[capture list] (parameters) -&gt; &lt;<span class="keyword">return</span> type&gt;&#123;&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>返回类型可以省略</li>
+<li>捕获的作用是比如函数作为谓词的时候，<strong>只能</strong>传递两个互相比较的参数，此时<strong>需要外部的参数</strong>就只能用捕获传入。<ul>
+<li>全局变量不需要捕获也能使用</li>
+<li>可以捕获引用<code>[&amp;var]</code>即可</li>
+</ul>
+</li>
 </ul>
 <h2 id="语法相关"><a href="#语法相关" class="headerlink" title="语法相关"></a>语法相关</h2><ul>
 <li>使用三目运算符<code>?:</code>的时候最好外加括号，否则会因为计算顺序的原因报错</li>
