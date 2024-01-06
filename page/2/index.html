@@ -570,6 +570,7 @@
 <li>后缀<code>L</code>是long，小数后缀L是long double</li>
 <li>后缀<code>ll</code>是long long</li>
 <li>小数后缀<code>f</code>是浮点数<h3 id="变量的初始化"><a href="#变量的初始化" class="headerlink" title="变量的初始化"></a>变量的初始化</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 都一样</span></span><br><span class="line"><span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> a = &#123;<span class="number">0</span>&#125;;<span class="comment">// 列表初始化</span></span><br><span class="line"><span class="keyword">int</span> a&#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">a</span><span class="params">(<span class="number">0</span>)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>调用<code>new int;</code>创建的时候，假如不加括号的话是个未初始化的int，加括号的话是0</li>
 <li>列表初始化对类型检查比较严格，比如用<code>long double</code>初始化<code>int</code>的时候就会报错，但是用传统的 初始化方式不会报错</li>
 <li>一个int类型的变量，再函数体内部（包括main），不会初始化</li>
 <li>但是假如不在任何函数内部，会初始化为0</li>
@@ -686,6 +687,8 @@
 <li>接受两个参数，开始迭代器和结束迭代器</li>
 <li>或者接受一个初始化列表</li>
 <li>或者接受n和k两个参数，表示n个k元素，类似于赋初值的操作<h2 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h2></li>
+<li>初始化</li>
+<li>可以用<code>&#123;&#123;key, val&#125;, &#123;key, val&#125;, ...&#125;</code>的形式初始化</li>
 <li><code>unordered_map</code>不能在使用<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> &amp;i : m)&#123;m.<span class="built_in">erase</span>(<span class="comment">/*blabla*/</span>)&#125;</span><br></pre></td></tr></table></figure>
 类型的循环中删除元素，否则可能会因为删除了<u>i指向的元素</u><strong>导致迭代器失效</strong>，引起内存错误</li>
 <li>安全的删除方式为<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> it = m.<span class="built_in">begin</span>(); it != m.<span class="built_in">end</span>();) </span><br><span class="line">&#123;</span><br><span class="line">    it = m.<span class="built_in">erase</span>(it);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
@@ -693,10 +696,10 @@
 <li><code>iterator erase(const_iterator position)</code>：删除迭代器 position 指向的元素，并返回指向下一个元素的迭代器</li>
 <li><code>size_type erase(const key_type&amp; k)</code>：删除容器中键为 k 的元素，并返回被删除的元素个数</li>
 <li><code>iterator erase(const_iterator first, const_iterator last)</code>删除迭代器范围 <strong>[first, last)</strong> 内的所有元素，并返回指向最后一个被删除元素之后的元素的迭代器</li>
-<li><code>template&lt; class K &gt; size_type erase( K&amp;&amp; x )</code>：C++23 引入了这种重载形式，它可以删除容器中与 x 等价的所有元素，并返回被删除的元素个数</li>
+<li><code>template&lt; class K &gt; size_type erase( K&amp;&amp; x )</code>：C++23 引入了这种重载形式，它可以删除容器中与 x 等价的所有元素，并返回被删除的元素个数<h3 id="其他获得某个元素的方式"><a href="#其他获得某个元素的方式" class="headerlink" title="其他获得某个元素的方式"></a>其他获得某个元素的方式</h3></li>
 </ul>
 </li>
-<li>遍历<code>map</code>:<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> it = m.<span class="built_in">begin</span>(); it != m.<span class="built_in">end</span>(); it++) </span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt; it-&gt;first &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; it-&gt;second &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><code>find(key)</code>返回的是迭代器，不存在就指向的是尾后<h3 id="遍历map"><a href="#遍历map" class="headerlink" title="遍历map"></a>遍历<code>map</code></h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> it = m.<span class="built_in">begin</span>(); it != m.<span class="built_in">end</span>(); it++) </span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt; it-&gt;first &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; it-&gt;second &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 <li>随机获得容器中的第某个元素<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">unordered_set&lt;<span class="keyword">int</span>&gt; um;</span><br><span class="line"><span class="keyword">auto</span> it = um.<span class="built_in">begin</span>();</span><br><span class="line"><span class="built_in">advance</span>(it, <span class="built_in">rand</span>() % um.<span class="built_in">size</span>());</span><br><span class="line"><span class="keyword">return</span> *it;</span><br></pre></td></tr></table></figure></li>
 <li>注意此处不能直接it+数字，会出错，需要使用<code>advance</code>函数`<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2></li>
 <li>使用<code>vector(对象值, 对象数量)</code>初始化vector的时候，会创建一个对象然后调用复制构造函数创建剩余的<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 类似数组的初始化方法</span></span><br><span class="line">vector&lt;<span class="keyword">int</span>&gt; v&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br></pre></td></tr></table></figure>

@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">2.8k</span>
+            <span class="post-count">4.7k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">10 min</span>
+            <span class="post-count">18 min</span>
         </span>
     </span>
 </div>
@@ -210,7 +210,37 @@
 </ul>
 <h3 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h3><ul>
 <li>将拷贝的参数转换为引用</li>
-<li><code>ref(val)</code><h2 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">[capture list] (parameters) -&gt; &lt;<span class="keyword">return</span> type&gt;&#123;&#125;;</span><br></pre></td></tr></table></figure></li>
+<li><code>ref(val)</code><h3 id="hash哈希函数"><a href="#hash哈希函数" class="headerlink" title="hash哈希函数"></a>hash哈希函数</h3></li>
+<li><code>hash&lt;key_type&gt;()</code>函数为内置类型，指针，string和智能指针提供了哈希函数</li>
+</ul>
+<h3 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h3><ul>
+<li><code>shared_ptr</code>允许多个指针指向同一个对象</li>
+<li><code>unique_ptr</code>独占所指向的对象<h4 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h4></li>
+<li>对指针可以直接做条件判断，<code>true</code>就是非空，否则是空</li>
+<li><code>p.get()</code>返回指针指向的对象<ul>
+<li>注意，如果智能指针被释放，那么使用get返回的指针指向的对象也会被释放</li>
+</ul>
+</li>
+<li><code>shared_ptr</code>基本用法<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建 shared_ptr，并分配一个整数</span></span><br><span class="line">    std::shared_ptr&lt;<span class="keyword">int</span>&gt; sharedInt = std::make_shared&lt;<span class="keyword">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 shared_ptr</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Value: &quot;</span> &lt;&lt; *sharedInt &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取引用计数</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Reference count: &quot;</span> &lt;&lt; sharedInt.<span class="built_in">use_count</span>() &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建另一个 shared_ptr，共享相同的整数</span></span><br><span class="line">    std::shared_ptr&lt;<span class="keyword">int</span>&gt; anotherSharedInt = sharedInt;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 引用计数增加</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Reference count: &quot;</span> &lt;&lt; sharedInt.<span class="built_in">use_count</span>() &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>另一种初始化</li>
+<li><code>shared_ptr&lt;int&gt; p(new int(1024));</code>可以用动态对象初始化指针</li>
+<li>但是必须显式的调用，不能隐式类型转换</li>
+<li>不要使用<code>shared_ptr</code>的<code>get</code>方法为另一个智能指针赋值，会导致内存管理混乱</li>
+<li><code>unique_ptr</code>基本用法<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建 unique_ptr，并分配一个整数</span></span><br><span class="line">    std::unique_ptr&lt;<span class="keyword">int</span>&gt; uniqueInt = std::make_unique&lt;<span class="keyword">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 unique_ptr</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Value: &quot;</span> &lt;&lt; *uniqueInt &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// unique_ptr 不能被拷贝，这会导致编译错误</span></span><br><span class="line">    <span class="comment">// std::unique_ptr&lt;int&gt; anotherUniqueInt = uniqueInt; // 错误！</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>可以用<code>release</code>或者<code>reset</code>转移指针的所有权<ul>
+<li>reset会<strong>释放本身指向的内存</strong>，将目标转移到函数传入的新地址上</li>
+<li>release会返回自己指向的内存地址，同时放弃对这个位置的控制权（不会释放内存）</li>
+</ul>
+</li>
+<li><code>unique_ptr</code>只有在即将被销毁（比如函数返回）或者是临时对象的时候可以被拷贝，接手自己的内存区域<h3 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h3></li>
+<li>可以绑定到<code>shared_ptr</code>但是不影响引用计数</li>
+<li><code>lock</code>方法用于获取对应的shared_ptr，<strong>不存在则是空的指针对象</strong></li>
+<li><code>expired</code>可以看当前是不是还有shared_ptr在指向空间<h3 id="Blob"><a href="#Blob" class="headerlink" title="Blob"></a>Blob</h3></li>
+<li>与vector类似，但是其中数据在拷贝的时候是公用的，不是像vector是复制的</li>
+<li>管理机制与共享指针类似，最后一个被释放之后存储的数据才会删除</li>
+</ul>
+<h2 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">[capture list] (parameters) -&gt; &lt;<span class="keyword">return</span> type&gt;&#123;&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
 <li>返回类型可以省略</li>
 <li>捕获的作用是比如函数作为谓词的时候，<strong>只能</strong>传递两个互相比较的参数，此时<strong>需要外部的参数</strong>就只能用捕获传入。<ul>
 <li>全局变量不需要捕获也能使用</li>
@@ -232,7 +262,8 @@
 <li>向输出流迭代器<strong>写入数据</strong>就是输出</li>
 <li>初始化的时候加的是每个数据之后的分隔符</li>
 <li><code>*</code>, <code>++</code>等运算符对他没什么意义<h2 id="语法相关"><a href="#语法相关" class="headerlink" title="语法相关"></a>语法相关</h2></li>
-<li>使用三目运算符<code>?:</code>的时候最好外加括号，否则会因为计算顺序的原因报错</li>
+<li>使用三目运算符<code>?:</code>的时候最好外加括号，否则会因为计算顺序的原因报错<h3 id="管理内存"><a href="#管理内存" class="headerlink" title="管理内存"></a>管理内存</h3></li>
+<li><code>new</code>和<code>delete</code>一个分配动态对象一个删除动态对象</li>
 </ul>
 <h3 id="函数返回值"><a href="#函数返回值" class="headerlink" title="函数返回值"></a>函数返回值</h3><ul>
 <li>不要返回局部对象的引用类型，否则会因为局部对象生命周期结束而失效</li>
@@ -292,22 +323,98 @@
 <li>但是<strong>调用</strong>的时候可以发生类型转换</li>
 <li>返回的时候不能返回函数，因为函数不能拷贝，只能返回函数指针<h4 id="如何返回函数指针"><a href="#如何返回函数指针" class="headerlink" title="如何返回函数指针"></a>如何返回函数指针</h4></li>
 <li><code>int (*f1(int))(int, int);</code>返回的是一个<code>int(*)(int, int)</code>类型的函数指针</li>
-<li>或者写<code>auto f(int) -&gt; int(*)(int, int)</code><h2 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h2><h3 id="成员函数"><a href="#成员函数" class="headerlink" title="成员函数"></a>成员函数</h3></li>
-<li>常量成员函数<code>&lt;return type&gt; func() const &#123;&#125;</code><ul>
+<li>或者写<code>auto f(int) -&gt; int(*)(int, int)</code></li>
+</ul>
+<h2 id="动态内存管理"><a href="#动态内存管理" class="headerlink" title="动态内存管理"></a>动态内存管理</h2><h3 id="动态数组"><a href="#动态数组" class="headerlink" title="动态数组"></a>动态数组</h3><ul>
+<li><code>int*a = new int[10];</code>是未初始化的</li>
+<li><code>int*a = new int[10]();</code>是已经初始化为0的</li>
+<li>创建长度为0的动态数组可以，但<strong>不能解引用</strong></li>
+<li>释放的时候必须用<code>delete [] ptr</code></li>
+</ul>
+<h3 id="allocator类申请内存"><a href="#allocator类申请内存" class="headerlink" title="allocator类申请内存"></a>allocator类申请内存</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 使用 std::allocator 分配一块内存来存储 int 类型的元素</span></span><br><span class="line">    std::allocator&lt;<span class="keyword">int</span>&gt; allocator;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 分配内存以存储一个 int</span></span><br><span class="line">    <span class="keyword">int</span>* ptr = allocator.<span class="built_in">allocate</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在分配的内存上构造 int 对象</span></span><br><span class="line">    allocator.<span class="built_in">construct</span>(ptr, <span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用构造的对象</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Value: &quot;</span> &lt;&lt; *ptr &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 销毁对象并释放内存</span></span><br><span class="line">    allocator.<span class="built_in">destroy</span>(ptr);</span><br><span class="line">    allocator.<span class="built_in">deallocate</span>(ptr, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>alloccate</code>仅仅是分配内存</li>
+<li><code>construct</code>才构造对象</li>
+<li>删除的时候先<code>destroy</code></li>
+<li>然后再解除内存占用<code>deallocate</code></li>
+<li>使用<code>allocator</code>构造内存的时候可以像使用指针一样对指针做加减，只要不超出构造的范围即可</li>
+</ul>
+<h2 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h2><h3 id="成员函数"><a href="#成员函数" class="headerlink" title="成员函数"></a>成员函数</h3><ul>
+<li><p>常量成员函数<code>&lt;return type&gt; func() const &#123;&#125;</code></p>
+<ul>
 <li>不修改类对象的函数</li>
 <li>对这个类的const实例的时候会调用const的成员函数</li>
 <li>但是假如某个成员有<code>mutable</code>关键字，那么也可以修改<h3 id="访问说明符"><a href="#访问说明符" class="headerlink" title="访问说明符"></a>访问说明符</h3></li>
 </ul>
 </li>
-<li><code>public</code>和<code>private</code>可以反复出现多次<h3 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h3></li>
-<li>类内声明</li>
-<li><code>friend &lt;return type&gt; func();</code><h3 id="作用域运算符"><a href="#作用域运算符" class="headerlink" title="作用域运算符::"></a>作用域运算符<code>::</code></h3></li>
-<li>访问全局作用域中的变量直接用<code>::&lt;variable&gt;</code>即可</li>
-<li>访问类的就用<code>&lt;class name&gt;::&lt;var&gt;</code><h3 id="类成员初始化"><a href="#类成员初始化" class="headerlink" title="类成员初始化"></a>类成员初始化</h3></li>
-<li>无论初始化列表里怎么写，类成员的初始化顺序是<strong>按照他们在类中定义的顺序的</strong><h3 id="委托构造函数"><a href="#委托构造函数" class="headerlink" title="委托构造函数"></a>委托构造函数</h3></li>
-<li>类的多个构造函数中一个构造函数借用类的其他功能强大的构造函数构造对象<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">test</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    string data;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">test</span>(string s):<span class="built_in">data</span>(s)&#123;&#125;</span><br><span class="line">    <span class="built_in">test</span>():<span class="built_in">test</span>(<span class="string">&quot;Hello World&quot;</span>)&#123;&#125; <span class="comment">// 这里是委托带参数的构造函数test(string s)构造对象</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>调用默认构造函数（无参数）的时候不能加括号，否则编译器会认为你想声明一个函数<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">className <span class="title">obj</span><span class="params">()</span></span>;<span class="comment">// 看起来就是声明一个叫obj的函数</span></span><br></pre></td></tr></table></figure>
-<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3></li>
+<li><p><code>public</code>和<code>private</code>可以反复出现多次</p>
+<h3 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h3></li>
+<li><p>类内声明</p>
+</li>
+<li><p><code>friend &lt;return type&gt; func();</code></p>
+<h3 id="作用域运算符"><a href="#作用域运算符" class="headerlink" title="作用域运算符::"></a>作用域运算符<code>::</code></h3></li>
+<li><p>访问全局作用域中的变量直接用<code>::&lt;variable&gt;</code>即可</p>
+</li>
+<li><p>访问类的就用<code>&lt;class name&gt;::&lt;var&gt;</code></p>
+<h3 id="类成员初始化"><a href="#类成员初始化" class="headerlink" title="类成员初始化"></a>类成员初始化</h3></li>
+<li><p>无论初始化列表里怎么写，类成员的初始化顺序是<strong>按照他们在类中定义的顺序的</strong></p>
+<h3 id="委托构造函数"><a href="#委托构造函数" class="headerlink" title="委托构造函数"></a>委托构造函数</h3></li>
+<li><p>类的多个构造函数中一个构造函数借用类的其他功能强大的构造函数构造对象</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">test</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    string data;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">test</span>(string s):<span class="built_in">data</span>(s)&#123;&#125;</span><br><span class="line">    <span class="built_in">test</span>():<span class="built_in">test</span>(<span class="string">&quot;Hello World&quot;</span>)&#123;&#125; <span class="comment">// 这里是委托带参数的构造函数test(string s)构造对象</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>调用默认构造函数（无参数）的时候不能加括号，否则编译器会认为你想声明一个函数</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">className <span class="title">obj</span><span class="params">()</span></span>;<span class="comment">// 看起来就是声明一个叫obj的函数</span></span><br></pre></td></tr></table></figure>
+<h3 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h3></li>
+<li><p><code>className(const className&amp; cName)&#123;&#125;;</code></p>
+</li>
+<li><p>第一个参数必须是自身的引用</p>
+</li>
+<li><p>其他参数必须有默认值</p>
+</li>
+<li><p>注意形如<code>&lt;className&gt; val = valOld;</code>的是拷贝初始化</p>
+<h3 id="移动构造函数"><a href="#移动构造函数" class="headerlink" title="移动构造函数"></a>移动构造函数</h3></li>
+<li><p>移动语义的目的是在<strong>避免不必要的数据复制</strong>的同时，更高效地管理资源。</p>
+</li>
+<li><p>在 C++11 引入右值引用之前，对象的拷贝构造函数是唯一的构造函数，用于复制对象。然而，对于临时对象或即将销毁的对象，进行深拷贝可能是不必要的开销。移动构造函数通过使用右值引用，允许在不复制底层资源的情况下将资源从一个对象“移动”到另一个对象。</p>
+</li>
+<li><p>必须是<code>noexcept</code>标明的</p>
+</li>
+<li><p>传入的参数是一个右值引用</p>
+</li>
+<li><p>有不具备移动构造功能的成员，自身也不能移动构造</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyString</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 移动构造函数</span></span><br><span class="line">    <span class="built_in">MyString</span>(MyString&amp;&amp; other) <span class="keyword">noexcept</span></span><br><span class="line">        : <span class="built_in">data</span>(other.data), <span class="built_in">length</span>(other.length) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Move Constructor&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="comment">// 移动构造函数中，将原对象的资源指针置为空，避免资源被析构</span></span><br><span class="line">        other.data = <span class="literal">nullptr</span>;</span><br><span class="line">        other.length = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造函数</span></span><br><span class="line">    <span class="built_in">MyString</span>(<span class="keyword">const</span> <span class="keyword">char</span>* str)</span><br><span class="line">        : <span class="built_in">data</span>(<span class="built_in">strdup</span>(str)), <span class="built_in">length</span>(<span class="built_in">strlen</span>(str)) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Constructor&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 析构函数</span></span><br><span class="line">    ~<span class="built_in">MyString</span>() &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Destructor&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="comment">// 释放资源</span></span><br><span class="line">        <span class="built_in">free</span>(data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">char</span>* data;</span><br><span class="line">    std::<span class="keyword">size_t</span> length;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建一个对象</span></span><br><span class="line">    <span class="function">MyString <span class="title">source</span><span class="params">(<span class="string">&quot;Hello, World!&quot;</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用移动构造函数，将资源从 source 移动到 target</span></span><br><span class="line">    MyString target = std::<span class="built_in">move</span>(source);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出结果</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Source String: &quot;</span> &lt;&lt; (source.<span class="built_in">GetData</span>() ? source.<span class="built_in">GetData</span>() : <span class="string">&quot;nullptr&quot;</span>) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Target String: &quot;</span> &lt;&lt; (target.<span class="built_in">GetData</span>() ? target.<span class="built_in">GetData</span>() : <span class="string">&quot;nullptr&quot;</span>) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h3></li>
+<li><p>可以是成员函数也可以直接是函数</p>
+</li>
+<li><p>如果运算符是某个类的成员函数那么左侧的操作数<strong>必须是这个类的对象</strong></p>
+</li>
+<li><p>重载输入输出运算符的时候必须不是成员函数</p>
+</li>
+<li><p>下标运算符必须是成员函数</p>
+</li>
+<li><p>赋值运算符必须是成员函数</p>
+<h4 id="自增自减运算符"><a href="#自增自减运算符" class="headerlink" title="自增自减运算符"></a>自增自减运算符</h4></li>
+<li><p><code>className&amp; operator++();</code>前置</p>
+</li>
+<li><p><code>className&amp; operator(int); </code>后置，参数无用，用于与前置区分</p>
+</li>
+<li><p>一般是成员函数</p>
+</li>
+</ul>
+<h3 id="等号运算符"><a href="#等号运算符" class="headerlink" title="等号运算符"></a>等号运算符</h3><ul>
+<li><code>className&amp; operator=(const className&amp;);</code></li>
+<li>控制等号的行为</li>
+<li><code>return *this;</code>即可</li>
+<li>注意处理等号左右是同一个变量的情况</li>
+</ul>
+<h3 id="要求系统合成一个默认的构造-析构函数"><a href="#要求系统合成一个默认的构造-析构函数" class="headerlink" title="要求系统合成一个默认的构造/析构函数"></a>要求系统合成一个默认的构造/析构函数</h3><ul>
+<li><code>ClassName() = default;</code></li>
+<li><code>=default;</code><h3 id="禁止一个构造-复制函数被调用"><a href="#禁止一个构造-复制函数被调用" class="headerlink" title="禁止一个构造/复制函数被调用"></a>禁止一个构造/复制函数被调用</h3></li>
+<li><code>ClassName &amp;operator=(const ClassName&amp;) = delete;</code></li>
+<li><code>=delete;</code></li>
+<li>可以对于任何函数使用</li>
+<li>删除析构函数的类型，不能定义该类型的变量或者释放该类型动态对象的指针</li>
+</ul>
+<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><ul>
 <li>如果类具有只接受一个参数的构造函数，那么编译器可以将<strong>这个参数类型的对象</strong>自动转换为这个类的对象<ul>
 <li>给构造函数增加一个<code>explicit</code>参数可以禁止这种转换</li>
 <li>但是static_cast可以调用<code>explicit</code>的构造函数<h3 id="聚合类"><a href="#聚合类" class="headerlink" title="聚合类"></a>聚合类</h3></li>
@@ -349,6 +456,11 @@
 <li>不指定的话是<code>out</code>和<code>trunc</code><h3 id="sstream"><a href="#sstream" class="headerlink" title="sstream"></a>sstream</h3></li>
 <li>自身就是个string</li>
 <li>可以初始化也可以不初始化<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 将一个整数转换为string</span></span><br><span class="line">    <span class="keyword">int</span> n = <span class="number">123</span>;</span><br><span class="line">    stringstream ss1;</span><br><span class="line">    ss1 &lt;&lt; n; <span class="comment">// 向stringstream写入整数</span></span><br><span class="line">    string s1 = ss1.<span class="built_in">str</span>(); <span class="comment">// 获取stringstream内部的string</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;s1 = &quot;</span> &lt;&lt; s1 &lt;&lt; endl; <span class="comment">// 输出s1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将一个string分割为单词</span></span><br><span class="line">    string s2 = <span class="string">&quot;Hello world!&quot;</span>;</span><br><span class="line">    <span class="function">stringstream <span class="title">ss2</span><span class="params">(s2)</span></span>; <span class="comment">// 用string初始化stringstream</span></span><br><span class="line">    string word;</span><br><span class="line">    <span class="keyword">while</span> (ss2 &gt;&gt; word) <span class="comment">// 从stringstream读取单词</span></span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;word = &quot;</span> &lt;&lt; word &lt;&lt; endl; <span class="comment">// 输出单词</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="std-istringstream"><a href="#std-istringstream" class="headerlink" title="std::istringstream"></a>std::istringstream</h3><ul>
+<li>一个字符串输入流，允许你从字符串中读取数据，就像从标准输入流中读取数据一样<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::string inputString = <span class="string">&quot;123 4.56 Hello&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建 istringstream 对象，并将字符串传入</span></span><br><span class="line">    <span class="function">std::istringstream <span class="title">iss</span><span class="params">(inputString)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> intValue;</span><br><span class="line">    <span class="keyword">float</span> floatValue;</span><br><span class="line">    std::string stringValue;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从字符串流中读取数据</span></span><br><span class="line">    iss &gt;&gt; intValue &gt;&gt; floatValue &gt;&gt; stringValue;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出读取到的数据</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Int: &quot;</span> &lt;&lt; intValue &lt;&lt; <span class="string">&quot;, Float: &quot;</span> &lt;&lt; floatValue &lt;&lt; <span class="string">&quot;, String: &quot;</span> &lt;&lt; stringValue &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="std-ostringstream"><a href="#std-ostringstream" class="headerlink" title="std::ostringstream"></a>std::ostringstream</h3></li>
+<li>一个字符串输出流，允许你将数据写入字符串，就像写入标准输出流一样<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> intValue = <span class="number">42</span>;</span><br><span class="line">    <span class="keyword">float</span> floatValue = <span class="number">3.14</span>;</span><br><span class="line">    std::string stringValue = <span class="string">&quot;Hello, World!&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建 ostringstream 对象</span></span><br><span class="line">    std::ostringstream oss;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将数据写入字符串流</span></span><br><span class="line">    oss &lt;&lt; <span class="string">&quot;Int: &quot;</span> &lt;&lt; intValue &lt;&lt; <span class="string">&quot;, Float: &quot;</span> &lt;&lt; floatValue &lt;&lt; <span class="string">&quot;, String: &quot;</span> &lt;&lt; stringValue;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取字符串</span></span><br><span class="line">    std::string resultString = oss.<span class="built_in">str</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出写入的字符串</span></span><br><span class="line">    std::cout &lt;&lt; resultString &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
  
       <!-- reward -->
