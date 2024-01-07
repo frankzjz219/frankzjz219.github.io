@@ -581,6 +581,11 @@
 <li>通过值捕获的变量一般不允许修改，除非在函数体之前加一个<code>mutable</code>关键字</li>
 </ul>
 </li>
+<li>lambda是函数类型，不是函数指针</li>
+</ul>
+<h2 id="函数对象"><a href="#函数对象" class="headerlink" title="函数对象"></a>函数对象</h2><ul>
+<li>包装器</li>
+<li>可以将任何可以调用的对象存入，能使用<code>()</code>的就可以，包装为一个函数<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个普通函数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个函数对象</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Multiply</span> &#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a * b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 使用 std::function 包装普通函数</span></span><br><span class="line">    std::function&lt;<span class="built_in"><span class="keyword">int</span></span>(<span class="keyword">int</span>, <span class="keyword">int</span>)&gt; addFunction = Add;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Add Function Result: &quot;</span> &lt;&lt; <span class="built_in">addFunction</span>(<span class="number">3</span>, <span class="number">4</span>) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 std::function 包装函数对象</span></span><br><span class="line">    std::function&lt;<span class="built_in"><span class="keyword">int</span></span>(<span class="keyword">int</span>, <span class="keyword">int</span>)&gt; multiplyFunction = <span class="built_in">Multiply</span>();</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Multiply Function Result: &quot;</span> &lt;&lt; <span class="built_in">multiplyFunction</span>(<span class="number">3</span>, <span class="number">4</span>) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 Lambda 表达式</span></span><br><span class="line">    std::function&lt;<span class="built_in"><span class="keyword">int</span></span>(<span class="keyword">int</span>, <span class="keyword">int</span>)&gt; lambdaFunction = [](<span class="keyword">int</span> a, <span class="keyword">int</span> b) &#123;</span><br><span class="line">        <span class="keyword">return</span> a / b;</span><br><span class="line">    &#125;;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Lambda Function Result: &quot;</span> &lt;&lt; <span class="built_in">lambdaFunction</span>(<span class="number">8</span>, <span class="number">2</span>) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h2><h3 id="反向迭代器"><a href="#反向迭代器" class="headerlink" title="反向迭代器"></a>反向迭代器</h3><ul>
 <li>倒序排序<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sort</span>(vec.<span class="built_in">begin</span>(), vec.<span class="built_in">end</span>());</span><br><span class="line"><span class="built_in">sort</span>(vec.<span class="built_in">rbegin</span>(), vec.<span class="built_in">rend</span>()); <span class="comment">// 倒序</span></span><br></pre></td></tr></table></figure>
@@ -592,7 +597,10 @@
 <li>初始化的时候加的是每个数据之后的分隔符</li>
 <li><code>*</code>, <code>++</code>等运算符对他没什么意义<h2 id="语法相关"><a href="#语法相关" class="headerlink" title="语法相关"></a>语法相关</h2></li>
 <li>使用三目运算符<code>?:</code>的时候最好外加括号，否则会因为计算顺序的原因报错<h3 id="管理内存"><a href="#管理内存" class="headerlink" title="管理内存"></a>管理内存</h3></li>
-<li><code>new</code>和<code>delete</code>一个分配动态对象一个删除动态对象</li>
+<li><code>new</code>和<code>delete</code>是运算符一个分配动态对象一个删除动态对象</li>
+</ul>
+<h3 id="for-each"><a href="#for-each" class="headerlink" title="for_each"></a>for_each</h3><ul>
+<li>作用是对一个区间内的变量每个都执行指定的操作（函数）<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个函数，用于在 for_each 中作为操作</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PrintSquare</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    std::cout &lt;&lt; x * x &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建一个向量</span></span><br><span class="line">    std::vector&lt;<span class="keyword">int</span>&gt; numbers = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 for_each 遍历向量并应用操作</span></span><br><span class="line">    std::for_each(numbers.<span class="built_in">begin</span>(), numbers.<span class="built_in">end</span>(), PrintSquare);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出结果：1 4 9 16 25</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="函数返回值"><a href="#函数返回值" class="headerlink" title="函数返回值"></a>函数返回值</h3><ul>
 <li>不要返回局部对象的引用类型，否则会因为局部对象生命周期结束而失效</li>
@@ -681,6 +689,18 @@
 <li><p>类内声明</p>
 </li>
 <li><p><code>friend &lt;return type&gt; func();</code></p>
+</li>
+<li><p>即使这个类被内嵌在一个子类中，也可以访问相应部分的成员</p>
+<h3 id="不同类别的继承"><a href="#不同类别的继承" class="headerlink" title="不同类别的继承"></a>不同类别的继承</h3></li>
+<li><p>private继承会把所有从基类继承的成员都作为private对象</p>
+</li>
+<li><p>protected会把所有的作为protected</p>
+</li>
+<li><p>public则不改变权限</p>
+</li>
+<li><p>可以手动在public、protected或者private后面使用<code>using 基类名:: 基类成员</code>手动变更访问权限</p>
+</li>
+<li><p>继承的时候子类的同名成员会覆盖基类的，无论是变量还是成员函数</p>
 <h3 id="作用域运算符"><a href="#作用域运算符" class="headerlink" title="作用域运算符::"></a>作用域运算符<code>::</code></h3></li>
 <li><p>访问全局作用域中的变量直接用<code>::&lt;variable&gt;</code>即可</p>
 </li>
@@ -729,6 +749,9 @@
 <li><p>一般是成员函数</p>
 </li>
 </ul>
+<h4 id="重载-gt-运算符"><a href="#重载-gt-运算符" class="headerlink" title="重载-&gt;运算符"></a>重载<code>-&gt;</code>运算符</h4><ul>
+<li>返回值必须是指针（<strong>可以是某个成员函数类型的指针</strong>）<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Display</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Displaying MyClass&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 重载 -&gt; 运算符</span></span><br><span class="line">    MyClass* <span class="keyword">operator</span>-&gt;() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    MyClass myObject;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用重载的 -&gt; 运算符</span></span><br><span class="line">    myObject-&gt;<span class="built_in">Display</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
 <h3 id="等号运算符"><a href="#等号运算符" class="headerlink" title="等号运算符"></a>等号运算符</h3><ul>
 <li><code>className&amp; operator=(const className&amp;);</code></li>
 <li>控制等号的行为</li>
@@ -746,9 +769,64 @@
 <h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><ul>
 <li>如果类具有只接受一个参数的构造函数，那么编译器可以将<strong>这个参数类型的对象</strong>自动转换为这个类的对象<ul>
 <li>给构造函数增加一个<code>explicit</code>参数可以禁止这种转换</li>
-<li>但是static_cast可以调用<code>explicit</code>的构造函数<h3 id="聚合类"><a href="#聚合类" class="headerlink" title="聚合类"></a>聚合类</h3></li>
+<li>但是static_cast可以调用<code>explicit</code>的构造函数</li>
 </ul>
 </li>
+</ul>
+<h3 id="重载类型转换运算符"><a href="#重载类型转换运算符" class="headerlink" title="重载类型转换运算符"></a>重载类型转换运算符</h3><ul>
+<li>类型转换运算符通常不显式声明返回类型，因为它们没有返回类型<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Distance</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> feet;</span><br><span class="line">    <span class="keyword">float</span> inches;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Distance</span>(<span class="keyword">int</span> ft, <span class="keyword">float</span> in) : <span class="built_in">feet</span>(ft), <span class="built_in">inches</span>(in) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 类型转换运算符，将 Distance 转换为 float</span></span><br><span class="line">    <span class="function"><span class="keyword">operator</span> <span class="title">float</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;<span class="keyword">float</span>&gt;(feet) + inches / <span class="number">12.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">Distance <span class="title">d</span><span class="params">(<span class="number">5</span>, <span class="number">9.0</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用类型转换运算符将 Distance 转换为 float</span></span><br><span class="line">    <span class="keyword">float</span> totalInches = <span class="keyword">static_cast</span>&lt;<span class="keyword">float</span>&gt;(d);</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Total Inches: &quot;</span> &lt;&lt; totalInches &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>注意防止类型转换运算符与某些具有隐式类型转换功能的构造函数出现二义性</li>
+<li>只要有多个用户自定义的类型转换都能达到目的，编译器就认为出线了二义性</li>
+</ul>
+<h3 id="override"><a href="#override" class="headerlink" title="override"></a>override</h3><ul>
+<li><code>override</code>的主要作用是在子类中表明某个<strong>函数是覆盖基类的虚函数的</strong>，方便检查是否真的覆盖了</li>
+</ul>
+<h3 id="动态绑定"><a href="#动态绑定" class="headerlink" title="动态绑定"></a>动态绑定</h3><ul>
+<li>使用一个基类的指针调用一个虚函数</li>
+<li>根据不同的子类对虚函数的继承，产生不同的结果  </li>
+</ul>
+<h3 id="多态和虚函数"><a href="#多态和虚函数" class="headerlink" title="多态和虚函数"></a>多态和虚函数</h3><ul>
+<li>使用基类的指针（或引用）<strong>不能</strong>直接访问子类中定义了但是基类中没定义的成员函数和变量<ul>
+<li>需要使用类型转换才能访问</li>
+</ul>
+</li>
+<li>但是可以访问子类中重载了的基类的虚函数</li>
+<li>虚函数继承的时候<u><strong>必须函数头完全一致才行，这样才能实现多态</strong></u><ul>
+<li>不一样的话会直接覆盖基类的虚函数，不会产生多态，用基类的指针的时候还是会调用基类的函数</li>
+</ul>
+</li>
+<li>可以使用类名和<strong>作用域运算符</strong>手动指定通过指针调用的是哪个函数，从而防止运行时才知道是哪个<h4 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h4></li>
+<li>基类的析构函数最好写成虚函数，方便多态调用的时候析构掉整个的，否则析构基类的动态对象的时候会只析构基类的部分导致内存泄漏</li>
+<li>具有手动析构函数的类，编译器一般<strong>不会</strong>自动合成移动构造函数、拷贝构造函数、等号运算符重载等，需要的话最好手动指出<ul>
+<li><u>否则会因此导致继承他的子类因为父类没有这些函数而无法复制构造</u><h4 id="基类的拷贝构造函数和移动构造函数"><a href="#基类的拷贝构造函数和移动构造函数" class="headerlink" title="基类的拷贝构造函数和移动构造函数"></a>基类的拷贝构造函数和移动构造函数</h4></li>
+</ul>
+</li>
+<li>必须显式的子类的相应函数中的初始化列表中调用基类的拷贝构造函数或者移动构造函数<ul>
+<li><img src="/imgs/44be057dc9bca19ac215614aa2ab6479eb8204fa537f43cb20a96756074c76f2.png" alt="picture 0">  </li>
+</ul>
+</li>
+</ul>
+<h4 id="基类和派生类的-赋值运算符"><a href="#基类和派生类的-赋值运算符" class="headerlink" title="基类和派生类的=赋值运算符"></a>基类和派生类的<code>=</code>赋值运算符</h4><ul>
+<li>需要在派生类的<code>=</code>赋值运算符函数体中手动调用基类的赋值运算符</li>
+</ul>
+<h3 id="抽象类和纯虚函数"><a href="#抽象类和纯虚函数" class="headerlink" title="抽象类和纯虚函数"></a>抽象类和纯虚函数</h3><ul>
+<li>在一个成员函数后面加上<code>=0;</code>即可实现</li>
+<li>类不能被实例化</li>
+<li>纯虚函数的定义必须在外部</li>
+</ul>
+<h3 id="集成的时候的构造函数"><a href="#集成的时候的构造函数" class="headerlink" title="集成的时候的构造函数"></a>集成的时候的构造函数</h3><ul>
+<li>基类的数据成员必须调用基类的构造函数构造（在初始化列表直接调用）</li>
+<li>然后再按声明的顺序构造自身的对象</li>
+</ul>
+<h3 id="不能被继承的类"><a href="#不能被继承的类" class="headerlink" title="不能被继承的类"></a>不能被继承的类</h3><ul>
+<li>类声明之后加一个<code>final</code></li>
+</ul>
+<h3 id="private和protected"><a href="#private和protected" class="headerlink" title="private和protected"></a><code>private</code>和<code>protected</code></h3><ul>
+<li><code>protected</code>是继承的类能拿到但是别的类拿不到</li>
+<li><code>private</code>继承的类也拿不到</li>
+<li>派生类的友元对基类的保护对象访问没有任何特权，无法访问protected</li>
+</ul>
+<h3 id="聚合类"><a href="#聚合类" class="headerlink" title="聚合类"></a>聚合类</h3><ul>
 <li>所有成员public</li>
 <li>没有构造函数</li>
 <li>类内没给初始值</li>
