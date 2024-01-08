@@ -625,6 +625,9 @@
 <li><code>*p</code>解引用会被认为是对应基础类型的引用类型</li>
 <li><code>int i</code>是int类型，但是假如<code>decltype((i))</code>或者是<code>decltype(((i)))</code>都是int的引用类型，不存在引用的引用，无论嵌套多少层都是引用</li>
 </ul>
+<h3 id="引用类型-1"><a href="#引用类型-1" class="headerlink" title="引用类型"></a>引用类型</h3><ul>
+<li><code>const T&amp;</code>可以接受右值类型的传参</li>
+</ul>
 <h3 id="struct"><a href="#struct" class="headerlink" title="struct"></a>struct</h3><ul>
 <li>默认是public</li>
 <li>C++11开始，定义的时候可以对其中的变量赋初值</li>
