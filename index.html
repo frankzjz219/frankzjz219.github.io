@@ -859,7 +859,7 @@
 <li>此时可以在构造的时候加一个<code>constexpr</code><h3 id="静态成员"><a href="#静态成员" class="headerlink" title="静态成员"></a>静态成员</h3></li>
 <li><code>static</code></li>
 <li>对象的内存不包含静态对象</li>
-<li>static函数不含有this指针</li>
+<li>static函数不含有this指针，<strong>不能处理非static成员</strong></li>
 <li>可以使用类作用域直接调用，也可以用对象的<code>.</code>调用</li>
 <li>static关键字只出现在类内声明的场合，定义的时候不出现</li>
 <li>初始化<ul>
@@ -867,7 +867,10 @@
 <li><code>int &lt;class name&gt;:: var = blabla;</code></li>
 </ul>
 </li>
-<li>可以在一个类还没被初始化完的时候就声明它的静态对象<h3 id="IO流对象"><a href="#IO流对象" class="headerlink" title="IO流对象"></a>IO流对象</h3></li>
+<li>可以在一个类还没被初始化完的时候就声明它的静态对象</li>
+<li>类的（不一定是静态）成员函数操作静态成员的时候可以直接操作，<strong>不需要加作用域运算符</strong></li>
+</ul>
+<h3 id="IO流对象"><a href="#IO流对象" class="headerlink" title="IO流对象"></a>IO流对象</h3><ul>
 <li><code>iostream</code>, <code>fstream</code>, <code>sstream</code> </li>
 <li>不能修改，赋值</li>
 <li>输出<code>endl</code>是刷新缓冲区附带一个回车，输出<code>flush</code>则只刷新缓冲区，输出<code>ends</code>刷新缓冲区的同时附带一个空格</li>
