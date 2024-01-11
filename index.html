@@ -222,6 +222,16 @@
 <li>例子<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ucontext.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> *argv[])</span></span>&#123;</span><br><span class="line">    <span class="keyword">ucontext_t</span> context;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">getcontext</span>(&amp;context);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Hello world&quot;</span>);</span><br><span class="line">    <span class="built_in">sleep</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">setcontext</span>(&amp;context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 <li>上述函数会不断重复输出<code>Hello World</code>，因为<code>getcontext</code>将上下文设置在了输出之前，<code>setcontext</code>每次都把整个执行流返回到输出的位置</li>
 </ul>
+<h3 id="更换为执行时间最短先服务逻辑的调度器版本"><a href="#更换为执行时间最短先服务逻辑的调度器版本" class="headerlink" title="更换为执行时间最短先服务逻辑的调度器版本"></a>更换为执行时间最短先服务逻辑的调度器版本</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/Winnerhust/uthread">参考的原版</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/frankzjz219/coThread">我改进代码的github仓库</a></li>
+<li>使用了优先级队列重写携程选择逻辑，切换的时候会选择当前已经运行时间最短的携程上处理机执行</li>
+<li>运行结果<ul>
+<li><img src="/imgs/941347f9abd1720738aefc5d97931550f21aa9612e6620b2f0e59f887e23f2f5.png" alt="picture 0">  </li>
+<li>四个线程的优先级分别是4，3，2，1，可见是符合设置的</li>
+</ul>
+</li>
+</ul>
  
       <!-- reward -->
       
