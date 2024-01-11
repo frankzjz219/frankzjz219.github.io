@@ -141,6 +141,98 @@
     
     
     <article
+  id="post-Ubuntu下开发Linux内核模块"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/09/17/Ubuntu%E4%B8%8B%E5%BC%80%E5%8F%91Linux%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97/"
+    >Ubuntu下开发Linux内核模块</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/09/17/Ubuntu%E4%B8%8B%E5%BC%80%E5%8F%91Linux%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97/" class="article-date">
+  <time datetime="2022-09-17T11:46:38.000Z" itemprop="datePublished">2022-09-17</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <ul>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43455712/article/details/117468579">参考链接</a></p>
+<h2 id="Ubuntu下开发Linux内核模块"><a href="#Ubuntu下开发Linux内核模块" class="headerlink" title="Ubuntu下开发Linux内核模块"></a>Ubuntu下开发Linux内核模块</h2></li>
+<li><p>Linux内核源码头文件位置<code>/usr/src/linux-headers-$(LINUX_KERNEL)</code></p>
+</li>
+<li><p>其中的LINUX_KERNEL是Linux内核版本号，使用<code>uname -r</code>获得</p>
+<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">obj-m := test.o</span><br><span class="line">CURRENT_PATH := <span class="variable">$(<span class="built_in">shell</span> pwd)</span></span><br><span class="line">LINUX_KERNEL := <span class="variable">$(<span class="built_in">shell</span> uname -r)</span></span><br><span class="line">LINUX_KERNEL_PATH := /usr/src/linux-headers-<span class="variable">$(LINUX_KERNEL)</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">	make -C <span class="variable">$(LINUX_KERNEL_PATH)</span> M=<span class="variable">$(CURRENT_PATH)</span> modules</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	make -C <span class="variable">$(LINUX_KERNEL_PATH)</span> M=<span class="variable">$(CURRENT_PATH)</span> clean</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="更新包含文件的目录"><a href="#更新包含文件的目录" class="headerlink" title="更新包含文件的目录"></a>更新包含文件的目录</h2></li>
+<li><p>在<u>远程端</u>安装C/C++等全套插件（<strong>不安装的话没有相应的选项</strong>）</p>
+</li>
+<li><p>按<code>Ctrl+Shift+P</code>打开命令</p>
+</li>
+<li><p>输入<code>C/C++</code></p>
+</li>
+<li><p><img src="/imgs/3fadb8e8eb03dd521095a75961d71a0eaf8e0b8e404d5036369e33bffed6555b.png" alt="图 5">  </p>
+</li>
+<li><p>然后在输入框里粘贴地址<code>/usr/src/linux-headers-&lt;uname -r的输出&gt;/include/**</code>和<code>/usr/src/linux-headers-&lt;uname -r的输出&gt;/arch/x86/include/</code></p>
+</li>
+<li><p><img src="/imgs/b578e50a48b4244960928d63e81d416ad4ebdb44bc237a25b504132ce59fc89f.png" alt="picture 4">  </p>
+<ul>
+<li>重启设置之后<code>**</code>可能会消失</li>
+</ul>
+</li>
+<li><p>然后即可找到printk等函数的定义</p>
+<ul>
+<li><img src="/imgs/4eb3b08f44d7d9de7683b995f0a039fbb891857b050e26c607cce3733dc5db20.png" alt="图 7">  </li>
+</ul>
+</li>
+</ul>
+<h3 id="但是还是有报错"><a href="#但是还是有报错" class="headerlink" title="但是还是有报错"></a>但是还是有报错</h3><ul>
+<li><img src="/imgs/c559b03e240382fdaea8cfeda7b97012bf360206024705575ce9fa6f259d614f.png" alt="picture 1">  </li>
+</ul>
+<h2 id="代码文件"><a href="#代码文件" class="headerlink" title="代码文件"></a>代码文件</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/init.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;Dual BSD/GPL&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hello_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	printk(KERN_ALERT <span class="string">&quot; Hello World enter\n&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hello_exit</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	printk(KERN_ALERT<span class="string">&quot; Hello World exit\n &quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">module_init(hello_init);</span><br><span class="line">module_exit(hello_exit);</span><br><span class="line"> </span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;Song Baohua&quot;</span>);</span><br><span class="line">MODULE_DESCRIPTION(<span class="string">&quot;A simple Hello World Module&quot;</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="编译结果"><a href="#编译结果" class="headerlink" title="编译结果"></a>编译结果</h2><ul>
+<li><img src="/imgs/bcffe914e1cdc23926f55b30fbf48854fe6645be5a7c614c63d7c5d294562232.png" alt="图 3">  </li>
+<li><code>insmod</code>安装模块，<code>rmmod</code>移除模块<ul>
+<li><code>insmod</code>需要<code>sudo</code></li>
+<li>安装的是<code>.ko</code>文件</li>
+<li><img src="/imgs/d49222db17a55746e5d61c89182a737c6275304412c38ff3d9587f685f379c00.png" alt="picture 2">  </li>
+</ul>
+</li>
+<li>使用<code>dmesg</code>查看<strong>系统输出</strong></li>
+<li><img src="/imgs/6433a69aa1954041ecf4f563d8d6362a7365db8eaa4b83c234917c50fb663ba2.png" alt="图 4">  </li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-使用VSCode连接VMware虚拟机Ubuntu"
   class="article article-type-post"
   itemscope
@@ -909,101 +1001,6 @@
 </ul>
 <h2 id="leetcode-209-长度最小的子数组"><a href="#leetcode-209-长度最小的子数组" class="headerlink" title="leetcode 209. 长度最小的子数组"></a>leetcode 209. 长度最小的子数组</h2><ul>
 <li>此题因为必须是连续数组，而且是求和，因此考虑使用滑动窗口的方法解决<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minSubArrayLen</span><span class="params">(<span class="keyword">int</span> target, vector&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> start = <span class="number">0</span>, end = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> minLen = INT_MAX;</span><br><span class="line">        <span class="keyword">do</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;start&lt;&lt;&#x27; &#x27;&lt;&lt;end&lt;&lt;endl;</span></span><br><span class="line">            <span class="keyword">if</span>(sum&lt;target)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(end == nums.<span class="built_in">size</span>()<span class="number">-1</span>)<span class="keyword">break</span>;</span><br><span class="line">                ++end;</span><br><span class="line">                sum+=nums[end];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> </span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(end-start+<span class="number">1</span>&lt;minLen)</span><br><span class="line">                &#123;</span><br><span class="line">                    minLen = end - start+<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                sum-=nums[start];</span><br><span class="line">                ++start;</span><br><span class="line">                </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">while</span>(end&lt;nums.<span class="built_in">size</span>() &amp;&amp; end&gt;=start);</span><br><span class="line">        <span class="keyword">return</span> minLen == INT_MAX?<span class="number">0</span>:minLen;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-manacher算法"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/28/manacher%E7%AE%97%E6%B3%95/"
-    >manacher算法</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/28/manacher%E7%AE%97%E6%B3%95/" class="article-date">
-  <time datetime="2022-08-28T02:50:13.000Z" itemprop="datePublished">2022-08-28</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="解决的问题"><a href="#解决的问题" class="headerlink" title="解决的问题"></a>解决的问题</h2><ul>
-<li>字符串的最长回文字串的问题（必须是连续的串）<h2 id="获得长度为奇数和偶数的字符串"><a href="#获得长度为奇数和偶数的字符串" class="headerlink" title="获得长度为奇数和偶数的字符串"></a>获得长度为奇数和偶数的字符串</h2></li>
-<li>奇数的话直接取每个字符向两边找扩展即可</li>
-<li>针对偶数可以在每两个字符之间<strong>加入一个虚拟的字符</strong>，向左右两边扩展得到偶数长度的回文字符串</li>
-<li><img src="/imgs/87935e4d8a92e959ccda8401cf31306762c0fe8418854a1eef92f8d09ee30dba.png" alt="图 2">  </li>
-<li>将处理得到的字符串的长度直接/2就可以得到实际的回文串的长度</li>
-<li>虚拟的字符可以是任意字符，即使是原串之中出现过的字符也可以</li>
-<li>时间复杂度是<code>O(N^2)</code><h2 id="Manacher"><a href="#Manacher" class="headerlink" title="Manacher"></a>Manacher</h2></li>
-<li>时间复杂度是<code>O(N)</code></li>
-<li>概念<ul>
-<li>回文直径和半径</li>
-<li><img src="/imgs/18ab4a39c4e691caf0301e6d309f1ff2c97f2fb100da73a20f5b55752ccd9afe.png" alt="图 3">  </li>
-<li>回文直径7半径4</li>
-<li>生成一个<code>回文半径数组</code></li>
-<li>之前扩展的所有位置中所到达过的回文最右边界，初始值是-1</li>
-<li>取得最远边界的时候的中心点的位置，与上一条同时更新</li>
-</ul>
-</li>
-<li>方法：<ul>
-<li>假如此时index没在最右回文右边界之内，直接向两边暴力计算即可</li>
-<li>假如在最右边界之内：<ul>
-<li>中心点一定在index的左侧</li>
-<li><img src="/imgs/694a11a5b4ed6114a4bfcf85d8d329c4db097e451e269ac5dec433e70d29ecab.png" alt="图 4">  </li>
-<li>C是此时的最右回文串的中心位置，L是左边界，R是右边界</li>
-<li>i’是i关于C的对称点，根据i’的回文状况分类：<ul>
-<li>假如i’的回文在L和R范围内（用回文半径数组得到）<ul>
-<li>i位置和i’位置的回文半径相同</li>
-</ul>
-</li>
-<li>假如i’的区域有一部分已经到L和R的外侧了<ul>
-<li><img src="/imgs/8e9b9549693606dccff649bf276d88d81e1451e3599734737c1a69b5dcd84765.png" alt="图 5">  </li>
-<li>此时i的答案是<strong>i到R的长度</strong></li>
-</ul>
-</li>
-<li>假如i’的左边界正好在L上<ul>
-<li><img src="/imgs/1e139074cc661226468bd6ddeddfc033b6f3ef39f085d9807868ff5839718773.png" alt="图 6">  </li>
-<li>首先i’自身的回文半径<strong>一定是回文</strong>，从R外的第一个字符开始继续验证即可</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><img src="/imgs/d89728ae0ac3bc388471df7088a5aeafcae7c8c3bab4533dd11e7dce4d1e2e7d.png" alt="图 7">  <h2 id="manacher代码"><a href="#manacher代码" class="headerlink" title="manacher代码"></a>manacher代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">manacher</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// &quot;12132&quot; -&gt; &quot;#1#2#1#3#2#&quot;</span></span><br><span class="line">    <span class="keyword">char</span>[] str = manacherString(s);</span><br><span class="line">    <span class="comment">// 回文半径的大小</span></span><br><span class="line">    <span class="keyword">int</span>[] pArr = <span class="keyword">new</span> <span class="keyword">int</span>[str.length];</span><br><span class="line">    <span class="keyword">int</span> C = -<span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 讲述中：R代表最右的扩成功的位置</span></span><br><span class="line">    <span class="comment">// coding：最右的扩成功位置的，再下一个位置</span></span><br><span class="line">    <span class="keyword">int</span> R = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> max = Integer.MIN_VALUE;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length; i++) &#123; <span class="comment">// 0 1 2</span></span><br><span class="line">        <span class="comment">// R第一个违规的位置，i&gt;= R</span></span><br><span class="line">        <span class="comment">// i位置扩出来的答案，i位置扩的区域，至少是多大。</span></span><br><span class="line">        pArr[i] = R &gt; i ? Math.min(pArr[<span class="number">2</span> * C - i], R - i) : <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (i + pArr[i] &lt; str.length &amp;&amp; i - pArr[i] &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (str[i + pArr[i]] == str[i - pArr[i]])</span><br><span class="line">                pArr[i]++;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (i + pArr[i] &gt; R) &#123;</span><br><span class="line">            R = i + pArr[i];</span><br><span class="line">            C = i;</span><br><span class="line">        &#125;</span><br><span class="line">        max = Math.max(max, pArr[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> max - <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">char</span>[] manacherString(String str) &#123;</span><br><span class="line">    <span class="keyword">char</span>[] charArr = str.toCharArray();</span><br><span class="line">    <span class="keyword">char</span>[] res = <span class="keyword">new</span> <span class="keyword">char</span>[str.length() * <span class="number">2</span> + <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i != res.length; i++) &#123;</span><br><span class="line">        res[i] = (i &amp; <span class="number">1</span>) == <span class="number">0</span> ? <span class="string">&#x27;#&#x27;</span> : charArr[index++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// for test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">right</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">char</span>[] str = manacherString(s);</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> L = i - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> R = i + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (L &gt;= <span class="number">0</span> &amp;&amp; R &lt; str.length &amp;&amp; str[L] == str[R]) &#123;</span><br><span class="line">            L--;</span><br><span class="line">            R++;</span><br><span class="line">        &#125;</span><br><span class="line">        max = Math.max(max, R - L - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> max / <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
  
       <!-- reward -->
