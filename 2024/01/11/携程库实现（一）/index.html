@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">616</span>
+            <span class="post-count">623</span>
         </span>
     </span>
 
@@ -125,12 +125,36 @@
 </ul>
 </li>
 <li><code>int swapcontext(ucontext_t *oucp, ucontext_t *ucp);</code><ul>
-<li>保存当前上下文到oucp结构体中，然后激活upc上下文。 </li>
+<li><strong>保存当前上下文到oucp结构体中</strong>，<strong>然后激活upc上下文</strong>。 </li>
 </ul>
 </li>
 <li>如果执行成功，<code>getcontext</code>返回0，<code>setcontext</code>和<code>swapcontext</code>不返回；如果执行失败，<code>getcontext</code>,<code>setcontext</code>,<code>swapcontext</code>返回-1，并设置对于的errno.</li>
-<li>函数名|作用</li>
-<li>–|—<br>getcontext|获取上下文<br>setcontext|设置上下文<br>swapcontext|切换上下文<br>makecontext|创建新的上下文</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>getcontext</td>
+<td>获取上下文</td>
+</tr>
+<tr>
+<td>setcontext</td>
+<td>设置上下文</td>
+</tr>
+<tr>
+<td>swapcontext</td>
+<td>保存当前上下文，切换上下文</td>
+</tr>
+<tr>
+<td>makecontext</td>
+<td>创建新的上下文</td>
+</tr>
+</tbody></table>
+<ul>
 <li>例子<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ucontext.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> *argv[])</span></span>&#123;</span><br><span class="line">    <span class="keyword">ucontext_t</span> context;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">getcontext</span>(&amp;context);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Hello world&quot;</span>);</span><br><span class="line">    <span class="built_in">sleep</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">setcontext</span>(&amp;context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 <li>上述函数会不断重复输出<code>Hello World</code>，因为<code>getcontext</code>将上下文设置在了输出之前，<code>setcontext</code>每次都把整个执行流返回到输出的位置</li>
 </ul>
