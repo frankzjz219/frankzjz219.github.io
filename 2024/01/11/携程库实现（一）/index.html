@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>携程库实现（一） |  Frank’s blogs</title>
+      <title>协程库实现（一） |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -64,7 +64,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  携程库实现（一）
+  协程库实现（一）
 </h1>
  
 
@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">936</span>
+            <span class="post-count">1.2k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">3 min</span>
+            <span class="post-count">4 min</span>
         </span>
     </span>
 </div>
@@ -176,6 +176,9 @@
 </li>
 <li>注意在一个文件中定义的类静态变量在其他文件中使用的时候需要先用<code>extern</code>声明`</li>
 <li>C++可以使用宏<code>__FILE__</code>判断自己所处的文件名称</li>
+<li><code>makecontext</code>的第二个参数无论传入的是什么函数，都要将其转换为<code>void(*)(void)</code>类型的函数指针，然后再给出参数</li>
+<li>执行流路径<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-----------调度器或main中-----------------</span><br><span class="line">创建协程(create)--&gt;</span><br><span class="line">  获取互斥锁</span><br><span class="line">  使用makecontext生成开始执行协程函数的上下文</span><br><span class="line">  令目标函数的上下文的后继位置时刻指向调度器schedule的上下文main</span><br><span class="line">  释放互斥锁</span><br><span class="line">切换到协程(resume)--&gt;</span><br><span class="line">  将当前的上下文保存在调度器schedule.main中，切换到目标函数的上下文</span><br><span class="line">-----------协程函数中----------------</span><br><span class="line">切换回main(yield)--&gt;</span><br><span class="line">  获取锁</span><br><span class="line">  将协程当前的上下文保存在ctx中</span><br><span class="line">  释放锁</span><br><span class="line">  切换回之前指向的main上下文</span><br><span class="line">-----------------main中-----------------</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
+<li>因为添加协程<code>create</code>函数与协程调度器不在一个线程中，可能会有竞争关系，因此添加了互斥锁防止冲突</li>
 </ul>
  
       <!-- reward -->
