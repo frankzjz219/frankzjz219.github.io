@@ -232,11 +232,14 @@
 </ul>
 </li>
 <li>修改为了多线程版本，分别调度，分别设置优先级<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3></li>
-<li>C/C++文件编译的时候每个源文件都是独立编译的，这样会导致即使头文件使用了<code>ifndef</code>之类的保护，仍然可能在整个项目中被引用多次<ul>
+<li>C/C++文件编译的时候<strong>每个源文件都是独立编译的</strong>，这样会导致即使头文件使用了<code>ifndef</code>之类的保护，仍然可能在整个项目中被<strong>不同的文件</strong>引用多次<ul>
 <li>因此如果头文件中出现了函数或者是变量的定义的话，这个变量在整个项目中会被定义多次</li>
 <li>因此头文件中只能声明，变量使用<code>extern</code>关键字声明</li>
+<li>必须定义的函数用<code>inline</code></li>
 </ul>
 </li>
+<li>注意在一个文件中定义的类静态变量在其他文件中使用的时候需要先用<code>extern</code>声明`</li>
+<li>C++可以使用宏<code>__FILE__</code>判断自己所处的文件名称</li>
 </ul>
  
       <!-- reward -->
