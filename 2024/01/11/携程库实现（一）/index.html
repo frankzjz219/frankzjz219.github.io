@@ -167,7 +167,11 @@
 <li>四个线程的优先级分别是4，3，2，1，可见是符合设置的<h3 id="1月12日修改"><a href="#1月12日修改" class="headerlink" title="1月12日修改"></a>1月12日修改</h3></li>
 </ul>
 </li>
-<li>修改为了多线程版本，分别调度，分别设置优先级<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3></li>
+<li>修改为了多线程版本，分别调度，分别设置优先级</li>
+<li><img src="/imgs/e31840ca773951d3d8406fb1a527485c5ca3492df2b7055bd5d175e851c5e9d0.png" alt="picture 1">  </li>
+<li><img src="/imgs/d78782a55f0dc69ab765b2e962fede515994cce6269969ff93cea72ac87690e4.png" alt="picture 2">  </li>
+</ul>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
 <li>C/C++文件编译的时候<strong>每个源文件都是独立编译的</strong>，这样会导致即使头文件使用了<code>ifndef</code>之类的保护，仍然可能在整个项目中被<strong>不同的文件</strong>引用多次<ul>
 <li>因此如果头文件中出现了函数或者是变量的定义的话，这个变量在整个项目中会被定义多次</li>
 <li>因此头文件中只能声明，变量使用<code>extern</code>关键字声明</li>
