@@ -248,6 +248,31 @@
 <li>执行流路径<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-----------调度器或main中-----------------</span><br><span class="line">创建协程(create)--&gt;</span><br><span class="line">  获取互斥锁</span><br><span class="line">  使用makecontext生成开始执行协程函数的上下文</span><br><span class="line">  令目标函数的上下文的后继位置时刻指向调度器schedule的上下文main</span><br><span class="line">  释放互斥锁</span><br><span class="line">切换到协程(resume)--&gt;</span><br><span class="line">  将当前的上下文保存在调度器schedule.main中，切换到目标函数的上下文</span><br><span class="line">-----------协程函数中----------------</span><br><span class="line">切换回main(yield)--&gt;</span><br><span class="line">  获取锁</span><br><span class="line">  将协程当前的上下文保存在ctx中</span><br><span class="line">  释放锁</span><br><span class="line">  切换回之前指向的main上下文</span><br><span class="line">-----------------main中-----------------</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
 <li>因为添加协程<code>create</code>函数与协程调度器不在一个线程中，可能会有竞争关系，因此添加了互斥锁防止冲突</li>
 </ul>
+<h2 id="lt-setjmp-h-gt-实现切换"><a href="#lt-setjmp-h-gt-实现切换" class="headerlink" title="&lt;setjmp.h&gt;实现切换"></a><code>&lt;setjmp.h&gt;</code>实现切换</h2><h3 id="setjmp-函数："><a href="#setjmp-函数：" class="headerlink" title="setjmp 函数："></a><code>setjmp</code> 函数：</h3><ul>
+<li><p><code>setjmp</code> 用于保存当前程序的执行状态，并返回一个整数值。</p>
+</li>
+<li><p>当首次调用 <code>setjmp</code> 时，它返回0，表示保存了当前执行状态。</p>
+</li>
+<li><p>当从 <code>longjmp</code> 调用返回时，<code>setjmp</code> 返回一个非零值，通常用于区分<strong>正常返回和通过 <code>longjmp</code> 返回</strong>。</p>
+<h3 id="longjmp函数"><a href="#longjmp函数" class="headerlink" title="longjmp函数"></a><code>longjmp</code>函数</h3></li>
+<li><p><code>longjmp</code> 用于恢复之前由 <code>setjmp</code> 保存的执行状态。</p>
+</li>
+<li><p>它接受两个参数：保存的执行状态（由 <code>setjmp</code> 返回的值）和一个非零的返回值。</p>
+</li>
+<li><p>调用 <code>longjmp</code> 会导致程序跳转到相应 <code>setjmp</code> 处，并且 <code>setjmp</code> 返回的值为 <code>longjmp</code> 的返回值。</p>
+<h3 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h3></li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/82492121">参考</a></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;setjmp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">jmp_buf env;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">my_func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (b == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;do not allow division by 0\n&quot;</span>);</span><br><span class="line">        <span class="built_in">longjmp</span>(env, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> a / b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span> *argv[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="built_in">setjmp</span>(env);</span><br><span class="line">    <span class="keyword">if</span> (res == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;return from setjmp\n&quot;</span>);</span><br><span class="line">        <span class="built_in">my_func</span>(<span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;return from longjmp: %d\n&quot;</span>, res);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="C-语言的锁机制"><a href="#C-语言的锁机制" class="headerlink" title="C++语言的锁机制"></a>C++语言的锁机制</h2><h3 id="unique-lock"><a href="#unique-lock" class="headerlink" title="unique_lock"></a><code>unique_lock</code></h3></li>
+<li><p><code>#include &lt;mutex&gt;</code>和<code>#include &lt;thread&gt;</code></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(myMutex)</span></span>;  <span class="comment">// 构造 unique_lock，并锁定互斥量</span></span><br></pre></td></tr></table></figure></li>
+<li><p>构造就是加锁</p>
+</li>
+<li><p>析构就是解锁</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">lock.<span class="built_in">lock</span>();  <span class="comment">// 手动锁定互斥量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 锁定期间的其他操作...</span></span><br><span class="line"></span><br><span class="line">lock.<span class="built_in">unlock</span>();  <span class="comment">// 手动释放锁</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 在 unique_lock 离开作用域时，会自动释放锁</span></span><br></pre></td></tr></table></figure></li>
+<li><p>同样支持手动操作，加锁和解锁</p>
+</li>
+</ul>
  
       <!-- reward -->
       
