@@ -875,6 +875,10 @@
 <li><p>访问全局作用域中的变量直接用<code>::&lt;variable&gt;</code>即可</p>
 </li>
 <li><p>访问类的就用<code>&lt;class name&gt;::&lt;var&gt;</code></p>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3></li>
+<li><p>子类在构造的时候必须在初始化列表中显式的调用基类的构造函数构造基类的部分</p>
+</li>
+<li><p>派生类构造函数只能通过初始化列表或构造函数的成员初始化列表来调用基类构造函数，而在函数体中是无法再次调用的</p>
 <h3 id="类成员初始化"><a href="#类成员初始化" class="headerlink" title="类成员初始化"></a>类成员初始化</h3></li>
 <li><p>无论初始化列表里怎么写，类成员的初始化顺序是<strong>按照他们在类中定义的顺序的</strong></p>
 <h3 id="委托构造函数"><a href="#委托构造函数" class="headerlink" title="委托构造函数"></a>委托构造函数</h3></li>
@@ -954,6 +958,7 @@
 <h3 id="动态绑定"><a href="#动态绑定" class="headerlink" title="动态绑定"></a>动态绑定</h3><ul>
 <li>使用一个基类的指针调用一个虚函数</li>
 <li>根据不同的子类对虚函数的继承，产生不同的结果  </li>
+<li>使用基类的指针调用子类的时候，必须基类也有这个函数才行</li>
 </ul>
 <h3 id="多态和虚函数"><a href="#多态和虚函数" class="headerlink" title="多态和虚函数"></a>多态和虚函数</h3><ul>
 <li>使用基类的指针（或引用）<strong>不能</strong>直接访问子类中定义了但是基类中没定义的成员函数和变量<ul>
