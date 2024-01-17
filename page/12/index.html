@@ -141,6 +141,189 @@
     
     
     <article
+  id="post-Linux高级IO"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/25/Linux%E9%AB%98%E7%BA%A7IO/"
+    >Linux高级IO</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/25/Linux%E9%AB%98%E7%BA%A7IO/" class="article-date">
+  <time datetime="2022-01-25T02:23:32.000Z" itemprop="datePublished">2022-01-25</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Linux高级IO"><a href="#Linux高级IO" class="headerlink" title="Linux高级IO"></a>Linux高级IO</h1><h2 id="阻塞与非阻塞IO"><a href="#阻塞与非阻塞IO" class="headerlink" title="阻塞与非阻塞IO"></a>阻塞与非阻塞IO</h2><ul>
+<li><p>阻塞其实就是进入了休眠状态，交出了 CPU 控制权。</p>
+</li>
+<li><p>譬如对于某些文件类型（读管道文件、网 络设备文件和字符设备文件），当对文件进行读操作时，如果数据未准备好、文件当前<strong>无数据可读</strong>，那么读 操作可能会<strong>使调用者阻塞</strong>，直到有数据<strong>可读时才会被唤醒</strong>，这就是阻塞式 I/O 常见的一种表现；如果是非阻 塞式 I/O，即使没有数据可读，也不会被阻塞、而是会立马返回错误！</p>
+</li>
+<li><p>普通文件的读写操作是不会阻塞的，不管读写多少个字节数据，read()或 write()<strong>一定会在有限的时间内 返回</strong>，所以普通文件一定是以<strong>非阻塞的方式</strong>进行 I/O 操作，这是普通文件本质上决定的；但是对于某些文件 类型，譬如上面所介绍的管道文件、设备文件等，它们既可以使用阻塞式 I/O 操作，也可以使用非阻塞式 I/O 进行操作。</p>
+</li>
+<li><p>控制台使用<code>sudo od -x /dev/input/mouse0</code>读取鼠标文件信息</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> fd, ret;</span><br><span class="line">    <span class="comment">/* 打开文件 */</span></span><br><span class="line">    fd = open(<span class="string">&quot;/dev/input/event3&quot;</span>, O_RDONLY);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 读文件 */</span></span><br><span class="line">    <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">    ret = read(fd, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; ret)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;read error&quot;</span>);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;成功读取&lt;%d&gt;个字节数据\n&quot;</span>, ret);</span><br><span class="line">    <span class="comment">/* 关闭文件 */</span></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>memset</code>函数的作用是<strong>void *memset(void *str, int c, size_t n)</strong> 复制字符 <strong>c</strong>（一个无符号字符）到参数 <strong>str</strong> 所指向的字符串的前 <strong>n</strong> 个字符。上面代码中的作用是初始化为0</p>
+</li>
+<li><p><img src="/../imgs/image-20220125105645727.png" alt="image-20220125105645727"></p>
+</li>
+<li><p>但是看到读取的并不是要求的100个字节</p>
+</li>
+<li><p>假如将<code>open</code>的flag更改为<code>O_RDONLY | O_NONBLOCK</code>，那么调用程序假如没读取到的话就会立即报错，</p>
+</li>
+<li><p><img src="/../imgs/image-20220125105756074.png" alt="image-20220125105756074"></p>
+</li>
+<li><p>所以<strong>阻塞式</strong> I/O 的优点在于能够<strong>提升 CPU 的处理效率</strong>，当自身条件不满足时，进入阻塞状态，交出 CPU 资源，将 CPU 资源让给别人使用；而<strong>非阻塞式则是抓紧利用 CPU 资源</strong>，譬如不断地去轮训，这样就会导致 该程序占用了非常高的 CPU 使用率！</p>
+</li>
+</ul>
+<h3 id="键盘"><a href="#键盘" class="headerlink" title="键盘"></a>键盘</h3><ul>
+<li>键盘是<strong>标准输入设备</strong> stdin，进程会自动从父进程中<strong>继承标准输入</strong>、标准输出以及标准错 误，标准输入设备对应的<strong>文件描述符为 0</strong>，所以在程序当中直接使用即可，不需要再调用 open 打开。</li>
+</ul>
+<h3 id="并发读取"><a href="#并发读取" class="headerlink" title="并发读取"></a>并发读取</h3><ul>
+<li>程序中先读了鼠标，在接着读键盘，所以由此可知，在实际测试当中，需要先动鼠标在按键盘（按 下键盘上的按键、按完之后按下回车），这样才能既成功读取鼠标、又成功读取键盘，程序才能够顺利运行 结束。因为 read 此时是阻塞式读取，先读取了鼠标，没有数据可读将会一直被阻塞，后面的读取键盘将得 不到执行。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOUSE <span class="meta-string">&quot;/dev/input/event3&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> fd, ret;</span><br><span class="line">    <span class="comment">/* 打开鼠标设备文件 */</span></span><br><span class="line">    fd = open(MOUSE, O_RDONLY);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 读鼠标 */</span></span><br><span class="line">    <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">    ret = read(fd, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;鼠标: 成功读取&lt;%d&gt;个字节数据\n&quot;</span>, ret);</span><br><span class="line">    <span class="comment">/* 读键盘 */</span></span><br><span class="line">    <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">    ret = read(<span class="number">0</span>, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;键盘: 成功读取&lt;%d&gt;个字节数据\n&quot;</span>, ret);</span><br><span class="line">    <span class="comment">/* 关闭文件 */</span></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>利用下面的代码修改键盘文件的读取类型为不堵塞，并且同上将鼠标的打开方式也设置为非堵塞</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> flag;</span><br><span class="line">flag = fcntl(<span class="number">0</span>, F_GETFL); <span class="comment">//先获取原来的 flag</span></span><br><span class="line">flag |= O_NONBLOCK; <span class="comment">//将 O_NONBLOCK 标志添加到 flag</span></span><br><span class="line">fcntl(<span class="number">0</span>, F_SETFL, flag); <span class="comment">//重新设置 flag</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用非阻塞 I/O 方式解决了示例代码 13.1.4 出现的问题，但由于程序当中使用轮训方式，故而会 使得该程序的 CPU 占用率特别高，终归还是不太安全，会对整个系统产生很大的副作用，如何解决这样的 问题呢？我们将在下一小节向大家介绍。</li>
+</ul>
+<h2 id="多路复用"><a href="#多路复用" class="headerlink" title="多路复用"></a>多路复用</h2><ul>
+<li>I/O 多路复用（IO multiplexing）它通过一种机制，可以监视多个文件描述符，一旦某个文件描述符（也 就是某个文件）可以执行 I/O 操作时，能够通知应用程序进行相应的读写操作。I/O 多路复用技术是为了解 决：在并发式 I/O 场景中进程或线程阻塞到某个 I/O 系统调用而出现的技术，使进程不阻塞于某个特定的 I/O 系统调用。</li>
+</ul>
+<h3 id="select-函数"><a href="#select-函数" class="headerlink" title="select()函数"></a>select()函数</h3><ul>
+<li>系统调用 select()可用于执行 I/O 多路复用操作，调用 select()会一直阻塞，直到某一个或多个文件描述 符成为就绪态（可以读或写）。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/select.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span><span class="params">(<span class="keyword">int</span> nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>参数 readfds、writefds 以及 exceptfds 都是 fd_set 类型指针， 指向一个 fd_set 类型对象，fd_set 数据类型是一个文件描述符的集合体，所以参数 readfds、writefds 以及 exceptfds 都是指向文件描述符集合的指针，这些参数按照如下方式使用：</p>
+<ul>
+<li>readfds 是用来检测读是否就绪（是否可读）的文件描述符集合；</li>
+<li>writefds 是用来检测写是否就绪（是否可写）的文件描述符集合；</li>
+<li>exceptfds 是用来检测异常情况是否发生的文件描述符集合。</li>
+</ul>
+</li>
+<li><p>为 Linux 提供了四个宏用于对 fd_set 类型对象进行操作</p>
+<ul>
+<li>FD_CLR()、FD_ISSET()、FD_SET()、FD_ZERO()</li>
+</ul>
+</li>
+<li><p>如果对 readfds、writefds 以及 exceptfds 中的某些事件不感兴趣，可将其设置为 NULL，这表示对相应条 件不关心。如果这三个参数都设置为 NULL，则可以将 select()当做为一个类似于 sleep()休眠的函数来使用， 通过 select()函数的最后一个参数 timeout 来设置休眠时间。</p>
+</li>
+<li><p>select()函数的第一个参数 nfds 通常表示最大文件描述符编号值加 1，考虑 readfds、writefds 以及 exceptfds 这三个文件描述符集合，在 3 个描述符集中找出最大描述符编号值，然后加 1，这就是参数 nfds。</p>
+</li>
+<li><p>select()函数的最后一个参数 timeout 可用于设定 select()阻塞的时间上限，控制 select 的阻塞行为，可将 timeout 参数设置为 NULL，表示 select()将会一直阻塞、直到某一个或多个文件描述符成为就绪态；也可将 其指向一个 struct timeval 结构体对象</p>
+<ul>
+<li>如果参数 timeout 指向的 struct timeval 结构体对象中的两个成员变量都为 0，那么此时 select()函数不会 阻塞，它只是简单地轮训指定的文件描述符集合，看看其中是否有就绪的文件描述符并立刻返回。否则，参 数 timeout 将为 select()指定一个等待（阻塞）时间的上限值，如果在阻塞期间内，文件描述符集合中的某一 个或多个文件描述符成为就绪态，将会结束阻塞并返回；如果超过了阻塞时间的上限值，select()函数将会返 回！</li>
+</ul>
+</li>
+<li><p>select()函数将阻塞直到有以下事情发生：</p>
+<ul>
+<li>readfds、writefds 或 exceptfds 指定的文件描述符中至少有一个称为就绪态；</li>
+<li>该调用被信号处理函数中断；</li>
+<li>参数 timeout 中指定的时间上限已经超时。</li>
+</ul>
+</li>
+<li><p>文件描述集合的操作宏定义</p>
+<ul>
+<li>FD_ZERO()将参数 set 所指向的集合<strong>初始化为空</strong>；</li>
+<li>FD_SET()将文件描述符 fd 添加到参数 set 所指向的集合中；</li>
+<li>FD_CLR()将文件描述符 fd 从参数 set 所指向的集合中移除；</li>
+<li>如果文件描述符 fd 是参数 set 所指向的集合中的成员，则 FD_ISSET()返回 true，否则返回 false。</li>
+</ul>
+</li>
+<li><p>返回值</p>
+<ul>
+<li>返回-1 表示有错误发生，并且会设置 errno。</li>
+<li>返回 0 表示在任何文件描述符成为就绪态之前 select()调用已经超时，在这种情况下，readfds， writefds 以及 exceptfds 所指向的文件描述符集合都会被清空。</li>
+<li> 返回一个正整数表示有一个或多个文件描述符已达到就绪态。返回值表示处于就绪态的文件描述 符的个数，在这种情况下，每个返回的文件描述符集合都需要检查，通过 FD_ISSET()宏进行检查， 以此找出发生的 I/O 事件是什么。如果同一个文件描述符在 readfds，writefds 以及 exceptfds 中同时 被指定，且它对于多个 I/O 事件都处于就绪态的话，那么就<strong>会被统计多次</strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/select.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOUSE <span class="meta-string">&quot;/dev/input/event3&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> fd, ret = <span class="number">0</span>, flag;</span><br><span class="line">    fd_set rdfds;</span><br><span class="line">    <span class="keyword">int</span> loops = <span class="number">5</span>;</span><br><span class="line">    <span class="comment">/* 打开鼠标设备文件 */</span></span><br><span class="line">    fd = open(MOUSE, O_RDONLY | O_NONBLOCK);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 将键盘设置为非阻塞方式 */</span></span><br><span class="line">    flag = fcntl(<span class="number">0</span>, F_GETFL); <span class="comment">//先获取原来的 flag</span></span><br><span class="line">    flag |= O_NONBLOCK;       <span class="comment">//将 O_NONBLOCK 标准添加到 flag</span></span><br><span class="line">    fcntl(<span class="number">0</span>, F_SETFL, flag);  <span class="comment">//重新设置 flag</span></span><br><span class="line">    <span class="comment">/* 同时读取键盘和鼠标 */</span></span><br><span class="line">    <span class="keyword">while</span> (loops--)</span><br><span class="line">    &#123;</span><br><span class="line">        FD_ZERO(&amp;rdfds);</span><br><span class="line">        FD_SET(<span class="number">0</span>, &amp;rdfds);  <span class="comment">//添加键盘</span></span><br><span class="line">        FD_SET(fd, &amp;rdfds); <span class="comment">//添加鼠标</span></span><br><span class="line">        ret = select(fd + <span class="number">1</span>, &amp;rdfds, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> &gt; ret)</span><br><span class="line">        &#123;</span><br><span class="line">            perror(<span class="string">&quot;select error&quot;</span>);</span><br><span class="line">            <span class="keyword">goto</span> out;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">0</span> == ret)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;select timeout.\n&quot;</span>);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* 检查键盘是否为就绪态 */</span></span><br><span class="line">        <span class="keyword">if</span> (FD_ISSET(<span class="number">0</span>, &amp;rdfds))</span><br><span class="line">        &#123;</span><br><span class="line">            ret = read(<span class="number">0</span>, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">0</span> &lt; ret)</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;键盘: 成功读取&lt;%d&gt;个字节数据\n&quot;</span>, ret);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* 检查鼠标是否为就绪态 */</span></span><br><span class="line">        <span class="keyword">if</span> (FD_ISSET(fd, &amp;rdfds))</span><br><span class="line">        &#123;</span><br><span class="line">            ret = read(fd, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">0</span> &lt; ret)</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;鼠标: 成功读取&lt;%d&gt;个字节数据\n&quot;</span>, ret);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">out:</span><br><span class="line">    <span class="comment">/* 关闭文件 */</span></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">exit</span>(ret);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>程序的工作实际上是先利用鼠标和键盘的文件位置构建一个结构体，然后使用select进行检测，然后检测结果之后对每个文件使用宏定义进行判断是否是这个文件处于就绪状态。</li>
+<li>鼠标和键盘都设置为了非阻塞 I/O 方式，其实设置为阻塞 I/O 方式也是可以的，因 为 select()返回时意味着此时数据是可读取的，所以以非阻塞和阻塞两种方式读取数据<strong>均不会发生阻塞</strong>。</li>
+</ul>
+<h3 id="poll-函数"><a href="#poll-函数" class="headerlink" title="poll()函数"></a>poll()函数</h3><ul>
+<li>系统调用 poll()与 select()函数很相似，但函数接口有所不同。在 select()函数中，我们提供三个 fd_set 集 合，在每个集合中添加我们关心的文件描述符；而在 poll()函数中，则需要构造一个 struct pollfd 类型的数 组，每个数组元素指定一个文件描述符以及我们对该文件描述符所关心的条件（数据可读、可写或异常情 况）。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;poll.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span><span class="params">(struct pollfd *fds, <span class="keyword">nfds_t</span> nfds, <span class="keyword">int</span> timeout)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>fds：指向一个 struct pollfd 类型的数组，数组中的每个元素都会指定一个文件描述符以及我们对该文件 描述符所关心的条件，稍后介绍 struct pollfd 结构体类型。</li>
+<li>nfds：参数 nfds 指定了 fds 数组中的元素个数，数据类型 nfds_t 实际为无符号整形。</li>
+<li>timeout：该参数与 select()函数的 timeout 参数相似，用于决定 poll()函数的阻塞行为，具体用法如下：<ul>
+<li>如果 timeout 等于**-1，则 poll()会一直阻塞**（与 select()函数的 timeout 等于 NULL 相同），直到 fds 数组中列出的文件描述符有一个达到就绪态或者捕获到一个信号时返回。</li>
+<li>如果 timeout 等于 0，poll()不会阻塞，只是执行一次检查看看哪个文件描述符处于就绪态。</li>
+<li>如果 timeout 大于 0，则表示设置 poll()函数阻塞时间的上限值，意味着 poll()函数最多阻塞 timeout 毫秒，直到 fds 数组中列出的文件描述符有一个达到就绪态或者捕获到一个信号为止。</li>
+</ul>
+</li>
+<li><strong>pollfd结构体</strong></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span> &#123;</span></span><br><span class="line"> <span class="keyword">int</span> fd; <span class="comment">/* file descriptor */</span></span><br><span class="line"> <span class="keyword">short</span> events; <span class="comment">/* requested events */</span></span><br><span class="line"> <span class="keyword">short</span> revents; <span class="comment">/* returned events */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>events 和 revents 都是位掩码</p>
+<ul>
+<li><p>初始化 events 来指 定<strong>需要为文件描述符 fd 做检查的事件</strong></p>
+</li>
+<li><p>revents 变量由 poll()函数内部进行设置，用于 说明文件描述符 fd 发生了哪些事件（注意，poll()没有更改 events 变量）</p>
+</li>
+<li><p>如果我们对某个文件描述符上的事件不感兴趣，则可将 events 变量设置为 0；另外，将 fd 变量设置为 文件描述符的负值（取文件描述符 fd 的相反数-fd），将导致对应的 events 变量被 poll()忽略，并且 revents 变量将总是返回 0，这两种方法都可用来关闭对某个文件描述符的检查。</p>
+</li>
+<li><p><img src="/../imgs/image-20220125133340426.png" alt="image-20220125133340426"></p>
+</li>
+</ul>
+</li>
+<li><p>返回值与select类似，略</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;poll.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOUSE <span class="meta-string">&quot;/dev/input/event3&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> fd, ret = <span class="number">0</span>, flag;</span><br><span class="line">    <span class="keyword">int</span> loops = <span class="number">5</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span> <span class="title">fds</span>[2];</span></span><br><span class="line">    <span class="comment">/* 打开鼠标设备文件 */</span></span><br><span class="line">    fd = open(MOUSE, O_RDONLY | O_NONBLOCK);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 将键盘设置为非阻塞方式 */</span></span><br><span class="line">    flag = fcntl(<span class="number">0</span>, F_GETFL); <span class="comment">//先获取原来的 flag</span></span><br><span class="line">    flag |= O_NONBLOCK;       <span class="comment">//将 O_NONBLOCK 标准添加到 flag</span></span><br><span class="line">    fcntl(<span class="number">0</span>, F_SETFL, flag);  <span class="comment">//重新设置 flag</span></span><br><span class="line">    <span class="comment">/* 同时读取键盘和鼠标 */</span></span><br><span class="line">    fds[<span class="number">0</span>].fd = <span class="number">0</span>;</span><br><span class="line">    fds[<span class="number">0</span>].events = POLLIN; <span class="comment">//只关心数据可读</span></span><br><span class="line">    fds[<span class="number">0</span>].revents = <span class="number">0</span>;</span><br><span class="line">    fds[<span class="number">1</span>].fd = fd;</span><br><span class="line">    fds[<span class="number">1</span>].events = POLLIN; <span class="comment">//只关心数据可读</span></span><br><span class="line">    fds[<span class="number">1</span>].revents = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (loops--)</span><br><span class="line">    &#123;</span><br><span class="line">        ret = poll(fds, <span class="number">2</span>, <span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> &gt; ret)</span><br><span class="line">        &#123;</span><br><span class="line">            perror(<span class="string">&quot;poll error&quot;</span>);</span><br><span class="line">            <span class="keyword">goto</span> out;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">0</span> == ret)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;poll timeout.\n&quot;</span>);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* 检查键盘是否为就绪态 */</span></span><br><span class="line">        <span class="keyword">if</span> (fds[<span class="number">0</span>].revents &amp; POLLIN)</span><br><span class="line">        &#123;</span><br><span class="line">            ret = read(<span class="number">0</span>, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">0</span> &lt; ret)</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;键盘: 成功读取&lt;%d&gt;个字节数据\n&quot;</span>, ret);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* 检查鼠标是否为就绪态 */</span></span><br><span class="line">        <span class="keyword">if</span> (fds[<span class="number">1</span>].revents &amp; POLLIN)</span><br><span class="line">        &#123;</span><br><span class="line">            ret = read(fd, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">0</span> &lt; ret)</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;鼠标: 成功读取&lt;%d&gt;个字节数据\n&quot;</span>, ret);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">out:</span><br><span class="line">    <span class="comment">/* 关闭文件 */</span></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">exit</span>(ret);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-链表相关题目题解"
   class="article article-type-post"
   itemscope
@@ -1638,68 +1821,6 @@
     
     <footer class="article-footer">
        
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-堆排序和快排"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/20/%E5%A0%86%E6%8E%92%E5%BA%8F%E5%92%8C%E5%BF%AB%E6%8E%92/"
-    >堆排序和快排</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/20/%E5%A0%86%E6%8E%92%E5%BA%8F%E5%92%8C%E5%BF%AB%E6%8E%92/" class="article-date">
-  <time datetime="2022-01-20T14:27:30.000Z" itemprop="datePublished">2022-01-20</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"> <span class="comment">//heapSort 构建大顶堆或者小顶堆，将堆顶元素与堆尾元素交换后再调整，如此反复</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">heapSort</span><span class="params">(<span class="keyword">int</span>[] arr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//构建大顶堆 k为最后一个非叶子节点，逐渐-1，即从下向上，从右往左</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> k = arr.length/<span class="number">2</span> - <span class="number">1</span>;k&gt;=<span class="number">0</span>;k--)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">adjustHeap</span>(arr,k,arr.length);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//排序 交换+调整</span></span><br><span class="line">    <span class="keyword">int</span> temp =<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = arr.length<span class="number">-1</span>; i &gt;= <span class="number">0</span>; i--) </span><br><span class="line">    &#123;</span><br><span class="line">        temp =arr [<span class="number">0</span>];</span><br><span class="line">        arr[<span class="number">0</span>] = arr[i];</span><br><span class="line">        arr[i] = temp;</span><br><span class="line">        <span class="built_in">adjustHeap</span>(arr,<span class="number">0</span>,i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * @param arr 待调整数组</span></span><br><span class="line"><span class="comment">     * @param i 非叶子节点在数组中的索引</span></span><br><span class="line"><span class="comment">     * @param length 对多少个元素进行调整</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">adjustHeap</span><span class="params">(<span class="keyword">int</span>[] arr,<span class="keyword">int</span> i,<span class="keyword">int</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> temp = arr[i];<span class="comment">//取出当前非叶子叶结点的值</span></span><br><span class="line">    <span class="comment">//k为当前节点的左子节点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">2</span>*i+<span class="number">1</span>;k&lt;length;k=<span class="number">2</span>*k+<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(k+<span class="number">1</span>&lt;length &amp;&amp; arr[k+<span class="number">1</span>]&gt;arr[k])</span><br><span class="line">        &#123;<span class="comment">//右子节点大于左子节点</span></span><br><span class="line">            k++;<span class="comment">//k指向右子节点</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(arr[k]&gt;temp)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//如果当前节点大于父节点就交换</span></span><br><span class="line">            arr[i] = arr[k];</span><br><span class="line">            i = k;<span class="comment">//!!!!!!精髓，因为该子节点值大小发生了改变，可能会使其子根堆发生改变，索引要调整其子根堆</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">break</span>;<span class="comment">//否则直接退出，因为其后面的节点一定满足堆定义</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    arr[i] = temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>一个对象的下标为i，他的左右子节点分别是<code>2i+1</code>和<code>2i+2</code></li>
-<li>更换节点的时候</li>
-</ul>
-<h2 id="快排"><a href="#快排" class="headerlink" title="快排"></a>快排</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//quickSort 每次选择一个元素并且将整个数组以这个元素分为两部分，小于该元素的放右边，大于该元素的放左边</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span>[] arr,<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l&lt;r)&#123; <span class="comment">//跳出递归的条件</span></span><br><span class="line">        <span class="comment">//partition就是划分操作，将arr划分成满足条件的两个子表</span></span><br><span class="line">        <span class="keyword">int</span> pivotpos = <span class="built_in">partition</span>(arr,l,r);</span><br><span class="line">        <span class="comment">//依次对左右两个子表进行递归排序</span></span><br><span class="line">        <span class="built_in">quickSort</span>(arr,l,pivotpos);</span><br><span class="line">        <span class="built_in">quickSort</span>(arr,pivotpos+<span class="number">1</span>,r);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="keyword">int</span>[] arr,<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//以当前数组的最后一个元素作为中枢pivot，进行划分</span></span><br><span class="line">    <span class="keyword">int</span> pivot = arr[r];</span><br><span class="line">    <span class="keyword">while</span> (l&lt;r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">while</span> (l&lt;r &amp;&amp; arr[l]&lt;pivot) l++;</span><br><span class="line">        arr[r] = arr[l];<span class="comment">//将比中枢值大的移动到右端r处 由于r处为中枢或者该位置值已经被替换到l处，所以直接可以替换</span></span><br><span class="line">        <span class="keyword">while</span> (l&lt;r &amp;&amp; arr[r]&gt;=pivot) r--;</span><br><span class="line">        arr[l] = arr[r];<span class="comment">//将比中枢值小的移动到左端l处 由于前面l处的值已经换到r处，所以该位置值也可以替换掉</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//l==r时，重合，这个位置就是中枢的最终位置</span></span><br><span class="line">    arr[l] = pivot;</span><br><span class="line">    <span class="comment">//返回存放中枢的最终位置</span></span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>主要的思路是每次选择一个（实际上一般是最右边的那一个）元素作为标准，将比这个元素小的元素移动到数组的左边，大的移动到右边，最后实现这个元素的左边的所有元素都比这个元素小，右边的都比这个大。然后再分别对左边和右边的数组分别排序，实现递归。<h2 id="Leetcode-295-数据流的中位数"><a href="#Leetcode-295-数据流的中位数" class="headerlink" title="Leetcode 295. 数据流的中位数"></a>Leetcode 295. 数据流的中位数</h2></li>
-<li>用一个最小堆记录大于中位数的数字，和一个最大堆记录小于中位数的数字</li>
-<li>新加入的数字与小于中位数的数字中的最大值比较，决定插入哪个堆</li>
-<li>根据总数替换中位数的值<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MedianFinder</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    priority_queue&lt;<span class="keyword">int</span>, vector&lt;<span class="keyword">int</span>&gt;, less&lt;<span class="keyword">int</span>&gt;&gt; queMin;</span><br><span class="line">    priority_queue&lt;<span class="keyword">int</span>, vector&lt;<span class="keyword">int</span>&gt;, greater&lt;<span class="keyword">int</span>&gt;&gt; queMax;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">MedianFinder</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addNum</span><span class="params">(<span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (queMin.<span class="built_in">empty</span>() || num &lt;= queMin.<span class="built_in">top</span>()) &#123;</span><br><span class="line">            queMin.<span class="built_in">push</span>(num);</span><br><span class="line">            <span class="keyword">if</span> (queMax.<span class="built_in">size</span>() + <span class="number">1</span> &lt; queMin.<span class="built_in">size</span>()) &#123;</span><br><span class="line">                queMax.<span class="built_in">push</span>(queMin.<span class="built_in">top</span>());</span><br><span class="line">                queMin.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            queMax.<span class="built_in">push</span>(num);</span><br><span class="line">            <span class="keyword">if</span> (queMax.<span class="built_in">size</span>() &gt; queMin.<span class="built_in">size</span>()) &#123;</span><br><span class="line">                queMin.<span class="built_in">push</span>(queMax.<span class="built_in">top</span>());</span><br><span class="line">                queMax.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">findMedian</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (queMin.<span class="built_in">size</span>() &gt; queMax.<span class="built_in">size</span>()) &#123;</span><br><span class="line">            <span class="keyword">return</span> queMin.<span class="built_in">top</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (queMin.<span class="built_in">top</span>() + queMax.<span class="built_in">top</span>()) / <span class="number">2.0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
     </footer>
   </div>
 
