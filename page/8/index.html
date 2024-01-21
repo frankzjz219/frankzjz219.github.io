@@ -141,6 +141,100 @@
     
     
     <article
+  id="post-单调栈"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/08/28/%E5%8D%95%E8%B0%83%E6%A0%88/"
+    >单调栈</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/08/28/%E5%8D%95%E8%B0%83%E6%A0%88/" class="article-date">
+  <time datetime="2022-08-28T13:32:21.000Z" itemprop="datePublished">2022-08-28</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
+<li>了解数组中的一个数，左边最近的比这个数大的数，和右边最近的比这个数大的数在哪</li>
+<li>在一维数组中对每一个数找到<strong>第一个比自己小的元素</strong>。这类“<strong>在一维数组中找第一个满足某种条件的数</strong>”的场景就是典型的单调栈应用场景<h2 id="单调栈"><a href="#单调栈" class="headerlink" title="单调栈"></a>单调栈</h2><h3 id="无重复数字"><a href="#无重复数字" class="headerlink" title="无重复数字"></a>无重复数字</h3></li>
+<li>求某个数字附近最近的比他大的数字：<ul>
+<li>使用一个栈，这个栈从下到上是由大到小的顺序</li>
+<li>新加入的数字符合单调性？直接加入</li>
+<li>不符合单调性？弹出栈顶的数字，此时记录，对于被弹出的这个数字而言：<ul>
+<li>左边最近的比他大的数字就是弹出这个数字之后的栈顶元素</li>
+<li>右边最近的比他大的数字就是正要进栈的数字</li>
+<li>直到符合单调性为止</li>
+</ul>
+</li>
+<li>最后结束的时候栈中还有数据怎么办？<ul>
+<li>栈中剩余的所有数据的右边最近比他大的数字都是无</li>
+<li>左边最近的比他大的数字都是他在栈中的下一个元素</li>
+<li>栈底的最后一个元素左右都是无<h3 id="有重复数字"><a href="#有重复数字" class="headerlink" title="有重复数字"></a>有重复数字</h3></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>栈中放的内容都是链表，每个位置链表结点存放index</li>
+<li>弹出的时候，右边最近比他大的数字是当前等待进栈的数字，左边最近的比他大的数字是栈中下面紧邻位置链表的最后一个位置</li>
+<li>同样数字进栈的时候，将同样的数字对应的index串联在进栈位置链表的下一个位置<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLessNoRepeat(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    <span class="comment">// 只存位置！</span></span><br><span class="line">    Stack&lt;Integer&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// 当遍历到i位置的数，arr[i]</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek()] &gt; arr[i]) &#123;</span><br><span class="line">            <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">            res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[j][<span class="number">1</span>] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">        res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">        res[j][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLess(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    Stack&lt;List&lt;Integer&gt;&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// i -&gt; arr[i] 进栈</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] &gt; arr[i]) &#123;</span><br><span class="line">            List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">                res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">                res[popi][<span class="number">1</span>] = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] == arr[i]) &#123;</span><br><span class="line">            stack.peek().add(Integer.valueOf(i));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            list.add(i);</span><br><span class="line">            stack.push(list);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">            res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[popi][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Leetcode-739-每日温度"><a href="#Leetcode-739-每日温度" class="headerlink" title="Leetcode 739.每日温度"></a>Leetcode 739.每日温度</h2><ul>
+<li><p>单调栈解法</p>
+</li>
+<li><p>可以维护一个存储下标的单调栈，从栈底到栈顶的下标对应的温度列表中的温度依次递减。如果一个下标在单调栈里，则表示尚未找到下一次温度更高的下标。</p>
+</li>
+<li><p>正向遍历温度列表。对于温度列表中的每个元素<code> temperatures[i]</code>，如果栈为空，则直接将 <code>i</code> 进栈，如果栈不为空，则比较栈顶元素 <code>prevIndex</code> 对应的温度 <code>temperatures[prevIndex]</code> 和当前温度 <code>temperatures[i]</code>，如果 <code>temperatures[i]</code> &gt; <code>temperatures[prevIndex]</code>，则将 <code>prevIndex</code> 移除，并将 <code>prevIndex</code> 对应的等待天数设为 <code>i - prevIndex</code>，重复上述操作直到栈为空或者栈顶元素对应的温度小于等于当前温度，然后将 i 进栈。</p>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">dailyTemperatures</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; temperatures)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = temperatures.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">ans</span><span class="params">(n)</span></span>;</span><br><span class="line">        stack&lt;<span class="keyword">int</span>&gt; s;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!s.<span class="built_in">empty</span>() &amp;&amp; temperatures[i] &gt; temperatures[s.<span class="built_in">top</span>()]) &#123;</span><br><span class="line">                <span class="keyword">int</span> previousIndex = s.<span class="built_in">top</span>();</span><br><span class="line">                ans[previousIndex] = i - previousIndex;</span><br><span class="line">                s.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            s.<span class="built_in">push</span>(i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="Leetcode-155-最小栈"><a href="#Leetcode-155-最小栈" class="headerlink" title="Leetcode 155.最小栈"></a>Leetcode 155.最小栈</h2><ul>
+<li><p>当一个元素要入栈时，我们取当前辅助栈的栈顶存储的最小值，与当前元素比较得出最小值，将这个最小值插入辅助栈中</p>
+</li>
+<li><p>当一个元素要出栈时，我们把辅助栈的栈顶元素也一并弹出</p>
+</li>
+<li><p>在任意一个时刻，栈内元素的最小值就存储在辅助栈的栈顶元素中</p>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MinStack</span> &#123;</span></span><br><span class="line">    stack&lt;<span class="keyword">int</span>&gt; x_stack;</span><br><span class="line">    stack&lt;<span class="keyword">int</span>&gt; min_stack;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MinStack</span>() &#123;</span><br><span class="line">        min_stack.<span class="built_in">push</span>(INT_MAX);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        x_stack.<span class="built_in">push</span>(x);</span><br><span class="line">        min_stack.<span class="built_in">push</span>(<span class="built_in">min</span>(min_stack.<span class="built_in">top</span>(), x));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        x_stack.<span class="built_in">pop</span>();</span><br><span class="line">        min_stack.<span class="built_in">pop</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">top</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x_stack.<span class="built_in">top</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getMin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> min_stack.<span class="built_in">top</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Leetcode-84-柱状图中最大的矩形"><a href="#Leetcode-84-柱状图中最大的矩形" class="headerlink" title="Leetcode 84. 柱状图中最大的矩形"></a>Leetcode 84. 柱状图中最大的矩形</h2><ul>
+<li>随后我们需要进行向左右两边扩展，使得扩展到的柱子的高度均不小于 <code>h</code>。换句话说，我们需要找到左右两侧最近的高度小于 <code>h</code> 的柱子，这样这两根柱子之间（不包括其本身）的所有柱子高度均不小于 <code>h</code>，并且就是 <code>i</code> 能够扩展到的最远范围。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largestRectangleArea</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; heights)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = heights.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">left</span><span class="params">(n)</span>, <span class="title">right</span><span class="params">(n)</span></span>;</span><br><span class="line">        </span><br><span class="line">        stack&lt;<span class="keyword">int</span>&gt; mono_stack; <span class="comment">// 找左侧比较小的元素</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!mono_stack.<span class="built_in">empty</span>() &amp;&amp; heights[mono_stack.<span class="built_in">top</span>()] &gt;= heights[i]) &#123;</span><br><span class="line">                mono_stack.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            left[i] = (mono_stack.<span class="built_in">empty</span>() ? <span class="number">-1</span> : mono_stack.<span class="built_in">top</span>());</span><br><span class="line">            mono_stack.<span class="built_in">push</span>(i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        mono_stack = stack&lt;<span class="keyword">int</span>&gt;();<span class="comment">// 找右侧比较小的元素</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!mono_stack.<span class="built_in">empty</span>() &amp;&amp; heights[mono_stack.<span class="built_in">top</span>()] &gt;= heights[i]) &#123;</span><br><span class="line">                mono_stack.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            right[i] = (mono_stack.<span class="built_in">empty</span>() ? n : mono_stack.<span class="built_in">top</span>());</span><br><span class="line">            mono_stack.<span class="built_in">push</span>(i);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;<span class="comment">// 根据左侧和右侧比较小的元素的位置计算出不小于当前竖条宽度的面积</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            ans = <span class="built_in">max</span>(ans, (right[i] - left[i] - <span class="number">1</span>) * heights[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-滑动窗口的最大值问题"
   class="article article-type-post"
   itemscope
@@ -855,69 +949,13 @@
 </article>
 
     
-    <article
-  id="post-C-二级指针和二维数组"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/15/C-%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88%E5%92%8C%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84/"
-    >C++二级指针和二维数组（不使用Vector）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/15/C-%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88%E5%92%8C%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84/" class="article-date">
-  <time datetime="2022-08-14T16:01:25.000Z" itemprop="datePublished">2022-08-15</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
-<li>不要将二级指针和二维数组混为一谈，二维数组再指针作为起始地址的基础上必须还知道第二维度的长度才可以，因为实际上的数组索引操作是<code>i*&lt;第二维度大小&gt; + j</code><h2 id="动态二维数组的创建和销毁-不使用Vector"><a href="#动态二维数组的创建和销毁-不使用Vector" class="headerlink" title="动态二维数组的创建和销毁(不使用Vector)"></a>动态二维数组的创建和销毁(不使用Vector)</h2></li>
-<li>创建<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">double</span> **dataMat;</span><br><span class="line">dataMat = <span class="keyword">new</span> <span class="keyword">double</span>* [x_size];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;xSize;i++)</span><br><span class="line">&#123;</span><br><span class="line">    dataMat[i] = <span class="keyword">new</span> <span class="keyword">double</span>[ySize];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wordwarwordwar/article/details/52558583">参考链接</a></li>
-<li>释放二维数组<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;数组第一维的数量&gt;;i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> dataMat[i];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">delete</span> dataMat;</span><br></pre></td></tr></table></figure></li>
-<li>先逐个释放数组的行，然后再释放整个数组<h2 id="动态二维数组的传参"><a href="#动态二维数组的传参" class="headerlink" title="动态二维数组的传参"></a>动态二维数组的传参</h2></li>
-<li>对于正常创建的二维数组（不是使用上文的方法创建的动态数组）<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//方法1：传递数组，注意第二维必须标明</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun1</span><span class="params">(<span class="keyword">int</span> arr[][<span class="number">3</span>],<span class="keyword">int</span> iRows)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;iRows;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">3</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout&lt;&lt;arr[i][j]&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 当作指针数组传递</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun2</span><span class="params">(<span class="keyword">int</span> (*arr)[<span class="number">3</span>],<span class="keyword">int</span> iRows)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;iRows;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">3</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout&lt;&lt;arr[i][j]&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 直接传递一级指针（强制类型转换）</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun3</span><span class="params">(<span class="keyword">int</span>*arr,<span class="keyword">int</span> iRows,<span class="keyword">int</span> iCols)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;iRows;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">3</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout&lt;&lt;*(arr+i*iRows+j)&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a[<span class="number">2</span>][<span class="number">3</span>]=&#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;,&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;&#125;;</span><br><span class="line">    <span class="built_in">fun1</span>(a,<span class="number">2</span>);</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">    <span class="built_in">fun2</span>(a,<span class="number">2</span>);</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">    <span class="comment">//此处必须进行强制类型转换，因为a是二维数组，而需要传入的是指针</span></span><br><span class="line">    <span class="comment">//所以必须强制转换成指针，如果a是一维数组则不必进行强制类型转换</span></span><br><span class="line">    <span class="comment">//为什么一维数组不用强制转换而二维数组必须转换，此问题还没解决，期待大牛！</span></span><br><span class="line">    <span class="built_in">fun3</span>((<span class="keyword">int</span>*)a,<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li>假如预先<strong>不知道数组的第二维度</strong>是多少的话，还是只能使用强制类型转换为<strong>一级指针</strong>的方法传递。</li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43036419/article/details/110490025">参考链接</a></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/7/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/9/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/7/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/9/">下一页</a>
   </nav>
   
 </section>
