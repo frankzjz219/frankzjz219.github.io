@@ -141,6 +141,88 @@
     
     
     <article
+  id="post-leetcode非数据结构类型题目题解"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/11/18/leetcode%E9%9D%9E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%B1%BB%E5%9E%8B%E9%A2%98%E7%9B%AE%E9%A2%98%E8%A7%A3/"
+    >leetcode非数据结构类型题目题解</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/11/18/leetcode%E9%9D%9E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%B1%BB%E5%9E%8B%E9%A2%98%E7%9B%AE%E9%A2%98%E8%A7%A3/" class="article-date">
+  <time datetime="2023-11-18T09:40:55.000Z" itemprop="datePublished">2023-11-18</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="leetcode-318-最大单词长度乘积"><a href="#leetcode-318-最大单词长度乘积" class="headerlink" title="leetcode 318. 最大单词长度乘积"></a>leetcode 318. 最大单词长度乘积</h2><ul>
+<li>此题主要是将26个字母映射为26个位，用位运算的形式寻找是否存在重复字母<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxProduct</span><span class="params">(vector&lt;string&gt;&amp; words)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">flags</span><span class="params">(words.size(), <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;words.<span class="built_in">size</span>(); i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">auto</span> j = words[i].<span class="built_in">begin</span>(); j!=words[i].<span class="built_in">end</span>(); j++)</span><br><span class="line">            &#123;</span><br><span class="line">                flags[i] |= <span class="number">1</span>&lt;&lt;<span class="built_in"><span class="keyword">int</span></span>(*j-<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> maxVal = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;words.<span class="built_in">size</span>()<span class="number">-1</span>; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>; j&lt;words.<span class="built_in">size</span>(); j++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>((flags[i]&amp;flags[j]) == <span class="number">0</span>)</span><br><span class="line">                maxVal = <span class="built_in">max</span>(maxVal, <span class="built_in"><span class="keyword">int</span></span>(words[i].<span class="built_in">size</span>()*words[j].<span class="built_in">size</span>()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxVal;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="leetcode-11-接最多水的容器"><a href="#leetcode-11-接最多水的容器" class="headerlink" title="leetcode 11.接最多水的容器"></a>leetcode 11.接最多水的容器</h2><ul>
+<li>双指针法，左边一个右边一个，先左边在最左边，右边在最右边</li>
+<li>然后两个指针靠近，选择下一个高度较高的往里挪</li>
+<li>每一步的时候都计算承载量，取每一步的最大值<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> maxVal = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = height.<span class="built_in">size</span>()<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">int</span> tempVal = <span class="built_in">min</span>(height[left], height[right])*(right-left);</span><br><span class="line">        <span class="keyword">while</span>(left!=right)</span><br><span class="line">        &#123;</span><br><span class="line">            tempVal = <span class="built_in">min</span>(height[left], height[right])*(right-left);</span><br><span class="line">            maxVal = maxVal&gt;tempVal?maxVal: tempVal;</span><br><span class="line">            <span class="keyword">if</span>(height[left]&lt;=height[right])left++;</span><br><span class="line">            <span class="keyword">else</span> right--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxVal;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="leetcode-42-接雨水"><a href="#leetcode-42-接雨水" class="headerlink" title="leetcode 42.接雨水"></a>leetcode 42.接雨水</h2><ul>
+<li>先用数组表示出每个位置左边最高的墙和右边最高的墙，然后每个位置从两个墙选一个最小值与自己的差值（小于0的话取0）加到总和里即可<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> leftMax = <span class="number">0</span>, templ = <span class="number">0</span>, rightMax = <span class="number">0</span>, tempr = <span class="number">0</span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">leftMap</span><span class="params">(height.size(), <span class="number">0</span>)</span>, <span class="title">rightMap</span><span class="params">(height.size(), <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;height.<span class="built_in">size</span>(); i++)</span><br><span class="line">        &#123;</span><br><span class="line">            leftMax = <span class="built_in">max</span>(leftMax, height[i]);</span><br><span class="line">            rightMax = <span class="built_in">max</span>(rightMax, height[height.<span class="built_in">size</span>()-i<span class="number">-1</span>]);</span><br><span class="line">            leftMap[i] = leftMax;</span><br><span class="line">            rightMap[height.<span class="built_in">size</span>()<span class="number">-1</span>-i] = rightMax;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> sumW = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i&lt;height.<span class="built_in">size</span>()<span class="number">-1</span>; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            sumW+=<span class="built_in">max</span>(<span class="number">0</span>, <span class="built_in">min</span>(leftMap[i<span class="number">-1</span>], rightMap[i+<span class="number">1</span>]) - height[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sumW;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Leetcode-560-和为k的子数组"><a href="#Leetcode-560-和为k的子数组" class="headerlink" title="Leetcode 560.和为k的子数组"></a>Leetcode 560.和为k的子数组</h2><ul>
+<li>循环一次，每次寻找每个位置的前缀和</li>
+<li>然后寻找字典中是否存在<code>pre-k</code></li>
+<li>假如存在的话，意味着从<code>pre-k</code>的结束位置开始，到当前的位置结束的一段数组的和是k<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">subarraySum</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        unordered_map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; mp;</span><br><span class="line">        mp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">0</span>, pre = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; x:nums) &#123;</span><br><span class="line">            pre += x; <span class="comment">// 这一步是前缀和</span></span><br><span class="line">            <span class="keyword">if</span> (mp.<span class="built_in">find</span>(pre - k) != mp.<span class="built_in">end</span>()) &#123;</span><br><span class="line">                count += mp[pre - k]; <span class="comment">// 可行的计数加上这个计数</span></span><br><span class="line">            &#125;</span><br><span class="line">            mp[pre]++; <span class="comment">// 添加上当前计算的前缀和到字典</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="leetcode-239-滑动窗口最大值"><a href="#leetcode-239-滑动窗口最大值" class="headerlink" title="leetcode 239.滑动窗口最大值"></a>leetcode 239.滑动窗口最大值</h2><ul>
+<li>由于我们需要求出的是滑动窗口的最大值，一开始先把一个长度为k的滑动窗口的每个值加入队列</li>
+<li>在答案数组里加入优先级队列的头部元素</li>
+<li>然后开始移动滑动窗口，先把下一个元素加入队列，然后开始从队列弹出内容</li>
+<li>假如此时队列的头部是窗口的第一个index之前的位置（也就是<code>&lt;=i-k</code>）</li>
+<li>将其弹出直到遇到当前窗口的头部（<code>i-k+1</code>）在优先级队列的头部，那么此时这个元素一定是窗口中的最大值（不管还有没有滑动窗口值卡九年的元素，此时这个元素都是剩余的所有元素（包括窗口中的所有元素）中的最大值</li>
+<li>把此时优先级队列的头部元素加入答案数组（这是此时滑动窗口的最大元素）<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">maxSlidingWindow</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        priority_queue&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; q;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; ++i) &#123;</span><br><span class="line">            q.<span class="built_in">emplace</span>(nums[i], i);</span><br><span class="line">        &#125;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; ans = &#123;q.<span class="built_in">top</span>().first&#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = k; i &lt; n; ++i) &#123;</span><br><span class="line">            q.<span class="built_in">emplace</span>(nums[i], i);</span><br><span class="line">            <span class="keyword">while</span> (q.<span class="built_in">top</span>().second &lt;= i - k) &#123;</span><br><span class="line">                q.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            ans.<span class="built_in">push_back</span>(q.<span class="built_in">top</span>().first);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="使用单调队列的方式"><a href="#使用单调队列的方式" class="headerlink" title="使用单调队列的方式"></a>使用单调队列的方式</h3></li>
+<li>遇到队列末尾元素小于等于当前需要插入的元素的时候一直弹出</li>
+<li>插入当前元素</li>
+<li>保持队列是递减的</li>
+<li>将队列头部目前不在滑动窗口内，应该弹出的元素全部弹出</li>
+<li>队头元素加入返回值序列中（但不弹出）</li>
+<li>因为队列的长度不会超过整个滑动窗口的长度，所以此时滑动窗口中小于当前元素的都被弹出，因此队头元素就是滑动窗口中的最大值（因为<strong>递减</strong>）<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">maxSlidingWindow</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        deque&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; ++i) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!q.<span class="built_in">empty</span>() &amp;&amp; nums[i] &gt;= nums[q.<span class="built_in">back</span>()]) &#123;</span><br><span class="line">                q.<span class="built_in">pop_back</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            q.<span class="built_in">push_back</span>(i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; ans = &#123;nums[q.<span class="built_in">front</span>()]&#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = k; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!q.<span class="built_in">empty</span>() &amp;&amp; nums[i] &gt;= nums[q.<span class="built_in">back</span>()]) &#123;</span><br><span class="line">                q.<span class="built_in">pop_back</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            q.<span class="built_in">push_back</span>(i);</span><br><span class="line">            <span class="keyword">while</span> (q.<span class="built_in">front</span>() &lt;= i - k) &#123;</span><br><span class="line">                q.<span class="built_in">pop_front</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            ans.<span class="built_in">push_back</span>(nums[q.<span class="built_in">front</span>()]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="leetcode-48-旋转图像"><a href="#leetcode-48-旋转图像" class="headerlink" title="leetcode 48. 旋转图像"></a>leetcode 48. 旋转图像</h2><ul>
+<li>使用临时变量储存，将矩阵旋转中的四个位置变量依次交换<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">rotate</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; matrix)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = matrix.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n / <span class="number">2</span>; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; (n + <span class="number">1</span>) / <span class="number">2</span>; ++j) &#123;</span><br><span class="line">                <span class="keyword">int</span> temp = matrix[i][j];</span><br><span class="line">                <span class="comment">// 存一个变量然后旋转</span></span><br><span class="line">                matrix[i][j] = matrix[n - j - <span class="number">1</span>][i];</span><br><span class="line">                matrix[n - j - <span class="number">1</span>][i] = matrix[n - i - <span class="number">1</span>][n - j - <span class="number">1</span>];</span><br><span class="line">                matrix[n - i - <span class="number">1</span>][n - j - <span class="number">1</span>] = matrix[j][n - i - <span class="number">1</span>];</span><br><span class="line">                matrix[j][n - i - <span class="number">1</span>] = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-leetcode树相关题解"
   class="article article-type-post"
   itemscope
@@ -1301,73 +1383,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gdb/" rel="tag">gdb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-VMWare扩容Ubuntu系统硬盘容量之后无法开机的截距"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/08/29/VMWare%E6%89%A9%E5%AE%B9Ubuntu%E7%B3%BB%E7%BB%9F%E7%A1%AC%E7%9B%98%E5%AE%B9%E9%87%8F%E4%B9%8B%E5%90%8E%E6%97%A0%E6%B3%95%E5%BC%80%E6%9C%BA%E7%9A%84%E6%88%AA%E8%B7%9D/"
-    >VMWare扩容Ubuntu系统硬盘容量之后无法开机的解决</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/08/29/VMWare%E6%89%A9%E5%AE%B9Ubuntu%E7%B3%BB%E7%BB%9F%E7%A1%AC%E7%9B%98%E5%AE%B9%E9%87%8F%E4%B9%8B%E5%90%8E%E6%97%A0%E6%B3%95%E5%BC%80%E6%9C%BA%E7%9A%84%E6%88%AA%E8%B7%9D/" class="article-date">
-  <time datetime="2023-08-28T17:12:00.000Z" itemprop="datePublished">2023-08-29</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
-<li>启动系统的时候在启动之前按F2进入VMWare的BIOS配置界面</li>
-<li>移动启动顺序，将CD-ROM移动到第一位</li>
-<li><img src="/imgs/1205e783fc644a3b1f1eebf36ad636ae69cdc72ff4cda95e5cd88f1889f5a184.png" alt="picture 0">  </li>
-<li>提示安装Ubuntu的时候取消安装，进入live系统</li>
-<li>找到<code>gparted</code></li>
-<li><img src="/imgs/22ec42ce149d277f4cd73706fc87218a5b21e774dde489316be44ad90927762b.png" alt="picture 1">  </li>
-<li><img src="/imgs/f7b120ebe049d2cc58d00112ec70a7b5461955d43c6fdb0872377364b8f57daa.png" alt="picture 2">  </li>
-<li>给已经存在的空间扩容</li>
-<li><img src="/imgs/efdb163f5b6f5ecba70ebc1b08783e2b1e5080ba81219b9d5bcbf7277f406e91.png" alt="picture 3">  </li>
-<li>apply<ul>
-<li><img src="/imgs/d02898d5c7ea5be1277130271789a7683df4532a76a426a77dcbcf597f204736.png" alt="picture 4">  </li>
-</ul>
-</li>
-<li>执行完成之后关机</li>
-<li>重启，将启动顺序<strong>改回之前的</strong></li>
-<li><img src="/imgs/d13fa9c4fd21610a94534ed3f1c6adc3c3833b36ad6c06fa4d095fc48270e1d9.png" alt="picture 5">  </li>
-<li>系统正常启动</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
 
     </footer>
   </div>

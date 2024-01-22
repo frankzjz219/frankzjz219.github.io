@@ -141,6 +141,170 @@
     
     
     <article
+  id="post-Linux文件锁"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/26/Linux%E6%96%87%E4%BB%B6%E9%94%81/"
+    >Linux文件锁</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/26/Linux%E6%96%87%E4%BB%B6%E9%94%81/" class="article-date">
+  <time datetime="2022-01-26T04:24:49.000Z" itemprop="datePublished">2022-01-26</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Linux文件锁"><a href="#Linux文件锁" class="headerlink" title="Linux文件锁"></a>Linux文件锁</h1><ul>
+<li>对于有些应用程序，进程有时需要确保只有它自己能够对某一文件进行 I/O 操作，在这段时间内不允许 其它进程对该文件进行 I/O 操作。为了向进程提供这种功能，Linux 系统提供了文件锁机制。</li>
+<li>譬如进程对文件进行 I/O 操作时，首先对文件进行上锁，将其锁住，然后再进行读写操作；只要进程没有对 文件进行解锁，那么其它的进程将无法对其进行操作；这样就可以保证，文件被锁住期间，只有它（该进程） 可以对其进行读写操作。</li>
+</ul>
+<h2 id="文件锁的分类"><a href="#文件锁的分类" class="headerlink" title="文件锁的分类"></a>文件锁的分类</h2><h3 id="建议性锁"><a href="#建议性锁" class="headerlink" title="建议性锁"></a>建议性锁</h3><ul>
+<li>建议性锁本质上是一种协议，程序访问文件之前，先对文件上锁，上锁成功之后再访问文件，这是建议 性锁的一种用法；但是如果你的程序不管三七二十一，在没有对文件上锁的情况下直接访问文件，也是可以 访问的，并非无法访问文件；如果是这样，那么建议性锁就没有起到任何作用，如果要使得建议性锁起作用， 那么大家就要遵守协议，访问文件之前先对文件上锁。这就好比交通信号灯，规定红灯不能通行，绿灯才可 以通行，但如果你非要在红灯的时候通行，谁也拦不住你，那么后果将会导致发生交通事故；所以必须要大 家共同遵守交通规则，交通信号灯才能起到作用。</li>
+</ul>
+<h3 id="强制性锁"><a href="#强制性锁" class="headerlink" title="强制性锁"></a>强制性锁</h3><ul>
+<li>强制性锁比较好理解，它是一种强制性的要求，如果进程对文件上了强制性锁，其它的进程在没有获取 到文件锁的情况下是无法对文件进行访问的。其本质原因在于，强制性锁会让内核检查每一个 I/O 操作（譬 如 read()、write()），验证调用进程是否是该文件锁的拥有者，如果不是将无法访问文件。当一个文件被上 锁进行写入操作的时候，内核将阻止其它进程对其进行读写操作。采取强制性锁对性能的影响很大，每次进 行读写操作都必须检查文件锁。</li>
+</ul>
+<h2 id="flock-函数加锁"><a href="#flock-函数加锁" class="headerlink" title="flock()函数加锁"></a>flock()函数加锁</h2><ul>
+<li>先来学习系统调用 flock()，使用该函数可以对文件加锁或者解锁，但是 flock()函数只能产生建议性锁</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/file.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">flock</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> operation)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>fd：参数 fd 为文件描述符，指定需要加锁的文件。</p>
+</li>
+<li><p>operation：参数 operation 指定了操作方式，可以设置为以下值的其中一个：</p>
+<ul>
+<li>LOCK_SH：在 fd 引用的文件上放置一把共享锁。所谓共享，指的便是多个进程可以拥有对同一 个文件的共享锁，该共享锁可被多个进程同时拥有。</li>
+<li>LOCK_EX：在 fd 引用的文件上放置一把排它锁（或叫互斥锁）。所谓互斥，指的便是互斥锁只 能同时被一个进程所拥有。</li>
+<li>LOCK_UN：解除文件锁定状态，解锁、释放锁。</li>
+<li>LOCK_NB：表示以<strong>非阻塞方式获取锁</strong>。默认情况下，调用 flock()无法获取到文件锁时会阻塞、直 到其它进程释放锁为止，如果不想让程序被阻塞，可以指定 LOCK_NB 标志，如果无法获取到锁 应立刻返回（错误返回，并将 errno 设置为 EWOULDBLOCK），通常与 LOCK_SH 或 LOCK_EX 一起使用，通过位或运算符组合在一起。</li>
+</ul>
+</li>
+<li><p>注意，虽然一个程序对文件加锁之后，另一个程序企图加锁文件会失败，但是另一个程序同样可以打开并且编辑这个文件。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/file.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> fd = <span class="number">-1</span>; <span class="comment">//文件描述符</span></span><br><span class="line"><span class="comment">/* 信号处理函数 */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sigint_handler</span><span class="params">(<span class="keyword">int</span> sig)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (SIGINT != sig)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">/* 解锁 */</span></span><br><span class="line">    flock(fd, LOCK_UN);</span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;进程 1: 文件已解锁!\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">2</span> != argc)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;usage: %s &lt;file&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 打开文件 */</span></span><br><span class="line">    fd = open(argv[<span class="number">1</span>], O_WRONLY);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 以非阻塞方式对文件加锁(排它锁) */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == flock(fd, LOCK_EX | LOCK_NB))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;进程 1: 文件加锁失败&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;进程 1: 文件加锁成功!\n&quot;</span>);</span><br><span class="line">    <span class="comment">/* 为 SIGINT 信号注册处理函数 */</span></span><br><span class="line">    signal(SIGINT, sigint_handler);</span><br><span class="line">    <span class="keyword">for</span> (;;)</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>另一个试图读写文件的程序</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/file.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">100</span>] = <span class="string">&quot;Hello World!&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    <span class="keyword">int</span> len;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">2</span> != argc)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;usage: %s &lt;file&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 打开文件 */</span></span><br><span class="line">    fd = open(argv[<span class="number">1</span>], O_RDWR);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 以非阻塞方式对文件加锁(排它锁) */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == flock(fd, LOCK_EX | LOCK_NB))</span><br><span class="line">        perror(<span class="string">&quot;进程 2: 文件加锁失败&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;进程 2: 文件加锁成功!\n&quot;</span>);</span><br><span class="line">    <span class="comment">/* 写文件 */</span></span><br><span class="line">    len = <span class="built_in">strlen</span>(buf);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; write(fd, buf, len))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;进程 2: 写入到文件的字符串&lt;%s&gt;\n&quot;</span>, buf);</span><br><span class="line">    <span class="comment">/* 将文件读写位置移动到文件头 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; lseek(fd, <span class="number">0x0</span>, SEEK_SET))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;lseek error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 读文件 */</span></span><br><span class="line">    <span class="built_in">memset</span>(buf, <span class="number">0x0</span>, <span class="keyword">sizeof</span>(buf)); <span class="comment">//清理 buf</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; read(fd, buf, len))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;read error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;进程 2: 从文件读取的字符串&lt;%s&gt;\n&quot;</span>, buf);</span><br><span class="line">    <span class="comment">/* 解锁、退出 */</span></span><br><span class="line">    flock(fd, LOCK_UN);</span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>使用 kill 命令向 testApp1 进程发送编号为 2 的信号，也就是 SIGIO 信号，testApp1 接收到信号之后， 对 infile 文件进行解锁、然后退出；接着再次执行 testApp2 程序，从打印信息可知，这次能够成功对 infile 文件加锁了，读写也是没有问题的。</li>
+<li>关于 flock()的几条规则<ul>
+<li>同一进程对文件多次加锁<strong>不会导致死锁</strong>。当进程调用 flock()对文件加锁成功，再次调用 flock()对 文件（同一文件描述符）加锁，这样不会导致死锁，<strong>新加的锁会<u>替换</u>旧的锁</strong>。譬如调用 flock()对文 件加共享锁，再次调用 flock()对文件加排它锁，最终文件锁会由共享锁替换为排它锁。</li>
+<li>文件关闭的时候，<strong>会自动解锁</strong>。进程调用 flock()对文件加锁，如果在未解锁之前将文件关闭，则会 导致文件锁自动解锁，也就是说，文件锁会在相应的文件描述符被关闭之后自动释放。同理，当一 个进程终止时，它所建立的锁将全部释放。</li>
+<li>一个进程不可以对<strong>另一个进程持有</strong>的文件锁进行解锁。</li>
+<li>由 fork()创建的子进程不会继承父进程所创建的锁。这意味着，若一个进程对文件加锁成功，然后 该进程调用 fork()创建了子进程，那么对父进程创建的锁而言，子进程被视为另一个进程，虽然<strong>子 进程从父进程继承了其文件描述符，但不能继承文件锁</strong>。这个约束是有道理的，因为锁的作用就是 阻止多个进程同时写同一个文件，<strong>如果子进程通过 fork()继承了父进程的锁，则</strong> <strong>父进程和子进程就 可以同时写同一个文件了</strong>。</li>
+<li>除此之外，当一个<strong>文件描述符被复制时</strong>（譬如使用 dup()、dup2()或 fcntl()F_DUPFD 操作），这些通过 复制得到的文件描述符和源文件描述符都会<strong>引用同一个文件锁</strong>，使用<strong>这些文件描述符中的任何一个进行解 锁都可以</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="fcntl-函数加锁"><a href="#fcntl-函数加锁" class="headerlink" title="fcntl()函数加锁"></a>fcntl()函数加锁</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fcntl</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> cmd, ... <span class="comment">/* struct flock *flockptr */</span> )</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>与锁相关的 cmd 为 F_SETLK、F_SETLKW、F_GETLK，第三个参数 flockptr 是一个 struct flock 结构体 指针。使用 fcntl()实现文件锁功能与 flock()有两个比较大的区别：</p>
+<ul>
+<li>flock()仅支持对整个文件进行加锁/解锁；而 fcntl()可以对文件的<strong>某个区域（某部分内容）进行加锁 /解锁，可以精确到某一个字节数据</strong>。</li>
+<li>flock()<strong>仅支持建议性锁类型</strong>；而 fcntl()可支持建议性锁和强制性锁两种类型。</li>
+</ul>
+</li>
+<li><p>结构体参数如下</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">flock</span> &#123;</span></span><br><span class="line"> ...</span><br><span class="line"> <span class="keyword">short</span> l_type; <span class="comment">/* Type of lock: F_RDLCK,F_WRLCK, F_UNLCK */</span></span><br><span class="line"> <span class="keyword">short</span> l_whence; <span class="comment">/* How to interpret l_start: SEEK_SET, SEEK_CUR, SEEK_END */</span></span><br><span class="line"> <span class="keyword">off_t</span> l_start; <span class="comment">/* Starting offset for lock */</span></span><br><span class="line"> <span class="keyword">off_t</span> l_len; <span class="comment">/* Number of bytes to lock */</span></span><br><span class="line"> <span class="keyword">pid_t</span> l_pid; <span class="comment">/* PID of process blocking our lock(set by F_GETLK and F_OFD_GETLK) */</span></span><br><span class="line"> ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>具体说明</p>
+<ul>
+<li>l_type：所希望的锁类型，可以设置为 F_RDLCK、F_WRLCK 和 F_UNLCK 三种类型之一，F_RDLCK 表示共享性质的读锁，F_WRLCK 表示独占性质的写锁，F_UNLCK 表示解锁一个区域。</li>
+<li>l_whence 和 l_start：这两个变量用于指定要加锁或解锁区域的起始字节偏移量，与 2.7 小节所学 的 lseek()函数中的 offset 和 whence 参数相同，这里不再重述，如果忘记了，可以回到 2.7 小节再 看看。</li>
+<li>l_len：需要加锁或解锁区域的字节长度。</li>
+<li>l_pid：一个 pid，指向一个进程，表示该进程持有的锁能阻塞当前进程，当 cmd=F_GETLK 时有效。</li>
+</ul>
+</li>
+<li><p>几条规则</p>
+<ul>
+<li>锁区域可以在当前文件末尾处开始或者越过末尾处开始，但是不能在文件起始位置之前开始。</li>
+<li>若参数 l_len 设置为 0，表示将锁区域扩大到最大范围，也就是说从锁区域的起始位置开始，到文 件的最大偏移量处（也就是文件末尾）都处于锁区域范围内。而且是动态的，这意味着不管向该文 件追加写了多少数据，它们都处于锁区域范围，起始位置可以是文件的任意位置。</li>
+<li>如果我们需要对整个文件加锁，可以将 l_whence 和 l_start 设置为指向文件的起始位置，并且指定 参数 l_len 等于 0。</li>
+</ul>
+</li>
+<li><p>锁的类型</p>
+</li>
+<li><p>上面我们提到了两种类型的锁，分别为共享性读锁（F_RDLCK）和独占性写锁（F_WRLCK）。基本的 规则与 12.5 小节所介绍的线程同步读写锁很相似，<strong>任意多个进程在一个给定的字节上可以有一把共享的读 锁</strong>，但是<strong>在一个给定的字节上只能有一个进程有一把独占写锁</strong>，进一步而言，如果在一个给定的字节上已经 有一把或多把读锁，则不能在该字节上加写锁；如果在一个字节上<strong>已经有一把独占性写锁，则不能再对它加 任何锁</strong>（包括读锁和写锁）</p>
+</li>
+</ul>
+<p><img src="/../imgs/image-20220126132857197.png" alt="image-20220126132857197"></p>
+<ul>
+<li><p>如果一个进程对文件的某个区域已经上了一把锁，后来该进程又试图在该区域再加一把锁，那么通常<strong>新 加的锁将替换旧的锁</strong>。譬如，若某一进程在文件的 100<del>200 字节区间有一把写锁，然后又试图在 100</del>200 字 节区间再加一把读锁，那么该请求将会成功执行，原来的写锁会替换为读锁。</p>
+</li>
+<li><p>当对文件的某一区域加读锁时，调用进程必须对该文件有读权限，譬如 open() 时 flags 参数指定了 O_RDONLY 或 O_RDWR；当对文件的某一区域加写锁时，调用进程必须对该文件有写 权限，譬如 open()时 flags 参数指定了 O_WRONLY 或 O_RDWR。</p>
+</li>
+<li><p>F_SETLK、F_SETLKW 和 F_GETLK</p>
+<ul>
+<li> F_GETLK：这种用法一般用于测试，测试调用进程对文件加一把由参数 flockptr 指向的 struct flock 对象所描述的锁是否会加锁成功。如果加锁不成功，意味着该文件的这部分区域已经存在一把锁， 并且由另一进程所持有，并且调用进程加的锁与现有锁之间存在排斥关系，现有锁会阻止调用进程 想要加的锁，并且现有锁的信息将会重写参数 flockptr 指向的对象信息。如果不存在这种情况，也 就是说 flockptr 指向的 struct flock 对象所描述的锁会加锁成功，则除了将 struct flock 对象的 l_type 修改为 F_UNLCK 之外，结构体中的其它信息保持不变。</li>
+<li>F_SETLK：对文件添加由 flockptr 指向的 struct flock 对象所描述的锁。譬如试图对文件的某一区 域加读锁（l_type 等于 F_RDLCK）或写锁（l_type 等于 F_WRLCK），如果加锁失败，那么 fcntl() 将立即出错返回，此时将 errno 设置为 EACCES 或 EAGAIN。也可用于清除由 flockptr 指向的 struct  flock 对象所描述的锁（l_type 等于 F_UNLCK）。</li>
+<li>F_SETLKW：此命令是 F_SETLK 的阻塞版本（命令名中的 W 表示等待 wait），如果所请求的读 锁或写锁因另一个进程当前已经对所请求区域的某部分进行了加锁，而导致请求失败，那么调用进 程将会进入阻塞状态。只有当请求的锁可用时，进程才会被唤醒。</li>
+</ul>
+</li>
+<li><p>规则</p>
+<ul>
+<li>文件关闭的时候，会自动解锁。</li>
+<li>一个进程不可以对另一个进程持有的文件锁进行解锁。</li>
+<li>由 fork()创建的子进程不会继承父进程所创建的锁。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">flock</span> <span class="title">lock</span> =</span> &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> fd = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">char</span> buf[] = <span class="string">&quot;Hello World!&quot;</span>;</span><br><span class="line">    <span class="comment">/* 校验传参 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">2</span> != argc)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;usage: %s &lt;file&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 打开文件 */</span></span><br><span class="line">    fd = open(argv[<span class="number">1</span>], O_WRONLY);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 对文件加锁 */</span></span><br><span class="line">    lock.l_type = F_WRLCK;    <span class="comment">//独占性写锁</span></span><br><span class="line">    lock.l_whence = SEEK_SET; <span class="comment">//文件头部</span></span><br><span class="line">    lock.l_start = <span class="number">0</span>;         <span class="comment">//偏移量为 0</span></span><br><span class="line">    lock.l_len = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fcntl(fd, F_SETLK, &amp;lock))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;加锁失败&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;对文件加锁成功!\n&quot;</span>);</span><br><span class="line">    <span class="comment">/* 对文件进行写操作 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; write(fd, buf, <span class="built_in">strlen</span>(buf)))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 解锁 */</span></span><br><span class="line">    lock.l_type = F_UNLCK; <span class="comment">//解锁</span></span><br><span class="line">    fcntl(fd, F_SETLK, &amp;lock);</span><br><span class="line">    <span class="comment">/* 退出 */</span></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>不同区域加锁</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">flock</span> <span class="title">wr_lock</span> =</span> &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">flock</span> <span class="title">rd_lock</span> =</span> &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> fd = <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">/* 校验传参 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">2</span> != argc)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;usage: %s &lt;file&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 打开文件 */</span></span><br><span class="line">    fd = open(argv[<span class="number">1</span>], O_RDWR);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 将文件大小截断为 1024 字节 */</span></span><br><span class="line">    ftruncate(fd, <span class="number">1024</span>);</span><br><span class="line">    <span class="comment">/* 对 100~200 字节区间加写锁 */</span></span><br><span class="line">    wr_lock.l_type = F_WRLCK;</span><br><span class="line">    wr_lock.l_whence = SEEK_SET;</span><br><span class="line">    wr_lock.l_start = <span class="number">100</span>;</span><br><span class="line">    wr_lock.l_len = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fcntl(fd, F_SETLK, &amp;wr_lock))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;加写锁失败&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;加写锁成功!\n&quot;</span>);</span><br><span class="line">    <span class="comment">/* 对 400~500 字节区间加读锁 */</span></span><br><span class="line">    rd_lock.l_type = F_RDLCK;</span><br><span class="line">    rd_lock.l_whence = SEEK_SET;</span><br><span class="line">    rd_lock.l_start = <span class="number">400</span>;</span><br><span class="line">    rd_lock.l_len = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fcntl(fd, F_SETLK, &amp;rd_lock))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;加读锁失败&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;加读锁成功!\n&quot;</span>);</span><br><span class="line">    <span class="comment">/* 对文件进行 I/O 操作 */</span></span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">    <span class="comment">/* 解锁 */</span></span><br><span class="line">    wr_lock.l_type = F_UNLCK; <span class="comment">//写锁解锁</span></span><br><span class="line">    fcntl(fd, F_SETLK, &amp;wr_lock);</span><br><span class="line">    rd_lock.l_type = F_UNLCK; <span class="comment">//读锁解锁</span></span><br><span class="line">    fcntl(fd, F_SETLK, &amp;rd_lock);</span><br><span class="line">    <span class="comment">/* 退出 */</span></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>多个进程对同一文件的相同区域都可以加读锁，说明读锁是共享性的。由于程序 是放置在后台运行的，测试完毕之后，可以使用 kill 命令将这些进程杀死，或者直接关闭当前终端，重新启 动新的终端。</li>
+<li>第一次启动的进程对文件加写锁之后，后面再启动进程对同一文件的相同区域加写 锁发现都会失败，所以由此可知，写锁是独占性的。</li>
+</ul>
+<p>锁的规则同上面的<code>flock()</code>函数</p>
+<p><strong>强制性锁</strong>会直接影响<code>read()</code>和<code>write()</code>函数的操作（失败会报错），在此处略</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Linux高级IO（二）"
   class="article article-type-post"
   itemscope
@@ -1314,6 +1478,11 @@
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_create</span><span class="params">(<span class="keyword">pthread_t</span> *thread, <span class="keyword">const</span> <span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">void</span> *(*start_routine) (<span class="keyword">void</span> *), <span class="keyword">void</span> *arg)</span></span>;</span><br></pre></td></tr></table></figure>
 
 <ul>
+<li><p>注意，这个线程本质上是通过库函数调用系统的<code>clone</code>实现的，实际上就是创建了一个新的进程(类似<code>vfork</code>)，但是这个进程的<u>所有数据资源都直接指向创建它的进程的数据资源，导致二者实际使用起来是共享变量和数据等等</u></p>
+<ul>
+<li>因此所谓的线程也是进程，只不过是与创建它的进程共享资源的进程</li>
+</ul>
+</li>
 <li><p>thread：pthread_t 类型指针，当 pthread_create()成功返回时，新创建的线程的线程 ID 会保存在参数 thread 所指向的内存中，后续的线程相关函数会使用该标识来引用此线程。</p>
 </li>
 <li><p>attr：pthread_attr_t 类型指针，指向 pthread_attr_t 类型的缓冲区，pthread_attr_t 数据类型定义了线程的 各种属性，关于线程属性将会在 11.8 小节介绍。如果将参数 attr 设置为 NULL，那么表示将线程的所有属 性设置为默认值，以此创建新线程。</p>
@@ -1326,8 +1495,9 @@
 </li>
 <li><p>线程创建成功，新线程就会加入到系统调度队列中，获取到 CPU 之后就会立马从 start_routine()函数开 始运行该线程的任务；调用 pthread_create()函数后，通常我们无法确定系统接着会调度哪一个线程来使用 CPU 资源</p>
 </li>
+<li><p>在编译含有<code>pthread</code>的库函数的文件的时候，需要通过gcc的<code>-l</code>选项指定链接库，比如</p>
+</li>
 </ul>
-<p>在编译含有<code>pthread</code>的库函数的文件的时候，需要通过gcc的<code>-l</code>选项指定链接库，比如</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">gcc -o 文件名 文件名.c -lpthread</span><br></pre></td></tr></table></figure>
 
 <p>应用举例：</p>
@@ -1692,313 +1862,6 @@
 <p><img src="/../imgs/image-20220121225414970.png" alt="image-20220121225414970"></p>
 <ul>
 <li>首先打开一个特定的文件，这里只是举例，以当前目录下的 testApp.pid 文件作为特定文件， 以 O_WRONLY | O_CREAT 方式打开，如果文件不存在则创建该文件；打开文件之后<strong>使用 flock 尝试获取文 件锁</strong>，调用 flock()时指定了<strong>互斥锁标志 LOCK_NB</strong>，意味着<strong>同时只能有一个进程拥有该锁</strong>，如果获取锁失败， 表示该程序已经启动了，无需再次执行，然后退出；如果获取锁成功，将进程的 PID 写入到该文件中，<strong>当程 序退出时，会自动解锁、关闭文件</strong>。</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-linux进程"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/21/linux%E8%BF%9B%E7%A8%8B/"
-    >linux进程</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/21/linux%E8%BF%9B%E7%A8%8B/" class="article-date">
-  <time datetime="2022-01-21T05:26:22.000Z" itemprop="datePublished">2022-01-21</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Linux进程"><a href="#Linux进程" class="headerlink" title="Linux进程"></a>Linux进程</h1><ul>
-<li>main传参</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br></pre></td></tr></table></figure>
-
-<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><ul>
-<li><p>进程是一个动态过程，而非静态文件，它是程序的一次运行过程，当应用程序被加载到内存中运行之后 它就称为了一个进程，当程序运行结束后也就意味着进程终止，这就是进程的一个生命周期。</p>
-</li>
-<li><p>Linux 系统下的每一个进程都有一个进程号（processID，简称 PID），进程号是一个正数，用于唯一标 识系统中的某一个进程。在 Ubuntu 系统下执行 **<code>ps -aux </code>**命令可以查到系统中进程相关的一些信息，包括每个进程 的进程号</p>
-</li>
-<li><p><img src="/../imgs/image-20220121134232404.png" alt="image-20220121134232404"></p>
-</li>
-<li><p>通过系统调用 getpid()来获取<strong>本进程</strong>的进程号</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">getpid</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>还可以使用 getppid()系统调用获取父进程的进程号</li>
-</ul>
-<h2 id="进程的环境变量"><a href="#进程的环境变量" class="headerlink" title="进程的环境变量"></a>进程的环境变量</h2><ul>
-<li><p>每一个进程都有一组与其相关的环境变量，这些环境变量以字符串形式存储在一个字符串数组列表中， 把这个数组称为环境列表。其中每个字符串都是以<strong>“名称=值（name=value）”</strong>形式定义</p>
-</li>
-<li><p>在 shell 终端下可以使用 env 命令查看到 shell 进程的所有环境变量</p>
-</li>
-<li><p>使用 export 命令还可以添加一个新的环境变量或删除一个环境变量</p>
-<ul>
-<li><code>export LINUX_APP=123456</code></li>
-</ul>
-</li>
-<li><p>使用”export -n LINUX_APP”命令则可以删除 LINUX_APP 环境变量</p>
-<ul>
-<li><code>export -n LINUX_APP</code></li>
-</ul>
-</li>
-</ul>
-<p>环境变量存放在一个字符串数组中，在应用程序中，通过 environ 变量指向它，environ 是一个全局变 量，在我们的应用程序中只需申明它即可使用</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> **environ; <span class="comment">// 申明外部全局变量 environ</span></span><br></pre></td></tr></table></figure>
-
-<p>如果只想要<strong>获取某个指定的环境变量</strong>，可以使用库函数 getenv()</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">getenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>不应该去修改其返回的字符串，修改该字符串意味着修改了环境变量对应的值</p>
-</li>
-<li><p><strong>添加/修改</strong>环境变量</p>
-</li>
-<li><p>putenv()函数</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">putenv</span><span class="params">(<span class="keyword">char</span> *<span class="built_in">string</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>​            string：参数 string 是一个字符串指针，指向 name=value 形式的字符串。 </p>
-<p>​            返回值：成功返回 0；失败将返回非 0 值，并设置 errno。</p>
-<ul>
-<li>setenv()函数</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name, <span class="keyword">const</span> <span class="keyword">char</span> *value, <span class="keyword">int</span> overwrite)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>​            name：需要添加或修改的环境变量名称。 </p>
-<p>​            value：环境变量的值。 </p>
-<p>​            overwrite：若参数 name 标识的环境变量已经存在，在参数 overwrite 为 0 的情况下，setenv()函数将不 改变现有环境变量的值，也就是说本次调用没有产生任何影响；如果参数 overwrite 的值为非 0，若参数 name 标识的环境变量已经存在，则覆盖，不存在则表示添加新的环境变量。</p>
-<p>​             返回值：成功返回 0；失败将返回-1，并设置 errno。</p>
-<p>​        setenv()函数为<strong>形如 name=value 的字符串</strong>分配一块内存缓冲区，并将参数 name 和参数 value 所指向的 字符串复制到此缓冲区中，以此来创建一个新的环境变量</p>
-<ul>
-<li>除了上面给大家介绍的函数之外，我们还可以通过一种更简单地方式向进程环境变量表中添加环境变量</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">NAME=value ./app</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>在执行程序的时候，<strong>在其路径前面添加环境变量，以 name=value 的形式添加</strong>，如果是<strong>多个</strong>环境变量， 则在./app 前面放置多对 name=value 即可，以<strong>空格分隔</strong>。</p>
-</li>
-<li><p>清除环境变量：</p>
-<ul>
-<li><code>environ = NULL;</code>或者</li>
-<li>使用stdlib中的<code>int clearenv(void);</code></li>
-</ul>
-</li>
-</ul>
-<h3 id="环境变量的作用"><a href="#环境变量的作用" class="headerlink" title="环境变量的作用"></a>环境变量的作用</h3><ul>
-<li>环境变量常见的用途之一是在 shell 中，每一个环境变量都有它所表示的含义，譬如 HOME 环境变量表 示用户的家目录，USER 环境变量表示当前用户名，SHELL 环境变量表示 shell 解析器名称，PWD 环境变 量表示当前所在目录等，在我们自己的应用程序当中，也可以使用进程的环境变量。</li>
-</ul>
-<h2 id="进程的内存布置"><a href="#进程的内存布置" class="headerlink" title="进程的内存布置"></a>进程的内存布置</h2><ul>
-<li><p><strong>正文段。</strong>也可称为代码段，这是 CPU 执行的机器语言指令部分，文本段具有只读属性，以防止程 序由于意外而修改其指令；正文段是可以共享的，即使在多个进程间也可同时运行同一段程序。</p>
-</li>
-<li><p><strong>初始化数据段。</strong>通常将此段称为数据段，包含了显式初始化的全局变量和静态变量，当程序加载到 内存中时，从可执行文件中读取这些变量的值。</p>
-</li>
-<li><p><strong>未初始化数据段</strong>。包含了<strong>未进行显式初始化的全局变量和静态变量</strong>，通常将此段称为 bss 段，这一 名词来源于早期汇编程序中的一个操作符，意思是“由符号开始的块”（block started by symbol）， 在程序开始执行之前，系统会将本段内所有内存初始化为 0，可执行文件并没有为 bss 段变量分配 存储空间，在可执行文件中只需记录 bss 段的位置及其所需大小，直到程序运行时，由加载器来分 配这一段内存空间。</p>
-</li>
-<li><p><strong>栈。</strong>函数内的<strong>局部变量</strong>以及每次函数调用时所需保存的信息都放在此段中，每次调用函数时，函数 传递的实参以及函数返回值等也都存放在栈中。栈是一个动态增长和收缩的段，由栈帧组成，系统 会为每个当前调用的函数分配一个栈帧，栈帧中存储了函数的局部变量（所谓自动变量）、实参和 返回值。</p>
-</li>
-<li><p><strong>堆</strong>。可在运行时<strong>动态进行内存分配</strong>的一块区域，譬如使用 **malloc()**分配的内存空间，就是从系统堆 内存中申请分配的。</p>
-</li>
-<li><p><img src="/../imgs/image-20220121141423676.png" alt="image-20220121141423676"></p>
-</li>
-</ul>
-<h2 id="虚拟地址"><a href="#虚拟地址" class="headerlink" title="虚拟地址"></a>虚拟地址</h2><ul>
-<li><p>在 32 位系统中，每个进程的逻辑地址空间均为 4GB，这 4GB 的内存空间按照 3:1 的比例 进行分配，其中用户进程享有 3G 的空间，而内核独自享有剩下的 1G 空间，如下所示：</p>
-</li>
-<li><p><img src="/../imgs/image-20220121141526808.png" alt="image-20220121141526808"></p>
-</li>
-<li><p>学习过驱动开发的读者对“虚拟地址”这个概念应该并不陌生，虚拟地址会通过硬件 <strong>MMU（内存管理 单元）</strong>映射到实际的物理地址空间中，建立虚拟地址到物理地址的映射关系后，对虚拟地址的读写操作实际 上就是对物理地址的读写操作，MMU 会将物理地址“翻译”为对应的物理地址</p>
-<ul>
-<li>虚拟地址解决的问题</li>
-<li><strong>内存使用效率低</strong>。内存空间不足时，就需要将其它程序暂时拷贝到硬盘中，然后将新的程序装入内 存。然而由于大量的数据装入装出，内存的使用效率就会非常低。（实际上不会真正给程序分配所有的空间，程序用到的时候才会分配空间）</li>
-<li>进程地址<strong>空间不隔离</strong>。由于程序是直接访问物理内存的，所以每一个进程都可以修改其它进程的 内存数据，甚至修改内核地址空间中的数据，所以有些恶意程序可以随意修改别的进程，就会造成 一些破坏，系统不安全、不稳定。</li>
-<li>无法<strong>确定程序的链接地址</strong>。程序运行时，链接地址和运行地址必须一致，否则程序无法运行！因为 程序代码加载到内存的地址是由系统随机分配的，是无法预知的，所以程序的运行地址在编译程序 时是无法确认的。</li>
-<li>在某些应用场合下，两个或者更多进程能够共享内存。因为每个进程都有自己的映射表，可以让不 同进程的虚拟地址空间映射到相同的物理地址空间中。通常，共享内存可用于实现进程间通信。</li>
-<li>便于实现内存保护机制。譬如在多个进程共享内存时，允许每个进程对内存采取不同的保护措施， 例如，一个进程可能以只读方式访问内存，而另一进程则能够以可读可写的方式访问。</li>
-</ul>
-</li>
-</ul>
-<h3 id="创建子线程"><a href="#创建子线程" class="headerlink" title="创建子线程"></a>创建子线程</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">fork</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>fork()调用成功后，将会<strong>在父进程中返回子进程的 PID</strong>，而<strong>在子进程中返回值是 0</strong>；如果调用失败，父进 程返回值-1，不创建子进程，并设置 errno。 </li>
-<li>fork()系统调用的关键在于，完成对其调用后将存在两个进程，一个是原进程（父进程）、另一个 则是创建出来的子进程，并且<strong>每个进程都会从 fork()函数的返回处继续执行</strong>，会导致调用 fork()返回两次值， <strong>子进程返回一个值、父进程返回一个值</strong>。在程序代码中，可通过返回值来区分是子进程还是父进程。</li>
-<li>fork()调用成功后，子进程和父进程会<strong>继续执行 fork()调用之后的指令</strong>，子进程、父进程<strong>各自在自己的进 程空间中运行</strong>。事实上，<strong>子进程是父进程的一个副本，譬如子进程拷贝了父进程的数据段、堆、栈以及继承 了父进程打开的文件描述符，父进程与子进程并不共享这些存储空间</strong>，这是子进程对父进程相应<strong>部分存储 空间的完全复制</strong>，执行 fork()之后，每个进程均可修改各自的栈数据以及堆段中的变量，而并不影响另一个 进程。</li>
-<li>虽然子进程是父进程的一个副本，但是对于程序代码段（文本段）来说，<strong>两个进程执行相同的代码段</strong>， 因为代码段是只读的，也就是说父子进程共享代码段，在内存中只存在一份代码段数据。</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="keyword">pid_t</span> pid;</span><br><span class="line"> pid = fork();</span><br><span class="line"> <span class="keyword">switch</span> (pid) </span><br><span class="line"> 	&#123;</span><br><span class="line">     <span class="keyword">case</span> <span class="number">-1</span>:</span><br><span class="line">         perror(<span class="string">&quot;fork error&quot;</span>);</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">     <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">         <span class="built_in">printf</span>(<span class="string">&quot;这是子进程打印信息&lt;pid: %d, 父进程 pid: %d&gt;\n&quot;</span>,</span><br><span class="line">         getpid(), getppid());</span><br><span class="line">         _exit(<span class="number">0</span>); <span class="comment">//子进程使用_exit()退出</span></span><br><span class="line">     <span class="keyword">default</span>:</span><br><span class="line">         <span class="built_in">printf</span>(<span class="string">&quot;这是父进程打印信息&lt;pid: %d, 子进程 pid: %d&gt;\n&quot;</span>,</span><br><span class="line">         getpid(), pid);</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line"> 	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="进程和子进程之间的文件共享"><a href="#进程和子进程之间的文件共享" class="headerlink" title="进程和子进程之间的文件共享"></a>进程和子进程之间的文件共享</h3><ul>
-<li><p>调用 fork()函数之后，子进程会获得父进程所有文件描述符的副本，这些副本的创建方式类似于 dup()， 这也意味着父、子进程对应的文件描述符均指向相同的文件表</p>
-</li>
-<li><p><img src="/../imgs/image-20220121181944858.png" alt="image-20220121181944858"></p>
-</li>
-<li><p>由此可知，<strong>子进程拷贝了父进程的文件描述符表</strong>，使得父、子进程中对应的<strong>文件描述符指向了相同的文 件表</strong>，也意味着父、子进程中对应的文件描述符指向了磁盘中相同的文件，因而这些文件在父、子进程间实 现了共享，譬如，如果<strong>子进程更新了文件偏移量，那么这个改变也会影响到父进程中相应文件描述符的位置 偏移量</strong>。</p>
-</li>
-<li><p><strong>假如是父子进程分别打开同一个文件的话（在fork()之后），则读写文件会互相覆盖，因为偏移量没有互相影响</strong></p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pid_t</span> pid;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    pid = fork();</span><br><span class="line">    <span class="keyword">switch</span> (pid)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">-1</span>:</span><br><span class="line">        perror(<span class="string">&quot;fork error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">        <span class="comment">/* 子进程 */</span></span><br><span class="line">        fd = open(<span class="string">&quot;./Text.txt&quot;</span>, O_WRONLY);</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> &gt; fd)</span><br><span class="line">        &#123;</span><br><span class="line">            perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">            _exit(<span class="number">-1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) <span class="comment">//循环写入 4 次</span></span><br><span class="line">            write(fd, <span class="string">&quot;1122&quot;</span>, <span class="number">4</span>);</span><br><span class="line">        close(fd);</span><br><span class="line">        _exit(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="comment">/* 父进程 */</span></span><br><span class="line">        fd = open(<span class="string">&quot;./Text.txt&quot;</span>, O_WRONLY);</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> &gt; fd)</span><br><span class="line">        &#123;</span><br><span class="line">            perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) <span class="comment">//循环写入 4 次</span></span><br><span class="line">            write(fd, <span class="string">&quot;AABB&quot;</span>, <span class="number">4</span>);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>父进程写入5次，子进程写入4次，最终的输出为</p>
-<ul>
-<li><img src="/../imgs/image-20220121184306317.png" alt="image-20220121184306317"></li>
-</ul>
-</li>
-<li><p><code>vfork()</code></p>
-</li>
-<li><p>除了 fork()系统调用之外，Linux 系统还提供了 vfork()系统调用用于创建子进程，vfork()与 fork()函数在 功能上是相同的，并且返回值也相同，在一些细节上存在区别</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">vfork</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>从前面的介绍可知，可以将 fork()认作对父进程的数据段、堆段、栈段以及其它一些数据结构创建拷贝， 由此可以看出，使用 fork()系统调用的代价是很大的，它复制了父进程中的数据段和堆栈段中的绝大部分内 容，这将会消耗比较多的时间，效率会有所降低，<strong>而且太浪费</strong>，原因有很多，其中之一在于，<strong>fork()函数之 后子进程通常会调用 exec 函数</strong>.子进程<strong>不再执行父程序中的代码 段</strong>，而是执行新程序的代码段，从新程序的 main 函数开始执行、并为新程序重新<strong>初始化其数据段、堆段、 栈段等.</strong></p>
-</li>
-<li><p>出于这一原因，引入了 vfork()系统调用，虽然在一些细节上有所不同，但其效率要高于 fork()函数。类 似于 fork()，vfork()可以为调用该函数的进程创建一个新的子进程，然而，vfork()是为子进程<strong>立即执行 exec()</strong> 新的程序而专门设计的</p>
-<ul>
-<li>vfork的区别：<ul>
-<li>vfork()与 fork()一样都创建了子进程，但 vfork()函数并不会将父进程的地址空间完全复制到子进程 中，因为子进程会立即调用 exec（或_exit），于是也就不会引用该地址空间的数据。不过在子进程 调用 exec 或_exit 之前，它<strong>在父进程的空间中运行</strong>、子进程<strong>共享父进程的内存</strong>。这种优化工作方式 的实现提高的效率；但如果子进程修改了父进程的数据（除了 vfork 返回值的变量）、进行了函数 调用、或者没有调用 exec 或_exit 就返回将可能带来未知的结果。</li>
-<li>另一个区别在于，vfork()保证<strong>子进程先运行</strong>，<strong>子进程调用 exec 之后父进程才可能被调度运行</strong>。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>现代的 Linux 系统内核已经采 用了写时复制技术来实现 fork()，其效率较之于早期的 fork()实现要高出许多，除非速度绝对重要的场合， 我们的程序当中应舍弃 vfork()而使用 fork()。</p>
-</li>
-<li><p>调用 fork()之后，子进程成为了一个独立的进程，可被系统调度运行，而父进程也继续被系统调度运行， 这里出现了一个问题，调用 fork 之后，<strong>无法确定父、子两个进程谁将率先访问 CPU</strong></p>
-</li>
-<li><p>此时可以采用先让某个进程堵塞，然后另一个进程<strong>向其发送信号将其唤醒</strong></p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sig_handler</span><span class="params">(<span class="keyword">int</span> sig)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;接收到信号\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sigaction</span> <span class="title">sig</span> =</span> &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">sigset_t</span> wait_mask;</span><br><span class="line">    <span class="comment">/* 初始化信号集 */</span></span><br><span class="line">    sigemptyset(&amp;wait_mask);</span><br><span class="line">    <span class="comment">/* 设置信号处理方式 */</span></span><br><span class="line">    sig.sa_handler = sig_handler;</span><br><span class="line">    sig.sa_flags = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == sigaction(SIGUSR1, &amp;sig, <span class="literal">NULL</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;sigaction error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">switch</span> (fork())</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">-1</span>:</span><br><span class="line">        perror(<span class="string">&quot;fork error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">        <span class="comment">/* 子进程 */</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;子进程开始执行\n&quot;</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;子进程打印信息\n&quot;</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;~~~~~~~~~~~~~~~\n&quot;</span>);</span><br><span class="line">        sleep(<span class="number">2</span>);</span><br><span class="line">        kill(getppid(), SIGUSR1); <span class="comment">//发送信号给父进程、唤醒它</span></span><br><span class="line">        _exit(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="comment">/* 父进程 */</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="number">-1</span> != sigsuspend(&amp;wait_mask)) <span class="comment">//挂起、阻塞</span></span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;父进程开始执行\n&quot;</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;父进程打印信息\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>上面代码中的父进程先通过调用<code>sigsuspend(&amp;wait_mask)</code>堵塞，然后等待子线程发送<code>kill(getppid(), SIGUSR1)</code>发送信号将其唤醒</li>
-</ul>
-<p><strong>init 进程的 PID 总是为 1，它是所有子进程的父进程，一切从 1 开始、一切从 init 进程开始</strong></p>
-<h3 id="进程的退出"><a href="#进程的退出" class="headerlink" title="进程的退出"></a>进程的退出</h3><ul>
-<li>如果程序中注册了进程终止处理函数，那么会调用终止处理函数。在 9.1.2 小节给大家介绍如何注 册进程的终止处理函数；</li>
-<li><strong>刷新 stdio 流缓冲区</strong>。</li>
-<li>执行_exit()系统调用</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello World!&quot;</span>);</span><br><span class="line">    <span class="keyword">switch</span> (fork())</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">-1</span>:</span><br><span class="line">        perror(<span class="string">&quot;fork error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">        <span class="comment">/* 子进程 */</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="comment">/* 父进程 */</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>这个程序会将其中的”Hello World”打印两次，但是假如上述字符串包含换行符的话就不会打印显示，原因如下</p>
-<ul>
-<li>进程的用户空间内存中维护了 stdio 缓冲区，0 小节给大家 介绍过，因此通过 fork()创建子进程时会复制这些缓冲区。标准输出设备默认使用的是行缓冲，当检测到换 行符\n 时会立即显示函数 printf()输出的字符串，此时输出之后的缓冲区的空的</li>
-<li>假如没有换行符的话，系统并不会立即输出内容，这就导致在创建子线程的时候会将缓冲去等待显示的字符串也拷贝一次。当它们<strong>调用 exit()函数时，都会刷 新各自的缓冲区、显示字符串</strong>，所以就会看到打印出了两次相同的字符串<ul>
-<li>防止上述问题的办法</li>
-<li>在调用 fork()之前，使用函数 <code>fflush()</code>来刷新 stdio 缓冲区，当然，作为另一种选择，也可以使用 setvbuf()和 setbuf()来关闭 stdio 流的缓冲功能</li>
-</ul>
-</li>
-</ul>
-<h3 id="监视子进程"><a href="#监视子进程" class="headerlink" title="监视子进程"></a>监视子进程</h3><ul>
-<li>系统调用 wait()可以等待进程的任一子进程终止，同时获取子进程 的终止状态信息</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">wait</span><span class="params">(<span class="keyword">int</span> *status)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>status：参数 status 用于存放子进程终止时的状态信息，参数 status 可以为 NULL，表示不接收子进程 终止时的状态信息。</p>
-</li>
-<li><p> 返回值：若成功则返回终止的子进程对应的进程号；失败则返回-1。</p>
-</li>
-<li><p>wait函数的内容</p>
-<ul>
-<li>调用 wait()函数，如果其所有子进程都还在运行，则 <strong>wait()会一直阻塞等待，直到某一个子进程终 止</strong>；</li>
-<li>如果进程调用 wait()，但是该进程并没有子进程，也就意味着该进程<strong>并没有需要等待的子进程，那 么 wait()将返回错误，也就是返回-1</strong>、并且会将 errno 设置为 ECHILD。</li>
-<li>如果进程调用 wait()之前，它的子进程当中<strong>已经有一个或多个子进程已经终止了，那么调用 wait() 也不会阻塞</strong>。wait()函数的作用除了获取子进程的终止状态信息之外，更重要的一点，就是回收子 进程的一些资源，俗称为子进程“收尸”，关于这个问题后面再给大家进行介绍。所以在调用 wait() 函数之前，已经有子进程终止了，意味着正等待着父进程为其“收尸”，所以调用 wait()将不会阻 塞，而是会立即替该子进程“收尸”、处理它的“后事”，然后返回到正常的程序流程中，<strong>一次 wait() 调用只能处理一次</strong>。</li>
-<li>参数 status 不为 NULL 的情况下，则 wait()会将子进程的终止时的状态信息存储在它指向的 int 变量中， 可以通过宏来检查 status 参数（略）</li>
-</ul>
-</li>
-<li><p><code>waitpid()</code></p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">waitpid</span><span class="params">(<span class="keyword">pid_t</span> pid, <span class="keyword">int</span> *status, <span class="keyword">int</span> options)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>pid：参数 pid 用于表示需要等待的某个具体子进程，关于参数 pid 的取值范围如下：</p>
-<ul>
-<li>如果 pid 大于 0，表示等待进程号为 pid 的子进程；</li>
-<li>如果 pid 等于 0，则等待与调用进程（父进程）同一个进程组的所有子进程；</li>
-<li>如果 pid 小于-1，则会等待进程组标识符与 pid 绝对值相等的所有子进程；</li>
-<li>如果 pid 等于-1，则等待任意子进程。wait(&amp;status)与 waitpid(-1, &amp;status, 0)等价。</li>
-</ul>
-</li>
-<li><p>status：与 wait()函数的 status 参数意义相同。</p>
-</li>
-<li><p>参数 options 是一个位掩码，可以包括 0 个或多个标志（略）</p>
-</li>
-</ul>
-<h2 id="僵尸进程和孤儿进程"><a href="#僵尸进程和孤儿进程" class="headerlink" title="僵尸进程和孤儿进程"></a>僵尸进程和孤儿进程</h2><h3 id="孤儿进程"><a href="#孤儿进程" class="headerlink" title="孤儿进程"></a>孤儿进程</h3><ul>
-<li>父进程先于子进程结束，也就是意味着，此时子进程变成了一个“孤儿”，我们把这种进程就称为孤儿 进程。</li>
-<li>在 Linux 系统当中，所有的孤儿进程都自动成为 init 进程（进程号为 1）的子进程，换言之，某一子 进程的父进程结束后，该子进程<strong>调用 getppid()将返回 1</strong></li>
-</ul>
-<h3 id="僵尸进程"><a href="#僵尸进程" class="headerlink" title="僵尸进程"></a>僵尸进程</h3><ul>
-<li>进程结束之后，通常需要其父进程为其“收尸”，回收子进程占用的一些内存资源，父进程通过调用 wait()（或其变体 waitpid()、waitid()等）函数回收子进程资源，归还给系统。 </li>
-<li>如果子进程先于父进程结束，此时父进程还未来得及给子进程“收尸”，那么此时子进程就变成了一个 僵尸进程。</li>
-<li>当父进程调用 wait()（或其变体，下文不再强调）为子进程“收尸”后，僵尸进程就会被内核彻底删除。 另外一种情况，如果父进程并没有调用 wait()函数然后就退出了，那么此时 **init 进程将会接管它的子进程并 自动调用 wait()**，故而从系统中移除僵尸进程。</li>
-<li>如果系统中存在大量的 僵尸进程，它们<strong>势必会填满内核进程表，从而阻碍新进程的创建</strong>。需要注意的是，僵尸进程是<strong>无法通过信号 将其杀死的</strong>，即使是“一击必杀”信号 SIGKILL 也无法将其杀死，那么这种情况下，只能<strong>杀死僵尸进程的 父进程（或等待其父进程终止）</strong>，这样 init 进程将会<strong>接管这些僵尸进程，从而将它们从系统中清理掉</strong></li>
-</ul>
-<h2 id="执行新程序"><a href="#执行新程序" class="headerlink" title="执行新程序"></a>执行新程序</h2><h4 id="execve"><a href="#execve" class="headerlink" title="execve()"></a><code>execve()</code></h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execve</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">char</span> *<span class="keyword">const</span> argv[], <span class="keyword">char</span> *<span class="keyword">const</span> envp[])</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>filename：参数 filename 指向需要载入当前进程空间的新程序的路径名，既可以是绝对路径、也可以是 相对路径。 </p>
-</li>
-<li><p>argv：参数 argv 则指定了传递给新程序的命令行参数。是一个字符串数组，**该数组对应于 main(int argc,  char *argv[])函数的第二个参数 argv，且格式也与之相同，是由字符串指针所组成的数组**，以 NULL 结束。 argv[0]对应的便是新程序自身路径名。 </p>
-</li>
-<li><p>envp：参数 envp 也是一个字符串指针数组，<strong>指定了新程序的环境变量列表</strong>，参数 envp 其实对应于新程 序的 environ 数组，同样也是以 NULL 结束，所指向的字符串格式为 <strong>name=value</strong>。</p>
-</li>
-<li><p>execve 调用成功将不会返回；失败将返回-1，并设置 errno。对 execve()的成功调用<strong>将永不返回</strong>，而且也无需检查它的返回值，实际上，一旦该函数返回，就表明它 发生了错误。</p>
-</li>
-</ul>
-<h2 id="执行shell命令"><a href="#执行shell命令" class="headerlink" title="执行shell命令"></a>执行shell命令</h2><ul>
-<li>使用 system()函数可以很方便地在我们的程序当中执行任意 shell 命令，本小节来学习下 system()函数的 用法，以及介绍 system()函数的实现方法。 首先来看看 system()函数原型，如下所示</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">system</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *command)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>system()函数其内部的是通过调用 fork()、execl()以及 waitpid()这三个函数来实现它的功能，首先 system() 会调用 fork()创建一个子进程来运行 shell（可以把这个子进程成为 shell 进程），并通过 shell 执行参数 command 所指定的命令。<ul>
-<li>当参数 command 为 NULL，如果 shell 可用则返回一个非 0 值，若不可用则返回 0；针对一些非 UNIX 系统，该系统上可能是没有 shell 的，这样就会导致 shell 不可能；如果 command 参数不为 NULL，则返回值从以下的各种情况所决定。</li>
-<li>如果无法创建子进程或无法获取子进程的终止状态，那么 system()返回-1；</li>
-<li>如果子进程不能执行 shell，则 system()的返回值就好像是子进程通过调用_exit(127)终止了；</li>
-<li>如果所有的系统调用都成功，system()函数会返回执行 command 的 shell 进程的终止状态。</li>
-</ul>
-</li>
 </ul>
  
       <!-- reward -->

@@ -141,6 +141,70 @@
     
     
     <article
+  id="post-matlab中parfor一些踩坑和用法"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/06/02/matlab%E4%B8%ADparfor%E4%B8%80%E4%BA%9B%E8%B8%A9%E5%9D%91%E5%92%8C%E7%94%A8%E6%B3%95/"
+    >matlab中parfor一些踩坑和用法</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/06/02/matlab%E4%B8%ADparfor%E4%B8%80%E4%BA%9B%E8%B8%A9%E5%9D%91%E5%92%8C%E7%94%A8%E6%B3%95/" class="article-date">
+  <time datetime="2023-06-02T14:32:39.000Z" itemprop="datePublished">2023-06-02</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="parfor中使用分支和循环语句的一些问题"><a href="#parfor中使用分支和循环语句的一些问题" class="headerlink" title="parfor中使用分支和循环语句的一些问题"></a>parfor中使用分支和循环语句的一些问题</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/JasonJiangCHN/article/details/121231872">参考链接</a></li>
+<li>使用<code>if</code>语句和循环控制语句比如<code>continue</code>和<code>break</code>可能会有问题</li>
+</ul>
+<h2 id="如何控制进程的数量"><a href="#如何控制进程的数量" class="headerlink" title="如何控制进程的数量"></a>如何控制进程的数量</h2><ul>
+<li><code>Cluster</code>会默认指定一个最大的并行计算的上限，一般是CPU的物理核心数<ul>
+<li><img src="/imgs/52502f2d1d5f76d0b2e344fe7001726ea849d242ff9f8f6c7f603a01d2a6bddb.png" alt="picture 1">  </li>
+<li>点击第三个更换</li>
+<li><img src="/imgs/55be49cf5408c2404c3aed84d1ffa0d75cabb0798e902a7941f3c9f44efdee3a.png" alt="picture 3">  </li>
+<li>点击此处可以修改默认值为自己需要的数值比如CPU的逻辑处理器的数量，可能是物理核心的2倍</li>
+</ul>
+</li>
+<li>然后使用如下代码设置线程的数量<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">CoreNum=<span class="number">16</span>; <span class="comment">%设定机器CPU核心数量</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">isempty</span>(gcp(<span class="string">&#x27;nocreate&#x27;</span>)) <span class="comment">%如果并行未开启</span></span><br><span class="line">    parpool(CoreNum);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+<li>终止的时候使用<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">delete(gcp)</span><br></pre></td></tr></table></figure></li>
+<li>循环套循环的时候最好是内层循环是<code>parfor</code></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matlab/" rel="tag">matlab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-操作系统and编译随记（2）"
   class="article article-type-post"
   itemscope
@@ -1011,68 +1075,6 @@
 </ul>
 </li>
 <li>成功<img src="/imgs/b15cd13ce2fb795faf45e816ff93ee25688022b2512acf57a81c9c878b337cdf.png" alt="picture 5">  </li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-Linux使用环境变量无需路径执行自己的程序"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/04/04/Linux%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%97%A0%E9%9C%80%E8%B7%AF%E5%BE%84%E6%89%A7%E8%A1%8C%E8%87%AA%E5%B7%B1%E7%9A%84%E7%A8%8B%E5%BA%8F/"
-    >Linux使用环境变量无需路径执行自己的程序</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/04/04/Linux%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%97%A0%E9%9C%80%E8%B7%AF%E5%BE%84%E6%89%A7%E8%A1%8C%E8%87%AA%E5%B7%B1%E7%9A%84%E7%A8%8B%E5%BA%8F/" class="article-date">
-  <time datetime="2023-04-04T02:52:31.000Z" itemprop="datePublished">2023-04-04</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/gfdxx/article/details/127875066">参考</a><h2 id="添加环境变量"><a href="#添加环境变量" class="headerlink" title="添加环境变量"></a>添加环境变量</h2></li>
-<li><a target="_blank" rel="noopener" href="https://wap.sciencenet.cn/blog-3425629-1258887.html?mobile=1">参考</a></li>
-<li>编辑<code>/etc/profile</code>文件，在其最后一行添加<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:&lt;路径&gt;</span><br></pre></td></tr></table></figure></li>
-<li>相当于在环境变量后追加了新的内容</li>
-<li>然后使用<code>source /etc/profile</code>即可更新环境变量<h2 id="使用环境变量"><a href="#使用环境变量" class="headerlink" title="使用环境变量"></a>使用环境变量</h2></li>
-<li>在添加的环境变量目录下创建一个文件（比如test.sh）</li>
-<li>然后给test.sh可执行的权限</li>
-<li>然后直接在命令行输入<code>test.sh</code> 即可直接执行这个脚本的内容</li>
-<li>可以在环境变量中使用a<code>alias</code>给命令起别名，进一步简化命令的使用<ul>
-<li><img src="/imgs/30cdf759675eba53ff40ae74fe08b865daaa6ce6a6bc942d28302f6389eb2685.png" alt="picture 1">  </li>
-</ul>
-</li>
 </ul>
  
       <!-- reward -->

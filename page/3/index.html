@@ -141,6 +141,73 @@
     
     
     <article
+  id="post-VMWare扩容Ubuntu系统硬盘容量之后无法开机的截距"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/08/29/VMWare%E6%89%A9%E5%AE%B9Ubuntu%E7%B3%BB%E7%BB%9F%E7%A1%AC%E7%9B%98%E5%AE%B9%E9%87%8F%E4%B9%8B%E5%90%8E%E6%97%A0%E6%B3%95%E5%BC%80%E6%9C%BA%E7%9A%84%E6%88%AA%E8%B7%9D/"
+    >VMWare扩容Ubuntu系统硬盘容量之后无法开机的解决</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/08/29/VMWare%E6%89%A9%E5%AE%B9Ubuntu%E7%B3%BB%E7%BB%9F%E7%A1%AC%E7%9B%98%E5%AE%B9%E9%87%8F%E4%B9%8B%E5%90%8E%E6%97%A0%E6%B3%95%E5%BC%80%E6%9C%BA%E7%9A%84%E6%88%AA%E8%B7%9D/" class="article-date">
+  <time datetime="2023-08-28T17:12:00.000Z" itemprop="datePublished">2023-08-29</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <ul>
+<li>启动系统的时候在启动之前按F2进入VMWare的BIOS配置界面</li>
+<li>移动启动顺序，将CD-ROM移动到第一位</li>
+<li><img src="/imgs/1205e783fc644a3b1f1eebf36ad636ae69cdc72ff4cda95e5cd88f1889f5a184.png" alt="picture 0">  </li>
+<li>提示安装Ubuntu的时候取消安装，进入live系统</li>
+<li>找到<code>gparted</code></li>
+<li><img src="/imgs/22ec42ce149d277f4cd73706fc87218a5b21e774dde489316be44ad90927762b.png" alt="picture 1">  </li>
+<li><img src="/imgs/f7b120ebe049d2cc58d00112ec70a7b5461955d43c6fdb0872377364b8f57daa.png" alt="picture 2">  </li>
+<li>给已经存在的空间扩容</li>
+<li><img src="/imgs/efdb163f5b6f5ecba70ebc1b08783e2b1e5080ba81219b9d5bcbf7277f406e91.png" alt="picture 3">  </li>
+<li>apply<ul>
+<li><img src="/imgs/d02898d5c7ea5be1277130271789a7683df4532a76a426a77dcbcf597f204736.png" alt="picture 4">  </li>
+</ul>
+</li>
+<li>执行完成之后关机</li>
+<li>重启，将启动顺序<strong>改回之前的</strong></li>
+<li><img src="/imgs/d13fa9c4fd21610a94534ed3f1c6adc3c3833b36ad6c06fa4d095fc48270e1d9.png" alt="picture 5">  </li>
+<li>系统正常启动</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-x86平台上向量化编程及实验"
   class="article article-type-post"
   itemscope
@@ -1197,70 +1264,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-matlab中parfor一些踩坑和用法"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/06/02/matlab%E4%B8%ADparfor%E4%B8%80%E4%BA%9B%E8%B8%A9%E5%9D%91%E5%92%8C%E7%94%A8%E6%B3%95/"
-    >matlab中parfor一些踩坑和用法</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/06/02/matlab%E4%B8%ADparfor%E4%B8%80%E4%BA%9B%E8%B8%A9%E5%9D%91%E5%92%8C%E7%94%A8%E6%B3%95/" class="article-date">
-  <time datetime="2023-06-02T14:32:39.000Z" itemprop="datePublished">2023-06-02</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="parfor中使用分支和循环语句的一些问题"><a href="#parfor中使用分支和循环语句的一些问题" class="headerlink" title="parfor中使用分支和循环语句的一些问题"></a>parfor中使用分支和循环语句的一些问题</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/JasonJiangCHN/article/details/121231872">参考链接</a></li>
-<li>使用<code>if</code>语句和循环控制语句比如<code>continue</code>和<code>break</code>可能会有问题</li>
-</ul>
-<h2 id="如何控制进程的数量"><a href="#如何控制进程的数量" class="headerlink" title="如何控制进程的数量"></a>如何控制进程的数量</h2><ul>
-<li><code>Cluster</code>会默认指定一个最大的并行计算的上限，一般是CPU的物理核心数<ul>
-<li><img src="/imgs/52502f2d1d5f76d0b2e344fe7001726ea849d242ff9f8f6c7f603a01d2a6bddb.png" alt="picture 1">  </li>
-<li>点击第三个更换</li>
-<li><img src="/imgs/55be49cf5408c2404c3aed84d1ffa0d75cabb0798e902a7941f3c9f44efdee3a.png" alt="picture 3">  </li>
-<li>点击此处可以修改默认值为自己需要的数值比如CPU的逻辑处理器的数量，可能是物理核心的2倍</li>
-</ul>
-</li>
-<li>然后使用如下代码设置线程的数量<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">CoreNum=<span class="number">16</span>; <span class="comment">%设定机器CPU核心数量</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">isempty</span>(gcp(<span class="string">&#x27;nocreate&#x27;</span>)) <span class="comment">%如果并行未开启</span></span><br><span class="line">    parpool(CoreNum);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
-<li>终止的时候使用<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">delete(gcp)</span><br></pre></td></tr></table></figure></li>
-<li>循环套循环的时候最好是内层循环是<code>parfor</code></li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matlab/" rel="tag">matlab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
 
     </footer>
   </div>

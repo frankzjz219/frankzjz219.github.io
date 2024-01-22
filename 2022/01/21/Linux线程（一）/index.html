@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">4.6k</span>
+            <span class="post-count">4.7k</span>
         </span>
     </span>
 
@@ -178,6 +178,11 @@
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_create</span><span class="params">(<span class="keyword">pthread_t</span> *thread, <span class="keyword">const</span> <span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">void</span> *(*start_routine) (<span class="keyword">void</span> *), <span class="keyword">void</span> *arg)</span></span>;</span><br></pre></td></tr></table></figure>
 
 <ul>
+<li><p>注意，这个线程本质上是通过库函数调用系统的<code>clone</code>实现的，实际上就是创建了一个新的进程(类似<code>vfork</code>)，但是这个进程的<u>所有数据资源都直接指向创建它的进程的数据资源，导致二者实际使用起来是共享变量和数据等等</u></p>
+<ul>
+<li>因此所谓的线程也是进程，只不过是与创建它的进程共享资源的进程</li>
+</ul>
+</li>
 <li><p>thread：pthread_t 类型指针，当 pthread_create()成功返回时，新创建的线程的线程 ID 会保存在参数 thread 所指向的内存中，后续的线程相关函数会使用该标识来引用此线程。</p>
 </li>
 <li><p>attr：pthread_attr_t 类型指针，指向 pthread_attr_t 类型的缓冲区，pthread_attr_t 数据类型定义了线程的 各种属性，关于线程属性将会在 11.8 小节介绍。如果将参数 attr 设置为 NULL，那么表示将线程的所有属 性设置为默认值，以此创建新线程。</p>
@@ -190,8 +195,9 @@
 </li>
 <li><p>线程创建成功，新线程就会加入到系统调度队列中，获取到 CPU 之后就会立马从 start_routine()函数开 始运行该线程的任务；调用 pthread_create()函数后，通常我们无法确定系统接着会调度哪一个线程来使用 CPU 资源</p>
 </li>
+<li><p>在编译含有<code>pthread</code>的库函数的文件的时候，需要通过gcc的<code>-l</code>选项指定链接库，比如</p>
+</li>
 </ul>
-<p>在编译含有<code>pthread</code>的库函数的文件的时候，需要通过gcc的<code>-l</code>选项指定链接库，比如</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">gcc -o 文件名 文件名.c -lpthread</span><br></pre></td></tr></table></figure>
 
 <p>应用举例：</p>
