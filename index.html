@@ -186,6 +186,37 @@
 </ul>
 </li>
 </ul>
+<h2 id="Leetcode-47-全排列II"><a href="#Leetcode-47-全排列II" class="headerlink" title="Leetcode 47. 全排列II"></a>Leetcode 47. 全排列II</h2><ul>
+<li>关键是去重</li>
+<li>还要强调的是去重一定要对元素进行<strong>排序</strong>，这样我们才方便通过相邻的节点来判断是否重复使用了<ul>
+<li><img src="/imgs/e603911ea5befcd9846a5d3ab96f008fd5e373ac9bf6c7720c932888e2a59505.png" alt="picture 0">  </li>
+<li>具体判断逻辑<ul>
+<li>上一个字母是否与这个一样</li>
+<li>一样的话上一个是否是未使用过的，如果是就说明上一个字母在当前的这个位置，被其他分支使用过，需要跳过</li>
+<li>否则将其添加到结果数组中<br>```cpp<br>class Solution {<br>private:<br>vector&lt;vector<int>&gt; result;<br>vector<int> path;<br>void backtracking (vector<int>&amp; nums, vector<bool>&amp; used) {<br>  // 此时说明找到了一组<br>  if (path.size() == nums.size()) {<pre><code>  result.push_back(path);
+  return;
+</code></pre>
+  }<br>  for (int i = 0; i &lt; nums.size(); i++) {<pre><code>  // used[i - 1] == true，说明同一树枝nums[i - 1]使用过
+  // used[i - 1] == false，说明同一树层nums[i - 1]使用过
+  // 如果同一树层nums[i - 1]使用过则直接跳过
+  if (i &gt; 0 &amp;&amp; nums[i] == nums[i - 1] &amp;&amp; used[i - 1] == false) &#123;
+      continue;
+  &#125;
+  if (used[i] == false) &#123;
+      used[i] = true;
+      path.push_back(nums[i]);
+      backtracking(nums, used);
+      path.pop_back();
+      used[i] = false;
+  &#125;
+</code></pre>
+  }<br>}<br>public:<br>vector&lt;vector<int>&gt; permuteUnique(vector<int>&amp; nums) {<br>  result.clear();<br>  path.clear();<br>  sort(nums.begin(), nums.end()); // 排序<br>  vector<bool> used(nums.size(), false);<br>  backtracking(nums, used);<br>  return result;<br>}<br>};</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>// 时间复杂度: 最差情况所有元素都是唯一的。复杂度和全排列1都是 O(n! * n) 对于 n 个元素一共有 n! 中排列方案。而对于每一个答案，我们需要 O(n) 去复制最终放到 result 数组<br>// 空间复杂度: O(n) 回溯树的深度取决于我们有多少个元素```</p>
  
       <!-- reward -->
       
