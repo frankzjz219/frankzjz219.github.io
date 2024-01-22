@@ -259,7 +259,7 @@
 </tr>
 <tr>
 <td>sched_getscheduler()</td>
-<td>Gets a process’s scheduling policy</td>
+<td>Gets a process’s scheduling pol1icy</td>
 </tr>
 <tr>
 <td>sched_setparam()</td>
@@ -294,6 +294,35 @@
 <td>Temporarily yields the processor</td>
 </tr>
 </tbody></table>
+<h2 id="设置进程的CPU亲和"><a href="#设置进程的CPU亲和" class="headerlink" title="设置进程的CPU亲和"></a>设置进程的CPU亲和</h2><ul>
+<li>使用<code>taskset</code>命令行工具</li>
+<li>上文提到的<code>sched_setaffinity()</code></li>
+<li>或者单独设置线程的亲和力<code>pthread_setaffinity_np()</code><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_setaffinity_np</span><span class="params">(<span class="keyword">pthread_t</span> thread, <span class="keyword">size_t</span> cpusetsize, <span class="keyword">const</span> <span class="keyword">cpu_set_t</span> *cpuset)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>或者创建新线程时，通过属性结构体，控制新线程的亲和性<code>pthread_attr_setaffinity_np()</code><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_setaffinity_np</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">size_t</span> cpusetsize, <span class="keyword">const</span> <span class="keyword">cpu_set_t</span> *cpuset)</span></span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="进程组"><a href="#进程组" class="headerlink" title="进程组"></a>进程组</h2><ul>
+<li>cgroup（Control Groups）是 Linux 内核提供的一个功能，用于限制、控制和监视一个或多个进程的资源使用。cgroup 允许你将进程组织在层次结构中，并为每个组分配特定的资源限制。</li>
+<li>创建<ul>
+<li><code>sudo mkdir /sys/fs/cgroup/cpu/my_cgroup</code></li>
+</ul>
+</li>
+<li>添加进程<ul>
+<li><code>echo &lt;PID&gt; &gt; /sys/fs/cgroup/cpu/my_cgroup/tasks</code></li>
+</ul>
+</li>
+<li>设置 cgroup 的资源限制<ul>
+<li><code>echo 1000000 &gt; /sys/fs/cgroup/cpu/my_cgroup/cpu.cfs_quota_us</code></li>
+</ul>
+</li>
+<li>查看 cgroup 信息<ul>
+<li><code>cat /sys/fs/cgroup/cpu/my_cgroup/cpu.cfs_quota_us</code></li>
+</ul>
+</li>
+<li>删除 cgroup<ul>
+<li><code>sudo rmdir /sys/fs/cgroup/cpu/my_cgroup</code></li>
+</ul>
+</li>
+</ul>
  
       <!-- reward -->
       
