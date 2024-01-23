@@ -127,7 +127,10 @@
 <li>subreaper需要一个进程<strong>自己声明自己是</strong>才可以<h2 id="深度睡眠和浅度睡眠"><a href="#深度睡眠和浅度睡眠" class="headerlink" title="深度睡眠和浅度睡眠"></a>深度睡眠和浅度睡眠</h2></li>
 </ul>
 </li>
-<li>深度睡眠只能被资源唤醒</li>
+<li>深度睡眠只能被资源唤醒<ul>
+<li>甚至无法被信号杀死</li>
+</ul>
+</li>
 <li>浅度睡眠可以被资源或者是信号（signal）唤醒</li>
 <li>比如程序因为内存没加载导致page fault<ul>
 <li>此时如果因为接收到信号开始执行内容，会导致程序继而触发更多的page fault</li>
