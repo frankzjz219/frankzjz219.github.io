@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">1.3k</span>
+            <span class="post-count">1.7k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">4 min</span>
+            <span class="post-count">6 min</span>
         </span>
     </span>
 </div>
@@ -259,7 +259,81 @@
 </ul>
 </li>
 </ul>
-<h2 id="如何使用sudo权限将echo的输出写入到文件中"><a href="#如何使用sudo权限将echo的输出写入到文件中" class="headerlink" title="如何使用sudo权限将echo的输出写入到文件中"></a>如何使用sudo权限将echo的输出写入到文件中</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c &#x27;echo string &gt; file&#x27;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 或者</span></span><br><span class="line">echo &quot;Hello, world&quot; | sudo tee -a /path/to/file</span><br></pre></td></tr></table></figure>
+<h2 id="如何使用sudo权限将echo的输出写入到文件中"><a href="#如何使用sudo权限将echo的输出写入到文件中" class="headerlink" title="如何使用sudo权限将echo的输出写入到文件中"></a>如何使用sudo权限将echo的输出写入到文件中</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c &#x27;echo string &gt; /path/to/file&#x27;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 或者</span></span><br><span class="line">echo &quot;Hello, world&quot; | sudo tee -a /path/to/file</span><br></pre></td></tr></table></figure>
+<h2 id="Linux中进程可以抢占的部分"><a href="#Linux中进程可以抢占的部分" class="headerlink" title="Linux中进程可以抢占的部分"></a>Linux中<code>进程</code>可以抢占的部分</h2><ul>
+<li>即使是在下面不可调度的部分唤醒了一个优先级再高的进程，也不允许抢占执行</li>
+<li>一个核心上的进程拿到了spinlock，会直接关闭这个核心的调度器停止调度</li>
+<li>一个程序的<strong>优先级改变（降低）</strong>的时候，别的优先级高的进程可以<strong>立即抢占</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>区间</th>
+<th>可调度性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>（硬）中断（不允许中断嵌套）</td>
+<td>不可调度</td>
+</tr>
+<tr>
+<td>软中断（可以中断嵌套）</td>
+<td>不可调度</td>
+</tr>
+<tr>
+<td>进程上下文中获取到<code>spinlock</code></td>
+<td>不可调度</td>
+</tr>
+<tr>
+<td>其他进程上下文</td>
+<td>可以调度</td>
+</tr>
+</tbody></table>
+<ul>
+<li>自旋锁的自旋一定发生在不同的核心之间<ul>
+<li>如果同一个核心的两个进程争夺自旋锁，一个抢到之后就直接关闭了调度器，另一个进程根本上不来，不可能自旋</li>
+<li>只有可能是一个核心持有锁，另一个核心自旋</li>
+</ul>
+</li>
+</ul>
+<h2 id="进程回收和僵尸进程"><a href="#进程回收和僵尸进程" class="headerlink" title="进程回收和僵尸进程"></a>进程回收和僵尸进程</h2><ul>
+<li>一个进程变成僵尸状态之后，进程的资源都消失了</li>
+<li>但是进程的<code>task_struct</code>还没有消失</li>
+<li>等待父进程使用<code>waitpid</code>回收并且查看进程的<strong>退出码</strong>，判断子进程的死因</li>
+<li>只有父进程使用wait等待的时候他的task struct才会消失</li>
+<li>这个进程无法使用系统的signal杀死</li>
+</ul>
+<h2 id="Linux进程状态"><a href="#Linux进程状态" class="headerlink" title="Linux进程状态"></a>Linux进程状态</h2><ul>
+<li><img src="/imgs/8234473b9b901abca50f411cfe93f07e7bb03b02e925e19096cfe46f38cd29fb.png" alt="picture 4">  </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>就绪</td>
+<td>等待上CPU（因为时间片结束或者被抢占等）</td>
+</tr>
+<tr>
+<td>运行</td>
+<td>执行</td>
+</tr>
+<tr>
+<td>睡眠</td>
+<td>等资源（等到了就绪）</td>
+</tr>
+<tr>
+<td>僵尸</td>
+<td>执行完但是还没有回收</td>
+</tr>
+<tr>
+<td>停止</td>
+<td>STOP或者收到了Ctrl+Z等信号，还可以继续恢复（输入fg，bg等）</td>
+</tr>
+</tbody></table>
  
       <!-- reward -->
       
