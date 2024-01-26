@@ -299,6 +299,7 @@
 <li>任何可能改变vector元素<code>capacity</code>（容量）的操作都会使得迭代器失效，因为内存位置变了</li>
 <li>迭代器可以像指针一样做差，得到的结果是相差的<strong>元素的个数</strong><h3 id="insert"><a href="#insert" class="headerlink" title="insert"></a>insert</h3></li>
 <li>insert会返回插入的元素的迭代器</li>
+<li><u>可以向当前尚且不存在的位置（比如尾后）插入元素</u></li>
 <li>insert也可以用初始化列表的方式插入，只需指定位置和初始化列表即可</li>
 <li>也可以给定插入位置，迭代器开始和迭代器结束实现同样功能<h3 id="erase"><a href="#erase" class="headerlink" title="erase"></a>erase</h3></li>
 <li>删除某个迭代器指定位置的元素</li>
