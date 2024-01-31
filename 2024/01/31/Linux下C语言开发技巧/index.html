@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+
+
+<html lang="Chinese">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>Linux下C语言开发技巧 |  Frank’s blogs</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/FLogo.png" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      
+<link rel="stylesheet" href="/css/fonts/remixicon.css">
+
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-Linux下C语言开发技巧"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Linux下C语言开发技巧
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2024/01/31/Linux%E4%B8%8BC%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/" class="article-date">
+  <time datetime="2024-01-31T03:39:58.000Z" itemprop="datePublished">2024-01-31</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">1.5k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">6 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="比较的宏以及typeof-类型判断宏"><a href="#比较的宏以及typeof-类型判断宏" class="headerlink" title="比较的宏以及typeof()类型判断宏`"></a>比较的宏以及<code>typeof()</code>类型判断宏`</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> max(a,b) ((a)&gt;(b)?(a):(b))</span></span><br><span class="line"><span class="comment">// 上述无法处理包含a++等的情况</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用<code>typeof()</code><strong>类转换宏</strong>处理<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> max(a, b) (&#123;        \</span></span><br><span class="line"><span class="meta">    typeof(a) _a = (a);      \</span></span><br><span class="line"><span class="meta">    typeof(b) _b = (b);      \</span></span><br><span class="line"><span class="meta">    (void) (&amp;_a == &amp;_b);   \</span></span><br><span class="line"><span class="meta">    _a &gt; _b ? _a : _b; &#125;)</span></span><br></pre></td></tr></table></figure></li>
+<li><code>typeof(a) _a = (a)</code>定义一个a类型的变量，值等于a</li>
+<li><code>(void) (&amp;_a == &amp;_b)</code>判断二者类型是否相同，<u>不同的话会出现警告</u><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">typeof(<span class="keyword">int</span> *) a,b;<span class="comment">//等价于：int *a,*b;</span></span><br></pre></td></tr></table></figure>
+<h2 id="零长数组（变长数组）"><a href="#零长数组（变长数组）" class="headerlink" title="零长数组（变长数组）"></a>零长数组（变长数组）</h2></li>
+<li>满足需要变长度的结构体，因此有时也习惯性地称为变长数组。</li>
+<li>在一个结构体的最后, 申明一个长度为0的数组, 就可以使得这个结构体是可变长的<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">line</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> length;</span><br><span class="line">    <span class="keyword">char</span> contents[<span class="number">0</span>];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">line</span> *<span class="title">thisline</span> =</span> <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct line) + this_length);</span><br><span class="line">thisline-&gt;length = this_length;</span><br></pre></td></tr></table></figure></li>
+<li>上述结构体本身的大小只有一个length的大小，不包括content</li>
+<li>创建的时候人为分配空间给contents即可</li>
+</ul>
+<h2 id="switch-case的条件指定范围"><a href="#switch-case的条件指定范围" class="headerlink" title="switch case的条件指定范围"></a>switch case的条件指定范围</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">case</span> low ... high:</span><br><span class="line"><span class="keyword">case</span> <span class="string">&#x27;A&#x27;</span> ..<span class="number">.&#x27;</span>Z<span class="number">&#x27;</span>:</span><br></pre></td></tr></table></figure>
+<ul>
+<li>还可以用整形数来表示范围，但是这里需要注意在“…”两边有空格</li>
+</ul>
+<h2 id="struct的指定成员初始化"><a href="#struct的指定成员初始化" class="headerlink" title="struct的指定成员初始化"></a>struct的指定成员初始化</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 三维点的结构体</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Point3D</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">    <span class="keyword">int</span> y;</span><br><span class="line">    <span class="keyword">int</span> z;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 包含点操作的结构体</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">PointOperations</span> &#123;</span></span><br><span class="line">    <span class="comment">// 函数指针，用于计算两个点的距离</span></span><br><span class="line">    <span class="keyword">double</span> (*calculateDistance)(<span class="keyword">const</span> struct Point3D* p1, <span class="keyword">const</span> struct Point3D* p2);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 函数指针，用于打印点的坐标</span></span><br><span class="line">    <span class="keyword">void</span> (*printCoordinates)(<span class="keyword">const</span> struct Point3D* point);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算两个点的距离的具体实现</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">calculateDistance</span><span class="params">(<span class="keyword">const</span> struct Point3D* p1, <span class="keyword">const</span> struct Point3D* p2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> dx = p1-&gt;x - p2-&gt;x;</span><br><span class="line">    <span class="keyword">int</span> dy = p1-&gt;y - p2-&gt;y;</span><br><span class="line">    <span class="keyword">int</span> dz = p1-&gt;z - p2-&gt;z;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sqrt</span>(dx*dx + dy*dy + dz*dz);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 打印点的坐标的具体实现</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printCoordinates</span><span class="params">(<span class="keyword">const</span> struct Point3D* point)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;(%d, %d, %d)\n&quot;</span>, point-&gt;x, point-&gt;y, point-&gt;z);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 定义一个三维点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Point3D</span> <span class="title">pointA</span> =</span> &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 实例化操作的结构体并初始化函数指针</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">PointOperations</span> <span class="title">pointOps</span> =</span> &#123;</span><br><span class="line">        .calculateDistance = calculateDistance,</span><br><span class="line">        .printCoordinates = printCoordinates</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用结构体中的函数指针计算两个点的距离</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Point3D</span> <span class="title">pointB</span> =</span> &#123;<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125;;</span><br><span class="line">    <span class="keyword">double</span> distance = pointOps.calculateDistance(&amp;pointA, &amp;pointB);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Distance between points: %f\n&quot;</span>, distance);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用结构体中的函数指针打印点的坐标</span></span><br><span class="line">    pointOps.printCoordinates(&amp;pointA);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>上文中的指定名称初始化是<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 定义点操作的结构体并初始化函数指针</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">PointOperations</span> <span class="title">pointOps</span> =</span> &#123;</span><br><span class="line">    .calculateDistance = calculateDistance,</span><br><span class="line">    .printCoordinates = printCoordinates</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li>这里可以手动指定需要初始化的结构体成员的名字</li>
+</ul>
+<h2 id="可变参数宏"><a href="#可变参数宏" class="headerlink" title="可变参数宏"></a>可变参数宏</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/printk.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> pr_debug(fmt, ...) \</span></span><br><span class="line"><span class="meta">    dynamic_pr_debug(fmt, ##__VA_ARGS__)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>dynamic_pr_debug 是 Linux 内核中用于动态调试打印的宏，而 fmt 和 <code>__VA_ARGS__</code> 则是格式化字符串和可变参数列表。</p>
+</li>
+<li><p>fmt：格式化字符串，类似于 printf 中的格式化字符串，包含要打印的文本和格式说明符。</p>
+</li>
+<li><p><code>__VA_ARGS__</code>：表示可变参数的宏，用于将额外的参数传递给 fmt 中的格式说明符。</p>
+</li>
+<li><p><code>##__VA_ARGS__</code> 是一个预处理器技巧，用于处理当可变参数列表为空时的情况，确保宏在没有额外参数时也能正确展开</p>
+</li>
+</ul>
+<h2 id="函数属性-attribute"><a href="#函数属性-attribute" class="headerlink" title="函数属性 __attribute__"></a>函数属性 <code>__attribute__</code></h2><ul>
+<li><p><code>__attribute__ ((attribute-list))</code></p>
+</li>
+<li><p><code>attribute-list</code>的定义有很多，如<code>noreturn</code>、<code>format</code>以及<code>const</code>等。此外，还可以定义一些和处理器体系结构相关的函数属性</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> __attribute__((noreturn)) die(<span class="keyword">void</span>);</span><br></pre></td></tr></table></figure></li>
+<li><p>其他属性</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __pure           __attribute__((pure))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __aligned(x)        __attribute__((aligned(x)))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __printf(a, b)      __attribute__((format(printf, a, b)))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __scanf(a, b)       __attribute__((format(scanf, a, b)))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> noinline          __attribute__((noinline))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __attribute_const__   __attribute__((__const__))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __maybe_unused      __attribute__((unused))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __always_unused      __attribute__((unused))</span></span><br></pre></td></tr></table></figure>
+<h2 id="变量属性和类属性"><a href="#变量属性和类属性" class="headerlink" title="变量属性和类属性"></a>变量属性和类属性</h2></li>
+<li><p>变量属性可以对变量或结构体成员进行属性设置。类型属性常见的属性有<code>alignment</code>、<code>packed</code>和<code>sections</code>等。</p>
+</li>
+<li><p><code>alignment</code>属性规定变量或者结构体成员的最小对齐格式，以字节为单位</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">qib_user_info</span> &#123;</span></span><br><span class="line">    __u32 spu_userversion;</span><br><span class="line">    __u64 spu_base_info;</span><br><span class="line">&#125; __aligned(<span class="number">8</span>);</span><br></pre></td></tr></table></figure></li>
+<li><p>上述例子中结构体存储会以八字节对齐</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">test</span>&#123;</span></span><br><span class="line"> <span class="keyword">char</span> a;</span><br><span class="line">    <span class="keyword">int</span> x[<span class="number">2</span>] __attribute__ ((packed));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li><p>x成员使用了packed属性，它会存储在变量a后面，所以这个结构体一共占用9字节</p>
+<h2 id="内建函数"><a href="#内建函数" class="headerlink" title="内建函数"></a>内建函数</h2></li>
+<li><p>内建函数以“_builtin_”作为函数名前缀。下面介绍Linux内核常用的一些内建函数</p>
+</li>
+<li><p><code>__builtin_constant_p(x)</code>：判断x是否在编译时就可以被确定为常量。如果x为常量，该函数返回1，否则返回0</p>
+</li>
+<li><p><code>__builtin_expect(exp, c)</code>：这里的意思是<code>exp==c</code>的概率很大，用来引导GCC编译器进行条件分支预测</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __swab16(x)        \</span></span><br><span class="line"><span class="meta">(__builtin_constant_p((__u16)(x)) ?  \</span></span><br><span class="line"><span class="meta">___constant_swab16(x) :      \</span></span><br><span class="line"><span class="meta">__fswab16(x))__builtin_expect(exp, c)</span></span><br></pre></td></tr></table></figure></li>
+<li><p><code>__builtin_prefetch(const void *addr, int rw, int locality)</code>：主动进行数据预取，在使用<strong>地址addr的值之前就把其值加载到cache中</strong>，<u>减少读取的延迟</u>，从而提高性能。</p>
+<ul>
+<li><p>该函数可以接受3个参数：</p>
+<ul>
+<li>第一个参数addr表示要预取数据的地址；</li>
+<li>第二个参数rw表示读写属性，1表示可写，0表示只读；</li>
+<li>第三个参数locality表示数据在cache中的时间局部性，其中0表示读取完addr的之后不用保留在cache中，而1～3表示时间局部性逐渐增强</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="asmlinkage"><a href="#asmlinkage" class="headerlink" title="asmlinkage"></a>asmlinkage</h2><ul>
+<li>在标准C语言中，函数的形参在实际传入参数时会涉及参数存放问题</li>
+<li>对于x86架构，函数参数和局部变量被一起分配到函数的局部堆栈里<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&lt;arch/x86/include/<span class="keyword">asm</span>/linkage.h&gt;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> asmlinkage CPP_ASMLINKAGE __attribute__((regparm(0)))</span></span><br></pre></td></tr></table></figure></li>
+<li>告诉编译器该函数<strong>不需要通过任何寄存器来传递参数，只通过堆栈来传递</strong></li>
+<li>对于ARM来说，函数参数的传递有一套ATPCS标准，即通过寄存器来传递。<strong>ARM中的R0～R4寄存器存放传入参数，当参数超过5个时，多余的参数被存放在局部堆栈中</strong><ul>
+<li>ARM平台没有定义asmlinkage</li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2024/01/31/Linux%E4%B8%8BC%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%86%85%E6%A0%B8/" rel="tag">内核</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" rel="tag">嵌入式</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2024/01/26/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%EF%BC%88%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%89/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">背包问题（动态规划）</div>
+      </a>
+    
+  </nav>
+
+  
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2021-2024
+        <i class="ri-heart-fill heart_icon"></i> FrankZhang
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>Visitors:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>Views:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/avatar.png" alt="Frank’s blogs"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>
