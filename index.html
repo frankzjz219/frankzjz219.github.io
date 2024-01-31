@@ -237,6 +237,8 @@
 <li>在标准C语言中，函数的形参在实际传入参数时会涉及参数存放问题</li>
 <li>对于x86架构，函数参数和局部变量被一起分配到函数的局部堆栈里<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&lt;arch/x86/include/<span class="keyword">asm</span>/linkage.h&gt;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> asmlinkage CPP_ASMLINKAGE __attribute__((regparm(0)))</span></span><br></pre></td></tr></table></figure></li>
 <li>告诉编译器该函数<strong>不需要通过任何寄存器来传递参数，只通过堆栈来传递</strong></li>
+<li>用法<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">asmlinkage <span class="keyword">void</span> <span class="title">my_assembly_function</span><span class="params">(<span class="keyword">int</span> arg1, <span class="keyword">int</span> arg2)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 汇编函数的实现</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>asmlinkage 用于标识 my_assembly_function 是一个汇编语言编写的函数，并且该函数使用堆栈而不是寄存器来传递参数</li>
 <li>对于ARM来说，函数参数的传递有一套ATPCS标准，即通过寄存器来传递。<strong>ARM中的R0～R4寄存器存放传入参数，当参数超过5个时，多余的参数被存放在局部堆栈中</strong><ul>
 <li>ARM平台没有定义asmlinkage</li>
 </ul>
