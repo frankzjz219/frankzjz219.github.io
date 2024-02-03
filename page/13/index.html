@@ -141,6 +141,253 @@
     
     
     <article
+  id="post-Linux线程（一）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/21/Linux%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/"
+    >Linux线程（一）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/21/Linux%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/" class="article-date">
+  <time datetime="2022-01-21T15:46:10.000Z" itemprop="datePublished">2022-01-21</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Linux线程（一）"><a href="#Linux线程（一）" class="headerlink" title="Linux线程（一）"></a>Linux线程（一）</h1><h2 id="一些注意事项"><a href="#一些注意事项" class="headerlink" title="一些注意事项"></a>一些注意事项</h2><ul>
+<li>Linux中每个线程都有单独的进程ID，inux中每个线程都有单独的进程ID。在Linux中，线程其实是通过轻量级进程（LWP）实现的，因此<strong>Linux中每个线程都是一个进程</strong>，都拥有一个PID。换句话说，操作系统原理中的线程，对应的其实是Linux中的进程</li>
+<li>Linux的线程中，假如主线程（也就是<code>main</code>函数）执行结束退出（比如<code>exit()</code>或者<code>return 0</code>），会导致整个进程所有线程被<strong>强制停止</strong></li>
+<li>即使是正在执行尚且没有结束的线程也会被停止</li>
+</ul>
+<h2 id="线程概念"><a href="#线程概念" class="headerlink" title="线程概念"></a>线程概念</h2><ul>
+<li>线程是参与系统调度的最小单位。它被包含在进程之中，是进程中的实际运行单位。一个线程指的是进 程中一个单一顺序的控制流（或者说是执行路线、执行流），一个进程中可以创建多个线程，多个线程实现 并发运行，每个线程执行不同的任务。譬如某应用程序设计了两个需要并发运行的任务 task1 和 task2，可将 两个不同的任务分别放置在两个线程中。</li>
+</ul>
+<h2 id="关于线程的更深层次的理解"><a href="#关于线程的更深层次的理解" class="headerlink" title="关于线程的更深层次的理解"></a>关于线程的更深层次的理解</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41167361/article/details/107990763">参考</a></li>
+<li>对于进程来说，相同的地址(同一个虚拟地址)在不同的进程中，反复使用而不冲突。原因是他们虽虚拟址一样，但是页目录、页表、物理页面各不相同。相同的虚拟址，映射到不同的物理页面内存单元，最终访问不同的物理页面。<br>但！线程不同！两个线程具有各自独立的PCB，但共享同一个页目录，也就共享同一个页表和物理页面。所以两个PCB共享一个地址空间。</li>
+<li>实际上，无论是创建进程的fork，还是创建线程的pthread_create，底层实现都是调用同一个内核函数clone</li>
+<li>如果复制对方的地址空间，那么就产出一个“进程”；如果共享对方的地址空间，就产生一个“线程”</li>
+<li>Linux<strong>内核是不区分进程和线程的</strong>。只在用户层面上进行区分。所以，线程所有操作函数 pthread_* 是<strong>库函数，而非系统调用</strong></li>
+<li>进程：独立地址空间，拥有PCB</li>
+<li>线程：<strong>也有PCB</strong>，但没有独立的地址空间</li>
+</ul>
+<h2 id="线程的创建"><a href="#线程的创建" class="headerlink" title="线程的创建"></a>线程的创建</h2><ul>
+<li>当一个程序启动时，就有一个进程被操作系统（OS）创建，与此同时一个线程也立刻运行，该线程通 常叫做程序的主线程（Main Thread），因为它是程序一开始时就运行的线程。应用程序都是以 main()做为 入口开始运行的，所以 main()函数就是主线程的入口函数，main()函数所执行的任务就是主线程需要执行的 任务。</li>
+<li>所以由此可知，任何一个进程都包含一个主线程，只有主线程的进程称为单线程进程，譬如前面章节内 容中所编写的所有应用程序都是单线程程序，它们只有主线程；既然有单线程进程，那自然就存在多线程进 程，所谓多线程指的是除了主线程以外，还包含其它的线程，其它线程通常由主线程来创建（调用 pthread_create 创建一个新的线程），那么创建的新线程就是主线程的子线程。<ul>
+<li>其它新的线程（也就是子线程）是由主线程创建的；</li>
+<li>主线程通常会在最后结束运行，执行各种清理工作，譬如回收各个子线程。</li>
+</ul>
+</li>
+</ul>
+<h3 id="线程vs进程"><a href="#线程vs进程" class="headerlink" title="线程vs进程"></a>线程vs进程</h3><ul>
+<li>进程间切换开销大。多个进程同时运行（指宏观上同时运行，无特别说明，均指宏观上），微观上 依然是轮流切换运行，进程间切换开销远大于同一进程的多个线程间切换的开销，通常对于一些中 小型应用程序来说不划算。</li>
+<li>进程间通信较为麻烦。每个进程都在各自的地址空间中、相互独立、隔离，处在于不同的地址空间 中，因此相互通信较为麻烦，在上一章节给大家有所介绍。</li>
+<li>同一进程的多个线程间切换开销比较小。</li>
+<li>同一进程的多个线程间通信容易。它们共享了进程的地址空间，所以它们都是在同一个地址空间 中，通信容易。</li>
+<li>线程创建的速度远大于进程创建的速度。</li>
+<li>多线程在多核处理器上更有优势！</li>
+</ul>
+<h2 id="并发和并行"><a href="#并发和并行" class="headerlink" title="并发和并行"></a>并发和并行</h2><ul>
+<li><p>并行指的是可以并排/并列执行多个任务，这样的系统，它通常有多个执行单 元，所以可以实现并行运行，譬如并行运行 task1、task2、task3。</p>
+</li>
+<li><p><img src="/../imgs/image-20220121235908536.png" alt="image-20220121235908536"></p>
+</li>
+<li><p>并行运行并不一定要同时开始运行、同时结束运行</p>
+</li>
+<li><p>并发强调的是一种时分复用，与串行的区别在于，它不必等待上一个任务完成之后 在做下一个任务，可以打断当前执行的任务切换执行下一个任何，这就是时分复用。在同一个执行单元上， 将时间分解成不同的片段（时间片），每个任务执行一段时间，时间一到则切换执行下一个任务，依次这样 轮训（交叉/交替执行），这就是并发运行。</p>
+</li>
+<li><p><img src="/../imgs/image-20220122000512605.png" alt="image-20220122000512605"></p>
+</li>
+<li><p>你吃饭吃到一半，电话来了，你一直到吃完了以后才去接电话，这就说明你不支持并发也不支持并 行，仅仅<strong>只是串行</strong>。</p>
+</li>
+<li><p>你吃饭吃到一半，电话来了，你停下吃饭去接了电话，电话接完后继续吃饭，这说明你支持<strong>并发</strong>。</p>
+</li>
+<li><p>你吃饭吃到一半，电话来了，你一边打电话一边吃饭，这说明你<strong>支持并行</strong>。</p>
+</li>
+<li><p>计算机处理器运行速度是非常快的，在单个处理核心虽然以并发方式运行着系统中的线程（微观上交替 /交叉方式运行不同的线程），但在宏观上所表现出来的效果是同时运行着系统中的所有线程，因为处理器 的运算速度太快了，交替轮训一次所花费的时间在宏观上几乎是可以忽略不计的，所以<strong>表示出来的效果就 是同时运行着所有线程。</strong></p>
+</li>
+</ul>
+<h2 id="进程ID"><a href="#进程ID" class="headerlink" title="进程ID"></a>进程ID</h2><ul>
+<li><p>每个线程也有其对应的标识，称为线程 ID。进程 ID 在整个系统 中是唯一的，但线程 ID 不同，线程 ID <strong>只有在它所属的进程上下文中才有意义</strong>。</p>
+</li>
+<li><p>一个线程可通过库函数 pthread_self()来获取自己的线程 ID</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">pthread_t</span> <span class="title">pthread_self</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>该函数调用总是成功，返回当前线程的线程 ID</li>
+<li>可以使用 pthread_equal()函数来检查两个线程 ID 是否相等</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_equal</span><span class="params">(<span class="keyword">pthread_t</span> t1, <span class="keyword">pthread_t</span> t2)</span></span>;</span><br><span class="line"><span class="comment">//如果两个线程 ID t1 和 t2 相等，则 pthread_equal()返回一个非零值；否则返回 0。</span></span><br></pre></td></tr></table></figure>
+
+<p>在 Linux 系统中，使 用无符号长整型（unsigned long int）来表示 <code>pthread_t </code>数据类型</p>
+<h2 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h2><ul>
+<li>主线程可以使用库函数 <code>pthread_create()</code>负责创建一个新的线程</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_create</span><span class="params">(<span class="keyword">pthread_t</span> *thread, <span class="keyword">const</span> <span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">void</span> *(*start_routine) (<span class="keyword">void</span> *), <span class="keyword">void</span> *arg)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>注意，这个线程本质上是通过库函数调用系统的<code>clone</code>实现的，实际上就是创建了一个新的进程(类似<code>vfork</code>)，但是这个进程的<u>所有数据资源都直接指向创建它的进程的数据资源，导致二者实际使用起来是共享变量和数据等等</u></p>
+<ul>
+<li>因此所谓的线程也是进程，只不过是与创建它的进程共享资源的进程</li>
+</ul>
+</li>
+<li><p>thread：pthread_t 类型指针，当 pthread_create()成功返回时，新创建的线程的线程 ID 会保存在参数 thread 所指向的内存中，后续的线程相关函数会使用该标识来引用此线程。</p>
+</li>
+<li><p>attr：pthread_attr_t 类型指针，指向 pthread_attr_t 类型的缓冲区，pthread_attr_t 数据类型定义了线程的 各种属性，关于线程属性将会在 11.8 小节介绍。如果将参数 attr 设置为 NULL，那么表示将线程的所有属 性设置为默认值，以此创建新线程。</p>
+</li>
+<li><p>start_routine：<strong>参数 start_routine 是一个函数指针，指向一个函数</strong>，新创建的线程从 start_routine()函数 开始运行，该函数返回值类型为void *，并且该函数的参数只有一个void *，其实这个参数就是pthread_create() 函数的第四个参数 arg。如果需要向 start_routine()传递的参数有一个以上，那么需要把这些参数放到一个结 构体中，然后把这个结构体对象的地址作为 arg 参数传入。</p>
+</li>
+<li><p>arg：传递给 start_routine()函数的参数。一般情况下，需要将 arg 指向一个全局或堆变量，意思就是说 在线程的生命周期中，该 arg 指向的对象必须存在，否则如果线程中访问了该对象将会出现错误。当然也可 将参数 arg 设置为 NULL，表示不需要传入参数给 start_routine()函数。</p>
+</li>
+<li><p>返回值：<strong>成功返回 0；失败时将返回一个错误号</strong>，并且参数 thread 指向的内容是<strong>不确定</strong>的。</p>
+</li>
+<li><p>线程创建成功，新线程就会加入到系统调度队列中，获取到 CPU 之后就会立马从 start_routine()函数开 始运行该线程的任务；调用 pthread_create()函数后，通常我们无法确定系统接着会调度哪一个线程来使用 CPU 资源</p>
+</li>
+<li><p>在编译含有<code>pthread</code>的库函数的文件的时候，需要通过gcc的<code>-l</code>选项指定链接库，比如</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">gcc -o 文件名 文件名.c -lpthread</span><br></pre></td></tr></table></figure>
+
+<p>应用举例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">new_thread_start</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;新线程: 进程 ID&lt;%d&gt; 线程 ID&lt;%lu&gt;\n&quot;</span>, getpid(), pthread_self());</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">void</span> *)<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> tid;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    ret = pthread_create(&amp;tid, <span class="literal">NULL</span>, new_thread_start, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (ret)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Error: %s\n&quot;</span>, strerror(ret));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;主线程: 进程 ID&lt;%d&gt; 线程 ID&lt;%lu&gt;\n&quot;</span>, getpid(), pthread_self());</span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<p><img src="/../imgs/image-20220122104651258.png" alt="image-20220122104651258"></p>
+<ul>
+<li>主线程休眠了 1 秒钟，原因在于，<strong>如果主线程不进行休眠，它就可能会立马退出，这样可能会导致新创 建的线程还没有机会运行，整个进程就结束了</strong>。</li>
+</ul>
+<h2 id="线程终止"><a href="#线程终止" class="headerlink" title="线程终止"></a>线程终止</h2><ul>
+<li>线程的 start 函数执行 return 语句并返回指定值，返回值就是线程的退出码；</li>
+<li>线程调用 <code>pthread_exit()</code>函数；</li>
+<li>调用 <code>pthread_cancel()</code>取消线程（将在 11.6 小节介绍）；</li>
+</ul>
+<p>如果进程中的任意线程调用 <code>exit()</code>、<code>_exit()</code>或者<code>_Exit()</code>，那么将会导致<strong>整个进程终止</strong>，这里需要注意！</p>
+<ul>
+<li><code>pthread_exit()</code>函数将终止调用它的线程</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_exit</span><span class="params">(<span class="keyword">void</span> *retval)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>参数 retval 的数据类型为 void *，指定了线程的返回值、也就是线程的退出码，该返回值可由另一个线 程通过调用 pthread_join()来获取；同理，如果线程是在 start 函数中执行 return 语句终止，那么 return 的返 回值也是可以通过 pthread_join()来获取的。</p>
+</li>
+<li><p>调用 pthread_exit()相当于在线程的 start 函数中执行 return 语句，不同之处在于，可在线程 start 函数所 调用的任意函数中调用 pthread_exit()来终止线程。如果<strong>主线程调用了 <code>pthread_exit()</code>，那么主线程也会终止</strong>， 但<strong>其它线程依然正常运行</strong>，直到进程中的<strong>所有线程终止才会使得进程终止</strong>。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">new_thread_start</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;新线程: 进程 ID&lt;%d&gt; 线程 ID&lt;%lu&gt;\n&quot;</span>, getpid(), pthread_self());</span><br><span class="line">    pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> tid;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    ret = pthread_create(&amp;tid, <span class="literal">NULL</span>, new_thread_start, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (ret)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Error: %s\n&quot;</span>, strerror(ret));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;主线程: 进程 ID&lt;%d&gt; 线程 ID&lt;%lu&gt;\n&quot;</span>, getpid(), pthread_self());</span><br><span class="line"></span><br><span class="line">    pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意，将上一个程序中的所有<code>return</code>都改成<code>pthread_exit(NULL)</code>之后，程序会话<strong>并没有在主线程停止之后停止，而是等待子线程停止之后才停止</strong></li>
+</ul>
+<p>输出为</p>
+<p><img src="/../imgs/image-20220122110519433.png" alt="image-20220122110519433"></p>
+<h2 id="回收线程"><a href="#回收线程" class="headerlink" title="回收线程"></a>回收线程</h2><ul>
+<li>调用 <code>pthread_join()</code>函数来阻塞等待线程的终止， 并获取线程的退出码，回收线程资源（类似于多进程中的<code>wait()</code>函数）</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_join</span><span class="params">(<span class="keyword">pthread_t</span> thread, <span class="keyword">void</span> **retval)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>thread：pthread_join()等待指定线程的终止，通过参数 thread（线程 ID）指定需要等待的线程；</p>
+</li>
+<li><p>retval：如果参数 retval 不为 NULL，则 pthread_join()将目标线程的退出状态（即目标线程通过 pthread_exit()退出时指定的返回值或者在线程 start 函数中执行 return 语句对应的返回值）<strong>复制到*retval 所指 向的内存区域</strong>；如果目标线程被 pthread_cancel()取消，则将 PTHREAD_CANCELED 放在*retval 中。如果对 目标线程的终止状态不感兴趣，则可将参数 retval 设置为 NULL。</p>
+</li>
+<li><p>返回值：成功返回 0；失败将返回错误码。</p>
+</li>
+<li><p>调用 pthread_join()函数将会以<strong>阻塞的形式</strong>等待指定的线程终止，如果该<strong>线程已经终止，则 pthread_join() 立刻返回</strong>。如果多个线程同时尝试调用 pthread_join()等待指定线程的终止，那么结果将是不确定的。</p>
+</li>
+<li><p>若线程并未分离（detached，将在 11.6.1 小节介绍），则必须使用 pthread_join()来等待线程终止，回收 线程资源；如果线程终止后，其它线程没有调用 pthread_join()函数来回收该线程，那么该线程将<strong>变成僵尸线程</strong>，与僵尸进程的概念相类似；同样，僵尸线程除了浪费系统资源外，若僵尸线程积累过多，那么会导致应 用程序无法创建新的线程。</p>
+</li>
+<li><p>如果进程中存在着僵尸线程并未得到回收，当进程终止之后，<strong>进程会被其父进程回收，所以僵尸 线程同样也会被回收。</strong></p>
+</li>
+</ul>
+<p><strong>进程还具有以下特点</strong></p>
+<ul>
+<li><p>线程之间关系是<strong>对等</strong>的。进程中的<strong>任意线程均可调用 pthread_join()函数来等待另一个线程的终止</strong>。 譬如，如果线程 A 创建了线程 B，线程 B 再创建线程 C，那么线程 A 可以调用 pthread_join()等待 线程 C 的终止，线程 C 也可以调用 pthread_join()等待线程 A 的终止；这与进程间层次关系不同， <strong>父进程如果使用 fork()创建了子进程，那么它也是唯一能够对子进程调用 wait()的进程，线程之间 不存在这样的关系</strong>。</p>
+</li>
+<li><p>不能以非阻塞的方式调用 pthread_join()。对于<strong>进程</strong>，调用 waitpid()既可以实现阻塞方式等待、也可 以实现非阻塞方式等待。</p>
+</li>
+</ul>
+<h2 id="取消线程"><a href="#取消线程" class="headerlink" title="取消线程"></a>取消线程</h2><ul>
+<li>有时候，在程序设计需求当中，需要向一个线程发送一个请求，要求它立刻退出，我们把这种操作称为 取消线程，也就是向指定的线程发送一个请求，要求其立刻终止、退出。譬如，一组线程正在执行一个运算， 一旦某个线程检测到错误发生，需要其它线程退出，取消线程这项功能就派上用场了。</li>
+<li>调用 pthread_cancel()库函数向一个指定的线程发送取消请求</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cancel</span><span class="params">(<span class="keyword">pthread_t</span> thread)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>发出取消请求之后，函数 pthread_cancel()立即返回，不会等待目标线程的退出。默认情况下，目标线程 也会立刻退出</li>
+<li>线程可以设置自己不被取消或者控制如何被取消</li>
+</ul>
+<p>使用例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">new_thread_start</span><span class="params">(<span class="keyword">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;新线程--running\n&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> (;;)</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">void</span> *)<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> tid;</span><br><span class="line">    <span class="keyword">void</span> *tret;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="comment">/* 创建新线程 */</span></span><br><span class="line">    ret = pthread_create(&amp;tid, <span class="literal">NULL</span>, new_thread_start, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (ret)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;pthread_create error: %s\n&quot;</span>, strerror(ret));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">    <span class="comment">/* 向新线程发送取消请求 */</span></span><br><span class="line">    ret = pthread_cancel(tid);</span><br><span class="line">    <span class="keyword">if</span> (ret)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;pthread_cancel error: %s\n&quot;</span>, strerror(ret));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 等待新线程终止 */</span></span><br><span class="line">    ret = pthread_join(tid, &amp;tret);</span><br><span class="line">    <span class="keyword">if</span> (ret)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;pthread_join error: %s\n&quot;</span>, strerror(ret));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;新线程终止, code=%ld\n&quot;</span>, (<span class="keyword">long</span>)tret);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../imgs/image-20220122120358618.png" alt="image-20220122120358618"></p>
+<ul>
+<li>由打印结果可知，当主线程发送取消请求之后，<strong>新线程便退出了</strong>，而且退出码为<code>-1</code>，也就是 <code>PTHREAD_CANCELED</code>。</li>
+</ul>
+<h3 id="线程控制自己被取消的时候的行为"><a href="#线程控制自己被取消的时候的行为" class="headerlink" title="线程控制自己被取消的时候的行为"></a>线程控制自己被取消的时候的行为</h3><ul>
+<li>默认情况下，线程是响应其它线程发送过来的取消请求的，响应请求然后退出线程。当然，线程可以选 择不被取消或者控制如何被取消，通过 pthread_setcancelstate()和 pthread_setcanceltype()来设置线程的取消性 状态和类型。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_setcancelstate</span><span class="params">(<span class="keyword">int</span> state, <span class="keyword">int</span> *oldstate)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_setcanceltype</span><span class="params">(<span class="keyword">int</span> type, <span class="keyword">int</span> *oldtype)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>参数</strong></p>
+<ul>
+<li><p>PTHREAD_CANCEL_ENABLE：线程可以取消，这是新创建的线程取消性状态的默认值，所以 新建线程以及主线程默认都是可以取消的。</p>
+</li>
+<li><p>PTHREAD_CANCEL_DISABLE：线程不可被取消，如果此类线程接收到取消请求，则会将请求 挂起，直至线程的取消性状态变为 PTHREAD_CANCEL_ENABLE。</p>
+</li>
+<li><p>pthread_setcanceltype()函数执行的设置取消性类型和获取旧类型操作，这两步是一个原子操作。</p>
+</li>
+<li><p>参数 type 必须是以下值之一：</p>
+<ul>
+<li>PTHREAD_CANCEL_DEFERRED：取消请求到来时，线程还是继续运行，取消请求被挂起，直 到线程到达某个取消点（cancellation point，将在 11.6.3 小节介绍）为止，这是所有新建线程包括 主线程默认的取消性类型。</li>
+<li>PTHREAD_CANCEL_ASYNCHRONOUS：可能会在任何时间点（也许是立即取消，但不一定） 取消线程，这种取消性类型应用场景很少，不再介绍！</li>
+</ul>
+</li>
+<li><p>取消点：</p>
+<ul>
+<li>取消点其实就是一系列函数，当执行到这些函数的时候，才会真正响应取消请 求，这些函数就是取消点；在没有出现取消点时，取消请求是无法得到处理的，究其原因在于<strong>系统认为，但 没有到达取消点时，线程此时正在执行的工作是不能被停止的，正在执行关键代码</strong>，此时终止线程将可能会 导致出现意想不到的异常发生。</li>
+</ul>
+</li>
+<li><p>检测线程的可取消性</p>
+<ul>
+<li><code> pthread_testcancel(void);</code>，头文件同上</li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Linux进程间通信简介"
   class="article article-type-post"
   itemscope
@@ -1047,84 +1294,6 @@
 
 
 
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-Qt网络编程"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/17/Qt%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"
-    >Qt网络编程</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/17/Qt%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="article-date">
-  <time datetime="2022-01-17T10:49:55.000Z" itemprop="datePublished">2022-01-17</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Qt网络编程"><a href="#Qt网络编程" class="headerlink" title="Qt网络编程"></a>Qt网络编程</h1><h2 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h2><h3 id="获取IP"><a href="#获取IP" class="headerlink" title="获取IP"></a>获取IP</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">getLocalHostIP</span>()</span><br><span class="line">&#123;</span><br><span class="line">    QList&lt;QNetworkInterface&gt; list = QNetworkInterface::<span class="built_in">allInterfaces</span>();</span><br><span class="line">    foreach (QNetworkInterface interface, list)</span><br><span class="line">    &#123;</span><br><span class="line">        QList&lt;QNetworkAddressEntry&gt; entryList = interface.<span class="built_in">addressEntries</span>();</span><br><span class="line">        foreach(QNetworkAddressEntry entry ,entryList)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(entry.<span class="built_in">ip</span>().<span class="built_in">protocol</span>() == QAbstractSocket::IPv4Protocol)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(entry.<span class="built_in">ip</span>().<span class="built_in">toString</span>() == <span class="string">&quot;127.0.0.1&quot;</span>)<span class="keyword">continue</span>;</span><br><span class="line">                comboBox-&gt;<span class="built_in">addItem</span>(entry.<span class="built_in">ip</span>().<span class="built_in">toString</span>());</span><br><span class="line">                IPlist&lt;&lt;entry.<span class="built_in">ip</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>allInterfaces()</code>获取本地的所有网络接口，比如wlan，本地连接等等，然后使用<code>addressEntries()</code>获取所有IP地址，使用<code>IPv4Protocol</code>筛选所有的IPv4地址，进行连接，同时在</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(entry.<span class="built_in">ip</span>().<span class="built_in">toString</span>() == <span class="string">&quot;127.0.0.1&quot;</span>)<span class="keyword">continue</span>;</span><br></pre></td></tr></table></figure>
-
-<p>中筛选去掉本地IP，只留下有意义的（可以从外部连接的）IP地址。</p>
-<h3 id="监听"><a href="#监听" class="headerlink" title="监听"></a>监听</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">startListen</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(comboBox-&gt;<span class="built_in">currentIndex</span>() != <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;start Listen&quot;</span>&lt;&lt;endl;</span><br><span class="line">        tcpServer-&gt;<span class="built_in">listen</span>(IPlist[comboBox-&gt;<span class="built_in">currentIndex</span>()], spinBox-&gt;<span class="built_in">value</span>());</span><br><span class="line">        btn1-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">        btn2-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">        comboBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">        spinBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">        clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;server IP address:&quot;</span>+comboBox-&gt;<span class="built_in">currentText</span>());</span><br><span class="line">        clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Listening port: &quot;</span>+spinBox-&gt;<span class="built_in">text</span>());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>监听就是使用<code>tcpServer</code>对象，监听IP和端口，通过函数传入，等待程序链接</p>
-<h3 id="停止监听"><a href="#停止监听" class="headerlink" title="停止监听"></a>停止监听</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">stopListen</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;<span class="string">&quot;stop listen&quot;</span>&lt;&lt;endl;</span><br><span class="line">    tcpServer-&gt;<span class="built_in">close</span>();</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket-&gt;<span class="built_in">state</span>() == tcpSocket-&gt;ConnectedState)</span><br><span class="line">    &#123;</span><br><span class="line">        tcpSocket-&gt;<span class="built_in">disconnectFromHost</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    btn1-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">    btn2-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Stopped Listening: &quot;</span>+spinBox-&gt;<span class="built_in">text</span>());</span><br><span class="line">    comboBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">    spinBox-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意，调用<code>tcpServer-&gt;close()</code>之后，已经连接的客户端还可以继续与主机进行通信，此时需要<code>tcpSocket-&gt;disconnectFromHost();</code>来断开当前连接的客户端与服务器的链接，**注意此时调用的tcpSocket对象是用户连接时候从下面的<code>tcpServer-&gt;nextPendingConnection()</code>获得的Socket对象 **。</p>
-<h3 id="应对用户链接"><a href="#应对用户链接" class="headerlink" title="应对用户链接"></a>应对用户链接</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">clientConnection</span>()</span><br><span class="line">&#123;</span><br><span class="line">    tcpSocket = tcpServer-&gt;<span class="built_in">nextPendingConnection</span>();</span><br><span class="line">    QString ip = tcpSocket-&gt;<span class="built_in">peerAddress</span>().<span class="built_in">toString</span>();</span><br><span class="line">    quint16 port = tcpSocket-&gt;<span class="built_in">peerPort</span>();</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Client IP: &quot;</span>+ip);</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Client port&quot;</span>+QString::<span class="built_in">number</span>(port));</span><br><span class="line"></span><br><span class="line">    <span class="built_in">connect</span>(tcpSocket, <span class="built_in">SIGNAL</span>(<span class="built_in">readyRead</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">recMessage</span>()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>注意用户链接的时候，可以通过<code>tcpServer-&gt;nextPendingConnection();</code>获取用户链接的Socket对象，进而获取<code>tcpSocket-&gt;peerAddress().toString();</code>IP和<code>tcpSocket-&gt;peerPort();</code>端口号</p>
-<h3 id="收取消息"><a href="#收取消息" class="headerlink" title="收取消息"></a>收取消息</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">recMessage</span>()</span><br><span class="line">&#123;</span><br><span class="line">    QString messages = tcpSocket-&gt;<span class="built_in">readAll</span>();</span><br><span class="line">    clientBrowser-&gt;<span class="built_in">append</span>(messages);</span><br><span class="line">    <span class="built_in">qDebug</span>()&lt;&lt;messages&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sendMessage</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket-&gt;<span class="built_in">state</span>() == tcpSocket-&gt;ConnectedState)</span><br><span class="line">    &#123;</span><br><span class="line">        tcpSocket-&gt;<span class="built_in">write</span>(send-&gt;<span class="built_in">text</span>().<span class="built_in">toUtf8</span>().<span class="built_in">data</span>());</span><br><span class="line">        clientBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Server:&quot;</span>+send-&gt;<span class="built_in">text</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><p>此处仅仅强调客户端与服务器的区别</p>
-<h3 id="链接服务器"><a href="#链接服务器" class="headerlink" title="链接服务器"></a>链接服务器</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">toConnect</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(tcpSocket-&gt;<span class="built_in">state</span>()!=tcpSocket-&gt;ConnectedState)</span><br><span class="line">    &#123;</span><br><span class="line">        QHostAddress hostAdd;</span><br><span class="line">        hostAdd.<span class="built_in">setAddress</span>(ipInput-&gt;<span class="built_in">text</span>());</span><br><span class="line">        textBrowser-&gt;<span class="built_in">append</span>(<span class="string">&quot;Connecting: &quot;</span> + hostAdd.<span class="built_in">toString</span>() + <span class="string">&quot;  ...&quot;</span>);</span><br><span class="line">        tcpSocket-&gt;<span class="built_in">connectToHost</span>(hostAdd, spinBox-&gt;<span class="built_in">value</span>());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意<code>QHostAddress</code>具有从字符串0-255点分格式的IP地址中parse出IP地址的功能（<code>hostAdd.setAddress(ipInput-&gt;text());</code>)</li>
-</ul>
-<h3 id="断开连接"><a href="#断开连接" class="headerlink" title="断开连接"></a>断开连接</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">toDisconnect</span>()</span><br><span class="line">&#123;</span><br><span class="line">    tcpSocket-&gt;<span class="built_in">disconnectFromHost</span>();</span><br><span class="line">    tcpSocket-&gt;<span class="built_in">close</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其他与编写服务端类似，在此不再赘述。</p>
  
       <!-- reward -->
       

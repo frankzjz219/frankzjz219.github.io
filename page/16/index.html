@@ -141,6 +141,58 @@
     
     
     <article
+  id="post-SolidWorks打不开UG导出的x-t文件解决方法"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/21/SolidWorks%E6%89%93%E4%B8%8D%E5%BC%80UG%E5%AF%BC%E5%87%BA%E7%9A%84x-t%E6%96%87%E4%BB%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"
+    >SolidWorks打不开UG导出的x_t文件解决方法</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/21/SolidWorks%E6%89%93%E4%B8%8D%E5%BC%80UG%E5%AF%BC%E5%87%BA%E7%9A%84x-t%E6%96%87%E4%BB%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="article-date">
+  <time datetime="2021-12-21T08:34:45.000Z" itemprop="datePublished">2021-12-21</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="SolidWorks打不开UG导出的x-t-Parasolid-文件解决方法"><a href="#SolidWorks打不开UG导出的x-t-Parasolid-文件解决方法" class="headerlink" title="SolidWorks打不开UG导出的x_t(Parasolid)文件解决方法"></a>SolidWorks打不开UG导出的x_t(Parasolid)文件解决方法</h1><ul>
+<li><p>更改设置</p>
+</li>
+<li><p><img src="/imgs/image-20211221163511577.png" alt="image-20211221163511577"></p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-freeRTOS中断"
   class="article article-type-post"
   itemscope
@@ -858,60 +910,6 @@
 <p>这个会 <strong>丢弃</strong> 所有远程仓库领先于本地仓库的部分， <strong>强行</strong> 将本地仓库的内容推送到远端 </p>
 <p>或下面这个，但是这个可能会 <strong>覆盖一些本地的文件</strong> （主要是多人开发的情况下可能会出现）</p>
 <p><code>git pull origin master --allow-unrelated-histories</code></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-FreeRtos2"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/12/11/FreeRtos2/"
-    >FreeRtos2</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/12/11/FreeRtos2/" class="article-date">
-  <time datetime="2021-12-11T10:03:10.000Z" itemprop="datePublished">2021-12-11</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="FreeRtos创建注意（使用CubeMX）"><a href="#FreeRtos创建注意（使用CubeMX）" class="headerlink" title="FreeRtos创建注意（使用CubeMX）"></a>FreeRtos创建注意（使用CubeMX）</h2><ul>
-<li><p>创建按照前篇知乎上的文章创建即可，注意此时会提示Systick的问题，设置为外部时钟晶振，而且设置为TIM1（或者其他timer可能也可以，没有尝试过）</p>
-</li>
-<li><p><img src="/imgs/image-20211214001535585.png" alt="image-20211214001535585"></p>
-</li>
-<li><p>然后另一个可能存在的问题是在<code>freertos.c</code> 文件中定义一些与<code>UART</code>相关的东西的时候会因为没有<code>#include &quot;usart.h&quot;</code>而出错，此时加上引用即可</p>
-</li>
-</ul>
  
       <!-- reward -->
       
