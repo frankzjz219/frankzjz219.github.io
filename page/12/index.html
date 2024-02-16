@@ -141,6 +141,62 @@
     
     
     <article
+  id="post-DSP28377相关知识"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/02/16/DSP28377%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/"
+    >DSP28377相关知识</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/02/16/DSP28377%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/" class="article-date">
+  <time datetime="2022-02-16T07:43:53.000Z" itemprop="datePublished">2022-02-16</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="DSP28377相关知识"><a href="#DSP28377相关知识" class="headerlink" title="DSP28377相关知识"></a>DSP28377相关知识</h1><h2 id="BLDC（PWM）相关"><a href="#BLDC（PWM）相关" class="headerlink" title="BLDC（PWM）相关"></a>BLDC（PWM）相关</h2><ul>
+<li>驱动的PWM中135为一组，246为一组</li>
+<li></li>
+</ul>
+<h2 id="串口相关"><a href="#串口相关" class="headerlink" title="串口相关"></a>串口相关</h2><ul>
+<li>中断：TXINT和RXINT</li>
+</ul>
+<h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2><p>开启中断的步骤</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> “DSP2833x_Device.h”</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> “DSP2833x_Examples.h”</span></span><br><span class="line"></span><br><span class="line">interrupt <span class="keyword">void</span> cpu_TImer0_isr（<span class="keyword">void</span>）;<span class="comment">//声明中断服务函数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main（）</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step1：初始化系统控制、PLL、看门狗、允许外设时钟</span></span><br><span class="line"></span><br><span class="line">    InitSysCtrl（）;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step2：初始化GPIO</span></span><br><span class="line"></span><br><span class="line">    InitGpio（）;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step3：清除所有中断，初始化PIE向量表</span></span><br><span class="line"></span><br><span class="line">    DINT;</span><br><span class="line"></span><br><span class="line">    InitPieCtrl（）; <span class="comment">//初始化PIE控制器</span></span><br><span class="line"></span><br><span class="line">    IER = <span class="number">0x0000</span>; <span class="comment">//禁止CPU中断</span></span><br><span class="line"></span><br><span class="line">    IFR = <span class="number">0x0000</span>; <span class="comment">//清除所有CPU中断标志</span></span><br><span class="line"></span><br><span class="line">    InitPieVectTable（）; <span class="comment">//初始化PIE中断向量表</span></span><br><span class="line"></span><br><span class="line">    EALLOW;</span><br><span class="line"></span><br><span class="line">    PieVectTable.TINT0 = &amp;cpu_TImer0_isr; <span class="comment">//重映射中断向量，指向中断服务程序</span></span><br><span class="line"></span><br><span class="line">    EDIS;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step4：初始化外设模块</span></span><br><span class="line"></span><br><span class="line">    InitCpuTImers（）;</span><br><span class="line"></span><br><span class="line">    ConfigCpuTimer（&amp;CpuTimer0，<span class="number">150</span>，<span class="number">1000000</span>）; <span class="comment">//150MHz，周期1秒</span></span><br><span class="line"></span><br><span class="line">    CpuTimer0Regs.TCR.all = <span class="number">0x4001</span>; <span class="comment">//允许定时器中断，且设置TSS为0启动定时器工作</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//step5：</span></span><br><span class="line"></span><br><span class="line">    IER |= M_INT1; <span class="comment">//允许CPU的INT1中断，该中断连接至TINT0</span></span><br><span class="line"></span><br><span class="line">    PieCtrlRegs.PIEIER1.bit.INTx7 = <span class="number">1</span>; <span class="comment">//在PIE中断组1中允许TINT0中断</span></span><br><span class="line"></span><br><span class="line">    EINT; <span class="comment">//清除全局屏蔽</span></span><br><span class="line"></span><br><span class="line">    ERTM; <span class="comment">//允许全局实时中断</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//step6：循环</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>（<span class="number">1</span>）;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interrupt <span class="keyword">void</span> cpu_timer0_isr（<span class="keyword">void</span>）</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    CpuTimer0.InterruptCount++;</span><br><span class="line"></span><br><span class="line">    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1; <span class="comment">//清除PIE中断组1的应答位，以便CPU再次响应</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-DSP28377d与无刷直流电机的接线方法"
   class="article article-type-post"
   itemscope
@@ -1653,65 +1709,6 @@
 <li><p>其他内容略</p>
 </li>
 </ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-C语言函数指针"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/22/C%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/"
-    >C语言函数指针</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/22/C%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/" class="article-date">
-  <time datetime="2022-01-22T02:17:18.000Z" itemprop="datePublished">2022-01-22</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="C语言函数指针"><a href="#C语言函数指针" class="headerlink" title="C语言函数指针"></a>C语言函数指针</h1><ul>
-<li>函数指针是指向函数的指针变量</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;返回值类型&gt; (*函数指针名称)(&lt;输入参数类型&gt;,...)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>回调函数使用例：</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">populate_array</span><span class="params">(<span class="keyword">int</span> *<span class="built_in">array</span>, <span class="keyword">size_t</span> arraySize, <span class="keyword">int</span> (*getNextValue)(<span class="keyword">void</span>))</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i=<span class="number">0</span>; i&lt;arraySize; i++)</span><br><span class="line">        <span class="built_in">array</span>[i] = getNextValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>传参：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">populate_array(myarray, <span class="number">10</span>, getNextRandomValue);</span><br></pre></td></tr></table></figure>
-
  
       <!-- reward -->
       

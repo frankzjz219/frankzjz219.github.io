@@ -141,6 +141,99 @@
     
     
     <article
+  id="post-C语言使用并行执行的for循环"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/06/22/C%E8%AF%AD%E8%A8%80%E4%BD%BF%E7%94%A8%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C%E7%9A%84for%E5%BE%AA%E7%8E%AF/"
+    >C语言使用并行执行的for循环</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/06/22/C%E8%AF%AD%E8%A8%80%E4%BD%BF%E7%94%A8%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C%E7%9A%84for%E5%BE%AA%E7%8E%AF/" class="article-date">
+  <time datetime="2022-06-22T07:29:40.000Z" itemprop="datePublished">2022-06-22</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="C语言使用并行执行的for循环"><a href="#C语言使用并行执行的for循环" class="headerlink" title="C语言使用并行执行的for循环"></a>C语言使用并行执行的for循环</h1><h2 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;omp.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="编译指令"><a href="#编译指令" class="headerlink" title="编译指令"></a>编译指令</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">g++ test111.cpp -o paraCpp111 -fopenmp</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意要添加<code>-fopenmp</code>选项</li>
+</ul>
+<h2 id="设置线程数量"><a href="#设置线程数量" class="headerlink" title="设置线程数量"></a>设置线程数量</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">omp_set_num_threads(<span class="number">2</span>); <span class="comment">//参数为线程的数量</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用parallel的for循环"><a href="#使用parallel的for循环" class="headerlink" title="使用parallel的for循环"></a>使用parallel的for循环</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意<code>#pragma omp parallel for</code>这句必须和for循环<strong>紧邻</strong>，中间不能有其他语句，否则会出错</li>
+</ul>
+<h2 id="执行效果"><a href="#执行效果" class="headerlink" title="执行效果"></a>执行效果</h2><p>不进行线程设置和线程设置为2的效果对比：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1线程\n&quot;</span>);</span><br><span class="line">    before = clock();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    timePeriod = clock()-before;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;timePeriod&lt;&lt;<span class="string">&#x27;!&#x27;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2线程\n&quot;</span>);</span><br><span class="line"><span class="comment">// 此处设置了2线程</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    omp_set_num_threads(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    before = clock();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    timePeriod = clock()-before;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;timePeriod&lt;&lt;<span class="string">&#x27;!&#x27;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+
+<p>输出对比：</p>
+<ul>
+<li><p><img src="/imgs/image-20220622153605823.png" alt="image-20220622153605823"></p>
+</li>
+<li><p>注意到没有开启并行for循环的输出是按照顺序的，开启的输出是乱序的</p>
+</li>
+<li><p>同时经过尝试发现，假如开启了并行for循环的输出但是<strong>指定线程为1</strong>的，输出<strong>仍然是乱序</strong>的，暂时还不清楚原因</p>
+</li>
+</ul>
+<p>对比大量计算和多组计算：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;omp.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">1e8</span>;</span><br><span class="line">    <span class="keyword">int</span> before, timePeriod;</span><br><span class="line">    <span class="keyword">int</span> array1[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array2[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array4[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array8[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> count = <span class="number">0</span>;count&lt;<span class="number">100</span>;++count)</span><br><span class="line">    &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="comment">// printf(&quot;1线程\n&quot;);</span></span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;2线程\n&quot;);</span></span><br><span class="line">        array1[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">2</span>);</span><br><span class="line">        <span class="comment">// printf(&quot;2线程\n&quot;);</span></span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;4线程\n&quot;);</span></span><br><span class="line">        array2[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    </span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;8线程\n&quot;);</span></span><br><span class="line">        array4[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    </span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">8</span>);</span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>() - before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        array8[count] = timePeriod;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ofstream out;</span><br><span class="line">    out.<span class="built_in">open</span>(<span class="string">&quot;data.csv&quot;</span>, ios::out);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array1[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array2[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array4[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array8[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    out.<span class="built_in">close</span>();</span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;python3 showData.py&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>其中分别开启1、2、4、8线程，进行for循环的计算，对比所需时间（通过<code>clock()</code>进行测量），最后调用命令行脚本<code>system</code>，开启另外撰写的python脚本进行数据折线图的显示</p>
+</li>
+<li><p><img src="/imgs/image-20220622154102661.png" alt="image-20220622154102661"></p>
+<ul>
+<li>上图是分别开启1、2、4、8线程的计算结果</li>
+</ul>
+</li>
+<li><p>对于代码进行简单修改，在<strong>1线程的时候取消对于parallel的使用</strong>，实验结果如下图</p>
+</li>
+<li><p><img src="/imgs/image-20220622154349763.png" alt="image-20220622154349763"></p>
+<ul>
+<li>可见结果在1线程的时候，某些情况下会占用很长的时间</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;omp.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">1e8</span>;</span><br><span class="line">    <span class="keyword">int</span> before, timePeriod;</span><br><span class="line">    <span class="keyword">int</span> array1[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array2[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array4[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">int</span> array8[<span class="number">100</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> count = <span class="number">0</span>;count&lt;<span class="number">100</span>;++count)</span><br><span class="line">    &#123;</span><br><span class="line"><span class="comment">// #pragma omp parallel</span></span><br><span class="line"><span class="comment">//         omp_set_num_threads(1);</span></span><br><span class="line">        <span class="comment">// printf(&quot;1线程\n&quot;);</span></span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="comment">// #pragma omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;2线程\n&quot;);</span></span><br><span class="line">        array1[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">2</span>);</span><br><span class="line">        <span class="comment">// printf(&quot;2线程\n&quot;);</span></span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;4线程\n&quot;);</span></span><br><span class="line">        array2[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    </span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>()-before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// printf(&quot;8线程\n&quot;);</span></span><br><span class="line">        array4[count] = timePeriod;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">    </span><br><span class="line">        <span class="built_in">omp_set_num_threads</span>(<span class="number">8</span>);</span><br><span class="line">        before = <span class="built_in">clock</span>();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;max;++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        timePeriod = <span class="built_in">clock</span>() - before;</span><br><span class="line">        <span class="comment">// cout&lt;&lt;timePeriod&lt;&lt;&#x27;!&#x27;&lt;&lt;endl;</span></span><br><span class="line">        array8[count] = timePeriod;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ofstream out;</span><br><span class="line">    out.<span class="built_in">open</span>(<span class="string">&quot;data.csv&quot;</span>, ios::out);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array1[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array2[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array4[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> cnt = <span class="number">0</span>;cnt&lt;<span class="number">100</span>;++cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        out&lt;&lt;array8[cnt]&lt;&lt;<span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    out.<span class="built_in">close</span>();</span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;python3 showData.py&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-wsl2的Python以及增加远程用交互界面"
   class="article article-type-post"
   itemscope
@@ -1312,62 +1405,6 @@
 <li><strong>endptr</strong> – 对类型为 char* 的对象的引用，其值由函数设置为 str 中数值后的下一个字符。</li>
 <li><strong>base</strong> – 基数，必须介于 2 和 36（包含）之间，或者是特殊值 0。</li>
 </ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-DSP28377相关知识"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/02/16/DSP28377%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/"
-    >DSP28377相关知识</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/02/16/DSP28377%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/" class="article-date">
-  <time datetime="2022-02-16T07:43:53.000Z" itemprop="datePublished">2022-02-16</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="DSP28377相关知识"><a href="#DSP28377相关知识" class="headerlink" title="DSP28377相关知识"></a>DSP28377相关知识</h1><h2 id="BLDC（PWM）相关"><a href="#BLDC（PWM）相关" class="headerlink" title="BLDC（PWM）相关"></a>BLDC（PWM）相关</h2><ul>
-<li>驱动的PWM中135为一组，246为一组</li>
-<li></li>
-</ul>
-<h2 id="串口相关"><a href="#串口相关" class="headerlink" title="串口相关"></a>串口相关</h2><ul>
-<li>中断：TXINT和RXINT</li>
-</ul>
-<h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2><p>开启中断的步骤</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> “DSP2833x_Device.h”</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> “DSP2833x_Examples.h”</span></span><br><span class="line"></span><br><span class="line">interrupt <span class="keyword">void</span> cpu_TImer0_isr（<span class="keyword">void</span>）;<span class="comment">//声明中断服务函数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main（）</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step1：初始化系统控制、PLL、看门狗、允许外设时钟</span></span><br><span class="line"></span><br><span class="line">    InitSysCtrl（）;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step2：初始化GPIO</span></span><br><span class="line"></span><br><span class="line">    InitGpio（）;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step3：清除所有中断，初始化PIE向量表</span></span><br><span class="line"></span><br><span class="line">    DINT;</span><br><span class="line"></span><br><span class="line">    InitPieCtrl（）; <span class="comment">//初始化PIE控制器</span></span><br><span class="line"></span><br><span class="line">    IER = <span class="number">0x0000</span>; <span class="comment">//禁止CPU中断</span></span><br><span class="line"></span><br><span class="line">    IFR = <span class="number">0x0000</span>; <span class="comment">//清除所有CPU中断标志</span></span><br><span class="line"></span><br><span class="line">    InitPieVectTable（）; <span class="comment">//初始化PIE中断向量表</span></span><br><span class="line"></span><br><span class="line">    EALLOW;</span><br><span class="line"></span><br><span class="line">    PieVectTable.TINT0 = &amp;cpu_TImer0_isr; <span class="comment">//重映射中断向量，指向中断服务程序</span></span><br><span class="line"></span><br><span class="line">    EDIS;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//step4：初始化外设模块</span></span><br><span class="line"></span><br><span class="line">    InitCpuTImers（）;</span><br><span class="line"></span><br><span class="line">    ConfigCpuTimer（&amp;CpuTimer0，<span class="number">150</span>，<span class="number">1000000</span>）; <span class="comment">//150MHz，周期1秒</span></span><br><span class="line"></span><br><span class="line">    CpuTimer0Regs.TCR.all = <span class="number">0x4001</span>; <span class="comment">//允许定时器中断，且设置TSS为0启动定时器工作</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//step5：</span></span><br><span class="line"></span><br><span class="line">    IER |= M_INT1; <span class="comment">//允许CPU的INT1中断，该中断连接至TINT0</span></span><br><span class="line"></span><br><span class="line">    PieCtrlRegs.PIEIER1.bit.INTx7 = <span class="number">1</span>; <span class="comment">//在PIE中断组1中允许TINT0中断</span></span><br><span class="line"></span><br><span class="line">    EINT; <span class="comment">//清除全局屏蔽</span></span><br><span class="line"></span><br><span class="line">    ERTM; <span class="comment">//允许全局实时中断</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//step6：循环</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>（<span class="number">1</span>）;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interrupt <span class="keyword">void</span> cpu_timer0_isr（<span class="keyword">void</span>）</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    CpuTimer0.InterruptCount++;</span><br><span class="line"></span><br><span class="line">    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1; <span class="comment">//清除PIE中断组1的应答位，以便CPU再次响应</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
  
       <!-- reward -->
       
