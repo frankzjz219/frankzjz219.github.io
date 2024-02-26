@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">39 min</span>
+            <span class="post-count">40 min</span>
         </span>
     </span>
 </div>
@@ -213,7 +213,7 @@
 <li><code>ref(val)</code><h3 id="hash哈希函数"><a href="#hash哈希函数" class="headerlink" title="hash哈希函数"></a>hash哈希函数</h3></li>
 <li><code>hash&lt;key_type&gt;()</code>函数为内置类型，指针，string和智能指针提供了哈希函数</li>
 </ul>
-<h3 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h3><ul>
+<h3 id="智能指针shared-ptr和unique-ptr"><a href="#智能指针shared-ptr和unique-ptr" class="headerlink" title="智能指针shared_ptr和unique_ptr"></a>智能指针<code>shared_ptr</code>和<code>unique_ptr</code></h3><ul>
 <li><code>shared_ptr</code>允许多个指针指向同一个对象</li>
 <li><code>unique_ptr</code>独占所指向的对象<h4 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h4></li>
 <li>对指针可以直接做条件判断，<code>true</code>就是非空，否则是空</li>
@@ -222,6 +222,7 @@
 <li>注意，如果智能指针被释放，那么使用get返回的指针指向的对象也会被释放</li>
 </ul>
 </li>
+<li><code>shared_ptr</code>比较是否相等时候，比较的是<strong>指向的对象是否相等</strong>，因此可以用来在STL中find()等等</li>
 <li><code>shared_ptr</code>基本用法<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建 shared_ptr，并分配一个整数</span></span><br><span class="line">    std::shared_ptr&lt;<span class="keyword">int</span>&gt; sharedInt = std::make_shared&lt;<span class="keyword">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 shared_ptr</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Value: &quot;</span> &lt;&lt; *sharedInt &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取引用计数</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Reference count: &quot;</span> &lt;&lt; sharedInt.<span class="built_in">use_count</span>() &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建另一个 shared_ptr，共享相同的整数</span></span><br><span class="line">    std::shared_ptr&lt;<span class="keyword">int</span>&gt; anotherSharedInt = sharedInt;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 引用计数增加</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Reference count: &quot;</span> &lt;&lt; sharedInt.<span class="built_in">use_count</span>() &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 <li>另一种初始化</li>
 <li><code>shared_ptr&lt;int&gt; p(new int(1024));</code>可以用动态对象初始化指针</li>

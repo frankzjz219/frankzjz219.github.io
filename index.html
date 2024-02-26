@@ -181,7 +181,8 @@
 <li>创建之后将协程状态设置为suspend</li>
 <li>等待epoll接收到信号之后，通过一个哈希映射将对应的协程状态设置为runnable提示该协程的调度器可以上处理机运行</li>
 <li>然后对应的线程将协程调度上处理及，协程处理完之后会继续将自己设置为suspend状态并且下处理机，等待epoll激活自己</li>
-<li><img src="/imgs/6130504fd0c4cfffb3fbf7495675fc72261f90b07f35d2ce378a52c75a05c180.png" alt="picture 2">  </li>
+<li>增加了定时器的功能，防止协程在睡眠的时候阻塞，提高时间利用率</li>
+<li><img src="/imgs/e640db7fe4441dacd50fb75168ec849f663fb217507466062a98192ca46d2c0b.png" alt="picture 3">  </li>
 </ul>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">EpollServer <span class="title">ep</span><span class="params">(&lt;线程数&gt;, &lt;端口号&gt;)</span></span>;</span><br></pre></td></tr></table></figure>
 <ul>
