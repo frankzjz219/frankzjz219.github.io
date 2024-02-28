@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">9.4k</span>
+            <span class="post-count">9.5k</span>
         </span>
     </span>
 
@@ -227,7 +227,10 @@
 <li>另一种初始化</li>
 <li><code>shared_ptr&lt;int&gt; p(new int(1024));</code>可以用动态对象初始化指针</li>
 <li>但是必须显式的调用，不能隐式类型转换</li>
-<li>不要使用<code>shared_ptr</code>的<code>get</code>方法为另一个智能指针赋值，会导致内存管理混乱</li>
+<li>不要使用<code>shared_ptr</code>的<code>get</code>方法为另一个智能指针赋值，会导致内存管理混乱<ul>
+<li>比如另一个位置的shared_ptr析构，可能使得另一侧的引用计数为0，导致指向的对象直接被析构，但是这一侧的shated_ptr并不知情，再访问会导致段错误</li>
+</ul>
+</li>
 <li><code>unique_ptr</code>基本用法<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建 unique_ptr，并分配一个整数</span></span><br><span class="line">    std::unique_ptr&lt;<span class="keyword">int</span>&gt; uniqueInt = std::make_unique&lt;<span class="keyword">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 unique_ptr</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Value: &quot;</span> &lt;&lt; *uniqueInt &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// unique_ptr 不能被拷贝，这会导致编译错误</span></span><br><span class="line">    <span class="comment">// std::unique_ptr&lt;int&gt; anotherUniqueInt = uniqueInt; // 错误！</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 <li>可以用<code>release</code>或者<code>reset</code>转移指针的所有权<ul>
 <li>reset会<strong>释放本身指向的内存</strong>，将目标转移到函数传入的新地址上</li>

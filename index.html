@@ -141,6 +141,115 @@
     
     
     <article
+  id="post-给Jetson-Orin刷入实时内核的方式"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2024/02/27/%E7%BB%99Jetson-Orin%E5%88%B7%E5%85%A5%E5%AE%9E%E6%97%B6%E5%86%85%E6%A0%B8%E7%9A%84%E6%96%B9%E5%BC%8F/"
+    >给Jetson_Orin刷入实时内核的方式</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2024/02/27/%E7%BB%99Jetson-Orin%E5%88%B7%E5%85%A5%E5%AE%9E%E6%97%B6%E5%86%85%E6%A0%B8%E7%9A%84%E6%96%B9%E5%BC%8F/" class="article-date">
+  <time datetime="2024-02-27T09:57:16.000Z" itemprop="datePublished">2024-02-27</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h1><ul>
+<li><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/jetson/archives/r35.1/DeveloperGuide/text/SD/Kernel/KernelCustomization.html#to-build-the-real-time-kernel">内核交叉编译参考</a></p>
+</li>
+<li><p>工具链的位置在<a target="_blank" rel="noopener" href="https://docs.nvidia.com/jetson/archives/r35.1/DeveloperGuide/text/AT/JetsonLinuxToolchain.html#at-jetsonlinuxtoolchain">工具链</a></p>
+</li>
+<li><p>先按照<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_31985307/article/details/131499050">这个</a></p>
+<ul>
+<li>下载好内核源码之后，在<code>kernel</code>目录下输入命令<code>./kernel-5.10/scripts/rt-patch.sh apply-patches</code></li>
+<li>执行结束后会输出<code>The PREEMPT RT patches have been successfully applied!</code></li>
+</ul>
+</li>
+<li><p>然后在内核目录下执行<code>make menuconfig</code></p>
+<ul>
+<li>在General Setup下找到抢占的设置<code>preemption model</code></li>
+<li><img src="/imgs/0f72dd5883389f992edc5d0f1120c66b4d983d40367140d3b3f63d0327b3c76b.png" alt="picture 2">  </li>
+<li>设置为Real Time</li>
+</ul>
+</li>
+<li><p>然后可能遇到报错，根据提示在内核源码目录下执行<code>make ARCH=arm64 mrproper</code></p>
+</li>
+<li><p>然后在<code>kernel</code>目录的根目录下执行<code>./nvbuild.sh -o $HOME/kernel_output</code></p>
+<ul>
+<li>输出到用户目录下的<code>kernel_output</code>目录下</li>
+</ul>
+</li>
+<li><p><img src="/imgs/4a945185255bec8a132abb2b4ba6f2499463fe3991db2b0a0b2ebbb89a31ed95.png" alt="picture 3">  </p>
+<ul>
+<li>注意这一步编译的驱动所需要的SYSSRC是之前编译的内核源码的位置，而不是jetpack SDK下载的内核源码的位置</li>
+</ul>
+</li>
+<li><p>但是又遇到报错</p>
+<ul>
+<li><img src="/imgs/cb8e8712b49db29b12288cd5ee486c801f50295f1eb2ac7841d226b74cace260.png" alt="picture 4">  </li>
+</ul>
+</li>
+<li><p>暂时跳过这一步，先进行后面的rootfs构造</p>
+</li>
+<li><p>使用<code>sudo ./flash.sh jetson-agx-orin-devkit internal</code>刷机的时候，可以看到提示</p>
+<ul>
+<li><img src="/imgs/5d3e6ac968752060b3abf84a772935f6e04dd5e06ddb0334e0d100e32a26aed0.png" alt="picture 5">  </li>
+<li>可以看出内核已经是rt内核了</li>
+</ul>
+</li>
+<li><p>正在烧录中</p>
+<ul>
+<li><img src="/imgs/8883564a1d87479f161a1418df6b684aba778bb41cd53d4a1701bee7f46791cb.png" alt="picture 6">  </li>
+</ul>
+</li>
+<li><p>然后小盒会自动重启</p>
+<ul>
+<li><img src="/imgs/c84bef522a1f99b075a3d50546bda1b82a6945a80562bbb38a4db7c16b44ea24.png" alt="picture 7">  </li>
+</ul>
+</li>
+<li><p>遇到无法连接WiFi的情况，先链接eth0等跳过这个界面，遇到DHCP失败直接选择之后再配置即可</p>
+</li>
+<li><p>然后重启几次开发板，使用<code>sudo nmtui</code>命令在命令行UI界面配网即可</p>
+</li>
+</ul>
+<h2 id="遇到刷机后因为SSH链接过而无法链接的问题"><a href="#遇到刷机后因为SSH链接过而无法链接的问题" class="headerlink" title="遇到刷机后因为SSH链接过而无法链接的问题"></a>遇到刷机后因为SSH链接过而无法链接的问题</h2><ul>
+<li>windows一般在<code>用户/用户名/.ssh/known_hosts</code>文件，根据目标设备的IP地址查找到对应的条目，删除即可</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nvidia/" rel="tag">Nvidia</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%86%85%E6%A0%B8/" rel="tag">内核</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-使用Epoll和协程处理链接的socket库"
   class="article article-type-post"
   itemscope
@@ -1113,127 +1222,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-动态规划（二）"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/12/12/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/"
-    >动态规划（二）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/12/12/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/" class="article-date">
-  <time datetime="2023-12-12T09:01:13.000Z" itemprop="datePublished">2023-12-12</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="Leetcode-718-最长重复子数组"><a href="#Leetcode-718-最长重复子数组" class="headerlink" title="Leetcode 718. 最长重复子数组"></a>Leetcode 718. 最长重复子数组</h2><ul>
-<li>递推，使用上一个位置的连续长度加上这个位置是否相等递推出这个位置的</li>
-<li>如果相等，就是到<code>i-1</code>,<code>j-1</code>位置为止的连续长度+1<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findLength</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums1, vector&lt;<span class="keyword">int</span>&gt;&amp; nums2)</span> </span>&#123;</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">map</span>(nums1.<span class="built_in">size</span>(), vector&lt;<span class="keyword">int</span>&gt;(nums2.<span class="built_in">size</span>(), <span class="number">0</span>));</span><br><span class="line">        <span class="keyword">int</span> maxLen = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;nums1.<span class="built_in">size</span>(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j&lt;nums2.<span class="built_in">size</span>(); ++j)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(nums1[i] == nums2[j])&#123;</span><br><span class="line">                    <span class="keyword">if</span>(i == <span class="number">0</span> || j == <span class="number">0</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        map[i][j] = <span class="number">1</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> </span><br><span class="line">                    &#123;</span><br><span class="line">                        map[i][j] = map[i<span class="number">-1</span>][j<span class="number">-1</span>]+<span class="number">1</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    maxLen = <span class="built_in">max</span>(map[i][j], maxLen);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxLen;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Leetcode-115-不同的子序列"><a href="#Leetcode-115-不同的子序列" class="headerlink" title="Leetcode 115. 不同的子序列"></a>Leetcode 115. 不同的子序列</h2><ul>
-<li>因为是从s中找t，所以递归的主要顺序是t找到了哪个位置</li>
-<li>假如s的<code>i</code>位置与t的<code>j</code>相等，那么该位置的子字符串种类就是<code>i-1</code>和<code>j-1</code>位置位置+t到<code>j</code>位置时之前的种类之和</li>
-<li>不等的话，就继承s字符串在之前位置，j字符串在当前位置的种类数量<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numDistinct</span><span class="params">(string s, string t)</span> </span>&#123;</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">map</span>(s.<span class="built_in">size</span>()+<span class="number">1</span>, vector&lt;<span class="keyword">int</span>&gt;(t.<span class="built_in">size</span>()+<span class="number">1</span>, <span class="number">0</span>));</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;=s.<span class="built_in">size</span>(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            map[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i&lt;=s.<span class="built_in">size</span>(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j&lt;=t.<span class="built_in">size</span>(); ++j)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(s[i<span class="number">-1</span>] == t[j<span class="number">-1</span>])</span><br><span class="line">                &#123;</span><br><span class="line">                    map[i][j]=(map[i<span class="number">-1</span>][j<span class="number">-1</span>]+map[i<span class="number">-1</span>][j])%((<span class="keyword">int</span>)<span class="number">1e9</span>+<span class="number">7</span>); <span class="comment">// 此处就是求和t字符串到j位置的所有可能性（包括s字符串之前的可能性）</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> </span><br><span class="line">                &#123;</span><br><span class="line">                    map[i][j] = map[i<span class="number">-1</span>][j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> map[s.<span class="built_in">size</span>()][t.<span class="built_in">size</span>()];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Leetcode-583-两个字符串的删除操作"><a href="#Leetcode-583-两个字符串的删除操作" class="headerlink" title="Leetcode 583. 两个字符串的删除操作"></a>Leetcode 583. 两个字符串的删除操作</h2><ul>
-<li><p>从<code>i-1</code>和<code>j-1</code>递推<code>i</code>和<code>j</code></p>
-</li>
-<li><p>当<code>word1[i - 1]</code> 与 <code>word2[j - 1]</code>相同的时候，<code>dp[i][j] = dp[i - 1][j - 1]</code></p>
-</li>
-<li><p>当<code>word1[i - 1]</code> 与 <code>word2[j - 1]</code>不相同的时候，有三种情况：</p>
-<ul>
-<li><p>情况一：删<code>word1[i - 1]</code>，最少操作次数为<code>dp[i - 1][j] + 1</code></p>
-</li>
-<li><p>情况二：删<code>word2[j - 1]</code>，最少操作次数为<code>dp[i][j - 1] + 1</code></p>
-</li>
-<li><p>情况三：同时删<code>word1[i - 1]</code>和<code>word2[j - 1]</code>，操作的最少次数为<code>dp[i - 1][j - 1] + 2</code></p>
-</li>
-</ul>
-</li>
-<li><p>那最后当然是取最小值，所以当<code>word1[i - 1]</code> 与 <code>word2[j - 1]</code>不相同的时候，递推公式：<code>dp[i][j] = min(&#123;dp[i - 1][j - 1] + 2, dp[i - 1][j] + 1, dp[i][j - 1] + 1&#125;);</code></p>
-</li>
-<li><p>因为 <code>dp[i][j - 1] + 1 = dp[i - 1][j - 1] + 2</code>，所以递推公式可简化为：<code>dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1);</code></p>
-<ul>
-<li>因为对于<code>dp[i][j-1]</code>而言，就是第一个字符串到<code>i-1</code>位置和第二个字符串到<code>j-2</code>位置，第一个字符串增加一步删除就可以到<code>i-2</code>和<code>j-2</code>的位置，因此二者只差一步</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minDistance</span><span class="params">(string word1, string word2)</span> </span>&#123;</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">dp</span>(word1.<span class="built_in">size</span>() + <span class="number">1</span>, vector&lt;<span class="keyword">int</span>&gt;(word2.<span class="built_in">size</span>() + <span class="number">1</span>));</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= word1.<span class="built_in">size</span>(); i++) dp[i][<span class="number">0</span>] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= word2.<span class="built_in">size</span>(); j++) dp[<span class="number">0</span>][j] = j;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= word1.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= word2.<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (word1[i - <span class="number">1</span>] == word2[j - <span class="number">1</span>]) &#123;</span><br><span class="line">                    dp[i][j] = dp[i - <span class="number">1</span>][j - <span class="number">1</span>];</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    dp[i][j] = <span class="built_in">min</span>(dp[i - <span class="number">1</span>][j] + <span class="number">1</span>, dp[i][j - <span class="number">1</span>] + <span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[word1.<span class="built_in">size</span>()][word2.<span class="built_in">size</span>()];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Leetcode-72-编辑距离"><a href="#Leetcode-72-编辑距离" class="headerlink" title="Leetcode 72. 编辑距离"></a>Leetcode 72. 编辑距离</h2><ul>
-<li>此题遇上一个类似，只是增加了几个操作<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minDistance</span><span class="params">(string word1, string word2)</span> </span>&#123;</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">dp</span>(word1.<span class="built_in">size</span>() + <span class="number">1</span>, vector&lt;<span class="keyword">int</span>&gt;(word2.<span class="built_in">size</span>() + <span class="number">1</span>, <span class="number">0</span>));</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= word1.<span class="built_in">size</span>(); i++) dp[i][<span class="number">0</span>] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= word2.<span class="built_in">size</span>(); j++) dp[<span class="number">0</span>][j] = j;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= word1.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= word2.<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (word1[i - <span class="number">1</span>] == word2[j - <span class="number">1</span>]) &#123;</span><br><span class="line">                    dp[i][j] = dp[i - <span class="number">1</span>][j - <span class="number">1</span>];</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    dp[i][j] = <span class="built_in">min</span>(&#123;dp[i - <span class="number">1</span>][j - <span class="number">1</span>], dp[i - <span class="number">1</span>][j], dp[i][j - <span class="number">1</span>]&#125;) + <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[word1.<span class="built_in">size</span>()][word2.<span class="built_in">size</span>()];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Leetcode-1035-不相交的线"><a href="#Leetcode-1035-不相交的线" class="headerlink" title="Leetcode 1035. 不相交的线"></a>Leetcode 1035. 不相交的线</h2><ul>
-<li>此题同样是类似的动态规划</li>
-<li>利用<code>i-1</code>和<code>j-1</code>推导<code>i</code>和<code>j</code>位置的值</li>
-<li>如果当前位置相等，此时则是在<code>i-1</code>和<code>j-1</code>位置的基础上<code>+1</code></li>
-<li>因为递推的上一级是<code>i-1</code>和<code>j-1</code>，这就导致<u>之前的连线最多只涉及之前的数字，不会于新加入的相交</u>，从而防止了相交<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxUncrossedLines</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; A, vector&lt;<span class="keyword">int</span>&gt;&amp; B)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">dp</span>(A.<span class="built_in">size</span>() + <span class="number">1</span>, vector&lt;<span class="keyword">int</span>&gt;(B.<span class="built_in">size</span>() + <span class="number">1</span>, <span class="number">0</span>));</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= A.<span class="built_in">size</span>(); i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= B.<span class="built_in">size</span>(); j++) </span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (A[i - <span class="number">1</span>] == B[j - <span class="number">1</span>]) </span><br><span class="line">                &#123;</span><br><span class="line">                    dp[i][j] = dp[i - <span class="number">1</span>][j - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    dp[i][j] = <span class="built_in">max</span>(dp[i - <span class="number">1</span>][j], dp[i][j - <span class="number">1</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[A.<span class="built_in">size</span>()][B.<span class="built_in">size</span>()];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Leetcode-1143-最长公共子序列"><a href="#Leetcode-1143-最长公共子序列" class="headerlink" title="Leetcode 1143. 最长公共子序列"></a>Leetcode 1143. 最长公共子序列</h2><ul>
-<li><strong>暴力递归方法（或者动态规划）</strong></li>
-<li>每次两个字符串往前走一个位置（比如到达i, j），假如两个字符串在这个位置的值相同，那么就以(i-1, j-1)位置的最长子串的长度+1作为当前位置的值</li>
-<li>否则，就从两个字符串分别到（i-1，j）和（i，j-1）位置选择一个较大的作为结果<ul>
-<li><strong><u>这么做的关键原因（也就是遇上一题的区别）就是因为这个不必须是连续的</u></strong><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">longestCommonSubsequence</span><span class="params">(string text1, string text2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m = text1.<span class="built_in">length</span>(), n = text2.<span class="built_in">length</span>();</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">dp</span>(m + <span class="number">1</span>, vector&lt;<span class="keyword">int</span>&gt;(n + <span class="number">1</span>));</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c1 = text1.<span class="built_in">at</span>(i - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++) &#123;</span><br><span class="line">                <span class="keyword">char</span> c2 = text2.<span class="built_in">at</span>(j - <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">if</span> (c1 == c2) &#123;</span><br><span class="line">                    dp[i][j] = dp[i - <span class="number">1</span>][j - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    dp[i][j] = <span class="built_in">max</span>(dp[i - <span class="number">1</span>][j], dp[i][j - <span class="number">1</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[m][n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h2 id="LeetCode-72-编辑距离"><a href="#LeetCode-72-编辑距离" class="headerlink" title="LeetCode 72. 编辑距离"></a>LeetCode 72. 编辑距离</h2><ul>
-<li>创建一个二维数组，一个维度是第一个字符串的长度，另一个是第二个字符串的长度</li>
-<li>当 <code>word1[i] == word2[j]</code>，<code>dp[i][j] = dp[i-1][j-1]</code></li>
-<li>当 <code>word1[i] != word2[j]</code>，<code>dp[i][j] = min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]) + 1</code></li>
-<li>其中，<code>dp[i-1][j-1]</code> 表示<strong>替换</strong>操作，<code>dp[i-1][j]</code> 表示<strong>删除</strong>操作，<code>dp[i][j-1]</code> 表示<strong>插入</strong>操作。<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minDistance</span><span class="params">(string word1, string word2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m = word1.<span class="built_in">length</span>();</span><br><span class="line">        <span class="keyword">int</span> n = word2.<span class="built_in">length</span>();</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">map</span>(m+<span class="number">1</span>, vector&lt;<span class="keyword">int</span>&gt;(n+<span class="number">1</span>, INT_MAX));</span><br><span class="line">        map[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;=m; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j&lt;=n; ++j)</span><br><span class="line">            &#123;</span><br><span class="line">                </span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span>(i == <span class="number">0</span>&amp;&amp; j &gt; <span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    map[i][j] = map[i][j<span class="number">-1</span>]+<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(i &gt; <span class="number">0</span>&amp;&amp; j == <span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    map[i][j] = map[i<span class="number">-1</span>][j]+<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>)<span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(word1[i<span class="number">-1</span>] == word2[j<span class="number">-1</span>])</span><br><span class="line">                &#123;</span><br><span class="line">                    map[i][j] = map[i<span class="number">-1</span>][j<span class="number">-1</span>];</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    map[i][j] = <span class="built_in">min</span>(map[i<span class="number">-1</span>][j], <span class="built_in">min</span>(map[i][j<span class="number">-1</span>], map[i<span class="number">-1</span>][j<span class="number">-1</span>]))+<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> map[m][n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Leetcode-474-一和零"><a href="#Leetcode-474-一和零" class="headerlink" title="Leetcode 474. 一和零"></a>Leetcode 474. 一和零</h2><ul>
-<li>此题主要是从一个数组中选择几个元素组成某个目的</li>
-<li>本质上是遍历每个元素然后决定要/不要的问题</li>
-<li>所以遍历每个元素的时候要针对<strong>要这个元素</strong>和<strong>不要这个元素</strong>做出两种情况的递推。<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// int maxLen;</span></span><br><span class="line">    vector&lt;vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&gt; lenMap;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findMaxForm</span><span class="params">(vector&lt;string&gt;&amp; strs, <span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">smap</span>(strs.<span class="built_in">size</span>(), vector&lt;<span class="keyword">int</span>&gt;(<span class="number">2</span>, <span class="number">0</span>));</span><br><span class="line">        <span class="comment">// lenMap</span></span><br><span class="line">        <span class="comment">// maxLen = 0;</span></span><br><span class="line">        lenMap = vector&lt;vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&gt;(strs.<span class="built_in">size</span>()+<span class="number">1</span>, vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;(m+<span class="number">1</span>, vector&lt;<span class="keyword">int</span>&gt;(n+<span class="number">1</span>, <span class="number">-1</span>)));</span><br><span class="line">        lenMap[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;strs.<span class="built_in">size</span>(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">while</span>(index&lt;strs[i].<span class="built_in">size</span>())</span><br><span class="line">            &#123;</span><br><span class="line">                ++smap[i][strs[i][index++] - <span class="string">&#x27;0&#x27;</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> maxLen = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;strs.<span class="built_in">size</span>(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j&lt;=m; ++j)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k&lt;=n; ++k)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">if</span>(lenMap[i][j][k]&lt;<span class="number">0</span>)<span class="keyword">continue</span>;</span><br><span class="line">                    lenMap[i+<span class="number">1</span>][j][k]=<span class="built_in">max</span>(lenMap[i][j][k], lenMap[i+<span class="number">1</span>][j][k]); </span><br><span class="line">                    <span class="keyword">if</span>(j+smap[i][<span class="number">0</span>]&lt;=m &amp;&amp; k+smap[i][<span class="number">1</span>]&lt;=n)</span><br><span class="line">                    &#123;</span><br><span class="line">                        lenMap[i+<span class="number">1</span>][j+smap[i][<span class="number">0</span>]][k+smap[i][<span class="number">1</span>]] = <span class="built_in">max</span>(lenMap[i][j][k]+<span class="number">1</span>, lenMap[i+<span class="number">1</span>][j+smap[i][<span class="number">0</span>]][k+smap[i][<span class="number">1</span>]]);</span><br><span class="line">                        maxLen = <span class="built_in">max</span>(maxLen, lenMap[i+<span class="number">1</span>][j+smap[i][<span class="number">0</span>]][k+smap[i][<span class="number">1</span>]]);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxLen&lt;<span class="number">0</span>?<span class="number">0</span>:maxLen;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="647-回文子串"><a href="#647-回文子串" class="headerlink" title="647. 回文子串"></a>647. 回文子串</h2><ul>
-<li>注意循环顺序，从中间到两边，所以要从<strong>末端开始</strong><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">countSubstrings</span><span class="params">(string s)</span> </span>&#123;</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">bool</span>&gt;&gt; <span class="built_in">dp</span>(s.<span class="built_in">size</span>(), vector&lt;<span class="keyword">bool</span>&gt;(s.<span class="built_in">size</span>(), <span class="literal">false</span>));</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = s.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;  <span class="comment">// 注意遍历顺序</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &lt; s.<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (s[i] == s[j]) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (j - i &lt;= <span class="number">1</span>) &#123; <span class="comment">// 情况一 和 情况二</span></span><br><span class="line">                        result++;</span><br><span class="line">                        dp[i][j] = <span class="literal">true</span>;</span><br><span class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (dp[i + <span class="number">1</span>][j - <span class="number">1</span>]) &#123; <span class="comment">// 情况三</span></span><br><span class="line">                        result++;</span><br><span class="line">                        dp[i][j] = <span class="literal">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="最长回文子序列"><a href="#最长回文子序列" class="headerlink" title="最长回文子序列"></a>最长回文子序列</h2><ul>
-<li>此题大体与上面类似，唯一的区别是不需连续</li>
-<li>因此需要在条件不成立的时候使用<code>dp[i][j] = max(dp[i+1][j], dp[i][j-1]);</code>保存结果递推<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">longestPalindromeSubseq</span><span class="params">(string s)</span> </span>&#123;</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">dp</span>(s.<span class="built_in">size</span>(), vector&lt;<span class="keyword">int</span>&gt;(s.<span class="built_in">size</span>(), <span class="number">0</span>));</span><br><span class="line">        <span class="keyword">int</span> result = INT_MIN;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = s.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;  <span class="comment">// 注意遍历顺序</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &lt; s.<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (s[i] == s[j]) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (j - i &lt;= <span class="number">1</span>) </span><br><span class="line">                    &#123; </span><br><span class="line">                        <span class="comment">// 情况一 和 情况二</span></span><br><span class="line">                        dp[i][j] = j-i+<span class="number">1</span>;</span><br><span class="line">                        result = <span class="built_in">max</span>(result, dp[i][j]);</span><br><span class="line">                    &#125; </span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                    &#123;</span><br><span class="line">                        dp[i][j] = dp[i+<span class="number">1</span>][j<span class="number">-1</span>]+<span class="number">2</span>;</span><br><span class="line">                        result = <span class="built_in">max</span>(result, dp[i][j]);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> </span><br><span class="line">                &#123;</span><br><span class="line">                    dp[i][j] = <span class="built_in">max</span>(dp[i+<span class="number">1</span>][j], dp[i][j<span class="number">-1</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="小总结"><a href="#小总结" class="headerlink" title="小总结"></a>小总结</h2><ul>
-<li>从大序列中找小序列的问题，假如是连续序列的话，不满足对应的条件的时候可以不处理</li>
-<li>但是假如不是连续序列的话，往往需要类似于<code>dp[i][j] = max(dp[i+1][j], dp[i][j-1]);</code>的操作来保存递推结果</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Leetcode/" rel="tag">Leetcode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag">动态规划</a></li></ul>
 
     </footer>
   </div>

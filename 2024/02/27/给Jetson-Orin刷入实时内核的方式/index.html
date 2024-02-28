@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Archives |  Frank’s blogs</title>
+      <title>给Jetson_Orin刷入实时内核的方式 |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -52,246 +52,197 @@
       
     <main class="content on">
       <section class="outer">
-  
-  
-  <article class="articles">
+  <article
+  id="post-给Jetson-Orin刷入实时内核的方式"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
     
-    
-    <h1 class="page-type-title">Archives</h1>
-    
-    
-  
-  
-  
-  
-  
-  
-  <div class="archives-wrap">
-    <div class="archive-year-wrap">
-      <a href="/archives/2023" class="archive-year">2023</a>
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  给Jetson_Orin刷入实时内核的方式
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2024/02/27/%E7%BB%99Jetson-Orin%E5%88%B7%E5%85%A5%E5%AE%9E%E6%97%B6%E5%86%85%E6%A0%B8%E7%9A%84%E6%96%B9%E5%BC%8F/" class="article-date">
+  <time datetime="2024-02-27T09:57:16.000Z" itemprop="datePublished">2024-02-27</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">384</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">1 min</span>
+        </span>
+    </span>
+</div>
+ 
     </div>
-    <div class="archives">
       
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/06/30/%E8%A7%A3%E5%86%B3Windows%E4%B8%8BPowershell%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC%E6%97%A0%E6%B3%95%E8%BF%90%E8%A1%8Cconda%E7%9A%84%E9%97%AE%E9%A2%98/" class="archive-article-date">
-  <time datetime="2023-06-30T08:58:20.000Z" itemprop="datePublished">06/30</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/06/30/%E8%A7%A3%E5%86%B3Windows%E4%B8%8BPowershell%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC%E6%97%A0%E6%B3%95%E8%BF%90%E8%A1%8Cconda%E7%9A%84%E9%97%AE%E9%A2%98/"
-    >解决Windows下Powershell无法执行脚本无法运行conda的问题</a> 
-</h2>
- 
+    <div class="tocbot"></div>
 
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/06/27/%E4%BF%AE%E6%94%B9-etc-sudoers%E6%96%87%E4%BB%B6%E5%87%BA%E9%94%99%E5%AF%BC%E8%87%B4%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="archive-article-date">
-  <time datetime="2023-06-27T08:36:10.000Z" itemprop="datePublished">06/27</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/06/27/%E4%BF%AE%E6%94%B9-etc-sudoers%E6%96%87%E4%BB%B6%E5%87%BA%E9%94%99%E5%AF%BC%E8%87%B4%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"
-    >修改/etc/sudoers文件出错导致问题解决方案</a> 
-</h2>
- 
 
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/06/20/%E8%8A%AF%E7%89%87%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8CbootLoader/" class="archive-article-date">
-  <time datetime="2023-06-20T06:49:38.000Z" itemprop="datePublished">06/20</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/06/20/%E8%8A%AF%E7%89%87%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8CbootLoader/"
-    >芯片的启动和bootLoader</a> 
-</h2>
- 
 
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0%EF%BC%884%EF%BC%89/" class="archive-article-date">
-  <time datetime="2023-06-19T04:15:53.000Z" itemprop="datePublished">06/19</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0%EF%BC%884%EF%BC%89/"
-    >操作系统and编译随记（4）</a> 
-</h2>
- 
 
-    </header>
-    
-    
-  </div>
-</article>
-      
   
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/06/05/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0%EF%BC%883%EF%BC%89/" class="archive-article-date">
-  <time datetime="2023-06-05T11:08:23.000Z" itemprop="datePublished">06/05</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
        
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/06/05/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0%EF%BC%883%EF%BC%89/"
-    >操作系统and编译随记（3）</a> 
-</h2>
+  <h1 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h1><ul>
+<li><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/jetson/archives/r35.1/DeveloperGuide/text/SD/Kernel/KernelCustomization.html#to-build-the-real-time-kernel">内核交叉编译参考</a></p>
+</li>
+<li><p>工具链的位置在<a target="_blank" rel="noopener" href="https://docs.nvidia.com/jetson/archives/r35.1/DeveloperGuide/text/AT/JetsonLinuxToolchain.html#at-jetsonlinuxtoolchain">工具链</a></p>
+</li>
+<li><p>先按照<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_31985307/article/details/131499050">这个</a></p>
+<ul>
+<li>下载好内核源码之后，在<code>kernel</code>目录下输入命令<code>./kernel-5.10/scripts/rt-patch.sh apply-patches</code></li>
+<li>执行结束后会输出<code>The PREEMPT RT patches have been successfully applied!</code></li>
+</ul>
+</li>
+<li><p>然后在内核目录下执行<code>make menuconfig</code></p>
+<ul>
+<li>在General Setup下找到抢占的设置<code>preemption model</code></li>
+<li><img src="/imgs/0f72dd5883389f992edc5d0f1120c66b4d983d40367140d3b3f63d0327b3c76b.png" alt="picture 2">  </li>
+<li>设置为Real Time</li>
+</ul>
+</li>
+<li><p>然后可能遇到报错，根据提示在内核源码目录下执行<code>make ARCH=arm64 mrproper</code></p>
+</li>
+<li><p>然后在<code>kernel</code>目录的根目录下执行<code>./nvbuild.sh -o $HOME/kernel_output</code></p>
+<ul>
+<li>输出到用户目录下的<code>kernel_output</code>目录下</li>
+</ul>
+</li>
+<li><p><img src="/imgs/4a945185255bec8a132abb2b4ba6f2499463fe3991db2b0a0b2ebbb89a31ed95.png" alt="picture 3">  </p>
+<ul>
+<li>注意这一步编译的驱动所需要的SYSSRC是之前编译的内核源码的位置，而不是jetpack SDK下载的内核源码的位置</li>
+</ul>
+</li>
+<li><p>但是又遇到报错</p>
+<ul>
+<li><img src="/imgs/cb8e8712b49db29b12288cd5ee486c801f50295f1eb2ac7841d226b74cace260.png" alt="picture 4">  </li>
+</ul>
+</li>
+<li><p>暂时跳过这一步，先进行后面的rootfs构造</p>
+</li>
+<li><p>使用<code>sudo ./flash.sh jetson-agx-orin-devkit internal</code>刷机的时候，可以看到提示</p>
+<ul>
+<li><img src="/imgs/5d3e6ac968752060b3abf84a772935f6e04dd5e06ddb0334e0d100e32a26aed0.png" alt="picture 5">  </li>
+<li>可以看出内核已经是rt内核了</li>
+</ul>
+</li>
+<li><p>正在烧录中</p>
+<ul>
+<li><img src="/imgs/8883564a1d87479f161a1418df6b684aba778bb41cd53d4a1701bee7f46791cb.png" alt="picture 6">  </li>
+</ul>
+</li>
+<li><p>然后小盒会自动重启</p>
+<ul>
+<li><img src="/imgs/c84bef522a1f99b075a3d50546bda1b82a6945a80562bbb38a4db7c16b44ea24.png" alt="picture 7">  </li>
+</ul>
+</li>
+<li><p>遇到无法连接WiFi的情况，先链接eth0等跳过这个界面，遇到DHCP失败直接选择之后再配置即可</p>
+</li>
+<li><p>然后重启几次开发板，使用<code>sudo nmtui</code>命令在命令行UI界面配网即可</p>
+</li>
+</ul>
+<h2 id="遇到刷机后因为SSH链接过而无法链接的问题"><a href="#遇到刷机后因为SSH链接过而无法链接的问题" class="headerlink" title="遇到刷机后因为SSH链接过而无法链接的问题"></a>遇到刷机后因为SSH链接过而无法链接的问题</h2><ul>
+<li>windows一般在<code>用户/用户名/.ssh/known_hosts</code>文件，根据目标设备的IP地址查找到对应的条目，删除即可</li>
+</ul>
  
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/06/02/matlab%E4%B8%ADparfor%E4%B8%80%E4%BA%9B%E8%B8%A9%E5%9D%91%E5%92%8C%E7%94%A8%E6%B3%95/" class="archive-article-date">
-  <time datetime="2023-06-02T14:32:39.000Z" itemprop="datePublished">06/02</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/06/02/matlab%E4%B8%ADparfor%E4%B8%80%E4%BA%9B%E8%B8%A9%E5%9D%91%E5%92%8C%E7%94%A8%E6%B3%95/"
-    >matlab中parfor一些踩坑和用法</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/05/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0%EF%BC%882%EF%BC%89/" class="archive-article-date">
-  <time datetime="2023-05-16T10:20:00.000Z" itemprop="datePublished">05/16</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/05/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0%EF%BC%882%EF%BC%89/"
-    >操作系统and编译随记（2）</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/05/07/python%E8%BF%9B%E8%A1%8CSocket%E7%AE%80%E5%8D%95%E5%BC%80%E5%8F%91/" class="archive-article-date">
-  <time datetime="2023-05-07T02:20:06.000Z" itemprop="datePublished">05/07</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/05/07/python%E8%BF%9B%E8%A1%8CSocket%E7%AE%80%E5%8D%95%E5%BC%80%E5%8F%91/"
-    >python进行Socket简单开发</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/05/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0/" class="archive-article-date">
-  <time datetime="2023-05-06T05:16:27.000Z" itemprop="datePublished">05/06</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/05/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0/"
-    >操作系统and编译随记</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2023/04/19/%E4%BD%BF%E7%94%A8crow%E5%9C%A8CPP%E7%8E%AF%E5%A2%83%E4%B8%8B%E5%BC%80%E5%8F%91web%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="archive-article-date">
-  <time datetime="2023-04-19T15:29:13.000Z" itemprop="datePublished">04/19</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2023/04/19/%E4%BD%BF%E7%94%A8crow%E5%9C%A8CPP%E7%8E%AF%E5%A2%83%E4%B8%8B%E5%BC%80%E5%8F%91web%E6%9C%8D%E5%8A%A1%E5%99%A8/"
-    >使用crow在CPP环境下开发web服务器</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
+      <!-- reward -->
       
     </div>
-  </div>
-  
-  
-
-  
-  <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/archives/page/3/">上一页</a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><a class="page-number" href="/archives/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/archives/page/5/">5</a><a class="page-number" href="/archives/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/17/">17</a><a class="extend next" rel="next" href="/archives/page/5/">下一页</a>
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2024/02/27/%E7%BB%99Jetson-Orin%E5%88%B7%E5%85%A5%E5%AE%9E%E6%97%B6%E5%86%85%E6%A0%B8%E7%9A%84%E6%96%B9%E5%BC%8F/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nvidia/" rel="tag">Nvidia</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%86%85%E6%A0%B8/" rel="tag">内核</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2024/02/16/%E4%BD%BF%E7%94%A8Epoll%E5%92%8C%E5%8D%8F%E7%A8%8B%E5%A4%84%E7%90%86%E9%93%BE%E6%8E%A5%E7%9A%84socket%E5%BA%93/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">使用Epoll和协程处理链接的socket库</div>
+      </a>
+    
   </nav>
+
   
+   
+     
+</article>
+
 </section>
       <footer class="footer">
   <div class="outer">
@@ -414,6 +365,22 @@
 <script src="/js/lazyload.min.js"></script>
 
 <!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
 
 <script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
 <link
