@@ -141,6 +141,109 @@
     
     
     <article
+  id="post-链表相关题目题解"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/24/%E9%93%BE%E8%A1%A8%E7%9B%B8%E5%85%B3%E9%A2%98%E7%9B%AE%E9%A2%98%E8%A7%A3/"
+    >链表相关题目题解</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/24/%E9%93%BE%E8%A1%A8%E7%9B%B8%E5%85%B3%E9%A2%98%E7%9B%AE%E9%A2%98%E8%A7%A3/" class="article-date">
+  <time datetime="2022-01-24T05:04:08.000Z" itemprop="datePublished">2022-01-24</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="链表相关题目题解"><a href="#链表相关题目题解" class="headerlink" title="链表相关题目题解"></a>链表相关题目题解</h1><h2 id="返回链表倒数第k个元素"><a href="#返回链表倒数第k个元素" class="headerlink" title="返回链表倒数第k个元素"></a>返回链表倒数第k个元素</h2><ul>
+<li>快慢指针，<strong>第一个指针先移动k步，然后第二个指针再从头开始，这个时候这两个指针同时移动，当第一个指针到链表的末尾的时候，返回第二个指针即可</strong></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function">def <span class="title">FindKthToTail</span><span class="params">(self , pHead , k )</span>:</span></span><br><span class="line"><span class="function">        <span class="meta"># write code here</span></span></span><br><span class="line"><span class="function">        # 快慢指针</span></span><br><span class="line"><span class="function">        fast </span>= pHead</span><br><span class="line">        slow = pHead</span><br><span class="line">        # 快指针先走k步</span><br><span class="line">        <span class="keyword">for</span> i in range(<span class="number">0</span>, k):</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> fast:</span><br><span class="line">                <span class="keyword">return</span> None</span><br><span class="line">            fast = fast.next</span><br><span class="line">        # 双指针同时行走</span><br><span class="line">        <span class="keyword">while</span> fast:</span><br><span class="line">            fast = fast.next</span><br><span class="line">            slow = slow.next</span><br><span class="line">        <span class="keyword">return</span> slow</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>栈</strong>。把原链表的结点全部压栈，然后再把栈中最上面的k个节点出栈，出栈的结点重新串成一个新的链表即可</p>
+</li>
+<li><p><img src="/../imgs/image-20220124130552601.png" alt="image-20220124130552601"></p>
+</li>
+</ul>
+<h2 id="链表反序"><a href="#链表反序" class="headerlink" title="链表反序"></a>链表反序</h2><ul>
+<li>直接遍历</li>
+<li>递归</li>
+</ul>
+<h2 id="链表公共节点"><a href="#链表公共节点" class="headerlink" title="链表公共节点"></a>链表公共节点</h2><ul>
+<li><p>给定两个单链表<code>A，B</code>，假设一定含有公共结点，返回第一个公共结点的指针。</p>
+</li>
+<li><p>双指针</p>
+</li>
+<li><p><img src="/../imgs/image-20220124132357395.png" alt="image-20220124132357395"></p>
+</li>
+<li><p><img src="/../imgs/image-20220124132433562.png" alt="image-20220124132433562"></p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">FindFirstCommonNode</span><span class="params">( ListNode* pHead1, ListNode* pHead2)</span> </span>&#123;</span><br><span class="line">        ListNode *ta = pHead1, *tb = pHead2;</span><br><span class="line">        <span class="keyword">while</span> (ta != tb) &#123;</span><br><span class="line">            ta = ta ? ta-&gt;next : pHead2;</span><br><span class="line">            tb = tb ? tb-&gt;next : pHead1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ta;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>上述代码是从第一个链表的尾部循环到第二个链表的头部，第二个链表从尾部循环到第一个链表的头部，<strong>相当于是把一个链表完整的连接在了另一个后面构成一个长度为m+n的新的链表，长度相等，而且保留原来的相同的节点</strong></li>
+</ul>
+<h2 id="找带环链表的入口位置"><a href="#找带环链表的入口位置" class="headerlink" title="找带环链表的入口位置"></a>找带环链表的入口位置</h2><ul>
+<li><p>返回带有环的链表的环的入口节点</p>
+</li>
+<li><p><img src="/../imgs/image-20220124134956992.png" alt="image-20220124134956992"></p>
+</li>
+<li><p>理解：假设从开始到相遇位置的总距离是x+y，x是直线距离，y是在环上的距离，那么此时快指针走过的路径长度是2（x+y），也就意味着环上<strong>剩余的长度为x+y</strong>,此时将其中一个指针移动到头部，另一个保持在原地，二者都按照1的步长运动，走到入口节点的距离是<strong>相同</strong>的都是x+y，所以必定会在环的入口相遇</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode *<span class="title">detectCycle</span><span class="params">(ListNode *head)</span> </span>&#123;</span><br><span class="line">        ListNode* fast = head;</span><br><span class="line">        ListNode* slow = head;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (fast == <span class="literal">nullptr</span> || fast-&gt;next == <span class="literal">nullptr</span>) <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">            fast = fast-&gt;next-&gt;next;</span><br><span class="line">            slow = slow-&gt;next;</span><br><span class="line">            <span class="keyword">if</span> (fast == slow) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        fast = head;</span><br><span class="line">        <span class="keyword">while</span> (slow != fast) &#123;</span><br><span class="line">            slow = slow-&gt;next;</span><br><span class="line">            fast = fast-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> fast;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">- 相似的思路适用于Leetcode <span class="number">287.</span> 寻找重复数，寻找一个数字范围与数组长度相同的列表中的某一个（只有一个）重复数字。</span><br></pre></td></tr></table></figure>
+
+<h2 id="leetcode-146-LRU缓存"><a href="#leetcode-146-LRU缓存" class="headerlink" title="leetcode 146. LRU缓存"></a>leetcode 146. LRU缓存</h2><ul>
+<li>实现一个在容量上限达到之后弹出上次使用时间到现在最长的缓存项目的数据结构<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cacheLine</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> value;</span><br><span class="line">    <span class="keyword">int</span> key;</span><br><span class="line">    cacheLine* next;</span><br><span class="line">    cacheLine* prev;</span><br><span class="line">    <span class="built_in">cacheLine</span>(<span class="keyword">int</span> b, <span class="keyword">int</span> a):<span class="built_in">value</span>(a), <span class="built_in">key</span>(b), <span class="built_in">next</span>(<span class="literal">NULL</span>), <span class="built_in">prev</span>(<span class="literal">NULL</span>)&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> capa;</span><br><span class="line">    <span class="keyword">int</span> usedCnt;</span><br><span class="line">    cacheLine* head;</span><br><span class="line">    cacheLine* tail;</span><br><span class="line">    unordered_map&lt;<span class="keyword">int</span>, cacheLine*&gt; m;</span><br><span class="line">    <span class="built_in">LRUCache</span>(<span class="keyword">int</span> capacity) &#123;</span><br><span class="line">        capa = capacity;</span><br><span class="line">        usedCnt = <span class="number">0</span>;</span><br><span class="line">        head = <span class="keyword">new</span> <span class="built_in">cacheLine</span>(<span class="number">-999</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(m.<span class="built_in">count</span>(key))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(usedCnt&gt;<span class="number">1</span>&amp;&amp;m[key]-&gt;prev != head)</span><br><span class="line">            &#123;</span><br><span class="line">                cacheLine* temp = head-&gt;next;</span><br><span class="line">                cacheLine* thisNode = m[key];</span><br><span class="line">                <span class="keyword">if</span>(thisNode == tail)</span><br><span class="line">                &#123;</span><br><span class="line">                    tail = tail-&gt;prev;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(thisNode-&gt;next)</span><br><span class="line">                &#123;</span><br><span class="line">                    thisNode-&gt;next-&gt;prev = thisNode-&gt;prev;</span><br><span class="line">                &#125;</span><br><span class="line">                    </span><br><span class="line">                thisNode-&gt;prev-&gt;next = thisNode-&gt;next;</span><br><span class="line">                head-&gt;next = thisNode;</span><br><span class="line">                </span><br><span class="line">                thisNode-&gt;next = temp;</span><br><span class="line">                thisNode-&gt;prev = head;</span><br><span class="line">                temp-&gt;prev = thisNode;</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span>(temp)</span><br><span class="line">                    thisNode-&gt;next-&gt;prev =thisNode;</span><br><span class="line">                <span class="keyword">return</span> thisNode-&gt;value;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> m[key]-&gt;value;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">put</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(m.<span class="built_in">count</span>(key))</span><br><span class="line">        &#123;</span><br><span class="line">            m[key]-&gt;value = value;</span><br><span class="line">            <span class="built_in">get</span>(key);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(usedCnt&gt;<span class="number">0</span> &amp;&amp; usedCnt&lt;capa)</span><br><span class="line">        &#123;</span><br><span class="line">            cacheLine* temp = head-&gt;next;</span><br><span class="line">            cacheLine* newNode = <span class="keyword">new</span> <span class="built_in">cacheLine</span>(key, value);</span><br><span class="line">            temp-&gt;prev = newNode;</span><br><span class="line">            head-&gt;next = newNode;</span><br><span class="line">            newNode-&gt;prev = head;</span><br><span class="line">            newNode-&gt;next = temp;</span><br><span class="line">            m[key] = head-&gt;next;</span><br><span class="line">            ++usedCnt;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(usedCnt == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            head-&gt;next = <span class="keyword">new</span> <span class="built_in">cacheLine</span>(key, value);</span><br><span class="line">            m[key] = head-&gt;next;</span><br><span class="line">            head-&gt;next-&gt;prev = head;</span><br><span class="line">            tail = head-&gt;next;</span><br><span class="line">            ++usedCnt;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(usedCnt&gt;<span class="number">1</span> &amp;&amp; usedCnt == capa)</span><br><span class="line">        &#123;</span><br><span class="line">            m.<span class="built_in">erase</span>(m.<span class="built_in">find</span>(tail-&gt;key));</span><br><span class="line">            tail-&gt;key = key;</span><br><span class="line">            tail-&gt;value = value;</span><br><span class="line">            m[key] = tail;</span><br><span class="line">            <span class="built_in">get</span>(key);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            m.<span class="built_in">erase</span>(m.<span class="built_in">find</span>(tail-&gt;key));</span><br><span class="line">            tail-&gt;key = key;</span><br><span class="line">            tail-&gt;value = value;</span><br><span class="line">            m[key] = tail;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Your LRUCache object will be instantiated and called as such:</span></span><br><span class="line"><span class="comment"> * LRUCache* obj = new LRUCache(capacity);</span></span><br><span class="line"><span class="comment"> * int param_1 = obj-&gt;get(key);</span></span><br><span class="line"><span class="comment"> * obj-&gt;put(key,value);</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="链表选择排序"><a href="#链表选择排序" class="headerlink" title="链表选择排序"></a>链表选择排序</h2></li>
+<li>注意处理链表尾部和头部的问题</li>
+<li>建立一个假头部<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">insertionSortList</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        ListNode* dumHead = <span class="keyword">new</span> <span class="built_in">ListNode</span>(INT_MIN);</span><br><span class="line">        dumHead-&gt;next = head;</span><br><span class="line">        ListNode* newHead = dumHead, *cur = head;</span><br><span class="line">        <span class="keyword">int</span> minVal = INT_MAX;</span><br><span class="line">        ListNode* prevOfMin;</span><br><span class="line">        <span class="keyword">while</span>(newHead-&gt;next!=<span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            cur = newHead;</span><br><span class="line">            <span class="keyword">while</span>(cur-&gt;next!=<span class="literal">NULL</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(cur-&gt;next-&gt;val&lt;minVal)</span><br><span class="line">                &#123;</span><br><span class="line">                    prevOfMin = cur;</span><br><span class="line">                    minVal = cur-&gt;next-&gt;val;</span><br><span class="line">                &#125;</span><br><span class="line">                cur = cur-&gt;next;</span><br><span class="line">            &#125;</span><br><span class="line">            minVal = INT_MAX;</span><br><span class="line">            <span class="keyword">if</span>(prevOfMin == newHead)</span><br><span class="line">            &#123;</span><br><span class="line">                newHead = newHead-&gt;next;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            ListNode* temp = newHead-&gt;next, *temp2 = prevOfMin-&gt;next-&gt;next;</span><br><span class="line">            newHead-&gt;next = prevOfMin-&gt;next;</span><br><span class="line">            prevOfMin-&gt;next-&gt;next = temp;</span><br><span class="line">            </span><br><span class="line">            prevOfMin-&gt;next = temp2;</span><br><span class="line">            <span class="keyword">if</span>(newHead-&gt;next)</span><br><span class="line">            newHead = newHead-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dumHead-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="链表插入排序"><a href="#链表插入排序" class="headerlink" title="链表插入排序"></a>链表插入排序</h2><ul>
+<li>注意首先选择一个元素作为要插入的元素（保存这个元素的上一个元素这样方便修改，否则无法修改）</li>
+<li>注意没找到插入点的处理方法<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">insertionSortList</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        ListNode* dumHead = <span class="keyword">new</span> <span class="built_in">ListNode</span>(INT_MIN);</span><br><span class="line">        dumHead-&gt;next = head;</span><br><span class="line">        ListNode* cur, *pick = dumHead-&gt;next;</span><br><span class="line">        <span class="keyword">int</span> temp;</span><br><span class="line">        <span class="keyword">while</span>(pick-&gt;next)</span><br><span class="line">        &#123;</span><br><span class="line">            cur = dumHead;</span><br><span class="line">            <span class="keyword">while</span>((cur-&gt;next)&amp;&amp;(cur-&gt;next!=pick-&gt;next)&amp;&amp;(cur-&gt;next-&gt;val&lt;=pick-&gt;next-&gt;val))</span><br><span class="line">            &#123;</span><br><span class="line">                cur = cur-&gt;next;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(cur-&gt;next == pick-&gt;next)</span><br><span class="line">            &#123;</span><br><span class="line">                pick = pick-&gt;next;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            ListNode* temp = cur-&gt;next;</span><br><span class="line">            ListNode*temp2 = pick-&gt;next-&gt;next;</span><br><span class="line">            cur-&gt;next = pick-&gt;next;</span><br><span class="line">            pick-&gt;next = temp2;</span><br><span class="line">            cur-&gt;next-&gt;next = temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dumHead-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="Leetcode-206-反转链表"><a href="#Leetcode-206-反转链表" class="headerlink" title="Leetcode 206.反转链表"></a>Leetcode 206.反转链表</h2></li>
+<li>注意从堆中pop出来的时候可能会导致节点内存被释放，因此需要用自己创建的节点重建链表<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">reverseList</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!head)<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        stack&lt;ListNode*&gt; s;</span><br><span class="line">        ListNode *cur = head;</span><br><span class="line">        <span class="keyword">while</span>(cur!=<span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            s.<span class="built_in">push</span>(cur);</span><br><span class="line">            cur = cur-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        ListNode* temp = <span class="keyword">new</span> <span class="built_in">ListNode</span>(s.<span class="built_in">top</span>()-&gt;val), *newHead = temp;</span><br><span class="line">        s.<span class="built_in">pop</span>();</span><br><span class="line">        <span class="keyword">while</span>(s.<span class="built_in">size</span>()&amp;&amp;temp)</span><br><span class="line">        &#123;</span><br><span class="line">            temp-&gt;next = <span class="keyword">new</span> <span class="built_in">ListNode</span>(s.<span class="built_in">top</span>()-&gt;val);</span><br><span class="line">            s.<span class="built_in">pop</span>();</span><br><span class="line">            temp = temp-&gt;next;</span><br><span class="line">            <span class="comment">// cout&lt;&lt;temp-&gt;val&lt;&lt;endl;</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> newHead;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Leetcode-202-快乐数"><a href="#Leetcode-202-快乐数" class="headerlink" title="Leetcode 202. 快乐数"></a>Leetcode 202. 快乐数</h2><ul>
+<li>用快慢指针的方法，一个指针一次走两步，一个一次走一步<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">bitSquareSum</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(n &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> bit = n % <span class="number">10</span>;</span><br><span class="line">            sum += bit * bit;</span><br><span class="line">            n = n / <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isHappy</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> slow = n, fast = n;</span><br><span class="line">        <span class="keyword">do</span>&#123;</span><br><span class="line">            slow = <span class="built_in">bitSquareSum</span>(slow);</span><br><span class="line">            fast = <span class="built_in">bitSquareSum</span>(fast);</span><br><span class="line">            fast = <span class="built_in">bitSquareSum</span>(fast);</span><br><span class="line">        &#125;<span class="keyword">while</span>(slow != fast);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> slow == <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Linux线程（三）线程同步"
   class="article article-type-post"
   itemscope
@@ -1603,63 +1706,6 @@
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
 
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-修复manjaro不能识别外接显示器并且开启独显"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/20/%E4%BF%AE%E5%A4%8Dmanjaro%E4%B8%8D%E8%83%BD%E8%AF%86%E5%88%AB%E5%A4%96%E6%8E%A5%E6%98%BE%E7%A4%BA%E5%99%A8%E5%B9%B6%E4%B8%94%E5%BC%80%E5%90%AF%E7%8B%AC%E6%98%BE/"
-    >修复linux不能识别外接显示器并且开启独显</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/20/%E4%BF%AE%E5%A4%8Dmanjaro%E4%B8%8D%E8%83%BD%E8%AF%86%E5%88%AB%E5%A4%96%E6%8E%A5%E6%98%BE%E7%A4%BA%E5%99%A8%E5%B9%B6%E4%B8%94%E5%BC%80%E5%90%AF%E7%8B%AC%E6%98%BE/" class="article-date">
-  <time datetime="2022-01-20T03:00:01.000Z" itemprop="datePublished">2022-01-20</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="修复linux不能识别外接显示器并且开启独显"><a href="#修复linux不能识别外接显示器并且开启独显" class="headerlink" title="修复linux不能识别外接显示器并且开启独显"></a>修复linux不能识别外接显示器并且开启独显</h1><ul>
-<li><p>按照<a target="_blank" rel="noopener" href="https://github.com/Askannz/optimus-manager%E7%9A%84%E7%94%A8%E6%88%B7%E8%AF%B4%E6%98%8E%EF%BC%88manjaro%EF%BC%89">https://github.com/Askannz/optimus-manager的用户说明（manjaro）</a></p>
-<ul>
-<li><p><img src="/../imgs/image-20220120104302285.png" alt="image-20220120104302285"></p>
-</li>
-<li><p>将系统的<code>/etc/sddm.conf</code>文件进行修改注释掉两处之后，重启计算机，并且打开<code>optimus-manager-qt</code>，切换到英伟达显卡，再次重启，并且设置开机自启动模式</p>
-</li>
-</ul>
-</li>
-</ul>
-<p><img src="/../imgs/image-20220120104437272.png" alt="image-20220120104437272"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
     </footer>
   </div>
 
