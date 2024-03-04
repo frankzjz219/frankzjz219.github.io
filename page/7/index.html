@@ -141,6 +141,55 @@
     
     
     <article
+  id="post-贝叶斯回归"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/10/16/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%9B%9E%E5%BD%92/"
+    >贝叶斯回归</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/10/16/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%9B%9E%E5%BD%92/" class="article-date">
+  <time datetime="2022-10-16T03:20:52.000Z" itemprop="datePublished">2022-10-16</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/436569049">参考链接</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/tao-tie-wen-10/posts">总链接</a></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag">强化学习</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-PPO调参实录"
   class="article article-type-post"
   itemscope
@@ -878,97 +927,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-使用VSCode连接VMware虚拟机Ubuntu"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/09/17/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9E%E6%8E%A5VMware%E8%99%9A%E6%8B%9F%E6%9C%BAUbuntu/"
-    >使用VSCode连接VMware虚拟机Ubuntu</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/09/17/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9E%E6%8E%A5VMware%E8%99%9A%E6%8B%9F%E6%9C%BAUbuntu/" class="article-date">
-  <time datetime="2022-09-17T10:50:07.000Z" itemprop="datePublished">2022-09-17</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/strive0_0/article/details/124967746">参考链接</a></li>
-<li>VMware虚拟机网络配置设置为<strong>桥接模式</strong>，然后使用ifconfig查看<code>IP地址</code></li>
-<li><img src="/imgs/8a503e879b39b180e4fb95bda8a014a0f8444c29cc4eb4653ef0d86dfdca9cd1.png" alt="图 2">  </li>
-</ul>
-<h2 id="Ubuntu端安装SSH"><a href="#Ubuntu端安装SSH" class="headerlink" title="Ubuntu端安装SSH"></a>Ubuntu端安装SSH</h2><ul>
-<li><code>sudo apt-get install openssh-server</code></li>
-<li>检查是否安装好<ul>
-<li><code>ssh -V</code></li>
-</ul>
-</li>
-<li>查看服务是否启动<ul>
-<li><code>sudo ps -e |grep ssh</code></li>
-</ul>
-</li>
-<li>启动SSH<ul>
-<li><code>sudo service ssh start</code></li>
-</ul>
-</li>
-<li>修改配置文件</li>
-<li>SSH服务的配置文件在/etc/ssh/sshd_config下，我们<code>sudo vim /etc/ssh/sshd_config</code>进行修改：<ul>
-<li>修改一：把配置文件中的”PermitRootLogin without-password“前面加一个”#“号,把它注释掉（也可以直接增加这一句）</li>
-<li>修改二：增加一句”PermitRootLogin yes”</li>
-</ul>
-</li>
-<li>保存，退出，重启ssh <code>/etc/init.d/ssh restart</code><h2 id="VSCode端配置"><a href="#VSCode端配置" class="headerlink" title="VSCode端配置"></a>VSCode端配置</h2></li>
-<li>安装<code>remote-ssh</code>插件</li>
-<li>新建ssh链接，在命令框中输入<code>ssh 用户名@IP地址 -A</code></li>
-<li>然后保存配置开始链接</li>
-<li><img src="/imgs/31d0f7334ef200549eb81def8586ddaa1782230ba5b521a788ecc3a628f5bf32.png" alt="图 1">  <h2 id="卡死在创建SSH链接的时候的解决方法"><a href="#卡死在创建SSH链接的时候的解决方法" class="headerlink" title="卡死在创建SSH链接的时候的解决方法"></a>卡死在创建SSH链接的时候的解决方法</h2></li>
-<li><img src="/imgs/40583bbf36963874eb80477c2349df6fc91fe7b8926a95de0b3be06103ae96ee.png" alt="picture 1">  </li>
-<li>打开Vscode端的<code>SSH</code>插件设置</li>
-<li>找到这一项 勾上对勾<ul>
-<li><img src="/imgs/5f8624e28c4e47571f5d970e8ea4e3d43061d6dfc22e57ab0426a9221c46f130.png" alt="picture 2">  </li>
-</ul>
-</li>
-<li>此外注意<strong>不要让ubuntu自动锁屏</strong>，否则可能导致连接断开</li>
-<li>在此处<strong>创建新的控制台</strong><img src="/imgs/5bd56d67d175ef3acc137deca15dfa260e2bbf02963c7bb89335b55362e9b7c5.png" alt="picture 3">  <ul>
-<li>因为安装SSH的控制台一般无法继续用作其他用途</li>
-</ul>
-</li>
-<li>另外，可以考虑使用<code>rm -r ~/.vscode-server</code>命令删除原先下载的<code>vscode-server</code>（在dpkg搜不到）</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/" rel="tag">虚拟机</a></li></ul>
 
     </footer>
   </div>
