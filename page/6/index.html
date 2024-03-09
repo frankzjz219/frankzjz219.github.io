@@ -708,6 +708,232 @@
 
     
     <article
+  id="post-CppToRemember"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/01/01/CppToRemember/"
+    >CppToRemember</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/01/01/CppToRemember/" class="article-date">
+  <time datetime="2023-01-01T11:25:41.000Z" itemprop="datePublished">2023-01-01</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="C-基础"><a href="#C-基础" class="headerlink" title="C++基础"></a>C++基础</h2><h3 id="C和C-的区别"><a href="#C和C-的区别" class="headerlink" title="C和C++的区别"></a>C和C++的区别</h3><ul>
+<li>C++是⾯向对象的语言，而C是⾯向过程的语言；</li>
+<li>C++引⼊ new/delete 运算符，取代了C中的 malloc/free 库函数；</li>
+<li>C++引⼊引⽤的概念，而C中没有；</li>
+<li>C++引⼊类的概念，而C中没有；</li>
+<li>C++引⼊函数重载的特性，而C中没有</li>
+</ul>
+<h3 id="a和-amp-a有什么区别"><a href="#a和-amp-a有什么区别" class="headerlink" title="a和&amp;a有什么区别"></a>a和&amp;a有什么区别</h3><ul>
+<li>假设数组int a[10]; int (*p)[10] = &a;其中<ul>
+<li>a是数组名，是数组⾸元素地址，+1表示地址值加上⼀个int类型的⼤⼩，如果a的值是0x00000001，加1操作后变为0x00000005。*(a + 1) = a[1]</li>
+<li>&amp;a是数组的指针，其类型为int (*)[10]（就是前⾯提到的数组指针），其加1时，系统会认为是数组⾸地址加上整个数组的偏移（10个int型变量），值为数组a尾元素后⼀个元素的地址</li>
+<li>若(int *)p ，此时输出 *p时，其值为a[0]的值，因为被转为int *类型，解引⽤时按照int类型⼤⼩来读取<h3 id="static的作用"><a href="#static的作用" class="headerlink" title="static的作用"></a>static的作用</h3></li>
+</ul>
+</li>
+<li>修饰局部变量时，使得该变量在静态存储区分配内存；只能在⾸次函数调⽤中进⾏⾸次初始化，之后的函数调⽤不再进⾏初始化；其⽣命周期与程序相同，但其作⽤域为局部作⽤域，并不能⼀直被访问</li>
+<li>修饰全局变量时，使得该变量在静态存储区分配内存；在声明该变量的整个⽂件中都是可⻅的，而在⽂件外是不可⻅的</li>
+<li>修饰函数时，在声明该函数的整个⽂件中都是可⻅的，而在⽂件外是不可⻅的，从而可以在多⼈协作时避免同名的函数冲突</li>
+<li>修饰成员变量时，所有的对象都只维持⼀份拷贝，可以实现不同对象间的数据共享；不需要实例化对象即可访问；不能在类内部初始化，⼀般在类外部初始化，并且初始化时不加 static</li>
+<li>修饰成员函数时，该函数不接受 this 指针，只能访问类的静态成员；不需要实例化对象即可访问</li>
+</ul>
+<h3 id="define和const有什么区别？"><a href="#define和const有什么区别？" class="headerlink" title="#define和const有什么区别？"></a>#define和const有什么区别？</h3><ul>
+<li>编译器处理方式不同： #define 宏是在预处理阶段展开，不能对宏定义进⾏调试，而 const 常量是在编译阶段使⽤</li>
+<li>类型和安全检查不同： #define 宏没有类型，不做任何类型检查，仅仅是代码展开，可能产⽣边际效应等错误，而 const 常量有具体类型，在编译阶段会执⾏类型检查</li>
+<li>存储方式不同： #define 宏仅仅是代码展开，在多个地方进⾏字符串替换，不会分配内存，存储于程序的代码段中，而 const 常量会分配内存，但只维持⼀份拷贝，存储于程序的数据段中</li>
+<li>定义域不同： #define 宏不受定义域限制，而 const 常量只在定义域内有效<h3 id="对于⼀个频繁使⽤的短⼩函数，应该使⽤什么来实现？有什么优缺点"><a href="#对于⼀个频繁使⽤的短⼩函数，应该使⽤什么来实现？有什么优缺点" class="headerlink" title="对于⼀个频繁使⽤的短⼩函数，应该使⽤什么来实现？有什么优缺点"></a>对于⼀个频繁使⽤的短⼩函数，应该使⽤什么来实现？有什么优缺点</h3></li>
+<li>应该使⽤ inline 内联函数，即编译器将 inline 内联函数内的代码替换到函数被调⽤的地方</li>
+<li>优点：<ul>
+<li>在内联函数被调⽤的地方进⾏代码展开，省去函数调⽤的时间，从而提⾼程序运⾏效率</li>
+<li>相⽐于宏函数，内联函数在代码展开时，编译器会进⾏语法安全检查或数据类型转换，使⽤更加安全</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>代码膨胀，产⽣更多的开销</li>
+<li>如果内联函数内代码块的执⾏时间⽐调⽤时间长得多，那么效率的提升并没有那么⼤</li>
+<li>如果修改内联函数，那么所有调⽤该函数的代码⽂件都需要重新编译</li>
+<li>内联声明只是建议，是否内联由编译器决定，所以实际并不可控<h3 id="什么是智能指针？智能指针有什么作⽤？分为哪⼏种？各⾃有什么样的特点"><a href="#什么是智能指针？智能指针有什么作⽤？分为哪⼏种？各⾃有什么样的特点" class="headerlink" title="什么是智能指针？智能指针有什么作⽤？分为哪⼏种？各⾃有什么样的特点"></a>什么是智能指针？智能指针有什么作⽤？分为哪⼏种？各⾃有什么样的特点</h3></li>
+</ul>
+</li>
+<li>智能指针是⼀个RAII类模型，⽤于动态分配内存，其设计思想是将基本类型指针封装为（模板）类对象指针，并在离开作⽤域时调⽤析构函数，使⽤ delete 删除指针所指向的内存空间。</li>
+<li>智能指针的作⽤是，能够处理内存泄漏问题和空悬指针问题</li>
+<li>分为 auto_ptr 、 unique_ptr 、 shared_ptr 和 weak_ptr 四种<ul>
+<li>对于 auto_ptr ，实现独占式拥有的概念，同⼀时间只能有⼀个智能指针可以指向该对象；但 auto_ptr在C++11中被摒弃，其主要问题在于<ul>
+<li>对象所有权的转移，⽐如在函数传参过程中，对象所有权不会返还，从而存在潜在的内存崩溃问题</li>
+<li>不能指向数组，也不能作为STL容器的成员</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>对于 unique_ptr ，实现独占式拥有的概念，同⼀时间只能有⼀个智能指针可以指向该对象，因为⽆法进⾏拷贝构造和拷贝赋值，但是可以进⾏移动构造和移动赋值</li>
+<li>对于 shared_ptr ，实现共享式拥有的概念，即多个智能指针可以指向相同的对象，该对象及相关资源会在其所指对象不再使⽤之后，⾃动释放与对象相关的资源</li>
+<li>对于 weak_ptr ，解决 shared_ptr 相互引⽤时，两个指针的引⽤计数永远不会下降为0，从而导致死锁问题。而 weak_ptr 是对对象的⼀种弱引⽤，可以绑定到 shared_ptr ，但不会增加对象的引⽤计数<h3 id="shared-ptr的实现"><a href="#shared-ptr的实现" class="headerlink" title="shared_ptr的实现"></a>shared_ptr的实现</h3></li>
+<li>构造函数中计数初始化为1</li>
+<li>拷贝构造函数中计数值加1</li>
+<li>赋值运算符中，左边的对象引⽤计数减1，右边的对象引⽤计数加1</li>
+<li>析构函数中引⽤计数减1</li>
+<li>在赋值运算符和析构函数中，如果减1后为0，则调⽤ delete 释放对象</li>
+</ul>
+<h3 id="右值引⽤有什么作⽤"><a href="#右值引⽤有什么作⽤" class="headerlink" title="右值引⽤有什么作⽤"></a>右值引⽤有什么作⽤</h3><ul>
+<li>右值引⽤的主要⽬的是为了实现转移语义和完美转发，消除两个对象交互时不必要的对象拷贝，也能够更加简洁明确地定义泛型函数</li>
+</ul>
+<h3 id="悬挂指针与野指针有什么区别"><a href="#悬挂指针与野指针有什么区别" class="headerlink" title="悬挂指针与野指针有什么区别"></a>悬挂指针与野指针有什么区别</h3><ul>
+<li>悬挂指针：当指针所指向的对象被释放，但是该指针没有任何改变，以⾄于其仍然指向已经被回收的内存地址，这种情况下该指针被称为悬挂指针</li>
+<li>野指针：未初始化的指针被称为野指针<h3 id="静态链接和动态链接有什么区别"><a href="#静态链接和动态链接有什么区别" class="headerlink" title="静态链接和动态链接有什么区别"></a>静态链接和动态链接有什么区别</h3></li>
+<li>静态链接是在编译链接时直接将需要的执⾏代码拷贝到调⽤处，优点在于程序在发布时不需要依赖库，可以独⽴执⾏，缺点在于程序的体积会相对较⼤，而且如果静态库更新之后，所有可执⾏⽂件需要重新链接</li>
+<li>动态链接是在编译时不直接拷贝执⾏代码，而是通过记录⼀系列符号和参数，在程序运⾏或加载时将这些信息传递给操作系统，操作系统负责将需要的动态库加载到内存中，然后程序在运⾏到指定代码时，在共享执⾏内存中寻找已经加载的动态库可执⾏代码，实现运⾏时链接</li>
+<li>优点在于多个程序可以共享同⼀个动态库，节省资源</li>
+<li>缺点在于由于运⾏时加载，可能影响程序的前期执⾏性能</li>
+</ul>
+<h3 id="变量的声明和定义有什么区别"><a href="#变量的声明和定义有什么区别" class="headerlink" title="变量的声明和定义有什么区别"></a>变量的声明和定义有什么区别</h3><ul>
+<li>变量的定义为变量分配地址和存储空间， 变量的声明不分配地址。⼀个变量可以在多个地方声明， 但是只在⼀个地方定义。加⼊extern 修饰的是变量的声明，说明此变量将在⽂件以外或在⽂件后⾯部分定义</li>
+<li>很多时候⼀个变量，只是声明不分配内存空间，直到具体使⽤时才初始化，分配内存空间， 如外部变量<h3 id="简述-ifdef、-else、-endif和-ifndef的作⽤"><a href="#简述-ifdef、-else、-endif和-ifndef的作⽤" class="headerlink" title="简述#ifdef、#else、#endif和#ifndef的作⽤"></a>简述#ifdef、#else、#endif和#ifndef的作⽤</h3></li>
+<li>利⽤#ifdef、#endif将某程序功能模块包括进去，以向特定⽤户提供该功能。在不需要时⽤户可轻易将其屏蔽</li>
+<li>在⼦程序前加上标记，以便于追踪和调试</li>
+<li>应对硬件的限制。由于⼀些具体应⽤环境的硬件不⼀样，限于条件，本地缺乏这种设备，只能绕过硬件，直接写出预期结果</li>
+<li>虽然不⽤条件编译命令而直接⽤if语句也能达到要求，但那样做⽬标程序长（因为所有语句都编译），运⾏时间长（因为在程序运⾏时间对if语句进⾏测试）。而采⽤条件编译，可以减少被编译的语句，从而减少⽬标程序的长度，减少运⾏时间<h3 id="写出int-、bool、-float-、指针变量与-“零值”⽐较的if-语句"><a href="#写出int-、bool、-float-、指针变量与-“零值”⽐较的if-语句" class="headerlink" title="写出int 、bool、 float 、指针变量与 “零值”⽐较的if 语句"></a>写出int 、bool、 float 、指针变量与 “零值”⽐较的if 语句</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//int与零值⽐较</span></span><br><span class="line"><span class="keyword">if</span> ( n == <span class="number">0</span> )</span><br><span class="line"><span class="keyword">if</span> ( n != <span class="number">0</span> )</span><br><span class="line"><span class="comment">//bool与零值⽐较</span></span><br><span class="line"><span class="keyword">if</span> (flag) <span class="comment">// 表示flag为真</span></span><br><span class="line"><span class="keyword">if</span> (!flag) <span class="comment">// 表示flag为假</span></span><br><span class="line"><span class="comment">//float与零值⽐较</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">float</span> EPSINON = <span class="number">0.00001</span>;</span><br><span class="line"><span class="keyword">if</span> ((x &gt;= - EPSINON) &amp;&amp; (x &lt;= EPSINON) <span class="comment">//其中EPSINON是允许的误差（即精度）。</span></span><br><span class="line"><span class="comment">//指针变量与零值⽐较</span></span><br><span class="line"><span class="keyword">if</span> (p == <span class="literal">NULL</span>)</span><br><span class="line"><span class="keyword">if</span> (p != <span class="literal">NULL</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="结构体可以直接赋值吗"><a href="#结构体可以直接赋值吗" class="headerlink" title="结构体可以直接赋值吗"></a>结构体可以直接赋值吗</h3></li>
+<li>声明时可以直接初始化，同⼀结构体的不同对象之间也可以直接赋值，但是当结构体中含有指针“成员”时⼀定要小心</li>
+<li>当有多个指针指向同⼀段内存时，某个指针释放这段内存可能会导致其他指针的⾮法操作。因此在释放前⼀定要确保其他指针不再使⽤这段内存空间<h3 id="sizeof-和strlen-的区别"><a href="#sizeof-和strlen-的区别" class="headerlink" title="sizeof 和strlen 的区别"></a>sizeof 和strlen 的区别</h3></li>
+<li>sizeof是⼀个操作符，strlen是库函数</li>
+<li>sizeof的参数可以是数据的类型，也可以是变量，而strlen只能以结尾为‘\0’的字符串作参数</li>
+<li>编译器在编译时就计算出了sizeof的结果，而strlen函数必须在运⾏时才能计算出来。并且sizeof计算的是数据类型占内存的⼤⼩，而strlen计算的是字符串实际的长度</li>
+<li>数组做sizeof的参数不退化，传递给strlen就退化为指针了<h3 id="C-语言的关键字-static-和-C-的关键字-static-有什么区别"><a href="#C-语言的关键字-static-和-C-的关键字-static-有什么区别" class="headerlink" title="C 语言的关键字 static 和 C++ 的关键字 static 有什么区别"></a>C 语言的关键字 static 和 C++ 的关键字 static 有什么区别</h3></li>
+<li>在 C 中 static ⽤来修饰局部静态变量和外部静态变量、函数。而 C++中除了上述功能外，还⽤来定义类的成员变量和函数。即静态成员和静态成员函数</li>
+<li>编程时 static 的记忆性，和全局性的特点可以让在不同时期调⽤的函数进⾏通信，传递信息，而 C++的静态成员则可以在多个对象实例间进⾏通信，传递信息<h3 id="volatile有什么作⽤"><a href="#volatile有什么作⽤" class="headerlink" title="volatile有什么作⽤"></a>volatile有什么作⽤</h3></li>
+<li>状态寄存器⼀类的并⾏设备硬件寄存器</li>
+<li>⼀个中断服务⼦程序会访问到的⾮⾃动变量</li>
+<li>多线程间被⼏个任务共享的变量<h3 id="⼀个参数可以既是const⼜是volatile吗"><a href="#⼀个参数可以既是const⼜是volatile吗" class="headerlink" title="⼀个参数可以既是const⼜是volatile吗"></a>⼀个参数可以既是const⼜是volatile吗</h3></li>
+<li>可以，⽤const和volatile同时修饰变量，表示这个变量在程序内部是只读的，不能改变的，只在程序外部条件变化下改变，并且编译器不会优化这个变量。每次使⽤这个变量时，都要小心地去内存读取这个变量的值，而不是去寄存器读取它的备份</li>
+<li>在此⼀定要注意const的意思，const只是不允许程序中的代码改变某⼀变量，其在编译期发挥作⽤，它并没有实际地禁止某段内存的读写特性</li>
+</ul>
+<h3 id="全局变量和局部变量有什么区别？操作系统和编译器是怎么知道的"><a href="#全局变量和局部变量有什么区别？操作系统和编译器是怎么知道的" class="headerlink" title="全局变量和局部变量有什么区别？操作系统和编译器是怎么知道的"></a>全局变量和局部变量有什么区别？操作系统和编译器是怎么知道的</h3><ul>
+<li>全局变量是整个程序都可访问的变量，谁都可以访问，⽣存期在整个程序从运⾏到结束（在程序结束时所占内存释放）</li>
+<li>而局部变量存在于模块（⼦程序，函数）中，只有所在模块可以访问，其他模块不可直接访问，模块结束（函数调⽤完毕），局部变量消失，所占据的内存释放</li>
+<li>操作系统和编译器，可能是通过内存分配的位置来知道的，全局变量分配在<strong>全局数据段</strong>并且在程序<strong>开始运⾏的时候被加载</strong>.局部变量则分配在<strong>堆栈</strong>⾥⾯<h3 id="简述strcpy、sprintf-与memcpy-的区别"><a href="#简述strcpy、sprintf-与memcpy-的区别" class="headerlink" title="简述strcpy、sprintf 与memcpy 的区别"></a>简述strcpy、sprintf 与memcpy 的区别</h3></li>
+<li>操作对象不同，strcpy 的两个操作对象均为字符串，sprintf 的操作源对象可以是多种数据类型， ⽬的操作对象是字符串，memcpy 的两个对象就是两个任意可操作的内存地址，并不限于何种数据类型</li>
+<li>执⾏效率不同，memcpy 最⾼，strcpy 次之，sprintf 的效率最低</li>
+<li>实现功能不同，strcpy 主要实现字符串变量间的拷贝，sprintf 主要实现其他数据类型格式到字 符串的转化，memcpy 主要是内存块间的拷贝<h3 id="请解析-void-0-的含义"><a href="#请解析-void-0-的含义" class="headerlink" title="请解析((void ()())0)()的含义"></a>请解析((void ()())0)()的含义</h3></li>
+<li>void()是一个没有输入参数的函数类型</li>
+<li>void()()是将一个空对象转换为如上的函数类型</li>
+<li>(void ()()) 整个部分的意思是将一个空函数转换为一个没有参数并且返回 void 的函数</li>
+<li>0 是一个整数常量</li>
+<li>(void ()())0 这部分的意思是将整数常量 0 强制转换为一个没有参数并且返回 void 的函数。实际上, 它被解释为一个函数指针, 其值为 NULL</li>
+<li>((void ()())0)() 是对前面那个 NULL 函数指针的调用<h3 id="C语言的指针和引⽤和c-的有什么区别"><a href="#C语言的指针和引⽤和c-的有什么区别" class="headerlink" title="C语言的指针和引⽤和c++的有什么区别"></a>C语言的指针和引⽤和c++的有什么区别</h3></li>
+<li>指针有⾃⼰的⼀块空间，而引⽤只是⼀个别名</li>
+<li>使⽤sizeof看⼀个指针的⼤⼩是4，而引⽤则是被引⽤对象的⼤⼩</li>
+<li>作为参数传递时，指针需要被解引⽤才可以对对象进⾏操作，而直接对引 ⽤的修改都会改变引⽤所指向的对象</li>
+<li>可以有const指针，但是没有const引⽤</li>
+<li>指针在使⽤中可以指向其它对象，但是引⽤只能是⼀个对象的引⽤，不能被改变</li>
+<li>指针可以有多级指针（**p），而引⽤⽌于⼀级</li>
+<li>指针和引⽤使⽤++运算符的意义不⼀样</li>
+<li>如果返回动态内存分配的对象或者内存，必须使⽤指针，引⽤可能引起内存泄露<h3 id="typedef-和define-有什么区别"><a href="#typedef-和define-有什么区别" class="headerlink" title="typedef 和define 有什么区别"></a>typedef 和define 有什么区别</h3></li>
+<li>⽤法不同：typedef ⽤来定义⼀种数据类型的别名，增强程序的可读性。define 主要⽤来定义 常量，以及书写复杂使⽤频繁的宏</li>
+<li>执⾏时间不同：typedef 是编译过程的⼀部分，有类型检查的功能。define 是宏定义，是预编译的部分，其发⽣在编译之前，只是简单的进⾏字符串的替换，不进⾏类型的检查</li>
+<li>作⽤域不同：typedef 有作⽤域限定。define 不受作⽤域约束，只要是在define 声明后的引⽤都是正确的</li>
+<li>对指针的操作不同：typedef 和define 定义的指针时有很⼤的区别</li>
+<li>typedef 定义是语句，因为句尾要加上分号。而define 不是语句，千万不能在句尾加分号<h3 id="指针常量与常量指针区别"><a href="#指针常量与常量指针区别" class="headerlink" title="指针常量与常量指针区别"></a>指针常量与常量指针区别</h3></li>
+<li>指针常量是指定义了⼀个指针，这个指针的值只能在定义时初始化，其他地方不能改变。常量指针是指定义了⼀个指针，这个指针指向⼀个只读的对象，不能通过常量指针来改变这个对象的值，但是可以改变其指向的对象。指针常量强调的是指针的不可改变性，而常量指针强调的是指针对其所指对象的不可改变性</li>
+<li>⽆论是指针常量还是常量指针，其最⼤的⽤途就是作为函数的形式参数，保证实参在被调⽤ 函数中的不可改变特性<h3 id="简述队列和栈的异同"><a href="#简述队列和栈的异同" class="headerlink" title="简述队列和栈的异同"></a>简述队列和栈的异同</h3></li>
+<li>队列和栈都是线性存储结构，但是两者的插⼊和删除数据的操作不同，队列是“先进先出”，栈是 “后进先出”。<h3 id="设置地址为0x67a9-的整型变量的值为0xaa66"><a href="#设置地址为0x67a9-的整型变量的值为0xaa66" class="headerlink" title="设置地址为0x67a9 的整型变量的值为0xaa66"></a>设置地址为0x67a9 的整型变量的值为0xaa66</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> *ptr;</span><br><span class="line">ptr = (<span class="keyword">int</span> *)<span class="number">0x67a9</span>;</span><br><span class="line">*ptr = <span class="number">0xaa66</span>;</span><br></pre></td></tr></table></figure></li>
+<li>⽆论在什么平台地址长度和整型数据的长度是⼀样的<h3 id="如何避免“野指针”"><a href="#如何避免“野指针”" class="headerlink" title="如何避免“野指针”"></a>如何避免“野指针”</h3></li>
+<li>指针变量声明时没有被初始化。解决办法：指针声明时初始化，可以是具体的地址值，也可让它指向NULL。</li>
+<li>指针p被free或者delete之后，没有置为NULL。解决办法：指针指向的内存空间被释放后指针应该指向NULL。</li>
+<li>指针操作超越了变量的作⽤范围。解决办法：在变量的作⽤域结束前释放掉变量的地址空间并且让指针指向NULL<h3 id="句柄和指针的区别和联系是什么"><a href="#句柄和指针的区别和联系是什么" class="headerlink" title="句柄和指针的区别和联系是什么"></a>句柄和指针的区别和联系是什么</h3></li>
+<li>句柄和指针其实是两个截然不同的概念。Windows系统⽤句柄标记系统资源，隐藏系统的信息。你只要知道有这个东⻄，然后去调⽤就⾏了，它是个32it的uint。指针则标记某个物理内存地址，两者是不同的概念</li>
+</ul>
+<h3 id="说⼀说extern“C”"><a href="#说⼀说extern“C”" class="headerlink" title="说⼀说extern“C”"></a>说⼀说extern“C”</h3><ul>
+<li>extern “C”的主要作⽤就是为了能够正确实现C++代码调⽤其他C语言代码。加上extern “C”后，会指示编译器这部分代码按C语言（⽽不是C++）的方式进⾏编译。由于C++⽀持函数重载，因此编译器编译函数的过程中会将函数的参数类型也加到编译后的代码中，⽽不仅仅是函数名；⽽C语言并不⽀持函数重载，因此编译C语言代码的函数时不会带上函数的参数类型，⼀般只包括函数名</li>
+<li>这个功能⼗分有⽤处，因为在C++出现以前，很多代码都是C语⾔写的，⽽且很底层的库也是C语⾔写的，为了更好的⽀持原来的C代码和已经写好的C语⾔库，需要在C++中尽可能的⽀持C，⽽extern “C”就是其中的⼀个策略</li>
+<li>C++代码调⽤C语⾔代码</li>
+<li>在C++的头⽂件中使⽤</li>
+<li>在多个⼈协同开发时，可能有的⼈⽐较擅长C语⾔，⽽有的⼈擅⻓C++，这样的情况下也会有⽤到<h3 id="C-⾥⾯的三个智能指针-shared-ptr-weak-ptr-unique-ptr"><a href="#C-⾥⾯的三个智能指针-shared-ptr-weak-ptr-unique-ptr" class="headerlink" title="C++⾥⾯的三个智能指针: shared_ptr, weak_ptr, unique_ptr"></a>C++⾥⾯的三个智能指针: shared_ptr, weak_ptr, unique_ptr</h3></li>
+<li>unique_ptr实现独占式拥有或严格拥有概念，保证同⼀时间内只有⼀个智能指针可以指向该对象。它对于避免资源泄露(例如“以new创建对象后因为发⽣异常⽽忘记调⽤delete”)特别有⽤<ul>
+<li>unique_ptr还有更聪明的地方：当程序试图将⼀个 unique_ptr 赋值给另⼀个时，如果源 unique_ptr 是个临时右值，编译器允许这么做；如果源 unique_ptr 将存在⼀段时间，编译器将禁⽌这么做</li>
+</ul>
+</li>
+<li>shared_ptr实现共享式拥有概念。多个智能指针可以指向相同对象，该对象和其相关资源会在“最后⼀个引⽤被销毁”时候释放。从名字share就可以看出了资源可以被多个指针共享，它使⽤计数机制来表明资源被⼏个指针共享。<br>可以通过成员函数use_count()来查看资源的所有者个数。除了可以通过new来构造，还可以通过传⼊auto_ptr,unique_ptr,weak_ptr来构造。当我们调⽤release()时，当前指针会释放资源所有权，计数减⼀。当计数等于0时，资源会被释放</li>
+<li>weak_ptr 是⼀种不控制对象⽣命周期的智能指针, 它指向⼀个 shared_ptr 管理的对象. 进⾏该对象的内存管理的是那个强引⽤的 shared_ptr. weak_ptr只是提供了对管理对象的⼀个访问⼿段。weak_ptr 设计的⽬的是为配合shared_ptr ⽽引⼊的⼀种智能指针来协助 shared_ptr ⼯作, 它只可以从⼀个 shared_ptr 或另⼀个 weak_ptr 对象构造, 它的构造和析构不会引起引⽤记数的增加或减少<ul>
+<li>weak_ptr是⽤来解决shared_ptr相互引⽤时的死锁问题,如果说两个shared_ptr相互引⽤,那么这两个指针的引⽤计数永远不可能下降为0,资源永远不会释放<h2 id="C-面向对象"><a href="#C-面向对象" class="headerlink" title="C++面向对象"></a>C++面向对象</h2><h3 id="面向对象的三大特征"><a href="#面向对象的三大特征" class="headerlink" title="面向对象的三大特征"></a>面向对象的三大特征</h3></li>
+</ul>
+</li>
+<li>封装：将客观事物封装成抽象的类，⽽类可以把⾃⼰的数据和方法暴露给可信的类或者对象，对不可信的类或对象则进⾏信息隐藏</li>
+<li>继承：可以使⽤现有类的所有功能，并且⽆需重新编写原来的类即可对功能进⾏拓展</li>
+<li>多态：⼀个类实例的相同方法在不同情形下有不同的表现形式，使不同内部结构的对象可以共享相同的外部接⼝<h3 id="C-中类成员的访问权限"><a href="#C-中类成员的访问权限" class="headerlink" title="C++中类成员的访问权限"></a>C++中类成员的访问权限</h3></li>
+<li>C++通过 public、protected、private 三个关键字来控制成员变量和成员函数的访问权限，它们分别表示公有的、受保护的、私有的，被称为成员访问限定符。在类的内部（定义类的代码内部），⽆论成员被声明为 public、<br>protected 还是 private，都是可以互相访问的，没有访问权限的限制。在类的外部（定义类的代码之外），只能通过对象访问成员，并且通过对象只能访问 public 属性的成员，不能访问 private、protected 属性的成员<h3 id="多态的实现有哪⼏种"><a href="#多态的实现有哪⼏种" class="headerlink" title="多态的实现有哪⼏种"></a>多态的实现有哪⼏种</h3></li>
+<li>多态分为静态多态和动态多态。其中，静态多态是通过重载和模板技术实现的，在编译期间确定；动态多态是通过虚函数和继承关系实现的，执⾏动态绑定，在运⾏期间确定。<h3 id="动态多态有什么作⽤？有哪些必要条件？"><a href="#动态多态有什么作⽤？有哪些必要条件？" class="headerlink" title="动态多态有什么作⽤？有哪些必要条件？"></a>动态多态有什么作⽤？有哪些必要条件？</h3></li>
+<li>动态多态的作⽤<ul>
+<li>隐藏实现细节，使代码模块化，提⾼代码的可复⽤性</li>
+<li>接⼝重⽤，使派⽣类的功能可以被基类的指针/引⽤所调⽤，即向后兼容，提⾼代码的可扩充性和可维护性</li>
+</ul>
+</li>
+<li>动态多态的必要条件<ul>
+<li>需要有继承</li>
+<li>需要有虚函数覆盖</li>
+<li>需要有基类指针/引⽤指向⼦类对象<h3 id="动态绑定是如何实现的"><a href="#动态绑定是如何实现的" class="headerlink" title="动态绑定是如何实现的"></a>动态绑定是如何实现的</h3></li>
+</ul>
+</li>
+<li>当编译器发现类中有虚函数时，会创建⼀张虚函数表，把虚函数的函数⼊⼝地址放到虚函数表中，并且在对象中增加⼀个指针 <code>vptr</code> ，⽤于指向类的虚函数表。当派⽣类覆盖基类的虚函数时，会将虚函数表中对应的指针进⾏替换，从⽽调⽤派⽣类中覆盖后的虚函数，从⽽实现动态绑定<h3 id="纯虚函数有什么作⽤？如何实现"><a href="#纯虚函数有什么作⽤？如何实现" class="headerlink" title="纯虚函数有什么作⽤？如何实现"></a>纯虚函数有什么作⽤？如何实现</h3></li>
+<li>定义纯虚函数是为了实现⼀个接⼝，起到规范的作⽤，想要继承这个类就必须覆盖该函数</li>
+<li>实现方式是在虚函数声明的结尾加上 = 0 即可<h3 id="虚函数表是针对类的还是针对对象的？同⼀个类的两个对象的虚函数表是怎么维护的"><a href="#虚函数表是针对类的还是针对对象的？同⼀个类的两个对象的虚函数表是怎么维护的" class="headerlink" title="虚函数表是针对类的还是针对对象的？同⼀个类的两个对象的虚函数表是怎么维护的"></a>虚函数表是针对类的还是针对对象的？同⼀个类的两个对象的虚函数表是怎么维护的</h3></li>
+<li>虚函数表是针对类的，类的所有对象共享这个类的虚函数表，因为每个对象内部都保存⼀个指向该类虚函数表的指针 vptr ，每个对象的 vptr 的存放地址都不同，但都指向同⼀虚函数表<h3 id="为什么基类的构造函数不能定义为虚函数"><a href="#为什么基类的构造函数不能定义为虚函数" class="headerlink" title="为什么基类的构造函数不能定义为虚函数"></a>为什么基类的构造函数不能定义为虚函数</h3></li>
+<li>虚函数的调⽤依赖于<strong>虚函数表</strong>，⽽指向虚函数表的指针 vptr <strong>需要在构造函数中进⾏初始化</strong>，所以⽆法调⽤定义为虚函数的构造函数</li>
+</ul>
+<h3 id="为什么基类的析构函数需要定义为虚函数"><a href="#为什么基类的析构函数需要定义为虚函数" class="headerlink" title="为什么基类的析构函数需要定义为虚函数"></a>为什么基类的析构函数需要定义为虚函数</h3><ul>
+<li>为了实现动态绑定，基类指针指向派⽣类对象，如果析构函数不是虚函数，那么在对象销毁时，就会调⽤基类的析构函数，只能销毁派⽣类对象中的部分数据，所以必须将析构函数定义为虚函数，从⽽在对象销毁时，调⽤派⽣类的析构函数，从⽽销毁派⽣类对象中的所有数据<h3 id="构造函数和析构函数能抛出异常吗"><a href="#构造函数和析构函数能抛出异常吗" class="headerlink" title="构造函数和析构函数能抛出异常吗"></a>构造函数和析构函数能抛出异常吗</h3></li>
+<li>从语法的⻆度来说，构造函数可以抛出异常，但从逻辑和⻛险控制的⻆度来说，尽量不要抛出异常，否则可能导致内存泄漏</li>
+<li>析构函数不可以抛出异常，如果析构函数抛出异常，则异常点之后的程序，⽐如释放内存等操作，就不会被执⾏，从⽽造成内存泄露的问题；⽽且当异常发⽣时，C++通常会调⽤对象的析构函数来释放资源，如果此时析构函数也抛出异常，即前⼀个异常未处理⼜出现了新的异常，从⽽造成程序崩溃的问题<h3 id="如何让⼀个类不能实例化"><a href="#如何让⼀个类不能实例化" class="headerlink" title="如何让⼀个类不能实例化"></a>如何让⼀个类不能实例化</h3></li>
+<li>将类定义为抽象类（也就是存在纯虚函数）或者将构造函数声明为 private<h3 id="多继承存在什么问题？如何消除多继承中的⼆义性"><a href="#多继承存在什么问题？如何消除多继承中的⼆义性" class="headerlink" title="多继承存在什么问题？如何消除多继承中的⼆义性"></a>多继承存在什么问题？如何消除多继承中的⼆义性</h3></li>
+<li>增加程序的复杂度，使得程序的编写和维护⽐较困难，容易出错</li>
+<li>在继承时，基类之间或基类与派⽣类之间发⽣成员同名时，将出现对成员访问的不确定性，即同名⼆义性；消除同名⼆义性的方法<ul>
+<li>利⽤作⽤域运算符 :: ，⽤于限定派⽣类使⽤的是哪个基类的成员</li>
+<li>在派⽣类中定义同名成员，覆盖基类中的相关成员</li>
+</ul>
+</li>
+<li>当派⽣类从多个基类派⽣，⽽这些基类⼜从同⼀个基类派⽣，则在访问此共同基类的成员时，将产⽣另⼀种不确定性，即路径⼆义性</li>
+<li>消除路径⼆义性的方法<ul>
+<li>消除同名⼆义性的两种方法都可以</li>
+<li>使⽤虚继承，使得不同路径继承来的同名成员在内存中只有⼀份拷贝<h3 id=""><a href="#" class="headerlink" title=""></a></h3></li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Operating-System"
   class="article article-type-post"
   itemscope
@@ -1732,102 +1958,6 @@ UDP接收方收到报文后，不需要给出任何确认
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matplotlib/" rel="tag">matplotlib</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-Unity学习笔记"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/12/21/Unity%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
-    >Unity学习笔记</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/12/21/Unity%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="article-date">
-  <time datetime="2022-12-20T16:21:08.000Z" itemprop="datePublished">2022-12-21</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Unity学习笔记"><a href="#Unity学习笔记" class="headerlink" title="Unity学习笔记"></a>Unity学习笔记</h1><p><u><strong>先安装hub再安装Unity！！！</strong></u></p>
-<h2 id="环境变量配置（建议用VS一步到位，VSCode配置环境太麻烦）"><a href="#环境变量配置（建议用VS一步到位，VSCode配置环境太麻烦）" class="headerlink" title="环境变量配置（建议用VS一步到位，VSCode配置环境太麻烦）"></a>环境变量配置（建议用VS一步到位，VSCode配置环境太麻烦）</h2><ul>
-<li>右键文件管理器-&gt;属性-&gt;<img src="/imgs/7a45dd2b4ae080fe76c4387e1d39b34498f2d3b18611f42a1274bc17a4d2e25c.png" alt="picture 5">  </li>
-<li>然后环境变量，添加<img src="/imgs/047fbdff8062f0b8d0fe2806b51cccd884cadc4c8be1c8fb6cddd968ea217925.png" alt="picture 6">  看这俩有没有，然后试一下命令行输入<code>dotnet --info</code></li>
-</ul>
-<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
-<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV16W411D7sC?p=14&vd_source=2ad101445b39a9dac0437fdcd408895e">入门教程</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://docs.unity3d.com/2022.1/Documentation/ScriptReference/">官方文档</a></p>
-<h2 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h2></li>
-<li><p>用将对象拖拽到这个位置<img src="/imgs/fd77db333d98e6cb810a31c94a1629c8359b6da349617469610875b303c9798a.png" alt="picture 4"><br>的方式给<code>public</code>对象赋值，包括<code>GameObject</code>和<code>RigidBody</code>，这两个得<u>分开赋值</u></p>
-</li>
-<li><p><code>RigidBody</code>的<code>AddForce</code>不能开启<img src="/imgs/fdedeaddbfac4dea740aae258bcd25e49c578e1b4a6cc61b9238483bb50d35d8.png" alt="picture 2">  </p>
-</li>
-<li><p>刚体的<a target="_blank" rel="noopener" href="https://blog.csdn.net/LOVE_Me__/article/details/125851048">教程</a></p>
-</li>
-<li><p>is Kinematic的<a target="_blank" rel="noopener" href="https://blog.csdn.net/iiiiiiimp/article/details/126822387">教程</a></p>
-<ul>
-<li>isKinematic<strong>不会对碰撞和力做出反应</strong>，不受物理系统影响，但依然<strong>会对其他刚体产生物理影响</strong>（比如可以<strong>阻挡</strong>其他刚体）。</li>
-<li>isKinematic只能<u>在脚本中修改物体的Transform属性来移动</u>。</li>
-<li>用在经常需要移动等变化物理状态的碰撞体上。一个刚体碰撞体，可以随时开启或关闭Is Kinematic选项，不会像静态碰撞体的enabled开启或关闭那样引起物理系统的问题。</li>
-</ul>
-</li>
-<li><p>给一个物理系统的刚体添加一个瞬时的速度的方法</p>
-<ul>
-<li><code>wbRd.AddForce(new Vector3(x, y, z) * 1.0f, ForceMode.Impulse);</code></li>
-<li>或者ForceMode设置为<code>VelocityChange</code>，可以直接改变速度，类似于碰撞的效果</li>
-</ul>
-</li>
-<li><p>获取时间用<code>Time</code>类，unity有支持</p>
-</li>
-<li><p>复位一个场景用<code>SceneManager.LoadScene(index);</code>，index是这个scene在最终的序列里拍第几个，从0开始</p>
-</li>
-<li><p>一个<code>Vector3.normalized</code>给出同方向的一个单位向量</p>
-</li>
-<li><p><code>transform.LookAt(transform)</code>是让当前对象的z轴指向目标对象（z轴是相机的拍照方向）</p>
-</li>
-<li><p>不规则物体生成碰撞体：<img src="/imgs/d2d0ca79325ddcc42b7949239c75d296bb0b0b5bdd12eb91330d0a4f2f44c5e6.png" alt="picture 3">  </p>
-</li>
-<li><p>数学计算用<code>Mathf</code>对象下面的操作函数，其中的三角函数是角度制（0-360°）的</p>
-</li>
-<li><p>鼠标位置用<code>Input.mousePosition</code>得到一个Vector2</p>
-</li>
-<li><p>键盘用<code>Input.GetKeyDown(KeyCode.按键名)</code>或者其他，可以查手册，KeyCode包含的内容也查手册</p>
-</li>
-<li><p><code>Transform.translate()</code>函数可以指定运动的坐标系是自身的还是世界的</p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Unity/" rel="tag">Unity</a></li></ul>
 
     </footer>
   </div>
