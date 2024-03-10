@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">15.5k</span>
+            <span class="post-count">15.9k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">53 min</span>
+            <span class="post-count">54 min</span>
         </span>
     </span>
 </div>
@@ -372,6 +372,53 @@
 <p>异常是一种错误情况，是执行当前指令的结果，可能被错误处理程序修正，也可能直接<strong>终止</strong>应用程序。异常是同步的。这里特指因为执行当前指令而产生的<strong>错误情况</strong>，比如除法异常无法恢复、缺页异常就可能可以恢复等。有些书上为了区分，也将这类“异常”称为<strong>“故障”</strong>。</p>
 <p>信号是一种<strong>更高层的</strong>软件形式的异常，同样会中断进程的控制流，可以由进程进行处理。一个信号代表了一个消息。信号的作用是用来<strong>通知进程</strong>发生了某种系统事件。</p>
 <p>更详细的可以参考：<a target="_blank" rel="noopener" href="https://imageslr.github.io/2020/07/09/trap-interrupt-exception.html">https://imageslr.github.io/2020/07/09/trap-interrupt-exception.html</a></p>
+<h3 id="处理中断的流程"><a href="#处理中断的流程" class="headerlink" title="处理中断的流程"></a>处理中断的流程</h3><ul>
+<li><p>中断发生</p>
+<ul>
+<li>当CPU正在执行程序时,如果发生了中断事件(如硬件中断、软件中断等),会触发中断信号,CPU暂停当前程序的执行。</li>
+</ul>
+</li>
+<li><p>中断向量表查询</p>
+<ul>
+<li>CPU根据中断类型查询中断向量表(Interrupt Vector Table),获取相应中断处理程序的入口地址。</li>
+</ul>
+</li>
+<li><p>保护现场</p>
+<ul>
+<li>CPU将当前程序的执行现场(如程序计数器、寄存器等)压入内核堆栈,以便中断处理完成后能恢复执行。</li>
+</ul>
+</li>
+<li><p>切换到内核态</p>
+<ul>
+<li>CPU切换到内核态(特权模式),准备执行中断处理程序。</li>
+</ul>
+</li>
+<li><p>执行中断处理程序</p>
+<ul>
+<li>CPU跳转到中断处理程序的入口地址,开始执行中断处理程序。中断处理程序会根据中断类型进行相应的处理,如读取数据、发送数据等。</li>
+</ul>
+</li>
+<li><p>中断处理完成</p>
+<ul>
+<li>中断处理程序完成相应的工作后,会执行”中断返回”指令。</li>
+</ul>
+</li>
+<li><p>恢复现场</p>
+<ul>
+<li>CPU从内核堆栈中恢复被中断程序的执行现场。</li>
+</ul>
+</li>
+<li><p>切换到用户态</p>
+<ul>
+<li>如果被中断的是用户程序,CPU切换回到用户态(非特权模式)。</li>
+</ul>
+</li>
+<li><p>继续执行</p>
+<ul>
+<li>CPU继续执行被中断的程序,就像中断从未发生过一样。</li>
+</ul>
+</li>
+</ul>
 <h3 id="什么是IO多路复用？怎么实现？"><a href="#什么是IO多路复用？怎么实现？" class="headerlink" title="什么是IO多路复用？怎么实现？"></a>什么是IO多路复用？怎么实现？</h3><p>IO多路复用（IO Multiplexing）是指单个进程/线程就可以同时处理多个IO请求。</p>
 <p>实现原理：用户将想要监视的文件描述符（File Descriptor）添加到select/poll/epoll函数中，由内核监视，函数阻塞。一旦有文件描述符就绪（读就绪或写就绪），或者超时（设置timeout），函数就会返回，然后该进程可以进行相应的读/写操作。</p>
 <summary>select/poll/epoll三者的区别？</summary>
