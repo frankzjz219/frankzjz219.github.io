@@ -737,10 +737,10 @@
        
   <h2 id="C-基础"><a href="#C-基础" class="headerlink" title="C++基础"></a>C++基础</h2><h3 id="C和C-的区别"><a href="#C和C-的区别" class="headerlink" title="C和C++的区别"></a>C和C++的区别</h3><ul>
 <li>C++是⾯向对象的语言，而C是⾯向过程的语言；</li>
-<li>C++引⼊ new/delete 运算符，取代了C中的 malloc/free 库函数；</li>
-<li>C++引⼊引⽤的概念，而C中没有；</li>
-<li>C++引⼊类的概念，而C中没有；</li>
-<li>C++引⼊函数重载的特性，而C中没有</li>
+<li>C++引入 new/delete 运算符，取代了C中的 malloc/free 库函数；</li>
+<li>C++引入引⽤的概念，而C中没有；</li>
+<li>C++引入类的概念，而C中没有；</li>
+<li>C++引入函数重载的特性，而C中没有</li>
 </ul>
 <h3 id="a和-amp-a有什么区别"><a href="#a和-amp-a有什么区别" class="headerlink" title="a和&amp;a有什么区别"></a>a和&amp;a有什么区别</h3><ul>
 <li>假设数组int a[10]; int (*p)[10] = &a;其中<ul>
@@ -804,7 +804,7 @@
 <li>缺点在于由于运⾏时加载，可能影响程序的前期执⾏性能</li>
 </ul>
 <h3 id="变量的声明和定义有什么区别"><a href="#变量的声明和定义有什么区别" class="headerlink" title="变量的声明和定义有什么区别"></a>变量的声明和定义有什么区别</h3><ul>
-<li>变量的定义为变量分配地址和存储空间， 变量的声明不分配地址。⼀个变量可以在多个地方声明， 但是只在⼀个地方定义。加⼊extern 修饰的是变量的声明，说明此变量将在⽂件以外或在⽂件后⾯部分定义</li>
+<li>变量的定义为变量分配地址和存储空间， 变量的声明不分配地址。⼀个变量可以在多个地方声明， 但是只在⼀个地方定义。加入extern 修饰的是变量的声明，说明此变量将在⽂件以外或在⽂件后⾯部分定义</li>
 <li>很多时候⼀个变量，只是声明不分配内存空间，直到具体使⽤时才初始化，分配内存空间， 如外部变量<h3 id="简述-ifdef、-else、-endif和-ifndef的作⽤"><a href="#简述-ifdef、-else、-endif和-ifndef的作⽤" class="headerlink" title="简述#ifdef、#else、#endif和#ifndef的作⽤"></a>简述#ifdef、#else、#endif和#ifndef的作⽤</h3></li>
 <li>利⽤#ifdef、#endif将某程序功能模块包括进去，以向特定⽤户提供该功能。在不需要时⽤户可轻易将其屏蔽</li>
 <li>在⼦程序前加上标记，以便于追踪和调试</li>
@@ -853,7 +853,7 @@
 <li>typedef 定义是语句，因为句尾要加上分号。而define 不是语句，千万不能在句尾加分号<h3 id="指针常量与常量指针区别"><a href="#指针常量与常量指针区别" class="headerlink" title="指针常量与常量指针区别"></a>指针常量与常量指针区别</h3></li>
 <li>指针常量是指定义了⼀个指针，这个指针的值只能在定义时初始化，其他地方不能改变。常量指针是指定义了⼀个指针，这个指针指向⼀个只读的对象，不能通过常量指针来改变这个对象的值，但是可以改变其指向的对象。指针常量强调的是指针的不可改变性，而常量指针强调的是指针对其所指对象的不可改变性</li>
 <li>⽆论是指针常量还是常量指针，其最⼤的⽤途就是作为函数的形式参数，保证实参在被调⽤ 函数中的不可改变特性<h3 id="简述队列和栈的异同"><a href="#简述队列和栈的异同" class="headerlink" title="简述队列和栈的异同"></a>简述队列和栈的异同</h3></li>
-<li>队列和栈都是线性存储结构，但是两者的插⼊和删除数据的操作不同，队列是“先进先出”，栈是 “后进先出”。<h3 id="设置地址为0x67a9-的整型变量的值为0xaa66"><a href="#设置地址为0x67a9-的整型变量的值为0xaa66" class="headerlink" title="设置地址为0x67a9 的整型变量的值为0xaa66"></a>设置地址为0x67a9 的整型变量的值为0xaa66</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> *ptr;</span><br><span class="line">ptr = (<span class="keyword">int</span> *)<span class="number">0x67a9</span>;</span><br><span class="line">*ptr = <span class="number">0xaa66</span>;</span><br></pre></td></tr></table></figure></li>
+<li>队列和栈都是线性存储结构，但是两者的插入和删除数据的操作不同，队列是“先进先出”，栈是 “后进先出”。<h3 id="设置地址为0x67a9-的整型变量的值为0xaa66"><a href="#设置地址为0x67a9-的整型变量的值为0xaa66" class="headerlink" title="设置地址为0x67a9 的整型变量的值为0xaa66"></a>设置地址为0x67a9 的整型变量的值为0xaa66</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> *ptr;</span><br><span class="line">ptr = (<span class="keyword">int</span> *)<span class="number">0x67a9</span>;</span><br><span class="line">*ptr = <span class="number">0xaa66</span>;</span><br></pre></td></tr></table></figure></li>
 <li>⽆论在什么平台地址长度和整型数据的长度是⼀样的<h3 id="如何避免“野指针”"><a href="#如何避免“野指针”" class="headerlink" title="如何避免“野指针”"></a>如何避免“野指针”</h3></li>
 <li>指针变量声明时没有被初始化。解决办法：指针声明时初始化，可以是具体的地址值，也可让它指向NULL。</li>
 <li>指针p被free或者delete之后，没有置为NULL。解决办法：指针指向的内存空间被释放后指针应该指向NULL。</li>
@@ -870,8 +870,8 @@
 <li>unique_ptr还有更聪明的地方：当程序试图将⼀个 unique_ptr 赋值给另⼀个时，如果源 unique_ptr 是个临时右值，编译器允许这么做；如果源 unique_ptr 将存在⼀段时间，编译器将禁⽌这么做</li>
 </ul>
 </li>
-<li>shared_ptr实现共享式拥有概念。多个智能指针可以指向相同对象，该对象和其相关资源会在“最后⼀个引⽤被销毁”时候释放。从名字share就可以看出了资源可以被多个指针共享，它使⽤计数机制来表明资源被⼏个指针共享。<br>可以通过成员函数use_count()来查看资源的所有者个数。除了可以通过new来构造，还可以通过传⼊auto_ptr,unique_ptr,weak_ptr来构造。当我们调⽤release()时，当前指针会释放资源所有权，计数减⼀。当计数等于0时，资源会被释放</li>
-<li>weak_ptr 是⼀种不控制对象⽣命周期的智能指针, 它指向⼀个 shared_ptr 管理的对象. 进⾏该对象的内存管理的是那个强引⽤的 shared_ptr. weak_ptr只是提供了对管理对象的⼀个访问⼿段。weak_ptr 设计的⽬的是为配合shared_ptr ⽽引⼊的⼀种智能指针来协助 shared_ptr ⼯作, 它只可以从⼀个 shared_ptr 或另⼀个 weak_ptr 对象构造, 它的构造和析构不会引起引⽤记数的增加或减少<ul>
+<li>shared_ptr实现共享式拥有概念。多个智能指针可以指向相同对象，该对象和其相关资源会在“最后⼀个引⽤被销毁”时候释放。从名字share就可以看出了资源可以被多个指针共享，它使⽤计数机制来表明资源被⼏个指针共享。<br>可以通过成员函数use_count()来查看资源的所有者个数。除了可以通过new来构造，还可以通过传入auto_ptr,unique_ptr,weak_ptr来构造。当我们调⽤release()时，当前指针会释放资源所有权，计数减⼀。当计数等于0时，资源会被释放</li>
+<li>weak_ptr 是⼀种不控制对象⽣命周期的智能指针, 它指向⼀个 shared_ptr 管理的对象. 进⾏该对象的内存管理的是那个强引⽤的 shared_ptr. weak_ptr只是提供了对管理对象的⼀个访问⼿段。weak_ptr 设计的⽬的是为配合shared_ptr ⽽引入的⼀种智能指针来协助 shared_ptr ⼯作, 它只可以从⼀个 shared_ptr 或另⼀个 weak_ptr 对象构造, 它的构造和析构不会引起引⽤记数的增加或减少<ul>
 <li>weak_ptr是⽤来解决shared_ptr相互引⽤时的死锁问题,如果说两个shared_ptr相互引⽤,那么这两个指针的引⽤计数永远不可能下降为0,资源永远不会释放<h2 id="C-面向对象"><a href="#C-面向对象" class="headerlink" title="C++面向对象"></a>C++面向对象</h2><h3 id="面向对象的三大特征"><a href="#面向对象的三大特征" class="headerlink" title="面向对象的三大特征"></a>面向对象的三大特征</h3></li>
 </ul>
 </li>
@@ -891,7 +891,7 @@
 <li>需要有基类指针/引⽤指向⼦类对象<h3 id="动态绑定是如何实现的"><a href="#动态绑定是如何实现的" class="headerlink" title="动态绑定是如何实现的"></a>动态绑定是如何实现的</h3></li>
 </ul>
 </li>
-<li>当编译器发现类中有虚函数时，会创建⼀张虚函数表，把虚函数的函数⼊⼝地址放到虚函数表中，并且在对象中增加⼀个指针 <code>vptr</code> ，⽤于指向类的虚函数表。当派⽣类覆盖基类的虚函数时，会将虚函数表中对应的指针进⾏替换，从⽽调⽤派⽣类中覆盖后的虚函数，从⽽实现动态绑定<h3 id="纯虚函数有什么作⽤？如何实现"><a href="#纯虚函数有什么作⽤？如何实现" class="headerlink" title="纯虚函数有什么作⽤？如何实现"></a>纯虚函数有什么作⽤？如何实现</h3></li>
+<li>当编译器发现类中有虚函数时，会创建⼀张虚函数表，把虚函数的函数入⼝地址放到虚函数表中，并且在对象中增加⼀个指针 <code>vptr</code> ，⽤于指向类的虚函数表。当派⽣类覆盖基类的虚函数时，会将虚函数表中对应的指针进⾏替换，从⽽调⽤派⽣类中覆盖后的虚函数，从⽽实现动态绑定<h3 id="纯虚函数有什么作⽤？如何实现"><a href="#纯虚函数有什么作⽤？如何实现" class="headerlink" title="纯虚函数有什么作⽤？如何实现"></a>纯虚函数有什么作⽤？如何实现</h3></li>
 <li>定义纯虚函数是为了实现⼀个接⼝，起到规范的作⽤，想要继承这个类就必须覆盖该函数</li>
 <li>实现方式是在虚函数声明的结尾加上 = 0 即可<h3 id="虚函数表是针对类的还是针对对象的？同⼀个类的两个对象的虚函数表是怎么维护的"><a href="#虚函数表是针对类的还是针对对象的？同⼀个类的两个对象的虚函数表是怎么维护的" class="headerlink" title="虚函数表是针对类的还是针对对象的？同⼀个类的两个对象的虚函数表是怎么维护的"></a>虚函数表是针对类的还是针对对象的？同⼀个类的两个对象的虚函数表是怎么维护的</h3></li>
 <li>虚函数表是针对类的，类的所有对象共享这个类的虚函数表，因为每个对象内部都保存⼀个指向该类虚函数表的指针 vptr ，每个对象的 vptr 的存放地址都不同，但都指向同⼀虚函数表<h3 id="为什么基类的构造函数不能定义为虚函数"><a href="#为什么基类的构造函数不能定义为虚函数" class="headerlink" title="为什么基类的构造函数不能定义为虚函数"></a>为什么基类的构造函数不能定义为虚函数</h3></li>
@@ -999,32 +999,33 @@
 <li>容器就是数据的存放形式，包括序列式容器和关联式容器，序列式容器就是list，vector等，关联式容器就是set，map等</li>
 <li>迭代器就是在不暴露容器内部结构的情况下对容器的遍历<h3 id="什么时候需要⽤hash-map，什么时候需要⽤map"><a href="#什么时候需要⽤hash-map，什么时候需要⽤map" class="headerlink" title="什么时候需要⽤hash_map，什么时候需要⽤map"></a>什么时候需要⽤hash_map，什么时候需要⽤map</h3></li>
 <li>总体来说，hash_map 查找速度会⽐ map 快，⽽且查找速度基本和数据数据量⼤⼩，属于常数级别;⽽ map 的查找速度是 log(n) 级别</li>
-<li>并不⼀定常数就⽐ log(n) ⼩，hash 还有 hash 函数的耗时，明⽩了吧，如果你考虑效率，特别是在元素达到⼀定数量级时，考虑考虑 hash_map。但若你对内存使⽤特别严格，希望程序尽可能少消耗内存，那么⼀定要⼩⼼，hash_map 可能会让你陷⼊尴尬，特别是当你的 hash_map 对象特别多时，你就更⽆法控制了。⽽且 hash_map的构造速度较慢<h3 id="hashtable的底层实现"><a href="#hashtable的底层实现" class="headerlink" title="hashtable的底层实现"></a>hashtable的底层实现</h3></li>
+<li>并不⼀定常数就⽐ log(n) ⼩，hash 还有 hash 函数的耗时，明⽩了吧，如果你考虑效率，特别是在元素达到⼀定数量级时，考虑考虑 hash_map。但若你对内存使⽤特别严格，希望程序尽可能少消耗内存，那么⼀定要⼩⼼，hash_map 可能会让你陷入尴尬，特别是当你的 hash_map 对象特别多时，你就更⽆法控制了。⽽且 hash_map的构造速度较慢<h3 id="hashtable的底层实现"><a href="#hashtable的底层实现" class="headerlink" title="hashtable的底层实现"></a>hashtable的底层实现</h3></li>
 <li>STL中的hashtable使⽤的是开链法解决hash冲突问题</li>
 <li><img src="/imgs/6333ce2e305aa236242c4a2f5241018546c938cffbaaf87b12e7e08497f366ce.png" alt="picture 0">  </li>
 <li>hashtable中的bucket所维护的list既不是list也不是slist，⽽是其⾃⼰定义的由hashtable_node数据结构组成的linked-list，⽽bucket聚合体本身使⽤vector进⾏存储。hashtable的迭代器只提供前进操作，不提供后退操作</li>
-<li>在hashtable设计bucket的数量上，其内置了28个质数[53, 97, 193,…,429496729]，在创建hashtable时，会根据存⼊的元素个数选择⼤于等于元素个数的质数作为hashtable的容量（vector的⻓度），其中每个bucket所维护的linked-list⻓度也等于hashtable的容量。如果插⼊hashtable的元素个数超过了bucket的容量，就要进⾏重建table操作，即找出下⼀个质数，创建新的buckets vector，重新计算元素在新hashtable的位置<h3 id="vector-的原理"><a href="#vector-的原理" class="headerlink" title="vector 的原理"></a>vector 的原理</h3></li>
+<li>在hashtable设计bucket的数量上，其内置了28个质数[53, 97, 193,…,429496729]，在创建hashtable时，会根据存入的元素个数选择⼤于等于元素个数的质数作为hashtable的容量（vector的⻓度），其中每个bucket所维护的linked-list⻓度也等于hashtable的容量。如果插入hashtable的元素个数超过了bucket的容量，就要进⾏重建table操作，即找出下⼀个质数，创建新的buckets vector，重新计算元素在新hashtable的位置<h3 id="vector-的原理"><a href="#vector-的原理" class="headerlink" title="vector 的原理"></a>vector 的原理</h3></li>
 <li>vector底层是⼀个动态数组，包含三个迭代器，start和finish之间是已经被使⽤的空间范围，end_of_storage是整块连续空间包括备⽤空间的尾部</li>
 <li>当空间不够装下数据（vec.push_back(val)）时，会⾃动申请另⼀⽚更⼤的空间（1.5倍或者2倍），然后把原来的数据拷⻉到新的内存空间，接着释放原来的那⽚空间</li>
 <li>当释放或者删除（vec.clear()）⾥⾯的数据时，其存储空间不释放，仅仅是清空了⾥⾯的数据</li>
 <li>因此，对vector的任何操作⼀旦引起了空间的重新配置，指向原vector的所有迭代器会都失效了<h4 id="reserve和resize"><a href="#reserve和resize" class="headerlink" title="reserve和resize"></a>reserve和resize</h4></li>
 <li>reserve是直接扩充到已经确定的⼤⼩，可以减少多次开辟、释放空间的问题（优化push_back）可以提⾼效率</li>
 <li>还可以减少多次要拷⻉数据的问题。reserve只是保证vector中的空间⼤⼩（capacity）最少达到参数所指定的⼤⼩n。</li>
-<li>reserve()只有⼀个参数<h4 id="size和capacity"><a href="#size和capacity" class="headerlink" title="size和capacity"></a>size和capacity</h4></li>
+<li>reserve()只有⼀个参数</li>
+<li>vector 的 resize(n) ⽅法改变 vector 的⼤⼩，如果当前容量⼩于 n ，则调整容量为 n ，同时将其全部元素填充为初始值；如果当前容量⼤于等于 n ，则不调整容量，只将其前 n 个元素<strong>填充为初始值</strong><h4 id="size和capacity"><a href="#size和capacity" class="headerlink" title="size和capacity"></a>size和capacity</h4></li>
 <li>size表示当前vector中有多少个元素（finish - start），⽽capacity函数则表示它已经分配的内存中<strong>可以容纳</strong>多少元素（<strong>end_of_storage</strong> - start）<h4 id="vector的元素类型可以是引⽤吗？"><a href="#vector的元素类型可以是引⽤吗？" class="headerlink" title="vector的元素类型可以是引⽤吗？"></a>vector的元素类型可以是引⽤吗？</h4></li>
 <li>vector的底层实现要求连续的对象排列，引⽤并⾮对象，没有实际地址，因此vector的元素类型不能是引⽤<h4 id="vector迭代器失效的情况"><a href="#vector迭代器失效的情况" class="headerlink" title="vector迭代器失效的情况"></a>vector迭代器失效的情况</h4></li>
-<li>当插⼊⼀个元素到vector中，由于引起了内存重新分配，所以指向原内存的迭代器全部失效。<br>当删除容器中⼀个元素后,该迭代器所指向的元素已经被删除，那么也造成迭代器失效。erase⽅法会返回下⼀个有效的迭代器，所以当我们要删除某个元素时，<strong>需要<code>it=vec.erase(it);</code></strong></li>
+<li>当插入⼀个元素到vector中，由于引起了内存重新分配，所以指向原内存的迭代器全部失效。<br>当删除容器中⼀个元素后,该迭代器所指向的元素已经被删除，那么也造成迭代器失效。erase⽅法会返回下⼀个有效的迭代器，所以当我们要删除某个元素时，<strong>需要<code>it=vec.erase(it);</code></strong></li>
 </ul>
 <h4 id="正确释放vector的内存-clear-swap-shrink-to-fit"><a href="#正确释放vector的内存-clear-swap-shrink-to-fit" class="headerlink" title="正确释放vector的内存(clear(), swap(), shrink_to_fit())"></a>正确释放vector的内存(clear(), swap(), shrink_to_fit())</h4><ul>
 <li>vec.clear()：清空内容，但是不释放内存</li>
 <li>vector().swap(vec)：清空内容，且释放内存，想得到⼀个全新的vector</li>
 <li>vec.shrink_to_fit()：请求容器降低其capacity和size匹配</li>
 <li>vec.clear();vec.shrink_to_fit();：清空内容，且释放内存<h3 id="list-底层原理"><a href="#list-底层原理" class="headerlink" title="list 底层原理"></a>list 底层原理</h3></li>
-<li>list的底层是⼀个双向链表，以结点为单位存放数据，结点的地址在内存中不⼀定连续，每次插⼊或删除⼀个元素，就配置或释放⼀个元素空间</li>
-<li>list<strong>不⽀持随机存取</strong>，适合需要<u>⼤量的插⼊和删除</u></li>
-<li><img src="/imgs/716e934eaa10d6ae43c07cb8293befc03b09f0f0c8527e6f515f1ebb6359659b.png" alt="picture 1">  <h4 id="常见操作"><a href="#常见操作" class="headerlink" title="常见操作"></a>常见操作</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">list.<span class="built_in">push_back</span>(elem) <span class="comment">// 在尾部加⼊⼀个数据</span></span><br><span class="line">list.<span class="built_in">pop_back</span>() <span class="comment">// 删除尾部数据</span></span><br><span class="line">list.<span class="built_in">push_front</span>(elem) <span class="comment">// 在头部插⼊⼀个数据</span></span><br><span class="line">list.<span class="built_in">pop_front</span>() <span class="comment">// 删除头部数据</span></span><br><span class="line">list.<span class="built_in">size</span>() <span class="comment">// 返回容器中实际数据的个数</span></span><br><span class="line">list.<span class="built_in">sort</span>() <span class="comment">// 排序，默认由⼩到⼤</span></span><br><span class="line">list.<span class="built_in">unique</span>() <span class="comment">// 移除数值相同的连续元素</span></span><br><span class="line">list.<span class="built_in">back</span>() <span class="comment">// 取尾部迭代器</span></span><br><span class="line">list.<span class="built_in">erase</span>(iterator) <span class="comment">// 删除⼀个元素，参数是迭代器，返回的是删除迭代器的下⼀个位置</span></span><br></pre></td></tr></table></figure>
+<li>list的底层是⼀个双向链表，以结点为单位存放数据，结点的地址在内存中不⼀定连续，每次插入或删除⼀个元素，就配置或释放⼀个元素空间</li>
+<li>list<strong>不⽀持随机存取</strong>，适合需要<u>⼤量的插入和删除</u></li>
+<li><img src="/imgs/716e934eaa10d6ae43c07cb8293befc03b09f0f0c8527e6f515f1ebb6359659b.png" alt="picture 1">  <h4 id="常见操作"><a href="#常见操作" class="headerlink" title="常见操作"></a>常见操作</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">list.<span class="built_in">push_back</span>(elem) <span class="comment">// 在尾部加入⼀个数据</span></span><br><span class="line">list.<span class="built_in">pop_back</span>() <span class="comment">// 删除尾部数据</span></span><br><span class="line">list.<span class="built_in">push_front</span>(elem) <span class="comment">// 在头部插入⼀个数据</span></span><br><span class="line">list.<span class="built_in">pop_front</span>() <span class="comment">// 删除头部数据</span></span><br><span class="line">list.<span class="built_in">size</span>() <span class="comment">// 返回容器中实际数据的个数</span></span><br><span class="line">list.<span class="built_in">sort</span>() <span class="comment">// 排序，默认由⼩到⼤</span></span><br><span class="line">list.<span class="built_in">unique</span>() <span class="comment">// 移除数值相同的连续元素</span></span><br><span class="line">list.<span class="built_in">back</span>() <span class="comment">// 取尾部迭代器</span></span><br><span class="line">list.<span class="built_in">erase</span>(iterator) <span class="comment">// 删除⼀个元素，参数是迭代器，返回的是删除迭代器的下⼀个位置</span></span><br></pre></td></tr></table></figure>
 <h3 id="deque原理"><a href="#deque原理" class="headerlink" title="deque原理"></a>deque原理</h3></li>
-<li>deque是⼀个<strong>双向开⼝</strong>的<strong>连续</strong>线性空间（双端队列），在头尾两端进⾏元素的插⼊跟删除操作都有理想的时间复杂度<h4 id="常见操作-1"><a href="#常见操作-1" class="headerlink" title="常见操作"></a>常见操作</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">deque.<span class="built_in">push_back</span>(elem) <span class="comment">// 在尾部加⼊⼀个数据。</span></span><br><span class="line">deque.<span class="built_in">pop_back</span>() <span class="comment">// 删除尾部数据。</span></span><br><span class="line">deque.<span class="built_in">push_front</span>(elem) <span class="comment">// 在头部插⼊⼀个数据。</span></span><br><span class="line">deque.<span class="built_in">pop_front</span>() <span class="comment">// 删除头部数据。</span></span><br><span class="line">deque.<span class="built_in">size</span>() <span class="comment">// 返回容器中实际数据的个数。</span></span><br><span class="line">deque.<span class="built_in">at</span>(idx) <span class="comment">// 传回索引idx所指的数据，如果idx越界，抛出out_of_range。</span></span><br></pre></td></tr></table></figure></li>
+<li>deque是⼀个<strong>双向开⼝</strong>的<strong>连续</strong>线性空间（双端队列），在头尾两端进⾏元素的插入跟删除操作都有理想的时间复杂度<h4 id="常见操作-1"><a href="#常见操作-1" class="headerlink" title="常见操作"></a>常见操作</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">deque.<span class="built_in">push_back</span>(elem) <span class="comment">// 在尾部加入⼀个数据。</span></span><br><span class="line">deque.<span class="built_in">pop_back</span>() <span class="comment">// 删除尾部数据。</span></span><br><span class="line">deque.<span class="built_in">push_front</span>(elem) <span class="comment">// 在头部插入⼀个数据。</span></span><br><span class="line">deque.<span class="built_in">pop_front</span>() <span class="comment">// 删除头部数据。</span></span><br><span class="line">deque.<span class="built_in">size</span>() <span class="comment">// 返回容器中实际数据的个数。</span></span><br><span class="line">deque.<span class="built_in">at</span>(idx) <span class="comment">// 传回索引idx所指的数据，如果idx越界，抛出out_of_range。</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="map-、set、multiset、multimap-底层原理"><a href="#map-、set、multiset、multimap-底层原理" class="headerlink" title="map 、set、multiset、multimap 底层原理"></a>map 、set、multiset、multimap 底层原理</h3><ul>
 <li>map 、set、multiset、multimap的底层实现都是红⿊树，epoll模型的底层数据结构也是红⿊树，linux系统中CFS进程调度算法，也⽤到红⿊树</li>
@@ -1038,24 +1039,49 @@
 </li>
 <li>set和multiset会根据特定的排序准则⾃动将元素排序，set中元素不允许重复，multiset可以重复</li>
 <li>map和multimap将key和value组成的pair作为元素，根据key的排序准则⾃动将元素排序（因为红⿊树也是⼆叉搜索树，所以map默认是按key排序的），map中元素的key不允许重复，multimap可以重复</li>
-<li>map和set的增删改查速度为都是logn<h3 id="为何map和set的插⼊删除效率⽐其他序列容器⾼，⽽且每次insert之后，以前保存的iterator不会失效"><a href="#为何map和set的插⼊删除效率⽐其他序列容器⾼，⽽且每次insert之后，以前保存的iterator不会失效" class="headerlink" title="为何map和set的插⼊删除效率⽐其他序列容器⾼，⽽且每次insert之后，以前保存的iterator不会失效"></a>为何map和set的插⼊删除效率⽐其他序列容器⾼，⽽且每次insert之后，以前保存的iterator不会失效</h3></li>
+<li>map和set的增删改查速度为都是logn<h3 id="为何map和set的插入删除效率⽐其他序列容器⾼，⽽且每次insert之后，以前保存的iterator不会失效"><a href="#为何map和set的插入删除效率⽐其他序列容器⾼，⽽且每次insert之后，以前保存的iterator不会失效" class="headerlink" title="为何map和set的插入删除效率⽐其他序列容器⾼，⽽且每次insert之后，以前保存的iterator不会失效"></a>为何map和set的插入删除效率⽐其他序列容器⾼，⽽且每次insert之后，以前保存的iterator不会失效</h3></li>
 <li>因为存储的是结点，不需要内存拷⻉和内存移动</li>
-<li>因为插⼊操作只是结点指针换来换去，结点内存没有改变。⽽iterator就像指向结点的指针，内存没变，指向内存的指针也不会变<h3 id="为何map和set不能像vector⼀样有个reserve函数来预分配数据"><a href="#为何map和set不能像vector⼀样有个reserve函数来预分配数据" class="headerlink" title="为何map和set不能像vector⼀样有个reserve函数来预分配数据"></a>为何map和set不能像vector⼀样有个reserve函数来预分配数据</h3></li>
-<li>因为在map和set内部存储的已经不是元素本身了，⽽是包含元素的结点。也就是说map内部使⽤的Alloc并不是<code>map&lt;Key, Data, Compare, Alloc&gt;</code>声明的时候从参数中传⼊的Alloc。<h3 id="unordered-map、unordered-set的底层原理"><a href="#unordered-map、unordered-set的底层原理" class="headerlink" title="unordered_map、unordered_set的底层原理"></a>unordered_map、unordered_set的底层原理</h3></li>
+<li>因为插入操作只是结点指针换来换去，结点内存没有改变。⽽iterator就像指向结点的指针，内存没变，指向内存的指针也不会变<h3 id="为何map和set不能像vector⼀样有个reserve函数来预分配数据"><a href="#为何map和set不能像vector⼀样有个reserve函数来预分配数据" class="headerlink" title="为何map和set不能像vector⼀样有个reserve函数来预分配数据"></a>为何map和set不能像vector⼀样有个reserve函数来预分配数据</h3></li>
+<li>因为在map和set内部存储的已经不是元素本身了，⽽是包含元素的结点。也就是说map内部使⽤的Alloc并不是<code>map&lt;Key, Data, Compare, Alloc&gt;</code>声明的时候从参数中传入的Alloc。<h3 id="unordered-map、unordered-set的底层原理"><a href="#unordered-map、unordered-set的底层原理" class="headerlink" title="unordered_map、unordered_set的底层原理"></a>unordered_map、unordered_set的底层原理</h3></li>
 <li>unordered_map的底层是⼀个防冗余的哈希表（采⽤除留余数法）。哈希表最⼤的优点，就是把数据的存储和查找消耗的时间⼤⼤降低，时间复杂度为O(1)；⽽代价仅仅是消耗⽐较多的内存。</li>
 <li>不能够保证每个元素的key与函数值是⼀⼀对应的，因此极有可能出现对于不同的元素，却计算出了相同的函数值，这样就产⽣了“冲突”，换句话说，就是把不同的元素分在了相同的“类”之中。 ⼀般可采⽤拉链法解决冲突</li>
 <li><img src="/imgs/c39279d1266504ec3bdc4e6fe72cc2d1722521c9fafaa6c373e09800102a9a71.png" alt="picture 2">  <h3 id="unordered-map-与map的区别？使⽤场景？"><a href="#unordered-map-与map的区别？使⽤场景？" class="headerlink" title="unordered_map 与map的区别？使⽤场景？"></a>unordered_map 与map的区别？使⽤场景？</h3></li>
 <li>构造函数：unordered_map 需要hash函数，等于函数;map只需要⽐较函数(⼩于函数).</li>
 <li>存储结构：unordered_map 采⽤hash表存储，map⼀般采⽤红⿊树(RB Tree) 实现。因此其memory数据结构是不⼀样的。</li>
 <li>总体来说，unordered_map 查找速度会⽐map快，⽽且查找速度基本和数据数据量⼤⼩，属于常数级别;⽽map的查找速度是log(n)级别</li>
-<li>并不⼀定常数就⽐log(n)⼩，hash还有hash函数的耗时，如果考虑效率，特别是在元素达到⼀定数量级时，考虑考虑unordered_map 。但若你对内存使⽤特别严格，希望程序尽可能少消耗内存，那么⼀定要⼩⼼，unordered_map 可能会让你陷⼊尴尬，特别是当你的unordered_map 对象特别多时，就更⽆法控制了，⽽且unordered_map 的构造速度较慢<h3 id="迭代器的底层原理"><a href="#迭代器的底层原理" class="headerlink" title="迭代器的底层原理"></a>迭代器的底层原理</h3></li>
+<li>并不⼀定常数就⽐log(n)⼩，hash还有hash函数的耗时，如果考虑效率，特别是在元素达到⼀定数量级时，考虑考虑unordered_map 。但若你对内存使⽤特别严格，希望程序尽可能少消耗内存，那么⼀定要⼩⼼，unordered_map 可能会让你陷入尴尬，特别是当你的unordered_map 对象特别多时，就更⽆法控制了，⽽且unordered_map 的构造速度较慢<h3 id="迭代器的底层原理"><a href="#迭代器的底层原理" class="headerlink" title="迭代器的底层原理"></a>迭代器的底层原理</h3></li>
 <li>迭代器是连接容器和算法的⼀种重要桥梁，通过迭代器可以在不了解容器内部原理的情况下遍历容器。它的底层实现包含两个重要的部分：萃取技术和模板偏特化</li>
-<li>迭代器是连接容器和算法的⼀种᯿要桥梁，通过迭代器可以在不了解容器内部原理的情况下遍历容器。它的底层实现包含两个᯿要的部分：萃取技术和模板偏特化<h3 id="迭代器的种类"><a href="#迭代器的种类" class="headerlink" title="迭代器的种类"></a>迭代器的种类</h3></li>
-<li>输⼊迭代器：是只读迭代器，在每个被遍历的位置上只能读取⼀次。例如上⾯find函数参数就是输⼊迭代器。</li>
+<li>迭代器是连接容器和算法的⼀种重要桥梁，通过迭代器可以在不了解容器内部原理的情况下遍历容器。它的底层实现包含两个重要的部分：萃取技术和模板偏特化<h3 id="迭代器的种类"><a href="#迭代器的种类" class="headerlink" title="迭代器的种类"></a>迭代器的种类</h3></li>
+<li>输入迭代器：是只读迭代器，在每个被遍历的位置上只能读取⼀次。例如上⾯find函数参数就是输入迭代器。</li>
 <li>输出迭代器：是只写迭代器，在每个被遍历的位置上只能被写⼀次。</li>
-<li>前向迭代器：兼具输⼊和输出迭代器的能⼒，但是它可以对同⼀个位置᯿复进⾏读和写。但它不⽀持operator–，所以只能向前移动。</li>
+<li>前向迭代器：兼具输入和输出迭代器的能⼒，但是它可以对同⼀个位置重·复进⾏读和写。但它不⽀持operator–，所以只能向前移动。</li>
 <li>双向迭代器：很像前向迭代器，只是它向后移动和向前移动同样容易。</li>
-<li>随机访问迭代器：有双向迭代器的所有功能。⽽且，它还提供了“迭代器算术”，即在⼀步内可以向前或向后跳跃任意位置， 包含指针的所有操作，可进⾏随机访问，随意移动指定的步数。⽀持前⾯四种Iterator的所有操作，并另外⽀持<code>it + n</code>、<code>it - n</code>、<code>it += n</code>、 <code>it -= n</code>、<code>it1 - it2</code>和<code>it[n]</code>等操作。</li>
+<li>随机访问迭代器：有双向迭代器的所有功能。⽽且，它还提供了“迭代器算术”，即在⼀步内可以向前或向后跳跃任意位置， 包含指针的所有操作，可进⾏随机访问，随意移动指定的步数。⽀持前⾯四种Iterator的所有操作，并另外⽀持<code>it + n</code>、<code>it - n</code>、<code>it += n</code>、 <code>it -= n</code>、<code>it1 - it2</code>和<code>it[n]</code>等操作。<h3 id="迭代器失效的问题"><a href="#迭代器失效的问题" class="headerlink" title="迭代器失效的问题"></a>迭代器失效的问题</h3></li>
+<li>插入<ul>
+<li>对于vector和string，如果容器内存被重新分配，iterators,pointers,references失效；如果没有重新分配，那么插入点之前的iterator有效，插入点之后的iterator失效</li>
+<li>对于deque，如果插入点位于除front和back的其它位置，iterators,pointers,references失效；当我们插入元素到  front和back时，deque的迭代器失效，但reference和pointers有效；</li>
+<li>对于list和forward_list，所有的iterator,pointer和refercnce有效。</li>
+</ul>
+</li>
+<li>删除<ul>
+<li>对于vector和string，删除点之前的iterators,pointers,references有效；off-the-end迭代器总是失效的；</li>
+<li>对于deque，如果删除点位于除front和back的其它位置，iterators,pointers,references失效；当我们插⼊元素到front和back时，off-the-end失效，其他的iterators,pointers,references有效；</li>
+<li>对于list和forward_list，所有的iterator,pointer和refercnce有效。</li>
+<li>对于关联容器map来说，如果某⼀个元素已经被删除，那么其对应的迭代器就失效了，不应该再被使⽤，否则会导致程序⽆定义的⾏为。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Vector如何释放空间"><a href="#Vector如何释放空间" class="headerlink" title="Vector如何释放空间"></a>Vector如何释放空间</h3><ul>
+<li>由于vector的内存占⽤空间只增不减，⽐如你⾸先分配了10,000个字节，然后erase掉后⾯9,999个，留下⼀个有效元素，但是内存占⽤仍为10,000个</li>
+<li>所有内存空间是在vector析构时候才能被系统回收。empty()⽤来检测容器是否为空的，clear()可以清空所有元素。但是即使clear()，vector所占⽤的内存空间依然如故，⽆法保证内存的回收</li>
+</ul>
+<h3 id="如何在共享内存上使⽤STL标准库"><a href="#如何在共享内存上使⽤STL标准库" class="headerlink" title="如何在共享内存上使⽤STL标准库"></a>如何在共享内存上使⽤STL标准库</h3><ul>
+<li>当⼀个元素被插⼊到⼀个STL列表(list)中时，列表容器⾃动为其分配内存，保存数据。考虑到要将STL容器放到共享内存中，⽽容器却⾃⼰在堆上分配内存</li>
+<li>⼀个最笨拙的办法是在堆上构造STL容器，然后把容器复制到共享内存，并且确保所有容器的内部分配的内存指向共享内存中的相应区域，这基本是个不可能完成的任务</li>
+<li>假设进程A在共享内存中放⼊了数个容器，进程B如何找到这些容器呢<ul>
+<li>⼀个⽅法就是进程A把容器放在共享内存中的确定地址上（fixed offsets），则进程B可以从该已知地址上获取容器。另外⼀个改进点的办法是，进程A先在共享内存某块确定地址上放置⼀个map容器，然后进程A再创建其他容器，然后给其取个名字和地址⼀并保存到这个map容器⾥</li>
+</ul>
+</li>
 </ul>
  
       <!-- reward -->
