@@ -141,6 +141,62 @@
     
     
     <article
+  id="post-C-二级指针和二维数组"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/08/15/C-%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88%E5%92%8C%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84/"
+    >C++二级指针和二维数组（不使用Vector）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/08/15/C-%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88%E5%92%8C%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84/" class="article-date">
+  <time datetime="2022-08-14T16:01:25.000Z" itemprop="datePublished">2022-08-15</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <ul>
+<li>不要将二级指针和二维数组混为一谈，二维数组再指针作为起始地址的基础上必须还知道第二维度的长度才可以，因为实际上的数组索引操作是<code>i*&lt;第二维度大小&gt; + j</code><h2 id="动态二维数组的创建和销毁-不使用Vector"><a href="#动态二维数组的创建和销毁-不使用Vector" class="headerlink" title="动态二维数组的创建和销毁(不使用Vector)"></a>动态二维数组的创建和销毁(不使用Vector)</h2></li>
+<li>创建<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">double</span> **dataMat;</span><br><span class="line">dataMat = <span class="keyword">new</span> <span class="keyword">double</span>* [x_size];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;xSize;i++)</span><br><span class="line">&#123;</span><br><span class="line">    dataMat[i] = <span class="keyword">new</span> <span class="keyword">double</span>[ySize];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wordwarwordwar/article/details/52558583">参考链接</a></li>
+<li>释放二维数组<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;数组第一维的数量&gt;;i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> dataMat[i];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">delete</span> dataMat;</span><br></pre></td></tr></table></figure></li>
+<li>先逐个释放数组的行，然后再释放整个数组<h2 id="动态二维数组的传参"><a href="#动态二维数组的传参" class="headerlink" title="动态二维数组的传参"></a>动态二维数组的传参</h2></li>
+<li>对于正常创建的二维数组（不是使用上文的方法创建的动态数组）<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//方法1：传递数组，注意第二维必须标明</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun1</span><span class="params">(<span class="keyword">int</span> arr[][<span class="number">3</span>],<span class="keyword">int</span> iRows)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;iRows;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">3</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout&lt;&lt;arr[i][j]&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 当作指针数组传递</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun2</span><span class="params">(<span class="keyword">int</span> (*arr)[<span class="number">3</span>],<span class="keyword">int</span> iRows)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;iRows;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">3</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout&lt;&lt;arr[i][j]&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 直接传递一级指针（强制类型转换）</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun3</span><span class="params">(<span class="keyword">int</span>*arr,<span class="keyword">int</span> iRows,<span class="keyword">int</span> iCols)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;iRows;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">3</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout&lt;&lt;*(arr+i*iRows+j)&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a[<span class="number">2</span>][<span class="number">3</span>]=&#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;,&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;&#125;;</span><br><span class="line">    <span class="built_in">fun1</span>(a,<span class="number">2</span>);</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">    <span class="built_in">fun2</span>(a,<span class="number">2</span>);</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">    <span class="comment">//此处必须进行强制类型转换，因为a是二维数组，而需要传入的是指针</span></span><br><span class="line">    <span class="comment">//所以必须强制转换成指针，如果a是一维数组则不必进行强制类型转换</span></span><br><span class="line">    <span class="comment">//为什么一维数组不用强制转换而二维数组必须转换，此问题还没解决，期待大牛！</span></span><br><span class="line">    <span class="built_in">fun3</span>((<span class="keyword">int</span>*)a,<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line">    cout&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>假如预先<strong>不知道数组的第二维度</strong>是多少的话，还是只能使用强制类型转换为<strong>一级指针</strong>的方法传递。</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43036419/article/details/110490025">参考链接</a></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-基于WSL开发内核模块"
   class="article article-type-post"
   itemscope
@@ -999,130 +1055,13 @@
 </article>
 
     
-    <article
-  id="post-分析基于epoll的C-高性能webServer代码（二）"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81%EF%BC%88%E4%BA%8C%EF%BC%89/"
-    >分析基于epoll的C++高性能webServer代码（二）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81%EF%BC%88%E4%BA%8C%EF%BC%89/" class="article-date">
-  <time datetime="2022-06-29T04:43:03.000Z" itemprop="datePublished">2022-06-29</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="分析基于epoll的C-高性能webServer代码（二）"><a href="#分析基于epoll的C-高性能webServer代码（二）" class="headerlink" title="分析基于epoll的C++高性能webServer代码（二）"></a>分析基于epoll的C++高性能webServer代码（二）</h1><h2 id="C-bind-函数用法"><a href="#C-bind-函数用法" class="headerlink" title="C++bind()函数用法"></a>C++<code>bind()</code>函数用法</h2><ul>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dongkun152/article/details/123992292">参考链接</a></p>
-</li>
-<li><p>std::bind()函数作为<strong>函数的适配器</strong>，它可以<strong>扩大函数是使用场合</strong>，使得函数更加灵活的被使用。<br>template&lt;class F, class… Args&gt;</p>
-</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">bind</span>(F&amp;&amp;f, Args&amp;&amp;… args);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>参数：<br>f 可以是function object，函数指针，函数引用，成员函数指针，或者数据成员的指针。</li>
-<li>返回值：<br>function object</li>
-</ul>
-<h3 id="可以用std-placeholders-1等替换函数本身的输入参数"><a href="#可以用std-placeholders-1等替换函数本身的输入参数" class="headerlink" title="可以用std::placeholders::_1等替换函数本身的输入参数"></a>可以用<code>std::placeholders::_1</code>等替换函数本身的输入参数</h3><ul>
-<li>举例：</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std::placeholders;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; (a -b -c) &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> fn1 = <span class="built_in">bind</span>(func, _1, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">auto</span> fn2 = <span class="built_in">bind</span>(func, <span class="number">2</span>, _1, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">fn1</span>(<span class="number">10</span>);</span><br><span class="line">    <span class="built_in">fn2</span>(<span class="number">10</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出</span></span><br><span class="line"><span class="comment">5</span></span><br><span class="line"><span class="comment">-11</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意上面的三输入函数<code>func</code>使用<code>bind</code>替换掉了其中的两个输入参数，仅仅在<code>placeholder</code>的位置提供一个输入</li>
-<li>注意，当具有多个输入的时候，输入的顺序是按照<code>std::placeholders::_1</code>、<code>std::placeholders::_2</code>、<code>std::placeholders::_3</code>等的顺序</li>
-<li>举例：</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std::placeholders;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; (a - b -c) &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> fn1= <span class="built_in">bind</span>(func, _2, <span class="number">2</span>, _1);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;the value of function is :&quot;</span>;</span><br><span class="line">    <span class="built_in">fn1</span>(<span class="number">1</span>, <span class="number">13</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> fn2 = <span class="built_in">bind</span>(func, _1, <span class="number">2</span>, _2);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;the value of function after changing placeholder position is :&quot;</span>;</span><br><span class="line">    <span class="built_in">fn2</span>(<span class="number">1</span>, <span class="number">13</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出</span></span><br><span class="line"><span class="comment">the value of function is :10</span></span><br><span class="line"><span class="comment">the value of function after changing placeholder position is :-14</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意上面的函数中，fn1的实际输入到func中的参数是<code>func(13, 2, 1)</code>，而输入到fn2中的参数实际上是<code>func(1, 2, 13)</code></li>
-</ul>
-<h2 id="httpServer的成员函数分析"><a href="#httpServer的成员函数分析" class="headerlink" title="httpServer的成员函数分析"></a>httpServer的成员函数分析</h2><ul>
-<li><a target="_blank" rel="noopener" href="http://naotu.baidu.com/file/5affaf781a1d7a139d281fba48af613a?token=e03c48870d07da80">类结构思维导图</a></li>
-</ul>
-<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><ul>
-<li>使用初始化列表初始化成员<code>tcpserver_</code>，然后将<code>tcpserver_</code>的函数接口全部初始化为HttpServer提供的处理函数</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">HttpServer::<span class="built_in">HttpServer</span>(EventLoop *loop, <span class="keyword">int</span> port)</span><br><span class="line">    : <span class="built_in">tcpserver_</span>(loop, port),</span><br><span class="line">    <span class="built_in">cnt</span>(<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    tcpserver_.<span class="built_in">SetNewConnCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleNewConnection, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetMessageCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleMessage, <span class="keyword">this</span>, std::placeholders::_1, std::placeholders::_2));</span><br><span class="line">    tcpserver_.<span class="built_in">SetSendCompleteCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleSendComplete, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetCloseCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleClose, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetErrorCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleError, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="HandleNewConnection-TcpConnection-ptcpconn"><a href="#HandleNewConnection-TcpConnection-ptcpconn" class="headerlink" title="HandleNewConnection(TcpConnection *ptcpconn)"></a>HandleNewConnection(TcpConnection *ptcpconn)</h3><ul>
-<li>处理新建立的http连接请求</li>
-<li>新建一个<code>HttpSession</code>对象</li>
-<li>将该对象放入<code>httpsessionlist_</code>中(<code>httpsessionlist_</code>是一个map，通过TcpConnection映射到httpSession对象)</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleNewConnection</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//std::string msg(s);</span></span><br><span class="line">    HttpSession *phttpsession = <span class="keyword">new</span> <span class="built_in">HttpSession</span>();</span><br><span class="line">    httpsessionnlist_[ptcpconn] = phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="HandleMessage-TcpConnection-ptcpconn-std-string-amp-s"><a href="#HandleMessage-TcpConnection-ptcpconn-std-string-amp-s" class="headerlink" title="HandleMessage(TcpConnection *ptcpconn, std::string &amp;s)"></a>HandleMessage(TcpConnection *ptcpconn, std::string &amp;s)</h3><ul>
-<li>调用<code>httpsessionlist_</code>中的对象处理信息</li>
-<li>将同样的数据发送回发送方（回显）</li>
-<li>处理短链接问题</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleMessage</span><span class="params">(TcpConnection *ptcpconn, std::string &amp;s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot;http num is:&quot; &lt;&lt; ++cnt &lt;&lt; std::endl;   </span></span><br><span class="line">    HttpSession *phttpsession =  httpsessionnlist_[ptcpconn];</span><br><span class="line">    phttpsession-&gt;<span class="built_in">PraseHttpRequest</span>(s);</span><br><span class="line">    phttpsession-&gt;<span class="built_in">HttpProcess</span>();</span><br><span class="line">    std::string msg;</span><br><span class="line">    phttpsession-&gt;<span class="built_in">AddToBuf</span>(msg);</span><br><span class="line">    ptcpconn-&gt;<span class="built_in">Send</span>(msg);</span><br><span class="line">    <span class="keyword">if</span>(!phttpsession-&gt;<span class="built_in">KeepAlive</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//短连接，可以告诉框架层数据发完就可以关掉TCP连接，不过这里注释掉，还是交给客户端主动关闭吧</span></span><br><span class="line">        <span class="comment">//ptcpconn-&gt;HandleClose();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>HttpProcess()</code>的行为：</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpSession::HttpProcess</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">&quot;GET&quot;</span> == httprequestcontext_.method)</span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;POST&quot;</span> == httprequestcontext_.method)</span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;HttpServer::HttpParser&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        errormsg = <span class="string">&quot;Method Not Implemented&quot;</span>;</span><br><span class="line">        <span class="built_in">HttpError</span>(<span class="number">501</span>, <span class="string">&quot;Method Not Implemented&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">size_t</span> pos = httprequestcontext_.url.<span class="built_in">find</span>(<span class="string">&quot;?&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(pos != std::string::npos)</span><br><span class="line">    &#123;</span><br><span class="line">        path_ = httprequestcontext_.url.<span class="built_in">substr</span>(<span class="number">0</span>, pos);</span><br><span class="line">        querystring_ = httprequestcontext_.url.<span class="built_in">substr</span>(pos+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        path_ = httprequestcontext_.url;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//keepalive判断处理</span></span><br><span class="line">    std::map&lt;std::string, std::string&gt;::const_iterator iter = httprequestcontext_.header.<span class="built_in">find</span>(<span class="string">&quot;Connection&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        keepalive_ = (iter-&gt;second == <span class="string">&quot;Keep-Alive&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(httprequestcontext_.version == <span class="string">&quot;HTTP/1.1&quot;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            keepalive_ = <span class="literal">true</span>;<span class="comment">//HTTP/1.1默认长连接</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            keepalive_ = <span class="literal">false</span>;<span class="comment">//HTTP/1.0默认短连接</span></span><br><span class="line">        &#125;            </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    responsebody_.<span class="built_in">clear</span>();</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">&quot;/&quot;</span> == path_)</span><br><span class="line">    &#123;        </span><br><span class="line">        path_ = <span class="string">&quot;/index.html&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;/hello&quot;</span> == path_)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//Wenbbench 测试用</span></span><br><span class="line">        std::string <span class="built_in">filetype</span>(<span class="string">&quot;text/html&quot;</span>);</span><br><span class="line">        responsebody_ = (<span class="string">&quot;hello world&quot;</span>);</span><br><span class="line">        responsecontext_ += httprequestcontext_.version + <span class="string">&quot; 200 OK\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Server: Chen Shuaihao&#x27;s NetServer/0.1\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Content-Type: &quot;</span> + filetype + <span class="string">&quot;; charset=utf-8\r\n&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            responsecontext_ += <span class="string">&quot;Connection: &quot;</span> + iter-&gt;second + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Content-Length: &quot;</span> + std::<span class="built_in">to_string</span>(responsebody_.<span class="built_in">size</span>()) + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += responsebody_;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;    </span><br><span class="line"></span><br><span class="line">    <span class="comment">//std::string responsebody;    </span></span><br><span class="line">    path_.<span class="built_in">insert</span>(<span class="number">0</span>,<span class="string">&quot;.&quot;</span>);</span><br><span class="line">    FILE* fp = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span>((fp = <span class="built_in">fopen</span>(path_.<span class="built_in">c_str</span>(), <span class="string">&quot;rb&quot;</span>)) == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//perror(&quot;error fopen&quot;);</span></span><br><span class="line">        <span class="comment">//404 NOT FOUND</span></span><br><span class="line">        <span class="built_in">HttpError</span>(<span class="number">404</span>, <span class="string">&quot;Not Found&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">char</span> buffer[<span class="number">4096</span>];</span><br><span class="line">        <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer));</span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">fread</span>(buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), <span class="number">1</span>, fp) == <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            responsebody_.<span class="built_in">append</span>(buffer);</span><br><span class="line">            <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">feof</span>(fp))</span><br><span class="line">        &#123;</span><br><span class="line">            responsebody_.<span class="built_in">append</span>(buffer);</span><br><span class="line">        &#125;        </span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;error fread&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        &#125;        	</span><br><span class="line">        <span class="built_in">fclose</span>(fp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">std::string <span class="title">filetype</span><span class="params">(<span class="string">&quot;text/html&quot;</span>)</span></span>; <span class="comment">//暂时固定为html</span></span><br><span class="line">    responsecontext_ += httprequestcontext_.version + <span class="string">&quot; 200 OK\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Server: Chen Shuaihao&#x27;s NetServer/0.1\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Content-Type: &quot;</span> + filetype + <span class="string">&quot;; charset=utf-8\r\n&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Connection: &quot;</span> + iter-&gt;second + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Content-Length: &quot;</span> + std::<span class="built_in">to_string</span>(responsebody_.<span class="built_in">size</span>()) + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += responsebody_;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="HttpServer-HandleClose-TcpConnection-ptcpconn"><a href="#HttpServer-HandleClose-TcpConnection-ptcpconn" class="headerlink" title="HttpServer::HandleClose(TcpConnection *ptcpconn)"></a>HttpServer::HandleClose(TcpConnection *ptcpconn)</h2><ul>
-<li>通过传入的参数<code>TcpConnecton</code>和map映射找到对应的<code>httpSession</code></li>
-<li>将<code>httpSession</code>从列表中删除</li>
-<li>释放<code>httpSession</code>占用的内存空间</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleClose</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HttpSession *phttpsession = httpsessionnlist_[ptcpconn];</span><br><span class="line">    httpsessionnlist_.<span class="built_in">erase</span>(ptcpconn);</span><br><span class="line">    <span class="keyword">delete</span> phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="HttpServer-HandleError-TcpConnection-ptcpconn"><a href="#HttpServer-HandleError-TcpConnection-ptcpconn" class="headerlink" title="HttpServer::HandleError(TcpConnection *ptcpconn)"></a>HttpServer::HandleError(TcpConnection *ptcpconn)</h2><ul>
-<li>删除对应的<code>httpSession</code>同上</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleError</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HttpSession *phttpsession = httpsessionnlist_[ptcpconn];</span><br><span class="line">    httpsessionnlist_.<span class="built_in">erase</span>(ptcpconn);</span><br><span class="line">    <span class="keyword">delete</span> phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="HttpServer-Start"><a href="#HttpServer-Start" class="headerlink" title="HttpServer::Start()"></a>HttpServer::Start()</h2><ul>
-<li>直接调用内部的<code>tcpserver</code>成员的<code>start</code>函数</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::Start</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    tcpserver_.<span class="built_in">Start</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/9/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/11/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/9/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/11/">下一页</a>
   </nav>
   
 </section>

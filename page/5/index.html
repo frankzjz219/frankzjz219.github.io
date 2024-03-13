@@ -141,6 +141,82 @@
     
     
     <article
+  id="post-使用crow在CPP环境下开发web服务器"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/04/19/%E4%BD%BF%E7%94%A8crow%E5%9C%A8CPP%E7%8E%AF%E5%A2%83%E4%B8%8B%E5%BC%80%E5%8F%91web%E6%9C%8D%E5%8A%A1%E5%99%A8/"
+    >使用crow在CPP环境下开发web服务器</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/04/19/%E4%BD%BF%E7%94%A8crow%E5%9C%A8CPP%E7%8E%AF%E5%A2%83%E4%B8%8B%E5%BC%80%E5%8F%91web%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="article-date">
+  <time datetime="2023-04-19T15:29:13.000Z" itemprop="datePublished">2023-04-19</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="下载与安装"><a href="#下载与安装" class="headerlink" title="下载与安装"></a>下载与安装</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://crowcpp.org/master/">官方网站</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/CrowCpp/Crow">github</a></li>
+<li>下载自己需要的relaease即可<ul>
+<li><img src="/imgs/9edcaefdfd3b82149dac42244821ed13f17edc338f633e9b1edb24d5ebf43a14.png" alt="picture 1">  <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2></li>
+</ul>
+</li>
+<li>C++包的头文件在<code>/usr/include</code>目录下</li>
+<li>但是出现错误<strong>fatal error: boost/optional.hpp: No such file or directory</strong></li>
+<li>此时安装<code>boost</code>，也就是<code>sudo apt-get install libboost-all-dev</code></li>
+<li>然后又报错<code>undefined reference to pthread_sigmask</code>，此时在编译后加参数<code>-lpthread</code>添加多线程库</li>
+<li>但是还有错误<code>undefined reference to boost::system::system_category()&#39;</code>之类的，需要添加参数<code>-lboost_system -lboost_thread</code></li>
+<li>最终的编译命令为<code>g++ ./crowHelloWorld.cpp -o helloWorld -lpthread -lboost_system -lboost_thread</code></li>
+<li>输出结果<ul>
+<li><img src="/imgs/dd4678720db50310c4cceaae5977b02902d56d5864021e62b06ff4a9b390b858.png" alt="picture 2">  </li>
+<li><img src="/imgs/9e2db2a339b05758e287d902bfd5a0984c784886dfffb2057440165ca6bb5ba3.png" alt="picture 3">  </li>
+</ul>
+</li>
+</ul>
+<h2 id="一个简单的包含前后端互换数据的案例"><a href="#一个简单的包含前后端互换数据的案例" class="headerlink" title="一个简单的包含前后端互换数据的案例"></a>一个简单的包含前后端互换数据的案例</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/yz2zcx/article/details/105758850">新手参考</a><h3 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;crow.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    crow::SimpleApp app;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">CROW_ROUTE</span>(app, <span class="string">&quot;/&quot;</span>)([]()&#123;</span><br><span class="line">        <span class="keyword">auto</span> page = crow::mustache::<span class="built_in">load_text</span>(<span class="string">&quot;./mainPage.html&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> page;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">CROW_ROUTE</span>(app, <span class="string">&quot;/data&quot;</span>).<span class="built_in">methods</span>(<span class="string">&quot;POST&quot;</span>_method)([](<span class="keyword">const</span> crow::request&amp; req)&#123;</span><br><span class="line">        <span class="keyword">auto</span> x = crow::json::<span class="built_in">load</span>(req.body);</span><br><span class="line">        std::cout&lt;&lt;x[<span class="string">&quot;data&quot;</span>]&lt;&lt;std::endl;</span><br><span class="line">        crow::json::wvalue retDict;</span><br><span class="line">        retDict[<span class="string">&quot;message&quot;</span>] = x[<span class="string">&quot;data&quot;</span>];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> crow::<span class="built_in">response</span>(retDict);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    app.<span class="built_in">port</span>(<span class="number">8080</span>).<span class="built_in">multithreaded</span>().<span class="built_in">run</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h3></li>
+<li>注意后端发送的JSON数据<strong>不需要解析（PARSE）</strong><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">placeholder</span>=<span class="string">&quot;send something...&quot;</span> <span class="attr">id</span>=<span class="string">&quot;input&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">&quot;sendAjax()&quot;</span>&gt;</span>send<span class="tag">&lt;/<span class="name">button</span>&gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div1&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> input = <span class="built_in">document</span>.getElementById(<span class="string">&quot;input&quot;</span>);</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">&quot;div1&quot;</span>);</span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="keyword">function</span> <span class="title">sendAjax</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        $.ajax(&#123;</span></span><br><span class="line"><span class="javascript">            <span class="attr">type</span>: <span class="string">&quot;POST&quot;</span>,</span></span><br><span class="line"><span class="javascript">            <span class="attr">url</span>: <span class="string">&quot;/data&quot;</span>,</span></span><br><span class="line"><span class="javascript">            <span class="attr">data</span>: <span class="built_in">JSON</span>.stringify(&#123; <span class="string">&#x27;data&#x27;</span>: input.value &#125;),</span></span><br><span class="line"><span class="javascript">            <span class="attr">success</span>: <span class="function"><span class="keyword">function</span> (<span class="params">datas</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">                <span class="built_in">console</span>.log(datas);</span></span><br><span class="line"><span class="javascript">                <span class="comment">// dataDict = JSON.parse(datas);</span></span></span><br><span class="line"><span class="javascript">                div1.innerHTML = datas[<span class="string">&#x27;message&#x27;</span>];</span></span><br><span class="line"><span class="javascript">            &#125;</span></span><br><span class="line"><span class="javascript">        &#125;);</span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="makefile"><a href="#makefile" class="headerlink" title="makefile"></a>makefile</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">main: </span></span><br><span class="line">	g++ ./crowHelloWorld.cpp -o main -lpthread -lboost_system -lboost_thread</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	<span class="comment"># rm *.o</span></span><br><span class="line">	rm main</span><br></pre></td></tr></table></figure>
+<h3 id="文件目录格式"><a href="#文件目录格式" class="headerlink" title="文件目录格式"></a>文件目录格式</h3></li>
+<li><code>.html</code>文件需要放在工作目录的<code>templates</code>文件夹下<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3></li>
+<li><img src="/imgs/d8207e1f2ed546fa746dc1773bbbab150bbadcb6bcdd8ddba15d407af9baa142.png" alt="picture 4">  </li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/crow/" rel="tag">crow</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-编写基于Flask的mp4分块流式传输前后端"
   class="article article-type-post"
   itemscope
@@ -828,101 +904,13 @@
 </article>
 
     
-    <article
-  id="post-C语言获取命令行的返回内容"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/03/11/C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E8%BF%94%E5%9B%9E%E5%86%85%E5%AE%B9/"
-    >C语言和python获取命令行的返回内容</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/03/11/C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E8%BF%94%E5%9B%9E%E5%86%85%E5%AE%B9/" class="article-date">
-  <time datetime="2023-03-11T07:16:04.000Z" itemprop="datePublished">2023-03-11</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="C语言获取命令行的返回内容"><a href="#C语言获取命令行的返回内容" class="headerlink" title="C语言获取命令行的返回内容"></a>C语言获取命令行的返回内容</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/508000943/answer/2286590668">参考链接</a></li>
-<li>示例程序<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>*   szCmd       = <span class="string">&quot;ls -l&quot;</span>;</span><br><span class="line">    FILE*   pResultStr  = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">char</span>    szBuf[<span class="number">1024</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 创建子进程，执行shell命令 */</span></span><br><span class="line">    pResultStr = popen(szCmd, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">NULL</span> == pResultStr)</span><br><span class="line">    &#123;   </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;popen faild. (%d, %s)\n&quot;</span>,errno, strerror(errno));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>; </span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 获取返回结果 */</span></span><br><span class="line">    fread(szBuf, <span class="number">1</span>, <span class="keyword">sizeof</span>(szBuf), pResultStr);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 打印命令返回内容 */</span></span><br><span class="line">    <span class="built_in">printf</span>(szBuf);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 不要忘记关闭句柄 */</span></span><br><span class="line">    pclose(pResultStr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h3></li>
-<li><img src="/imgs/11a292bb14e47fbefb6880cb53828369d95a5a8094aad026a367c2efd26e0b75.png" alt="picture 1">  </li>
-<li>可见，多了一行<code>total 16</code>含义是<h2 id="popen函数"><a href="#popen函数" class="headerlink" title="popen函数"></a>popen函数</h2></li>
-<li><code>popen()</code> 函数通过创建一个<strong>管道</strong>，调用 fork 产生一个子进程，执行一个 shell 以运行命令来开启一个进程。</li>
-<li>这个进程必须由 <code>pclose()</code> 函数关闭，而不是 <code>fclose()</code> 函数。<code>pclose()</code> 函数关闭标准 I/O 流，等待命令执行结束，然后返回 shell 的终止状态。如果 shell 不能被执行，则 <code>pclose()</code> 返回的终止状态与 shell 已执行 exit 一样。</li>
-<li>也就是，popen<strong>创建管道</strong>，<strong>执行shell命令将文件流中的某些数据读出</strong><h3 id="头文件和函数头"><a href="#头文件和函数头" class="headerlink" title="头文件和函数头"></a>头文件和函数头</h3></li>
-<li><code>#include &lt;stdio.h&gt;</code><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">FILE *<span class="title">popen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *command, <span class="keyword">const</span> <span class="keyword">char</span> *type)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>command： 是一个指向以 NULL 结束的 shell 命令字符串的指针。<strong>命令将被传到 bin/sh 并使用 -c 标志</strong>，<u>shell 将执行这个命令</u>，比如<code>sh -c ls</code></li>
-<li>type： <strong>只能是读或者写中的一种</strong>，得到的返回值（标准 I/O 流）也具有和 type 相应的只读或只写类型。如果 type 是 “r” 则文件指针连接到 command 的标准输出；如果 type 是 “w” 则文件指针连接到 command 的标准输入。<h2 id="另一种方法"><a href="#另一种方法" class="headerlink" title="另一种方法"></a>另一种方法</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">作者：Reticence</span><br><span class="line">链接：https:<span class="comment">//www.zhihu.com/question/508000943/answer/2285530356</span></span><br><span class="line">来源：知乎</span><br><span class="line">著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *argv[] = &#123;<span class="string">&quot;ls&quot;</span>, <span class="literal">NULL</span> &#125;;</span><br><span class="line">    <span class="keyword">int</span> pipe_fd[<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">char</span> buffer[<span class="number">256</span>];</span><br><span class="line">    <span class="built_in">memset</span>(buffer,<span class="number">0</span>,<span class="number">256</span>);</span><br><span class="line">    pipe(pipe_fd);  <span class="comment">// 忽略了错误处理</span></span><br><span class="line">   </span><br><span class="line">    <span class="keyword">int</span> pid = fork(); <span class="comment">// 忽略了错误处理</span></span><br><span class="line">    <span class="keyword">if</span> (pid &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        sleep(<span class="number">1</span>);     </span><br><span class="line">        close(pipe_fd[<span class="number">1</span>]);   <span class="comment">// 关闭管道输出</span></span><br><span class="line">        read(pipe_fd[<span class="number">0</span>], buffer, <span class="number">256</span>);  <span class="comment">// ls的输出到buffer了，你可以进行你的处理</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;ls = %s&quot;</span>,buffer);</span><br><span class="line">        <span class="comment">// 父进程</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        close(pipe_fd[<span class="number">0</span>]);               <span class="comment">// 关闭管道读入</span></span><br><span class="line">        dup2(pipe_fd[<span class="number">1</span>], STDOUT_FILENO); <span class="comment">// 关闭标准输出，改成管道输出</span></span><br><span class="line">        execv(<span class="string">&quot;/usr/bin/ls&quot;</span>, argv);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="管道开启和关闭"><a href="#管道开启和关闭" class="headerlink" title="管道开启和关闭"></a>管道开启和关闭</h3></li>
-<li><a target="_blank" rel="noopener" href="https://linux.die.net/man/">linux man手册参考</a><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pipe</span><span class="params">(<span class="keyword">int</span> pipefd[<span class="number">2</span>])</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>其中<code>pipefd[0]</code>是读一侧 <code>pipefd[1]</code>是写入一侧</li>
-<li>写入的时候要关闭读一侧，读的时候要关闭写入的一侧<h3 id="dup2用法"><a href="#dup2用法" class="headerlink" title="dup2用法"></a>dup2用法</h3></li>
-<li>转移输出定向</li>
-<li><a target="_blank" rel="noopener" href="https://www.shuzhiduo.com/A/pRdBjbn1dn/">参考链接</a><h3 id="文件描述符和FILE指针互相转换"><a href="#文件描述符和FILE指针互相转换" class="headerlink" title="文件描述符和FILE指针互相转换"></a>文件描述符和FILE指针互相转换</h3></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/zzbeagle/article/details/106586694">参考链接</a><h3 id="跨越进程的dup2（dup2与execv和execlp一起使用的问题）"><a href="#跨越进程的dup2（dup2与execv和execlp一起使用的问题）" class="headerlink" title="跨越进程的dup2（dup2与execv和execlp一起使用的问题）"></a>跨越进程的dup2（dup2与execv和execlp一起使用的问题）</h3></li>
-<li>运行上述程序可见，主进程并不能抓取到输出</li>
-<li>然后做了以下测试，在子线程中直接讲<code>execv</code>修改为<code>printf</code>函数，结果发现主线程能抓取到<code>printf</code>函数的输出</li>
-<li>可以推测在<code>execv</code>创建新的线程之后，之前的<code>dup2</code><strong>并不起到作用了</strong></li>
-<li>但是发现使用<code>execlp</code>可以，使用<code>execv</code>不行，格式为<code>execlp(argv[0], argv[0], argv[1], argv[2]);</code><ul>
-<li>其中<code>argv</code>分别是<code>echo</code>, <code>输出的字符串</code>和<code>NULL</code></li>
-</ul>
-</li>
-<li>类似地，对<code>execv</code>函数的参数作出修改，<strong>还是没法收到</strong>，暂时不清楚原因</li>
-<li><strong>最终版代码</strong><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *argv[] = &#123;<span class="string">&quot;ls&quot;</span>, <span class="string">&quot;-l&quot;</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// char *argv[] = &#123;&quot;echo&quot;, NULL, NULL&#125;;</span></span><br><span class="line">    <span class="keyword">int</span> pipe_fd[<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">char</span> buffer[<span class="number">256</span>];</span><br><span class="line">    <span class="keyword">char</span> routeBuf[<span class="number">256</span>];</span><br><span class="line">    FILE* pipeWrite;</span><br><span class="line">    getcwd(routeBuf, <span class="number">256</span>);</span><br><span class="line">    <span class="comment">// argv[2] = routeBuf;</span></span><br><span class="line"></span><br><span class="line">    argv[<span class="number">1</span>] = routeBuf;</span><br><span class="line">    pipeWrite = fdopen(pipe_fd[<span class="number">1</span>], <span class="string">&quot;w&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="number">256</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pipe return: %d\n&quot;</span>, pipe(pipe_fd)); <span class="comment">// 忽略了错误处理</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> pid = fork(); <span class="comment">// 忽略了错误处理</span></span><br><span class="line">    <span class="keyword">if</span> (pid &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// sleep(1);</span></span><br><span class="line">        wait();</span><br><span class="line">        close(pipe_fd[<span class="number">1</span>]);             <span class="comment">// 关闭管道输出</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;read: %d\n&quot;</span>, read(pipe_fd[<span class="number">0</span>], buffer, <span class="number">256</span>)); <span class="comment">// ls的输出到buffer了，你可以进行你的处理</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;ls = \n%s\n&quot;</span>, buffer);</span><br><span class="line">        <span class="comment">// 父进程</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        close(pipe_fd[<span class="number">0</span>]); <span class="comment">// 关闭管道读入</span></span><br><span class="line">        <span class="comment">// fflush(stdout);</span></span><br><span class="line">        dup2(pipe_fd[<span class="number">1</span>], STDOUT_FILENO); <span class="comment">// 关闭标准输出，改成管道输出</span></span><br><span class="line">        <span class="comment">// fflush(stdout);</span></span><br><span class="line">        <span class="comment">// execv(&quot;/usr/bin/ls&quot;, argv);</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// execv(&quot;echo&quot;, argv);</span></span><br><span class="line">        execlp(argv[<span class="number">0</span>], argv[<span class="number">0</span>], argv[<span class="number">1</span>], argv[<span class="number">2</span>]);</span><br><span class="line">        <span class="comment">// execlp(argv[0], argv[0], argv[1], argv[2]);</span></span><br><span class="line">        <span class="comment">// printf(&quot;test\n&quot;);</span></span><br><span class="line">        fflush(pipeWrite);</span><br><span class="line">        <span class="comment">// close(pipe_fd[1]);</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>输出：<ul>
-<li><img src="/imgs/dc445d41057939f55d22d264ed7ba7caf721b75974b03428371edb4bff5b01da.png" alt="picture 2">  </li>
-</ul>
-</li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Marsbupt/article/details/126185726">上述代码修改参考链接</a><h2 id="python开启新的子进程并且获取命令行的返回值"><a href="#python开启新的子进程并且获取命令行的返回值" class="headerlink" title="python开启新的子进程并且获取命令行的返回值"></a>python开启新的子进程并且获取命令行的返回值</h2></li>
-<li>从python2.4版本开始,可以用<code>subprocess</code>这个模块来产生子进程,并连接到子进程的标准输入/输出/错误中去，还可以得到子进程的返回值。</li>
-<li>比如<code>subprocess.Popen(command, stdout = subprocess.PIPE)</code></li>
-<li>去掉后面的手动指定参数，输出结果为<ul>
-<li><img src="/imgs/afe58596e700b9a51c15139bc0e4095c9e7269e13ca49280fb145bb99ea51e6e.png" alt="picture 3">  </li>
-</ul>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/4/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/6/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/4/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/6/">下一页</a>
   </nav>
   
 </section>

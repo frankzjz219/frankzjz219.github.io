@@ -141,6 +141,56 @@
     
     
     <article
+  id="post-解决Cube新建项目使用UART编译出错的问题"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/06/%E8%A7%A3%E5%86%B3Cube%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8UART%E7%BC%96%E8%AF%91%E5%87%BA%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98/"
+    >解决Cube新建项目使用UART编译出错的问题</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/06/%E8%A7%A3%E5%86%B3Cube%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8UART%E7%BC%96%E8%AF%91%E5%87%BA%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98/" class="article-date">
+  <time datetime="2022-01-06T14:07:10.000Z" itemprop="datePublished">2022-01-06</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="解决Cube新建项目使用UART编译出错的问题"><a href="#解决Cube新建项目使用UART编译出错的问题" class="headerlink" title="解决Cube新建项目使用UART编译出错的问题"></a>解决Cube新建项目使用UART编译出错的问题</h1><p>注意<code>stm32f4xx_hal_conf.h</code>中有一些宏定义</p>
+<p><img src="/imgs/image-20220106220834007.png" alt="image-20220106220834007"></p>
+<p>此处可能是系统没有将<code>#define HAL_UART_MODULE_ENABLED   </code>取消注释，此处自己删除注释即可正常编译</p>
+<p><img src="/imgs/image-20220106220934356.png" alt="image-20220106220934356"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-Linux初步学习（五）"
   class="article article-type-post"
   itemscope
@@ -1772,74 +1822,13 @@
 </article>
 
     
-    <article
-  id="post-解决C语言变量被重复定义错误的问题"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/12/17/%E8%A7%A3%E5%86%B3C%E8%AF%AD%E8%A8%80%E5%8F%98%E9%87%8F%E8%A2%AB%E9%87%8D%E5%A4%8D%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/"
-    >解决C语言变量被重复定义错误的问题</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/12/17/%E8%A7%A3%E5%86%B3C%E8%AF%AD%E8%A8%80%E5%8F%98%E9%87%8F%E8%A2%AB%E9%87%8D%E5%A4%8D%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/" class="article-date">
-  <time datetime="2021-12-17T15:10:42.000Z" itemprop="datePublished">2021-12-17</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="解决C语言变量被重复定义错误的问题"><a href="#解决C语言变量被重复定义错误的问题" class="headerlink" title="解决C语言变量被重复定义错误的问题"></a>解决C语言变量被重复定义错误的问题</h1><h2 id="头文件编译的原理"><a href="#头文件编译的原理" class="headerlink" title="头文件编译的原理"></a>头文件编译的原理</h2><ul>
-<li>在每次头文件被某个.c文件include的时候，头文件头会被插入到代码中<code>#include &quot;xxx.h&quot;</code>的位置，假如在头文件中定义了变量，然后这个头文件被多个.c文件同时Include的话，就会导致头文件中的变量以同样的名称被定义多次。因此产生错误</li>
-</ul>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ul>
-<li>就是在定义该变量的.c文件的头文件中（或者需要用到在其他.c文件中定义的变量的文件中）给对应的变量加<code>extern</code>关键字定义，此时会意味着这个变量是在其他位置被定义的，在此处仅仅是声明一下，而不是定义，也不分配内存空间。此时在该文件被其他.c文件Include的时候，就不会使得变量被定义多次。</li>
-<li>或者使用<code>#ifndef</code>，<code>#define XX</code>，<code>#endif</code>防止if块中的内容被定义多次。</li>
-</ul>
-<h2 id="其他知识点"><a href="#其他知识点" class="headerlink" title="其他知识点"></a>其他知识点</h2><ul>
-<li><p>C语言中两种方式使用#include命令,<code> #include &lt;&gt;</code>与<code>#include ””</code>的区别</p>
-</li>
-<li><p>一种是在包含指令<code>#include</code>后面”&lt;&gt;”将头文件名括起来。这种方式用于<strong>标准或系统提供</strong>的头文件，到保存系统标准头文件的位置查找头文件。</p>
-</li>
-<li><p>另一种是在包含指令<code>#include</code>后用双引号””将头文件包括起来。这种方式常用与<strong>程序员自己的头文件</strong>。用这种格式时，C编译器先查找当前目录是否有指定名称的头文件，然后在从标准头文件目录中查找。</p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/15/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/17/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/15/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/17/">下一页</a>
   </nav>
   
 </section>

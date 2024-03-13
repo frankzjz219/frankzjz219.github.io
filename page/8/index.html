@@ -141,6 +141,118 @@
     
     
     <article
+  id="post-强化学习复习（一）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/10/06/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/"
+    >强化学习复习（一）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/10/06/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/" class="article-date">
+  <time datetime="2022-10-06T02:37:45.000Z" itemprop="datePublished">2022-10-06</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="马尔可夫过程"><a href="#马尔可夫过程" class="headerlink" title="马尔可夫过程"></a>马尔可夫过程</h2><ul>
+<li><p><img src="/imgs/275a22ea5b6433abd04d8fbddb92f761a9057fd19afc2bda82cd131faac96110.png" alt="picture 9">  </p>
+</li>
+<li><p>注意，并不是说与之前的状态绝对意义上的无关，而是在t时刻之前的信息全部已知的情况下，只通过t时刻就可做出判断。也就是意味着，<strong>t时刻之前的状态对于待得到的t+1时刻的状态的影响全部体现在t时刻的信息中了</strong>。</p>
+</li>
+<li><p><img src="/imgs/25616d2b0e5fada3d0ddb5e6f129d381f59f79d37aa7e6a7a8dce0b8c53f8286.png" alt="picture 10">  </p>
+</li>
+<li><p> <img src="/imgs/97ecf9a445f6024b238f1963ab9937c56079595ca704644703cc74eb34e3f0b4.png" alt="picture 11">  </p>
+</li>
+<li><p>注意，非常关键的是在定义一个<code>状态</code>的时候，如何<u>让这个状态包含计算出下个状态所需要的所有信息</u></p>
+<h2 id="马尔可夫决策过程"><a href="#马尔可夫决策过程" class="headerlink" title="马尔可夫决策过程"></a>马尔可夫决策过程</h2></li>
+<li><p><img src="/imgs/a760aed68ebf4659099dfd844e95b9f3a3f8b3ff223bf295e101604e4dc6d1f6.png" alt="picture 12">  </p>
+</li>
+<li><p>时齐性</p>
+<ul>
+<li><img src="/imgs/296953f9cfc2fd8358fec39fb2dbb3e2a2bd59aabad95d2d1ccf7c8d9922a7fb.png" alt="picture 13">  </li>
+</ul>
+</li>
+<li><p>时间连续的问题</p>
+<ul>
+<li><img src="/imgs/c5b9381536bf2a7d1c06608993b113ef85e4e666bed199eb8c81478b8e3a4d4d.png" alt="picture 14">  <h2 id="基于价值的思想"><a href="#基于价值的思想" class="headerlink" title="基于价值的思想"></a>基于价值的思想</h2></li>
+</ul>
+</li>
+<li><p><img src="/imgs/479e70e6bc4369176f625da5751f0441e661efa26fbdd5c58ed4ce30cb6bd7e7.png" alt="picture 15">  </p>
+<h2 id="基于策略还是基于价值"><a href="#基于策略还是基于价值" class="headerlink" title="基于策略还是基于价值"></a>基于策略还是基于价值</h2></li>
+<li><p><img src="/imgs/cbdbb4eb9c16b69076103a2ac2bb158d8f39a585dfab99c6a6ea07d94652535c.png" alt="picture 16">  </p>
+</li>
+<li><p><img src="/imgs/33b349b35b46437a9534c90b9413da8746623dacbf0088f7b7b918ddf4564109.png" alt="picture 17">  </p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3></li>
+<li><p><img src="/imgs/9d594da14c780d7661ffb48885f69868395727f058b72307354e60d84dc24f4d.png" alt="picture 18">  </p>
+<h2 id="基于价值的方法和基于策略的方法"><a href="#基于价值的方法和基于策略的方法" class="headerlink" title="基于价值的方法和基于策略的方法"></a>基于价值的方法和基于策略的方法</h2></li>
+<li><p><img src="/imgs/68fafbe4f4748b9a64b4e4f887ff8dde5027ccc14c163d653b0ebbbc91ef0273.png" alt="picture 19">  </p>
+</li>
+<li><p>基于价值方法的核心思想在于对时间的差分，是一种动态规划的思想；而基于策略的方法则没有这种思想，而是要通盘考虑策略在整个时间轨道内造成的影响</p>
+</li>
+<li><p><img src="/imgs/875139c62dc89d23eddfa472c90d0ae54e15a1131262fb19d6760bba66473d6b.png" alt="picture 20">  </p>
+<h2 id="Q值的思想"><a href="#Q值的思想" class="headerlink" title="Q值的思想"></a>Q值的思想</h2></li>
+<li><p><img src="/imgs/1945b19ede6c60ed56350f818e7389608fc3ac8fa27e8b96a5eb4f6e21b83941.png" alt="picture 21">  </p>
+</li>
+<li><p>基于价值的基本解决方法</p>
+<ul>
+<li><img src="/imgs/dfcab65f4922dd312a0d8692ddacbb771de87d15415ebf8b872108ac43353059.png" alt="picture 22">  </li>
+<li>其中的V是<img src="/imgs/e4c0e4a8934163161835e9940587e5e0c8151839ee6ef45e8c75dd645383d654.png" alt="picture 23">  </li>
+<li>P是状态转移方程<h2 id="Q-Learning-的思路"><a href="#Q-Learning-的思路" class="headerlink" title="Q Learning 的思路"></a>Q Learning 的思路</h2></li>
+</ul>
+</li>
+<li><p><img src="/imgs/b04e300913d76b79136dcab4ed6f4b49b6e4bd419410515b7c5ca2d4349c5101.png" alt="picture 24">  </p>
+</li>
+<li><p><img src="/imgs/f1ee7ec356f3485f5b817114d53e486b503bfb41f2b4c4df050f2cdea4774aa7.png" alt="picture 25">  </p>
+</li>
+<li><p>对于表格学习的QLearning实际上是一种用动态规划的方法每一步都修改一下对应位置的Q值的算法</p>
+</li>
+<li><p><img src="/imgs/75082e3ffd5b31058c285181a1d365e7fee8708e4b2750690269f9c2ee5edbb8.png" alt="picture 38">  </p>
+</li>
+<li><p>Q更新的思路：在每次尝试结束之后，将这次尝试得到的价值更新到Q网络预测的价值上</p>
+<h3 id="on-policy-和-off-policy的区别"><a href="#on-policy-和-off-policy的区别" class="headerlink" title="on policy 和 off policy的区别"></a>on policy 和 off policy的区别</h3></li>
+<li><p><img src="/imgs/771886329edaec68501b0228b4b93143c2531cae35b4a58842dfad2ae67c6444.png" alt="picture 26">  </p>
+</li>
+<li><p>一个通俗的比喻</p>
+<ul>
+<li><img src="/imgs/640211411248b69921d9fbe85c5c636b81ddef4728e4a2df15244a3897987b63.png" alt="picture 27">  </li>
+</ul>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag">强化学习</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-强化学习复习（零）"
   class="article article-type-post"
   itemscope
@@ -924,107 +1036,13 @@
 </article>
 
     
-    <article
-  id="post-单调栈"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/08/28/%E5%8D%95%E8%B0%83%E6%A0%88/"
-    >单调栈</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/08/28/%E5%8D%95%E8%B0%83%E6%A0%88/" class="article-date">
-  <time datetime="2022-08-28T13:32:21.000Z" itemprop="datePublished">2022-08-28</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
-<li>了解数组中的一个数，左边最近的比这个数大的数，和右边最近的比这个数大的数在哪</li>
-<li>在一维数组中对每一个数找到<strong>第一个比自己小的元素</strong>。这类“<strong>在一维数组中找第一个满足某种条件的数</strong>”的场景就是典型的单调栈应用场景<h2 id="单调栈"><a href="#单调栈" class="headerlink" title="单调栈"></a>单调栈</h2><h3 id="无重复数字"><a href="#无重复数字" class="headerlink" title="无重复数字"></a>无重复数字</h3></li>
-<li>求某个数字附近最近的比他大的数字：<ul>
-<li>使用一个栈，这个栈从下到上是由大到小的顺序</li>
-<li>新加入的数字符合单调性？直接加入</li>
-<li>不符合单调性？弹出栈顶的数字，此时记录，对于被弹出的这个数字而言：<ul>
-<li>左边最近的比他大的数字就是弹出这个数字之后的栈顶元素</li>
-<li>右边最近的比他大的数字就是正要进栈的数字</li>
-<li>直到符合单调性为止</li>
-</ul>
-</li>
-<li>最后结束的时候栈中还有数据怎么办？<ul>
-<li>栈中剩余的所有数据的右边最近比他大的数字都是无</li>
-<li>左边最近的比他大的数字都是他在栈中的下一个元素</li>
-<li>栈底的最后一个元素左右都是无<h3 id="有重复数字"><a href="#有重复数字" class="headerlink" title="有重复数字"></a>有重复数字</h3></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>栈中放的内容都是链表，每个位置链表结点存放index</li>
-<li>弹出的时候，右边最近比他大的数字是当前等待进栈的数字，左边最近的比他大的数字是栈中下面紧邻位置链表的最后一个位置</li>
-<li>同样数字进栈的时候，将同样的数字对应的index串联在进栈位置链表的下一个位置<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLessNoRepeat(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    <span class="comment">// 只存位置！</span></span><br><span class="line">    Stack&lt;Integer&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// 当遍历到i位置的数，arr[i]</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek()] &gt; arr[i]) &#123;</span><br><span class="line">            <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">            res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[j][<span class="number">1</span>] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        <span class="keyword">int</span> j = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">        res[j][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">        res[j][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] getNearLess(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">    <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length][<span class="number">2</span>];</span><br><span class="line">    Stack&lt;List&lt;Integer&gt;&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123; <span class="comment">// i -&gt; arr[i] 进栈</span></span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] &gt; arr[i]) &#123;</span><br><span class="line">            List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">            <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">                res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">                res[popi][<span class="number">1</span>] = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!stack.isEmpty() &amp;&amp; arr[stack.peek().get(<span class="number">0</span>)] == arr[i]) &#123;</span><br><span class="line">            stack.peek().add(Integer.valueOf(i));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            list.add(i);</span><br><span class="line">            stack.push(list);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        List&lt;Integer&gt; popIs = stack.pop();</span><br><span class="line">        <span class="keyword">int</span> leftLessIndex = stack.isEmpty() ? -<span class="number">1</span> : stack.peek().get(stack.peek().size() - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (Integer popi : popIs) &#123;</span><br><span class="line">            res[popi][<span class="number">0</span>] = leftLessIndex;</span><br><span class="line">            res[popi][<span class="number">1</span>] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Leetcode-739-每日温度"><a href="#Leetcode-739-每日温度" class="headerlink" title="Leetcode 739.每日温度"></a>Leetcode 739.每日温度</h2><ul>
-<li><p>单调栈解法</p>
-</li>
-<li><p>可以维护一个存储下标的单调栈，从栈底到栈顶的下标对应的温度列表中的温度依次递减。如果一个下标在单调栈里，则表示尚未找到下一次温度更高的下标。</p>
-</li>
-<li><p>正向遍历温度列表。对于温度列表中的每个元素<code> temperatures[i]</code>，如果栈为空，则直接将 <code>i</code> 进栈，如果栈不为空，则比较栈顶元素 <code>prevIndex</code> 对应的温度 <code>temperatures[prevIndex]</code> 和当前温度 <code>temperatures[i]</code>，如果 <code>temperatures[i]</code> &gt; <code>temperatures[prevIndex]</code>，则将 <code>prevIndex</code> 移除，并将 <code>prevIndex</code> 对应的等待天数设为 <code>i - prevIndex</code>，重复上述操作直到栈为空或者栈顶元素对应的温度小于等于当前温度，然后将 i 进栈。</p>
-</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">dailyTemperatures</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; temperatures)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = temperatures.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">ans</span><span class="params">(n)</span></span>;</span><br><span class="line">        stack&lt;<span class="keyword">int</span>&gt; s;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!s.<span class="built_in">empty</span>() &amp;&amp; temperatures[i] &gt; temperatures[s.<span class="built_in">top</span>()]) &#123;</span><br><span class="line">                <span class="keyword">int</span> previousIndex = s.<span class="built_in">top</span>();</span><br><span class="line">                ans[previousIndex] = i - previousIndex;</span><br><span class="line">                s.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            s.<span class="built_in">push</span>(i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="Leetcode-155-最小栈"><a href="#Leetcode-155-最小栈" class="headerlink" title="Leetcode 155.最小栈"></a>Leetcode 155.最小栈</h2><ul>
-<li><p>当一个元素要入栈时，我们取当前辅助栈的栈顶存储的最小值，与当前元素比较得出最小值，将这个最小值插入辅助栈中</p>
-</li>
-<li><p>当一个元素要出栈时，我们把辅助栈的栈顶元素也一并弹出</p>
-</li>
-<li><p>在任意一个时刻，栈内元素的最小值就存储在辅助栈的栈顶元素中</p>
-</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MinStack</span> &#123;</span></span><br><span class="line">    stack&lt;<span class="keyword">int</span>&gt; x_stack;</span><br><span class="line">    stack&lt;<span class="keyword">int</span>&gt; min_stack;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MinStack</span>() &#123;</span><br><span class="line">        min_stack.<span class="built_in">push</span>(INT_MAX);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        x_stack.<span class="built_in">push</span>(x);</span><br><span class="line">        min_stack.<span class="built_in">push</span>(<span class="built_in">min</span>(min_stack.<span class="built_in">top</span>(), x));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        x_stack.<span class="built_in">pop</span>();</span><br><span class="line">        min_stack.<span class="built_in">pop</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">top</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x_stack.<span class="built_in">top</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getMin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> min_stack.<span class="built_in">top</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Leetcode-84-柱状图中最大的矩形"><a href="#Leetcode-84-柱状图中最大的矩形" class="headerlink" title="Leetcode 84. 柱状图中最大的矩形"></a>Leetcode 84. 柱状图中最大的矩形</h2><ul>
-<li>随后我们需要进行向左右两边扩展，使得扩展到的柱子的高度均不小于 <code>h</code>。换句话说，我们需要找到左右两侧最近的高度小于 <code>h</code> 的柱子，这样这两根柱子之间（不包括其本身）的所有柱子高度均不小于 <code>h</code>，并且就是 <code>i</code> 能够扩展到的最远范围。</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largestRectangleArea</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; heights)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = heights.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">left</span><span class="params">(n)</span>, <span class="title">right</span><span class="params">(n)</span></span>;</span><br><span class="line">        </span><br><span class="line">        stack&lt;<span class="keyword">int</span>&gt; mono_stack; <span class="comment">// 找左侧比较小的元素</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!mono_stack.<span class="built_in">empty</span>() &amp;&amp; heights[mono_stack.<span class="built_in">top</span>()] &gt;= heights[i]) &#123;</span><br><span class="line">                mono_stack.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            left[i] = (mono_stack.<span class="built_in">empty</span>() ? <span class="number">-1</span> : mono_stack.<span class="built_in">top</span>());</span><br><span class="line">            mono_stack.<span class="built_in">push</span>(i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        mono_stack = stack&lt;<span class="keyword">int</span>&gt;();<span class="comment">// 找右侧比较小的元素</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!mono_stack.<span class="built_in">empty</span>() &amp;&amp; heights[mono_stack.<span class="built_in">top</span>()] &gt;= heights[i]) &#123;</span><br><span class="line">                mono_stack.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            right[i] = (mono_stack.<span class="built_in">empty</span>() ? n : mono_stack.<span class="built_in">top</span>());</span><br><span class="line">            mono_stack.<span class="built_in">push</span>(i);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;<span class="comment">// 根据左侧和右侧比较小的元素的位置计算出不小于当前竖条宽度的面积</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            ans = <span class="built_in">max</span>(ans, (right[i] - left[i] - <span class="number">1</span>) * heights[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure> 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cpp/" rel="tag">cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/7/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/9/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/7/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/9/">下一页</a>
   </nav>
   
 </section>

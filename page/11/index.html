@@ -141,6 +141,123 @@
     
     
     <article
+  id="post-分析基于epoll的C-高性能webServer代码（二）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81%EF%BC%88%E4%BA%8C%EF%BC%89/"
+    >分析基于epoll的C++高性能webServer代码（二）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81%EF%BC%88%E4%BA%8C%EF%BC%89/" class="article-date">
+  <time datetime="2022-06-29T04:43:03.000Z" itemprop="datePublished">2022-06-29</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="分析基于epoll的C-高性能webServer代码（二）"><a href="#分析基于epoll的C-高性能webServer代码（二）" class="headerlink" title="分析基于epoll的C++高性能webServer代码（二）"></a>分析基于epoll的C++高性能webServer代码（二）</h1><h2 id="C-bind-函数用法"><a href="#C-bind-函数用法" class="headerlink" title="C++bind()函数用法"></a>C++<code>bind()</code>函数用法</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dongkun152/article/details/123992292">参考链接</a></p>
+</li>
+<li><p>std::bind()函数作为<strong>函数的适配器</strong>，它可以<strong>扩大函数是使用场合</strong>，使得函数更加灵活的被使用。<br>template&lt;class F, class… Args&gt;</p>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">bind</span>(F&amp;&amp;f, Args&amp;&amp;… args);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数：<br>f 可以是function object，函数指针，函数引用，成员函数指针，或者数据成员的指针。</li>
+<li>返回值：<br>function object</li>
+</ul>
+<h3 id="可以用std-placeholders-1等替换函数本身的输入参数"><a href="#可以用std-placeholders-1等替换函数本身的输入参数" class="headerlink" title="可以用std::placeholders::_1等替换函数本身的输入参数"></a>可以用<code>std::placeholders::_1</code>等替换函数本身的输入参数</h3><ul>
+<li>举例：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std::placeholders;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; (a -b -c) &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> fn1 = <span class="built_in">bind</span>(func, _1, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">auto</span> fn2 = <span class="built_in">bind</span>(func, <span class="number">2</span>, _1, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">fn1</span>(<span class="number">10</span>);</span><br><span class="line">    <span class="built_in">fn2</span>(<span class="number">10</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出</span></span><br><span class="line"><span class="comment">5</span></span><br><span class="line"><span class="comment">-11</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意上面的三输入函数<code>func</code>使用<code>bind</code>替换掉了其中的两个输入参数，仅仅在<code>placeholder</code>的位置提供一个输入</li>
+<li>注意，当具有多个输入的时候，输入的顺序是按照<code>std::placeholders::_1</code>、<code>std::placeholders::_2</code>、<code>std::placeholders::_3</code>等的顺序</li>
+<li>举例：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std::placeholders;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; (a - b -c) &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> fn1= <span class="built_in">bind</span>(func, _2, <span class="number">2</span>, _1);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;the value of function is :&quot;</span>;</span><br><span class="line">    <span class="built_in">fn1</span>(<span class="number">1</span>, <span class="number">13</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> fn2 = <span class="built_in">bind</span>(func, _1, <span class="number">2</span>, _2);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;the value of function after changing placeholder position is :&quot;</span>;</span><br><span class="line">    <span class="built_in">fn2</span>(<span class="number">1</span>, <span class="number">13</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出</span></span><br><span class="line"><span class="comment">the value of function is :10</span></span><br><span class="line"><span class="comment">the value of function after changing placeholder position is :-14</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意上面的函数中，fn1的实际输入到func中的参数是<code>func(13, 2, 1)</code>，而输入到fn2中的参数实际上是<code>func(1, 2, 13)</code></li>
+</ul>
+<h2 id="httpServer的成员函数分析"><a href="#httpServer的成员函数分析" class="headerlink" title="httpServer的成员函数分析"></a>httpServer的成员函数分析</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://naotu.baidu.com/file/5affaf781a1d7a139d281fba48af613a?token=e03c48870d07da80">类结构思维导图</a></li>
+</ul>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><ul>
+<li>使用初始化列表初始化成员<code>tcpserver_</code>，然后将<code>tcpserver_</code>的函数接口全部初始化为HttpServer提供的处理函数</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">HttpServer::<span class="built_in">HttpServer</span>(EventLoop *loop, <span class="keyword">int</span> port)</span><br><span class="line">    : <span class="built_in">tcpserver_</span>(loop, port),</span><br><span class="line">    <span class="built_in">cnt</span>(<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    tcpserver_.<span class="built_in">SetNewConnCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleNewConnection, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetMessageCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleMessage, <span class="keyword">this</span>, std::placeholders::_1, std::placeholders::_2));</span><br><span class="line">    tcpserver_.<span class="built_in">SetSendCompleteCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleSendComplete, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetCloseCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleClose, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">    tcpserver_.<span class="built_in">SetErrorCallback</span>(std::<span class="built_in">bind</span>(&amp;HttpServer::HandleError, <span class="keyword">this</span>, std::placeholders::_1));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="HandleNewConnection-TcpConnection-ptcpconn"><a href="#HandleNewConnection-TcpConnection-ptcpconn" class="headerlink" title="HandleNewConnection(TcpConnection *ptcpconn)"></a>HandleNewConnection(TcpConnection *ptcpconn)</h3><ul>
+<li>处理新建立的http连接请求</li>
+<li>新建一个<code>HttpSession</code>对象</li>
+<li>将该对象放入<code>httpsessionlist_</code>中(<code>httpsessionlist_</code>是一个map，通过TcpConnection映射到httpSession对象)</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleNewConnection</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//std::string msg(s);</span></span><br><span class="line">    HttpSession *phttpsession = <span class="keyword">new</span> <span class="built_in">HttpSession</span>();</span><br><span class="line">    httpsessionnlist_[ptcpconn] = phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="HandleMessage-TcpConnection-ptcpconn-std-string-amp-s"><a href="#HandleMessage-TcpConnection-ptcpconn-std-string-amp-s" class="headerlink" title="HandleMessage(TcpConnection *ptcpconn, std::string &amp;s)"></a>HandleMessage(TcpConnection *ptcpconn, std::string &amp;s)</h3><ul>
+<li>调用<code>httpsessionlist_</code>中的对象处理信息</li>
+<li>将同样的数据发送回发送方（回显）</li>
+<li>处理短链接问题</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleMessage</span><span class="params">(TcpConnection *ptcpconn, std::string &amp;s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot;http num is:&quot; &lt;&lt; ++cnt &lt;&lt; std::endl;   </span></span><br><span class="line">    HttpSession *phttpsession =  httpsessionnlist_[ptcpconn];</span><br><span class="line">    phttpsession-&gt;<span class="built_in">PraseHttpRequest</span>(s);</span><br><span class="line">    phttpsession-&gt;<span class="built_in">HttpProcess</span>();</span><br><span class="line">    std::string msg;</span><br><span class="line">    phttpsession-&gt;<span class="built_in">AddToBuf</span>(msg);</span><br><span class="line">    ptcpconn-&gt;<span class="built_in">Send</span>(msg);</span><br><span class="line">    <span class="keyword">if</span>(!phttpsession-&gt;<span class="built_in">KeepAlive</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//短连接，可以告诉框架层数据发完就可以关掉TCP连接，不过这里注释掉，还是交给客户端主动关闭吧</span></span><br><span class="line">        <span class="comment">//ptcpconn-&gt;HandleClose();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>HttpProcess()</code>的行为：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpSession::HttpProcess</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">&quot;GET&quot;</span> == httprequestcontext_.method)</span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;POST&quot;</span> == httprequestcontext_.method)</span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;HttpServer::HttpParser&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        errormsg = <span class="string">&quot;Method Not Implemented&quot;</span>;</span><br><span class="line">        <span class="built_in">HttpError</span>(<span class="number">501</span>, <span class="string">&quot;Method Not Implemented&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">size_t</span> pos = httprequestcontext_.url.<span class="built_in">find</span>(<span class="string">&quot;?&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(pos != std::string::npos)</span><br><span class="line">    &#123;</span><br><span class="line">        path_ = httprequestcontext_.url.<span class="built_in">substr</span>(<span class="number">0</span>, pos);</span><br><span class="line">        querystring_ = httprequestcontext_.url.<span class="built_in">substr</span>(pos+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        path_ = httprequestcontext_.url;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//keepalive判断处理</span></span><br><span class="line">    std::map&lt;std::string, std::string&gt;::const_iterator iter = httprequestcontext_.header.<span class="built_in">find</span>(<span class="string">&quot;Connection&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        keepalive_ = (iter-&gt;second == <span class="string">&quot;Keep-Alive&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(httprequestcontext_.version == <span class="string">&quot;HTTP/1.1&quot;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            keepalive_ = <span class="literal">true</span>;<span class="comment">//HTTP/1.1默认长连接</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            keepalive_ = <span class="literal">false</span>;<span class="comment">//HTTP/1.0默认短连接</span></span><br><span class="line">        &#125;            </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    responsebody_.<span class="built_in">clear</span>();</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">&quot;/&quot;</span> == path_)</span><br><span class="line">    &#123;        </span><br><span class="line">        path_ = <span class="string">&quot;/index.html&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;/hello&quot;</span> == path_)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//Wenbbench 测试用</span></span><br><span class="line">        std::string <span class="built_in">filetype</span>(<span class="string">&quot;text/html&quot;</span>);</span><br><span class="line">        responsebody_ = (<span class="string">&quot;hello world&quot;</span>);</span><br><span class="line">        responsecontext_ += httprequestcontext_.version + <span class="string">&quot; 200 OK\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Server: Chen Shuaihao&#x27;s NetServer/0.1\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Content-Type: &quot;</span> + filetype + <span class="string">&quot;; charset=utf-8\r\n&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            responsecontext_ += <span class="string">&quot;Connection: &quot;</span> + iter-&gt;second + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Content-Length: &quot;</span> + std::<span class="built_in">to_string</span>(responsebody_.<span class="built_in">size</span>()) + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        responsecontext_ += responsebody_;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ;</span><br><span class="line">    &#125;    </span><br><span class="line"></span><br><span class="line">    <span class="comment">//std::string responsebody;    </span></span><br><span class="line">    path_.<span class="built_in">insert</span>(<span class="number">0</span>,<span class="string">&quot;.&quot;</span>);</span><br><span class="line">    FILE* fp = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span>((fp = <span class="built_in">fopen</span>(path_.<span class="built_in">c_str</span>(), <span class="string">&quot;rb&quot;</span>)) == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//perror(&quot;error fopen&quot;);</span></span><br><span class="line">        <span class="comment">//404 NOT FOUND</span></span><br><span class="line">        <span class="built_in">HttpError</span>(<span class="number">404</span>, <span class="string">&quot;Not Found&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">char</span> buffer[<span class="number">4096</span>];</span><br><span class="line">        <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer));</span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">fread</span>(buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), <span class="number">1</span>, fp) == <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            responsebody_.<span class="built_in">append</span>(buffer);</span><br><span class="line">            <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">feof</span>(fp))</span><br><span class="line">        &#123;</span><br><span class="line">            responsebody_.<span class="built_in">append</span>(buffer);</span><br><span class="line">        &#125;        </span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;error fread&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        &#125;        	</span><br><span class="line">        <span class="built_in">fclose</span>(fp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">std::string <span class="title">filetype</span><span class="params">(<span class="string">&quot;text/html&quot;</span>)</span></span>; <span class="comment">//暂时固定为html</span></span><br><span class="line">    responsecontext_ += httprequestcontext_.version + <span class="string">&quot; 200 OK\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Server: Chen Shuaihao&#x27;s NetServer/0.1\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Content-Type: &quot;</span> + filetype + <span class="string">&quot;; charset=utf-8\r\n&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(iter != httprequestcontext_.header.<span class="built_in">end</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        responsecontext_ += <span class="string">&quot;Connection: &quot;</span> + iter-&gt;second + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;Content-Length: &quot;</span> + std::<span class="built_in">to_string</span>(responsebody_.<span class="built_in">size</span>()) + <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">    responsecontext_ += responsebody_;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="HttpServer-HandleClose-TcpConnection-ptcpconn"><a href="#HttpServer-HandleClose-TcpConnection-ptcpconn" class="headerlink" title="HttpServer::HandleClose(TcpConnection *ptcpconn)"></a>HttpServer::HandleClose(TcpConnection *ptcpconn)</h2><ul>
+<li>通过传入的参数<code>TcpConnecton</code>和map映射找到对应的<code>httpSession</code></li>
+<li>将<code>httpSession</code>从列表中删除</li>
+<li>释放<code>httpSession</code>占用的内存空间</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleClose</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HttpSession *phttpsession = httpsessionnlist_[ptcpconn];</span><br><span class="line">    httpsessionnlist_.<span class="built_in">erase</span>(ptcpconn);</span><br><span class="line">    <span class="keyword">delete</span> phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="HttpServer-HandleError-TcpConnection-ptcpconn"><a href="#HttpServer-HandleError-TcpConnection-ptcpconn" class="headerlink" title="HttpServer::HandleError(TcpConnection *ptcpconn)"></a>HttpServer::HandleError(TcpConnection *ptcpconn)</h2><ul>
+<li>删除对应的<code>httpSession</code>同上</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::HandleError</span><span class="params">(TcpConnection *ptcpconn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HttpSession *phttpsession = httpsessionnlist_[ptcpconn];</span><br><span class="line">    httpsessionnlist_.<span class="built_in">erase</span>(ptcpconn);</span><br><span class="line">    <span class="keyword">delete</span> phttpsession;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="HttpServer-Start"><a href="#HttpServer-Start" class="headerlink" title="HttpServer::Start()"></a>HttpServer::Start()</h2><ul>
+<li>直接调用内部的<code>tcpserver</code>成员的<code>start</code>函数</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HttpServer::Start</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    tcpserver_.<span class="built_in">Start</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-分析基于epoll的C-高性能webServer代码"
   class="article article-type-post"
   itemscope
@@ -1060,106 +1177,13 @@
 </article>
 
     
-    <article
-  id="post-Linux根文件系统"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/02/27/Linux%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"
-    >Linux根文件系统</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/02/27/Linux%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="article-date">
-  <time datetime="2022-02-27T08:33:12.000Z" itemprop="datePublished">2022-02-27</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Linux根文件系统"><a href="#Linux根文件系统" class="headerlink" title="Linux根文件系统"></a>Linux根文件系统</h1><h2 id="什么是文件系统"><a href="#什么是文件系统" class="headerlink" title="什么是文件系统"></a>什么是文件系统</h2><ul>
-<li><p>根文件系统一般也叫做 rootfs，那么什么叫根文件系统？看到“文件系统”这四个字，很多 人，包括我第一反应就是 FATFS、FAT、EXT4、YAFFS 和 NTFS 等这样的文件系统。在这里， 根文件系统<u>并不是 FATFS 这样的文件系统代码</u>，EXT4 这样的<u>文件系统代码属于 Linux 内核的 一部分</u>。Linux 中的根文件系统更像是<strong>一个文件夹或者叫做目录</strong>(在我看来就是一个文件夹，只 不过是特殊的文件夹)，在这个目录里面<strong>会有很多的子目录。根目录下和子目录中会有很多的文件</strong>，这些文件是 Linux 运行所必须的，比如库、常用的软件和命令、设备文件、配置文件等等。</p>
-</li>
-<li><p>根文件系统首先是内核启动时所 <strong>mount(挂载)的第一个文件系统</strong>，内核代码映像文件保存在 根文件系统中，而系统引导启动程序会在根文件系统挂载之后从中把一些基本的初始化脚本和 服务等加载到内存中去运行。</p>
-</li>
-<li><p>嵌入式 Linux 并没有将内 核代码镜像保存在根文件系统中，而是保存到了其他地方。比如 <u>NAND Flash 的指定存储地址、 EMMC 专用分区中</u>。根文件系统是 Linux 内核启动以后挂载(mount)的第一个文件系统，然后从 根文件系统中读取初始化脚本，比如 rcS，inittab 等。根文件系统和 Linux 内核是分开的，单独 的 Linux 内核是没法正常工作的，必须要搭配根文件系统。如果不提供根文件系统，Linux 内核 在启动的时候就会提示内核崩溃(Kernel panic)的提示</p>
-</li>
-<li><p>根文件系统是其他文件系统的根，没有这个“根”，其他的文件系统或者软件就别想工作。比如我们<strong>常用的 ls、mv、ifconfig 等命令 其实就是一个个小软件</strong>，只是这些<u>软件没有图形界面</u>，而且需要输入命令来运行。这些<strong>小软件就保存在根文件系统中</strong></p>
-</li>
-<li><p>以 Ubuntu 为例，根文件系统的目录名字为‘/’，没看错就是一个斜杠，所以输入如下命令就可以进入根目录中</p>
-</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd / //进入根目录</span><br></pre></td></tr></table></figure>
-
-<h3 id="bin"><a href="#bin" class="headerlink" title="/bin"></a>/bin</h3><ul>
-<li>bin 文件就是<strong>可执行文件</strong>。所以此目录下存放着系统 需要的可执行文件，一般都是一些命令，比如 ls、mv 等命令。此目录下的命令所有的客户都可 以使用。</li>
-</ul>
-<h3 id="dev-目录"><a href="#dev-目录" class="headerlink" title="/dev 目录"></a>/dev 目录</h3><ul>
-<li>dev 是 device 的缩写，所以此目录下的文件都是和设备有关的，此目录下的文件都是<strong>设备文件</strong>。在 <strong>Linux 下一切皆文件</strong>，即使是<strong>硬件设备，也是以文件的形式存在的</strong>，比如 /dev/ttymxc0(I.MX6ULL 根目录会有此文件)就表示 I.MX6ULL 的串口 0，我们**要想通过串口 0 发送或者接收数据就要操作文件/dev/ttymxc0，通过对文件/dev/ttymxc0 的<u>读写操作</u>来实现串口 0 的<u>数据收发</u>**。</li>
-</ul>
-<h3 id="etc-目录"><a href="#etc-目录" class="headerlink" title="/etc 目录"></a>/etc 目录</h3><ul>
-<li>此目录下存放着<strong>各种配置文件</strong>，大家可以进入 Ubuntu 的 etc 目录看一下，里面的配置文件 非常多！但是在嵌入式 Linux 下此目录会很简洁。</li>
-</ul>
-<h3 id="lib-目录"><a href="#lib-目录" class="headerlink" title="/lib 目录"></a>/lib 目录</h3><ul>
-<li>lib 是 library 的简称，也就是库的意思，因此此目录下<strong>存放着 Linux 所必须的库文件</strong>。这些 库文件是<strong>共享库</strong>，命令和用户编写的应用程序要使用这些库文件。</li>
-</ul>
-<h3 id="mnt-目录"><a href="#mnt-目录" class="headerlink" title="/mnt 目录"></a>/mnt 目录</h3><ul>
-<li>临时挂载目录，一般是空目录，可以在此目录下创建空的子目录，比如/mnt/sd、/mnt/usb， 这样就可以将 SD 卡或者 U 盘挂载到/mnt/sd 或者/mnt/usb 目录中。</li>
-</ul>
-<h3 id="proc-目录"><a href="#proc-目录" class="headerlink" title="/proc 目录"></a>/proc 目录</h3><ul>
-<li>此目录一般是空的，当 Linux 系统启动以后会将此目录作为 proc 文件系统的挂载点，proc 是个<strong>虚拟文件系统</strong>，没有实际的存储设备。proc 里面的文件都是临时存在的，一般用来存储系 统运行信息文件。</li>
-</ul>
-<h3 id="usr-目录"><a href="#usr-目录" class="headerlink" title="/usr 目录"></a>/usr 目录</h3><ul>
-<li>usr 不是 user 的缩写，而是 <u>Unix Software Resource</u> 的缩写，也就是 Unix 操作系统 软件资源目录。这里有个小知识点，那就是 <u>Linux 一般被称为类 Unix 操作系统</u>，苹果的 MacOS 也是类 Unix 操作系统。关于 Linux 和 Unix 操作系统的渊源大家可以直接在网上找 Linux 的发 展历史来看。既然是软件资源目录，因此**/usr 目录下也存放着很多软件**，一般系统安装完成以 后此目录占用的空间最多。</li>
-</ul>
-<h3 id="var-目录"><a href="#var-目录" class="headerlink" title="/var 目录"></a>/var 目录</h3><ul>
-<li>此目录存放一些<u>可以改变的数据</u>。</li>
-</ul>
-<h3 id="sbin-目录"><a href="#sbin-目录" class="headerlink" title="/sbin 目录"></a>/sbin 目录</h3><ul>
-<li>此目录页<u>用户存放一些可执行文件</u>，但是此目录下的文件或者说命令只有管理员才能使用， 主要用户系统管理。</li>
-</ul>
-<h3 id="sys-目录"><a href="#sys-目录" class="headerlink" title="/sys 目录"></a>/sys 目录</h3><ul>
-<li>系统启动以后此目录作为 <strong>sysfs 文件系统的挂载点</strong>，sysfs 是一个类似于 proc 文件系统的特 殊文件系统，<u>sysfs 也是基于 ram 的文件系统，也就是说它也没有实际的存储设备</u>。此目录是系 统设备管理的重要目录，此目录通过一定的组织结构向用户提供详细的内核数据结构信息。</li>
-</ul>
-<h3 id="opt目录"><a href="#opt目录" class="headerlink" title="/opt目录"></a>/opt目录</h3><ul>
-<li>可选的文件、软件存放区，由用户选择将哪些文件或软件放到此目录中。</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/10/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/12/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/10/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/12/">下一页</a>
   </nav>
   
 </section>
