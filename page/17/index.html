@@ -141,6 +141,75 @@
     
     
     <article
+  id="post-使用freeRTOS的队列和定时器"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/18/%E4%BD%BF%E7%94%A8freeRTOS%E7%9A%84%E9%98%9F%E5%88%97%E5%92%8C%E5%AE%9A%E6%97%B6%E5%99%A8/"
+    >使用freeRTOS的队列和定时器</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/18/%E4%BD%BF%E7%94%A8freeRTOS%E7%9A%84%E9%98%9F%E5%88%97%E5%92%8C%E5%AE%9A%E6%97%B6%E5%99%A8/" class="article-date">
+  <time datetime="2021-12-18T04:59:35.000Z" itemprop="datePublished">2021-12-18</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="使用freeRTOS的队列和定时器"><a href="#使用freeRTOS的队列和定时器" class="headerlink" title="使用freeRTOS的队列和定时器"></a>使用freeRTOS的队列和定时器</h1><h2 id="Cube"><a href="#Cube" class="headerlink" title="Cube"></a>Cube</h2><ul>
+<li>注意必须用<code>CMSIS_V2</code>系统才可以设置定时器</li>
+</ul>
+<p><img src="/imgs/image-20211218130310454.png" alt="image-20211218130310454"></p>
+<p><img src="/imgs/image-20211218130352028.png" alt="image-20211218130352028"></p>
+<p>然后在<code>freeRTOS.c</code>中的<strong>初始化函数</strong><code>MX_FREERTOS_Init</code>中添加启动定时器的语句</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MX_FREERTOS_Init</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN Init */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE END Init */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN RTOS_MUTEX */</span></span><br><span class="line">  <span class="comment">/* add mutexes, ... */</span></span><br><span class="line">  <span class="comment">/* USER CODE END RTOS_MUTEX */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN RTOS_SEMAPHORES */</span></span><br><span class="line">  <span class="comment">/* add semaphores, ... */</span></span><br><span class="line">  <span class="comment">/* USER CODE END RTOS_SEMAPHORES */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Create the timer(s) */</span></span><br><span class="line">  <span class="comment">/* creation of myTimer01 */</span></span><br><span class="line">  myTimer01Handle = osTimerNew(refreshScreen, osTimerPeriodic, <span class="literal">NULL</span>, &amp;myTimer01_attributes);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* creation of myTimer02 */</span></span><br><span class="line">  myTimer02Handle = osTimerNew(drawString, osTimerPeriodic, <span class="literal">NULL</span>, &amp;myTimer02_attributes);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN RTOS_TIMERS */</span></span><br><span class="line">  osTimerStart(myTimer01Handle, <span class="number">500</span>);</span><br><span class="line">  osTimerStart(myTimer02Handle, <span class="number">500</span>);</span><br><span class="line">  <span class="comment">/* start timers, add new ones, ... */</span></span><br><span class="line">  <span class="comment">/* USER CODE END RTOS_TIMERS */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Create the queue(s) */</span></span><br><span class="line">  <span class="comment">/* creation of colorQ */</span></span><br><span class="line">  colorQHandle = osMessageQueueNew (<span class="number">16</span>, <span class="keyword">sizeof</span>(<span class="keyword">uint8_t</span>), &amp;colorQ_attributes);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN RTOS_QUEUES */</span></span><br><span class="line">  <span class="comment">/* add queues, ... */</span></span><br><span class="line">  <span class="comment">/* USER CODE END RTOS_QUEUES */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Create the thread(s) */</span></span><br><span class="line">  <span class="comment">/* creation of drawColor */</span></span><br><span class="line">  drawColorHandle = osThreadNew(StartDefaultTask, <span class="literal">NULL</span>, &amp;drawColor_attributes);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN RTOS_THREADS */</span></span><br><span class="line">  <span class="comment">/* add threads, ... */</span></span><br><span class="line">  <span class="comment">/* USER CODE END RTOS_THREADS */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN RTOS_EVENTS */</span></span><br><span class="line">  <span class="comment">/* add events, ... */</span></span><br><span class="line">  <span class="comment">/* USER CODE END RTOS_EVENTS */</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>队列从Cube里直接创建即可，不需要额外的代码启动。</li>
+<li>队列相关的操作函数在<code>cmsis_os2.h</code>中，如图</li>
+<li><img src="/imgs/image-20211218130544220.png" alt="image-20211218130544220"></li>
+</ul>
+<h2 id="测试CMSIS-V2使用ili9341驱动"><a href="#测试CMSIS-V2使用ili9341驱动" class="headerlink" title="测试CMSIS_V2使用ili9341驱动"></a>测试CMSIS_V2使用ili9341驱动</h2><ul>
+<li><p>能开始像芯片发送一次左右的指令，然后就会不知道因为什么原因（猜测是SPI）进入hardFault无限循环</p>
+</li>
+<li><p><img src="/imgs/image-20211218132008015.png" alt="image-20211218132008015"></p>
+</li>
+<li><p>认为还是<strong>只能用</strong><code>CMSIS_V1</code>进行操作。</p>
+</li>
+<li><p>尝试过SPI和DMA都不使用freeRTOS的中断，中断都比RTOS高，也尝试过DMA不用而SPI用，<strong>都不行。</strong></p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
   id="post-解决C语言变量被重复定义错误的问题"
   class="article article-type-post"
   itemscope
@@ -866,94 +935,6 @@
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/390722326">参考</a><h2 id="python从图片生成gif"><a href="#python从图片生成gif" class="headerlink" title="python从图片生成gif"></a>python从图片生成gif</h2></li>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/634922656">参考</a></li>
 </ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-   
-    
-</article>
-
-    
-    <article
-  id="post-TD3网络"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/12/08/TD3%E7%BD%91%E7%BB%9C/"
-    >TD3网络</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/12/08/TD3%E7%BD%91%E7%BB%9C/" class="article-date">
-  <time datetime="2021-12-08T13:31:09.000Z" itemprop="datePublished">2021-12-08</time>
-</a>    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="TD3网络"><a href="#TD3网络" class="headerlink" title="TD3网络"></a>TD3网络</h1><ul>
-<li><p>TD3是<strong>Twin Delayed</strong> Deep Deterministic policy gradient algorithm的简称，<strong>双延迟</strong>深度确定性策略梯度</p>
-<p>传统的DDPG：</p>
-<p><img src="/imgs/image-20211208213332139.png" alt="image-20211208213332139"></p>
-</li>
-</ul>
-<p>关注上图中，我们通过Critic网络估算动作的A值。一个Critic的评估可能会较高。所以我们加一个。</p>
-<p><img src="/imgs/image-20211208213403185.png" alt="image-20211208213403185"></p>
-<p>这就相当于我们把途中的Critic的框框，一个变为两个。</p>
-<p>在目标网络中，我们估算出来的Q值会用min()函数求出较少值。以这个值作为更新的目标。</p>
-<p>这个目标会更新两个网络 Critic网络_1 和 Critic网络_2。</p>
-<p>你可以理解为这两个网络是完全独立，他们只是都用同一个目标进行更新。</p>
-<p>剩余的就和DDPG一样了。过一段时间，把学习好的网络赋值给目标网络。</p>
-<p>我们再仔细分别看Critic部分和Actor部分的学习。</p>
-<h2 id="Critic部分的学习"><a href="#Critic部分的学习" class="headerlink" title="Critic部分的学习"></a>Critic部分的学习</h2><p>只有我们在计算Critic的更新目标时，我们才用target network。其中就包括了一个Policy network，用于计算A’；两个Q network ,用于计算两个Q值：Q1(A’) 和Q2(A’)。</p>
-<p>Q1(A’) 和Q2(A’) 取最小值 min(Q1,Q2) 将代替DDPG的 Q(a’) 计算更新目标，也就是说： target = min(Q1,Q2) * gamma + r</p>
-<p>target 将会是 Q_network_1 和 Q_network_2 两个网络的更新目标。</p>
-<p>这里可能会有同学问，既然更新目标是一样的，那么为什么还需要两个网络呢?</p>
-<p>虽然更新目标一样，两个网络会越来越趋近与和实际q值相同。但由于网络参数的初始值不一样，会导致计算出来的值有所不同。所以我们可以有空间选择较小的值去估算q值，避免q值被高估。</p>
-<h2 id="Actor部分的学习"><a href="#Actor部分的学习" class="headerlink" title="Actor部分的学习"></a>Actor部分的学习</h2><p>我们在DDPG中说过，DDPG网络图像上就可以想象成一张布，覆盖在qtable上。当我们输入某个状态的时候，相当于这块布上的一个截面，我们我们能够看到在这个状态下的一条曲线。</p>
-<p>而actor的任务，就是用梯度上升的方法，寻着这条线的最高点。</p>
-<p>对于actor来说，其实并不在乎Q值是否会被高估，他的任务只是不断做梯度上升，寻找这条最大的Q值。随着更新的进行Q1和Q2两个网络，将会变得越来越像。所以用Q1还是Q2，还是两者都用，对于actor的问题不大。</p>
-<h2 id="Delayed-延迟"><a href="#Delayed-延迟" class="headerlink" title="Delayed - 延迟"></a>Delayed - 延迟</h2><p>这里说的Dalayed ，是actor更新的delay。也就是说相对于critic可以更新多次后，actor再进行更新。</p>
-<p>为什么要这样做呢？</p>
-<p>还是回到我们qnet拟合出来的那块”布”上。</p>
-<p>qnet在学习过程中，我们的q值是不断变化的，也就是说这块布是不断变形的。所以要寻着最高点的任务有时候就挺难为为的actor了。</p>
-<p>可以想象，本来是最高点的，当actor好不容易去到最高点；q值更新了，这并不是最高点。这时候actor只能转头再继续寻找新的最高点。更坏的情况可能是actor被困在次高点，没有找到正确的最高点。</p>
-<p>所以我们可以把Critic的更新频率，调的比Actor要高一点。让critic更加确定，actor再行动。</p>
-<h2 id="target-policy-smoothing-regularization"><a href="#target-policy-smoothing-regularization" class="headerlink" title="target policy smoothing regularization"></a>target policy smoothing regularization</h2><p>TD3中，价值函数的更新目标每次都在action上加一个小扰动，这个操作就是target policy smoothing regularization</p>
-<p>为什么要这样呢？</p>
-<p>我们可以再次回到我们关于“布”的想象。</p>
-<p>在DDPG中，计算target的时候，我们输入时s_和a_，获得q，也就是这块布上的一点A。通过估算target估算另外一点s，a，也就是布上的另外一点B的Q值。<br><img src="/imgs/image-20211208213605697.png" alt="image-20211208213605697"></p>
-<p>在TD3中，计算target时候，输入s_到actor输出a后，给a加上噪音，让a在一定范围内随机。这又什么好处呢。</p>
-<p>好处就是，当更新多次的时候，就相当于用A点附近的一小部分范围（准确来说是在s_这条线上的一定范围）的去估算B，这样可以让B点的估计更准确，更健壮。</p>
-<p><img src="/imgs/image-20211208213632464.png" alt="image-20211208213632464"></p>
-<ul>
-<li>这注意区分三个地方：</li>
-</ul>
-<p>​    在跑游戏的时候，我们同样加上了了noise。这个时候的noise是为了更充分地开发整个游戏空间。<br>​    计算target的时候，actor加上noise，是为了预估更准确，网络更有健壮性。<br>​    更新actor的时候，我们不需要加上noise，这里是希望actor能够寻着最大值。加上noise并没有任何意义。</p>
-<h2 id="下面附上源代码"><a href="#下面附上源代码" class="headerlink" title="下面附上源代码"></a>下面附上源代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;迁移到了GPU上进行训练&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Actor</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, input_size, hidden_size, output_size</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(Actor, self).__init__()</span><br><span class="line">        self.linear1 = nn.Linear(input_size, hidden_size)</span><br><span class="line">        self.linear2 = nn.Linear(hidden_size, hidden_size)</span><br><span class="line">        self.linear3 = nn.Linear(hidden_size, hidden_size)</span><br><span class="line">        self.linear4 = nn.Linear(hidden_size, output_size)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, s</span>):</span></span><br><span class="line">        x = F.relu(self.linear1(s))</span><br><span class="line">        x = F.relu(self.linear2(x))</span><br><span class="line">        x = F.relu(self.linear3(x))</span><br><span class="line">        x = torch.tanh(self.linear4(x))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Critic</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, input_size, hidden_size, output_size</span>):</span></span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.linear1 = nn.Linear(input_size, hidden_size)</span><br><span class="line">        self.linear2 = nn.Linear(hidden_size, hidden_size)</span><br><span class="line">        self.linear3 = nn.Linear(hidden_size, hidden_size)</span><br><span class="line">        self.linear4 = nn.Linear(hidden_size, output_size)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, s, a</span>):</span></span><br><span class="line">        x = torch.cat([s, a], <span class="number">1</span>)</span><br><span class="line">        x = F.relu(self.linear1(x))</span><br><span class="line">        x = F.relu(self.linear2(x))</span><br><span class="line">        x = F.relu(self.linear3(x))</span><br><span class="line">        x = self.linear4(x)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Agent</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, **kwargs</span>):</span></span><br><span class="line">        <span class="keyword">for</span> key, value <span class="keyword">in</span> kwargs.items():</span><br><span class="line">            <span class="built_in">setattr</span>(self, key, value)</span><br><span class="line"></span><br><span class="line">        s_dim = self.env.observation_space.shape[<span class="number">0</span>]</span><br><span class="line">        a_dim = self.env.action_space.shape[<span class="number">0</span>]</span><br><span class="line">        fileList = os.listdir(<span class="string">&#x27;nets/&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;actor.pkl&quot;</span> <span class="keyword">in</span> fileList :</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Trained nets found!&quot;</span>)</span><br><span class="line"></span><br><span class="line">            self.actor = torch.load(<span class="string">&#x27;nets/actor.pkl&#x27;</span>)</span><br><span class="line">            self.actor_target = torch.load(<span class="string">&#x27;nets/actor_target.pkl&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            self.critic1 = torch.load(<span class="string">&#x27;nets/critic1.pkl&#x27;</span>)</span><br><span class="line">            self.critic_target1 = torch.load(<span class="string">&#x27;nets/critic_target1.pkl&#x27;</span>)</span><br><span class="line">            self.critic2 = torch.load(<span class="string">&#x27;nets/critic2.pkl&#x27;</span>)</span><br><span class="line">            self.critic_target2 = torch.load(<span class="string">&#x27;nets/critic_target2.pkl&#x27;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Trained nets not found!&quot;</span>)</span><br><span class="line"></span><br><span class="line">            self.actor = Actor(s_dim, <span class="number">256</span>, a_dim).cuda()</span><br><span class="line">            self.actor_target = Actor(s_dim, <span class="number">256</span>, a_dim).cuda()</span><br><span class="line"></span><br><span class="line">            self.critic1 = Critic(s_dim + a_dim, <span class="number">256</span>, <span class="number">1</span>).cuda()   <span class="comment"># 此处修改了critic的输出维度恒为1</span></span><br><span class="line">            self.critic_target1 = Critic(s_dim + a_dim, <span class="number">256</span>, <span class="number">1</span>).cuda()  <span class="comment"># 此处修改了critic的输出维度恒为1</span></span><br><span class="line">            self.critic2 = Critic(s_dim + a_dim, <span class="number">256</span>, <span class="number">1</span>).cuda()  <span class="comment"># 此处修改了critic的输出维度恒为1</span></span><br><span class="line">            self.critic_target2 = Critic(s_dim + a_dim, <span class="number">256</span>, <span class="number">1</span>).cuda()  <span class="comment"># 此处修改了critic的输出维度恒为1</span></span><br><span class="line">            <span class="comment"># 假如没找到存在的网络的话，初始化target网络</span></span><br><span class="line">            self.actor_target.load_state_dict(self.actor.state_dict())</span><br><span class="line"></span><br><span class="line">            self.critic_target1.load_state_dict(self.critic1.state_dict())</span><br><span class="line">            self.critic_target2.load_state_dict(self.critic2.state_dict())</span><br><span class="line"></span><br><span class="line">        self.actor_optim = optim.Adam(self.actor.parameters(), lr=self.actor_lr)</span><br><span class="line">        self.critic_optim1 = optim.Adam(self.critic1.parameters(), lr=self.critic_lr)</span><br><span class="line">        self.critic_optim2 = optim.Adam(self.critic2.parameters(), lr=self.critic_lr)</span><br><span class="line">        self.buffer = []</span><br><span class="line">        self.updateCnt = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">act</span>(<span class="params">self, s0</span>):</span></span><br><span class="line">        s0 = torch.tensor(s0, dtype=torch.<span class="built_in">float</span>).cuda().unsqueeze(<span class="number">0</span>).cuda()</span><br><span class="line">        a0 = self.actor(s0).squeeze(<span class="number">0</span>).detach().cpu().numpy()</span><br><span class="line">        <span class="keyword">return</span> a0</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span>(<span class="params">self, *transition</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(self.buffer) == self.capacity:</span><br><span class="line">            self.buffer.pop(<span class="number">0</span>)</span><br><span class="line">        self.buffer.append(transition)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">learn</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(self.buffer) &lt; self.batch_size:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        samples = random.sample(self.buffer, self.batch_size)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        s0, a0, r1, s1 = <span class="built_in">zip</span>(*samples)</span><br><span class="line"></span><br><span class="line">        s0 = torch.tensor(s0, dtype=torch.<span class="built_in">float</span>).cuda()</span><br><span class="line">        a0 = torch.tensor(a0, dtype=torch.<span class="built_in">float</span>).cuda()</span><br><span class="line">        r1 = torch.tensor(r1, dtype=torch.<span class="built_in">float</span>).view(self.batch_size, -<span class="number">1</span>).cuda()</span><br><span class="line">        s1 = torch.tensor(s1, dtype=torch.<span class="built_in">float</span>).cuda()</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">critic_learn</span>():</span></span><br><span class="line">            a1 = self.actor_target(s1).detach()</span><br><span class="line">            y_true = r1 + self.gamma * torch.<span class="built_in">min</span>(self.critic_target1(s1, a1), self.critic_target1(s1, a1)).detach()</span><br><span class="line">            <span class="comment"># 更新网咯1</span></span><br><span class="line">            y_pred1 = self.critic1(s0, a0)</span><br><span class="line">            loss_fn = nn.MSELoss()</span><br><span class="line">            loss = loss_fn(y_pred1, y_true)</span><br><span class="line">            self.critic_optim1.zero_grad()</span><br><span class="line">            loss.backward()</span><br><span class="line">            self.critic_optim1.step()</span><br><span class="line">            <span class="comment"># 更新网络2</span></span><br><span class="line">            y_pred2 = self.critic2(s0, a0)</span><br><span class="line">            loss_fn = nn.MSELoss()</span><br><span class="line">            loss = loss_fn(y_pred2, y_true)</span><br><span class="line">            self.critic_optim2.zero_grad()</span><br><span class="line">            loss.backward()</span><br><span class="line">            self.critic_optim2.step()</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">actor_learn</span>():</span></span><br><span class="line">            <span class="comment"># 此处update actor网络同样从两个critic网络中选择一个较小的</span></span><br><span class="line">            loss = -torch.mean(torch.<span class="built_in">min</span>(self.critic1(s0, self.actor(s0)), self.critic2(s0, self.actor(s0))))</span><br><span class="line">            self.actor_optim.zero_grad()</span><br><span class="line">            loss.backward()</span><br><span class="line">            self.actor_optim.step()</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">soft_update</span>(<span class="params">net_target, net, tau</span>):</span></span><br><span class="line">            <span class="keyword">for</span> target_param, param <span class="keyword">in</span> <span class="built_in">zip</span>(net_target.parameters(), net.parameters()):</span><br><span class="line">                target_param.data.copy_(target_param.data * (<span class="number">1.0</span> - tau) + param.data * tau)</span><br><span class="line"></span><br><span class="line">        critic_learn()</span><br><span class="line">        soft_update(self.critic_target1, self.critic1, self.tau)</span><br><span class="line">        soft_update(self.critic_target2, self.critic2, self.tau)</span><br><span class="line">        self.updateCnt += <span class="number">1</span></span><br><span class="line">        <span class="comment"># 到达更新频率的时候才更新actor</span></span><br><span class="line">        <span class="keyword">if</span>((self.updateCnt % self.update_interval) == <span class="number">0</span>):</span><br><span class="line">            actor_learn()</span><br><span class="line">            soft_update(self.actor_target, self.actor, self.tau)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save</span>(<span class="params">self</span>):</span></span><br><span class="line">        torch.save(self.actor, <span class="string">&#x27;nets/actor.pkl&#x27;</span>)</span><br><span class="line">        torch.save(self.actor_target, <span class="string">&#x27;nets/actor_target.pkl&#x27;</span>)</span><br><span class="line">        torch.save(self.critic1, <span class="string">&#x27;nets/critic1.pkl&#x27;</span>)</span><br><span class="line">        torch.save(self.critic_target1, <span class="string">&#x27;nets/critic_target1.pkl&#x27;</span>)</span><br><span class="line">        torch.save(self.critic2, <span class="string">&#x27;nets/critic2.pkl&#x27;</span>)</span><br><span class="line">        torch.save(self.critic_target2, <span class="string">&#x27;nets/critic_target2.pkl&#x27;</span>)</span><br><span class="line"></span><br><span class="line">env = gym.make(<span class="string">&#x27;Pendulum-v1&#x27;</span>)</span><br><span class="line">env.reset()</span><br><span class="line">env.render()</span><br><span class="line"></span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&#x27;env&#x27;</span>: env,</span><br><span class="line">    <span class="string">&#x27;gamma&#x27;</span>: <span class="number">0.99</span>,</span><br><span class="line">    <span class="string">&#x27;actor_lr&#x27;</span>: <span class="number">0.001</span>,</span><br><span class="line">    <span class="string">&#x27;critic_lr&#x27;</span>: <span class="number">0.0013</span>,</span><br><span class="line">    <span class="string">&#x27;tau&#x27;</span>: <span class="number">0.02</span>,</span><br><span class="line">    <span class="string">&#x27;capacity&#x27;</span>: <span class="number">5000</span>,</span><br><span class="line">    <span class="string">&#x27;batch_size&#x27;</span>: <span class="number">32</span>,</span><br><span class="line">    <span class="string">&#x27;update_interval&#x27;</span>: <span class="number">3</span>,</span><br><span class="line">&#125;</span><br><span class="line">EPOCH_NUM = <span class="number">200</span></span><br><span class="line">agent = Agent(**params)</span><br><span class="line">FLAG = <span class="literal">False</span></span><br><span class="line">rewardList = []</span><br><span class="line"><span class="comment"># INTCOEFF = 0.001</span></span><br><span class="line">integral = <span class="number">0</span></span><br><span class="line"><span class="comment"># INTCOEFF = 0.0</span></span><br><span class="line"><span class="keyword">for</span> episode <span class="keyword">in</span> <span class="built_in">range</span>(EPOCH_NUM):</span><br><span class="line">    s0 = env.reset()</span><br><span class="line">    episode_reward = <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span>(episode%<span class="number">20</span> == <span class="number">0</span>):</span><br><span class="line">        flag = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        flag = <span class="literal">False</span></span><br><span class="line">    integral = <span class="number">0</span></span><br><span class="line">    INTCOEFF = (episode/EPOCH_NUM)**<span class="number">2</span>*<span class="number">0.005</span></span><br><span class="line">    <span class="keyword">for</span> step <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">500</span>):</span><br><span class="line">        <span class="keyword">if</span>(flag):</span><br><span class="line">            env.render()</span><br><span class="line">        a0 = agent.act(s0)</span><br><span class="line">        s1, r1, done, _ = env.step(a0)</span><br><span class="line">        integral += r1*INTCOEFF</span><br><span class="line">        agent.put(s0, a0, r1+integral, s1)</span><br><span class="line"></span><br><span class="line">        episode_reward += r1</span><br><span class="line">        s0 = s1</span><br><span class="line"></span><br><span class="line">        agent.learn()</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(episode, <span class="string">&#x27;: &#x27;</span>, episode_reward)</span><br><span class="line">    rewardList.append(episode_reward)</span><br><span class="line">pltX = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(EPOCH_NUM)]</span><br><span class="line">plt.plot(pltX, rewardList)</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment"># agent.save()</span></span><br></pre></td></tr></table></figure>
-
-<p>详见<a target="_blank" rel="noopener" href="https://gitee.com/frankzhang0219/ddpg_try">DDPG_Try: DDPG尝试集 (gitee.com)</a></p>
  
       <!-- reward -->
       

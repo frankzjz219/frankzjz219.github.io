@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>windows系统如何创建定时任务 |  Frank’s blogs</title>
+      <title>什么是无栈协程 |  Frank’s blogs</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/FLogo.png" />
@@ -53,7 +53,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-windows系统如何创建定时任务"
+  id="post-什么是无栈协程"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -64,7 +64,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  windows系统如何创建定时任务
+  什么是无栈协程
 </h1>
  
 
@@ -72,15 +72,15 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2024/03/13/windows%E7%B3%BB%E7%BB%9F%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/" class="article-date">
-  <time datetime="2024-03-13T09:42:02.000Z" itemprop="datePublished">2024-03-13</time>
+      <a href="/2024/03/13/%E4%BB%80%E4%B9%88%E6%98%AF%E6%97%A0%E6%A0%88%E5%8D%8F%E7%A8%8B/" class="article-date">
+  <time datetime="2024-03-13T14:43:48.000Z" itemprop="datePublished">2024-03-13</time>
 </a>   
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">125</span>
+            <span class="post-count">570</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">1 min</span>
+            <span class="post-count">2 min</span>
         </span>
     </span>
 </div>
@@ -104,27 +104,13 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h2 id="Windows系统如何创建一个定时任务"><a href="#Windows系统如何创建一个定时任务" class="headerlink" title="Windows系统如何创建一个定时任务"></a>Windows系统如何创建一个定时任务</h2><ul>
-<li>使用<strong>管理员权限</strong>打开一个控制台<ul>
-<li><img src="/imgs/05b3098b43134a50913a3deb074131da39556d7d4ac3caa671c1254635d09220.png" alt="picture 0">  </li>
-</ul>
-</li>
-<li>在其中输入<code>taskschd.msc</code><ul>
-<li><img src="/imgs/ed1e4e8aadb2ab28e974680377859595ba24de404eed7c0d945ace3b3618edcc.png" alt="picture 1">  </li>
-</ul>
-</li>
-<li>打开的管理器中点击<code>创建基本任务</code><ul>
-<li><img src="/imgs/16cddef12607d83abfab09b7aff666eb054d0abc3dc388c60df294b2070f2a8d.png" alt="picture 2">  </li>
-</ul>
-</li>
-<li>选择<code>每日</code><ul>
-<li><img src="/imgs/73b385370bed1b8b084c405e7e96506a22846ab1690f8908e4515a9289e9dde0.png" alt="picture 3">  </li>
-</ul>
-</li>
-<li>指定的开始时间就是每天的开始时间</li>
-<li>执行的操作选择<code>执行程序</code></li>
-<li>选择自己需要执行的脚本(.bat)文件或者直接在输入框里输入自己需要在命令行执行的命令也可以</li>
-<li>完成即可</li>
+  <h2 id="什么是无栈协程"><a href="#什么是无栈协程" class="headerlink" title="什么是无栈协程"></a>什么是无栈协程</h2><ul>
+<li>无栈协程是一种轻量级的协程实现方式，相比有栈协程，它们不拥有独立的调用栈。这种设计让无栈协程更加轻量，因为它们不需要为每个协程分配独立的栈空间，从而减少了内存的使用量。</li>
+<li>全程都在使用系统<strong>自动分配的栈空间</strong>，只不过是将一次调用和下一次调用之间所需要的数据利用某种数据结构（比如类的局部变量）<strong>手动保存了下来</strong></li>
+<li>无栈协程的核心原理是将协程中的代码转换成一个或多个状态机。每当执行到协程内的一个异步调用时，协程会保存当前的状态（例如局部变量的值、程序执行到哪一行等），然后暂停执行，将控制权交回给协程的调度器或事件循环。当异步调用完成后，协程根据保存的状态恢复执行</li>
+<li>实际上就是利用系统的数据结构（比如类的成员）保存状态，外界需要其重新执行的时候读取该状态再执行</li>
+<li>例子<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 协程状态</span></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="keyword">class</span> <span class="title">CoroutineState</span> &#123;</span></span><br><span class="line">    BeforeStart = <span class="number">0</span>,</span><br><span class="line">    AfterHello,</span><br><span class="line">    AfterWorld,</span><br><span class="line">    Completed</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloWorldCoroutine</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 协程当前状态</span></span><br><span class="line">    CoroutineState state = CoroutineState::BeforeStart;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 协程的执行函数</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">resume</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="built_in"><span class="keyword">switch</span></span> (state) &#123;</span><br><span class="line">            <span class="keyword">case</span> CoroutineState::BeforeStart:</span><br><span class="line">                <span class="comment">// 第一个操作：打印&quot;Hello&quot;</span></span><br><span class="line">                std::cout &lt;&lt; <span class="string">&quot;Hello, &quot;</span>;</span><br><span class="line">                <span class="comment">// 更新状态到下一步</span></span><br><span class="line">                state = CoroutineState::AfterHello;</span><br><span class="line">                <span class="comment">// 退出当前执行，模拟异步操作的暂停</span></span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            <span class="keyword">case</span> CoroutineState::AfterHello:</span><br><span class="line">                <span class="comment">// 第二个操作：打印&quot;World&quot;</span></span><br><span class="line">                std::cout &lt;&lt; <span class="string">&quot;World!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">                <span class="comment">// 更新状态到完成</span></span><br><span class="line">                state = CoroutineState::AfterWorld;</span><br><span class="line">                <span class="comment">// 退出当前执行</span></span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            <span class="keyword">case</span> CoroutineState::AfterWorld:</span><br><span class="line">                <span class="comment">// 协程已完成，不做任何操作</span></span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="comment">// 非法状态</span></span><br><span class="line">                std::cerr &lt;&lt; <span class="string">&quot;Invalid state&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查协程是否完成</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isCompleted</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state == CoroutineState::AfterWorld;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    HelloWorldCoroutine coroutine;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 循环执行，直到协程状态表示完成</span></span><br><span class="line">    <span class="keyword">while</span> (!coroutine.<span class="built_in">isCompleted</span>()) &#123;</span><br><span class="line">        coroutine.<span class="built_in">resume</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>实际上就是将需要的状态手动保存了下来，在被外界调用的时候手动的恢复，是一种比较间接的协程实现方法</li>
 </ul>
  
       <!-- reward -->
@@ -178,12 +164,12 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2024/03/13/windows%E7%B3%BB%E7%BB%9F%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://frankzhang0219.gitee.io/2024/03/13/%E4%BB%80%E4%B9%88%E6%98%AF%E6%97%A0%E6%A0%88%E5%8D%8F%E7%A8%8B/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/" rel="tag">windows</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%8F%E7%A8%8B/" rel="tag">协程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
 
     </footer>
   </div>
@@ -191,19 +177,10 @@
    
   <nav class="article-nav">
     
-      <a href="/2024/03/13/%E4%BB%80%E4%B9%88%E6%98%AF%E6%97%A0%E6%A0%88%E5%8D%8F%E7%A8%8B/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            什么是无栈协程
-          
-        </div>
-      </a>
     
-    
-      <a href="/2024/02/27/%E7%BB%99Jetson-Orin%E5%88%B7%E5%85%A5%E5%AE%9E%E6%97%B6%E5%86%85%E6%A0%B8%E7%9A%84%E6%96%B9%E5%BC%8F/" class="article-nav-link">
+      <a href="/2024/03/13/windows%E7%B3%BB%E7%BB%9F%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">给Jetson_Orin刷入实时内核的方式</div>
+        <div class="article-nav-title">windows系统如何创建定时任务</div>
       </a>
     
   </nav>
