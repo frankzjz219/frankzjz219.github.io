@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">54 min</span>
+            <span class="post-count">55 min</span>
         </span>
     </span>
 </div>
@@ -385,7 +385,17 @@
 </li>
 <li><p>保护现场</p>
 <ul>
-<li>CPU将当前程序的执行现场(如程序计数器、寄存器等)压入内核堆栈,以便中断处理完成后能恢复执行。</li>
+<li>CPU将当前程序的执行现场(如程序计数器、寄存器等)主要是寄存器，压入内核堆栈,以便中断处理完成后能恢复执行。</li>
+</ul>
+</li>
+<li><p>关中断</p>
+<ul>
+<li>保证整个中断处理程序不被打断，在中断服务结束之后才再次开中断</li>
+</ul>
+</li>
+<li><p>也存在多重中断</p>
+<ul>
+<li>只在<strong>保护现场和恢复现场</strong>的时候关闭中断防止被打断，其他步骤均开启中断允许打断</li>
 </ul>
 </li>
 <li><p>切换到内核态</p>
