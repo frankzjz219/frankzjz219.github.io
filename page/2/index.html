@@ -657,9 +657,10 @@
     <div class="article-entry" itemprop="articleBody">
        
   <h2 id="STL相关"><a href="#STL相关" class="headerlink" title="STL相关"></a>STL相关</h2><ul>
-<li>注意<code>vector&lt;&gt;.size()</code>返回的是无符号整数，<code>unsigned</code>与<strong>同样大小类型的有符号整数相加的时候会将这个有符号整数类型转换为无符号的，导致表示的意思出现区别</strong></li>
-</ul>
-<h3 id="initializer-list-lt-gt"><a href="#initializer-list-lt-gt" class="headerlink" title="initializer_list&lt;&gt;"></a>initializer_list&lt;&gt;</h3><ul>
+<li><p>注意<code>vector&lt;&gt;.size()</code>返回的是无符号整数，<code>unsigned</code>与<strong>同样大小类型的有符号整数相加的时候会将这个有符号整数类型转换为无符号的，导致表示的意思出现区别</strong></p>
+</li>
+<li><p>对无符号数字给负值的时候，实际的到的值是<code>给的数字+该类型能表达的最大数字</code></p>
+<h3 id="initializer-list-lt-gt"><a href="#initializer-list-lt-gt" class="headerlink" title="initializer_list&lt;&gt;"></a>initializer_list&lt;&gt;</h3></li>
 <li><p>用于不定参数个数的函数的传参</p>
 </li>
 <li><p>只能传递同一个类型的参数</p>

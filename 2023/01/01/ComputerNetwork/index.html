@@ -141,6 +141,7 @@
 <li>第一次握手：Client将SYN置1，随机产生一个初始序列号seq发送给Server，进入SYN_SENT状态；</li>
 <li>第二次握手：Server收到Client的SYN=1之后，知道客户端请求建立连接，将自己的SYN置1，ACK置1，产生一个acknowledge number=sequence number+1，并随机产生一个自己的初始序列号，发送给客户端；进入SYN_RCVD状态；</li>
 <li>第三次握手：客户端检查acknowledge number是否为序列号+1，ACK是否为1，检查正确之后将自己的ACK置为1，产生一个acknowledge number=服务器发的序列号+1，发送给服务器；进入ESTABLISHED状态；服务器检查ACK为1和acknowledge number为序列号+1之后，也进入ESTABLISHED状态；完成三次握手，连接建立。</li>
+<li>注意，ACK字段在正常传输过程中一般都是1，只要包含对对方发送的数据的确认序号的，ACK都是1，包括连接建立除了第一次握手之外的部分</li>
 </ul>
 <h5 id="TCP建立连接可以两次握手吗？为什么"><a href="#TCP建立连接可以两次握手吗？为什么" class="headerlink" title="TCP建立连接可以两次握手吗？为什么?"></a>TCP建立连接可以两次握手吗？为什么?</h5><p>不可以。有两个原因：</p>
 <p>首先，可能会出现<strong>已失效的连接请求报文段又传到了服务器端</strong>。</p>
