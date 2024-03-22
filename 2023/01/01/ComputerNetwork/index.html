@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">8.4k</span>
+            <span class="post-count">8.5k</span>
         </span>
     </span>
 
@@ -202,7 +202,7 @@
 <p>设滑动窗口大小为<img src="/imgs/2076e492e3a4d86f2b5723665faeaa2e902e4b281917efd61e50c7189ff2868c.png" alt="picture 0">  ， 发送端和接收端的带宽为<img src="/imgs/cf86f6fd4dd5941232135e40c4f99575bf3add3d94719edd5d7c3e52b4a278c2.png" alt="picture 1">  ， RTT为<img src="/imgs/bd6df51c6a4f4b9f270bc282f2185f1578afb628fe54722ffe653295f37f9a5f.png" alt="picture 2">  。</p>
 <p>前面已经说过了，TCP发送数据时受滑动窗口的限制，当TCP将滑动窗口中的数据都发出后，在收到第一个ACK之前，滑动窗口大小是0，不能再发送数据了，必须等待ACK包使滑动窗口移动。那么在理想情况下，ACK包应该在什么时候到达呢？显然，就是在数据发出后的RTT时间后，ACK包到达。这也就是说，现在在不考虑丢包和拥塞情况下，TCP在一个RTT时间内能发出的最大数据量为 <img src="/imgs/6e92dc50f423f667e68b89ba03b78e7b92b031b830ac02be61aea6334802694e.png"><br> ，所以不考虑带宽限制下，TCP能一个时刻能达到的最大速度是<img src="/imgs/d8ba11019e0f9d2586eb94d24f8b51d181bec9f82919731b47f30a251152fbc3.png" alt="picture 4">  。</p>
 <p>现在再考虑带宽限制，前面说过当马路上摆满车的时候，就无法再往里放车了，同理，TCP发送端在 <img src="/imgs/ddb7fec471b33ab2b947fd9a470164b8294df755ec8ce4227492769f5bdb8ffa.png" alt="picture 5"><br> 时间内，能往通道上放的最大数据量为 <img src="/imgs/459ebb8aa50c74abe419c3d9b2cfa489036024781b7b47121c2fd3d15bc265ad.png" alt="picture 6"> ，通过带宽时延乘积得到的容积限制为 <img src="/imgs/7014486ce717558802dfdd5219bda9345e459f58e63d29ba0ab14eaaf461f1b7.png" alt="picture 7">  。当 <img src="/imgs/4d76b42ade162ff6c9034e20c742c847acaddcf08630b50f4df7c9cfebbc5c59.png" alt="picture 8">  时，单向通道容积不构成瓶颈，速率的限制主要来源于窗口大小限制。而当<img src="/imgs/6976ef1ef342622edfd64881a0fd37e748a821bd7c22fef059737c42401d6985.png" alt="picture 9"><br>时，则就受到容积限制，即此时速率限制来源于带宽限制。</p>
-<p>因此，TCP的最大速率为 <img src="/imgs/6f8652b6cfdea0ed63b286b45505b1c137d651d09cc80132d4b7423e2ed8b93c.png" alt="picture 10"><br>在我们平时生活中使用的宽带网络，ADSL等环境下，因为带宽都比较小，从而 <img src="/imgs/b89b54e601ac7b7a4f47c4f2142ef6ca6c6685a9a991327e82990c969c4a6aea.png" alt="picture 11">  也比较小，再加上网络情况比较复杂，拥塞情况比较常见，所以这些网络环境下，TCP速率的主要限制因素在于带宽，丢包率等。长肥管道一般不太常见，多见于一些单位使用的专线网络，在这些网络中速率的主要限制因素就是窗口大小了，这也是传统TCP在这些网络环境中不能充分利用带宽的原因所在（因为传统TCP的窗口大小是用2字节表示的，所以最大只有65535（不考虑窗口扩大选项）），除了专线网络外，随着网络硬件技术的发展，万兆交换机的出现，局域网中也可能会出现带宽时延乘积较大的情况。</p>
+<p>因此，TCP的最大速率为 <img src="/imgs/6f8652b6cfdea0ed63b286b45505b1c137d651d09cc80132d4b7423e2ed8b93c.png" alt="picture 10"> ,就是滑动窗口的大小除以RTT的值和网络带宽中比较小的一个<br>在我们平时生活中使用的宽带网络，ADSL等环境下，因为带宽都比较小，从而 <img src="/imgs/b89b54e601ac7b7a4f47c4f2142ef6ca6c6685a9a991327e82990c969c4a6aea.png" alt="picture 11">  也比较小，再加上网络情况比较复杂，拥塞情况比较常见，所以这些网络环境下，TCP速率的主要限制因素在于带宽，丢包率等。长肥管道一般不太常见，多见于一些单位使用的专线网络，在这些网络中速率的主要限制因素就是窗口大小了，这也是传统TCP在这些网络环境中不能充分利用带宽的原因所在（因为传统TCP的窗口大小是用2字节表示的，所以最大只有65535（不考虑窗口扩大选项）），除了专线网络外，随着网络硬件技术的发展，万兆交换机的出现，局域网中也可能会出现带宽时延乘积较大的情况。</p>
 <h3 id="TCP与UDP的区别"><a href="#TCP与UDP的区别" class="headerlink" title="TCP与UDP的区别"></a>TCP与UDP的区别</h3><ol>
 <li>TCP是面向连接的，UDP是无连接的；</li>
 </ol>
