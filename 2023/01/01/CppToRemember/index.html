@@ -131,7 +131,7 @@
 <li>定义域不同： #define 宏不受定义域限制，而 const 常量只在定义域内有效<h3 id="对于一个频繁使用的短小函数，应该使用什么来实现？有什么优缺点"><a href="#对于一个频繁使用的短小函数，应该使用什么来实现？有什么优缺点" class="headerlink" title="对于一个频繁使用的短小函数，应该使用什么来实现？有什么优缺点"></a>对于一个频繁使用的短小函数，应该使用什么来实现？有什么优缺点</h3></li>
 <li>应该使用 inline 内联函数，即编译器将 inline 内联函数内的代码替换到函数被调用的地方</li>
 <li>优点：<ul>
-<li>在内联函数被调用的地方进行代码展开，省去函数调用的时间，从而提⾼程序运行效率</li>
+<li>在内联函数被调用的地方进行代码展开，省去函数调用的时间，从而提高程序运行效率</li>
 <li>相比于宏函数，内联函数在代码展开时，编译器会进行语法安全检查或数据类型转换，使用更加安全</li>
 </ul>
 </li>
@@ -176,7 +176,7 @@
 <li>变量的定义为变量分配地址和存储空间， 变量的声明不分配地址。一个变量可以在多个地方声明， 但是只在一个地方定义。加入extern 修饰的是变量的声明，说明此变量将在文件以外或在文件后⾯部分定义</li>
 <li>很多时候一个变量，只是声明不分配内存空间，直到具体使用时才初始化，分配内存空间， 如外部变量<h3 id="简述-ifdef、-else、-endif和-ifndef的作用"><a href="#简述-ifdef、-else、-endif和-ifndef的作用" class="headerlink" title="简述#ifdef、#else、#endif和#ifndef的作用"></a>简述#ifdef、#else、#endif和#ifndef的作用</h3></li>
 <li>利用#ifdef、#endif将某程序功能模块包括进去，以向特定用户提供该功能。在不需要时用户可轻易将其屏蔽</li>
-<li>在⼦程序前加上标记，以便于追踪和调试</li>
+<li>在子程序前加上标记，以便于追踪和调试</li>
 <li>应对硬件的限制。由于一些具体应用环境的硬件不一样，限于条件，本地缺乏这种设备，只能绕过硬件，直接写出预期结果</li>
 <li>虽然不用条件编译命令而直接用if语句也能达到要求，但那样做⽬标程序长（因为所有语句都编译），运行时间长（因为在程序运行时间对if语句进行测试）。而采用条件编译，可以减少被编译的语句，从而减少⽬标程序的长度，减少运行时间<h3 id="写出int-、bool、-float-、指针变量与-“零值”比较的if-语句"><a href="#写出int-、bool、-float-、指针变量与-“零值”比较的if-语句" class="headerlink" title="写出int 、bool、 float 、指针变量与 “零值”比较的if 语句"></a>写出int 、bool、 float 、指针变量与 “零值”比较的if 语句</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//int与零值比较</span></span><br><span class="line"><span class="keyword">if</span> ( n == <span class="number">0</span> )</span><br><span class="line"><span class="keyword">if</span> ( n != <span class="number">0</span> )</span><br><span class="line"><span class="comment">//bool与零值比较</span></span><br><span class="line"><span class="keyword">if</span> (flag) <span class="comment">// 表示flag为真</span></span><br><span class="line"><span class="keyword">if</span> (!flag) <span class="comment">// 表示flag为假</span></span><br><span class="line"><span class="comment">//float与零值比较</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">float</span> EPSINON = <span class="number">0.00001</span>;</span><br><span class="line"><span class="keyword">if</span> ((x &gt;= - EPSINON) &amp;&amp; (x &lt;= EPSINON) <span class="comment">//其中EPSINON是允许的误差（即精度）。</span></span><br><span class="line"><span class="comment">//指针变量与零值比较</span></span><br><span class="line"><span class="keyword">if</span> (p == <span class="literal">NULL</span>)</span><br><span class="line"><span class="keyword">if</span> (p != <span class="literal">NULL</span>)</span><br></pre></td></tr></table></figure>
 <h3 id="结构体可以直接赋值吗"><a href="#结构体可以直接赋值吗" class="headerlink" title="结构体可以直接赋值吗"></a>结构体可以直接赋值吗</h3></li>
@@ -189,17 +189,17 @@
 <li>在 C 中 static 用来修饰局部静态变量和外部静态变量、函数。而 C++中除了上述功能外，还用来定义类的成员变量和函数。即静态成员和静态成员函数</li>
 <li>编程时 static 的记忆性，和全局性的特点可以让在不同时期调用的函数进行通信，传递信息，而 C++的静态成员则可以在多个对象实例间进行通信，传递信息<h3 id="volatile有什么作用"><a href="#volatile有什么作用" class="headerlink" title="volatile有什么作用"></a>volatile有什么作用</h3></li>
 <li>状态寄存器一类的并行设备硬件寄存器</li>
-<li>一个中断服务⼦程序会访问到的非自动变量</li>
+<li>一个中断服务子程序会访问到的非自动变量</li>
 <li>多线程间被几个任务共享的变量<h3 id="一个参数可以既是const又是volatile吗"><a href="#一个参数可以既是const又是volatile吗" class="headerlink" title="一个参数可以既是const又是volatile吗"></a>一个参数可以既是const又是volatile吗</h3></li>
 <li>可以，用const和volatile同时修饰变量，表示这个变量在程序内部是只读的，不能改变的，只在程序外部条件变化下改变，并且编译器不会优化这个变量。每次使用这个变量时，都要小心地去内存读取这个变量的值，而不是去寄存器读取它的备份</li>
 <li>在此一定要注意const的意思，const只是不允许程序中的代码改变某一变量，其在编译期发挥作用，它并没有实际地禁止某段内存的读写特性</li>
 </ul>
 <h3 id="全局变量和局部变量有什么区别？操作系统和编译器是怎么知道的"><a href="#全局变量和局部变量有什么区别？操作系统和编译器是怎么知道的" class="headerlink" title="全局变量和局部变量有什么区别？操作系统和编译器是怎么知道的"></a>全局变量和局部变量有什么区别？操作系统和编译器是怎么知道的</h3><ul>
 <li>全局变量是整个程序都可访问的变量，谁都可以访问，生存期在整个程序从运行到结束（在程序结束时所占内存释放）</li>
-<li>而局部变量存在于模块（⼦程序，函数）中，只有所在模块可以访问，其他模块不可直接访问，模块结束（函数调用完毕），局部变量消失，所占据的内存释放</li>
+<li>而局部变量存在于模块（子程序，函数）中，只有所在模块可以访问，其他模块不可直接访问，模块结束（函数调用完毕），局部变量消失，所占据的内存释放</li>
 <li>操作系统和编译器，可能是通过内存分配的位置来知道的，全局变量分配在<strong>全局数据段</strong>并且在程序<strong>开始运行的时候被加载</strong>.局部变量则分配在<strong>堆栈</strong>⾥⾯<h3 id="简述strcpy、sprintf-与memcpy-的区别"><a href="#简述strcpy、sprintf-与memcpy-的区别" class="headerlink" title="简述strcpy、sprintf 与memcpy 的区别"></a>简述strcpy、sprintf 与memcpy 的区别</h3></li>
 <li>操作对象不同，strcpy 的两个操作对象均为字符串，sprintf 的操作源对象可以是多种数据类型， ⽬的操作对象是字符串，memcpy 的两个对象就是两个任意可操作的内存地址，并不限于何种数据类型</li>
-<li>执行效率不同，memcpy 最⾼，strcpy 次之，sprintf 的效率最低</li>
+<li>执行效率不同，memcpy 最高，strcpy 次之，sprintf 的效率最低</li>
 <li>实现功能不同，strcpy 主要实现字符串变量间的拷贝，sprintf 主要实现其他数据类型格式到字 符串的转化，memcpy 主要是内存块间的拷贝<h3 id="请解析-void-0-的含义"><a href="#请解析-void-0-的含义" class="headerlink" title="请解析((void ()())0)()的含义"></a>请解析((void ()())0)()的含义</h3></li>
 <li>void()是一个没有输入参数的函数类型</li>
 <li>void()()是将一个空对象转换为如上的函数类型</li>
@@ -246,22 +246,22 @@
 </li>
 <li>封装：将客观事物封装成抽象的类，而类可以把自⼰的数据和方法暴露给可信的类或者对象，对不可信的类或对象则进行信息隐藏</li>
 <li>继承：可以使用现有类的所有功能，并且无需重新编写原来的类即可对功能进行拓展</li>
-<li>多态：一个类实例的相同方法在不同情形下有不同的表现形式，使不同内部结构的对象可以共享相同的外部接⼝<h3 id="C-中类成员的访问权限"><a href="#C-中类成员的访问权限" class="headerlink" title="C++中类成员的访问权限"></a>C++中类成员的访问权限</h3></li>
+<li>多态：一个类实例的相同方法在不同情形下有不同的表现形式，使不同内部结构的对象可以共享相同的外部接口<h3 id="C-中类成员的访问权限"><a href="#C-中类成员的访问权限" class="headerlink" title="C++中类成员的访问权限"></a>C++中类成员的访问权限</h3></li>
 <li>C++通过 public、protected、private 三个关键字来控制成员变量和成员函数的访问权限，它们分别表示公有的、受保护的、私有的，被称为成员访问限定符。在类的内部（定义类的代码内部），无论成员被声明为 public、<br>protected 还是 private，都是可以互相访问的，没有访问权限的限制。在类的外部（定义类的代码之外），只能通过对象访问成员，并且通过对象只能访问 public 属性的成员，不能访问 private、protected 属性的成员<h3 id="多态的实现有哪几种"><a href="#多态的实现有哪几种" class="headerlink" title="多态的实现有哪几种"></a>多态的实现有哪几种</h3></li>
 <li>多态分为静态多态和动态多态。其中，静态多态是通过重载和模板技术实现的，在编译期间确定；动态多态是通过虚函数和继承关系实现的，执行动态绑定，在运行期间确定。<h3 id="动态多态有什么作用？有哪些必要条件？"><a href="#动态多态有什么作用？有哪些必要条件？" class="headerlink" title="动态多态有什么作用？有哪些必要条件？"></a>动态多态有什么作用？有哪些必要条件？</h3></li>
 <li>动态多态的作用<ul>
-<li>隐藏实现细节，使代码模块化，提⾼代码的可复用性</li>
-<li>接⼝重用，使派生类的功能可以被基类的指针/引用所调用，即向后兼容，提⾼代码的可扩充性和可维护性</li>
+<li>隐藏实现细节，使代码模块化，提高代码的可复用性</li>
+<li>接口重用，使派生类的功能可以被基类的指针/引用所调用，即向后兼容，提高代码的可扩充性和可维护性</li>
 </ul>
 </li>
 <li>动态多态的必要条件<ul>
 <li>需要有继承</li>
 <li>需要有虚函数覆盖</li>
-<li>需要有基类指针/引用指向⼦类对象<h3 id="动态绑定是如何实现的"><a href="#动态绑定是如何实现的" class="headerlink" title="动态绑定是如何实现的"></a>动态绑定是如何实现的</h3></li>
+<li>需要有基类指针/引用指向子类对象<h3 id="动态绑定是如何实现的"><a href="#动态绑定是如何实现的" class="headerlink" title="动态绑定是如何实现的"></a>动态绑定是如何实现的</h3></li>
 </ul>
 </li>
-<li>当编译器发现类中有虚函数时，会创建一张虚函数表，把虚函数的函数入⼝地址放到虚函数表中，并且在对象中增加一个指针 <code>vptr</code> ，用于指向类的虚函数表。当派生类覆盖基类的虚函数时，会将虚函数表中对应的指针进行替换，从而调用派生类中覆盖后的虚函数，从而实现动态绑定<h3 id="纯虚函数有什么作用？如何实现"><a href="#纯虚函数有什么作用？如何实现" class="headerlink" title="纯虚函数有什么作用？如何实现"></a>纯虚函数有什么作用？如何实现</h3></li>
-<li>定义纯虚函数是为了实现一个接⼝，起到规范的作用，想要继承这个类就必须覆盖该函数</li>
+<li>当编译器发现类中有虚函数时，会创建一张虚函数表，把虚函数的函数入口地址放到虚函数表中，并且在对象中增加一个指针 <code>vptr</code> ，用于指向类的虚函数表。当派生类覆盖基类的虚函数时，会将虚函数表中对应的指针进行替换，从而调用派生类中覆盖后的虚函数，从而实现动态绑定<h3 id="纯虚函数有什么作用？如何实现"><a href="#纯虚函数有什么作用？如何实现" class="headerlink" title="纯虚函数有什么作用？如何实现"></a>纯虚函数有什么作用？如何实现</h3></li>
+<li>定义纯虚函数是为了实现一个接口，起到规范的作用，想要继承这个类就必须覆盖该函数</li>
 <li>实现方式是在虚函数声明的结尾加上 = 0 即可<h3 id="虚函数表是针对类的还是针对对象的？同一个类的两个对象的虚函数表是怎么维护的"><a href="#虚函数表是针对类的还是针对对象的？同一个类的两个对象的虚函数表是怎么维护的" class="headerlink" title="虚函数表是针对类的还是针对对象的？同一个类的两个对象的虚函数表是怎么维护的"></a>虚函数表是针对类的还是针对对象的？同一个类的两个对象的虚函数表是怎么维护的</h3></li>
 <li>虚函数表是针对类的，类的所有对象共享这个类的虚函数表，因为每个对象内部都保存一个指向该类虚函数表的指针 vptr ，每个对象的 vptr 的存放地址都不同，但都指向同一虚函数表<h3 id="为什么基类的构造函数不能定义为虚函数"><a href="#为什么基类的构造函数不能定义为虚函数" class="headerlink" title="为什么基类的构造函数不能定义为虚函数"></a>为什么基类的构造函数不能定义为虚函数</h3></li>
 <li>虚函数的调用依赖于<strong>虚函数表</strong>，而指向虚函数表的指针 vptr <strong>需要在构造函数中进行初始化</strong>，所以无法调用定义为虚函数的构造函数</li>
@@ -288,8 +288,8 @@
 <li>拷贝构造函数用于构造新的对象<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">Student s;</span><br><span class="line">Student s1 = s; <span class="comment">// 隐式调用拷贝构造函数</span></span><br><span class="line"><span class="function">Student <span class="title">s2</span><span class="params">(s)</span></span>; <span class="comment">// 显式调用拷贝构造函数</span></span><br></pre></td></tr></table></figure></li>
 <li>赋值运算符重载用于将源对象的内容拷贝到⽬标对象中，而且若源对象中包含未释放的内存需要先将其释放<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">Student s;</span><br><span class="line">Student s1;</span><br><span class="line">s1 = s; <span class="comment">// 使用赋值运算符</span></span><br></pre></td></tr></table></figure></li>
 <li>一般情况下，类中包含指针变量时需要重载拷贝构造函数、赋值运算符和析构函数<h3 id="对虚函数和多态的理解"><a href="#对虚函数和多态的理解" class="headerlink" title="对虚函数和多态的理解"></a>对虚函数和多态的理解</h3></li>
-<li>多态的实现主要分为静态多态和动态多态，静态多态主要是重载，在编译的时候就已经确定；动态多态是用虚函数机制实现的，在运行期间动态绑定。举个例⼦：一个⽗类类型的指针指向一个⼦类对象时候，使用⽗类的指针去调用⼦类中重写了的⽗类中的虚函数的时候，会调用⼦类重写过后的函数，在⽗类中声明为加了virtual关键字的函数，在⼦类中重写时候不需要加virtual也是虚函数</li>
-<li>虚函数的实现：在有虚函数的类中，类的最开始部分是一个虚函数表的指针，这个指针指向一个虚函数表，表中放了虚函数的地址，实际的虚函数在代码段(.text)中。当⼦类继承了⽗类的时候也会继承其虚函数表，当⼦类重写⽗类中虚函数时候，会将其继承到的虚函数表中的地址替换为重新写的函数地址。使用了虚函数，会增加访问内存开销，降低效率<h3 id="C-中struct和class的区别"><a href="#C-中struct和class的区别" class="headerlink" title="C++中struct和class的区别"></a>C++中struct和class的区别</h3></li>
+<li>多态的实现主要分为静态多态和动态多态，静态多态主要是重载，在编译的时候就已经确定；动态多态是用虚函数机制实现的，在运行期间动态绑定。举个例子：一个⽗类类型的指针指向一个子类对象时候，使用⽗类的指针去调用子类中重写了的⽗类中的虚函数的时候，会调用子类重写过后的函数，在⽗类中声明为加了virtual关键字的函数，在子类中重写时候不需要加virtual也是虚函数</li>
+<li>虚函数的实现：在有虚函数的类中，类的最开始部分是一个虚函数表的指针，这个指针指向一个虚函数表，表中放了虚函数的地址，实际的虚函数在代码段(.text)中。当子类继承了⽗类的时候也会继承其虚函数表，当子类重写⽗类中虚函数时候，会将其继承到的虚函数表中的地址替换为重新写的函数地址。使用了虚函数，会增加访问内存开销，降低效率<h3 id="C-中struct和class的区别"><a href="#C-中struct和class的区别" class="headerlink" title="C++中struct和class的区别"></a>C++中struct和class的区别</h3></li>
 <li>默认继承权限不同，class继承默认是private继承，而struct默认是public继承</li>
 <li>class还可用于定义模板参数，像typename，但是关键字struct不能同于定义模板参数</li>
 </ul>
@@ -301,7 +301,7 @@
 <li>用于非多态类型的转换</li>
 <li>不执行运行时类型检查（转换安全性不如 dynamic_cast）</li>
 <li>通常用于转换数值数据类型（如 float -&gt; int）</li>
-<li>可以在整个类层次结构中移动指针，⼦类转化为⽗类安全（向上转换），⽗类转化为⼦类不安全（因为⼦类可能有不在⽗类的字段或⽅法）</li>
+<li>可以在整个类层次结构中移动指针，子类转化为⽗类安全（向上转换），⽗类转化为子类不安全（因为子类可能有不在⽗类的字段或⽅法）</li>
 </ul>
 </li>
 <li><code>dynamic_cast</code><ul>
@@ -377,7 +377,7 @@
 <li>当空间不够装下数据（vec.push_back(val)）时，会自动申请另一⽚更大的空间（1.5倍或者2倍），然后把原来的数据拷贝到新的内存空间，接着释放原来的那⽚空间</li>
 <li>当释放或者删除（vec.clear()）⾥⾯的数据时，其存储空间不释放，仅仅是清空了⾥⾯的数据</li>
 <li>因此，对vector的任何操作一旦引起了空间的重新配置，指向原vector的所有迭代器会都失效了<h4 id="reserve和resize"><a href="#reserve和resize" class="headerlink" title="reserve和resize"></a>reserve和resize</h4></li>
-<li>reserve是直接扩充到已经确定的大小，可以减少多次开辟、释放空间的问题（优化push_back）可以提⾼效率</li>
+<li>reserve是直接扩充到已经确定的大小，可以减少多次开辟、释放空间的问题（优化push_back）可以提高效率</li>
 <li>还可以减少多次要拷贝数据的问题。reserve只是保证vector中的空间大小（capacity）最少达到参数所指定的大小n。</li>
 <li>reserve()只有一个参数</li>
 <li>vector 的 resize(n) ⽅法改变 vector 的大小，如果当前容量小于 n ，则调整容量为 n ，同时将其全部元素填充为初始值；如果当前容量大于等于 n ，则不调整容量，只将其前 n 个元素<strong>填充为初始值</strong><h4 id="size和capacity"><a href="#size和capacity" class="headerlink" title="size和capacity"></a>size和capacity</h4></li>
@@ -394,7 +394,7 @@
 <li>list<strong>不⽀持随机存取</strong>，适合需要<u>大量的插入和删除</u></li>
 <li><img src="/imgs/716e934eaa10d6ae43c07cb8293befc03b09f0f0c8527e6f515f1ebb6359659b.png" alt="picture 1">  <h4 id="常见操作"><a href="#常见操作" class="headerlink" title="常见操作"></a>常见操作</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">list.<span class="built_in">push_back</span>(elem) <span class="comment">// 在尾部加入一个数据</span></span><br><span class="line">list.<span class="built_in">pop_back</span>() <span class="comment">// 删除尾部数据</span></span><br><span class="line">list.<span class="built_in">push_front</span>(elem) <span class="comment">// 在头部插入一个数据</span></span><br><span class="line">list.<span class="built_in">pop_front</span>() <span class="comment">// 删除头部数据</span></span><br><span class="line">list.<span class="built_in">size</span>() <span class="comment">// 返回容器中实际数据的个数</span></span><br><span class="line">list.<span class="built_in">sort</span>() <span class="comment">// 排序，默认由小到大</span></span><br><span class="line">list.<span class="built_in">unique</span>() <span class="comment">// 移除数值相同的连续元素</span></span><br><span class="line">list.<span class="built_in">back</span>() <span class="comment">// 取尾部迭代器</span></span><br><span class="line">list.<span class="built_in">erase</span>(iterator) <span class="comment">// 删除一个元素，参数是迭代器，返回的是删除迭代器的下一个位置</span></span><br></pre></td></tr></table></figure>
 <h3 id="deque原理"><a href="#deque原理" class="headerlink" title="deque原理"></a>deque原理</h3></li>
-<li>deque是一个<strong>双向开⼝</strong>的<strong>连续</strong>线性空间（双端队列），在头尾两端进行元素的插入跟删除操作都有理想的时间复杂度<h4 id="常见操作-1"><a href="#常见操作-1" class="headerlink" title="常见操作"></a>常见操作</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">deque.<span class="built_in">push_back</span>(elem) <span class="comment">// 在尾部加入一个数据。</span></span><br><span class="line">deque.<span class="built_in">pop_back</span>() <span class="comment">// 删除尾部数据。</span></span><br><span class="line">deque.<span class="built_in">push_front</span>(elem) <span class="comment">// 在头部插入一个数据。</span></span><br><span class="line">deque.<span class="built_in">pop_front</span>() <span class="comment">// 删除头部数据。</span></span><br><span class="line">deque.<span class="built_in">size</span>() <span class="comment">// 返回容器中实际数据的个数。</span></span><br><span class="line">deque.<span class="built_in">at</span>(idx) <span class="comment">// 传回索引idx所指的数据，如果idx越界，抛出out_of_range。</span></span><br></pre></td></tr></table></figure></li>
+<li>deque是一个<strong>双向开口</strong>的<strong>连续</strong>线性空间（双端队列），在头尾两端进行元素的插入跟删除操作都有理想的时间复杂度<h4 id="常见操作-1"><a href="#常见操作-1" class="headerlink" title="常见操作"></a>常见操作</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">deque.<span class="built_in">push_back</span>(elem) <span class="comment">// 在尾部加入一个数据。</span></span><br><span class="line">deque.<span class="built_in">pop_back</span>() <span class="comment">// 删除尾部数据。</span></span><br><span class="line">deque.<span class="built_in">push_front</span>(elem) <span class="comment">// 在头部插入一个数据。</span></span><br><span class="line">deque.<span class="built_in">pop_front</span>() <span class="comment">// 删除头部数据。</span></span><br><span class="line">deque.<span class="built_in">size</span>() <span class="comment">// 返回容器中实际数据的个数。</span></span><br><span class="line">deque.<span class="built_in">at</span>(idx) <span class="comment">// 传回索引idx所指的数据，如果idx越界，抛出out_of_range。</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="map-、set、multiset、multimap-底层原理"><a href="#map-、set、multiset、multimap-底层原理" class="headerlink" title="map 、set、multiset、multimap 底层原理"></a>map 、set、multiset、multimap 底层原理</h3><ul>
 <li>map 、set、multiset、multimap的底层实现都是红⿊树，epoll模型的底层数据结构也是红⿊树，linux系统中CFS进程调度算法，也用到红⿊树</li>
@@ -402,13 +402,13 @@
 <li>每个结点或是红⾊或是⿊⾊</li>
 <li>根结点是⿊⾊</li>
 <li>每个叶结点是⿊的</li>
-<li>如果一个结点是红的，则它的两个⼉⼦均是⿊⾊</li>
-<li>每个结点到其⼦孙结点的所有路径上包含相同数⽬的⿊⾊结点<h3 id="map-、set、multiset、multimap的特点"><a href="#map-、set、multiset、multimap的特点" class="headerlink" title="map 、set、multiset、multimap的特点"></a>map 、set、multiset、multimap的特点</h3></li>
+<li>如果一个结点是红的，则它的两个⼉子均是⿊⾊</li>
+<li>每个结点到其子孙结点的所有路径上包含相同数⽬的⿊⾊结点<h3 id="map-、set、multiset、multimap的特点"><a href="#map-、set、multiset、multimap的特点" class="headerlink" title="map 、set、multiset、multimap的特点"></a>map 、set、multiset、multimap的特点</h3></li>
 </ul>
 </li>
 <li>set和multiset会根据特定的排序准则自动将元素排序，set中元素不允许重复，multiset可以重复</li>
 <li>map和multimap将key和value组成的pair作为元素，根据key的排序准则自动将元素排序（因为红⿊树也是二叉搜索树，所以map默认是按key排序的），map中元素的key不允许重复，multimap可以重复</li>
-<li>map和set的增删改查速度为都是logn<h3 id="为何map和set的插入删除效率比其他序列容器⾼，而且每次insert之后，以前保存的iterator不会失效"><a href="#为何map和set的插入删除效率比其他序列容器⾼，而且每次insert之后，以前保存的iterator不会失效" class="headerlink" title="为何map和set的插入删除效率比其他序列容器⾼，而且每次insert之后，以前保存的iterator不会失效"></a>为何map和set的插入删除效率比其他序列容器⾼，而且每次insert之后，以前保存的iterator不会失效</h3></li>
+<li>map和set的增删改查速度为都是logn<h3 id="为何map和set的插入删除效率比其他序列容器高，而且每次insert之后，以前保存的iterator不会失效"><a href="#为何map和set的插入删除效率比其他序列容器高，而且每次insert之后，以前保存的iterator不会失效" class="headerlink" title="为何map和set的插入删除效率比其他序列容器高，而且每次insert之后，以前保存的iterator不会失效"></a>为何map和set的插入删除效率比其他序列容器高，而且每次insert之后，以前保存的iterator不会失效</h3></li>
 <li>因为存储的是结点，不需要内存拷贝和内存移动</li>
 <li>因为插入操作只是结点指针换来换去，结点内存没有改变。而iterator就像指向结点的指针，内存没变，指向内存的指针也不会变<h3 id="为何map和set不能像vector一样有个reserve函数来预分配数据"><a href="#为何map和set不能像vector一样有个reserve函数来预分配数据" class="headerlink" title="为何map和set不能像vector一样有个reserve函数来预分配数据"></a>为何map和set不能像vector一样有个reserve函数来预分配数据</h3></li>
 <li>因为在map和set内部存储的已经不是元素本身了，而是包含元素的结点。也就是说map内部使用的Alloc并不是<code>map&lt;Key, Data, Compare, Alloc&gt;</code>声明的时候从参数中传入的Alloc。<h3 id="unordered-map、unordered-set的底层原理"><a href="#unordered-map、unordered-set的底层原理" class="headerlink" title="unordered_map、unordered_set的底层原理"></a>unordered_map、unordered_set的底层原理</h3></li>
