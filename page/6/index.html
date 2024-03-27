@@ -2277,6 +2277,16 @@
 </ul>
 </li>
 </ul>
+<h3 id="链接的时候如何处理符号"><a href="#链接的时候如何处理符号" class="headerlink" title="链接的时候如何处理符号"></a>链接的时候如何处理符号</h3><ul>
+<li>强符号和弱符号<ul>
+<li>编译的时候，全部的全局符号分为强和弱两种</li>
+<li>已经初始化的全局变量是强符号，未初始化的全局变量是弱符号</li>
+<li>被定义的函数是强符号</li>
+<li>同名的强符号可以和弱符号共存</li>
+<li>但是超过一个同名的强符号链接时会报错</li>
+</ul>
+</li>
+</ul>
 <h3 id="待完成"><a href="#待完成" class="headerlink" title="待完成"></a>待完成</h3><ul>
 <li><input disabled="" type="checkbox"> IPC</li>
 <li><input disabled="" type="checkbox"> 进程同步问题：生产者-消费者问题…</li>

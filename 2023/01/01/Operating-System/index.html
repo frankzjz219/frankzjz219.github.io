@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">16.9k</span>
+            <span class="post-count">17k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">57 min</span>
+            <span class="post-count">58 min</span>
         </span>
     </span>
 </div>
@@ -788,6 +788,16 @@
 <li>链接(link)<ul>
 <li>链接代码不同的<strong>可重定位目标文件</strong>得到完整的逻辑地址</li>
 <li>链接的时候不仅仅需要用户编译的模块，还需要<code>cruntime</code>等很多库的文件</li>
+</ul>
+</li>
+</ul>
+<h3 id="链接的时候如何处理符号"><a href="#链接的时候如何处理符号" class="headerlink" title="链接的时候如何处理符号"></a>链接的时候如何处理符号</h3><ul>
+<li>强符号和弱符号<ul>
+<li>编译的时候，全部的全局符号分为强和弱两种</li>
+<li>已经初始化的全局变量是强符号，未初始化的全局变量是弱符号</li>
+<li>被定义的函数是强符号</li>
+<li>同名的强符号可以和弱符号共存</li>
+<li>但是超过一个同名的强符号链接时会报错</li>
 </ul>
 </li>
 </ul>
