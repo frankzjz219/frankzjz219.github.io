@@ -688,7 +688,7 @@
 </li>
 <li>使一个类只能在栈上分配内存<ul>
 <li>可以将类的析构函数设为 private，禁止在堆上释放内存。同时，将类的构造函数设为 public，以便在栈上创建对象</li>
-<li>用 new 和 delete 运算符(将相应的函数设置为=delete)</li>
+<li>禁用 new 和 delete 运算符(将相应的函数设置为=delete)</li>
 </ul>
 </li>
 </ul>
