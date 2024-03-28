@@ -429,17 +429,17 @@
 <li>输出迭代器：是只写迭代器，在每个被遍历的位置上只能被写一次。</li>
 <li>前向迭代器：兼具输入和输出迭代器的能⼒，但是它可以对同一个位置重·复进行读和写。但它不支持operator–，所以只能向前移动。</li>
 <li>双向迭代器：很像前向迭代器，只是它向后移动和向前移动同样容易。</li>
-<li>随机访问迭代器：有双向迭代器的所有功能。而且，它还提供了“迭代器算术”，即在一步内可以向前或向后跳跃任意位置， 包含指针的所有操作，可进行随机访问，随意移动指定的步数。支持前⾯四种Iterator的所有操作，并另外支持<code>it + n</code>、<code>it - n</code>、<code>it += n</code>、 <code>it -= n</code>、<code>it1 - it2</code>和<code>it[n]</code>等操作。<h3 id="迭代器失效的问题"><a href="#迭代器失效的问题" class="headerlink" title="迭代器失效的问题"></a>迭代器失效的问题</h3></li>
+<li>随机访问迭代器：有双向迭代器的所有功能。而且，它还提供了“迭代器算术”，即在一步内可以向前或向后跳跃任意位置， 包含指针的所有操作，可进行随机访问，随意移动指定的步数。支持前⾯四种Iterator的所有操作，并另外支持<code>it + n</code>、<code>it - n</code>、<code>it += n</code>、 <code>it -= n</code>、<code>it1 - it2</code>和<code>it[n]</code>等操作。<h3 id="迭代器失效的问题"><a href="#迭代器失效的问题" class="headerlink" title="迭代器失效的问题"></a><span style="color: #0099FF">迭代器失效的问题</span></h3></li>
 <li>插入<ul>
 <li>对于vector和string，<span style="color: #0099FF">如果容器内存被重新分配</span>，iterators,pointers,references失效；如果没有重新分配，那么插入点之前的iterator有效，<span style="color: #0099FF">插入点之后的iterator失效</span></li>
 <li>对于deque，如果插入点位于除front和back的其它位置，iterators,pointers,references失效；<strong>当我们插入元素到  front和back时</strong>，deque的迭代器失效，但reference和pointers有效；</li>
-<li>对于list和forward_list，所有的iterator,pointer和refercnce有效。</li>
+<li>对于list和forward_list，所有的iterator,pointer和reference有效。</li>
 </ul>
 </li>
 <li>删除<ul>
 <li>对于vector和string，<span style="color: #0099FF">删除点之前的iterators,pointers,references有效</span>；off-the-end迭代器总是失效的；</li>
 <li>对于deque，如果删除点位于除front和back的其它位置，iterators,pointers,references失效；当我们插⼊元素到front和back时，off-the-end失效，其他的iterators,pointers,references有效；</li>
-<li>对于list和forward_list，所有的iterator,pointer和refercnce有效。</li>
+<li>对于list和forward_list，所有的iterator,pointer和reference有效。</li>
 <li>对于关联容器map来说，如果某一个元素已经被删除，那么其对应的迭代器就失效了，不应该再被使用，否则会导致程序无定义的行为。</li>
 </ul>
 </li>
@@ -461,13 +461,13 @@
 <li><code>map[key]</code> 用于访问关联键的值。如果键不存在，它会自动插入一个新的键值对，其中键为给定的键，值为该类型的默认值（例如，对于 int 类型，值为 0）</li>
 <li><code>map.find(key)</code> 查找给定键的迭代器。如果键不存在，返回的迭代器等于 <code>map.end()</code>。使用 find 函数的一个优点是，它不会自动插入新的键值对。</li>
 </ul>
-<h3 id="STL内存优化"><a href="#STL内存优化" class="headerlink" title="STL内存优化"></a>STL内存优化</h3><ul>
-<li>第一级配置器<ul>
-<li>当分配的内存块大小大于一个特定阈值（通常为 128 字节）时，一级内存分配器直接调用底层系统分配函数（如 malloc() 或 operator new()）。当释放内存时，也会直接调用底层系统释放函数（如 free() 或 operator delete()）</li>
+<h3 id="STL内存优化"><a href="#STL内存优化" class="headerlink" title="STL内存优化"></a><span style="color: #0099FF">STL内存优化</span></h3><ul>
+<li><span style="color: #0099FF">第一级配置器</span><ul>
+<li>当分配的内存块大小大于一个特定阈值（通常为 128 字节）时，一级内存分配器<strong>直接调用底层系统分配函数</strong>（如 malloc() 或 operator new()）。当释放内存时，也会直接调用底层系统释放函数（如 free() 或 operator delete()）</li>
 </ul>
 </li>
-<li>第二级配置器<ul>
-<li>当分配的内存块大小小于或等于特定阈值时，二级内存分配器会使用内存池（Memory Pools）来优化内存分配和释放。内存池由一系列固定大小的内存块组成，这些内存块可以有效地减少内存碎片和分配/释放操作的开销。二级内存分配器会根据请求的内存大小从适当的内存池中分配内存。当释放内存时，内存块会返回到相应的内存池以备后续使用</li>
+<li><span style="color: #0099FF">第二级配置器</span><ul>
+<li>当分配的内存块大小小于或等于特定阈值时，二级内存分配器会使用<span style="color: #0099FF">内存池</span>（Memory Pools）来优化内存分配和释放。内存池由一系列固定大小的内存块组成，这些内存块可以有效地减少内存碎片和分配/释放操作的开销。二级内存分配器会<strong>根据请求的内存大小从适当的内存池中分配内存</strong>。当释放内存时，<strong>内存块会返回到相应的内存池以备后续使用</strong></li>
 </ul>
 </li>
 <li>这种<strong>二级内存分配</strong>策略有效地平衡了大内存分配和小内存分配的性能。对于大内存分配，直接使用系统分配函数可以减少内存池管理的开销；而对于小内存分配，使用内存池可以显著提高内存分配和释放的性能</li>
