@@ -301,7 +301,7 @@
 <h3 id="保留struct的意义"><a href="#保留struct的意义" class="headerlink" title="保留struct的意义"></a>保留struct的意义</h3><ul>
 <li>保证与C语⾔的向下兼容性，C++必须提供一个struct</li>
 <li>C++中的struct定义必须百分百地保证与C语⾔中的struct的向下兼容性，把C++中的最基本的对象单元规定为class而不是struct，就是为了避免各种兼容性要求的限制</li>
-<li>对struct定义的扩展使C语⾔的代码能够更容易的被移植到C++中<h3 id="说说强制类型转换运算符"><a href="#说说强制类型转换运算符" class="headerlink" title="说说强制类型转换运算符"></a>说说强制类型转换运算符</h3></li>
+<li>对struct定义的扩展使C语⾔的代码能够更容易的被移植到C++中<h3 id="说说强制类型转换运算符"><a href="#说说强制类型转换运算符" class="headerlink" title="说说强制类型转换运算符"></a><span style="color: #0099FF">说说强制类型转换运算符</span></h3></li>
 <li><code>static_cast</code><ul>
 <li>用于非多态类型的转换</li>
 <li>不执行运行时类型检查（转换安全性不如 dynamic_cast）</li>
@@ -333,7 +333,7 @@
 <li>重写和重载主要有以下几点不同<ul>
 <li>范围的区别：被重写的和重写的函数在两个类中，而重载和被重载的函数在同一个类中。</li>
 <li>参数的区别：被重写函数和重写函数的参数列表一定相同，而被重载函数和重载函数的参数列表一 定不同。</li>
-<li>virtual 的区别：重写的基类中被重写的函数必须要有virtual 修饰，而重载函数和被重载函数可以被 virtual 修饰，也可以没有。</li>
+<li>virtual 的区别：<span style="color: #0099FF">重写的基类中被重写的函数必须要有virtual 修饰，而重载函数和被重载函数可以被 virtual 修饰，也可以没有</span>。</li>
 </ul>
 </li>
 <li>隐藏和重写、重载有以下几点不同<ul>
@@ -341,7 +341,7 @@
 <li>参数的区别：隐藏函数和被隐藏的函数的参数列表可以相同，也可不同，但是函数名肯定要相同。当参数不相同时，无论基类中的参数是否被virtual 修饰，基类的函数都是被隐藏，而不是被重写。</li>
 </ul>
 </li>
-<li>虽然重载和覆盖都是实现多态的基础，但是两者实现的技术完全不相同，达到的⽬的也是完 全不同的，<strong>覆盖是动态绑定的多态</strong>，而<strong>重载是静态绑定的多态</strong><h3 id="RTTI是什么？其原理是什么"><a href="#RTTI是什么？其原理是什么" class="headerlink" title="RTTI是什么？其原理是什么"></a>RTTI是什么？其原理是什么</h3></li>
+<li><span style="color: #0099FF">虽然重载和覆盖都是实现多态的基础，但是两者实现的技术完全不相同，达到的⽬的也是完 全不同的，<strong>覆盖是动态绑定的多态</strong>，而<strong>重载是静态绑定的多态</strong></span><h3 id="RTTI是什么？其原理是什么"><a href="#RTTI是什么？其原理是什么" class="headerlink" title="RTTI是什么？其原理是什么"></a>RTTI是什么？其原理是什么</h3></li>
 <li>运行时类型识别，其功能由两个运算符实现：</li>
 <li>typeid 运算符，用于返回表达式的类型，可以通过基类的指针获取派生类的数据类型；</li>
 <li>dynamic_cast 运算符，具有类型检查的功能，用于将基类的指针或引用安全地转换成派生类的指针或引用<h3 id="C-的空类有哪些成员函数"><a href="#C-的空类有哪些成员函数" class="headerlink" title="C++的空类有哪些成员函数"></a>C++的空类有哪些成员函数</h3></li>
