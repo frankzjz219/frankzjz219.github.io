@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">384</span>
+            <span class="post-count">430</span>
         </span>
     </span>
 
@@ -164,6 +164,10 @@
 </ul>
 <h2 id="遇到刷机后因为SSH链接过而无法链接的问题"><a href="#遇到刷机后因为SSH链接过而无法链接的问题" class="headerlink" title="遇到刷机后因为SSH链接过而无法链接的问题"></a>遇到刷机后因为SSH链接过而无法链接的问题</h2><ul>
 <li>windows一般在<code>用户/用户名/.ssh/known_hosts</code>文件，根据目标设备的IP地址查找到对应的条目，删除即可</li>
+</ul>
+<h2 id="手动启动-停止某个CPU核心的运行"><a href="#手动启动-停止某个CPU核心的运行" class="headerlink" title="手动启动/停止某个CPU核心的运行"></a>手动启动/停止某个CPU核心的运行</h2><ul>
+<li><code>sudo sh -c &#39;echo 1 &gt; /sys/devices/system/cpu/cpu11/online&#39;</code>启动</li>
+<li><code>sudo sh -c &#39;echo 1 &gt; /sys/devices/system/cpu/cpu11/online&#39;</code>停止</li>
 </ul>
  
       <!-- reward -->
