@@ -840,7 +840,7 @@
 </li>
 <li><code>sched_rt_period_us</code>和<code>shced_rt_runtime_us</code></li>
 <li>控制FIFO和RR最多占用的时间</li>
-<li><code>sudo sh -c &#39;echo 4000000 &gt; /proc/sys/kernel/sched_rt_period_us&#39;</code>此处可以将实时线程运行时间设置为大于<code>shced_rt_runtime_us</code>的值<ul>
+<li><code>sudo sh -c &#39;echo 4000000 &gt; /proc/sys/kernel/sched_rt_runtime_us&#39;</code>此处可以将实时线程运行时间设置为大于<code>shced_rt_perios_us</code>的值<ul>
 <li><strong>但是可能会导致系统崩溃</strong></li>
 </ul>
 </li>
