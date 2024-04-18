@@ -164,13 +164,17 @@
 <li>优先级越高的在轮转中分配到的时间片越长</li>
 <li>在整个循环过程中是所有优先级的进程一起轮转的，不会高优先级阻塞低优先级运行</li>
 <li>系统会针对应用是IO类型还是CPU消耗类型来调整nice值<ul>
-<li>越CPU占用，nice越低<h2 id="控制实时进程和非实时进程"><a href="#控制实时进程和非实时进程" class="headerlink" title="控制实时进程和非实时进程"></a>控制实时进程和非实时进程</h2></li>
+<li>越CPU占用，nice越低<h2 id="控制实时进程和非实时进程占用的CPU比例"><a href="#控制实时进程和非实时进程占用的CPU比例" class="headerlink" title="控制实时进程和非实时进程占用的CPU比例"></a>控制实时进程和非实时进程占用的CPU比例</h2></li>
 </ul>
 </li>
 <li><code>sched_rt_period_us</code>和<code>shced_rt_runtime_us</code></li>
 <li>控制FIFO和RR最多占用的时间</li>
-<li><code>sudo sh -c &#39;echo CPU核心数*1000000 &gt; /proc/sys/kernel/sched_rt_period_us&#39;</code></li>
-<li><code>sudo sh -c &#39;echo 某个小于period的值 &gt; /proc/sys/kernel/sched_rt_runtime_us&#39;</code><ul>
+<li><code>sudo sh -c &#39;echo CPU核心数*1000000 &gt; /proc/sys/kernel/sched_rt_period_us&#39;</code><ul>
+<li>上面那个不能超过<code>CPU核心数*1000000</code></li>
+</ul>
+</li>
+<li><code>sudo sh -c &#39;echo 某个小于period的值 &gt; /proc/sys/kernel/sched_rt_runtime_us&#39;</code></li>
+<li>不能超过<code>sched_rt_period_us</code><ul>
 <li><strong>但是可能会导致系统崩溃</strong></li>
 </ul>
 </li>
