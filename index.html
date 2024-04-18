@@ -357,7 +357,8 @@
 </ul>
 <h2 id="手动启动-停止某个CPU核心的运行"><a href="#手动启动-停止某个CPU核心的运行" class="headerlink" title="手动启动/停止某个CPU核心的运行"></a>手动启动/停止某个CPU核心的运行</h2><ul>
 <li><code>sudo sh -c &#39;echo 1 &gt; /sys/devices/system/cpu/cpu11/online&#39;</code>启动</li>
-<li><code>sudo sh -c &#39;echo 1 &gt; /sys/devices/system/cpu/cpu11/online&#39;</code>停止</li>
+<li><code>sudo sh -c &#39;echo 1 &gt; /sys/devices/system/cpu/cpu11/online&#39;</code>停止<h2 id="某些实时内核下的CPU时序问题"><a href="#某些实时内核下的CPU时序问题" class="headerlink" title="某些实时内核下的CPU时序问题"></a>某些实时内核下的CPU时序问题</h2></li>
+<li>这个小盒在部分CPU开启部分CPU关闭的时候，可能导致向量计算出错，推测是<code>simd</code>指令的问题，此时使用<code>torch</code>的时候，需要手动指定<code>torch.tensor</code>的设备<code>device=&quot;cpu&quot;</code>，同时使用上面的指令手动启动所有CPU核心</li>
 </ul>
  
       <!-- reward -->
