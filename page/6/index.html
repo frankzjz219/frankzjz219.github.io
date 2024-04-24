@@ -1733,7 +1733,7 @@
 </li>
 <li><p>条件变量(Condition Variable)</p>
 <ul>
-<li>条件变量提供了线程间通信和同步的机制。一个线程可以等待某个条件变为真,而另一个线程可以<strong>通知条件已经满足</strong>,从而唤醒等待线程。条件变量通常与互斥锁一起使用,Linux下使用pthread_cond系列函数操作条件变量。</li>
+<li>条件变量提供了线程间通信和同步的机制。一个线程可以等待某个条件变为真,而另一个线程可以<strong>通知条件已经满足</strong>,从而唤醒等待线程。条件变量通常与互斥锁一起使用,Linux下使用pthread_cond系列函数操作条件变量。条件变量（pthread_cond）是通过等待（pthread_cond_wait）和通知（pthread_cond_signal或pthread_cond_broadcast）的方式实现线程间的协作</li>
 </ul>
 </li>
 <li><p>信号量(Semaphore)</p>
