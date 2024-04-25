@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">16.8k</span>
+            <span class="post-count">17.2k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">59 min</span>
+            <span class="post-count">60 min</span>
         </span>
     </span>
 </div>
@@ -333,21 +333,28 @@
 </ul>
 <h3 id="左值和右值有什么区别"><a href="#左值和右值有什么区别" class="headerlink" title="左值和右值有什么区别"></a>左值和右值有什么区别</h3><ul>
 <li>是否可以对表达式取地址。<ul>
-<li>可以获取地址的表达式就是左值，且<strong>持久性变量</strong>都是左值，临时变量和即将离开作用域的变量则是右值，不能取地址</li>
+<li>可以获取地址的表达式就是左值，且<strong>持久性变量</strong>都是左值，临时变量（纯右值）和即将离开作用域的变量（将亡值）则是右值，不能取地址</li>
 <li>一定程度是因为临时变量有时候是存储在寄存器里的，因此不能取内存地址</li>
 <li>变量都是左值</li>
 <li>因此可以对右值引用类型变量取地址</li>
 <li>右值引用是左值</li>
 </ul>
 </li>
-<li>产生临时变量或字面常量的表达式都是右值<h4 id="拷贝和移动的区别"><a href="#拷贝和移动的区别" class="headerlink" title="拷贝和移动的区别"></a>拷贝和移动的区别</h4></li>
+<li>产生临时变量或字面常量的表达式都是右值</li>
+<li>右值值引用通常不能绑定到任何的左值，要想绑定一个左值到右值引用，通常需要std::move()将左值强制转换为右值</li>
+<li>使用move语义可以减少一次拷贝，将其转化为移动</li>
+<li>左值引用通常也不能绑定到右值，但常量左值引用是个“万能”的引用类型。它可以接受非常量左值、常量左值、右值对其进行初始化<h4 id="拷贝和移动的区别"><a href="#拷贝和移动的区别" class="headerlink" title="拷贝和移动的区别"></a>拷贝和移动的区别</h4></li>
 <li>拷贝会产生新的内存，而移动不会</li>
 <li>通过拷贝获得的对象状态改变，不会影响到源对象，而通过移动获得的对象状态改变，会影响到源对象，而且被移动的源对象失去所有资源的控制权</li>
 <li>拷贝会增加内存申请和数据复制的开销，而移动不会</li>
+<li>引用折叠规则：所有的<strong>右值引用叠加到右值引用上仍然是一个右值引用</strong>，其他引用折叠都为左值引用。<strong>当T&amp;&amp;为模板参数时，输入左值，它将变成左值引用，输入右值则变成具名的右值应用</strong>。</li>
+<li>想实现移动语义，需要实现移动构造函数和移动赋值函数，会被move强制调用</li>
 <li>返回右值引用变量时，需要使用<code>std::move()</code>移动转发或者<code>std::forward()</code>完美转发<ul>
-<li>注意，使用上述转发之后就无法再使用原来的变量了<h4 id=""><a href="#" class="headerlink" title=""></a></h4><h3 id="简述类成员函数的重写、重载和隐藏的区别"><a href="#简述类成员函数的重写、重载和隐藏的区别" class="headerlink" title="简述类成员函数的重写、重载和隐藏的区别"></a>简述类成员函数的重写、重载和隐藏的区别</h3></li>
+<li>注意，使用上述转发之后就无法再使用原来的变量了<h4 id="完美转发"><a href="#完美转发" class="headerlink" title="完美转发"></a>完美转发</h4></li>
 </ul>
 </li>
+<li>完美转发(perfect forwarding)，是指在模板函数中，完全依照<strong>模板的参数类型</strong>讲参数传递给模板中调用的另外一个函数</li>
+<li>使用<code>forward&lt;T&gt;</code>函数可以实现这一点<h3 id="简述类成员函数的重写、重载和隐藏的区别"><a href="#简述类成员函数的重写、重载和隐藏的区别" class="headerlink" title="简述类成员函数的重写、重载和隐藏的区别"></a>简述类成员函数的重写、重载和隐藏的区别</h3></li>
 <li>重写和重载主要有以下几点不同<ul>
 <li>范围的区别：被重写的和重写的函数在两个类中，而重载和被重载的函数在同一个类中。</li>
 <li>参数的区别：被重写函数和重写函数的参数列表一定相同，而被重载函数和重载函数的参数列表一 定不同。</li>
@@ -368,7 +375,8 @@
 <li>省析构函数</li>
 <li>赋值运算符</li>
 <li>取址运算符</li>
-<li>取址运算符 const <h3 id="模板函数和模板类的特例化"><a href="#模板函数和模板类的特例化" class="headerlink" title="模板函数和模板类的特例化"></a>模板函数和模板类的特例化</h3></li>
+<li>取址运算符 const </li>
+<li>但是如果声明了一自定义的拷贝构造函数、拷贝赋值函数、移动构造函数、析构函数中的一个或者多个，编译器都不会再生成默认版本。所以在C++11中，拷贝构造函数、拷贝赋值函数、移动构造函数和移动赋值函数必须同时提供，或者同时不提供，只声明其中一种的话，类都仅能实现一种语义<h3 id="模板函数和模板类的特例化"><a href="#模板函数和模板类的特例化" class="headerlink" title="模板函数和模板类的特例化"></a>模板函数和模板类的特例化</h3></li>
 <li>编写单一的模板，它能适应多种类型的需求，使每种类型都具有相同的功能，但对于某种特定类型，如果要实现其特有的功能，单一模板就无法做到，这时就需要模板特例化</li>
 <li>模板函数特例化<ul>
 <li>必须为原函数模板的每个模板参数都提供实参，且使用关键字template后跟一个空尖括号对&lt;&gt;，表明将原模板的所有模板参数提供实参<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="comment">//模板函数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">compare</span><span class="params">(<span class="keyword">const</span> T &amp;v1,<span class="keyword">const</span> T &amp;v2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(v1 &gt; v2) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span>(v2 &gt; v1) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//模板特例化,满⾜针对字符串特定的比较，要提供所有实参，这⾥只有一个T</span></span><br><span class="line"><span class="keyword">template</span>&lt;&gt;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">compare</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">const</span> &amp;v1,<span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">const</span> &amp;v2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">strcmp</span>(p1,p2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
