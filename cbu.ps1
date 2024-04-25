@@ -25,4 +25,6 @@ Invoke-HexoCommand "hexo clean"
 Invoke-HexoCommand "hexo g"
 Invoke-HexoCommand "hexo d"
 
-Write-Host "Hexo site cleaning, generation, and deployment completed." -ForegroundColor Green
+# 打印当前脚本的根目录路径
+Write-Host "The script root directory is: $PSScriptRoot"
+Write-Host "Hexo site cleaning, generation, and deployment completed." -ForegroundColor Green -BackgroundColor White
