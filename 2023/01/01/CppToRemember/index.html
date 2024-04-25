@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">16.5k</span>
+            <span class="post-count">16.8k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">58 min</span>
+            <span class="post-count">59 min</span>
         </span>
     </span>
 </div>
@@ -327,7 +327,25 @@
 <li>允许将任何指针转换为任何其他指针类型（如 char* 到 int* 或 One_class* 到 Unrelated_class* 之类的转换，但其本身并不安全）</li>
 <li>也允许将任何整数类型转换为任何指针类型以及反向转换</li>
 <li>reinterpret_cast 运算符不能丢掉 const、volatile 或 __unaligned 特性</li>
-<li>reinterpret_cast 的一个实际用途是在哈希函数中，即，通过让两个不同的值几乎不以相同的索引结尾的⽅式将值映射到索引<h3 id="简述类成员函数的重写、重载和隐藏的区别"><a href="#简述类成员函数的重写、重载和隐藏的区别" class="headerlink" title="简述类成员函数的重写、重载和隐藏的区别"></a>简述类成员函数的重写、重载和隐藏的区别</h3></li>
+<li>reinterpret_cast 的一个实际用途是在哈希函数中，即，通过让两个不同的值几乎不以相同的索引结尾的⽅式将值映射到索引</li>
+</ul>
+</li>
+</ul>
+<h3 id="左值和右值有什么区别"><a href="#左值和右值有什么区别" class="headerlink" title="左值和右值有什么区别"></a>左值和右值有什么区别</h3><ul>
+<li>是否可以对表达式取地址。<ul>
+<li>可以获取地址的表达式就是左值，且<strong>持久性变量</strong>都是左值，临时变量和即将离开作用域的变量则是右值，不能取地址</li>
+<li>一定程度是因为临时变量有时候是存储在寄存器里的，因此不能取内存地址</li>
+<li>变量都是左值</li>
+<li>因此可以对右值引用类型变量取地址</li>
+<li>右值引用是左值</li>
+</ul>
+</li>
+<li>产生临时变量或字面常量的表达式都是右值<h4 id="拷贝和移动的区别"><a href="#拷贝和移动的区别" class="headerlink" title="拷贝和移动的区别"></a>拷贝和移动的区别</h4></li>
+<li>拷贝会产生新的内存，而移动不会</li>
+<li>通过拷贝获得的对象状态改变，不会影响到源对象，而通过移动获得的对象状态改变，会影响到源对象，而且被移动的源对象失去所有资源的控制权</li>
+<li>拷贝会增加内存申请和数据复制的开销，而移动不会</li>
+<li>返回右值引用变量时，需要使用<code>std::move()</code>移动转发或者<code>std::forward()</code>完美转发<ul>
+<li>注意，使用上述转发之后就无法再使用原来的变量了<h4 id=""><a href="#" class="headerlink" title=""></a></h4><h3 id="简述类成员函数的重写、重载和隐藏的区别"><a href="#简述类成员函数的重写、重载和隐藏的区别" class="headerlink" title="简述类成员函数的重写、重载和隐藏的区别"></a>简述类成员函数的重写、重载和隐藏的区别</h3></li>
 </ul>
 </li>
 <li>重写和重载主要有以下几点不同<ul>
