@@ -10,12 +10,12 @@ function Invoke-HexoCommand {
     param(
         [string]$Command
     )
-    Write-Host "Executing command: $Command"
+    Write-Host "Executing command: $Command" -ForegroundColor Cyan
     try {
         Invoke-Expression $Command
     } catch {
-        Write-Host "Error: Command execution failed - $Command"
-        Write-Host "Exception details: $_"
+        Write-Host "Error: Command execution failed - $Command" -ForegroundColor Red
+        Write-Host "Exception details: $_" -ForegroundColor Red
         exit 1
     }
 }
@@ -25,4 +25,4 @@ Invoke-HexoCommand "hexo clean"
 Invoke-HexoCommand "hexo g"
 Invoke-HexoCommand "hexo d"
 
-Write-Host "Hexo site cleaning, generation, and deployment completed."
+Write-Host "Hexo site cleaning, generation, and deployment completed." -ForegroundColor Green
