@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">17.2k</span>
+            <span class="post-count">17.3k</span>
         </span>
     </span>
 
@@ -89,7 +89,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">60 min</span>
+            <span class="post-count">61 min</span>
         </span>
     </span>
 </div>
@@ -354,7 +354,14 @@
 </ul>
 </li>
 <li>完美转发(perfect forwarding)，是指在模板函数中，完全依照<strong>模板的参数类型</strong>讲参数传递给模板中调用的另外一个函数</li>
-<li>使用<code>forward&lt;T&gt;</code>函数可以实现这一点<h3 id="简述类成员函数的重写、重载和隐藏的区别"><a href="#简述类成员函数的重写、重载和隐藏的区别" class="headerlink" title="简述类成员函数的重写、重载和隐藏的区别"></a>简述类成员函数的重写、重载和隐藏的区别</h3></li>
+<li>使用<code>forward&lt;T&gt;</code>函数可以实现这一点<h4 id="make-unique和直接new的区别"><a href="#make-unique和直接new的区别" class="headerlink" title="make_unique和直接new的区别"></a>make_unique和直接new的区别</h4></li>
+<li>相比于直接使用new表达式<ul>
+<li>make系列函数消除了重复代码</li>
+<li>改进了异常安全性</li>
+<li>对于std::make_shared及std::allcoated_shared而言，生成的目标代码尺寸更小，速度更快。</li>
+</ul>
+</li>
+<li>不适用于使用make系列函数的场景包括：自定义析构器、以及期望直接传递大括号初始化<h3 id="简述类成员函数的重写、重载和隐藏的区别"><a href="#简述类成员函数的重写、重载和隐藏的区别" class="headerlink" title="简述类成员函数的重写、重载和隐藏的区别"></a>简述类成员函数的重写、重载和隐藏的区别</h3></li>
 <li>重写和重载主要有以下几点不同<ul>
 <li>范围的区别：被重写的和重写的函数在两个类中，而重载和被重载的函数在同一个类中。</li>
 <li>参数的区别：被重写函数和重写函数的参数列表一定相同，而被重载函数和重载函数的参数列表一 定不同。</li>
