@@ -1,28 +1,37 @@
 # Set the error preference to stop the script on any command failure
 $ErrorActionPreference = 'Stop'
-# 路径设置为当前目录sources的根目录
+
+# Save the current working directory
+$originalLocation = Get-Location
+
+# Change directory to the parent directory of the script's directory
 Set-Location (Join-Path $PSScriptRoot "..")
 
-# Define a function to execute a command and check if it was successful
-function Invoke-HexoCommand {
-    param(
-        [string]$Command
-    )
-    Write-Host "Executing command: $Command" -ForegroundColor Cyan
-    try {
+try {
+    # Print the new working directory to confirm
+    Write-Host "Current working directory is now: $(Get-Location)"
+
+    # Define a function to execute a command and check if it was successful
+    function Invoke-HexoCommand {
+        param(
+            [string]$Command
+        )
+        Write-Host "Executing command: $Command" -ForegroundColor Cyan
         Invoke-Expression $Command
-    } catch {
-        Write-Host "Error: Command execution failed - $Command" -ForegroundColor Red
-        Write-Host "Exception details: $_" -ForegroundColor Red
-        exit 1
     }
+
+    # Execute Hexo commands
+    Invoke-HexoCommand "hexo clean"
+    Invoke-HexoCommand "hexo g"
+    Invoke-HexoCommand "hexo d"
+
+    # Command execution completed message
+    Write-Host "Hexo site cleaning, generation, and deployment completed." -ForegroundColor Green -BackgroundColor White
+} catch {
+    # Handle exceptions here if needed
+    Write-Host "An error occurred: $_" -ForegroundColor Red
+} finally {
+    # Restore the original working directory
+    Set-Location $originalLocation
+    Write-Host "Returned to the original directory: $originalLocation"
 }
-
-# Execute Hexo commands
-Invoke-HexoCommand "hexo clean"
-Invoke-HexoCommand "hexo g"
-Invoke-HexoCommand "hexo d"
-
-# 打印当前脚本的根目录路径
-Write-Host "The script root directory is: $PSScriptRoot"
-Write-Host "Hexo site cleaning, generation, and deployment completed." -ForegroundColor Green -BackgroundColor White
