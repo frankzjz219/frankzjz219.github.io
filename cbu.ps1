@@ -8,9 +8,6 @@ $originalLocation = Get-Location
 Set-Location (Join-Path $PSScriptRoot "..")
 
 try {
-    # Print the new working directory to confirm
-    Write-Host "Current working directory is now: $(Get-Location)"
-
     # Define a function to execute a command and check if it was successful
     function Invoke-HexoCommand {
         param(
@@ -25,6 +22,8 @@ try {
     Invoke-HexoCommand "hexo g"
     Invoke-HexoCommand "hexo d"
 
+    # Print the new working directory to confirm
+    Write-Host "Current working directory is now: $(Get-Location)"
     # Command execution completed message
     Write-Host "Hexo site cleaning, generation, and deployment completed." -ForegroundColor Green -BackgroundColor White
 } catch {
