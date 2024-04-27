@@ -19,8 +19,8 @@ try {
 
     # Execute Hexo commands
     Invoke-HexoCommand "hexo clean"
-    Invoke-HexoCommand "hexo g"
-    Invoke-HexoCommand "hexo d"
+    Invoke-HexoCommand "hexo g -s"
+    Invoke-HexoCommand "hexo d -s"
 
     # Print the new working directory to confirm
     Write-Host "Current working directory is now: $(Get-Location)"
