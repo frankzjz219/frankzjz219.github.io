@@ -1,174 +1,247 @@
 <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/rPi.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/rPi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/rPi.png">
+  <link rel="mask-icon" href="/images/rPi.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-<html lang="Chinese">
-  
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
-    <head>
-      <meta charset="utf-8" />
-        
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1"
-      />
-      <title> Frank&#39;s blogs</title>
-  <meta name="generator" content="hexo-theme-ayer">
-      
-      <link rel="shortcut icon" href="/FLogo.png" />
-       
-<link rel="stylesheet" href="/dist/main.css">
-
-      
-<link rel="stylesheet" href="/css/fonts/remixicon.css">
-
-      
-<link rel="stylesheet" href="/css/custom.css">
- 
-      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
-       
- 
-
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
-      />
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
-
-      <!-- mermaid -->
-      
-      <style>
-        .swal2-styled.swal2-confirm {
-          font-size: 1.6rem;
-        }
-      </style>
-    </head>
-  </html>
-</html>
-
-
-<body>
-  <div id="app">
-    
-      
-    <main class="content on">
-      
-<section class="cover">
-    
-  <div class="cover-frame">
-    <div class="bg-box">
-      <img src="/images/bkgPic.png" alt="image frame" />
-    </div>
-    <div class="cover-inner text-center text-white">
-      <h1><a href="/">Frank&#39;s blogs</a></h1>
-      <div id="subtitle-box">
-        
-        <span id="subtitle"></span>
-        
-      </div>
-      <div>
-        
-      </div>
-    </div>
-  </div>
-  <div class="cover-learn-more">
-    <a href="javascript:void(0)" class="anchor"><i class="ri-arrow-down-line"></i></a>
-  </div>
-</section>
-
-
-
-<script src="https://cdn.staticfile.org/typed.js/2.0.12/typed.min.js"></script>
-
-
-<!-- Subtitle -->
-
-  <script>
-    try {
-      var typed = new Typed("#subtitle", {
-        strings: ['Linux开发和工科生折腾集锦', '算法题总结', 'C/C++/python等开发'],
-        startDelay: 0,
-        typeSpeed: 100,
-        loop: true,
-        backSpeed: 100,
-        showCursor: true
-      });
-    } catch (err) {
-      console.log(err)
-    }
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"frankzjz219.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
+
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Frank&#39;s blogs">
+<meta property="og:url" content="https://frankzjz219.github.io/page/3/index.html">
+<meta property="og:site_name" content="Frank&#39;s blogs">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="FrankZhang">
+<meta property="article:tag" content="C, C++, Leetcode, Linux, 嵌入式, Ununtu, 驱动">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://frankzjz219.github.io/page/3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Frank's blogs</title>
   
-<div id="main">
-  <section class="outer">
-  
-  
-  
-<div class="notice" style="margin-top:50px">
-    <i class="ri-heart-fill"></i>
-    <div class="notice-content">Linux编程、C/C++开发、算法题、各种工科生折腾开发集锦</div>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Frank's blogs</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">永远好奇</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
 </div>
 
 
-<style>
-    .notice {
-        padding: 20px;
-        border: 1px dashed #e6e6e6;
-        color: #969696;
-        position: relative;
-        display: inline-block;
-        width: 100%;
-        background: #fbfbfb50;
-        border-radius: 10px;
-    }
 
-    .notice i {
-        float: left;
-        color: #999;
-        font-size: 16px;
-        padding-right: 10px;
-        vertical-align: middle;
-        margin-top: -2px;
-    }
 
-    .notice-content {
-        display: initial;
-        vertical-align: middle;
-    }
-</style>
-  
-  <article class="articles">
-    
-    
-    
-    
-    <article
-  id="post-使用Cython加速python程序计算"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/10/18/%E4%BD%BF%E7%94%A8Cython%E5%8A%A0%E9%80%9Fpython%E7%A8%8B%E5%BA%8F%E8%AE%A1%E7%AE%97/"
-    >使用Cython加速python程序计算</a> 
-</h2>
- 
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
 
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/10/18/%E4%BD%BF%E7%94%A8Cython%E5%8A%A0%E9%80%9Fpython%E7%A8%8B%E5%BA%8F%E8%AE%A1%E7%AE%97/" class="article-date">
-  <time datetime="2023-10-18T10:55:52.000Z" itemprop="datePublished">2023-10-18</time>
-</a>    
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
     </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/frankzjz219" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
       
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h2><ul>
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/10/18/%E4%BD%BF%E7%94%A8Cython%E5%8A%A0%E9%80%9Fpython%E7%A8%8B%E5%BA%8F%E8%AE%A1%E7%AE%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/18/%E4%BD%BF%E7%94%A8Cython%E5%8A%A0%E9%80%9Fpython%E7%A8%8B%E5%BA%8F%E8%AE%A1%E7%AE%97/" class="post-title-link" itemprop="url">使用Cython加速python程序计算</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-18 18:55:52" itemprop="dateCreated datePublished" datetime="2023-10-18T18:55:52+08:00">2023-10-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-25 11:47:27" itemprop="dateModified" datetime="2023-10-25T11:47:27+08:00">2023-10-25</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>10k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>18 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://cython.readthedocs.io/en/latest/">cython</a><h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2></li>
 <li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/traditional/p/13285339.html">参考（详细）</a></li>
 <li>定义一个<code>.pyx</code>文件<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># try111.pyx</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">say_hello_to_c</span>(<span class="params">m</span>):</span></span><br><span class="line">    t1 = time.time()</span><br><span class="line">    <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        <span class="built_in">sum</span>+=i</span><br><span class="line">    t2 = time.time()</span><br><span class="line">    <span class="comment"># print(t2-t1)</span></span><br><span class="line">    <span class="keyword">return</span> t2-t1</span><br></pre></td></tr></table></figure></li>
@@ -294,55 +367,85 @@
 <h3 id="其他参考"><a href="#其他参考" class="headerlink" title="其他参考"></a>其他参考</h3><ul>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/152343123">参考2</a></li>
 </ul>
- 
-      <!-- reward -->
+
       
     </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cython/" rel="tag">cython</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
 
     
-    <article
-  id="post-Linux实时线程和进程调度"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
     
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/10/10/Linux%E5%AE%9E%E6%97%B6%E7%BA%BF%E7%A8%8B%E5%92%8C%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/"
-    >Linux实时线程和进程调度</a> 
-</h2>
- 
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
       
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/10/10/Linux%E5%AE%9E%E6%97%B6%E7%BA%BF%E7%A8%8B%E5%92%8C%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/" class="article-date">
-  <time datetime="2023-10-10T02:48:43.000Z" itemprop="datePublished">2023-10-10</time>
-</a>    
-    </div>
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/10/10/Linux%E5%AE%9E%E6%97%B6%E7%BA%BF%E7%A8%8B%E5%92%8C%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/10/Linux%E5%AE%9E%E6%97%B6%E7%BA%BF%E7%A8%8B%E5%92%8C%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/" class="post-title-link" itemprop="url">Linux实时线程和进程调度</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-10 10:48:43" itemprop="dateCreated datePublished" datetime="2023-10-10T10:48:43+08:00">2023-10-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-03-05 16:28:44" itemprop="dateModified" datetime="2024-03-05T16:28:44+08:00">2024-03-05</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="实时线程"><a href="#实时线程" class="headerlink" title="实时线程"></a>实时线程</h2><ul>
+          <h2 id="实时线程"><a href="#实时线程" class="headerlink" title="实时线程"></a>实时线程</h2><ul>
 <li>在Linux中，实时线程是一种特殊类型的线程，它们的调度策略和优先级可以被设置为<strong>实时的</strong>。这意味着，<u>相比于普通的线程，实时线程有更高的优先级</u>，而且它们的执行<strong>不会被低优先级的线程打断</strong>。<h3 id="实时线程的调度策略"><a href="#实时线程的调度策略" class="headerlink" title="实时线程的调度策略"></a>实时线程的调度策略</h3></li>
 <li><code>SCHED_FIFO</code><strong>先入先出</strong>策略<ul>
 <li>线程会一直运行，直到它自己放弃CPU时间，或者有更高优先级的线程需要运行</li>
@@ -481,55 +584,85 @@
 </li>
 <li><img src="/imgs/a63520a86097fd5338f11cf3a9f79afd7e95ee1fdadd703e7c1126e17c072798.png" alt="picture 7">  </li>
 </ul>
- 
-      <!-- reward -->
+
       
     </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
 
     
-    <article
-  id="post-Jetson不能用网线连接电脑网络的解决方法"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
     
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/09/18/Jetson%E4%B8%8D%E8%83%BD%E7%94%A8%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E7%94%B5%E8%84%91%E7%BD%91%E7%BB%9C%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"
-    >Jetson不能用网线连接电脑网络的解决方法</a> 
-</h2>
- 
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
       
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/09/18/Jetson%E4%B8%8D%E8%83%BD%E7%94%A8%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E7%94%B5%E8%84%91%E7%BD%91%E7%BB%9C%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="article-date">
-  <time datetime="2023-09-18T02:37:20.000Z" itemprop="datePublished">2023-09-18</time>
-</a>    
-    </div>
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/09/18/Jetson%E4%B8%8D%E8%83%BD%E7%94%A8%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E7%94%B5%E8%84%91%E7%BD%91%E7%BB%9C%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/18/Jetson%E4%B8%8D%E8%83%BD%E7%94%A8%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E7%94%B5%E8%84%91%E7%BD%91%E7%BB%9C%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">Jetson不能用网线连接电脑网络的解决方法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-09-18 10:37:20" itemprop="dateCreated datePublished" datetime="2023-09-18T10:37:20+08:00">2023-09-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-23 15:33:36" itemprop="dateModified" datetime="2023-10-23T15:33:36+08:00">2023-10-23</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>188</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
+          <ul>
 <li>有时候使用网线将Jetson插到电脑上之后并不能有效的链接jetson和电脑</li>
 <li>此时是因为jetson的网络接口不能上网导致的</li>
 <li>需要在网络设置中修改jetson对应的以太网接口的设置</li>
@@ -542,55 +675,79 @@
 </li>
 <li>可能还需要重启jetson的网络配置<code>sudo service network-manager restart</code></li>
 </ul>
- 
-      <!-- reward -->
+
       
     </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
 
     
-    <article
-  id="post-python多进程（multiprocessing）相关"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
     
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/09/08/python%E5%A4%9A%E8%BF%9B%E7%A8%8B%EF%BC%88multiprocessing%EF%BC%89%E7%9B%B8%E5%85%B3/"
-    >python多进程（multiprocessing）相关</a> 
-</h2>
- 
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
       
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/09/08/python%E5%A4%9A%E8%BF%9B%E7%A8%8B%EF%BC%88multiprocessing%EF%BC%89%E7%9B%B8%E5%85%B3/" class="article-date">
-  <time datetime="2023-09-08T02:52:55.000Z" itemprop="datePublished">2023-09-08</time>
-</a>    
-    </div>
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/09/08/python%E5%A4%9A%E8%BF%9B%E7%A8%8B%EF%BC%88multiprocessing%EF%BC%89%E7%9B%B8%E5%85%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/08/python%E5%A4%9A%E8%BF%9B%E7%A8%8B%EF%BC%88multiprocessing%EF%BC%89%E7%9B%B8%E5%85%B3/" class="post-title-link" itemprop="url">python多进程（multiprocessing）相关</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-09-08 10:52:55 / 修改时间：16:35:03" itemprop="dateCreated datePublished" datetime="2023-09-08T10:52:55+08:00">2023-09-08</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="多进程库及其API"><a href="#多进程库及其API" class="headerlink" title="多进程库及其API"></a>多进程库及其API</h2><ul>
+          <h2 id="多进程库及其API"><a href="#多进程库及其API" class="headerlink" title="多进程库及其API"></a>多进程库及其API</h2><ul>
 <li><p><code>import multiprocessing</code></p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建进程</span></span><br><span class="line">Process(主函数)</span><br><span class="line"><span class="comment"># 注意调用的时候使用</span></span><br><span class="line">multiprocessing.Process(target=worker)</span><br><span class="line"><span class="comment"># 启动进程</span></span><br><span class="line">process.start()</span><br><span class="line"><span class="comment"># 回收进程（阻塞）</span></span><br><span class="line">process.join()</span><br></pre></td></tr></table></figure></li>
 <li><p>注意，在实验过程中多进程和单进程方式执行程序，消耗的<strong>总时间几乎没有区别</strong>，同时从任务管理器上可以看出，python并没有创建真正意义上的多个进程</p>
@@ -651,55 +808,85 @@
 <li>运行效果</li>
 <li><img src="/imgs/b6f49217c7a7f4205dcaf34519acc94f71e81346c898385a413c7bdcc396e288.png" alt="picture 9">  </li>
 </ul>
- 
-      <!-- reward -->
+
       
     </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/" rel="tag">多进程</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
 
     
-    <article
-  id="post-Cpp中STL的一些使用指南"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
     
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/09/04/Cpp%E4%B8%ADSTL%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/"
-    >Cpp中STL的一些使用指南</a> 
-</h2>
- 
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
       
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/09/04/Cpp%E4%B8%ADSTL%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" class="article-date">
-  <time datetime="2023-09-04T13:17:22.000Z" itemprop="datePublished">2023-09-04</time>
-</a>    
-    </div>
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/09/04/Cpp%E4%B8%ADSTL%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/04/Cpp%E4%B8%ADSTL%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" class="post-title-link" itemprop="url">Cpp中STL的一些使用指南</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-09-04 21:17:22" itemprop="dateCreated datePublished" datetime="2023-09-04T21:17:22+08:00">2023-09-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-27 15:48:27" itemprop="dateModified" datetime="2024-04-27T15:48:27+08:00">2024-04-27</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>13 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="C-语法复习"><a href="#C-语法复习" class="headerlink" title="C++语法复习"></a>C++语法复习</h2><h3 id="运算符操作"><a href="#运算符操作" class="headerlink" title="运算符操作"></a>运算符操作</h3><ul>
+          <h2 id="C-语法复习"><a href="#C-语法复习" class="headerlink" title="C++语法复习"></a>C++语法复习</h2><h3 id="运算符操作"><a href="#运算符操作" class="headerlink" title="运算符操作"></a>运算符操作</h3><ul>
 <li>从左往右多个连续不等号的时候是从左往右依次运算的</li>
 <li>连续的多个赋值操作是从右往左的</li>
 <li>移位运算最好针对无符号数使用，否则可能因为使用1填充高位导致出错<h3 id="sizeof"><a href="#sizeof" class="headerlink" title="sizeof"></a>sizeof</h3></li>
@@ -981,55 +1168,85 @@
 <li>底层是二分查找</li>
 <li>如果没找到，会返回数组尾迭代器<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">searchMatrix</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; matrix, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; row: matrix) &#123;</span><br><span class="line">            <span class="keyword">auto</span> it = <span class="built_in">lower_bound</span>(row.<span class="built_in">begin</span>(), row.<span class="built_in">end</span>(), target);</span><br><span class="line">            <span class="keyword">if</span> (it != row.<span class="built_in">end</span>() &amp;&amp; *it == target) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
 </ul>
- 
-      <!-- reward -->
+
       
     </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cpp/" rel="tag">Cpp</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
 
     
-    <article
-  id="post-Cpp语言STL中使用谓词的方法"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
     
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/09/04/Cpp%E8%AF%AD%E8%A8%80STL%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%B0%93%E8%AF%8D%E7%9A%84%E6%96%B9%E6%B3%95/"
-    >C++语言STL中使用谓词的方法</a> 
-</h2>
- 
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
       
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/09/04/Cpp%E8%AF%AD%E8%A8%80STL%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%B0%93%E8%AF%8D%E7%9A%84%E6%96%B9%E6%B3%95/" class="article-date">
-  <time datetime="2023-09-04T06:33:19.000Z" itemprop="datePublished">2023-09-04</time>
-</a>    
-    </div>
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/09/04/Cpp%E8%AF%AD%E8%A8%80STL%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%B0%93%E8%AF%8D%E7%9A%84%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/04/Cpp%E8%AF%AD%E8%A8%80STL%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%B0%93%E8%AF%8D%E7%9A%84%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">C++语言STL中使用谓词的方法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-09-04 14:33:19" itemprop="dateCreated datePublished" datetime="2023-09-04T14:33:19+08:00">2023-09-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-27 15:48:27" itemprop="dateModified" datetime="2024-04-27T15:48:27+08:00">2024-04-27</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
+          <ul>
 <li>C++的STL模板库中很多容器都需要谓词，比如有序集合<code>set</code>等，此时定义谓词主要有两种方式<h2 id="使用重载运算符作为谓词"><a href="#使用重载运算符作为谓词" class="headerlink" title="使用重载运算符作为谓词"></a>使用重载运算符作为谓词</h2></li>
 <li>新建一个struct<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">compFun</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">const</span> shared_ptr&lt;test&gt;&amp; a, <span class="keyword">const</span> shared_ptr&lt;test&gt;&amp; b)</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a-&gt;id&gt;b-&gt;id;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* data */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
 <li> 传参的时候使用<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">set&lt;shared_ptr&lt;test&gt;, compFun&gt; setTest;</span><br></pre></td></tr></table></figure></li>
@@ -1042,55 +1259,85 @@
 <li>注意对于cpp的优先级队列而言，使用<strong>大于号作为比较符得到的是最小堆，小于号是最大堆</strong></li>
 <li>优先级队列在使用谓词之前必须先指定存储的数据结构，比如如下代码<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> cmp = [](<span class="keyword">int</span> a, <span class="keyword">int</span> b)-&gt;<span class="keyword">bool</span>&#123;<span class="keyword">return</span> a&lt;b;&#125;;</span><br><span class="line">priority_queue&lt;<span class="keyword">int</span>, vector&lt;<span class="keyword">int</span>&gt;, function&lt;<span class="keyword">bool</span>(<span class="keyword">int</span>, <span class="keyword">int</span>)&gt;&gt; <span class="built_in">pq</span>(cmp);</span><br></pre></td></tr></table></figure></li>
 </ul>
- 
-      <!-- reward -->
+
       
     </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cpp/" rel="tag">Cpp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
 
     
-    <article
-  id="post-使用gdb调试qemu上的Linux"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
     
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/09/02/%E4%BD%BF%E7%94%A8gdb%E8%B0%83%E8%AF%95qemu%E4%B8%8A%E7%9A%84Linux/"
-    >使用gdb调试qemu上的Linux</a> 
-</h2>
- 
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
       
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/09/02/%E4%BD%BF%E7%94%A8gdb%E8%B0%83%E8%AF%95qemu%E4%B8%8A%E7%9A%84Linux/" class="article-date">
-  <time datetime="2023-09-02T02:16:35.000Z" itemprop="datePublished">2023-09-02</time>
-</a>    
-    </div>
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/09/02/%E4%BD%BF%E7%94%A8gdb%E8%B0%83%E8%AF%95qemu%E4%B8%8A%E7%9A%84Linux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/02/%E4%BD%BF%E7%94%A8gdb%E8%B0%83%E8%AF%95qemu%E4%B8%8A%E7%9A%84Linux/" class="post-title-link" itemprop="url">使用gdb调试qemu上的Linux</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-09-02 10:16:35" itemprop="dateCreated datePublished" datetime="2023-09-02T10:16:35+08:00">2023-09-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-09-04 10:56:18" itemprop="dateModified" datetime="2023-09-04T10:56:18+08:00">2023-09-04</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="修改Linux内核编译选项"><a href="#修改Linux内核编译选项" class="headerlink" title="修改Linux内核编译选项"></a>修改Linux内核编译选项</h2><ul>
+          <h2 id="修改Linux内核编译选项"><a href="#修改Linux内核编译选项" class="headerlink" title="修改Linux内核编译选项"></a>修改Linux内核编译选项</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/166253161">参考</a></li>
 <li><strong>注意 这个选项可能找不到</strong><ul>
 <li><img src="/imgs/2ee2577f6c7c405d96172e5833fb425147c0302a31931a40aabd8d442b4c6e7a.png" alt="picture 0">  </li>
@@ -1132,55 +1379,79 @@
 </li>
 <li><code>todo</code></li>
 </ul>
- 
-      <!-- reward -->
+
       
     </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gdb/" rel="tag">gdb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
 
     
-    <article
-  id="post-VMWare扩容Ubuntu系统硬盘容量之后无法开机的截距"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
     
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/08/29/VMWare%E6%89%A9%E5%AE%B9Ubuntu%E7%B3%BB%E7%BB%9F%E7%A1%AC%E7%9B%98%E5%AE%B9%E9%87%8F%E4%B9%8B%E5%90%8E%E6%97%A0%E6%B3%95%E5%BC%80%E6%9C%BA%E7%9A%84%E6%88%AA%E8%B7%9D/"
-    >VMWare扩容Ubuntu系统硬盘容量之后无法开机的解决</a> 
-</h2>
- 
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
       
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/08/29/VMWare%E6%89%A9%E5%AE%B9Ubuntu%E7%B3%BB%E7%BB%9F%E7%A1%AC%E7%9B%98%E5%AE%B9%E9%87%8F%E4%B9%8B%E5%90%8E%E6%97%A0%E6%B3%95%E5%BC%80%E6%9C%BA%E7%9A%84%E6%88%AA%E8%B7%9D/" class="article-date">
-  <time datetime="2023-08-28T17:12:00.000Z" itemprop="datePublished">2023-08-29</time>
-</a>    
-    </div>
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/08/29/VMWare%E6%89%A9%E5%AE%B9Ubuntu%E7%B3%BB%E7%BB%9F%E7%A1%AC%E7%9B%98%E5%AE%B9%E9%87%8F%E4%B9%8B%E5%90%8E%E6%97%A0%E6%B3%95%E5%BC%80%E6%9C%BA%E7%9A%84%E6%88%AA%E8%B7%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/08/29/VMWare%E6%89%A9%E5%AE%B9Ubuntu%E7%B3%BB%E7%BB%9F%E7%A1%AC%E7%9B%98%E5%AE%B9%E9%87%8F%E4%B9%8B%E5%90%8E%E6%97%A0%E6%B3%95%E5%BC%80%E6%9C%BA%E7%9A%84%E6%88%AA%E8%B7%9D/" class="post-title-link" itemprop="url">VMWare扩容Ubuntu系统硬盘容量之后无法开机的解决</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-08-29 01:12:00 / 修改时间：01:17:58" itemprop="dateCreated datePublished" datetime="2023-08-29T01:12:00+08:00">2023-08-29</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>129</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
+          <ul>
 <li>启动系统的时候在启动之前按F2进入VMWare的BIOS配置界面</li>
 <li>移动启动顺序，将CD-ROM移动到第一位</li>
 <li><img src="/imgs/1205e783fc644a3b1f1eebf36ad636ae69cdc72ff4cda95e5cd88f1889f5a184.png" alt="picture 0">  </li>
@@ -1199,55 +1470,85 @@
 <li><img src="/imgs/d13fa9c4fd21610a94534ed3f1c6adc3c3833b36ad6c06fa4d095fc48270e1d9.png" alt="picture 5">  </li>
 <li>系统正常启动</li>
 </ul>
- 
-      <!-- reward -->
+
       
     </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
 
     
-    <article
-  id="post-x86平台上向量化编程及实验"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
     
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/08/01/x86%E5%B9%B3%E5%8F%B0%E4%B8%8A%E5%90%91%E9%87%8F%E5%8C%96%E7%BC%96%E7%A8%8B%E5%8F%8A%E5%AE%9E%E9%AA%8C/"
-    >x86平台上向量化编程及实验</a> 
-</h2>
- 
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
       
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/08/01/x86%E5%B9%B3%E5%8F%B0%E4%B8%8A%E5%90%91%E9%87%8F%E5%8C%96%E7%BC%96%E7%A8%8B%E5%8F%8A%E5%AE%9E%E9%AA%8C/" class="article-date">
-  <time datetime="2023-08-01T02:19:06.000Z" itemprop="datePublished">2023-08-01</time>
-</a>    
-    </div>
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/08/01/x86%E5%B9%B3%E5%8F%B0%E4%B8%8A%E5%90%91%E9%87%8F%E5%8C%96%E7%BC%96%E7%A8%8B%E5%8F%8A%E5%AE%9E%E9%AA%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/08/01/x86%E5%B9%B3%E5%8F%B0%E4%B8%8A%E5%90%91%E9%87%8F%E5%8C%96%E7%BC%96%E7%A8%8B%E5%8F%8A%E5%AE%9E%E9%AA%8C/" class="post-title-link" itemprop="url">x86平台上向量化编程及实验</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-08-01 10:19:06" itemprop="dateCreated datePublished" datetime="2023-08-01T10:19:06+08:00">2023-08-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-27 15:45:33" itemprop="dateModified" datetime="2024-04-27T15:45:33+08:00">2024-04-27</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="向量化编程"><a href="#向量化编程" class="headerlink" title="向量化编程"></a>向量化编程</h2><ul>
+          <h2 id="向量化编程"><a href="#向量化编程" class="headerlink" title="向量化编程"></a>向量化编程</h2><ul>
 <li>使用向量化即“批量操作”，批量操作在物理生活中也很常见，在计算机中最常见的执行模型就是SIMD（Single Instruction Multiple Data），即对批量的数据同时进行同样的操作以提高效率。</li>
 <li><a target="_blank" rel="noopener" href="https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html">Intel向量化操作手册</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.codeproject.com/Articles/874396/Crunching-Numbers-with-AVX-and-AVX">Intel向量化编程示例</a><h2 id="代码案例"><a href="#代码案例" class="headerlink" title="代码案例"></a>代码案例</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;immintrin.h&gt;</span>  <span class="comment">// Header for AVX intrinsics</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">dot_productVec</span><span class="params">(<span class="keyword">float</span>* a, <span class="keyword">float</span>* b, <span class="keyword">int</span> length)</span> </span>&#123;</span><br><span class="line">    __m256 sum = _mm256_setzero_ps();</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i += <span class="number">8</span>) &#123;</span><br><span class="line">        __m256 vecA = _mm256_loadu_ps(&amp;a[i]);</span><br><span class="line">        __m256 vecB = _mm256_loadu_ps(&amp;b[i]);</span><br><span class="line">        __m256 mul = _mm256_mul_ps(vecA, vecB);</span><br><span class="line">        sum = _mm256_add_ps(sum, mul);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Sum the packed floats</span></span><br><span class="line">    <span class="keyword">float</span> result[<span class="number">8</span>];</span><br><span class="line">    _mm256_storeu_ps(result, sum);</span><br><span class="line">    <span class="keyword">return</span> result[<span class="number">0</span>] + result[<span class="number">1</span>] + result[<span class="number">2</span>] + result[<span class="number">3</span>] + result[<span class="number">4</span>] + result[<span class="number">5</span>] + result[<span class="number">6</span>] + result[<span class="number">7</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">dot_productLoop</span><span class="params">(<span class="keyword">float</span>* a, <span class="keyword">float</span>* b, <span class="keyword">int</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j&lt;length;j++)</span><br><span class="line">    &#123;</span><br><span class="line">        i+=a[j]*b[j];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Function to get the current time in nanoseconds</span></span><br><span class="line"><span class="function"><span class="keyword">int64_t</span> <span class="title">get_time_ns</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">ts</span>;</span></span><br><span class="line">    clock_gettime(CLOCK_MONOTONIC, &amp;ts);</span><br><span class="line">    <span class="keyword">return</span> ts.tv_sec * <span class="number">1000000000LL</span> + ts.tv_nsec;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">runTrial</span><span class="params">(<span class="keyword">int</span> length, <span class="keyword">int64_t</span>* tVec, <span class="keyword">int64_t</span>* tLoop)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(length == <span class="number">0</span>)&#123;*tVec = <span class="number">0</span>;*tLoop = <span class="number">0</span>;<span class="keyword">return</span>;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">float</span>* a = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">float</span>)*length);</span><br><span class="line">    <span class="keyword">float</span>* b = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">float</span>)*length);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// int length = sizeof(a) / sizeof(float);</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;length; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        a[i] = (<span class="keyword">float</span>)i/<span class="number">10</span>;</span><br><span class="line">        b[i] = (<span class="keyword">float</span>)(length-i)/<span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int64_t</span> tVec1, tVec2, tLoop1, tLoop2 = <span class="number">0</span>;</span><br><span class="line">    tVec1 = get_time_ns();</span><br><span class="line">    <span class="keyword">float</span> result = dot_productVec(a, b, length);</span><br><span class="line">    tVec2 = get_time_ns();</span><br><span class="line">    tLoop1 = get_time_ns();</span><br><span class="line">    <span class="keyword">float</span> result2 = dot_productLoop(a, b, length);</span><br><span class="line">    tLoop2 = get_time_ns();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">free</span>(a);</span><br><span class="line">    <span class="built_in">free</span>(b);</span><br><span class="line"></span><br><span class="line">    *tVec = tVec2 - tVec1;</span><br><span class="line">    *tLoop = tLoop2 - tLoop1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> maxCnt = <span class="number">5000</span>;</span><br><span class="line">    <span class="keyword">int64_t</span> tVecs[maxCnt];</span><br><span class="line">    <span class="keyword">int64_t</span> tLoops[maxCnt];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;maxCnt;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        runTrial(i, &amp;tVecs[i], &amp;tLoops[i]);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;length %d completed!\nVec: %ld, Loop: %ld\n&quot;</span>, i, tVecs[i], tLoops[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    FILE* file;</span><br><span class="line">    file = fopen(<span class="string">&quot;data.csv&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line">    <span class="built_in">fprintf</span>(file, <span class="string">&quot;tVec,tLoop\n&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;maxCnt; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(file, <span class="string">&quot;%ld, %ld\n&quot;</span>, tVecs[i], tLoops[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// fprintf(file, &quot;\n&quot;);</span></span><br><span class="line">    <span class="comment">// for(int i = 0;i&lt;maxCnt; i++)</span></span><br><span class="line">    <span class="comment">// &#123;</span></span><br><span class="line">    <span class="comment">//     fprintf(file, &quot;%ld, &quot;, tLoops[i]);</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    <span class="comment">// fprintf(file, &quot;\n&quot;);</span></span><br><span class="line">    fclose(file);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
@@ -1261,55 +1562,85 @@
 <li>可见循环计算的斜率几乎是向量化计算的<strong>6.30</strong>倍</li>
 <li><img src="/imgs/24a5b8225c2975e6c9cbd7e00bce4d2abb49a2ad131b9549db8aaaa7e31b5cc4.png" alt="picture 1">  </li>
 </ul>
- 
-      <!-- reward -->
+
       
     </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    </footer>
-  </div>
-
-   
-    
-</article>
 
     
-    <article
-  id="post-操作系统知识笔记（1）"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
     
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2023/07/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/"
-    >CSAPP知识笔记（1）</a> 
-</h2>
- 
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
       
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2023/07/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/" class="article-date">
-  <time datetime="2023-07-28T07:45:25.000Z" itemprop="datePublished">2023-07-28</time>
-</a>    
-    </div>
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/07/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/07/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/" class="post-title-link" itemprop="url">CSAPP知识笔记（1）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-07-28 15:45:25" itemprop="dateCreated datePublished" datetime="2023-07-28T15:45:25+08:00">2023-07-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-26 22:00:02" itemprop="dateModified" datetime="2023-10-26T22:00:02+08:00">2023-10-26</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="编译、重定位、装入和链接"><a href="#编译、重定位、装入和链接" class="headerlink" title="编译、重定位、装入和链接"></a>编译、重定位、装入和链接</h2><ul>
+          <h2 id="编译、重定位、装入和链接"><a href="#编译、重定位、装入和链接" class="headerlink" title="编译、重定位、装入和链接"></a>编译、重定位、装入和链接</h2><ul>
 <li><img src="/imgs/1a721cc175df7718d8b31218f7b2b189263c723c2fbf683d67155c7de7ae0ece.png" alt="picture 0">  <ul>
 <li>编译是得到单个的程序模块</li>
 <li>链接是将程序中用到的模块链接在一起，组合他们的虚拟地址（逻辑地址）</li>
@@ -1423,361 +1754,219 @@
 </ul>
 </li>
 </ul>
- 
-      <!-- reward -->
+
       
     </div>
-    
 
-    <!-- copyright -->
     
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li></ul>
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FrankZhang"
+      src="/images/avatar1.jpg">
+  <p class="site-author-name" itemprop="name">FrankZhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">172</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FrankZhang</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">622k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:51</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
     </footer>
   </div>
 
-   
-    
-</article>
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
-    
-  </article>
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
   
 
   
-  <nav class="page-nav">
-    
-    <a class="extend prev" rel="prev" href="/page/2/">上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/4/">下一页</a>
-  </nav>
-  
-</section>
-</div>
 
-      <footer class="footer">
-  <div class="outer">
-    <ul>
-      <li>
-        Copyrights &copy;
-        2021-2024
-        <i class="ri-heart-fill heart_icon"></i> FrankZhang
-      </li>
-    </ul>
-    <ul>
-      <li>
-        
-      </li>
-    </ul>
-    <ul>
-      <li>
-        
-        
-        <span>
-  <span><i class="ri-user-3-fill"></i>Visitors:<span id="busuanzi_value_site_uv"></span></span>
-  <span class="division">|</span>
-  <span><i class="ri-eye-fill"></i>Views:<span id="busuanzi_value_page_pv"></span></span>
-</span>
-        
-      </li>
-    </ul>
-    <ul>
-      
-    </ul>
-    <ul>
-      
-    </ul>
-    <ul>
-      <li>
-        <!-- cnzz统计 -->
-        
-      </li>
-    </ul>
-  </div>
-</footer>    
-    </main>
-    <div class="float_btns">
-      <div class="totop" id="totop">
-  <i class="ri-arrow-up-line"></i>
-</div>
-
-<div class="todark" id="todark">
-  <i class="ri-moon-line"></i>
-</div>
-
-    </div>
-    <aside class="sidebar on">
-      <button class="navbar-toggle"></button>
-<nav class="navbar">
-  
-  <div class="logo">
-    <a href="/"><img src="/images/avatar.png" alt="Frank&#39;s blogs"></a>
-  </div>
-  
-  <ul class="nav nav-main">
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/">主页</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/archives">归档</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/tags">标签</a>
-    </li>
-    
-  </ul>
-</nav>
-<nav class="navbar navbar-bottom">
-  <ul class="nav">
-    <li class="nav-item">
-      
-      <a class="nav-item-link nav-item-search"  title="Search">
-        <i class="ri-search-line"></i>
-      </a>
-      
-      
-    </li>
-  </ul>
-</nav>
-<div class="search-form-wrap">
-  <div class="local-search local-search-plugin">
-  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
-  <div id="local-search-result" class="local-search-result"></div>
-</div>
-</div>
-    </aside>
-    <div id="mask"></div>
-
-<!-- #reward -->
-<div id="reward">
-  <span class="close"><i class="ri-close-line"></i></span>
-  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
-  <div class="reward-box">
-    
-    <div class="reward-item">
-      <img class="reward-img" src="/images/alipay.jpg">
-      <span class="reward-type">支付宝</span>
-    </div>
-    
-    
-    <div class="reward-item">
-      <img class="reward-img" src="/images/wechat.jpg">
-      <span class="reward-type">微信</span>
-    </div>
-    
-  </div>
-</div>
-    
-<script src="/js/jquery-3.6.0.min.js"></script>
- 
-<script src="/js/lazyload.min.js"></script>
-
-<!-- Tocbot -->
-
-<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
-<link
-  rel="stylesheet"
-  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
-/>
-<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
-
-<script src="/dist/main.js"></script>
-
-<!-- ImageViewer -->
- <!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    <!-- Background of PhotoSwipe. 
-         It's a separate element as animating opacity is faster than rgba(). -->
-    <div class="pswp__bg"></div>
-
-    <!-- Slides wrapper with overflow:hidden. -->
-    <div class="pswp__scroll-wrap">
-
-        <!-- Container that holds slides. 
-            PhotoSwipe keeps only 3 of them in the DOM to save memory.
-            Don't modify these 3 pswp__item elements, data is added later on. -->
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
-
-        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-        <div class="pswp__ui pswp__ui--hidden">
-
-            <div class="pswp__top-bar">
-
-                <!--  Controls are self-explanatory. Order can be changed. -->
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-                <!-- element will get class pswp__preloader--active when preloader is running -->
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
-<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
-<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
-
-<script>
-    function viewer_init() {
-        let pswpElement = document.querySelectorAll('.pswp')[0];
-        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
-
-        $imgArr.forEach(($em, i) => {
-            $em.onclick = () => {
-                // slider展开状态
-                // todo: 这样不好，后面改成状态
-                if (document.querySelector('.left-col.show')) return
-                let items = []
-                $imgArr.forEach(($em2, i2) => {
-                    let img = $em2.getAttribute('data-idx', i2)
-                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
-                    let title = $em2.getAttribute('alt')
-                    // 获得原图尺寸
-                    const image = new Image()
-                    image.src = src
-                    items.push({
-                        src: src,
-                        w: image.width || $em2.width,
-                        h: image.height || $em2.height,
-                        title: title
-                    })
-                })
-                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
-                    index: parseInt(i)
-                });
-                gallery.init()
-            }
-        })
-    }
-    viewer_init()
-</script> 
-<!-- MathJax -->
-
-<!-- Katex -->
-
-<!-- busuanzi  -->
- 
-<script src="/js/busuanzi-2.3.pure.min.js"></script>
- 
-<!-- ClickLove -->
-
-<!-- ClickBoom1 -->
-
-<!-- ClickBoom2 -->
-
-<!-- CodeCopy -->
- 
-<link rel="stylesheet" href="/css/clipboard.css">
- <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
-<script>
-  function wait(callback, seconds) {
-    var timelag = null;
-    timelag = window.setTimeout(callback, seconds);
-  }
-  !function (e, t, a) {
-    var initCopyCode = function(){
-      var copyHtml = '';
-      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
-      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
-      copyHtml += '</button>';
-      $(".highlight .code pre").before(copyHtml);
-      $(".article pre code").before(copyHtml);
-      var clipboard = new ClipboardJS('.btn-copy', {
-        target: function(trigger) {
-          return trigger.nextElementSibling;
-        }
-      });
-      clipboard.on('success', function(e) {
-        let $btn = $(e.trigger);
-        $btn.addClass('copied');
-        let $icon = $($btn.find('i'));
-        $icon.removeClass('ri-file-copy-2-line');
-        $icon.addClass('ri-checkbox-circle-line');
-        let $span = $($btn.find('span'));
-        $span[0].innerText = 'COPIED';
-        
-        wait(function () { // 等待两秒钟后恢复
-          $icon.removeClass('ri-checkbox-circle-line');
-          $icon.addClass('ri-file-copy-2-line');
-          $span[0].innerText = 'COPY';
-        }, 2000);
-      });
-      clipboard.on('error', function(e) {
-        e.clearSelection();
-        let $btn = $(e.trigger);
-        $btn.addClass('copy-failed');
-        let $icon = $($btn.find('i'));
-        $icon.removeClass('ri-file-copy-2-line');
-        $icon.addClass('ri-time-line');
-        let $span = $($btn.find('span'));
-        $span[0].innerText = 'COPY FAILED';
-        
-        wait(function () { // 等待两秒钟后恢复
-          $icon.removeClass('ri-time-line');
-          $icon.addClass('ri-file-copy-2-line');
-          $span[0].innerText = 'COPY';
-        }, 2000);
-      });
-    }
-    initCopyCode();
-  }(window, document);
-</script>
- 
-<!-- CanvasBackground -->
-
-<script>
-  if (window.mermaid) {
-    mermaid.initialize({ theme: "forest" });
-  }
-</script>
-
-
-    
-    
-
-  </div>
 </body>
-
 </html>
