@@ -25,10 +25,10 @@ try {
     # Print the new working directory to confirm
     Write-Host "Current working directory is now: $(Get-Location)"
     # Command execution completed message
-    Write-Host "Hexo site cleaning, generation, and deployment completed." -ForegroundColor Green -BackgroundColor White
+    Write-Host "Hexo site cleaning, generation, and deployment completed." -ForegroundColor Green -BackgroundColor Gray
 } catch {
     # Handle exceptions here if needed
-    Write-Host "An error occurred: $_" -ForegroundColor Red
+    Write-Host "An error occurred: $_" -ForegroundColor Red -BackgroundColor Gray
 } finally {
     # Restore the original working directory
     Set-Location $originalLocation
