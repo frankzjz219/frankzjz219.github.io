@@ -182,6 +182,246 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/30/LinuxSocket%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/30/LinuxSocket%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">LinuxSocket编程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-01-30 16:50:09 / 修改时间：17:50:22" itemprop="dateCreated datePublished" datetime="2022-01-30T16:50:09+08:00">2022-01-30</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>17 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Linux-Socket编程"><a href="#Linux-Socket编程" class="headerlink" title="Linux Socket编程"></a>Linux Socket编程</h1><h2 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h2><ul>
+<li>套接字（socket）是 Linux 下的一种进程间通信机制（socket IPC），在前面的内容中已经给大家提到过， <strong>使用 socket IPC 可以使得在不同主机上的应用程序之间进行通信</strong>（网络通信），当然也可以是<strong>同一台主机上 的不同应用程序</strong>。socket IPC 通常使用客户端&lt;—&gt;服务器这种模式完成通信，多个客户端可以同时连接到服务器中，与服务器之间完成数据交互。</li>
+<li>当前网络中的主流程序设计都是使用 socket 进行编程的，因为它简单易用，它还是一个标准（BSD  socket），能在不同平台很方便移植，比如你的一个应用程序是基于 socket 接口编写的，那么它可以移植到 任何实现 BSD socket 标准的平台，譬如 LwIP，它兼容 BSD Socket；又譬如 Windows，它也实现了一套基于 socket 的套接字接口，更甚至在国产操作系统中，如 RT-Thread，它也实现了 BSD socket 标准的 socket 接 口。</li>
+</ul>
+<h2 id="Socket编程"><a href="#Socket编程" class="headerlink" title="Socket编程"></a>Socket编程</h2><h4 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span> <span class="comment">/* See NOTES */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="socket-函数"><a href="#socket-函数" class="headerlink" title="socket()函数"></a>socket()函数</h4><ul>
+<li>socket()函数类似于 open()函数，它用于创建一个网络通信端点（打开一个网络通信），如果成功则返回 一个网络文件描述符，通常把这个文件描述符称为 socket 描述符（socket descriptor），这个 socket 描述符跟 文件描述符一样，后续的操作都有用到它，把它作为参数，通过它来进行一些读写操作。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span> <span class="comment">/* See NOTES */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> domain, <span class="keyword">int</span> type, <span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>参数 domain 用于指定一个通信域；这将选择将用于通信的协议族。可选的协议族如下表所示</p>
+<ul>
+<li><p><img src="/imgs/image-20220130165700332.png" alt="image-20220130165700332"></p>
+</li>
+<li><p><img src="/imgs/image-20220130165812152.png" alt="image-20220130165812152"></p>
+</li>
+<li><p>对于 TCP/IP 协议来说，通常选择 <strong>AF_INET</strong> 就可以了，当然如果你的 IP 协议的版本支持 IPv6，那么可 以选择 <strong>AF_INET6</strong>。</p>
+</li>
+</ul>
+</li>
+<li><p>参数 type 指定套接字的类型，当前支持的类型有</p>
+<ul>
+<li><img src="/imgs/image-20220130165859271.png" alt="image-20220130165859271"></li>
+</ul>
+</li>
+<li><p>参数 protocol 通常设置为 0，表示为给定的通信域和套接字类型选择默认协议。当对同一域和套接字类 型支持多个协议时，可以使用 protocol 参数选择一个特定协议。在 AF_INET 通信域中，套接字类型为 SOCK_STREAM 的默认协议是传输控制协议（Transmission Control Protocol，TCP 协议）。在 AF_INET 通 信域中，套接字类型为 SOCK_DGRAM 的默认协议时 UDP。</p>
+</li>
+<li><p>调用 socket()与调用 open()函数很类似，调用成功情况下，均会返回用于文件 I/O 的文件描述符，只不 过对于 socket()来说，其<strong>返回的文件描述符一般称为 socket 描述符</strong>。当不再需要该文件描述符时，可调用 close()函数来关闭套接字，释放相应的资源。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> socket_fd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);<span class="comment">//打开套接字</span></span><br><span class="line"><span class="keyword">if</span> (<span class="number">0</span> &gt; socket_fd) &#123;</span><br><span class="line">     perror(<span class="string">&quot;socket error&quot;</span>);</span><br><span class="line">     <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">close(socket_fd); <span class="comment">//关闭套接字</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="bind-函数"><a href="#bind-函数" class="headerlink" title="bind()函数"></a>bind()函数</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bind</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct sockaddr *addr, <span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>bind()函数用于将一个 IP 地址或端口号与一个套接字进行绑定（将套接字与地址进行关联）。</li>
+<li>一般来讲，会将一个服务器的 套接字绑定到一个众所周知的地址—即一个固定的与服务器进行通信的客户端应用程序提前就知道的地址 （注意这里说的地址包括 IP 地址和端口号）。因为对于客户端来说，它与服务器进行通信，首先需要知道 服务器的 IP 地址以及对应的端口号，所以通常服务器的 IP 地址以及端口号都是众所周知的。</li>
+<li>参数 addr 是一个指针，指向一个 struct sockaddr 类型变量</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr</span> &#123;</span></span><br><span class="line"> 	<span class="keyword">sa_family_t</span> sa_family;</span><br><span class="line"> 	<span class="keyword">char</span> sa_data[<span class="number">14</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第二个成员 sa_data 是一个 char 类型数组，一共 14 个字节，在这 14 个字节中就包括了 IP 地址、端口 号等信息，这个结构对用户并不友好，它把这些信息都封装在了 sa_data 数组中，这样使得用户是无法对 sa_data 数组进行赋值。事实上，这是一个通用的 socket 地址结构体。</li>
+<li>一般我们在使用的时候都会使用 struct sockaddr_in 结构体，sockaddr_in 和 sockaddr 是<strong>并列的结构</strong>（<strong>占 用的空间是一样的</strong>），<strong>指向 sockaddr_in 的结构体的指针也可以指向 sockadd 的结构体，并代替它</strong>，而且 sockaddr_in 结构对用户将更加友好，在使用的时候进行类型转换就可以了。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> &#123;</span></span><br><span class="line"> <span class="keyword">sa_family_t</span> sin_family; <span class="comment">/* 协议族 */</span></span><br><span class="line"> <span class="keyword">in_port_t</span> sin_port; <span class="comment">/* 端口号 */</span></span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> <span class="title">sin_addr</span>;</span> <span class="comment">/* IP 地址 */</span></span><br><span class="line"> <span class="keyword">unsigned</span> <span class="keyword">char</span> sin_zero[<span class="number">8</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="listen-函数"><a href="#listen-函数" class="headerlink" title="listen()函数"></a>listen()函数</h4><ul>
+<li>listen()函数只能在服务器进程中使用，让服务器进程进入监听状态，等待客户端的连接请求，listen()函 数在一般在 bind()函数之后调用，在 accept()函数之前调用</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">listen</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">int</span> backlog)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数 backlog 用来描述 sockfd 的等待连接队列能够达到的最大值。在服务器进程正处理客户端连接请 求的时候，可能还存在其它的客户端请求建立连接，因为 TCP 连接是一个过程，由于同时尝试连接的用户 过多，使得服务器进程<strong>无法快速地完成所有的连接请求</strong>.因此<strong>内核会在自己的进程空间里维护一个队列</strong>，这些连接请求就会被放入一个队 列中，服务器进程会按照先来后到的顺序去处理这些连接请求，这样的一个队列内核不可能让其任意大，所 以必须有一个大小的上限，这个 backlog 参数告诉内核使用这个数值作为队列的上限。而当一个客户端的连接请求到达并且该队列为满时，客户端可能会收到一个表示连接失败的错误，本次请求会被丢弃不作处理。</li>
+</ul>
+<h4 id="accept-函数"><a href="#accept-函数" class="headerlink" title="accept()函数"></a>accept()函数</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">accept</span><span class="params">(<span class="keyword">int</span> sockfd, struct sockaddr *addr, <span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>服务器流程</p>
+<ul>
+<li>调用 socket()函数打开套接字；</li>
+<li>调用 bind()函数将套接字与一个端口号以及 IP 地址进行绑定；</li>
+<li>调用 listen()函数让服务器进程进入监听状态，监听客户端的连接请求；</li>
+<li>调用 accept()函数处理到来的连接请求。</li>
+</ul>
+</li>
+<li><p>accept()函数通常只用于服务器应用程序中，如果调用 accept()函数时，并没有客户端请求连接（等待连 接队列中也没有等待连接的请求），此时 accept()会进入阻塞状态，直到有客户端连接请求到达为止。</p>
+</li>
+<li><p>当有 客户端连接请求到达时，accept()函数与远程客户端之间建立连接，accept()函数返回一个新的套接字。这个 套接字与 socket()函数返回的套接字并不同，socket()函数返回的是服务器的套接字（以服务器为例）</p>
+</li>
+<li><p><strong>accept()函数返回的套接字连接到调用 connect()的客户端</strong>，服务器<strong>通过该套接字与客户端进行数据交互</strong>，譬 如向客户端发送数据、或从客户端接收数据。</p>
+</li>
+<li><p>参数 addr 是一个传出参数，参数 addr 用来<strong>返回已连接的客户端的 IP 地址与端口号等这些信息</strong>。参数 addrlen 应设置为 addr 所指向的对象的字节长度，如果我们对客户端的 IP 地址与端口号这些信息不感兴趣， 可以把 arrd 和 addrlen <strong>均置为空指针 NULL</strong>。</p>
+</li>
+</ul>
+<h4 id="connect-函数"><a href="#connect-函数" class="headerlink" title="connect()函数"></a>connect()函数</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct sockaddr *addr, <span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>该函数用于客户端应用程序中，<strong>客户端调用</strong> connect()函数将套接字 sockfd 与远程服务器进行连接，参 数 addr 指定了待连接的服务器的 IP 地址以及端口号等信息，参数 addrlen 指定了 addr 指向的 struct sockaddr 对象的字节大小。</li>
+<li>客户端通过 connect()函数请求与服务器建立连接，对于 TCP 连接来说，调用该函数将发生 TCP 连接的 握手过程，并最终建立一个 TCP 连接，而对于 UDP 协议来说，调用这个函数只是在 sockfd 中记录服务器 IP 地址与端口号，而不发送任何数据。</li>
+<li>函数调用成功则返回 0，失败返回-1，并设置 errno 以指示错误原因。</li>
+</ul>
+<h3 id="发送和接收函数"><a href="#发送和接收函数" class="headerlink" title="发送和接收函数"></a>发送和接收函数</h3><h4 id="read-函数"><a href="#read-函数" class="headerlink" title="read()函数"></a>read()函数</h4><ul>
+<li>通过 read()函数从一个文件描述符中读取指定字节大小的数据并放入到指 定的缓冲区中，read()调用成功将返回读取到的字节数，此返回值受文件剩余字节数限制，当返回值小于指 定的字节数时并不意味着错误；这可能是因为当前可读取的字节数小于指定的字节数（比如已经接近文件 结尾，或者正在从管道或者终端读取数据，或者 read()函数被信号中断等），出错返回-1 并设置 errno，如果 在调 read 之前已到达文件末尾，则这次 read 返回 0。</li>
+<li>套接字描述符<strong>也是文件描述符</strong>，所以使用 read()函数读取网络数据时，read()函数的参数 <strong>fd 就是对应的 套接字描述符</strong>。</li>
+</ul>
+<h4 id="recv-函数"><a href="#recv-函数" class="headerlink" title="recv()函数"></a>recv()函数</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">recv</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> len, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>不论是客户端还是服务器都可以通过 revc()函数读取网络数据，它与 read()函数的功能是相似的。参数 sockfd 指定套接字描述符，参数 buf 指向了一个数据接收缓冲区，参数 len 指定了读取数据的字节大小，参 数 flags 可以指定一些标志用于控制如何接收数据。</p>
+</li>
+<li><p>函数 recv()与 read()很相似，但是 recv()可以通过指定 flags 标志来控制如何接收数据，这些标志如下所 示：</p>
+<ul>
+<li><p><img src="/imgs/image-20220130174245872.png" alt="image-20220130174245872"></p>
+</li>
+<li><p>通常一般我们将 flags 参数设置为 0，当然，你可以根据自己的需求设置该参数。</p>
+</li>
+<li><p>当指定 MSG_PEEK 标志时，可以查看下一个要读取的数据但不真正取走它，当再次调用 read 或 recv 函数时，会返回刚才查看的数据。</p>
+</li>
+<li><p>对于 SOCK_STREAM 类型套接字，接收的数据可以比指定的字节大小少。MSG_WAITALL 标志会阻 止这种行为，<strong>直到所请求的数据全部返回，recv 函数才会返回</strong>。对于 SOCK_DGRAM 和 SOCK_SEQPACKET 套接字，MSG_WAITALL 标志并不会改变什么行为，因为这些基于报文的套接字类型一次读取就返回整个 报文。</p>
+</li>
+<li><p>如果发送者已经调用 shutdown 来结束传输，或者网络协议支持按默认的顺序关闭并且发送端已经关闭， 那么当所有的数据接收完毕后，recv 会返回 0。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="write函数"><a href="#write函数" class="headerlink" title="write函数"></a>write函数</h4><ul>
+<li>通过 write()函数可以向套接字描述符中写入数据，函数调用成功返回写入的字节数，失败返回-1，并设 置 errno 变量。</li>
+</ul>
+<h4 id="send-函数"><a href="#send-函数" class="headerlink" title="send()函数"></a>send()函数</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">send</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> len, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>send 和 write 很相似，但是 send 可以通过参数 flags 指定一些标志，来改变处理传输数据的方式。</p>
+<ul>
+<li><img src="/imgs/image-20220130174442209.png" alt="image-20220130174442209"></li>
+</ul>
+</li>
+<li><p>即使 send()成功返回，也并不表示连接的另一端的进程就一定接收了数据，我们所能保证的只是当 send 成功返回时，数据已经被<strong>无错误的发送到网络驱动程序上</strong>。</p>
+</li>
+</ul>
+<h4 id="close-关闭套接字"><a href="#close-关闭套接字" class="headerlink" title="close()关闭套接字"></a>close()关闭套接字</h4><ul>
+<li>当不再需要套接字描述符时，可调用 close()函数来关闭套接字，释放相应的资源。</li>
+</ul>
+<h3 id="IP-地址格式转换函数"><a href="#IP-地址格式转换函数" class="headerlink" title="IP 地址格式转换函数"></a>IP 地址格式转换函数</h3><ul>
+<li>对于人来说，我们更容易阅读的是点分十进制的 IP 地址，譬如 192.168.1.110、192.168.1.50，这其实是 一种字符串的形式，但是计算机所需要理解的是二进制形式的 IP 地址，所以我们就需要在点分十进制字符 串和二进制地址之间进行转换。</li>
+<li>点分十进制字符串和二进制地址之间的转换函数主要有：inet_aton、inet_addr、inet_ntoa、inet_ntop、 inet_pton 这五个，在我们的应用程序中使用它们需要包含头文件、以及&lt;netinet/in.h&gt;。</li>
+</ul>
+<h4 id="inet-aton、inet-addr、inet-ntoa-函数"><a href="#inet-aton、inet-addr、inet-ntoa-函数" class="headerlink" title="inet_aton、inet_addr、inet_ntoa 函数"></a>inet_aton、inet_addr、inet_ntoa 函数</h4><ul>
+<li>这些函数可将一个 IP 地址在点分十进制表示形式和二进制表示形式之间进行转换，这些函数已经废弃 了，基本不用这些函数了，但是在一些旧的代码中可能还会看到这些函数。完成此类转换工作我们应该使用 下面介绍的这些函数。</li>
+</ul>
+<h4 id="inet-ntop、inet-pton-函数"><a href="#inet-ntop、inet-pton-函数" class="headerlink" title="inet_ntop、inet_pton 函数"></a>inet_ntop、inet_pton 函数</h4><ul>
+<li>inet_ntop()、inet_pton()与 inet_ntoa()、inet_aton()类似，但它们还支持 IPv6 地址。它们将二进制 Ipv4 或 Ipv6 地址转换成以点分十进制表示的字符串形式，或将点分十进制表示的字符串形式转换成二进制 Ipv4 或 Ipv6 地址。使用这两个函数只需包含头文件即可！</li>
+<li><strong>inet_pton()函数</strong></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">inet_pton</span><span class="params">(<span class="keyword">int</span> af, <span class="keyword">const</span> <span class="keyword">char</span> *src, <span class="keyword">void</span> *dst)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>inet_pton()函数将点分十进制表示的字符串形式转换成二进制 Ipv4 或 Ipv6 地址。</p>
+</li>
+<li><p>inet_pton()函数将点分十进制表示的字符串形式转换成二进制 Ipv4 或 Ipv6 地址。 将字符串 src 转换为二进制地址，参数 af 必须是 AF_INET 或 AF_INET6，AF_INET 表示待转换的 Ipv4 地址，AF_INET6 表示待转换的是 Ipv6 地址；并将转换后得到的地址存放在参数 dst 所指向的对象中，如果 参数 af 被指定为 AF_INET，则参数 dst 所指对象应该是一个 struct in_addr 结构体的对象；如果参数 af 被指 定为 AF_INET6，则参数 dst 所指对象应该是一个 struct in6_addr 结构体的对象。</p>
+</li>
+<li><p>inet_pton()转换成功返回 1（已成功转换）。如果 src 不包含表示指定地址族中有效网络地址的字符串， 则返回 0。如果 af 不包含有效的地址族，则返回-1 并将 errno 设置为 EAFNOSUPPORT。</p>
+</li>
+<li><p><strong>inet_ntop()函数</strong></p>
+</li>
+<li><p>inet_ntop()函数执行与 inet_pton()相反的操作</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">const</span> <span class="keyword">char</span> *<span class="title">inet_ntop</span><span class="params">(<span class="keyword">int</span> af, <span class="keyword">const</span> <span class="keyword">void</span> *src, <span class="keyword">char</span> *dst, <span class="keyword">socklen_t</span> size)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数 af 与 inet_pton()函数的 af 参数意义相同。 </li>
+<li>参数 src 应指向一个 struct in_addr 结构体对象或 struct in6_addr 结构体对象，依据参数 af 而定。函数 inet_ntop()会将参数 src 指向的二进制 IP 地址转换为点分十进制形式的字符串，并将字符串存放在参数 dst所指的缓冲区中</li>
+<li>参数 size 指定了该缓冲区的大小。 inet_ntop()在成功时会返回 dst 指针。如果 size 的值太小了，那么将会返回 NULL 并将 errno 设置为 ENOSPC。</li>
+</ul>
+<p><strong>使用例</strong></p>
+<ul>
+<li>服务端</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SERVER_PORT 8888 <span class="comment">//端口号不能发生冲突,不常用的端口号通常大于 5000</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">server_addr</span> =</span> &#123;<span class="number">0</span>&#125;;</span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">client_addr</span> =</span> &#123;<span class="number">0</span>&#125;;</span><br><span class="line"> <span class="keyword">char</span> ip_str[<span class="number">20</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"> <span class="keyword">int</span> sockfd, connfd;</span><br><span class="line"> <span class="keyword">int</span> addrlen = <span class="keyword">sizeof</span>(client_addr);</span><br><span class="line"> <span class="keyword">char</span> recvbuf[<span class="number">512</span>];</span><br><span class="line"> <span class="keyword">int</span> ret;</span><br><span class="line"> <span class="comment">/* 打开套接字，得到套接字描述符 */</span></span><br><span class="line"> sockfd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);</span><br><span class="line"> <span class="keyword">if</span> (<span class="number">0</span> &gt; sockfd) &#123;</span><br><span class="line"> perror(<span class="string">&quot;socket error&quot;</span>);</span><br><span class="line"> <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">/* 将套接字与指定端口号进行绑定 */</span></span><br><span class="line"> server_addr.sin_family = AF_INET;</span><br><span class="line"> server_addr.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line"> server_addr.sin_port = htons(SERVER_PORT);</span><br><span class="line"> ret = bind(sockfd, (struct sockaddr *)&amp;server_addr, <span class="keyword">sizeof</span>(server_addr));</span><br><span class="line"> <span class="keyword">if</span> (<span class="number">0</span> &gt; ret) &#123;</span><br><span class="line"> perror(<span class="string">&quot;bind error&quot;</span>);</span><br><span class="line"> close(sockfd);</span><br><span class="line"> <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">/* 使服务器进入监听状态 */</span></span><br><span class="line"> ret = listen(sockfd, <span class="number">50</span>);</span><br><span class="line"> <span class="keyword">if</span> (<span class="number">0</span> &gt; ret) &#123;</span><br><span class="line"> perror(<span class="string">&quot;listen error&quot;</span>);</span><br><span class="line"> close(sockfd);</span><br><span class="line"> <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">/* 阻塞等待客户端连接 */</span></span><br><span class="line"> connfd = accept(sockfd, (struct sockaddr *)&amp;client_addr, &amp;addrlen);</span><br><span class="line"> <span class="keyword">if</span> (<span class="number">0</span> &gt; connfd) &#123;</span><br><span class="line"> perror(<span class="string">&quot;accept error&quot;</span>);</span><br><span class="line"> close(sockfd);</span><br><span class="line"> <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;有客户端接入...\n&quot;</span>);</span><br><span class="line"> inet_ntop(AF_INET, &amp;client_addr.sin_addr.s_addr, ip_str, <span class="keyword">sizeof</span>(ip_str));</span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;客户端主机的 IP 地址: %s\n&quot;</span>, ip_str);</span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;客户端进程的端口号: %d\n&quot;</span>, client_addr.sin_port);</span><br><span class="line"> <span class="comment">/* 接收客户端发送过来的数据 */</span></span><br><span class="line"> <span class="keyword">for</span> ( ; ; ) &#123;</span><br><span class="line"> <span class="comment">// 接收缓冲区清零</span></span><br><span class="line"> <span class="built_in">memset</span>(recvbuf, <span class="number">0x0</span>, <span class="keyword">sizeof</span>(recvbuf));</span><br><span class="line"> <span class="comment">// 读数据</span></span><br><span class="line"> ret = recv(connfd, recvbuf, <span class="keyword">sizeof</span>(recvbuf), <span class="number">0</span>);</span><br><span class="line"> <span class="keyword">if</span>(<span class="number">0</span> &gt;= ret) &#123;</span><br><span class="line"> perror(<span class="string">&quot;recv error&quot;</span>);</span><br><span class="line"> close(connfd);</span><br><span class="line"> <span class="keyword">break</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">// 将读取到的数据以字符串形式打印出来</span></span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;from client: %s\n&quot;</span>, recvbuf);</span><br><span class="line"> <span class="comment">// 如果读取到&quot;exit&quot;则关闭套接字退出程序</span></span><br><span class="line"> <span class="keyword">if</span> (<span class="number">0</span> == <span class="built_in">strncmp</span>(<span class="string">&quot;exit&quot;</span>, recvbuf, <span class="number">4</span>)) &#123;</span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;server exit...\n&quot;</span>);</span><br><span class="line"> close(connfd);</span><br><span class="line"> <span class="keyword">break</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">/* 关闭套接字 */</span></span><br><span class="line"> close(sockfd);</span><br><span class="line"> <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>客户端</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SERVER_PORT 8888 <span class="comment">//服务器的端口号</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SERVER_IP <span class="meta-string">&quot;192.168.1.150&quot;</span> <span class="comment">//服务器的 IP 地址</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">server_addr</span> =</span> &#123;<span class="number">0</span>&#125;;</span><br><span class="line"> <span class="keyword">char</span> buf[<span class="number">512</span>];</span><br><span class="line"> <span class="keyword">int</span> sockfd;</span><br><span class="line"> <span class="keyword">int</span> ret;</span><br><span class="line"> <span class="comment">/* 打开套接字，得到套接字描述符 */</span></span><br><span class="line"> sockfd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);</span><br><span class="line"> <span class="keyword">if</span> (<span class="number">0</span> &gt; sockfd) &#123;</span><br><span class="line"> perror(<span class="string">&quot;socket error&quot;</span>);</span><br><span class="line"> <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">/* 调用 connect 连接远端服务器 */</span></span><br><span class="line"> server_addr.sin_family = AF_INET;</span><br><span class="line"> server_addr.sin_port = htons(SERVER_PORT); <span class="comment">//端口号</span></span><br><span class="line"> inet_pton(AF_INET, SERVER_IP, &amp;server_addr.sin_addr);<span class="comment">//IP 地址</span></span><br><span class="line"> ret = connect(sockfd, (struct sockaddr *)&amp;server_addr, <span class="keyword">sizeof</span>(server_addr));</span><br><span class="line"> <span class="keyword">if</span> (<span class="number">0</span> &gt; ret) &#123;</span><br><span class="line"> perror(<span class="string">&quot;connect error&quot;</span>);</span><br><span class="line"> close(sockfd);</span><br><span class="line"> <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;服务器连接成功...\n\n&quot;</span>);</span><br><span class="line"> <span class="comment">/* 向服务器发送数据 */</span></span><br><span class="line"> <span class="keyword">for</span> ( ; ; ) &#123;</span><br><span class="line"> <span class="comment">// 清理缓冲区</span></span><br><span class="line"> <span class="built_in">memset</span>(buf, <span class="number">0x0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line"> <span class="comment">// 接收用户输入的字符串数据</span></span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;Please enter a string: &quot;</span>);</span><br><span class="line"> fgets(buf, <span class="keyword">sizeof</span>(buf), <span class="built_in">stdin</span>);</span><br><span class="line"> <span class="comment">// 将用户输入的数据发送给服务器</span></span><br><span class="line"> ret = send(sockfd, buf, <span class="built_in">strlen</span>(buf), <span class="number">0</span>);</span><br><span class="line"> <span class="keyword">if</span>(<span class="number">0</span> &gt; ret)&#123;</span><br><span class="line"> perror(<span class="string">&quot;send error&quot;</span>);</span><br><span class="line"> <span class="keyword">break</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">//输入了&quot;exit&quot;，退出循环</span></span><br><span class="line"> <span class="keyword">if</span>(<span class="number">0</span> == <span class="built_in">strncmp</span>(buf, <span class="string">&quot;exit&quot;</span>, <span class="number">4</span>))</span><br><span class="line"> <span class="keyword">break</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> close(sockfd);</span><br><span class="line"> <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/26/Linux%E6%96%87%E4%BB%B6%E9%94%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1997,214 +2237,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/21/linux%E8%BF%9B%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/21/linux%E8%BF%9B%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-title-link" itemprop="url">linux进程（二）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-01-21 21:13:28 / 修改时间：22:55:22" itemprop="dateCreated datePublished" datetime="2022-01-21T21:13:28+08:00">2022-01-21</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>5.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>11 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Linux进程（二）"><a href="#Linux进程（二）" class="headerlink" title="Linux进程（二）"></a>Linux进程（二）</h1><h2 id="进程的状态"><a href="#进程的状态" class="headerlink" title="进程的状态"></a>进程的状态</h2><ul>
-<li>Linux 系统下进程通常存在 6 种不同的状态，分为：就绪态、运行态、僵尸态、可中断睡眠状态（浅度 睡眠）、不可中断睡眠状态（深度睡眠）以及暂停态。<ul>
-<li>就绪态（Ready）：指该进程<strong>满足被 CPU 调度的所有条件但此时并没有被调度执行</strong>，只要得到 CPU 就能够直接运行；意味着该进程已经准备好被 CPU 执行，当一个进程的时间片到达，操作系统调 度程序会从就绪态链表中调度一个进程；</li>
-<li>运行态：指该进程当前正在被 CPU 调度运行，处于就绪态的进程得到 CPU 调度就会进入运行态；</li>
-<li>僵尸态：僵尸态进程其实指的就是僵尸进程，指该进程已经结束、但其父进程还未给它“收尸”；</li>
-<li>可中断睡眠状态：可中断睡眠也称为浅度睡眠，表示睡的不够“死”，还可以被唤醒，一般来说可 以通过信号来唤醒；</li>
-<li>不可中断睡眠状态：不可中断睡眠称为深度睡眠，深度睡眠无法被信号唤醒，只能等待相应的条件 成立才能结束睡眠状态。把浅度睡眠和深度睡眠统称为等待态（或者叫阻塞态），表示进程处于一 种等待状态，等待某种条件成立之后便会进入到就绪态；所以，处于等待态的进程是无法参与进程 系统调度的。</li>
-<li>暂停态：暂停并不是进程的终止，表示进程暂停运行，一般可通过信号将进程暂停，譬如 SIGSTOP 信号；处于暂停态的进程是可以恢复进入到就绪态的，譬如收到 SIGCONT 信号。</li>
-</ul>
-</li>
-</ul>
-<p><img src="/../imgs/image-20220121212212609.png" alt="image-20220121212212609"></p>
-<h3 id="进程组"><a href="#进程组" class="headerlink" title="进程组"></a>进程组</h3><ul>
-<li><p>每个进程除了有一个进程 ID、父进程 ID 之外，还有一个进程组 ID，用于标识该进程属于哪一个进程 组，进程组是一个或多个进程的集合，这些进程并不是孤立的，它们彼此之间或者存在父子、兄弟关系，或 者在功能上有联系。</p>
-</li>
-<li><p>Linux 系统设计进程组实质上是为了方便对进程进行管理。假设为了完成一个任务，需要并发运行 100 个进程，但当处于某种场景时需要终止这 100 个进程，若没有进程组就需要一个一个去终止，这样非常麻烦 且容易出现一些问题；有了进程组的概念之后，就可以将这 100 个进程设置为一个进程组，这些进程共享一 个进程组 ID，这样一来，终止这 100 个进程只需要终止该进程组即可。</p>
-</li>
-<li><p>进程组的特性</p>
-<ul>
-<li>每个进程必定属于某一个进程组、且只能属于一个进程组；</li>
-<li>每一个进程组有一个组长进程，组长进程的 ID 就等于进程组 ID；</li>
-<li>在组长进程的 ID 前面加上一个负号即是操作进程组；</li>
-<li>组长进程不能再创建新的进程组；</li>
-<li>只要进程组中还存在一个进程，则该进程组就存在，这与其组长进程是否终止无关；</li>
-<li>一个进程组可以包含一个或多个进程，进程组的生命周期从被创建开始，到其内所有进程终止或离 开该进程组；</li>
-<li>默认情况下，新创建的进程会继承父进程的进程组 ID。</li>
-</ul>
-</li>
-<li><p>通过系统调用 getpgrp()或 getpgid()可以获取进程对应的进程组 ID</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">getpgid</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>;<span class="comment">//对应的线程的进程组ID</span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">getpgrp</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>调用系统调用 setpgid()或 setpgrp()可以加入一个现有的进程组或创建一个新的进程组</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setpgid</span><span class="params">(<span class="keyword">pid_t</span> pid, <span class="keyword">pid_t</span> pgid)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setpgrp</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>setpgid()函数将参数 pid 指定的进程的进程组 ID 设置为参数 gpid。如果这两个参数相等（pid==gpid）， 则由 pid 指定的进程变成为进程组的组长进程，创建了一个新的进程；如果参数 pid <strong>等于 0，则使用调用者 的进程 ID</strong>；另外，<strong>如果参数 gpid 等于 0，则创建一个新的进程组，由参数 pid 指定的进程作为进程组组长 进程</strong>。</li>
-<li>setpgrp()函数等价于 setpgid(0, 0)。</li>
-<li>一个进程只能为<strong>它自己或它的子进程设置进程组 ID</strong>，在它的子进程<strong>调用 exec 函数后，它就不能更改该 子进程的进程组 ID 了</strong>。</li>
-</ul>
-<h3 id="会话"><a href="#会话" class="headerlink" title="会话"></a>会话</h3><ul>
-<li><p>会话是一个或多个进程组的集合</p>
-</li>
-<li><p><img src="/../imgs/image-20220121213639860.png" alt="image-20220121213639860"></p>
-</li>
-<li><p>一个会话可包含一个或多个进程组，但只能有一个前台进程组，其它的是后台进程组；每个会话都有一 个会话首领（leader），即创建会话的进程。</p>
-</li>
-<li><p>一个会话可以有控制终端、也可没有控制终端，在有控制终端的情况下也只能连接一个控制终端，这通常是登录到其上的终端设备（在终端登录情况下）或伪终端设备 （譬如通过 SSH 协议网络登录），一个会话中的进程组可被分为一个前台进程组以及一个或多个后台进程 组。</p>
-</li>
-<li><p>会话的首领进程连接一个终端之后，该终端就成为会话的控制终端，与控制终端建立连接的会话首领进 程被称为控制进程；产生在终端上的输入和信号将发送给会话的前台进程组中的所有进程，譬如 Ctrl + C（产 生 SIGINT 信号）、Ctrl + Z（产生 SIGTSTP 信号）、Ctrl + \（产生 SIGQUIT 信号）等等</p>
-</li>
-<li><p>一个进程组由组长进程的 ID 标识，而对于会话来说，<strong>会话的首领进程的进程组 ID 将作为该会话的标 识</strong>，也就是会话 ID（sid），在默认情况下，新创建的进程会继承父进程的会话 ID。通过系统调用 <code>getsid()</code>可 以获取进程的会话 ID</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">getsid</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>使用系统调用 setsid()可以创建一个会话，其函数原型如下所示</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">setsid</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果调用者进程<strong>不是进程组的组长进程</strong>，调用 setsid()<strong>将创建一个新的会话</strong>，<strong>调用者进程是新会话的首 领进程</strong>，同样也是一个新的进程组的组长进程，调用 setsid()创建的会话将没有控制终端。</li>
-</ul>
-<h3 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a>守护进程</h3><ul>
-<li><p>守护进程（Daemon）也称为精灵进程，是运行在后台的一种特殊进程，它独立于控制终端并且周期性 地执行某种任务或等待处理某些事情的发生</p>
-</li>
-<li><p><strong>长期运行。</strong>守护进程是一种生存期很长的一种进程，它们一般在系统启动时开始运行，除非强行终 止，否则直到系统关机都会保持运行。与守护进程相比，普通进程都是在用户登录或运行程序时创 建，在运行结束或用户注销时终止，但守护进程不受用户登录注销的影响，它们将会一直运行着、 直到系统关机。</p>
-</li>
-<li><p><strong>与控制终端脱离</strong>。在 Linux 中，系统与用户交互的界面称为终端，<strong>每一个从终端开始运行的进程都 会依附于这个终端</strong>，这是上一小节给大家介绍的控制终端，也就是会话的控制终端。当<strong>控制终端被 关闭的时候，该会话就会退出</strong>，由<strong>控制终端运行的所有进程都会被终止</strong>，这使得普通进程都是和运 行该进程的终端相绑定的；但守护进程能突破这种限制，它脱离终端并且在后台运行，脱离终端的 目的是为了避免进程在运行的过程中的信息在终端显示并且进程也不会被任何终端所产生的信息 所打断。</p>
-</li>
-<li><p>守护进程 Daemon，通常简称为 d，一般进程名后面带有 d 就表示它是一个守护进程。</p>
-</li>
-</ul>
-<p><strong>创建守护进程的步骤</strong></p>
-<ul>
-<li>创建子进程、终止父进程<ul>
-<li>父进程调用 fork()创建子进程，然后父进程使用 exit()退出，这样做实现了下面几点。第一，如果该守护 进程是作为一条简单地 shell 命令启动，那么父进程终止会让 shell 认为这条命令已经执行完毕。第二，虽然 子进程继承了父进程的进程组ID，但它有自己独立的进程ID，这保证了子进程不是一个进程组的组长进程， 这是下面将要调用 setsid 函数的先决条件！</li>
-</ul>
-</li>
-<li>子进程调用 setsid 创建会话<ul>
-<li>这步是关键，在子进程中调用上一小节给大家介绍的 setsid()函数创建新的会话，由于之前子进程并不 是进程组的组长进程，所以调用 setsid()会使得子进程创建一个新的会话，子进程成为新会话的首领进程， 同样也创建了新的进程组、子进程成为组长进程，此时创建的会话将没有控制终端。所以这里调用 setsid 有 三个作用：让子进程摆脱原会话的控制、让子进程摆脱原进程组的控制和让子进程摆脱原控制终端的控制。 在调用 fork 函数时，子进程继承了父进程的会话、进程组、控制终端等，虽然父进程退出了，但原先 的会话期、进程组、控制终端等并没有改变，因此，那还不是真正意义上使两者独立开来。<strong>setsid 函数能够 使子进程完全独立出来，从而脱离所有其他进程的控制</strong>。</li>
-</ul>
-</li>
-<li>将工作目录更改为根目录<ul>
-<li>子进程是继承了父进程的当前工作目录，由于在进程运行中，当前目录所在的文件系统是不能卸载的， 这对以后使用会造成很多的麻烦。因此通常的做法是让“/”作为守护进程的当前目录，当然也可以指定其 它目录来作为守护进程的工作目录。</li>
-</ul>
-</li>
-<li>重设文件权限掩码 umask<ul>
-<li>文件权限掩码 umask 用于对新建文件的权限位进行屏蔽，在 5.5.5 小节中有介绍。由于使用 fork 函数新 建的子进程继承了父进程的文件权限掩码，这就给子进程使用文件带来了诸多的麻烦。因此，把文件权限掩 码设置为 0，确保子进程有最大操作权限、这样可以大大增强该守护进程的灵活性。设置文件权限掩码的函 数是 umask，通常的使用方法为 umask(0)。</li>
-</ul>
-</li>
-<li>关闭不再需要的文件描述符<ul>
-<li>子进程继承了父进程的所有文件描述符，这些被打开的文件可能永远不会被守护进程（此时守护进程指 的就是子进程，父进程退出、子进程成为守护进程）读或写，但它们一样消耗系统资源，可能导致所在的文 件系统无法卸载，所以必须关闭这些文件，这使得守护进程不再持有从其父进程继承过来的任何文件描述 符。</li>
-</ul>
-</li>
-<li>将文件描述符号为 0、1、2 定位到/dev/null<ul>
-<li>将守护进程的标准输入、标准输出以及标准错误重定向到/dev/null，这使得守护进程的输出无处显示、 也无处从交互式用户那里接收输入。</li>
-</ul>
-</li>
-<li>其它：忽略 SIGCHLD 信号</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pid_t</span> pid;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="comment">/* 创建子进程 */</span></span><br><span class="line">    pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; pid)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;fork error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">0</span> &lt; pid) <span class="comment">//父进</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);      <span class="comment">//直接退出</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment"> *子进程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">    <span class="comment">/* 1.创建新的会话、脱离控制终端 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; setsid())</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;setsid error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 2.设置当前工作目录为根目录 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; chdir(<span class="string">&quot;/&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;chdir error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 3.重设文件权限掩码 umask */</span></span><br><span class="line">    umask(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">/* 4.关闭所有文件描述符 */</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; sysconf(_SC_OPEN_MAX); i++)</span><br><span class="line">        close(i);</span><br><span class="line">    <span class="comment">/* 5.将文件描述符号为 0、1、2 定位到/dev/null */</span></span><br><span class="line">    open(<span class="string">&quot;/dev/null&quot;</span>, O_RDWR);</span><br><span class="line">    dup(<span class="number">0</span>);</span><br><span class="line">    dup(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">/* 6.忽略 SIGCHLD 信号 */</span></span><br><span class="line">    signal(SIGCHLD, SIG_IGN);</span><br><span class="line">    <span class="comment">/* 正式进入到守护进程 */</span></span><br><span class="line">    <span class="keyword">for</span> (;;)</span><br><span class="line">    &#123;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">        <span class="built_in">puts</span>(<span class="string">&quot;守护进程运行中......&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../imgs/image-20220121223837693.png" alt="image-20220121223837693"></p>
-<ul>
-<li><p>可见没有输出，因为输出已经重定向到<code>dev/null</code>了</p>
-</li>
-<li><p>在<code>ps -ajx</code>中看到这个进程</p>
-</li>
-<li><p><img src="/../imgs/image-20220121224001123.png" alt="image-20220121224001123"></p>
-</li>
-<li><p>这个进程可以用<code>kill pid</code>停止</p>
-</li>
-</ul>
-<h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><ul>
-<li>对于有些程序设计来说，程序只能被执行一次，只要该程序没有结束，就无法 再次运行，我们把这种情况称为单例模式运行，多次同时运行并没有意义、甚至还会带来错误！。</li>
-</ul>
-<p><strong>方法：</strong></p>
-<ul>
-<li>通过一个特定的文件存在与否进行判断（进程开始的时候新建一个文件，结束的时候删除）</li>
-<li>文件锁<ul>
-<li>当程序启动之后，首先打开该文件，调用 open 时一般使用 <code>O_WRONLY | O_CREAT </code>标志，当文件不存在则创建该文件，然后尝试去获取文件锁，若是成功，则将程序 的进程号（PID）写入到该文件中，写入后不要关闭文件或解锁（释放文件锁），保证进程一直持有该文件 锁；若是程序获取锁失败，代表程序已经被运行、则退出本次启动。</li>
-<li>通过系统调用 <code>flock()</code>、<code>fcntl()</code>或库函数 <code>lockf()</code>均可实现对文件进行上锁，本小节我们以系统调用flock()为例，系统调用 <code>flock() </code>产生的是咨询锁（建议性锁）、并不能产生强制性锁</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/file.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOCK_FILE <span class="meta-string">&quot;./testApp.pid&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> str[<span class="number">20</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    <span class="comment">/* 打开 lock 文件，如果文件不存在则创建 */</span></span><br><span class="line">    fd = open(LOCK_FILE, O_WRONLY | O_CREAT, <span class="number">0666</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 以非阻塞方式获取文件锁 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == flock(fd, LOCK_EX | LOCK_NB))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fputs</span>(<span class="string">&quot;不能重复执行该程序!\n&quot;</span>, <span class="built_in">stderr</span>);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;程序运行中...&quot;</span>);</span><br><span class="line">    ftruncate(fd, <span class="number">0</span>); <span class="comment">//将文件长度截断为 0</span></span><br><span class="line">    <span class="built_in">sprintf</span>(str, <span class="string">&quot;%d\n&quot;</span>, getpid());</span><br><span class="line">    write(fd, str, <span class="built_in">strlen</span>(str)); <span class="comment">//写入 pid</span></span><br><span class="line">    <span class="keyword">for</span> (;;)</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><img src="/../imgs/image-20220121225414970.png" alt="image-20220121225414970"></p>
-<ul>
-<li>首先打开一个特定的文件，这里只是举例，以当前目录下的 testApp.pid 文件作为特定文件， 以 O_WRONLY | O_CREAT 方式打开，如果文件不存在则创建该文件；打开文件之后<strong>使用 flock 尝试获取文 件锁</strong>，调用 flock()时指定了<strong>互斥锁标志 LOCK_NB</strong>，意味着<strong>同时只能有一个进程拥有该锁</strong>，如果获取锁失败， 表示该程序已经启动了，无需再次执行，然后退出；如果获取锁成功，将进程的 PID 写入到该文件中，<strong>当程 序退出时，会自动解锁、关闭文件</strong>。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2276,14 +2308,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">172</span>
+          <span class="site-state-item-count">173</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">50</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -2320,13 +2352,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">622k</span>
+    <span title="站点总字数">624k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">18:51</span>
+    <span title="站点阅读时长">18:54</span>
 </div>
 
         

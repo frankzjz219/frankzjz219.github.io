@@ -182,6 +182,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/07/02/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%89%E7%A7%8D%E9%81%8D%E5%8E%86%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/02/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%89%E7%A7%8D%E9%81%8D%E5%8E%86%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">二叉树的三种遍历的非递归实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-02 11:58:26" itemprop="dateCreated datePublished" datetime="2022-07-02T11:58:26+08:00">2022-07-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-27 15:48:27" itemprop="dateModified" datetime="2024-04-27T15:48:27+08:00">2024-04-27</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="二叉树的三种遍历的非递归实现"><a href="#二叉树的三种遍历的非递归实现" class="headerlink" title="二叉树的三种遍历的非递归实现"></a>二叉树的三种遍历的非递归实现</h1><h2 id="前序遍历"><a href="#前序遍历" class="headerlink" title="前序遍历"></a>前序遍历</h2><ul>
+<li>主要思路是先将根节点入栈，然后每次循环从栈顶取出元素输出，同时将该元素的<strong>右节点</strong>和<strong>左节点</strong>压入栈中<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">preorderTraversal</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!root)<span class="keyword">return</span> vector&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line">        </span><br><span class="line">        stack&lt;TreeNode*&gt; s;</span><br><span class="line">        s.<span class="built_in">push</span>(root);</span><br><span class="line">        TreeNode* temp;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; ret;</span><br><span class="line">        <span class="keyword">while</span>(!s.<span class="built_in">empty</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            temp = s.<span class="built_in">top</span>();</span><br><span class="line">            s.<span class="built_in">pop</span>();</span><br><span class="line">            ret.<span class="built_in">push_back</span>(temp-&gt;val);</span><br><span class="line">            <span class="keyword">if</span>(temp-&gt;right)s.<span class="built_in">push</span>(temp-&gt;right);</span><br><span class="line">            <span class="keyword">if</span>(temp-&gt;left)s.<span class="built_in">push</span>(temp-&gt;left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h2></li>
+<li>主要思路是新建一个结构体，结构体包括二叉树的节点指针信息和是否被访问过的标记信息，标记默认是<code>false</code><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">nodeStruct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    TreeNode* p; </span><br><span class="line">    <span class="keyword">bool</span> flg; </span><br><span class="line">    <span class="built_in">nodeStruct</span>(TreeNode* ptr):<span class="built_in">p</span>(ptr),<span class="built_in">flg</span>(<span class="literal">false</span>)&#123;&#125;    </span><br><span class="line">    <span class="built_in">nodeStruct</span>(TreeNode* ptr, <span class="keyword">bool</span> flag):<span class="built_in">p</span>(ptr),<span class="built_in">flg</span>(flag)&#123;&#125;   </span><br><span class="line">&#125; nodeS;</span><br></pre></td></tr></table></figure></li>
+<li>每次从栈顶取出一个元素，如果该元素的标记提示被访问过，那么直接将元素输出</li>
+<li>如果该元素没有被访问过，那么现将该元素的访问标记置为<code>true</code>，然后将该元素的右子节点压入栈中，然后将节点自己压入栈中，最后将左子节点压入栈中<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">nodeStruct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    TreeNode* p; </span><br><span class="line">    <span class="keyword">bool</span> flg; </span><br><span class="line">    <span class="built_in">nodeStruct</span>(TreeNode* ptr):<span class="built_in">p</span>(ptr),<span class="built_in">flg</span>(<span class="literal">false</span>)&#123;&#125;    </span><br><span class="line">    <span class="built_in">nodeStruct</span>(TreeNode* ptr, <span class="keyword">bool</span> flag):<span class="built_in">p</span>(ptr),<span class="built_in">flg</span>(flag)&#123;&#125;   </span><br><span class="line">&#125; nodeS;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">inorderTraversal</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!root)<span class="keyword">return</span> vector&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; ret;</span><br><span class="line">        stack&lt;nodeS&gt; s;</span><br><span class="line">        s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(root));</span><br><span class="line">        <span class="function">nodeS <span class="title">temp</span><span class="params">(<span class="literal">NULL</span>)</span></span>;</span><br><span class="line">        <span class="keyword">while</span>(!s.<span class="built_in">empty</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            temp = s.<span class="built_in">top</span>();</span><br><span class="line">            s.<span class="built_in">pop</span>();</span><br><span class="line">            <span class="keyword">if</span>(!temp.flg)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(temp.p-&gt;right)s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(temp.p-&gt;right));</span><br><span class="line">                temp = <span class="built_in">nodeS</span>(temp.p, <span class="literal">true</span>);</span><br><span class="line">                s.<span class="built_in">push</span>(temp);</span><br><span class="line">                <span class="keyword">if</span>(temp.p-&gt;left)s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(temp.p-&gt;left));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ret.<span class="built_in">push_back</span>(temp.p-&gt;val);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>##后序遍历</p>
+<ul>
+<li>结构体方法同上，跟之前的主要区别是针对没有访问过的节点需要<strong>先将自己</strong>压入栈中，然后再将<strong>右节点</strong>和<strong>左节点</strong>压入栈中<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class"><span class="title">stackUnit</span>&#123;</span></span><br><span class="line">    TreeNode* p;</span><br><span class="line">    <span class="keyword">bool</span> flg;</span><br><span class="line">    <span class="built_in">stackUnit</span>(TreeNode* ptr, <span class="keyword">bool</span> flag):<span class="built_in">p</span>(ptr), <span class="built_in">flg</span>(flag)&#123;&#125;</span><br><span class="line">&#125; nodeS;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">postorderTraversal</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!root)<span class="keyword">return</span> vector&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; v;</span><br><span class="line">        stack&lt;nodeS&gt; s;</span><br><span class="line">        s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(root, <span class="literal">false</span>));</span><br><span class="line">        <span class="function">nodeS <span class="title">temp</span><span class="params">(<span class="literal">NULL</span>, <span class="literal">false</span>)</span></span>;</span><br><span class="line">        <span class="keyword">while</span>(!s.<span class="built_in">empty</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            temp = s.<span class="built_in">top</span>();</span><br><span class="line">            s.<span class="built_in">pop</span>();</span><br><span class="line">            <span class="keyword">if</span>(temp.flg)</span><br><span class="line">            &#123;</span><br><span class="line">                v.<span class="built_in">push_back</span>(temp.p-&gt;val);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(temp.p, <span class="literal">true</span>));</span><br><span class="line">                <span class="keyword">if</span>(temp.p-&gt;right)s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(temp.p-&gt;right,<span class="literal">false</span>));</span><br><span class="line">                <span class="keyword">if</span>(temp.p-&gt;left)s.<span class="built_in">push</span>(<span class="built_in">nodeS</span>(temp.p-&gt;left,<span class="literal">false</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/06/29/%E5%88%86%E6%9E%90%E5%9F%BA%E4%BA%8Eepoll%E7%9A%84C-%E9%AB%98%E6%80%A7%E8%83%BDwebServer%E4%BB%A3%E7%A0%81%EF%BC%88%E4%B8%89%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1468,185 +1557,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/03/03/Ubuntu%E9%85%8D%E7%BD%AEVNC%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%BF%9E%E6%8E%A5Windows%E7%94%B5%E8%84%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/03/Ubuntu%E9%85%8D%E7%BD%AEVNC%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%BF%9E%E6%8E%A5Windows%E7%94%B5%E8%84%91/" class="post-title-link" itemprop="url">Ubuntu配置VNC远程桌面连接Windows电脑</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-03 17:54:22" itemprop="dateCreated datePublished" datetime="2022-03-03T17:54:22+08:00">2022-03-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-03-04 15:07:51" itemprop="dateModified" datetime="2024-03-04T15:07:51+08:00">2024-03-04</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Ubuntu配置VNC远程桌面连接Windows电脑"><a href="#Ubuntu配置VNC远程桌面连接Windows电脑" class="headerlink" title="Ubuntu配置VNC远程桌面连接Windows电脑"></a>Ubuntu配置VNC远程桌面连接Windows电脑</h1><ul>
-<li>参考指南<ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/295422718">https://zhuanlan.zhihu.com/p/295422718</a></li>
-</ul>
-</li>
-<li>考虑安装<code>xrdp</code>，通过<code>sudo apt-get install xrdp</code>安装</li>
-<li>安装好之后再安装<code>deconf-editor</code>，也就是<code>sudo apt-get install dconf-editor</code>安装</li>
-<li>在<code>deconf-editor</code>中关闭<strong>org-gnome-desktop-remote-access</strong>下面的<code>requlre-encryption</code>即可</li>
-<li>安装好之后配置vnc服务的开机自启动</li>
-<li>参考这篇博客</li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40723748/article/details/120013808">https://blog.csdn.net/qq_40723748/article/details/120013808</a></li>
-<li>主要就是要在<code>/etc/systemd/user</code>目录下创建一个systemd服务文件, 命名为<code>user-defined.service</code></li>
-<li>这个文件具有固定的格式，如下</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">After=network.service</span><br><span class="line"> </span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/home/&lt;username&gt;/&lt;usershell&gt;.sh</span><br><span class="line">ExecStop=echo &quot;anbox-session-manager is running&quot;</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=default.target</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>其中将<code>username</code>和<code>usershell</code>替换为自己的用户名和新建的脚本</li>
-<li>自己新建的脚本的第一行一定要注意带有<code>#!/bin/bash</code></li>
-<li>这个脚本启动过程中出错的话是不会报错的，比较难debug</li>
-<li>然后使用<code>sudo chmod</code>赋予自己新建的.sh文件和<code>user-defined.service</code>权限</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo chmod 744 ~/test.sh</span><br><span class="line">sudo chmod 664 /etc/systemd/user/user-defined.service</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>然后调用<strong>以下两行</strong>刷新系统服务</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br><span class="line">systemctl --user enable user-defined.service</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果<strong>上述方法不行</strong>的话采用这篇博客的内容<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42390300/article/details/126104299">博客</a></li>
-<li>将service文件创建到<code>/etc/systemd/system/user-defined.service</code></li>
-<li>然后开启服务直接<code>sudo systemctl enable user-defined.service</code>即可，避免报错</li>
-<li>该服务<strong>不可以</strong>简单的用系统的Service跟随Network启动，因为此时<strong>桌面还没有启动</strong>，会导致VNC找不到用户界面而启动失败<h3 id="使用-etc-init-lt-文件名-gt-conf"><a href="#使用-etc-init-lt-文件名-gt-conf" class="headerlink" title="使用/etc/init/&lt;文件名&gt;.conf"></a>使用/etc/init/&lt;文件名&gt;.conf</h3></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_33204522/article/details/116703967">参考</a></li>
-</ul>
-<p>然后使用windows自带的远程桌面连接，在系统<strong>没有登陆</strong>的前提下进行远程桌面，<strong>否则会黑屏</strong></p>
-<ul>
-<li><p><img src="/imgs/image-20220303180321664.png" alt="image-20220303180321664"></p>
-</li>
-<li><p>此处保持设置不变，输入linux的用户名和密码</p>
-</li>
-<li><p>注意，假如卡顿的话可以修改设置为</p>
-</li>
-<li><p>点击最下的显示选项，点击体验，<strong>修改为LAN，会变流畅一些</strong></p>
-</li>
-<li><p><img src="/imgs/image-20220303180359964.png" alt="image-20220303180359964"></p>
-</li>
-<li><p>sudo reboot之后远程主机不需要登陆直接链接即可</p>
-</li>
-<li><p><img src="/imgs/image-20220303181038496.png" alt="image-20220303181038496"></p>
-</li>
-<li><p><img src="/imgs/image-20220303181046174.png" alt="image-20220303181046174"></p>
-</li>
-</ul>
-<h2 id="如果Ubuntu没有自带VNC远程桌面"><a href="#如果Ubuntu没有自带VNC远程桌面" class="headerlink" title="如果Ubuntu没有自带VNC远程桌面"></a>如果Ubuntu没有自带VNC远程桌面</h2><h3 id="Ubuntu端"><a href="#Ubuntu端" class="headerlink" title="Ubuntu端"></a>Ubuntu端</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/xujgcn/article/details/121165902">参考</a></li>
-<li>安装x11vnc <code>sudo apt-get install x11vnc</code></li>
-<li>然后设置密码 <code>x11vnc -storepasswd</code></li>
-<li>将其保存到<code>~/.vnc/passwd</code>之后即可</li>
-<li>给予文件<code>~/.vnc/passwd</code>全部权限（777）即可不需要sudo也可以使用x11vnc的密码<ul>
-<li><code>x11vnc -forever -shared -rfbauth ~/.vnc/passwd -rfbport 5901</code></li>
-<li>上述语句中指定了端口为5901，也可以自己修改为合适的端口<h4 id="Nvidia-Jetson设备"><a href="#Nvidia-Jetson设备" class="headerlink" title="Nvidia Jetson设备"></a>Nvidia Jetson设备</h4></li>
-</ul>
-</li>
-<li><a target="_blank" rel="noopener" href="https://developer.nvidia.com/embedded/learn/tutorials/vnc-setup">参考</a><h3 id="Windows端"><a href="#Windows端" class="headerlink" title="Windows端"></a>Windows端</h3></li>
-<li>VNCViewer官网下载软件 <a target="_blank" rel="noopener" href="https://www.realvnc.com/en/connect/download/viewer/">此处</a></li>
-<li>找到对应的端口链接即可</li>
-<li>解决部分Windows防火墙导致的904问题<a target="_blank" rel="noopener" href="https://www.anyviewer.cn/how-to/remote-desktop-0x904-2111.html">参考</a></li>
-<li><img src="/imgs/29dbdd6c6fe84707161c4726db07c85b47f0f911e89a569fec13147e7b1144c2.png" alt="picture 1"> <h2 id="sudo不需要密码"><a href="#sudo不需要密码" class="headerlink" title="sudo不需要密码"></a>sudo不需要密码</h2></li>
-<li><a target="_blank" rel="noopener" href="https://zhidao.baidu.com/question/1312297028274411899.html">参考</a><h2 id="Linux执行一次性任务和循环任务"><a href="#Linux执行一次性任务和循环任务" class="headerlink" title="Linux执行一次性任务和循环任务"></a>Linux执行一次性任务和循环任务</h2></li>
-<li>一次性任务参考<code>at</code></li>
-<li>循环任务使用<code>cron</code></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43696529/article/details/120239947">参考</a></li>
-<li><a target="_blank" rel="noopener" href="https://haodiyw.com/i/124398.html">cron参考</a></li>
-<li><a target="_blank" rel="noopener" href="https://haodiyw.com/i/124398.html">at参考</a></li>
-<li>查看Linux的任务(service)：<ul>
-<li><code>systemctl -l</code><h3 id="实现Linux开机延时启动"><a href="#实现Linux开机延时启动" class="headerlink" title="实现Linux开机延时启动"></a>实现Linux开机延时启动</h3></li>
-</ul>
-</li>
-<li>at非交互式添加任务<a target="_blank" rel="noopener" href="https://www.likecs.com/show-306999776.html">参考</a></li>
-<li><code>echo &quot;需要执行的shell命令&quot; | at 时间</code></li>
-<li>一个可能的思路：<ul>
-<li>在<code>user-defined.service</code>中执行一个shell脚本（注意第一行必须是<code>#!/bin/bash</code>） ，这个脚本执行一个非交互式向at添加命令的语句（带有一定的延迟），但是这种方法可能并不成功，因为at的时间有一些问题</li>
-<li>之所以不直接把这句话放在service里执行是<strong>可能会影响<code>echo</code>的解析</strong>导致不能正确执行</li>
-<li>总之不建议在service里直接执行脚本</li>
-</ul>
-</li>
-<li><strong>但是x11vnc似乎并不支持开机自带启动，否则会导致权限问题（即使密码文件已经给了777权限</strong><ul>
-<li><a target="_blank" rel="noopener" href="https://jiuaidu.com/jianzhan/1008052/">可能的解决方案</a></li>
-</ul>
-</li>
-<li><a target="_blank" rel="noopener" href="https://zhidao.baidu.com/question/1312297028274411899.html">修改参考</a></li>
-<li>验证是否启动的方法<ul>
-<li><code>sudo netstat -an | grep &lt;端口号&gt;</code></li>
-<li><code>ps -aux|grep vnc</code><h2 id="Linux的target"><a href="#Linux的target" class="headerlink" title="Linux的target"></a>Linux的target</h2></li>
-</ul>
-</li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_33939843/article/details/92236953">参考</a></li>
-<li>查看依赖关系<code>systemctl list-dependencies multi-user.target</code></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1718,14 +1628,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">172</span>
+          <span class="site-state-item-count">173</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">50</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1762,13 +1672,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">622k</span>
+    <span title="站点总字数">624k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">18:51</span>
+    <span title="站点阅读时长">18:54</span>
 </div>
 
         
