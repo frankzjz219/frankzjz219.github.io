@@ -20,7 +20,7 @@ try {
     # Execute Hexo commands
     Invoke-HexoCommand "hexo clean"
     Invoke-HexoCommand "hexo g --silent"
-    Invoke-HexoCommand "hexo d --silent"
+    Invoke-HexoCommand "hexo d"
 
     # Print the new working directory to confirm
     Write-Host "Current working directory is now: $(Get-Location)"
