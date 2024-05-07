@@ -213,7 +213,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-07 11:52:33" itemprop="dateModified" datetime="2024-05-07T11:52:33+08:00">2024-05-07</time>
+                <time title="修改时间：2024-05-07 12:32:53" itemprop="dateModified" datetime="2024-05-07T12:32:53+08:00">2024-05-07</time>
               </span>
 
           <br>
@@ -222,7 +222,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>20k</span>
+              <span>21k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -781,7 +781,7 @@
 <li>是一种故障，可以被修复的</li>
 <li>是一种内中断</li>
 </ul>
-<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><ul>
+<h3 id="CPU高速缓存"><a href="#CPU高速缓存" class="headerlink" title="CPU高速缓存"></a>CPU高速缓存</h3><ul>
 <li><p>在一个多核CPU中，每个核心都有自己的一级（L1，几十几百kb）和二级（L2几MB）缓存，这些缓存只能被相应的核心访问。这种设计可以使每个核心快速访问其私有缓存中的数据，而不需要与其他核心争用资源。然而，这也意味着如果一个核心需要访问另一个核心的数据，它必须通过更慢的通道（比如主内存或者其他某种形式的互连）来获取。</p>
 </li>
 <li><p>此外，多核CPU通常还有一个三级（L3几十MB）缓存，这是一个共享缓存，所有的核心都可以访问。这使得一个核心可以相对快速地访问另一个核心的数据，但是这也意味着核心之间可能会发生资源争用。</p>
@@ -789,7 +789,13 @@
 <li><p>MESI（修改、独占、共享、无效）：这是最常见的缓存一致性协议之一。每个缓存行可以处于四种状态之一：修改（Modified）、独占（Exclusive）、共享（Shared）或无效（Invalid）。当一个处理器需要写入数据时，它必须首先获取该数据的独占访问权限，这意味着所有其他处理器的相应缓存行都必须变为无效状态。</p>
 </li>
 </ul>
-<h5 id="如何进行地址空间到物理内存的映射？"><a href="#如何进行地址空间到物理内存的映射？" class="headerlink" title="如何进行地址空间到物理内存的映射？"></a>如何进行地址空间到物理内存的映射？</h5><p><strong>内存管理单元</strong>（MMU）管理着逻辑地址和物理地址的转换，其中的页表（Page table）存储着页（逻辑地址）和页框（物理内存空间）的映射表，页表中还包含包含有效位（是在内存还是磁盘）、访问位（是否被访问过）、修改位（内存中是否被修改过）、保护位（只读还是可读写）。逻辑地址：页号+页内地址（偏移）；每个进程一个页表，放在内存，页表起始地址在PCB/寄存器中。</p>
+<h3 id="伪共享"><a href="#伪共享" class="headerlink" title="伪共享"></a>伪共享</h3><ul>
+<li>伪共享（False Sharing）是多线程编程中的一个问题，它发生在多个线程并发地访问同一缓存行（Cache Line）中的不同数据时。尽管这些线程访问的数据在逻辑上是独立的，但由于它们位于同一缓存行中，CPU会将它们视为“共享”的，这可能导致性能显著下降</li>
+<li>一个线程访问缓存行之前，需要先获取缓存行的所有权，并发访问会导致并行性能下降</li>
+<li>每次缓存行的所有权改变时，CPU都必须将缓存行的内容写回到主内存，并从主内存中加载新的内容</li>
+<li>避免伪共享，可以尽量确保<strong>并发访问的数据位于不同的缓存行中</strong>。例如，可以通过添加<strong>填充</strong>（Padding）来调整数据的布局</li>
+</ul>
+<h3 id="如何进行地址空间到物理内存的映射？"><a href="#如何进行地址空间到物理内存的映射？" class="headerlink" title="如何进行地址空间到物理内存的映射？"></a>如何进行地址空间到物理内存的映射？</h3><p><strong>内存管理单元</strong>（MMU）管理着逻辑地址和物理地址的转换，其中的页表（Page table）存储着页（逻辑地址）和页框（物理内存空间）的映射表，页表中还包含包含有效位（是在内存还是磁盘）、访问位（是否被访问过）、修改位（内存中是否被修改过）、保护位（只读还是可读写）。逻辑地址：页号+页内地址（偏移）；每个进程一个页表，放在内存，页表起始地址在PCB/寄存器中。</p>
 <h3 id="有哪些页面置换算法？"><a href="#有哪些页面置换算法？" class="headerlink" title="有哪些页面置换算法？"></a>有哪些页面置换算法？</h3><p>在程序运行过程中，如果要访问的页面不在内存中，就发生缺页中断从而将该页调入内存中。此时如果内存已无空闲空间，系统必须从内存中调出一个页面到磁盘中来腾出空间。页面置换算法的主要目标是使页面置换频率最低（也可以说缺页率最低）。</p>
 <ul>
 <li><strong>最佳页面置换算法</strong>OPT（Optimal replacement algorithm）：置换以后不需要或者最远的将来才需要的页面，是一种理论上的算法，是最优策略但是不可能实现</li>
@@ -2158,7 +2164,7 @@ UDP接收方收到报文后，不需要给出任何确认
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">625k</span>
+    <span title="站点总字数">626k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
