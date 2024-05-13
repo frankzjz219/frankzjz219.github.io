@@ -550,7 +550,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-13 21:13:24" itemprop="dateModified" datetime="2024-05-13T21:13:24+08:00">2024-05-13</time>
+                <time title="修改时间：2024-05-13 21:19:14" itemprop="dateModified" datetime="2024-05-13T21:19:14+08:00">2024-05-13</time>
               </span>
 
           <br>
@@ -690,7 +690,11 @@
 <li><img src="/imgs/6ef88985eeca2da2eed21858d7725f50a80216dc31949964cbb977c125b8dd3e.png" alt="picture 4">  <ul>
 <li><strong>RT的门限</strong>：上面一条设置的是实时进程在<span style="color:#00B0F0"><strong>一个sched_rt_period中能运行的最多时间是sched_rt_runtime</strong></span></li>
 <li>修改上述门限的方法：</li>
-<li>直接消除门限：<code>sudo sysctl -w kernel.sched_rt_r untime_us=-1</code></li>
+<li><span style="color:#00F0F0">直接消除门限：<code>sudo sysctl -w kernel.sched_rt_runtime_us=-1</code></span><ul>
+<li><img src="/imgs/c776d0d11cf3b96d61bd412282d8dec3f0a72ff80dea670899ad6453e4d18547.png" alt="picture 21">  </li>
+<li>看得出解除门限之后确实<strong>CPU使用不受限制了</strong></li>
+</ul>
+</li>
 <li><code>sudo sh -c &#39;echo &quot;1000000&quot; &gt; /proc/sys/kernel/sched_rt_runtime_us&#39;</code></li>
 <li>因此，在一些情况下猛然将一个进程从普通进程转换为实时进程可能导致<strong>进程运行速度下降</strong>，因为实时进程的运行时间比率是有限的，但是<strong>普通进程没有这个限制</strong></li>
 <li>但是可能会导致<strong>系统运行明显卡顿</strong>，因为实时进程的优先级太高了，比很多系统进程优先级都高</li>
