@@ -550,7 +550,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-03-05 16:28:44" itemprop="dateModified" datetime="2024-03-05T16:28:44+08:00">2024-03-05</time>
+                <time title="修改时间：2024-05-13 21:13:24" itemprop="dateModified" datetime="2024-05-13T21:13:24+08:00">2024-05-13</time>
               </span>
 
           <br>
@@ -559,7 +559,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.8k</span>
+              <span>5.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -688,14 +688,21 @@
 <li>普通进程优先级高不会形成对低优先级的绝对优势</li>
 <li>前面<strong>不会堵着</strong>后面</li>
 <li><img src="/imgs/6ef88985eeca2da2eed21858d7725f50a80216dc31949964cbb977c125b8dd3e.png" alt="picture 4">  <ul>
-<li><strong>RT的门限</strong>：上面一条设置的是实时进程在一个sched_rt_period中能运行的最多时间是sched_rt_runtime</li>
+<li><strong>RT的门限</strong>：上面一条设置的是实时进程在<span style="color:#00B0F0"><strong>一个sched_rt_period中能运行的最多时间是sched_rt_runtime</strong></span></li>
 <li>修改上述门限的方法：</li>
+<li>直接消除门限：<code>sudo sysctl -w kernel.sched_rt_r untime_us=-1</code></li>
 <li><code>sudo sh -c &#39;echo &quot;1000000&quot; &gt; /proc/sys/kernel/sched_rt_runtime_us&#39;</code></li>
 <li>因此，在一些情况下猛然将一个进程从普通进程转换为实时进程可能导致<strong>进程运行速度下降</strong>，因为实时进程的运行时间比率是有限的，但是<strong>普通进程没有这个限制</strong></li>
 <li>但是可能会导致<strong>系统运行明显卡顿</strong>，因为实时进程的优先级太高了，比很多系统进程优先级都高</li>
-<li>RT类型的进程应该尽可能的小<h3 id="CFS调度算法（也就是所谓的OTHER调度算法）"><a href="#CFS调度算法（也就是所谓的OTHER调度算法）" class="headerlink" title="CFS调度算法（也就是所谓的OTHER调度算法）"></a>CFS调度算法（也就是所谓的OTHER调度算法）</h3></li>
+<li><strong>RT进程创建的线程也是RT的</strong></li>
+<li>RT类型的进程应该尽可能的小<h3 id="Linux系统的实时进程"><a href="#Linux系统的实时进程" class="headerlink" title="Linux系统的实时进程"></a>Linux系统的实时进程</h3></li>
 </ul>
 </li>
+<li>使用命令<code>ps -eo pid,rtprio,cmd</code>可以查看系统中所有具有实时优先级的进程</li>
+<li>非实时进程没有实时优先级，因此是<code>-</code>，实时进程则会显示实时优先级</li>
+<li><img src="/imgs/2f730c031808bd98d1d94c3cfac71dc7f94da3e28371b3e4024330273bca0d59.png" alt="picture 20">  </li>
+<li>但是系统中也有一些其他自身的实时进程，比如<code>/usr/libexec/tracker-miner-fs-3</code>优先级是0，<code>irq/24-pciehp</code>，<code>watchdogd</code>, <code>idle_inject</code>等的实时优先级是50，<code>migration/9</code>等是99</li>
+<li>不建议超过50，否则可能导致看门狗进程无法正常运行，使得系统崩溃<h3 id="CFS调度算法（也就是所谓的OTHER调度算法）"><a href="#CFS调度算法（也就是所谓的OTHER调度算法）" class="headerlink" title="CFS调度算法（也就是所谓的OTHER调度算法）"></a>CFS调度算法（也就是所谓的OTHER调度算法）</h3></li>
 <li>针对<strong>非实时进程</strong>的调度算法，<strong>实时进程的优先级是大于这些进程的</strong></li>
 <li>追求的是每个进程的vruntime接近</li>
 <li><strong>线程才有nice，线程是调度单位</strong>，进程资源分配单位（不包括CPU）</li>
@@ -1831,7 +1838,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">18:57</span>
+    <span title="站点阅读时长">18:58</span>
 </div>
 
         
