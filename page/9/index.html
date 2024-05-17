@@ -182,6 +182,111 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/09/03/%E6%9C%89%E5%BA%8F%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/03/%E6%9C%89%E5%BA%8F%E8%A1%A8/" class="post-title-link" itemprop="url">有序表</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-03 10:06:15" itemprop="dateCreated datePublished" datetime="2022-09-03T10:06:15+08:00">2022-09-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-27 15:48:27" itemprop="dateModified" datetime="2024-04-27T15:48:27+08:00">2024-04-27</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>308</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="有序表的实现"><a href="#有序表的实现" class="headerlink" title="有序表的实现"></a>有序表的实现</h2><ul>
+<li>底层：<ul>
+<li>红黑树</li>
+<li>AVL树</li>
+<li>SB树</li>
+<li>跳表</li>
+</ul>
+</li>
+<li>时间复杂度：O(log(N)) </li>
+<li>红黑树、AVL树、SB树是<em>平衡搜索二叉树</em><h3 id="搜索二叉树的插入和删除"><a href="#搜索二叉树的插入和删除" class="headerlink" title="搜索二叉树的插入和删除"></a>搜索二叉树的插入和删除</h3></li>
+<li>插入直接按照大小分支插入即可</li>
+<li>假如没有子节点的节点直接删除即可</li>
+<li>假如删除的节点只有一个孩子节点<ul>
+<li>直接让父节点的指针指向唯一的孩子即可</li>
+</ul>
+</li>
+<li>左右双全：<ul>
+<li>用左树最右的节点或者是右树最左的节点</li>
+<li>这样的节点必然不是两个孩子的节点</li>
+<li>先将这个节点的子节点（假如存在）移到这个节点原来的位置</li>
+<li>然后将这个节点移到被删除的具有两个孩子的节点的位置<h3 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h3></li>
+</ul>
+</li>
+<li>防止因为用户数据输入顺序的原因导致树左右不平衡使得搜索的时间复杂度上升</li>
+<li>左树和右树的体量差不多大</li>
+<li>AVL树在增删结点的时候会从这个节点的父节点开始向上查每个节点的平衡性</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/08/30/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1248,112 +1353,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/08/26/%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%9B%B8%E5%85%B3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/26/%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%9B%B8%E5%85%B3/" class="post-title-link" itemprop="url">并查集相关</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-26 20:52:15" itemprop="dateCreated datePublished" datetime="2022-08-26T20:52:15+08:00">2022-08-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-27 15:48:27" itemprop="dateModified" datetime="2024-04-27T15:48:27+08:00">2024-04-27</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>8 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://programmercarl.com/%E5%9B%BE%E8%AE%BA%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80.html#%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF">参考链接</a></li>
-<li>注意，实现的功能是添加<strong>边</strong>，将一条边两端的两个元素归为一个组合中的两个元素</li>
-<li>在实现 find 函数的过程中，我们知道，通过递归的方式，不断获取father数组下标对应的数值，最终找到这个集合的根</li>
-<li>在递归的过程中，让 father[u] 接住 递归函数 find(father[u]) 的返回结果</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> n = <span class="number">1005</span>; <span class="comment">// n根据题目中节点数量而定，一般比节点数量大一点就好</span></span><br><span class="line">vector&lt;<span class="keyword">int</span>&gt; father = vector&lt;<span class="keyword">int</span>&gt; (n, <span class="number">0</span>); <span class="comment">// C++里的一种数组结构</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 并查集初始化</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        father[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 并查集里寻根的过程</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> u)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(u != father[u]) <span class="comment">// 如果自己不是根节点</span></span><br><span class="line">    &#123;</span><br><span class="line">		<span class="comment">// 将自己的根节点直接改为最顶的根节点</span></span><br><span class="line">        father[u] = <span class="built_in">find</span>(father[u]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> father[u];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 判断 u 和 v是否找到同一个根</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isSame</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">    u = <span class="built_in">find</span>(u);</span><br><span class="line">    v = <span class="built_in">find</span>(v);</span><br><span class="line">    <span class="keyword">return</span> u == v;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将v-&gt;u 这条边加入并查集</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">join</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">    u = <span class="built_in">find</span>(u); <span class="comment">// 寻找u的根</span></span><br><span class="line">    v = <span class="built_in">find</span>(v); <span class="comment">// 寻找v的根</span></span><br><span class="line">    <span class="keyword">if</span> (u == v) <span class="keyword">return</span> ; <span class="comment">// 如果发现根相同，则说明在一个集合，不用两个节点相连直接返回</span></span><br><span class="line">    father[v] = u;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Leetcode-1971-寻找图中是否存在路径"><a href="#Leetcode-1971-寻找图中是否存在路径" class="headerlink" title="Leetcode 1971. 寻找图中是否存在路径"></a>Leetcode 1971. 寻找图中是否存在路径</h2><ul>
-<li>此题的原理就是将所有的边加入并查集，最后查找二者是否对应同一个祖先<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> n = <span class="number">200005</span>; <span class="comment">// 节点数量 20000</span></span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; father = vector&lt;<span class="keyword">int</span>&gt; (n, <span class="number">0</span>); <span class="comment">// C++里的一种数组结构</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 并查集初始化</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123; father[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 并查集里寻根的过程</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> u)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> u == father[u] ? u : father[u] = <span class="built_in">find</span>(father[u]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 判断 u 和 v是否找到同一个根</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isSame</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">        u = <span class="built_in">find</span>(u);</span><br><span class="line">        v = <span class="built_in">find</span>(v);</span><br><span class="line">        <span class="keyword">return</span> u == v;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将v-&gt;u 这条边加入并查集</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">join</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">        u = <span class="built_in">find</span>(u); <span class="comment">// 寻找u的根</span></span><br><span class="line">        v = <span class="built_in">find</span>(v); <span class="comment">// 寻找v的根</span></span><br><span class="line">        <span class="keyword">if</span> (u == v) <span class="keyword">return</span> ; <span class="comment">// 如果发现根相同，则说明在一个集合，不用两个节点相连直接返回</span></span><br><span class="line">        father[v] = u;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">validPath</span><span class="params">(<span class="keyword">int</span> n, vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; edges, <span class="keyword">int</span> source, <span class="keyword">int</span> destination)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">init</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; edges.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            <span class="built_in">join</span>(edges[i][<span class="number">0</span>], edges[i][<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">isSame</span>(source, destination);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Leetcode-684-冗余连接"><a href="#Leetcode-684-冗余连接" class="headerlink" title="Leetcode 684. 冗余连接"></a>Leetcode 684. 冗余连接</h2><ul>
-<li>此题同样是使用并查集</li>
-<li>主要是在插入之前检测是否边两端的节点已经是一个集合中的了</li>
-<li>如果不是的话就插入，是的话说明边是冗余的<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> n = <span class="number">1005</span>; <span class="comment">// 节点数量3 到 1000</span></span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; father = vector&lt;<span class="keyword">int</span>&gt; (n, <span class="number">0</span>); <span class="comment">// C++里的一种数组结构</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 并查集初始化</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            father[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 并查集里寻根的过程</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> u)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> u == father[u] ? u : father[u] = <span class="built_in">find</span>(father[u]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 判断 u 和 v是否找到同一个根</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isSame</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">        u = <span class="built_in">find</span>(u);</span><br><span class="line">        v = <span class="built_in">find</span>(v);</span><br><span class="line">        <span class="keyword">return</span> u == v;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 将v-&gt;u 这条边加入并查集</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">join</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">        u = <span class="built_in">find</span>(u); <span class="comment">// 寻找u的根</span></span><br><span class="line">        v = <span class="built_in">find</span>(v); <span class="comment">// 寻找v的根</span></span><br><span class="line">        <span class="keyword">if</span> (u == v) <span class="keyword">return</span> ; <span class="comment">// 如果发现根相同，则说明在一个集合，不用两个节点相连直接返回</span></span><br><span class="line">        father[v] = u;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">findRedundantConnection</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; edges)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">init</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; edges.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">isSame</span>(edges[i][<span class="number">0</span>], edges[i][<span class="number">1</span>])) <span class="keyword">return</span> edges[i];</span><br><span class="line">            <span class="keyword">else</span> <span class="built_in">join</span>(edges[i][<span class="number">0</span>], edges[i][<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> &#123;&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="最小生成树问题"><a href="#最小生成树问题" class="headerlink" title="最小生成树问题"></a>最小生成树问题</h2><ul>
-<li>此题是找能将所有点联通的最小代价的所有路径</li>
-<li>使用kruskal算法<ul>
-<li>初始化一个并查集，最开始每个节点都是独立的</li>
-<li>将所有路径加入一个代价从小到大的最小堆，每次取出一个路径</li>
-<li>如果路径两端的点在一个集合中，则忽略，如果不在，则该路径是必须的路径，加入需要的路径集合中并且加入总代价中<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line">vector&lt;<span class="keyword">int</span>&gt; father;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">edge</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> start;</span><br><span class="line">    <span class="keyword">int</span> end;</span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> u)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(u != father[u])</span><br><span class="line">    &#123;</span><br><span class="line">        father[u] = <span class="built_in">find</span>(father[u]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> father[u];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isSame</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">find</span>(u) == <span class="built_in">find</span>(v);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">join</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    u = <span class="built_in">find</span>(u);</span><br><span class="line">    v = <span class="built_in">find</span>(v);</span><br><span class="line">    <span class="keyword">if</span>(u == v)<span class="keyword">return</span>;</span><br><span class="line">    father[v] = u;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n, e;</span><br><span class="line">    cin&gt;&gt;n&gt;&gt;e;</span><br><span class="line">    father = vector&lt;<span class="keyword">int</span>&gt;(n+<span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span> ;i&lt;=n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        father[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">auto</span> cmp = [](<span class="keyword">const</span> edge&amp; a, <span class="keyword">const</span> edge&amp; b)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> a.val &gt; b.val;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// int conned = 1;</span></span><br><span class="line">    priority_queue&lt;edge, vector&lt;edge&gt;, <span class="keyword">decltype</span>(cmp)&gt; <span class="built_in">pq</span>(cmp);</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">edge</span> <span class="title">tmp</span>;</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;e; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        cin&gt;&gt;tmp.start&gt;&gt;tmp.end&gt;&gt;tmp.val;</span><br><span class="line">        pq.<span class="built_in">push</span>(tmp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(pq.<span class="built_in">size</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        tmp = pq.<span class="built_in">top</span>();</span><br><span class="line">        <span class="comment">// cout&lt;&lt;tmp.val&lt;&lt;endl;</span></span><br><span class="line">        pq.<span class="built_in">pop</span>();</span><br><span class="line">        <span class="keyword">if</span>(!<span class="built_in">isSame</span>(tmp.start, tmp.end))</span><br><span class="line">        &#123;</span><br><span class="line">            sum+=tmp.val;</span><br><span class="line">            <span class="built_in">join</span>(tmp.start, tmp.end);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;sum&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h2 id="41-岛屿数量（第四期模拟笔试）"><a href="#41-岛屿数量（第四期模拟笔试）" class="headerlink" title="41. 岛屿数量（第四期模拟笔试）"></a>41. 岛屿数量（第四期模拟笔试）</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://kamacoder.com/problempage.php?pid=1041">链接</a></li>
-<li>此题是标准的并查集问题<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; father, <span class="keyword">int</span> u)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(u!=father[u])</span><br><span class="line">    &#123;</span><br><span class="line">        father[u] = <span class="built_in">find</span>(father, father[u]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> father[u];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isSame</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v, vector&lt;<span class="keyword">int</span>&gt;&amp; father)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">find</span>(father, u) == <span class="built_in">find</span>(father, v);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">join</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; father, <span class="keyword">int</span> u, <span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    u = <span class="built_in">find</span>(father, u);</span><br><span class="line">    v = <span class="built_in">find</span>(father, v);</span><br><span class="line">    <span class="keyword">if</span>(u == v)<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">else</span> father[v] = u;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m, n, k;</span><br><span class="line">    cin&gt;&gt;m&gt;&gt;n&gt;&gt;k;</span><br><span class="line">    vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">map</span>(m, vector&lt;<span class="keyword">int</span>&gt;(n, <span class="number">0</span>));</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">father</span><span class="params">(m*n, <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;m*n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        father[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> a, b;</span><br><span class="line">    <span class="keyword">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;k; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        cin&gt;&gt;a&gt;&gt;b;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(a&gt;=m || b&gt;=n || a&lt;<span class="number">0</span> || b&lt;<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            cout&lt;&lt;cnt&lt;&lt;<span class="string">&#x27; &#x27;</span>;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!map[a][b]) ++cnt;</span><br><span class="line">        map[a][b] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">bool</span> tmp = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(a&gt;<span class="number">0</span> &amp;&amp; map[a<span class="number">-1</span>][b])</span><br><span class="line">        &#123;</span><br><span class="line">            tmp = <span class="built_in">join</span>(father, (a<span class="number">-1</span>)*m+b, a*m+b);</span><br><span class="line">            cnt-=tmp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(b&gt;<span class="number">0</span> &amp;&amp; map[a][b<span class="number">-1</span>])</span><br><span class="line">        &#123;</span><br><span class="line">            tmp = <span class="built_in">join</span>(father, (a*m+b<span class="number">-1</span>), a*m+b);</span><br><span class="line">            cnt-=tmp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(a&lt;m<span class="number">-1</span> &amp;&amp; map[a+<span class="number">1</span>][b])</span><br><span class="line">        &#123;</span><br><span class="line">            tmp = <span class="built_in">join</span>(father, (a+<span class="number">1</span>)*m+b, a*m+b);</span><br><span class="line">            cnt-=tmp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(b&lt;n<span class="number">-1</span> &amp;&amp; map[a][b+<span class="number">1</span>])</span><br><span class="line">        &#123;</span><br><span class="line">            tmp =<span class="built_in">join</span>(father, a*m+b+<span class="number">1</span>, a*m+b);</span><br><span class="line">            cnt-=tmp;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;cnt&lt;&lt;<span class="string">&#x27; &#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1425,14 +1424,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">175</span>
+          <span class="site-state-item-count">176</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">50</span>
+        <span class="site-state-item-count">51</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1469,13 +1468,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">629k</span>
+    <span title="站点总字数">630k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:04</span>
+    <span title="站点阅读时长">19:05</span>
 </div>
 
         

@@ -182,6 +182,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/05/17/Ubuntu%E8%AF%BB%E5%8F%96PS4%E6%89%8B%E6%9F%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/05/17/Ubuntu%E8%AF%BB%E5%8F%96PS4%E6%89%8B%E6%9F%84/" class="post-title-link" itemprop="url">Ubuntu读取PS4手柄</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-05-17 22:32:52 / 修改时间：22:36:28" itemprop="dateCreated datePublished" datetime="2024-05-17T22:32:52+08:00">2024-05-17</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>197</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><ul>
+<li>使用bluetoothctl工具</li>
+<li>命令行敲击之后，输入<code>power on</code></li>
+<li><code>agent on</code></li>
+<li><code>default-agent</code></li>
+<li><code>scan on</code></li>
+<li>找到名字（最右边一列）中带有<code>Wireless Controller</code>字样的设备</li>
+<li>与之MAC地址配对<code>pair XX:XX:XX:XX:XX:XX</code></li>
+<li>然后<code>connect XX:XX:XX:XX:XX:XX</code><h2 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h2></li>
+<li>使用<code>sudo evtest</code>查看手柄状态</li>
+<li><img src="/imgs/b4827177c2d2e372721a16a464cb14d24b1967eeffb9ab7e9219c5854eb6a07f.png" alt="picture 0">  </li>
+<li>6是触控板，8是按钮（不包括左边的四个方向键）</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/05/15/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88%E9%A2%98%E7%9B%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1126,128 +1211,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/01/26/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%EF%BC%88%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/26/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%EF%BC%88%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%89/" class="post-title-link" itemprop="url">背包问题（动态规划）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-01-26 21:36:09" itemprop="dateCreated datePublished" datetime="2024-01-26T21:36:09+08:00">2024-01-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-27 15:41:25" itemprop="dateModified" datetime="2024-04-27T15:41:25+08:00">2024-04-27</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>6.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>11 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Leetcode-416-分割等和子集"><a href="#Leetcode-416-分割等和子集" class="headerlink" title="Leetcode 416. 分割等和子集"></a>Leetcode 416. 分割等和子集</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.programmercarl.com/%E8%83%8C%E5%8C%85%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%8001%E8%83%8C%E5%8C%85-2.html">背包原理教程</a></li>
-<li>此题实际上就是使用数组的元素作为物品，数组元素本身的大小就是价值，讨论是否能使用数组中的元素凑出数组大小一半的值</li>
-<li>使用的是01背包，滚动数组即可<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">canPartition</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (n &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>, maxNum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; num : nums) &#123;</span><br><span class="line">            sum += num;</span><br><span class="line">            maxNum = <span class="built_in">max</span>(maxNum, num);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (sum &amp; <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> target = sum / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (maxNum &gt; target) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">bool</span>&gt; <span class="title">dp</span><span class="params">(target + <span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        dp[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; num : nums) &#123;</span><br><span class="line">            <span class="comment">// int num = nums[i];</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = target; j &gt;= num; --j) &#123;</span><br><span class="line">                dp[j] = dp[j]|dp[j - num];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[target];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Leetcode-1049-最后一块石头重量-II"><a href="#Leetcode-1049-最后一块石头重量-II" class="headerlink" title="Leetcode 1049. 最后一块石头重量 II"></a>Leetcode 1049. 最后一块石头重量 II</h2><ul>
-<li>主要思路还是背包问题，只不过此时的背包容量和装的物品的价值<strong>都是石头的重量</strong></li>
-<li><u>注意内存循环必须从后往前遍历，否则会导致前面被添加过的物品被连续重复添加</u></li>
-<li>外层循环的意思是使用到的石头是<code>0</code>-<code>i</code>个，内层的意思是石头<u>总重不超过某个值的时候的最大总重是多少</u><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lastStoneWeightII</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; stones)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; i:stones)sum+=i;</span><br><span class="line">        <span class="keyword">int</span> target = sum/<span class="number">2</span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">maxArr</span><span class="params">(target+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;stones.<span class="built_in">size</span>(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> wi = stones[i];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = target; j&gt;=wi; --j)</span><br><span class="line">            &#123;</span><br><span class="line">                maxArr[j] = <span class="built_in">max</span>(maxArr[j], maxArr[j-wi]+wi);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum - (maxArr[target]*<span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Leetcode-474-一和零"><a href="#Leetcode-474-一和零" class="headerlink" title="Leetcode 474. 一和零"></a>Leetcode 474. 一和零</h2><ul>
-<li>此题是一个递推问题，做题方式类似于背包法</li>
-<li>遍历同样是外层循环指定此时能使用的字符串的最大index</li>
-<li>内层循环从已经可达的位置往外递推，类似于广度优先搜索<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// int maxLen;</span></span><br><span class="line">    vector&lt;vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&gt; lenMap;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findMaxForm</span><span class="params">(vector&lt;string&gt;&amp; strs, <span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        vector&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; arr;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; i: strs)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> c0 = <span class="number">0</span>, c1 = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; a:i)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(a == <span class="string">&#x27;0&#x27;</span>)++c0;</span><br><span class="line">                <span class="keyword">else</span> ++c1;</span><br><span class="line">            &#125;</span><br><span class="line">            arr.<span class="built_in">push_back</span>(pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;(c0, c1));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">map</span>(m+<span class="number">1</span>, vector&lt;<span class="keyword">int</span>&gt;(n+<span class="number">1</span>, <span class="number">-1</span>));</span><br><span class="line">        map[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;arr.<span class="built_in">size</span>(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> c0 = arr[i].first;</span><br><span class="line">            <span class="keyword">int</span> c1 = arr[i].second;</span><br><span class="line">            <span class="comment">// int s = q.size();</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = m; j&gt;=c0; --j)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> k = n; k&gt;=c1; --k)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">if</span>(map[j-c0][k-c1]&lt;<span class="number">0</span>)<span class="keyword">continue</span>;</span><br><span class="line">                    map[j][k] = <span class="built_in">max</span>(map[j-c0][k-c1]+<span class="number">1</span>, map[j][k]);</span><br><span class="line">                    map[m][n] = <span class="built_in">max</span>(map[m][n], map[j][k]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> map[m][n]&lt;<span class="number">0</span>?<span class="number">0</span>:map[m][n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="Leetcode-518-零钱兑换II"><a href="#Leetcode-518-零钱兑换II" class="headerlink" title="Leetcode 518. 零钱兑换II"></a>Leetcode 518. 零钱兑换II</h2></li>
-<li>此题是一个完全背包类型的题<a target="_blank" rel="noopener" href="https://www.programmercarl.com/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85.html#%E7%AE%97%E6%B3%95%E5%85%AC%E5%BC%80%E8%AF%BE">参考链接</a></li>
-<li>注意循环次序的变化，0 1背包循环一般内层递推循环都是倒序的，但是这种是正序的</li>
-<li>完全背包遍历背包容量的时候是正序的，但是不完全背包遍历背包容量是倒序的<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">change</span><span class="params">(<span class="keyword">int</span> amount, vector&lt;<span class="keyword">int</span>&gt;&amp; coins)</span> </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">arr</span><span class="params">(amount+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        arr[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// queue&lt;int&gt; q;</span></span><br><span class="line">        <span class="comment">// q.push(0);</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;coins.<span class="built_in">size</span>(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = coins[i]; j&lt;=amount; ++j)</span><br><span class="line">            &#123;</span><br><span class="line">                arr[j]+=arr[j-coins[i]];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr[amount];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="Leetcode-377-组合总和IV"><a href="#Leetcode-377-组合总和IV" class="headerlink" title="Leetcode 377. 组合总和IV"></a>Leetcode 377. 组合总和IV</h2></li>
-<li>如果求<strong>组合数</strong>就是外层for循环遍历物品，内层for遍历背包。</li>
-<li>如果求<strong>排列数</strong>就是外层for遍历背包，内层for循环遍历物品。<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">combinationSum4</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">unsigned</span> <span class="keyword">long</span>&gt; <span class="title">arr</span><span class="params">(target+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        arr[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j&lt;=target; ++j)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">auto</span> &amp;i : nums)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(j-i&gt;=<span class="number">0</span>)</span><br><span class="line">                arr[j]+=arr[j-i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr[target];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Leetcode-279-完全平方数"><a href="#Leetcode-279-完全平方数" class="headerlink" title="Leetcode 279. 完全平方数"></a>Leetcode 279. 完全平方数</h2><ul>
-<li>转化为一个完全背包问题即可<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; minCnt;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numSquares</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n == <span class="number">0</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(n == <span class="number">1</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        minCnt = vector&lt;<span class="keyword">int</span>&gt;(n+<span class="number">1</span>, INT_MAX);</span><br><span class="line">        minCnt[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; nums;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i*i&lt;=n; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            nums.<span class="built_in">push_back</span>(i*i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; i : nums)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = i; j&lt;=n; ++j)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(minCnt[j-i]!=INT_MAX)minCnt[j] = <span class="built_in">min</span>(minCnt[j], minCnt[j-i]+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> minCnt[n];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="卡码网-28-子序列中的-k-种字母"><a href="#卡码网-28-子序列中的-k-种字母" class="headerlink" title="卡码网 28. 子序列中的 k 种字母"></a>卡码网 28. 子序列中的 k 种字母</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://kamacoder.com/problempage.php?pid=1028">链接</a></li>
-<li>此题是一个背包问题，主要是先统计字符串中26个字母每个包含几个</li>
-<li>因为顺序无所谓，因此直接开始找字母的种类</li>
-<li>假设此时字符串已经有了k种字母，凑到k+1种字母的方式就是通过添加一个新的种类的字母，但是新的种类的字母可能有多个备选项比如<code>n</code></li>
-<li>那么最终的字符串中可以在这n的字母种选择小于等于n的任意个，选择方式共有<img src="/imgs/b43e2b5ad8a38f7eed236cc409d35ddf366b245f2701794b13aac3c9ffb3073d.png" alt="picture 0">  种，上述结果的求和是<code>2^n-1</code></li>
-<li>因此实际上在递推背包的时候，假如当前选择的字母的个数有n个，那么具有k种字母的字符串的种类是具有k-1种字母的字符串的种类*<code>2^n-1</code></li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n, k;</span><br><span class="line">    cin&gt;&gt;n&gt;&gt;k;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;k)</span><br><span class="line">    &#123;</span><br><span class="line">        cout&lt;&lt;<span class="number">0</span>&lt;&lt;endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    map&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt; letters;</span><br><span class="line">    <span class="keyword">char</span> tmp;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        cin &gt;&gt; tmp;</span><br><span class="line">        letters[tmp]++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">long</span> <span class="keyword">long</span>&gt; <span class="title">combs</span><span class="params">(k+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">    combs[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span>&amp;i : letters)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> sec = (<span class="keyword">long</span> <span class="keyword">long</span>)(<span class="built_in">pow</span>(<span class="number">2</span>, i.second)<span class="number">-1</span>)%<span class="number">1000000007</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = k; j&gt;=<span class="number">1</span>; --j)</span><br><span class="line">        &#123;</span><br><span class="line">            combs[j]+=combs[j<span class="number">-1</span>]*sec;</span><br><span class="line">            combs[j]%=<span class="number">1000000007</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cout&lt;&lt;combs[k]%<span class="number">1000000007</span>&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="nowcoder-HJ16-购物单"><a href="#nowcoder-HJ16-购物单" class="headerlink" title="nowcoder HJ16 购物单"></a>nowcoder HJ16 购物单</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.nowcoder.com/practice/f9c6f980eeec43ef85be20755ddbeaf4?tpId=37&tqId=21239&rp=1&ru=/exam/oj/ta&qru=/exam/oj/ta&sourceUrl=/exam/oj/ta?page=2&tpId=37&type=37&difficulty=undefined&judgeStatus=undefined&tags=&title=">链接</a></li>
-<li>此题是一个分组背包问题，也就是每一组的物品只能买一个</li>
-<li>主要是在遍历每一组的不同物品尝试的时候，不能修改本身的dp数组，要遍历完某一个分组之后再修改</li>
-<li>此题因为一个物品最多有2个附属物品，因此每一组最多也就是4种组合，可以直接枚举<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ucontext.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> money, n;</span><br><span class="line">    cin&gt;&gt;money&gt;&gt;n;</span><br><span class="line">    vector&lt;vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&gt; <span class="built_in">items</span>(n);</span><br><span class="line">    <span class="keyword">int</span> a, b, c;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        cin&gt;&gt;a&gt;&gt;b&gt;&gt;c;</span><br><span class="line">        <span class="keyword">if</span>(c == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            items[i].<span class="built_in">insert</span>(items[i].<span class="built_in">begin</span>(), &#123;a, b, a*b&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            items[c<span class="number">-1</span>].<span class="built_in">push_back</span>(&#123;a, b, a*b&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(items[i].<span class="built_in">size</span>() ==<span class="number">1</span>)<span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(items[i].<span class="built_in">size</span>() == <span class="number">2</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            items[i][<span class="number">1</span>][<span class="number">0</span>] += items[i][<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">            items[i][<span class="number">1</span>][<span class="number">1</span>] += items[i][<span class="number">0</span>][<span class="number">1</span>];</span><br><span class="line">            items[i][<span class="number">1</span>][<span class="number">2</span>] += items[i][<span class="number">0</span>][<span class="number">2</span>];</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">else</span> <span class="keyword">if</span>(items[i].<span class="built_in">size</span>() == <span class="number">3</span>)</span><br><span class="line">       &#123;</span><br><span class="line">            items[i].<span class="built_in">push_back</span>(&#123;items[i][<span class="number">0</span>][<span class="number">0</span>]+items[i][<span class="number">1</span>][<span class="number">0</span>]+items[i][<span class="number">2</span>][<span class="number">0</span>], items[i][<span class="number">0</span>][<span class="number">1</span>]+items[i][<span class="number">1</span>][<span class="number">1</span>]+items[i][<span class="number">2</span>][<span class="number">1</span>], items[i][<span class="number">0</span>][<span class="number">2</span>]+items[i][<span class="number">1</span>][<span class="number">2</span>]+items[i][<span class="number">2</span>][<span class="number">2</span>]&#125;);</span><br><span class="line">            items[i][<span class="number">1</span>][<span class="number">0</span>] = items[i][<span class="number">0</span>][<span class="number">0</span>]+items[i][<span class="number">1</span>][<span class="number">0</span>];</span><br><span class="line">            items[i][<span class="number">1</span>][<span class="number">1</span>] = items[i][<span class="number">0</span>][<span class="number">1</span>]+items[i][<span class="number">1</span>][<span class="number">1</span>];</span><br><span class="line">            items[i][<span class="number">1</span>][<span class="number">2</span>] = items[i][<span class="number">0</span>][<span class="number">2</span>]+items[i][<span class="number">1</span>][<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">            items[i][<span class="number">2</span>][<span class="number">0</span>] = items[i][<span class="number">0</span>][<span class="number">0</span>]+items[i][<span class="number">2</span>][<span class="number">0</span>];</span><br><span class="line">            items[i][<span class="number">2</span>][<span class="number">1</span>] = items[i][<span class="number">0</span>][<span class="number">1</span>]+items[i][<span class="number">2</span>][<span class="number">1</span>];</span><br><span class="line">            items[i][<span class="number">2</span>][<span class="number">2</span>] = items[i][<span class="number">0</span>][<span class="number">2</span>]+items[i][<span class="number">2</span>][<span class="number">2</span>];</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(money+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; dpRes = dp;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = items[i].<span class="built_in">size</span>()<span class="number">-1</span>; j&gt;=<span class="number">0</span>; --j)</span><br><span class="line">        &#123;</span><br><span class="line">            vector&lt;<span class="keyword">int</span>&gt; dpTmp = dp;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k = money; k&gt;=items[i][j][<span class="number">0</span>]; --k)</span><br><span class="line">            &#123;</span><br><span class="line">                dpTmp[k] = <span class="built_in">max</span>(dpTmp[k], dpTmp[k-items[i][j][<span class="number">0</span>]]+items[i][j][<span class="number">2</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> b = <span class="number">0</span>; b&lt;dp.<span class="built_in">size</span>(); ++b)</span><br><span class="line">            &#123;</span><br><span class="line">                dpRes[b] = <span class="built_in">max</span>(dpTmp[b], dpRes[b]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        dp = dpRes;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;dp[money];</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 64 位输出请用 printf(&quot;%lld&quot;)</span></span><br></pre></td></tr></table></figure>
-<h2 id="494-目标和"><a href="#494-目标和" class="headerlink" title="494. 目标和"></a>494. 目标和</h2></li>
-<li>此题不能用传统的背包理论做，因为是每个物品必须用到而不是可用可不用</li>
-<li>使用了两个数组滚动进行更新，从上一次迭代能达到的位置出发，推算这一次迭代能达到的位置以及能达到的方式<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findTargetSumWays</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        unordered_map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; arr;</span><br><span class="line">        <span class="keyword">int</span> maxAbs = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> i : nums)</span><br><span class="line">        &#123;</span><br><span class="line">            maxAbs+=i;</span><br><span class="line">        &#125;</span><br><span class="line">        arr[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        unordered_map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; tmp;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;nums.<span class="built_in">size</span>(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> n = nums[i];</span><br><span class="line">            tmp.<span class="built_in">clear</span>();</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">auto</span> p : arr)</span><br><span class="line">            &#123;</span><br><span class="line">                tmp[p.first+n]+=p.second;</span><br><span class="line">                tmp[p.first-n]+=p.second;</span><br><span class="line">            &#125;</span><br><span class="line">            arr = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> arr[target];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1319,14 +1282,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">175</span>
+          <span class="site-state-item-count">176</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">50</span>
+        <span class="site-state-item-count">51</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1363,13 +1326,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">629k</span>
+    <span title="站点总字数">630k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:04</span>
+    <span title="站点阅读时长">19:05</span>
 </div>
 
         
