@@ -205,10 +205,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-05-17 22:32:52 / 修改时间：22:36:28" itemprop="dateCreated datePublished" datetime="2024-05-17T22:32:52+08:00">2024-05-17</time>
+              <time title="创建时间：2024-05-17 22:32:52" itemprop="dateCreated datePublished" datetime="2024-05-17T22:32:52+08:00">2024-05-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-05-20 11:29:57" itemprop="dateModified" datetime="2024-05-20T11:29:57+08:00">2024-05-20</time>
+              </span>
 
           <br>
             <span class="post-meta-item" title="本文字数">
@@ -216,7 +222,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>197</span>
+              <span>279</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -243,7 +249,11 @@
 <li><code>scan on</code></li>
 <li>找到名字（最右边一列）中带有<code>Wireless Controller</code>字样的设备</li>
 <li>与之MAC地址配对<code>pair XX:XX:XX:XX:XX:XX</code></li>
-<li>然后<code>connect XX:XX:XX:XX:XX:XX</code><h2 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h2></li>
+<li>然后<code>connect XX:XX:XX:XX:XX:XX</code><h3 id="第二次链接"><a href="#第二次链接" class="headerlink" title="第二次链接"></a>第二次链接</h3></li>
+<li>输入命令查看配对的设备：<code>paired-devices</code></li>
+<li><code>connect XX:XX:XX:XX:XX:XX</code></li>
+<li><img src="/imgs/4fb436872bdd20df976268ba8eb00772abbe5da84fe227e5f0dfc0e6865b8d6c.png" alt="picture 1">  </li>
+<li>使用<code>trust &lt;MAC地址&gt;</code>的方式信任设备<h2 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h2></li>
 <li>使用<code>sudo evtest</code>查看手柄状态</li>
 <li><img src="/imgs/b4827177c2d2e372721a16a464cb14d24b1967eeffb9ab7e9219c5854eb6a07f.png" alt="picture 0">  </li>
 <li>6是触控板，8是按钮（不包括左边的四个方向键）</li>
