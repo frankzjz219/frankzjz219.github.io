@@ -182,6 +182,93 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/09/17/%E8%A7%A3%E5%86%B3VMwareTools%E5%AE%89%E8%A3%85%E4%BA%86%E4%BB%8D%E7%84%B6%E4%B8%8D%E8%83%BD%E5%AE%9E%E7%8E%B0%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%92%8C%E4%B8%BB%E6%9C%BA%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/17/%E8%A7%A3%E5%86%B3VMwareTools%E5%AE%89%E8%A3%85%E4%BA%86%E4%BB%8D%E7%84%B6%E4%B8%8D%E8%83%BD%E5%AE%9E%E7%8E%B0%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%92%8C%E4%B8%BB%E6%9C%BA%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">解决VMwareTools安装了仍然不能实现虚拟机和主机复制粘贴的问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-09-17 18:20:54 / 修改时间：18:24:54" itemprop="dateCreated datePublished" datetime="2022-09-17T18:20:54+08:00">2022-09-17</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>297</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="解决VMwareTools安装了仍然不能实现虚拟机和主机复制粘贴的问题"><a href="#解决VMwareTools安装了仍然不能实现虚拟机和主机复制粘贴的问题" class="headerlink" title="解决VMwareTools安装了仍然不能实现虚拟机和主机复制粘贴的问题"></a>解决VMwareTools安装了仍然不能实现虚拟机和主机复制粘贴的问题</h2><ul>
+<li>Ubuntu版本：<code>18.04</code></li>
+<li>先尝试使用VMware提供的安装方法（从插入的CD驱动器中安装包）</li>
+<li><strong>失败解决办法</strong><ul>
+<li>命令行输入<code>sudo apt-get autoremove open-vm-tools</code></li>
+<li>然后使用<code>sudo apt-get install open-vm-tools-desktop</code></li>
+<li>假如安装不上的话就执行<code>sudo apt-get update</code>和<code>sudo apt-get install open-vm-tools-desktop fuse</code>两句命令，但是实际上直接update之后就可以安装了</li>
+<li>然后重启虚拟机，尝试拖放和粘贴文字操作已经可行</li>
+</ul>
+</li>
+<li>参考链接<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhouzhihao/p/16486787.html">参考</a></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/09/03/%E6%9C%89%E5%BA%8F%E8%A1%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1231,128 +1318,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/08/26/KMP%E7%AE%97%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/26/KMP%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">KMP算法（子字符串快速匹配算法）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-26 21:44:42" itemprop="dateCreated datePublished" datetime="2022-08-26T21:44:42+08:00">2022-08-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-27 15:48:27" itemprop="dateModified" datetime="2024-04-27T15:48:27+08:00">2024-04-27</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="KMP"><a href="#KMP" class="headerlink" title="KMP"></a>KMP</h2><ul>
-<li>求一个字符串是不是另一个字符串子串的问题</li>
-<li>暴力方法是O(N*M)的复杂度<h3 id="最长前缀和后缀的匹配长度"><a href="#最长前缀和后缀的匹配长度" class="headerlink" title="最长前缀和后缀的匹配长度"></a>最长前缀和后缀的匹配长度</h3></li>
-<li>一个字符位置存储的信息是匹配长度</li>
-<li><img src="/imgs/2196bf830f7b5db687473c79422ad7dfdec5d981f834054f9ac75eda56f6f7a0.png" alt="图 10">  <ul>
-<li>上图中前缀从最左算起，后缀从最右算起，等于3的时候相等</li>
-<li>将这个信息记录在K这个字符的位置</li>
-<li>这个长度必须小于整体的长度</li>
-</ul>
-</li>
-<li>以上这个信息需要对str2（也就是<strong>较短的字符串</strong>）求的<ul>
-<li><img src="/imgs/fb0d130530c2ce09057006d9d7424b35ea7456661bc3604cb0c91ef4823f5c67.png" alt="图 11">  </li>
-<li>第一个是<code>-1</code>是人为定义的<h3 id="加速过程"><a href="#加速过程" class="headerlink" title="加速过程"></a>加速过程</h3></li>
-</ul>
-</li>
-<li><img src="/imgs/a4b9841bb42c9a4e0047bfef0ba00cc98d660c07dc4212c2bd9f2dc4b2e584a5.png" alt="图 12">  <ul>
-<li>当长字符串的匹配进行到x位置的时候发现匹配不能继续，假如此时短字符串的匹配进行到了y位置，那么<strong>不需要回退x</strong>，只需要回退y到<strong>最长前缀的末尾位置（图中画框的位置）</strong>，相当于不需要从头开始匹配，而是从<strong>图上的j位置（下标三角）开始</strong>，只需要通过最长前缀和后缀跳过长字符串和短字符串中<strong>已经匹配过的段</strong>，实际上相当于将短字符串直接<strong>后移到最长前缀的位置</strong>，然后继续匹配即可。</li>
-<li> 另一个问题是从i到j位置之间不可能有任何一个位置能够配出短字符串</li>
-</ul>
-</li>
-<li>举例</li>
-<li><img src="/imgs/2809ae063ab9181ec086ffc99f622621c7cc923e0381e0a8ae7458c1d25dd66d.png" alt="图 13">  <ul>
-<li>团上的行为是先从两个字符串的头位置开始比对两个字符串，然后到第一个字符串的e位置发现不对，然后寻找此时短字符串的w位置的最长前缀位置的下一个位置也就是t，但是t于e仍然不相等，那么就寻找t位置的最长前缀的下一个位置，也就是s与e比较，但是还不相等，那么就<strong>选择s位置的最长前缀的下一个位置</strong>是短字符串的开始位置，也不行，此时将长字符串的比较位置后移一位到e的下一个位置，重新开始比较<h3 id="如何求"><a href="#如何求" class="headerlink" title="如何求"></a>如何求</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getNext</span> <span class="params">(<span class="keyword">int</span>* next, <span class="keyword">const</span> string&amp; s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    next[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i &lt; s.<span class="built_in">size</span>(); i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">while</span>(j &gt; <span class="number">0</span> &amp;&amp; s[i] != s[j]) </span><br><span class="line">        &#123;</span><br><span class="line">            j = next[j - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(s[i] == s[j]) </span><br><span class="line">        &#123;</span><br><span class="line">            j++;</span><br><span class="line">        &#125;</span><br><span class="line">        next[i] = j;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li>j指向的是前缀末尾位置，初始化为0</li>
-<li>i是后缀末尾位置，初始化为1</li>
-<li>next数组第一个位置也初始化为0</li>
-<li>如果i和j位置的字母不相等，那么j开始回退到上一个位置的前缀结束位置（相当于前缀长度减少了1）<ul>
-<li>直到前缀和后缀字母相同的位置</li>
-</ul>
-</li>
-<li>此时如果前后缀的最后一个位置字母相同，则给j的大小+1，因为相同的话后缀长度+1</li>
-<li>然后将这个值赋给i位置（也就是当前后缀得末尾位置），记录下<strong>到这个位置的最长后缀长度</strong></li>
-</ul>
-<h3 id="Leetcode-28-找出字符串中第一个匹配项的下标"><a href="#Leetcode-28-找出字符串中第一个匹配项的下标" class="headerlink" title="Leetcode 28. 找出字符串中第一个匹配项的下标"></a>Leetcode 28. 找出字符串中第一个匹配项的下标</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jb411V78H/?share_source=copy_web&vd_source=e29d06662d9baca058bed682909766d6">讲解</a></li>
-<li>注意比较的时候<ul>
-<li>如果二者不相等，<strong>needle就按照<u>当前不匹配位置的前一个位置</u>的next表持续回退到起始或者相等</strong>，<em>使得前缀来到原来后缀的位置</em></li>
-<li>如果相等，就二者一起前进一位</li>
-<li>如果到达了needle的末尾，就认为是匹配到了，返回位置<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">getNext</span><span class="params">(<span class="keyword">int</span>* next, <span class="keyword">const</span> string&amp; s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">        next[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; s.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            <span class="keyword">while</span> (j &gt; <span class="number">0</span> &amp;&amp; s[i] != s[j]) &#123;</span><br><span class="line">                j = next[j - <span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (s[i] == s[j]) &#123;</span><br><span class="line">                j++;</span><br><span class="line">            &#125;</span><br><span class="line">            next[i] = j;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">strStr</span><span class="params">(string haystack, string needle)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (needle.<span class="built_in">size</span>() == <span class="number">0</span>) </span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> next[needle.<span class="built_in">size</span>()];</span><br><span class="line">        <span class="built_in">getNext</span>(next, needle);</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; haystack.<span class="built_in">size</span>(); i++) </span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">while</span>(j &gt; <span class="number">0</span> &amp;&amp; haystack[i] != needle[j]) &#123;</span><br><span class="line">                j = next[j - <span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (haystack[i] == needle[j]) &#123;</span><br><span class="line">                j++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (j == needle.<span class="built_in">size</span>() ) &#123;</span><br><span class="line">                <span class="keyword">return</span> (i - needle.<span class="built_in">size</span>() + <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1424,7 +1389,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">176</span>
+          <span class="site-state-item-count">177</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1468,13 +1433,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">632k</span>
+    <span title="站点总字数">634k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:08</span>
+    <span title="站点阅读时长">19:12</span>
 </div>
 
         

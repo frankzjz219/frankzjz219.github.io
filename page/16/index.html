@@ -182,6 +182,327 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/12/Linux%E6%96%87%E4%BB%B6IO%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/12/Linux%E6%96%87%E4%BB%B6IO%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">Linux文件IO使用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-01-12 10:38:02 / 修改时间：15:14:14" itemprop="dateCreated datePublished" datetime="2022-01-12T10:38:02+08:00">2022-01-12</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>17 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Linux-文件IO"><a href="#Linux-文件IO" class="headerlink" title="Linux 文件IO"></a>Linux 文件IO</h1><p>简单的实例</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">char</span> buff[<span class="number">1024</span>];</span><br><span class="line">     <span class="keyword">int</span> fd1, fd2;</span><br><span class="line">     <span class="keyword">int</span> ret;</span><br><span class="line">     <span class="comment">/* 打开源文件 src_file(只读方式) */</span></span><br><span class="line">     fd1 = open(<span class="string">&quot;./src_file&quot;</span>, O_RDONLY);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd1)</span><br><span class="line">     <span class="keyword">return</span> fd1;</span><br><span class="line">     <span class="comment">/* 打开目标文件 dest_file(只写方式) */</span></span><br><span class="line">     fd2 = open(<span class="string">&quot;./dest_file&quot;</span>, O_WRONLY);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd2) &#123;</span><br><span class="line">     ret = fd2;</span><br><span class="line">     <span class="keyword">goto</span> out1;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 读取源文件 1KB 数据到 buff 中 */</span></span><br><span class="line">     ret = read(fd1, buff, <span class="keyword">sizeof</span>(buff));</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret)</span><br><span class="line">     <span class="keyword">goto</span> out2;</span><br><span class="line">     <span class="comment">/* 将 buff 中的数据写入目标文件 */</span></span><br><span class="line">     ret = write(fd2, buff, <span class="keyword">sizeof</span>(buff));</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret)</span><br><span class="line">     <span class="keyword">goto</span> out2;</span><br><span class="line">     ret = <span class="number">0</span>;</span><br><span class="line">out2:</span><br><span class="line">     <span class="comment">/* 关闭目标文件 */</span></span><br><span class="line">     close(fd2);</span><br><span class="line">out1:</span><br><span class="line">     <span class="comment">/* 关闭源文件 */</span></span><br><span class="line">     close(fd1);</span><br><span class="line">     <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h3><ul>
+<li>调用 open 函数会有一个返回值，譬如示例代码 2.1.1 中的 fd1 和 fd2，这是一个 int 类型的数据，在 open 函数执行成功的情况下，会返回一个非负整数，该返回值就是一个文件描述符（file descriptor），这说明文 件描述符是一个非负整数；对于 Linux 内核而言，所有打开的文件都会通过文件描述符进行索引。</li>
+<li>当调用 open 函数打开一个现有文件或创建一个新文件时，内核会向进程返回一个文件描述符，用于指 代被打开的文件，所有执行 IO 操作的系统调用都是通过文件描述符来索引到对应的文件，譬如示例代码 2.1.1 中，当调用 read/write 函数进行文件读写时，会将文件描述符传送给 read/write 函数</li>
+<li>所以<u>对于一个进程来说</u>，文件描述符是一种有限资源，<u>文件描述符是从 0 开始分配的</u>，譬如说进程中第 一个被打开的文件对应的文件描述符是 0、第二个文件是 1、第三个文件是 2、第 4 个文件是 3……以此类推，所以由此可知，文件描述符数字最大值为 1023<strong>（0~1023）</strong>。每一个被打开的文件在同一个进程中都有 一个<strong>唯一的文件描述符</strong>，不会重复，如果文件被关闭后，它对应的文件描述符将会被释放，那么这个文件描 述符将可以<strong>再次分配给其它打开的文件</strong>、与对应的文件绑定起来。</li>
+</ul>
+<h4 id="一切皆文件"><a href="#一切皆文件" class="headerlink" title="一切皆文件"></a>一切皆文件</h4><ul>
+<li>Linux 系统下，一切皆文件，也包括各种硬件设备，使用 open 函数打开任何文件成功情况下便会 返回对应的文件描述符 fd。每一个硬件设备都会对应于 Linux 系统下的某一个文件，把这类文件称为设备文 件。所以设备文件对应的其实是某一硬件设备，应用程序通过对设备文件进行读写等操作、来使用、操控硬 件设备，譬如 LCD 显示器、串口、音频、键盘等。</li>
+<li>标准输入一般对应的是键盘，可以理解为 0 便是打开键盘对应的设备文件时所得到的文件描述符；标 准输出一般指的是 LCD 显示器，可以理解为 1 便是打开 LCD 设备对应的设备文件时所得到的文件描述符； 而标准错误一般指的也是 LCD 显示器。</li>
+</ul>
+<h3 id="打开文件"><a href="#打开文件" class="headerlink" title="打开文件"></a>打开文件</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> flags)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> flags, <span class="keyword">mode_t</span> mode)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>pathname：字符串类型，用于标识需要打开或创建的文件，可以包含路径（绝对路径或相对路径）信 息，譬如：”./src_file”（当前目录下的 src_file 文件）、”/home/dengtao/hello.c”等；如果 pathname 是一个符号 链接，会对其进行解引用。</p>
+</li>
+<li><p>flags：调用 open 函数时需要提供的标志，包括文件访问模式标志以及其它文件相关标志，这些标志使 用宏定义进行描述，都是常量，open 函数提供了非常多的标志，我们传入 flags 参数时既可以单独使用某一 个标志，也可以通过位或运算（|）将多个标志进行组合。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>标志</th>
+<th>用途</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>O_WRONLY</td>
+<td>只写</td>
+<td></td>
+</tr>
+<tr>
+<td>O_RDONLY</td>
+<td>只读</td>
+<td></td>
+</tr>
+<tr>
+<td>O_RDWR</td>
+<td>可读可写</td>
+<td>这三个是文件访问权限标志，传入的 flags 参数中必须要包含其中一种标 志，而且只能包含一种</td>
+</tr>
+<tr>
+<td>O_CREAT</td>
+<td>如果地址指向的文件不存在就创建文件</td>
+<td>使用此标志时，调用 open 函数需要 传入第 3 个参数 mode，参数 mode 用 于指定新建文件的访问权限，稍后将 对此进行说明。 open 函数的第 3 个参数只有在使用 了 O_CREAT 或 O_TMPFILE 标志 时才有效。</td>
+</tr>
+<tr>
+<td>O_DIRECTORY</td>
+<td>如果地址指向的是目录，返回调用失败</td>
+<td></td>
+</tr>
+<tr>
+<td>O_EXCL</td>
+<td>此标志一般结合 O_CREAT 标志一起使用， 用于专门创建文件。 在 flags 参数同时使用到了 O_CREAT 和 O_EXCL 标志的情况下，如果 pathname 参数 指向的文件已经存在，则 open 函数返回错 误。</td>
+<td>可以用于测试一个文件是否存在，如 果不存在则创建此文件，如果存在则 返回错误，这使得测试和创建两者成 为一个原子操作；关于原子操作，在 后面的内容当中将会对此进行说明。</td>
+</tr>
+<tr>
+<td>O_NOFOLLOW</td>
+<td>如果 pathname 参数指向的是一个符号链接， 将不对其进行解引用，直接返回错误。</td>
+<td>不加此标志情况下，如果 pathname 参数是一个符号链接，会对其进行解引用，加了之后会对符号链接直接返回错误。</td>
+</tr>
+</tbody></table>
+<ul>
+<li>flag可以通过<code>|</code>标志添加大于一个，比如</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">open(<span class="string">&quot;./src_file&quot;</span>, O_RDONLY) <span class="comment">//单独使用某一个标志</span></span><br><span class="line">open(<span class="string">&quot;./src_file&quot;</span>, O_RDONLY | O_NOFOLLOW) <span class="comment">//多个标志组合</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="文件权限（rwx）"><a href="#文件权限（rwx）" class="headerlink" title="文件权限（rwx）"></a>文件权限（rwx）</h3><p><strong>前面的博客中已经详细介绍过了，略</strong></p>
+<h3 id="写入文件"><a href="#写入文件" class="headerlink" title="写入文件"></a>写入文件</h3><ul>
+<li>调用 write 函数可向打开的文件写入数据，其函数原型如下所示</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">write</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> count)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>fd：文件描述符。关于文件描述符，前面已经给大家进行了简单地讲解，这里不再重述！我们需要将进 行写操作的文件所对应的文件描述符传递给 write 函数。</p>
+</li>
+<li><p>buf：指定写入数据对应的缓冲区。</p>
+</li>
+<li><p>count：指定写入的字节数。</p>
+</li>
+<li><p>返回值：<u>如果成功将返回写入的字节数（0 表示未写入任何字节）</u>，<strong>如果此数字小于 count 参数，这不是错误，譬如磁盘空间已满</strong>，可能会发生这种情况；如果写入出错，则返回-1。</p>
+</li>
+</ul>
+<h4 id="针对写入文件的开始地址"><a href="#针对写入文件的开始地址" class="headerlink" title="针对写入文件的开始地址"></a>针对写入文件的开始地址</h4><ul>
+<li>读写操作都是从文件的当前位置偏移量处开始，当然当前位置偏移量可以通过 lseek 系统 调用进行设置，关于此函数后面再讲；<strong>默认情况下当前位置偏移量一般是 0</strong>，也就是指向了文件起始位置， 当<strong>调用 read、write 函数读写操作完成之后，当前位置偏移量也会向后移动对应字节数</strong></li>
+</ul>
+<h3 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h3><ul>
+<li>调用 read 函数可从打开的文件中读取数据</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">read</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> count)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>fd：文件描述符。与 write 函数的 fd 参数意义相同。</li>
+<li>buf：指定用于存储读取数据的缓冲区。</li>
+<li>count：指定需要读取的字节数。</li>
+<li>返回值：如果读取成功将返回读取到的字节数，<u>实际读取到的字节数可能会小于 count 参数指定的字节 数</u>，也有可能会为 0，譬如进行读操作时，<u>当前文件位置偏移量已经到了文件末尾</u>。实际读取到的字节数少 于要求读取的字节数，譬如在到达文件末尾之前有 30 个字节数据，而要求读取 100 个字节，则 read 读取成 功只能返回 30；而下一次再调用 read 读，它将返回 0（文件末尾）。</li>
+</ul>
+<h3 id="关闭文件"><a href="#关闭文件" class="headerlink" title="关闭文件"></a>关闭文件</h3><ul>
+<li>close</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>fd：文件描述符，需要关闭的文件所对应的文件描述符。</p>
+</li>
+<li><p>返回值：如果成功返回 0，如果失败则返回-1。</p>
+</li>
+<li><p>在 Linux 系统中，当一个进程终止时，内核会自动关闭它打开 的所有文件，也就是说在我们的程序中打开了文件，如果程序终止退出时没有关闭打开的文件，那么内核会 自动将程序中打开的文件关闭。<u>很多程序都利用了这一功能而不显式地用 close 关闭打开的文件。</u></p>
+</li>
+</ul>
+<h3 id="更改偏移量位置"><a href="#更改偏移量位置" class="headerlink" title="更改偏移量位置"></a>更改偏移量位置</h3><ul>
+<li>lseek</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">off_t</span> <span class="title">lseek</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">off_t</span> offset, <span class="keyword">int</span> whence)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>fd：文件描述符。</p>
+</li>
+<li><p>offset：偏移量，以字节为单位。</p>
+</li>
+<li><p>whence：用于定义参数 offset 偏移量对应的参考值，该参数为下列其中一种（宏定义）：</p>
+<ul>
+<li>SEEK_SET：读写偏移量将指向 offset 字节位置处（从文件头部开始算）；</li>
+<li>SEEK_CUR：读写偏移量将指向当前位置偏移量 + offset 字节位置处，offset 可以为正、也可以为 负，如果是正数表示往后偏移，如果是负数则表示往前偏移；</li>
+<li>SEEK_END：读写偏移量将指向文件末尾 + offset 字节位置处，同样 offset 可以为正、也可以为负， 如果是正数表示往后偏移、如果是负数则表示往前偏移。</li>
+</ul>
+</li>
+<li><p>成功将<strong>返回从文件头部开始算起的位置偏移量</strong>（字节为单位），也就是当前的读写位置；发生 错误将返回-1。可以用此函数获取文件此时的偏移量</p>
+</li>
+</ul>
+<h2 id="Linux文件系统简单讲述"><a href="#Linux文件系统简单讲述" class="headerlink" title="Linux文件系统简单讲述"></a>Linux文件系统简单讲述</h2><ul>
+<li><p>磁盘空间包括两个部分，一个是真正存储文件的区域，另一个是存储文件inode的区域（inode见前面的博客）</p>
+</li>
+<li><p><img src="/imgs/image-20220112130444097.png" alt="image-20220112130444097"></p>
+</li>
+<li><p>windows的快速格式化不会真正删除存储问文件内容的区域，只是删除了inode表的区域</p>
+</li>
+</ul>
+<h3 id="打开文件的过程"><a href="#打开文件的过程" class="headerlink" title="打开文件的过程"></a>打开文件的过程</h3><ul>
+<li><p>系统找到这个文件名所对应的 inode 编号；</p>
+</li>
+<li><p>通过 inode <strong>编号从 inode table 中找到对应的 inode 结构体</strong>；</p>
+</li>
+<li><p>根据 <strong>inode 结构体中记录的信息</strong>，确定<strong>文件数据所在的 block</strong>，并读出数据。</p>
+</li>
+<li><p>文件打开的时候内核会申请一段内存（一段缓冲区），并且将静态文件的数 据内容从磁盘这些存储设备中读取到内存中进行管理、缓存（也把内存中的这份文件数据叫做动态文件、内 核缓冲区）。打开文件后，以后对这个文件的读写操作，都是针对内存中这一份动态文件进行相关的操作。</p>
+</li>
+<li><p>因为磁盘、硬盘、U 盘等存储设备基本都是 Flash 块设备，因为块设备硬件本身有读写限制等特征，块 设备是以一块一块为单位进行读写的（一个块包含多个扇区，而一个扇区包含多个字节），一个字节的改动 也需要将该字节所在的 block 全部读取出来进行修改，修改完成之后再写入块设备中，所以导致对块设备的 读写操作非常不灵活；而内存可以按字节为单位来操作，而且可以随机操作任意地址数据，非常地很灵活， 所以对于操作系统来说，会先将磁盘中的静态文件读取到内存中进行缓存，读写操作都是针对这份动态文 件，而不是直接去操作磁盘中的静态文件，不但操作不灵活，效率也会下降很多，因为内存的读写速率远比 磁盘读写快得多。</p>
+</li>
+<li><p>在 Linux 系统中，<strong>内核会为每个进程</strong>（关于进程的概念，这是后面的内容，我们可以简单地理解为一个 运行的程序就是一个进程，运行了多个程序那就是存在多个进程）设置一个专门的数据结构用于管理该进 程，譬如用于记录进程的<strong>状态信息、运行特征</strong>等，我们把这个称为进程控制块（<strong>Process control block，缩写 PCB</strong>）。</p>
+<ul>
+<li>PCB 数据结构体中有一个指针指向了<strong>文件描述符表</strong>（File descriptors），文件描述符表中的每一个元素索引到对应的文件表（File table），文件表也是一个<strong>数据结构体</strong>，其中记录了很多文件相关的信息，譬如<strong>文 件状态标志、引用计数、当前文件的读写偏移量以及 i-node 指针</strong>（指向该文件对应的 inode）等，进程打开 的所有文件对应的文件描述符都记录在文件描述符表中，每一个文件描述符都会指向一个对应的文件表</li>
+<li><img src="/imgs/image-20220112131919826.png" alt="image-20220112131919826"></li>
+</ul>
+</li>
+</ul>
+<h2 id="程序出错"><a href="#程序出错" class="headerlink" title="程序出错"></a>程序出错</h2><p>略，详见原子教程pdf</p>
+<h2 id="程序退出"><a href="#程序退出" class="headerlink" title="程序退出"></a>程序退出</h2><h3 id="基本方法"><a href="#基本方法" class="headerlink" title="基本方法"></a>基本方法</h3><ul>
+<li>return<ul>
+<li>return 0表示程序正常结束</li>
+<li>return -1表示程序异常退出</li>
+</ul>
+</li>
+</ul>
+<h3 id="Linux-下的其他方法"><a href="#Linux-下的其他方法" class="headerlink" title="Linux 下的其他方法"></a>Linux 下的其他方法</h3><ul>
+<li><p>进程正常退出除了可以使用 return 之外，还可以使用<code>exit()</code>、<code>_exit()</code>以及_<code>Exit()</code></p>
+</li>
+<li><p><code>_exit()</code></p>
+</li>
+<li><p>调用<code>_exit()</code>函数会 清除其使用的内存空间，并销毁其在内核中的各种数据结构，关闭进程的所有文件描述符，并结束进程、将 控制权交给操作系统。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> _exit(<span class="keyword">int</span> status);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>其中的status含义与上面return的相同，0代表正常，其他数值代表异常</p>
+</li>
+<li><p><code>_Exit()</code>和<code>_exit()</code>等价，不再介绍</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> _Exit(<span class="keyword">int</span> status);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>exit()</code>是一个标准 C 库函数，而_exit()和_Exit()是系统调用。<br>执行 exit()会执行一些清理工作，最后调用_exit()函数。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">exit</span><span class="params">(<span class="keyword">int</span> status)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>不管你用哪一种都可以结束进程，但还是<strong>推荐大家使用 exit()</strong></li>
+</ul>
+<h2 id="空洞文件"><a href="#空洞文件" class="headerlink" title="空洞文件"></a>空洞文件</h2><ul>
+<li><p>什么是空洞文件（hole file）？在上一章内容中，笔者给大家介绍了 lseek()系统调用，使用 lseek 可以修 改文件的当前读写位置偏移量，此函数不但可以改变位置偏移量，并且还允许文件偏移量超出文件长度，这 是什么意思呢？譬如有一个 test_file，该<strong>文件的大小是 4K</strong>（也就是 4096 个字节），如果通过 lseek 系统调 用将该文件的读写偏移量移动到<strong>偏移文件头部 6000 个字节处</strong>，大家想一想会怎样？如果笔者没有提前告诉 大家，大家觉得不能这样操作，但事实上 lseek 函数确实可以这样操作。</p>
+</li>
+<li><p>接下来使用 write()函数对文件进行写入操作，也就是说此时将是从<strong>偏移文件头部 6000 个字节处开始写 入数据</strong>，也就意味着 <strong>4096~6000 字节之间出现了一个空洞</strong>，因为这部分空间并<strong>没有写入任何数据，所以形 成了空洞</strong>，这部分区域就被称为文件空洞，那么相应的该文件也被称为<strong>空洞文件</strong>。</p>
+</li>
+<li><p>文件空洞部分<strong>实际上并不会占用任何物理空间</strong>，直到<strong>在某个时刻对空洞部分进行写入数据时才会为它 分配对应的空间</strong>，但是**空洞文件形成时，<u>逻辑上该文件的大小是包含了空洞部分的大小的</u>**，这点需要注意。</p>
+</li>
+<li><p>空洞文件对多线程共同操作文件是及其有用的，有时候我们创建 一个很大的文件，如果单个线程从头开始依次构建该文件需要很长的时间，有一种思路就是<strong>将文件分为多 段，然后使用多线程来操作</strong>，<strong>每个线程负责其中一段数据的写入</strong></p>
+</li>
+</ul>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">int</span> fd;</span><br><span class="line">     <span class="keyword">int</span> ret;</span><br><span class="line">     <span class="keyword">char</span> buffer[<span class="number">1024</span>];</span><br><span class="line">     <span class="keyword">int</span> i;</span><br><span class="line">     <span class="comment">/* 打开文件 */</span></span><br><span class="line">     fd = open(<span class="string">&quot;./hole_file&quot;</span>, O_WRONLY | O_CREAT | O_EXCL,</span><br><span class="line">     S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd) </span><br><span class="line">     &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">     &#125;</span><br><span class="line"> <span class="comment">/* 将文件读写位置移动到偏移文件头 4096 个字节(4K)处 */</span></span><br><span class="line">     ret = lseek(fd, <span class="number">4096</span>, SEEK_SET);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) </span><br><span class="line">     &#123;</span><br><span class="line">         perror(<span class="string">&quot;lseek error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err;</span><br><span class="line">     &#125;</span><br><span class="line"> <span class="comment">/* 初始化 buffer 为 0xFF */</span></span><br><span class="line">     <span class="built_in">memset</span>(buffer, <span class="number">0xFF</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line"> <span class="comment">/* 循环写入 4 次，每次写入 1K */</span></span><br><span class="line">     <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">         ret = write(fd, buffer, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">         <span class="keyword">if</span> (<span class="number">-1</span> == ret) </span><br><span class="line">         &#123;</span><br><span class="line">             perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">             <span class="keyword">goto</span> err;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"> 	ret = <span class="number">0</span>;</span><br><span class="line">err:</span><br><span class="line">     <span class="comment">/* 关闭文件 */</span></span><br><span class="line">     close(fd);</span><br><span class="line">     <span class="built_in">exit</span>(ret);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>上面的代码从文件的4k位置开始，一次写入1k，写入4次。</p>
+</li>
+<li><p>下面查看文件的大小</p>
+</li>
+<li><p><img src="/imgs/image-20220112143912056.png" alt="image-20220112143912056"></p>
+</li>
+<li><p>利用<code>ls</code>察看文件大小的时候，虽然文件只有4k有数据，但是文件大小查出来逻辑大小，也就是8k。</p>
+</li>
+<li><p>但是使用du查看的时候，只有文件占用的实际存储的大小，也就是4k。</p>
+</li>
+</ul>
+<h2 id="O-APPEND-和-O-TRUNC-标志"><a href="#O-APPEND-和-O-TRUNC-标志" class="headerlink" title="O_APPEND 和 O_TRUNC 标志"></a>O_APPEND 和 O_TRUNC 标志</h2><p>在上一章给大家讲解 open 函数的时候介绍了一些 open 函数的 flags 标志，譬如 O_RDONLY、 O_WRONLY、O_CREAT、O_EXCL 等，本小节再给大家介绍两个标志，分别是 O_APPEND 和 O_TRUNC， 接下来对这两个标志分别进行介绍。</p>
+<h3 id="O-TRUNC-标志"><a href="#O-TRUNC-标志" class="headerlink" title="O_TRUNC 标志"></a>O_TRUNC 标志</h3><ul>
+<li>O_TRUNC 这个标志的作用非常简单，如果使用了这个标志，调用 open 函数打开文件的时候会<strong>将文件 原本的内容全部丢弃，文件大小变为 0</strong>；这里我们直接测试即可！测试代码如下所示：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">int</span> fd;</span><br><span class="line">     <span class="comment">/* 打开文件 */</span></span><br><span class="line">     fd = open(<span class="string">&quot;./test_file&quot;</span>, O_WRONLY | O_TRUNC);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd) </span><br><span class="line">     &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 关闭文件 */</span></span><br><span class="line">     close(fd);</span><br><span class="line">     <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="O-APPEND-标志"><a href="#O-APPEND-标志" class="headerlink" title="O_APPEND 标志"></a>O_APPEND 标志</h3><ul>
+<li>如果 open 函数携带了 O_APPEND 标志，调用 open 函数打开文件， 当<strong>每次使用 write()函数对文件进行写操作时，都会自动把文件当前位置偏移量移动到文件末尾</strong>，从<strong>文件末 尾开始写入数据</strong>，也就是意味着每次写入数据都是从文件末尾开始。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">char</span> buffer[<span class="number">16</span>];</span><br><span class="line">     <span class="keyword">int</span> fd;</span><br><span class="line">     <span class="keyword">int</span> ret;</span><br><span class="line">     <span class="comment">/* 打开文件 */</span></span><br><span class="line">     fd = open(<span class="string">&quot;./test_file&quot;</span>, O_RDWR | O_APPEND);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == fd) &#123;</span><br><span class="line">         perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/* 初始化 buffer 中的数据 */</span></span><br><span class="line">     <span class="built_in">memset</span>(buffer, <span class="number">0x55</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">     <span class="comment">/* 写入数据: 写入 4 个字节数据 */</span></span><br><span class="line">     ret = write(fd, buffer, <span class="number">4</span>);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err;</span><br><span class="line">     &#125;</span><br><span class="line">	 <span class="comment">/* 将 buffer 缓冲区中的数据全部清 0 */</span></span><br><span class="line">     <span class="built_in">memset</span>(buffer, <span class="number">0x00</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">     <span class="comment">/* 将位置偏移量移动到距离文件末尾 4 个字节处 */</span></span><br><span class="line">     ret = lseek(fd, <span class="number">-4</span>, SEEK_END);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;lseek error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err;</span><br><span class="line"> 	 &#125;</span><br><span class="line"> 	 <span class="comment">/* 读取数据 */</span></span><br><span class="line">	 ret = read(fd, buffer, <span class="number">4</span>);</span><br><span class="line">     <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">         perror(<span class="string">&quot;read error&quot;</span>);</span><br><span class="line">         <span class="keyword">goto</span> err;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;0x%x 0x%x 0x%x 0x%x\n&quot;</span>, buffer[<span class="number">0</span>], buffer[<span class="number">1</span>],</span><br><span class="line">         buffer[<span class="number">2</span>], buffer[<span class="number">3</span>]);</span><br><span class="line">     ret = <span class="number">0</span>;</span><br><span class="line">err:</span><br><span class="line">     <span class="comment">/* 关闭文件 */</span></span><br><span class="line">     close(fd);</span><br><span class="line">     <span class="built_in">exit</span>(ret);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><img src="/imgs/image-20220112145240871.png" alt="image-20220112145240871"></p>
+</li>
+<li><p>通过控制台可知，读出的内容确实是最后四个字节为0x55</p>
+</li>
+<li><p>O_APPEND 标志<strong>并不会影响读文件</strong>，<strong>当读取文件时，O_APPEND 标志并不会影响读位置偏移量</strong>，即使使用了 O_APPEND 标志，读文件位置偏移量默认情况下依然是文件头，关于这个问题大家可以自己进行测试，编程是一个实践 性很强的工作，有什么不能理解的问题，可以自己编写程序进行测试。</p>
+</li>
+<li><p>使用 lseek 函数来改变 write()时的写位置偏移量，<strong>其实这种做法并不会成功</strong>，这就是笔 者给大家提的第二个细节，使用了 O_APPEND 标志，<strong>即使是通过 lseek 函数也是无法修改写文件时对应的 位置偏移量</strong>（注意笔者这里说的是<strong>写文件，<u>并不包括读</u><strong>），</strong>写入数据依然是从文件末尾开始</strong>，lseek 并不会 该变写位置偏移量</p>
+</li>
+<li><p>测试</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd1;</span><br><span class="line">    <span class="keyword">char</span> readBuff[<span class="number">1024</span>];</span><br><span class="line">    <span class="keyword">char</span> wrBuff[<span class="number">1024</span>];</span><br><span class="line">    <span class="keyword">char</span> * wrCont = <span class="string">&quot;Hello World&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(wrCont[i]!=<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        wrBuff[i] = wrCont[i];</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">    wrBuff[i] = <span class="number">0</span>;</span><br><span class="line">    fd1 = open(<span class="string">&quot;./test1.txt&quot;</span>, O_RDWR|O_APPEND);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j&lt;<span class="number">4</span>;j++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">sprintf</span>(wrBuff,<span class="string">&quot;, 0x%02x&quot;</span>, j);</span><br><span class="line">        <span class="built_in">printf</span>(wrBuff);</span><br><span class="line">        write(fd1, wrBuff, <span class="number">6</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    close(fd1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>此处函数不对文件偏移位置进修修改的前提下，在文件写入4次<code>, 0xXX</code>的字符，观察效果</p>
+</li>
+<li><p><img src="/imgs/image-20220112151123797.png" alt="image-20220112151123797"></p>
+</li>
+<li><p>可以看出，在文件最后多出了四个字符串，可见每次写入的时候，文件的偏移量都自动移动到了文件的最后，即使文件在这个过程中并没有被保存。</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/10/DSP28377%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1842,469 +2163,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/02/Linux%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-title-link" itemprop="url">Linux初步学习（二）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-02 17:25:44" itemprop="dateCreated datePublished" datetime="2022-01-02T17:25:44+08:00">2022-01-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-04 14:52:16" itemprop="dateModified" datetime="2022-01-04T14:52:16+08:00">2022-01-04</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>9 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Linux初步学习（二）"><a href="#Linux初步学习（二）" class="headerlink" title="Linux初步学习（二）"></a>Linux初步学习（二）</h1><h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><h3 id="向shell脚本传参"><a href="#向shell脚本传参" class="headerlink" title="向shell脚本传参"></a>向shell脚本传参</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Shell 传递参数实例！&quot;</span>;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;执行的文件名：<span class="variable">$0</span>&quot;</span>;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第一个参数为：<span class="variable">$1</span>&quot;</span>;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第二个参数为：<span class="variable">$2</span>&quot;</span>;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第三个参数为：<span class="variable">$3</span>&quot;</span>;</span><br></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th align="left">参数处理</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">$#</td>
-<td align="left">传递到脚本的参数个数</td>
-</tr>
-<tr>
-<td align="left">$*</td>
-<td align="left">以一个单字符串显示所有向脚本传递的参数。 如”$*”用「”」括起来的情况、以”$1 $2 … $n”的形式输出所有参数。</td>
-</tr>
-<tr>
-<td align="left">$$</td>
-<td align="left">脚本运行的当前进程ID号</td>
-</tr>
-<tr>
-<td align="left">$!</td>
-<td align="left">后台运行的最后一个进程的ID号</td>
-</tr>
-<tr>
-<td align="left">$@</td>
-<td align="left">与$*相同，但是使用时加引号，并在引号中返回每个参数。 如”$@”用「”」括起来的情况、以”$1” “$2” … “$n” 的形式输出所有参数。</td>
-</tr>
-<tr>
-<td align="left">$-</td>
-<td align="left">显示Shell使用的当前选项，与<a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-comm-set.html">set命令</a>功能相同。</td>
-</tr>
-<tr>
-<td align="left">$?</td>
-<td align="left">显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。</td>
-</tr>
-</tbody></table>
-<p><strong>实例</strong></p>
-<p><img src="/imgs/image-20220102172744910.png" alt="image-20220102172744910"></p>
-<p><em><em>$</em> 与 $@ 区别：</em>*</p>
-<ul>
-<li>相同点：都是引用所有参数。</li>
-<li>不同点：只有在双引号中体现出来。假设在脚本运行时写了三个参数 1、2、3，，则 “ * “ 等价于 “1 2 3”（传递了一个参数），而 “@” 等价于 “1” “2” “3”（传递了三个参数）。</li>
-</ul>
-<p><strong>演示</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># author:菜鸟教程</span></span><br><span class="line"><span class="comment"># url:www.runoob.com</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;-- \$* 演示 ---&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">&quot;$*&quot;</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;-- \$@ 演示 ---&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$@</span>&quot;</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-
-<p>输出</p>
-<p><img src="/imgs/image-20220102173644362.png" alt="image-20220102173644362"></p>
-<hr>
-<h3 id="shell-数组"><a href="#shell-数组" class="headerlink" title="shell 数组"></a>shell 数组</h3><p>获取元素个数</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ chmod +x test.sh </span><br><span class="line">$ ./test.sh</span><br><span class="line">数组元素个数为: 4</span><br><span class="line">数组元素个数为: 4</span><br></pre></td></tr></table></figure>
-
-<p>数组长度</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;数组元素个数为: <span class="variable">$&#123;#my_array[*]&#125;</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;数组元素个数为: <span class="variable">$&#123;#my_array[@]&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>数组的值可以是变量</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">A=1</span><br><span class="line">my_array=(<span class="variable">$A</span> B C D)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第一个元素为: <span class="variable">$&#123;my_array[0]&#125;</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第二个元素为: <span class="variable">$&#123;my_array[1]&#125;</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第三个元素为: <span class="variable">$&#123;my_array[2]&#125;</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;第四个元素为: <span class="variable">$&#123;my_array[3]&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="shell-运算符"><a href="#shell-运算符" class="headerlink" title="shell 运算符"></a>shell 运算符</h3><p><code>expr</code>：expr是计算表达式的工具，比如</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">val = `expr 2 + 2`</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>表达式和运算符之间<strong>要有空格</strong>，例如 2+2 是不对的，必须写成 2 + 2，这与我们熟悉的大多数编程语言不一样。</li>
-<li>完整的表达式要被反引号 包含，注意这个字符不是常用的单引号，在 Esc 键下边。</li>
-</ul>
-<h3 id="if表达式"><a href="#if表达式" class="headerlink" title="if表达式"></a>if表达式</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> [ <span class="variable">$a</span> == <span class="variable">$b</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;a 等于 b&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$a</span> != <span class="variable">$b</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;a 不等于 b&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$a</span> -le <span class="variable">$b</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$a</span> -le <span class="variable">$b</span>: a 小于或等于 b&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$a</span> -le <span class="variable">$b</span>: a 大于 b&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>关系运算符</strong></p>
-<table>
-<thead>
-<tr>
-<th>-eq</th>
-<th>检测两个数是否相等，相等返回 true。</th>
-<th>[ $a -eq $b ] 返回 false。</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-ne</td>
-<td>检测两个数是否不相等，不相等返回 true。</td>
-<td>[ $a -ne $b ] 返回 true。</td>
-</tr>
-<tr>
-<td>-gt</td>
-<td>检测左边的数是否大于右边的，如果是，则返回 true。</td>
-<td>[ $a -gt $b ] 返回 false。</td>
-</tr>
-<tr>
-<td>-lt</td>
-<td>检测左边的数是否小于右边的，如果是，则返回 true。</td>
-<td>[ $a -lt $b ] 返回 true。</td>
-</tr>
-<tr>
-<td>-ge</td>
-<td>检测左边的数是否大于等于右边的，如果是，则返回 true。</td>
-<td>[ $a -ge $b ] 返回 false。</td>
-</tr>
-<tr>
-<td>-le</td>
-<td>检测左边的数是否小于等于右边的，如果是，则返回 true。</td>
-<td>[ $a -le $b ] 返回 true。</td>
-</tr>
-</tbody></table>
-<p><strong>布尔运算符</strong></p>
-<table>
-<thead>
-<tr>
-<th>!</th>
-<th>非运算，表达式为 true 则返回 false，否则返回 true。</th>
-<th>[ ! false ] 返回 true。</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-o</td>
-<td>或运算，有一个表达式为 true 则返回 true。</td>
-<td>[ $a -lt 20 -o $b -gt 100 ] 返回 true。</td>
-</tr>
-<tr>
-<td>-a</td>
-<td>与运算，两个表达式都为 true 才返回 true。</td>
-<td>[ $a -lt 20 -a $b -gt 100 ] 返回 false。</td>
-</tr>
-</tbody></table>
-<p><strong>逻辑运算符</strong></p>
-<table>
-<thead>
-<tr>
-<th align="left">运算符</th>
-<th align="left">说明</th>
-<th align="left">举例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">&amp;&amp;</td>
-<td align="left">逻辑的 AND</td>
-<td align="left">[[ $a -lt 100 &amp;&amp; $b -gt 100 ]] 返回 false</td>
-</tr>
-<tr>
-<td align="left">||</td>
-<td align="left">逻辑的 OR</td>
-<td align="left">[[ $a -lt 100 || $b -gt 100 ]] 返回 true</td>
-</tr>
-</tbody></table>
-<p><strong>字符串运算符</strong></p>
-<table>
-<thead>
-<tr>
-<th align="left">运算符</th>
-<th align="left">说明</th>
-<th align="left">举例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">=</td>
-<td align="left">检测两个字符串是否相等，相等返回 true。</td>
-<td align="left">[ $a = $b ] 返回 false。</td>
-</tr>
-<tr>
-<td align="left">!=</td>
-<td align="left">检测两个字符串是否不相等，不相等返回 true。</td>
-<td align="left">[ $a != $b ] 返回 true。</td>
-</tr>
-<tr>
-<td align="left">-z</td>
-<td align="left">检测字符串长度是否为0，为0返回 true。</td>
-<td align="left">[ -z $a ] 返回 false。</td>
-</tr>
-<tr>
-<td align="left">-n</td>
-<td align="left">检测字符串长度是否不为 0，不为 0 返回 true。</td>
-<td align="left">[ -n “$a” ] 返回 true。</td>
-</tr>
-<tr>
-<td align="left">$</td>
-<td align="left">检测字符串是否为空，不为空返回 true。</td>
-<td align="left">[ $a ] 返回 true。</td>
-</tr>
-</tbody></table>
-<p>使用例</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> author:菜鸟教程</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> url:www.runoob.com</span></span><br><span class="line"></span><br><span class="line">a=&quot;abc&quot;</span><br><span class="line">b=&quot;efg&quot;</span><br><span class="line"></span><br><span class="line">if [ $a = $b ]</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a = $b : a 等于 b&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a = $b: a 不等于 b&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a != $b ]</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a != $b : a 不等于 b&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a != $b: a 等于 b&quot;</span><br><span class="line">fi</span><br><span class="line">if [ -z $a ]</span><br><span class="line">then</span><br><span class="line">   echo &quot;-z $a : 字符串长度为 0&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;-z $a : 字符串长度不为 0&quot;</span><br><span class="line">fi</span><br><span class="line">if [ -n &quot;$a&quot; ]</span><br><span class="line">then</span><br><span class="line">   echo &quot;-n $a : 字符串长度不为 0&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;-n $a : 字符串长度为 0&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a ]</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a : 字符串不为空&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a : 字符串为空&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>文件测试运算符</strong></p>
-<table>
-<thead>
-<tr>
-<th align="left">操作符</th>
-<th align="left">说明</th>
-<th align="left">举例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">-b file</td>
-<td align="left">检测文件是否是块设备文件，如果是，则返回 true。</td>
-<td align="left">[ -b $file ] 返回 false。</td>
-</tr>
-<tr>
-<td align="left">-c file</td>
-<td align="left">检测文件是否是字符设备文件，如果是，则返回 true。</td>
-<td align="left">[ -c $file ] 返回 false。</td>
-</tr>
-<tr>
-<td align="left">-d file</td>
-<td align="left">检测文件是否是目录，如果是，则返回 true。</td>
-<td align="left">[ -d $file ] 返回 false。</td>
-</tr>
-<tr>
-<td align="left">-f file</td>
-<td align="left">检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回 true。</td>
-<td align="left">[ -f $file ] 返回 true。</td>
-</tr>
-<tr>
-<td align="left">-g file</td>
-<td align="left">检测文件是否设置了 SGID 位，如果是，则返回 true。</td>
-<td align="left">[ -g $file ] 返回 false。</td>
-</tr>
-<tr>
-<td align="left">-k file</td>
-<td align="left">检测文件是否设置了粘着位(Sticky Bit)，如果是，则返回 true。</td>
-<td align="left">[ -k $file ] 返回 false。</td>
-</tr>
-<tr>
-<td align="left">-p file</td>
-<td align="left">检测文件是否是有名管道，如果是，则返回 true。</td>
-<td align="left">[ -p $file ] 返回 false。</td>
-</tr>
-<tr>
-<td align="left">-u file</td>
-<td align="left">检测文件是否设置了 SUID 位，如果是，则返回 true。</td>
-<td align="left">[ -u $file ] 返回 false。</td>
-</tr>
-<tr>
-<td align="left">-r file</td>
-<td align="left">检测文件是否可读，如果是，则返回 true。</td>
-<td align="left">[ -r $file ] 返回 true。</td>
-</tr>
-<tr>
-<td align="left">-w file</td>
-<td align="left">检测文件是否可写，如果是，则返回 true。</td>
-<td align="left">[ -w $file ] 返回 true。</td>
-</tr>
-<tr>
-<td align="left">-x file</td>
-<td align="left">检测文件是否可执行，如果是，则返回 true。</td>
-<td align="left">[ -x $file ] 返回 true。</td>
-</tr>
-<tr>
-<td align="left">-s file</td>
-<td align="left">检测文件是否为空（文件大小是否大于0），不为空返回 true。</td>
-<td align="left">[ -s $file ] 返回 true。</td>
-</tr>
-<tr>
-<td align="left">-e file</td>
-<td align="left">检测文件（包括目录）是否存在，如果是，则返回 true。</td>
-<td align="left">[ -e $file ] 返回 true。</td>
-</tr>
-</tbody></table>
-<ul>
-<li><strong>-S</strong>: 判断某文件是否 socket。</li>
-<li><strong>-L</strong>: 检测文件是否存在并且是一个符号链接。</li>
-</ul>
-<p>使用例</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># author:菜鸟教程</span></span><br><span class="line"><span class="comment"># url:www.runoob.com</span></span><br><span class="line"></span><br><span class="line">file=<span class="string">&quot;/var/www/runoob/test.sh&quot;</span></span><br><span class="line"><span class="keyword">if</span> [ -r <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件可读&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件不可读&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ -w <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件可写&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件不可写&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ -x <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件可执行&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件不可执行&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ -f <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件为普通文件&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件为特殊文件&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ -d <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件是个目录&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件不是个目录&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ -s <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件不为空&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件为空&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">if</span> [ -e <span class="variable">$file</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件存在&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&quot;文件不存在&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="命令行输入和输出"><a href="#命令行输入和输出" class="headerlink" title="命令行输入和输出"></a>命令行输入和输出</h3><p>echo，显示转义字符使用<code>\</code></p>
-<p>read，从标准输入获取一行，并且将其赋给变量</p>
-<p>比如<code>read name</code>将一行内容赋值给name</p>
-<ul>
-<li>echo开启转义字符：<code>-e</code></li>
-</ul>
-<p>比如</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;OK! \n&quot;</span> <span class="comment"># -e 开启转义</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;It is a test&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>会在OK后换行</p>
-<ul>
-<li>不换行</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;OK! \c&quot;</span> <span class="comment"># -e 开启转义 \c 不换行</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;It is a test&quot;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>结果定向至文件</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;It is a test&quot;</span> &gt; myfile</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>原样输出字符串，不考虑变量和转义：</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;$name\&quot;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>显示对应的命令执行的结果(反引号)</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo `date`</span><br></pre></td></tr></table></figure>
-
-<p>输出</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Thu Jul 24 10:08:46 CST 2014</span><br></pre></td></tr></table></figure>
-
-<h3 id="printf"><a href="#printf" class="headerlink" title="printf"></a>printf</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>  format-string  [arguments...]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>使用例</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span> <span class="string">&quot;%-10s %-8s %-4s\n&quot;</span> 姓名 性别 体重kg  </span><br><span class="line"><span class="built_in">printf</span> <span class="string">&quot;%-10s %-8s %-4.2f\n&quot;</span> 郭靖 男 66.1234</span><br><span class="line"><span class="built_in">printf</span> <span class="string">&quot;%-10s %-8s %-4.2f\n&quot;</span> 杨过 男 48.6543</span><br><span class="line"><span class="built_in">printf</span> <span class="string">&quot;%-10s %-8s %-4.2f\n&quot;</span> 郭芙 女 47.9876</span><br></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li><p>输出</p>
-</li>
-<li><pre><code>姓名     性别   体重kg
-郭靖     男      66.12
-杨过     男      48.65
-郭芙     女      47.99
-</code></pre>
-</li>
-</ul>
-<p><strong>%s %c %d %f</strong> 都是格式替代符，<strong>％s</strong> 输出一个字符串，<strong>％d</strong> 整型输出，<strong>％c</strong> 输出一个字符，<strong>％f</strong> 输出实数，以小数形式输出。</p>
-<p><strong>%-10s</strong> 指一个宽度为 10 个字符（- 表示左对齐，没有则表示右对齐），任何字符都会被显示在 10 个字符宽的字符内，如果不足则自动以空格填充，超过也会将内容全部显示出来。</p>
-<p><strong>%-4.2f</strong> 指格式化为小数，其中 <strong>.2</strong> 指保留2位小数。</p>
-<ul>
-<li><p><em>单引号与双引号效果一样</em></p>
-</li>
-<li><p><em><strong>没有引号</strong>也可以输出</em></p>
-</li>
-<li><p><em>格式只指定的参数比传入的需要格式化输出的参数少的时候，多出的参数仍然会按照该格式输出，format-string 被重用</em>，类似于printf被重复使用多次直到所有参数都被格式化输出为止</p>
-</li>
-<li><p>转义序列</p>
-</li>
-<li></li>
-<li><table>
-<thead>
-<tr>
-<th align="left">序列</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">\a</td>
-<td align="left">警告字符，通常为ASCII的BEL字符</td>
-</tr>
-<tr>
-<td align="left">\b</td>
-<td align="left">后退</td>
-</tr>
-<tr>
-<td align="left">\c</td>
-<td align="left">抑制（不显示）输出结果中任何结尾的换行字符（只在%b格式指示符控制下的参数字符串中有效），而且，任何留在参数里的字符、任何接下来的参数以及任何留在格式字符串中的字符，都被忽略</td>
-</tr>
-<tr>
-<td align="left">\f</td>
-<td align="left">换页（formfeed）</td>
-</tr>
-<tr>
-<td align="left">\n</td>
-<td align="left">换行</td>
-</tr>
-<tr>
-<td align="left">\r</td>
-<td align="left">回车（Carriage return）</td>
-</tr>
-<tr>
-<td align="left">\t</td>
-<td align="left">水平制表符</td>
-</tr>
-<tr>
-<td align="left">\v</td>
-<td align="left">垂直制表符</td>
-</tr>
-<tr>
-<td align="left">\</td>
-<td align="left">一个字面上的反斜杠字符</td>
-</tr>
-<tr>
-<td align="left">\ddd</td>
-<td align="left">表示1到3位数八进制值的字符。仅在格式字符串中有效</td>
-</tr>
-<tr>
-<td align="left">\0ddd</td>
-<td align="left">表示1到3位的八进制值字符</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2376,7 +2234,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">176</span>
+          <span class="site-state-item-count">177</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2420,13 +2278,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">632k</span>
+    <span title="站点总字数">634k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:08</span>
+    <span title="站点阅读时长">19:12</span>
 </div>
 
         

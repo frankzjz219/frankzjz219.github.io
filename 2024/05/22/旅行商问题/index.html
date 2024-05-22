@@ -20,20 +20,23 @@
     var CONFIG = {"hostname":"frankzjz219.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="找不到.condarc文件 先执行一次conda config就能找到了配置Anaconda使用clash代理 链接修改Anaconda安装环境的默认位置 链接手动添加Anaconda到环境变量 链接配置pytorch使用CPU的多线程 torch.set_num_threads(8) 参考 作用不大GYM 官方文档 链接word中插入代码 https:&#x2F;&#x2F;highlightcode.com&#x2F;">
+  <meta name="description" content="旅行商问题 此题实际上是一个动态规划的问题 B站讲解问题】 https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1ne411i7gG&#x2F;?share_source&#x3D;copy_web&amp;vd_source&#x3D;e29d06662d9baca058bed682909766d6) 将整个路径排成一个圈，这一圈总的路程最小 因此从哪个点出发已经无所谓了，指定为0 先递推一个开环问题，也就是从">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Anaconda配置问题记录">
-<meta property="og:url" content="https://frankzjz219.github.io/2022/10/09/Anaconda%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:title" content="旅行商问题">
+<meta property="og:url" content="https://frankzjz219.github.io/2024/05/22/%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="Frank&#39;s blogs">
-<meta property="og:description" content="找不到.condarc文件 先执行一次conda config就能找到了配置Anaconda使用clash代理 链接修改Anaconda安装环境的默认位置 链接手动添加Anaconda到环境变量 链接配置pytorch使用CPU的多线程 torch.set_num_threads(8) 参考 作用不大GYM 官方文档 链接word中插入代码 https:&#x2F;&#x2F;highlightcode.com&#x2F;">
+<meta property="og:description" content="旅行商问题 此题实际上是一个动态规划的问题 B站讲解问题】 https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1ne411i7gG&#x2F;?share_source&#x3D;copy_web&amp;vd_source&#x3D;e29d06662d9baca058bed682909766d6) 将整个路径排成一个圈，这一圈总的路程最小 因此从哪个点出发已经无所谓了，指定为0 先递推一个开环问题，也就是从">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-10-09T06:25:18.000Z">
-<meta property="article:modified_time" content="2022-10-10T02:03:53.483Z">
+<meta property="article:published_time" content="2024-05-22T13:11:01.000Z">
+<meta property="article:modified_time" content="2024-05-22T13:27:03.758Z">
 <meta property="article:author" content="FrankZhang">
-<meta property="article:tag" content="anaconda">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Cpp">
+<meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="动态规划">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://frankzjz219.github.io/2022/10/09/Anaconda%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">
+<link rel="canonical" href="https://frankzjz219.github.io/2024/05/22/%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98/">
 
 
 <script id="page-configurations">
@@ -46,7 +49,7 @@
   };
 </script>
 
-  <title>Anaconda配置问题记录 | Frank's blogs</title>
+  <title>旅行商问题 | Frank's blogs</title>
   
 
 
@@ -187,7 +190,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/10/09/Anaconda%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/05/22/%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar1.jpg">
@@ -200,7 +203,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Anaconda配置问题记录
+          旅行商问题
         </h1>
 
         <div class="post-meta">
@@ -209,16 +212,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2022-10-09 14:25:18" itemprop="dateCreated datePublished" datetime="2022-10-09T14:25:18+08:00">2022-10-09</time>
+              <time title="创建时间：2024-05-22 21:11:01 / 修改时间：21:27:03" itemprop="dateCreated datePublished" datetime="2024-05-22T21:11:01+08:00">2024-05-22</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-10-10 10:03:53" itemprop="dateModified" datetime="2022-10-10T10:03:53+08:00">2022-10-10</time>
-              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
@@ -233,14 +230,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>187</span>
+              <span>2.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>4 分钟</span>
             </span>
 
         </div>
@@ -252,16 +249,32 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="找不到-condarc文件"><a href="#找不到-condarc文件" class="headerlink" title="找不到.condarc文件"></a>找不到<code>.condarc</code>文件</h2><ul>
-<li>先执行一次<code>conda config</code>就能找到了<h2 id="配置Anaconda使用clash代理"><a href="#配置Anaconda使用clash代理" class="headerlink" title="配置Anaconda使用clash代理"></a>配置Anaconda使用clash代理</h2></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43135178/article/details/124499250">链接</a><h2 id="修改Anaconda安装环境的默认位置"><a href="#修改Anaconda安装环境的默认位置" class="headerlink" title="修改Anaconda安装环境的默认位置"></a>修改Anaconda安装环境的默认位置</h2></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36455412/article/details/125347552">链接</a><h2 id="手动添加Anaconda到环境变量"><a href="#手动添加Anaconda到环境变量" class="headerlink" title="手动添加Anaconda到环境变量"></a>手动添加Anaconda到环境变量</h2></li>
-<li><a target="_blank" rel="noopener" href="http://news.sohu.com/a/446583263_120918998">链接</a><h2 id="配置pytorch使用CPU的多线程"><a href="#配置pytorch使用CPU的多线程" class="headerlink" title="配置pytorch使用CPU的多线程"></a>配置pytorch使用CPU的多线程</h2></li>
-<li><code>torch.set_num_threads(8)</code></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/a_piece_of_ppx/article/details/123714865">参考</a></li>
-<li>作用不大<h2 id="GYM-官方文档"><a href="#GYM-官方文档" class="headerlink" title="GYM 官方文档"></a>GYM 官方文档</h2></li>
-<li><a target="_blank" rel="noopener" href="https://www.gymlibrary.dev/">链接</a><h2 id="word中插入代码"><a href="#word中插入代码" class="headerlink" title="word中插入代码"></a>word中插入代码</h2></li>
-<li><a target="_blank" rel="noopener" href="https://highlightcode.com/">https://highlightcode.com/</a></li>
+        <h2 id="旅行商问题"><a href="#旅行商问题" class="headerlink" title="旅行商问题"></a>旅行商问题</h2><ul>
+<li>此题实际上是一个动态规划的问题</li>
+<li><a href="%E3%80%909-3-3%E5%9B%BE%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E2%80%94%E2%80%94%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%B3%95%E6%B1%82%E8%A7%A3%E6%97%85%E8%A1%8C%E5%95%86(TSP">B站讲解</a>问题】 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ne411i7gG/?share_source=copy_web&amp;vd_source=e29d06662d9baca058bed682909766d6">https://www.bilibili.com/video/BV1ne411i7gG/?share_source=copy_web&amp;vd_source=e29d06662d9baca058bed682909766d6</a>)</li>
+<li>将整个路径排成一个圈，这一圈总的路程最小</li>
+<li>因此从哪个点出发已经无所谓了，指定为0</li>
+<li>先递推一个开环问题，也就是从某个固定点出发遍历地图上所有的点，最短的总路径是什么<ul>
+<li>任意一个长度为n，结尾点为i的问题都依赖于一个长度为n-1，而且不包括i点的路径的总路程</li>
+</ul>
+</li>
+<li>递推数组中记录<code>[按位表示的经历过的点][末尾位置][路线的总长度]</code><h3 id="递推"><a href="#递推" class="headerlink" title="递推"></a>递推</h3></li>
+<li>n从2开始</li>
+<li>对于所有长度为n-1的路径，搜索其中所有到达过的点不同的路径</li>
+<li>对于到达过的点相同的路径，按末尾点不同搜索路径</li>
+<li>用地图上除了开始点之外的所有点尝试作为新的到达点<ul>
+<li>如果这个点该路径已经到达过了，跳过</li>
+<li>如果没有，则将其添加到路径中，将路径的总长度增加一个原来的末尾点到这个点的距离</li>
+</ul>
+</li>
+<li>将路径的末尾点修改为当前点</li>
+<li>查找长度为n的路径表中是否已经存在了<code>&lt;到达点与其相同&gt;&lt;末尾点与其相同&gt;</code>的路径<ul>
+<li>如果存在，将其长度和刚求出的长度取最小值，更新为新的<code>&lt;到达点与其相同&gt;&lt;末尾点与其相同&gt;</code>的所有路径的最小长度（不关心中间点的顺序，只在意结束位置）</li>
+</ul>
+</li>
+<li>最开始的时候，向dp图长度为1的路径添加所有起始点以外的点，长度为从起始点到任意点的距离，表示从开始点到任意其他点的路径</li>
+<li>结束的时候，长度为n的路径应该具有相同的到达点（也就是除了开始点之外的点全部到达过），这是末尾点不同，根据不同的末尾点，寻找末尾点返回起始点的距离，将其加到路径的长度上计算出每条长度为n的路径的闭环长度</li>
+<li>最短的一条就是结果<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;climits&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line">vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; to;</span><br><span class="line">vector&lt;unordered_map&lt;<span class="keyword">int</span>, unordered_map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt;&gt; dp;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    cin&gt;&gt;n;</span><br><span class="line">    to = vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;(n, vector&lt;<span class="keyword">int</span>&gt;(n));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j&lt;n; ++j)</span><br><span class="line">        &#123;</span><br><span class="line">            cin&gt;&gt;to[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    dp = vector&lt;unordered_map&lt;<span class="keyword">int</span>, unordered_map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt;&gt;(n+<span class="number">1</span>);</span><br><span class="line">    <span class="comment">// 默认从0开始</span></span><br><span class="line">    <span class="comment">// dp的第一个下标是路径长度，第二个是当前到达过的点标志（从低到高按位），第三个是当前路径的最后一个点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i&lt;n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        dp[<span class="number">1</span>][<span class="number">1</span>&lt;&lt;i][i] = to[<span class="number">0</span>][i];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> len = <span class="number">2</span>; len&lt;n; ++len)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> p : dp[len<span class="number">-1</span>])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">auto</span> q : p.second)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> s = <span class="number">1</span>; s&lt;n; ++s)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">if</span>((<span class="number">1</span>&lt;&lt;s)&amp;p.first)<span class="keyword">continue</span>;</span><br><span class="line">                    <span class="keyword">if</span>(dp[len].<span class="built_in">count</span>(p.first|<span class="number">1</span>&lt;&lt;s))</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">if</span>(dp[len][p.first|<span class="number">1</span>&lt;&lt;s].<span class="built_in">count</span>(s))</span><br><span class="line">                        &#123;</span><br><span class="line">                            dp[len][p.first|<span class="number">1</span>&lt;&lt;s][s] = <span class="built_in">min</span>(dp[len][p.first|<span class="number">1</span>&lt;&lt;s][s], q.second+to[q.first][s]);</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">else</span> </span><br><span class="line">                        &#123;</span><br><span class="line">                            dp[len][p.first|<span class="number">1</span>&lt;&lt;s][s] = q.second+to[q.first][s];</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> </span><br><span class="line">                    &#123;</span><br><span class="line">                        dp[len][p.first|<span class="number">1</span>&lt;&lt;s][s] = q.second+to[q.first][s];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> minDist = INT_MAX;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> p : dp[n<span class="number">-1</span>])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> q:p.second)</span><br><span class="line">        &#123;</span><br><span class="line">            minDist = <span class="built_in">min</span>(minDist, q.second+to[q.first][<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;minDist&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 64 位输出请用 printf(&quot;%lld&quot;)</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 
     </div>
@@ -272,7 +285,10 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/anaconda/" rel="tag"># anaconda</a>
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/Cpp/" rel="tag"># Cpp</a>
+              <a href="/tags/leetcode/" rel="tag"># leetcode</a>
+              <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag"># 动态规划</a>
           </div>
 
         
@@ -281,13 +297,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/10/07/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89/" rel="prev" title="强化学习复习（三）">
-      <i class="fa fa-chevron-left"></i> 强化学习复习（三）
+    <a href="/2024/05/17/Ubuntu%E8%AF%BB%E5%8F%96PS4%E6%89%8B%E6%9F%84/" rel="prev" title="Ubuntu读取PS4手柄">
+      <i class="fa fa-chevron-left"></i> Ubuntu读取PS4手柄
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/10/09/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/" rel="next" title="强化学习复习（四）">
-      强化学习复习（四） <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -346,7 +359,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%BE%E4%B8%8D%E5%88%B0-condarc%E6%96%87%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">找不到.condarc文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEAnaconda%E4%BD%BF%E7%94%A8clash%E4%BB%A3%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">配置Anaconda使用clash代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9Anaconda%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83%E7%9A%84%E9%BB%98%E8%AE%A4%E4%BD%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">修改Anaconda安装环境的默认位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%8B%E5%8A%A8%E6%B7%BB%E5%8A%A0Anaconda%E5%88%B0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text">手动添加Anaconda到环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEpytorch%E4%BD%BF%E7%94%A8CPU%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="nav-number">5.</span> <span class="nav-text">配置pytorch使用CPU的多线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GYM-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3"><span class="nav-number">6.</span> <span class="nav-text">GYM 官方文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#word%E4%B8%AD%E6%8F%92%E5%85%A5%E4%BB%A3%E7%A0%81"><span class="nav-number">7.</span> <span class="nav-text">word中插入代码</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">旅行商问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%92%E6%8E%A8"><span class="nav-number">1.1.</span> <span class="nav-text">递推</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
