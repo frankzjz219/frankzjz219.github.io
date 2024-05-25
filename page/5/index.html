@@ -182,6 +182,154 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/06/20/%E8%8A%AF%E7%89%87%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8CbootLoader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/06/20/%E8%8A%AF%E7%89%87%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8CbootLoader/" class="post-title-link" itemprop="url">芯片的启动和bootLoader</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-06-20 14:49:38 / 修改时间：15:18:22" itemprop="dateCreated datePublished" datetime="2023-06-20T14:49:38+08:00">2023-06-20</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="bootloader"><a href="#bootloader" class="headerlink" title="bootloader"></a>bootloader</h2><h3 id="8086芯片"><a href="#8086芯片" class="headerlink" title="8086芯片"></a>8086芯片</h3><ul>
+<li>reset引脚跳变的时候</li>
+<li>CS（代码段寄存器）和IP（指令指针寄存器）分别初始化为<code>0xffff</code>和<code>0x0000</code>，组合成一个20位的长度地址，再从这个地址跳转到其他地址<h3 id="ARM芯片"><a href="#ARM芯片" class="headerlink" title="ARM芯片"></a>ARM芯片</h3></li>
+<li><img src="/imgs/57ec30a8f7250a218f23c72bb900a78037e9ac385daab274de33317068b72536.png" alt="picture 1">  </li>
+<li>PC直接复位到0地址，然后从中断向量表的<code>Reset</code>位置获取下一步跳转的地址</li>
+<li>直接将代码搬运到内存中执行</li>
+<li>之后再以此为基础运行别的代码</li>
+<li><strong>出场写好的，用于启动用户软件的软件称为boot ROM</strong><h3 id="修改这部分代码"><a href="#修改这部分代码" class="headerlink" title="修改这部分代码"></a>修改这部分代码</h3></li>
+<li><img src="/imgs/8c6d30b382db21109c773da02af6dad393f8ce0facdcfa01fda580153fad2087.png" alt="picture 2">  <ul>
+<li>大部分芯片是用外部电路手动配置的方式</li>
+<li>拨码开关的信号会被记录下来控制部分启动信息</li>
+<li>对于电脑而言就是<code>BIOS</code><h3 id="二次至多次引导代码-bootloader"><a href="#二次至多次引导代码-bootloader" class="headerlink" title="二次至多次引导代码(bootloader)"></a>二次至多次引导代码(bootloader)</h3></li>
+</ul>
+</li>
+<li>一般<code>bootloader</code>是说这个<h4 id="为什么需要"><a href="#为什么需要" class="headerlink" title="为什么需要"></a>为什么需要</h4></li>
+<li><code>boot rom</code>不够灵活</li>
+<li>用户可控<code>bootloader</code></li>
+<li>MCU<ul>
+<li>单核或者多核同构</li>
+<li>主频小于1GHz</li>
+<li>没有MMU</li>
+<li>最多运行RTOS</li>
+<li><img src="/imgs/d0c62019ce7041521e0657170d70f385d735469755cb91e6ef6fdc5d6e85a12f.png" alt="picture 3">  </li>
+<li>程序运行基本都是NOR Flash<ul>
+<li>有分离的地址线和数据线</li>
+<li>运行不需要拷贝到RAM中</li>
+</ul>
+</li>
+<li>STM32的启动<ul>
+<li>启动时会固定跳转到0地址位置</li>
+<li>通过两个boot引脚控制启动的代码映射<ul>
+<li>引脚01的时候可以映射system boot（arm中的boot rom）</li>
+<li>第二位是0的时候，可以把存放用户代码的internal Flash映射到0</li>
+<li>引脚11的时候将internal SRAM映射到0</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>boot loader需要完成的任务<ul>
+<li>关闭看门狗，初始化中断和trap向量表，进行时钟和外设初始化，让芯片正常运行起来</li>
+<li>提供CAN、UART、ETH等用于通讯功能的驱动，能够接收外部数据传输请求</li>
+<li>提供FLASH的读写与擦除驱动，设计服务来对通讯端口接收到的更新代码进行校验、存储，以及跳转操作系统或后续应用程序代码</li>
+<li>如有必要，还会开发一些基础诊断服务，串口交互程序等等</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>嵌入式Linux的SoC和计算机<ul>
+<li>系统一般存储在NAND Flash中（计算机一般是硬盘），运行前需要先将代码搬运到SRAM中</li>
+<li>主要任务就是将代码从NAND Flash或者硬盘中搬运到SRAM中</li>
+<li>转移的这部分内容就是<code>bootloader</code></li>
+<li>转移的内容包括SPL和uBoot<ul>
+<li>SPL是接力赛中的第二棒，初始化更大的外部DRAM，再将uBoot搬运到外部RAM中运行</li>
+<li>uBoot运行初始化程序，再将系统环境变量将OS内核搬运到DRAM中执行</li>
+<li>OS再完成根文件系统的加载等等<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>boot rom<ul>
+<li>硬件自检，部分初始化，提供外部配置引脚</li>
+</ul>
+</li>
+<li>自己写的boot loader<ul>
+<li>可以访问外部RAM，NAND Flash</li>
+<li>初始化时钟，通讯等</li>
+<li>接收，存储以及跳转代码</li>
+</ul>
+</li>
+<li>application层<ul>
+<li>操作系统，文件系统</li>
+<li>用户应用程序</li>
+<li>方便更新</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0%EF%BC%884%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1632,94 +1780,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/04/11/%E6%89%8B%E5%8A%A8%E7%BB%99Debian%E5%AE%89%E8%A3%85xfce%E6%A1%8C%E9%9D%A2%E8%AE%B0%E5%BD%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/04/11/%E6%89%8B%E5%8A%A8%E7%BB%99Debian%E5%AE%89%E8%A3%85xfce%E6%A1%8C%E9%9D%A2%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">手动给Debian安装xfce桌面记录</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-04-11 00:00:23 / 修改时间：20:23:35" itemprop="dateCreated datePublished" datetime="2023-04-11T00:00:23+08:00">2023-04-11</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>712</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="安装桌面"><a href="#安装桌面" class="headerlink" title="安装桌面"></a>安装桌面</h2><ul>
-<li><code>sudo apt install xfce4-session</code></li>
-<li>然后执行，报错<code>exec :xinit :not found</code></li>
-<li>然后执行<code>sudo apt install xinit xserver-xorg</code></li>
-<li>报错<code>Failed to execute child process &quot;dbus-launch&quot;</code>（图形界面报错）</li>
-<li>执行<code>sudo apt install dbus-x11</code></li>
-<li>但是此时再执行<code>startxfce4</code>出现黑屏，无响应，无光标</li>
-<li>假如无法通过键盘切换回tty，可以用ssh远程控制命令行关闭桌面</li>
-<li>关闭桌面的命令是<code>killall xfce4-session</code></li>
-<li>查找进程：<code>ps -ef</code></li>
-<li>意外可以使用的方法<code>sudo apt-get install xorg slim xfce4</code>，但是缺失了一些功能<h2 id="一些shell技巧"><a href="#一些shell技巧" class="headerlink" title="一些shell技巧"></a>一些shell技巧</h2></li>
-<li><code>|</code>：输入了如下指令：<code>command0 | command1</code>，则command0的输出流入到command1中</li>
-<li><code>||</code>：与&amp;&amp;的作用正好相反，是在<strong>执行到成功的指令时停止后续指令的执行</strong>。<code>command0 || command1</code>，如果command0执行成功，则command1不再执行。如果command0执行失败，则继续执行command1</li>
-<li><code>&amp;</code>：输入了如下指令：<code>command0 &amp;</code>，则执行command0并使其<strong>进入后台</strong></li>
-<li><code>&amp;&amp;</code>：输入了如下指令：command0 &amp;&amp; command1，则先从command0开始执行。<u>如果command0执行失败，则不再继续执行command1。如果执行command0执行成功，则继续执行command1。</u><br>所以，&amp;&amp;的作用是<strong>在执行到失败的指令时停止后续指令的执行</strong>。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1791,14 +1851,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">177</span>
+          <span class="site-state-item-count">178</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-count">53</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1835,13 +1895,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">634k</span>
+    <span title="站点总字数">636k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:12</span>
+    <span title="站点阅读时长">19:16</span>
 </div>
 
         

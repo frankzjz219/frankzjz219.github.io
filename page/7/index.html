@@ -182,6 +182,148 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/02/22/%E7%BC%96%E5%86%99C%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E7%A8%8B%E5%BA%8F%E5%B9%B6%E7%BB%9F%E8%AE%A1%E6%97%B6%E9%97%B4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/22/%E7%BC%96%E5%86%99C%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E7%A8%8B%E5%BA%8F%E5%B9%B6%E7%BB%9F%E8%AE%A1%E6%97%B6%E9%97%B4/" class="post-title-link" itemprop="url">编写C并行计算程序并统计时间</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-22 22:58:23" itemprop="dateCreated datePublished" datetime="2023-02-22T22:58:23+08:00">2023-02-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-23 23:17:20" itemprop="dateModified" datetime="2023-02-23T23:17:20+08:00">2023-02-23</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> ret = pthread_create(ids+i, <span class="literal">NULL</span>, calc, (<span class="keyword">void</span>*)(seq+i));</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>如上强制类型转换修改指针类型的时候，假如指针与其他类型的变量有加减，需要先完成加减再进行修改，否则会先将指针类型转换为<code>void*</code>再计算，使得指针的位置出错</p>
+</li>
+<li><p>尽量避免使用<code>&amp;数组名[下标]</code>的方式传递指针</p>
+</li>
+<li><p>编译的时候记得再gcc最后加参数<code>-lpthread</code>比如</p>
+<ul>
+<li><code>gcc parallelCalc.c -o par -lpthread</code><h2 id="c语言计时"><a href="#c语言计时" class="headerlink" title="c语言计时"></a>c语言计时</h2></li>
+</ul>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lqtcsq/article/details/113189091">参考链接</a></p>
+</li>
+<li><p>都是<code>time.h</code>中的</p>
+<ul>
+<li>一种是<code>time_t time(time_t * timer)</code>，参数传递NULL即可</li>
+<li>另一种是直接计算硬件滴答数，要换算成秒，需要除以CLK_TCK或者 CLK_TCKCLOCKS_PER_SEC。</li>
+<li><code>clock_t clock(void);</code><h2 id="时间统计（开1000个线程）"><a href="#时间统计（开1000个线程）" class="headerlink" title="时间统计（开1000个线程）"></a>时间统计（开1000个线程）</h2></li>
+</ul>
+</li>
+<li><p>规模为100：</p>
+<ul>
+<li><img src="/imgs/b17dac56d785e2e078952f1308f910d85ee7f0bdd113c3a507dc266020db8881.png" alt="picture 6">  </li>
+</ul>
+</li>
+<li><p>1000：</p>
+<ul>
+<li><img src="/imgs/25e4f6a0c09f52871dc5bdb698ee75cd17834fc278fb923fdb877c40bb967b24.png" alt="picture 7">  </li>
+</ul>
+</li>
+<li><p>10000：</p>
+<ul>
+<li><img src="/imgs/df99bc87e5c1835ab73ead3e13575c9c4bd466248f24a456ada27084f011fe20.png" alt="picture 10">  </li>
+</ul>
+</li>
+<li><p>100000：</p>
+<ul>
+<li><img src="/imgs/e0053b8c364f57fc9a094e0fb0a894491a57b39115bd4c36558d8aa57da71243.png" alt="picture 11">  </li>
+</ul>
+</li>
+<li><p>1000000：</p>
+<ul>
+<li><img src="/imgs/9a59aa35ecb8631be1923c1a12f799fe35fc36f9157a645fd7251b395aa2dd83.png" alt="picture 12">  </li>
+</ul>
+</li>
+<li><p>10000000：</p>
+<ul>
+<li><img src="/imgs/55a5ef6b382f597fccd48eabbec78f86a72d3ba6047edcb5b2334f7c86cbc2a4.png" alt="picture 13">  <h4 id="CPU使用情况"><a href="#CPU使用情况" class="headerlink" title="CPU使用情况"></a>CPU使用情况</h4></li>
+</ul>
+</li>
+<li><p>设置VMWare虚拟机为8核心</p>
+<ul>
+<li><img src="/imgs/960c173c3e113b1171f5de5468539cc51829650c3437f6a6eb38bd083388fef2.png" alt="picture 14">  </li>
+<li>可以明显地观察到有8个核心的占用一下子升高</li>
+</ul>
+</li>
+<li><p>顺序执行</p>
+<ul>
+<li><img src="/imgs/7fb97d3fdba5362444d1d0cbb6ef173c4727e87ea068526a785ed597e3b4a30e.png" alt="picture 15">  </li>
+<li>没有明显的CPU使用（也或许是计算任务在不同的CPU之间来回变化），效率很低</li>
+<li><img src="/imgs/a38e06067cc496686d22f1b79dd2387661af485e449c1e918b8a4dd563c8e06a.png" alt="picture 16">  </li>
+</ul>
+</li>
+</ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIZEOFMAT 1000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIZEOFVEC 10000000</span></span><br><span class="line"><span class="comment">// int matrix[SIZEOFMAT][SIZEOFVEC];</span></span><br><span class="line"><span class="comment">// int vector[SIZEOFVEC];</span></span><br><span class="line"><span class="keyword">int</span> seq[SIZEOFMAT];</span><br><span class="line"><span class="keyword">int</span>* rets[SIZEOFMAT];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span>* <span class="title">calc</span><span class="params">(<span class="keyword">void</span> *input)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// printf(&quot;enter\n&quot;);</span></span><br><span class="line">    <span class="keyword">int</span> rowNum = *(<span class="keyword">int</span>*)input;</span><br><span class="line">    <span class="keyword">int</span> *sum = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>)); <span class="comment">// 分配内存 不使用临时变量</span></span><br><span class="line">    *sum = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// printf(&quot;线程%d: \n&quot;, rowNum);</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; SIZEOFVEC; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        *sum+=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// printf(&quot;sum: %d\n&quot;, *sum);</span></span><br><span class="line">    <span class="comment">// printf(&quot;exit\n&quot;);</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">void</span>*)sum;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">clock_t</span> start,end;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">pthread_t</span> ids[SIZEOFMAT];</span><br><span class="line">    <span class="keyword">int</span> outVec[SIZEOFMAT];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; SIZEOFMAT; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        seq[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// for(int i = 0;i&lt;SIZEOFMAT;i++)</span></span><br><span class="line">    <span class="comment">// &#123;</span></span><br><span class="line">    <span class="comment">//     for(int j = 0;j&lt;SIZEOFVEC;j++)</span></span><br><span class="line">    <span class="comment">//     &#123;</span></span><br><span class="line">    <span class="comment">//         matrix[i][j] = j;</span></span><br><span class="line">    <span class="comment">//         vector[j] = j;</span></span><br><span class="line">    <span class="comment">//     &#125;</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    start = clock();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; SIZEOFMAT; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> ret = pthread_create(ids+i, <span class="literal">NULL</span>, calc, (<span class="keyword">void</span>*)(seq+i));</span><br><span class="line">        <span class="comment">// printf(&quot;创建了%d\n&quot;, i);</span></span><br><span class="line">        <span class="keyword">if</span>(ret)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;创建发生错误！&quot;</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;SIZEOFMAT;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// printf(&quot;joining\n&quot;);</span></span><br><span class="line">        pthread_join(ids[i], (<span class="keyword">void</span>**)(rets+i));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;SIZEOFMAT;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// printf(&quot;%d, &quot;, *rets[i]);</span></span><br><span class="line">        <span class="built_in">free</span>(rets[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    end = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;并行计算经过的时间为 %d\n&quot;</span>, end-start);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// int stdSum = 0;</span></span><br><span class="line">    <span class="comment">// for(int i = 0;i&lt;SIZEOFVEC;i++)</span></span><br><span class="line">    <span class="comment">// &#123;</span></span><br><span class="line">    <span class="comment">//     stdSum+=i*i;</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    <span class="comment">// printf(&quot;\n参照: %d\n&quot;, stdSum);</span></span><br><span class="line">    </span><br><span class="line">    start = clock();</span><br><span class="line">    <span class="keyword">int</span> sumSeq[SIZEOFMAT] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;SIZEOFMAT; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j&lt;SIZEOFVEC; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            sumSeq[i]+=<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;SIZEOFMAT;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// printf(&quot;%d, &quot;, sumSeq[i]);</span></span><br><span class="line">    &#125;</span><br><span class="line">    end = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;循环计算经过的时间为:%d\n&quot;</span>, end - start);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/02/21/windows%E6%90%AD%E5%BB%BAFTP%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88%E5%B8%A6%E9%80%8F%E7%A9%BF%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2764,79 +2906,6 @@ UDP接收方收到报文后，不需要给出任何确认
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/10/16/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%9B%9E%E5%BD%92/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/16/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%9B%9E%E5%BD%92/" class="post-title-link" itemprop="url">贝叶斯回归</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-10-16 11:20:52 / 修改时间：15:33:01" itemprop="dateCreated datePublished" datetime="2022-10-16T11:20:52+08:00">2022-10-16</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>7</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/436569049">参考链接</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/tao-tie-wen-10/posts">总链接</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2908,14 +2977,14 @@ UDP接收方收到报文后，不需要给出任何确认
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">177</span>
+          <span class="site-state-item-count">178</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-count">53</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -2952,13 +3021,13 @@ UDP接收方收到报文后，不需要给出任何确认
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">634k</span>
+    <span title="站点总字数">636k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:12</span>
+    <span title="站点阅读时长">19:16</span>
 </div>
 
         

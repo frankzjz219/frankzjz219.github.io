@@ -182,6 +182,127 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/09/17/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9E%E6%8E%A5VMware%E8%99%9A%E6%8B%9F%E6%9C%BAUbuntu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/17/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9E%E6%8E%A5VMware%E8%99%9A%E6%8B%9F%E6%9C%BAUbuntu/" class="post-title-link" itemprop="url">使用VSCode连接VMware虚拟机Ubuntu</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-17 18:50:07" itemprop="dateCreated datePublished" datetime="2022-09-17T18:50:07+08:00">2022-09-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-22 22:06:11" itemprop="dateModified" datetime="2023-02-22T22:06:11+08:00">2023-02-22</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>579</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/strive0_0/article/details/124967746">参考链接</a></li>
+<li>VMware虚拟机网络配置设置为<strong>桥接模式</strong>，然后使用ifconfig查看<code>IP地址</code></li>
+<li><img src="/imgs/8a503e879b39b180e4fb95bda8a014a0f8444c29cc4eb4653ef0d86dfdca9cd1.png" alt="图 2">  </li>
+</ul>
+<h2 id="Ubuntu端安装SSH"><a href="#Ubuntu端安装SSH" class="headerlink" title="Ubuntu端安装SSH"></a>Ubuntu端安装SSH</h2><ul>
+<li><code>sudo apt-get install openssh-server</code></li>
+<li>检查是否安装好<ul>
+<li><code>ssh -V</code></li>
+</ul>
+</li>
+<li>查看服务是否启动<ul>
+<li><code>sudo ps -e |grep ssh</code></li>
+</ul>
+</li>
+<li>启动SSH<ul>
+<li><code>sudo service ssh start</code></li>
+</ul>
+</li>
+<li>修改配置文件</li>
+<li>SSH服务的配置文件在/etc/ssh/sshd_config下，我们<code>sudo vim /etc/ssh/sshd_config</code>进行修改：<ul>
+<li>修改一：把配置文件中的”PermitRootLogin without-password“前面加一个”#“号,把它注释掉（也可以直接增加这一句）</li>
+<li>修改二：增加一句”PermitRootLogin yes”</li>
+</ul>
+</li>
+<li>保存，退出，重启ssh <code>/etc/init.d/ssh restart</code><h2 id="VSCode端配置"><a href="#VSCode端配置" class="headerlink" title="VSCode端配置"></a>VSCode端配置</h2></li>
+<li>安装<code>remote-ssh</code>插件</li>
+<li>新建ssh链接，在命令框中输入<code>ssh 用户名@IP地址 -A</code></li>
+<li>然后保存配置开始链接</li>
+<li><img src="/imgs/31d0f7334ef200549eb81def8586ddaa1782230ba5b521a788ecc3a628f5bf32.png" alt="图 1">  <h2 id="卡死在创建SSH链接的时候的解决方法"><a href="#卡死在创建SSH链接的时候的解决方法" class="headerlink" title="卡死在创建SSH链接的时候的解决方法"></a>卡死在创建SSH链接的时候的解决方法</h2></li>
+<li><img src="/imgs/40583bbf36963874eb80477c2349df6fc91fe7b8926a95de0b3be06103ae96ee.png" alt="picture 1">  </li>
+<li>打开Vscode端的<code>SSH</code>插件设置</li>
+<li>找到这一项 勾上对勾<ul>
+<li><img src="/imgs/5f8624e28c4e47571f5d970e8ea4e3d43061d6dfc22e57ab0426a9221c46f130.png" alt="picture 2">  </li>
+</ul>
+</li>
+<li>此外注意<strong>不要让ubuntu自动锁屏</strong>，否则可能导致连接断开</li>
+<li>在此处<strong>创建新的控制台</strong><img src="/imgs/5bd56d67d175ef3acc137deca15dfa260e2bbf02963c7bb89335b55362e9b7c5.png" alt="picture 3">  <ul>
+<li>因为安装SSH的控制台一般无法继续用作其他用途</li>
+</ul>
+</li>
+<li>另外，可以考虑使用<code>rm -r ~/.vscode-server</code>命令删除原先下载的<code>vscode-server</code>（在dpkg搜不到）</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/09/17/%E8%A7%A3%E5%86%B3VMwareTools%E5%AE%89%E8%A3%85%E4%BA%86%E4%BB%8D%E7%84%B6%E4%B8%8D%E8%83%BD%E5%AE%9E%E7%8E%B0%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%92%8C%E4%B8%BB%E6%9C%BA%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E7%9A%84%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1233,91 +1354,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/08/27/%E8%81%94%E6%83%B3y7000%E7%AD%89%E5%90%8C%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%94%B5%E8%84%91CPU%E8%A2%AB%E9%99%8D%E9%A2%91%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/27/%E8%81%94%E6%83%B3y7000%E7%AD%89%E5%90%8C%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%94%B5%E8%84%91CPU%E8%A2%AB%E9%99%8D%E9%A2%91%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" class="post-title-link" itemprop="url">联想y7000等同系列笔记本电脑CPU被降频以及蓝牙设置丢失解决办法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-27 20:48:22" itemprop="dateCreated datePublished" datetime="2022-08-27T20:48:22+08:00">2022-08-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-30 10:48:58" itemprop="dateModified" datetime="2022-08-30T10:48:58+08:00">2022-08-30</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>137</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="联想y7000等同系列笔记本电脑CPU被降频以及蓝牙设置丢失解决办法"><a href="#联想y7000等同系列笔记本电脑CPU被降频以及蓝牙设置丢失解决办法" class="headerlink" title="联想y7000等同系列笔记本电脑CPU被降频以及蓝牙设置丢失解决办法"></a>联想y7000等同系列笔记本电脑CPU被降频以及蓝牙设置丢失解决办法</h1><ul>
-<li>CPU被降频为0.78或者CPU的占用封顶34%，同时没有任何风扇转动声音的情况</li>
-<li>或者是蓝牙的设置直接丢失找不到，电脑失去蓝牙功能</li>
-<li>拔掉电脑一些外设，包括电源线</li>
-<li>关机</li>
-<li>长按电脑开机键20-30s释放静电，再重启即可</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1389,14 +1425,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">177</span>
+          <span class="site-state-item-count">178</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-count">53</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1433,13 +1469,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">634k</span>
+    <span title="站点总字数">636k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:12</span>
+    <span title="站点阅读时长">19:16</span>
 </div>
 
         
