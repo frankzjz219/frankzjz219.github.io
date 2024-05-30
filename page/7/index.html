@@ -1556,7 +1556,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-23 16:40:53" itemprop="dateModified" datetime="2024-05-23T16:40:53+08:00">2024-05-23</time>
+                <time title="修改时间：2024-05-30 16:18:07" itemprop="dateModified" datetime="2024-05-30T16:18:07+08:00">2024-05-30</time>
               </span>
 
           <br>
@@ -1830,8 +1830,17 @@
 <li><p>线程进程都是同步机制，而协程则是异步</p>
 </li>
 <li><p>协程能保留上一次调用时的状态，每次过程重入时，就相当于进入上一次调用的状态</p>
-</li>
+<h4 id="C-20引入的协程"><a href="#C-20引入的协程" class="headerlink" title="C++20引入的协程"></a>C++20引入的协程</h4></li>
 </ol>
+<ul>
+<li>C++20引入了协程（coroutines），这是一种强大的语言特性，可以简化异步编程和生成器模式</li>
+<li>协程的关键组件<ul>
+<li>co_await：暂停协程执行，等待一个值或者任务完成。</li>
+<li>co_yield：生成一个值并暂停协程执行，稍后可以恢复执行。</li>
+<li>co_return：结束协程并返回一个值。</li>
+</ul>
+</li>
+</ul>
 <h3 id="进程的异常控制流：陷入、中断、异常和信号"><a href="#进程的异常控制流：陷入、中断、异常和信号" class="headerlink" title="进程的异常控制流：陷入、中断、异常和信号"></a>进程的异常控制流：陷入、中断、异常和信号</h3><p>中断是系统从用户态到内核态的<strong>唯一方式</strong></p>
 <p>陷入(trap)是<strong>有意</strong>造成的“异常”，是执行一条指令的结果。陷入是同步的。陷入的主要作用是实现<strong>系统调用</strong>。比如，进程可以执行 <code>syscall n</code> 指令向内核请求服务。当进程执行这条指令后，会中断当前的控制流，<strong>陷入</strong>到内核态，执行相应的系统调用。内核的处理程序在执行结束后，会将结果返回给进程，同时退回到用户态。进程此时继续执行<strong>下一条指令</strong>。</p>
 <p>故障是由错误条件引起的，可能可以修复（比如缺页），修复之后会将CPU使用权交还给用户进程继续执行</p>
