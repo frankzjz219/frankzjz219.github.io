@@ -182,6 +182,143 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/03/03/Linux%E5%86%85%E6%A0%B8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/03/03/Linux%E5%86%85%E6%A0%B8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97/" class="post-title-link" itemprop="url">Linux内核多线程计算</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-03 20:51:31" itemprop="dateCreated datePublished" datetime="2023-03-03T20:51:31+08:00">2023-03-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-06 19:58:54" itemprop="dateModified" datetime="2023-03-06T19:58:54+08:00">2023-03-06</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Linux内核文档"><a href="#Linux内核文档" class="headerlink" title="Linux内核文档"></a>Linux内核文档</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.kernel.org/doc/html/">链接</a><h2 id="内核时间获取"><a href="#内核时间获取" class="headerlink" title="内核时间获取"></a>内核时间获取</h2><h3 id="jiffies和jiffies-64"><a href="#jiffies和jiffies-64" class="headerlink" title="jiffies和jiffies_64"></a><code>jiffies</code>和<code>jiffies_64</code></h3></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/u013253075/article/details/128227877">参考链接</a></li>
+<li><strong>实际上计算的是电脑开机到现在总共的时钟中断次数。取决于系统的频率，单位是Hz，可能是100或者额000之类的，可以自己修改</strong>，因此精度不高<ul>
+<li>具体位置在<code>linux/param.h</code>-&gt;<code>asm/param.h</code>-&gt;<code>asm-generic/param.h</code>-&gt;<code>uapi/asm-generic/param.h</code>的<code>CONFIG_HZ</code>中，<a target="_blank" rel="noopener" href="https://www.ngui.cc/el/1554037.html?action=onClick">HZ参考链接</a> 如图</li>
+<li><img src="/imgs/69c2579bd7eccccba51d86a4bde7a4b57c1c82d5b4a3922b976b46f95b94b4b5.png" alt="picture 5">  </li>
+<li>这个<code>CONFIG_HZ</code>定义在<img src="/imgs/85b269ccba811b1a6c0ac4bcdc262c3d651e031cc421a941712d1ba4b33b6a3a.png" alt="picture 6">  中，值是250如图</li>
+<li><img src="/imgs/38e4d4e149ad63be3a92b4b62fcbc8ea83ef4253e117f34300fc43c1b524439f.png" alt="picture 7">  </li>
+</ul>
+</li>
+<li></li>
+<li>使用<code>#include &lt;linux/jiffies.h&gt;</code>中的<code>jiffies</code>变量直接获取，该变量的定义为<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">volatile</span> __cacheline_aligned_in_smp __jiffy_arch_data jiffies;</span><br></pre></td></tr></table></figure></li>
+<li>将这个变量转化为时间的形式有很多函数，见<code>jiffies.h</code>中，比如<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">jiffies_to_msecs</span><span class="params">(<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> j)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">jiffies_to_usecs</span><span class="params">(<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> j)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>其中的参数直接传入<code>jiffies</code>即可(或者<code>jiffies_64</code>和<code>get_jiffies_64()</code>也可以，效果类似)<ul>
+<li><strong>但是似乎并不精确</strong></li>
+<li><img src="/imgs/df5fa22e87578e8a7327077b7cb182a806edeca5e738b87f5a6d2790e25d6929.png" alt="picture 4">  </li>
+</ul>
+</li>
+</ul>
+<h4 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h4><ul>
+<li><img src="/imgs/d7bc9e5d08b1f98d4c7fa931810f85bfc2e636bbe1a593df34b4386f03f51e73.png" alt="picture 1">  <ul>
+<li>可见并不是直接等于内核时间，而是与内核时间之间有一个<u>稳定的差值</u>,大概在<strong>300s</strong>左右，暂时不清楚原因<h3 id="使用rdts统计经过的CPU周期"><a href="#使用rdts统计经过的CPU周期" class="headerlink" title="使用rdts统计经过的CPU周期"></a>使用rdts统计经过的CPU周期</h3></li>
+</ul>
+</li>
+<li>使用<code>rdtsc()</code></li>
+<li>包含<code>asm/msr.h</code>头文件（需要<strong>正确配置VSCode的应用目录具有</strong><code>/usr/src/linux-headers-&lt;uname -r的输出&gt;/arch/x86/include/</code>，否则将会搜索出错误的头文件</li>
+<li><a target="_blank" rel="noopener" href="https://www.ngui.cc/el/1554037.html?action=onClick">参考链接1</a> <h3 id="使用ktime实现高精度计时"><a href="#使用ktime实现高精度计时" class="headerlink" title="使用ktime实现高精度计时"></a>使用ktime实现高精度计时</h3></li>
+<li>头文件<code># include &lt;linux/timekeeping.h&gt;</code>或者<code>#include &lt;linux/ktime.h&gt;</code></li>
+<li>函数<code>ktime_get_ns()</code>等函数族，有不同的精度和单位</li>
+<li>使用<code>ktime_get_ns()/1000000</code>得到的微秒级时间是精确的<ul>
+<li><img src="/imgs/d68e92133bcd148b3d3418987949a716be8f21ab7f17d74258b9d329d78f989b.png" alt="picture 8">  </li>
+</ul>
+</li>
+<li>使用<code>ktime_get_ns()/1000%1000000</code>，后面的取模是防止溢出<h4 id="结果-1"><a href="#结果-1" class="headerlink" title="结果"></a>结果</h4></li>
+<li>使用<code>ktime_get_ns()%1000000</code>直接得到纳秒级别的结果<ul>
+<li><img src="/imgs/1da93068788461cfc5b2c913ce8f75c8e853cb7b5094db35f453baddb3cb8fe7.png" alt="picture 9">  </li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/u014787262/article/details/123888538">参考链接</a></li>
+</ul>
+<h2 id="使用多个文件时候的编译"><a href="#使用多个文件时候的编译" class="headerlink" title="使用多个文件时候的编译"></a>使用多个文件时候的编译</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_52411900/article/details/129050107">参考</a></li>
+<li>当对应的模块需要多个源文件时，可以添加多个<code>.o</code>文件作为依赖，比如<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">obj-m := kThOut.o</span><br><span class="line"></span><br><span class="line">kThOut-objs := kTh.o task.o</span><br><span class="line"></span><br><span class="line">CURRENT_PATH := <span class="variable">$(<span class="built_in">shell</span> pwd)</span></span><br><span class="line">LINUX_KERNEL := <span class="variable">$(<span class="built_in">shell</span> uname -r)</span></span><br><span class="line">LINUX_KERNEL_PATH := /usr/src/linux-headers-<span class="variable">$(LINUX_KERNEL)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">	make -C <span class="variable">$(LINUX_KERNEL_PATH)</span> M=<span class="variable">$(CURRENT_PATH)</span> modules</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	make -C <span class="variable">$(LINUX_KERNEL_PATH)</span> M=<span class="variable">$(CURRENT_PATH)</span> clean</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>注意代码中<strong>不要有两个模块具有同样的名字</strong>，比如一个依赖项是<code>kTh</code>，即使这个模块包含了主要的函数比如<code>module_init</code>等，也不能这么做，输出模块必须单独取一个名字比如<code>kThOut</code>，否则输出的文件加载到内核后会出现<code>kTh: module license &#39;unspecified&#39; taints kernel.</code>之类的报错</li>
+<li>上述代码中需要编译的模块名字是<code>kThOut</code>，因此添加一行<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">&lt;模块名&gt;-objs := &lt;c源文件1&gt;.o &lt;c源文件2&gt;.o ...</span><br></pre></td></tr></table></figure></li>
+<li>注意，内核线程的返回类型必须是<code>int</code><h2 id="结果-2"><a href="#结果-2" class="headerlink" title="结果"></a>结果</h2></li>
+<li>向量长度为100000时</li>
+<li><img src="/imgs/0da2e22604527dfdba0c13b07686acc6f31d76704a4a96da15d27ceb374856e2.png" alt="picture 2">  </li>
+<li>可能是内核线程创建的代价较大导致的</li>
+<li>将结果输出可以发现几乎是按照线程创建的顺序计算的<ul>
+<li><img src="/imgs/f2f68e0a98528cf710d07a7726cf82f6168c9b639d6b97921b67fdd9a404234e.png" alt="picture 10">  </li>
+<li>可以看到内核线程单个的计算时间比主线程两层循环的时间还长，目前原因<strong>未知</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="代码仓库"><a href="#代码仓库" class="headerlink" title="代码仓库"></a>代码仓库</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/frankzjz219/linuxKernelThreads">仓库</a><h2 id="git提交脚本"><a href="#git提交脚本" class="headerlink" title="git提交脚本"></a>git提交脚本</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash </span></span><br><span class="line">git add .</span><br><span class="line">git add *</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;请输入commit信息：&quot;</span></span><br><span class="line"><span class="built_in">read</span> info</span><br><span class="line"><span class="comment"># 字符串非空判断等</span></span><br><span class="line"><span class="keyword">if</span> [[ -n <span class="string">&quot;<span class="variable">$info</span>&quot;</span> ]]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    <span class="comment"># echo &quot;正在commit: $info&quot;</span></span><br><span class="line">    git commit -m <span class="string">&quot;<span class="variable">$info</span>&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;正在push: <span class="variable">$info</span>&quot;</span></span><br><span class="line">    git push origin master</span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;使用非法， 未输入commit参数！&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure></li>
+<li>检测字符串是否是空的<code>if [[ -n &quot;$info&quot; ]]</code></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/02/22/%E7%BC%96%E5%86%99C%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E7%A8%8B%E5%BA%8F%E5%B9%B6%E7%BB%9F%E8%AE%A1%E6%97%B6%E9%97%B4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -721,7 +858,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-30 14:14:20" itemprop="dateModified" datetime="2024-05-30T14:14:20+08:00">2024-05-30</time>
+                <time title="修改时间：2024-06-05 16:38:31" itemprop="dateModified" datetime="2024-06-05T16:38:31+08:00">2024-06-05</time>
               </span>
 
           <br>
@@ -730,7 +867,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>26k</span>
+              <span>27k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -844,11 +981,47 @@
 </li>
 </ul>
 <h3 id="RAII"><a href="#RAII" class="headerlink" title="RAII"></a>RAII</h3><ul>
-<li>RAII（Resource Acquisition Is Initialization，资源获取即初始化）是一种管理资源的编程惯用法，特别适用于C++。该惯用法的核心思想是将资源的生命周期绑定到对象的生命周期，通过对象的构造函数获取资源，通过对象的析构函数释放资源。这种方式确保了资源在程序中得到可靠的管理，避免了资源泄漏。</li>
-<li>异常安全：RAII 确保资源会被正确释放，即使在异常情况下也不会发生资源泄漏。</li>
-<li>简化资源管理：通过将资源管理封装在对象中，减少了手动释放资源的代码，降低了出错的风险。<h3 id="如何防止因为抛出异常而导致的内存泄漏"><a href="#如何防止因为抛出异常而导致的内存泄漏" class="headerlink" title="如何防止因为抛出异常而导致的内存泄漏"></a>如何防止因为抛出异常而导致的内存泄漏</h3></li>
-<li>在C++中，为了防止程序因异常而出现内存泄漏，通常会使用RAII（Resource Acquisition Is Initialization）惯用法和智能指针。</li>
-<li>C++标准库提供了一些RAII类，比如<code>std::vector</code>，<code>std::string</code>，<code>std::fstream</code>等<h3 id="什么是智能指针？智能指针有什么作用？分为哪几种？各自有什么样的特点"><a href="#什么是智能指针？智能指针有什么作用？分为哪几种？各自有什么样的特点" class="headerlink" title="什么是智能指针？智能指针有什么作用？分为哪几种？各自有什么样的特点"></a>什么是智能指针？智能指针有什么作用？分为哪几种？各自有什么样的特点</h3></li>
+<li><p>RAII（Resource Acquisition Is Initialization，资源获取即初始化）是一种管理资源的编程惯用法，特别适用于C++。该惯用法的核心思想是将资源的生命周期绑定到对象的生命周期，通过对象的构造函数获取资源，通过对象的析构函数释放资源。这种方式确保了资源在程序中得到可靠的管理，避免了资源泄漏。</p>
+</li>
+<li><p>异常安全：RAII 确保资源会被正确释放，即使在异常情况下也不会发生资源泄漏。</p>
+</li>
+<li><p>简化资源管理：通过将资源管理封装在对象中，减少了手动释放资源的代码，降低了出错的风险。</p>
+<h3 id="如何防止因为抛出异常而导致的内存泄漏"><a href="#如何防止因为抛出异常而导致的内存泄漏" class="headerlink" title="如何防止因为抛出异常而导致的内存泄漏"></a>如何防止因为抛出异常而导致的内存泄漏</h3></li>
+<li><p>在C++中，为了防止程序因异常而出现内存泄漏，通常会使用RAII（Resource Acquisition Is Initialization）惯用法和智能指针。</p>
+</li>
+<li><p>C++标准库提供了一些RAII类，比如<code>std::vector</code>，<code>std::string</code>，<code>std::fstream</code>等</p>
+<h3 id="函数是怎么调用的"><a href="#函数是怎么调用的" class="headerlink" title="函数是怎么调用的"></a>函数是怎么调用的</h3></li>
+<li><p>栈帧分配</p>
+<ul>
+<li>当一个函数被调用时，程序会在栈上分配一块内存空间，用于存储该函数的局部变量、参数值、返回地址以及其他必要信息，这块内存空间就是栈帧。</li>
+<li>栈帧的大小取决于函数所需的局部变量大小、参数个数和其他额外信息的大小。</li>
+</ul>
+</li>
+<li><p>参数传递</p>
+<ul>
+<li>如果函数有参数，调用者将参数的值传递给被调用函数。这些参数值通常会被存储在<strong>栈帧中的特定位置</strong>，供被调用函数在执行时访问和使用。</li>
+</ul>
+</li>
+<li><p>局部变量分配</p>
+<ul>
+<li>函数中声明的局部变量也会被分配到栈帧中的适当位置。它们的大小和数量由编译器在编译时确定，并在函数调用时为其分配空间。</li>
+</ul>
+</li>
+<li><p>返回地址存储</p>
+<ul>
+<li>在函数调用时，调用者的程序计数器（PC）保存着<strong>下一条指令</strong>的地址，即函数调用语句的下一条指令地址。这个地址被称为返回地址，用于在函数执行完毕后返回到调用函数的正确位置。</li>
+<li><strong>返回地址会被压入栈帧中</strong>，以便在函数执行完毕后能够正确返回到调用函数的位置。</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li><strong>其他信息</strong>：<ul>
+<li>除了参数值、局部变量和返回地址之外，栈帧还可能包含其他必要的信息，如保存寄存器状态、异常处理信息等，这些信息取决于具体的编程语言和编译器实现。</li>
+</ul>
+</li>
+</ol>
+<p>总之，函数调用时的内存分配主要涉及栈帧的分配和管理，确保函数执行时有足够的内存空间存储参数、局部变量和其他相关信息，并能够正确返回到调用函数的位置。</p>
+<h3 id="什么是智能指针？智能指针有什么作用？分为哪几种？各自有什么样的特点"><a href="#什么是智能指针？智能指针有什么作用？分为哪几种？各自有什么样的特点" class="headerlink" title="什么是智能指针？智能指针有什么作用？分为哪几种？各自有什么样的特点"></a>什么是智能指针？智能指针有什么作用？分为哪几种？各自有什么样的特点</h3><ul>
 <li>智能指针是一个RAII类模型，用于动态分配内存，其设计思想是将基本类型指针封装为（模板）类对象指针，并在离开作用域时调用析构函数，使用 delete 删除指针所指向的内存空间。</li>
 <li>智能指针的作用是，能够处理内存泄漏问题和空悬指针问题</li>
 <li>分为 auto_ptr 、 unique_ptr 、 shared_ptr 和 weak_ptr 四种<ul>
@@ -2822,115 +2995,6 @@ UDP接收方收到报文后，不需要给出任何确认
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/10/31/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9F%A5%E8%AF%86%E5%B8%96/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/31/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9F%A5%E8%AF%86%E5%B8%96/" class="post-title-link" itemprop="url">机器学习知识帖</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-10-31 15:45:40" itemprop="dateCreated datePublished" datetime="2022-10-31T15:45:40+08:00">2022-10-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-11-14 16:28:02" itemprop="dateModified" datetime="2022-11-14T16:28:02+08:00">2022-11-14</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>686</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2><ul>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33992985">梯度下降法</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/34842727">正规方程法(最小二乘法)</a></p>
-<h2 id="逻辑回归"><a href="#逻辑回归" class="headerlink" title="逻辑回归"></a>逻辑回归</h2></li>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28408516">逻辑回归</a></p>
-<h2 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h2></li>
-<li><p>在逻辑回归中，最常用的是代价函数是交叉熵(Cross Entropy)，交叉熵是一个常见的代价函数，在神经网络中也会用到。下面是《神经网络与深度学习》一书对交叉熵的解释：</p>
-</li>
-<li><p>交叉熵是对「出乎意料」（译者注：原文使用suprise）的度量。神经元的目标是去计算函数x→y=y(x)。但是我们让它取而代之计算函数x→a=a(x)。假设我们把a当作y等于1的概率，1−a是y等于0的概率。那么，交叉熵衡量的是我们在知道y的真实值时的平均「出乎意料」程度。当输出是我们期望的值，我们的「出乎意料」程度比较低；当输出不是我们期望的，我们的「出乎意料」程度就比较高。</p>
-</li>
-<li><p>在1948年，克劳德·艾尔伍德·香农将热力学的熵，引入到信息论，因此它又被称为香农熵(Shannon Entropy)，它是香农信息量(Shannon Information Content, SIC)的期望。香农信息量用来度量不确定性的大小：一个事件的香农信息量等于0，表示该事件的发生不会给我们提供任何新的信息，例如确定性的事件，发生的概率是1，发生了也不会引起任何惊讶；当不可能事件发生时，香农信息量为无穷大，这表示给我们提供了无穷多的新信息，并且使我们无限的惊讶</p>
-</li>
-<li><p>[交叉熵](<a target="_blank" rel="noopener" href="https://blog.csdn.net/rtygbwwwerr/article/details/50778098">https://blog.csdn.net/rtygbwwwerr/article/details/50778098</a></p>
-</li>
-<li><p><img src="/imgs/320549d4337620d61dd7b081632aa72e223e40cb5484ebaedd5756de3236de03.png" alt="picture 1">  </p>
-<ul>
-<li>上述式子是熵的期望（不同情况的熵的加权和）</li>
-</ul>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28415991">代价函数</a></p>
-<h2 id="SVM"><a href="#SVM" class="headerlink" title="SVM"></a>SVM</h2></li>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/v_july_v/article/details/7624837">SVM原理</a></p>
-<h2 id="KMeans"><a href="#KMeans" class="headerlink" title="KMeans"></a>KMeans</h2></li>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/78798251?utm_source=qq">KMeans</a></p>
-<h2 id="Dueling-DQN"><a href="#Dueling-DQN" class="headerlink" title="Dueling DQN"></a>Dueling DQN</h2></li>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/110807201">Dueling DQN</a></p>
-<h2 id="文章链接"><a href="#文章链接" class="headerlink" title="文章链接"></a>文章链接</h2></li>
-<li><p><a target="_blank" rel="noopener" href="https://openai.com/blog/vpt/">openai用强化学习玩我的世界</a></p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -3002,14 +3066,14 @@ UDP接收方收到报文后，不需要给出任何确认
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-count">179</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -3046,13 +3110,13 @@ UDP接收方收到报文后，不需要给出任何确认
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">637k</span>
+    <span title="站点总字数">638k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:18</span>
+    <span title="站点阅读时长">19:19</span>
 </div>
 
         
