@@ -2475,7 +2475,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-24 14:58:55" itemprop="dateModified" datetime="2024-04-24T14:58:55+08:00">2024-04-24</time>
+                <time title="修改时间：2024-06-06 11:54:54" itemprop="dateModified" datetime="2024-06-06T11:54:54+08:00">2024-06-06</time>
               </span>
 
           <br>
@@ -2491,7 +2491,7 @@
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>21 分钟</span>
+              <span>20 分钟</span>
             </span>
 
         </div>
@@ -2515,7 +2515,7 @@
 <p>client 发出的第一个连接请求报文段并没有丢失，而是在某个网络结点长时间的滞留了，以致延误到连接释放以后的某个时间才到达 server。本来这是一个早已失效的报文段。但 server 收到此失效的连接请求报文段后，就误认为是 client 再次发出的一个新的连接请求。于是就向 client 发出确认报文段，同意建立连接。假设不采用 “三次握手”，那么只要 server 发出确认，新的连接就建立了。由于现在 client 并没有发出建立连接的请求，因此不会理睬 server 的确认，也不会向 server 发送数据。但 server 却以为新的运输连接已经建立，并一直等待 client 发来数据。这样，server 的很多资源就白白浪费掉了。采用 “三次握手” 的办法可以防止上述现象发生。例如刚才那种情况，client 不会向 server 的确认发出确认。server 由于收不到确认，就知道 client 并没有要求建立连接。</p>
 </blockquote>
 <p>其次，两次握手无法保证Client正确接收第二次握手的报文（Server无法确认Client是否收到），也无法保证Client和Server之间成功互换初始序列号。</p>
-<p>还有就是两次握手会给SYN flood攻击提供机会。<br>扩展阅读： 什么是SYN攻击？<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/360479307">https://zhuanlan.zhihu.com/p/360479307</a></p>
+<p>还有就是两次握手会给SYN flood攻击提供机会。<br>扩展阅读： 什么是SYN攻击？<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/360479307">参考</a></p>
 <h5 id="可以采用四次握手吗？为什么？"><a href="#可以采用四次握手吗？为什么？" class="headerlink" title="可以采用四次握手吗？为什么？"></a>可以采用四次握手吗？为什么？</h5><p>可以。但是会降低传输的效率。</p>
 <p>四次握手是指：第二次握手：Server只发送ACK和acknowledge number；而Server的SYN和初始序列号在第三次握手时发送；原来协议中的第三次握手变为第四次握手。出于优化目的，四次握手中的二、三可以合并。</p>
 <h5 id="第三次握手中，如果客户端的ACK未送达服务器，会怎样？"><a href="#第三次握手中，如果客户端的ACK未送达服务器，会怎样？" class="headerlink" title="第三次握手中，如果客户端的ACK未送达服务器，会怎样？"></a>第三次握手中，如果客户端的ACK未送达服务器，会怎样？</h5><p>Server端：<br>由于Server没有收到ACK确认，因此会重发之前的SYN+ACK（默认重发五次，之后自动关闭连接进入CLOSED状态），Client收到后会重新传ACK给Server。</p>
@@ -2663,7 +2663,7 @@ UDP接收方收到报文后，不需要给出任何确认
 <li>5xx状态码：服务端错误。500服务器内部错误；501服务不可用</li>
 </ol>
 <h3 id="什么是RIP-Routing-Information-Protocol-距离矢量路由协议-算法是什么？"><a href="#什么是RIP-Routing-Information-Protocol-距离矢量路由协议-算法是什么？" class="headerlink" title="什么是RIP (Routing Information Protocol, 距离矢量路由协议)? 算法是什么？"></a>什么是RIP (Routing Information Protocol, 距离矢量路由协议)? 算法是什么？</h3><p>每个路由器维护一张表，记录该路由器到其它网络的”跳数“，路由器到与其直接连接的网络的跳数是1，每多经过一个路由器跳数就加1；更新该表时和相邻路由器交换路由信息；路由器允许一个路径最多包含15个路由器，如果跳数为16，则不可达。交付数据报时优先选取距离最短的路径。</p>
-<p>（PS：RIP是应用层协议：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/19645407">https://www.zhihu.com/question/19645407</a>）</p>
+<p>（PS：RIP是应用层协议：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/19645407">参考</a>）</p>
 <summary>优缺点</summary>
 
 <ul>
