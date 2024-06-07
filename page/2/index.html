@@ -1019,7 +1019,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-27 15:41:25" itemprop="dateModified" datetime="2024-04-27T15:41:25+08:00">2024-04-27</time>
+                <time title="修改时间：2024-06-07 21:50:13" itemprop="dateModified" datetime="2024-06-07T21:50:13+08:00">2024-06-07</time>
               </span>
 
           <br>
@@ -1028,7 +1028,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>6.1k</span>
+              <span>6.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1068,6 +1068,9 @@
 <h2 id="Leetcode-47-全排列II"><a href="#Leetcode-47-全排列II" class="headerlink" title="Leetcode 47. 全排列II"></a>Leetcode 47. 全排列II</h2><ul>
 <li>关键是去重</li>
 <li>还要强调的是去重一定要对元素进行<strong>排序</strong>，这样我们才方便通过相邻的节点来判断是否重复使用了<ul>
+<li>有两种去重的方式，其中一种是当目前循环的时候如果i大于起始位置而且数组中第i个的值等于第i-1个的话，则跳过i（这种去重的方式允许不同层级的回溯具有相同的元素值，因为允许在当前迭代的第一个元素的位置进入下一层）</li>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/subsets-ii/">参考力扣子集II</a></li>
+<li>另一种方式是使用<code>used</code>数组来记录，跳过所有与上一个元素相同而且目前没有被使用的元素，也就是在这一层出现的重复元素。</li>
 <li><img src="/imgs/e603911ea5befcd9846a5d3ab96f008fd5e373ac9bf6c7720c932888e2a59505.png" alt="picture 0">  </li>
 <li>如果这个位置和上个位置相同，而且上个位置的数字在另外的分支里被使用过（也就是<code>used[i-1] == false</code>），那么跳过这个数字来去重</li>
 <li>在这个位置中被使用过的数字的<code>used</code>是<code>true</code><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; result;</span><br><span class="line">    <span class="comment">// vector&lt;int&gt; path;</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">backtracking</span> <span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, vector&lt;<span class="keyword">int</span>&gt;&amp; seq, vector&lt;<span class="keyword">bool</span>&gt;&amp; used, <span class="keyword">int</span> start)</span> </span>&#123;</span><br><span class="line">        seq.<span class="built_in">push_back</span>(nums[start]);</span><br><span class="line">        <span class="comment">// 此时说明找到了一组</span></span><br><span class="line">        <span class="keyword">if</span> (seq.<span class="built_in">size</span>() == nums.<span class="built_in">size</span>()) &#123;</span><br><span class="line">            result.<span class="built_in">push_back</span>(seq);</span><br><span class="line">            seq.<span class="built_in">pop_back</span>();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i &gt; <span class="number">0</span> &amp;&amp; nums[i] == nums[i - <span class="number">1</span>] &amp;&amp; used[i - <span class="number">1</span>] == <span class="literal">false</span>) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (used[i] == <span class="literal">false</span>) &#123;</span><br><span class="line">                used[i] = <span class="literal">true</span>;</span><br><span class="line">                <span class="built_in">backtracking</span>(nums, seq, used, i);</span><br><span class="line">                used[i] = <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        seq.<span class="built_in">pop_back</span>();</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">permuteUnique</span>(vector&lt;<span class="keyword">int</span>&gt;&amp; nums) &#123;</span><br><span class="line">        result.<span class="built_in">clear</span>();</span><br><span class="line">        <span class="built_in">sort</span>(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>()); <span class="comment">// 排序</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;nums.<span class="built_in">size</span>(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i&gt;<span class="number">0</span> &amp;&amp; nums[i<span class="number">-1</span>] == nums[i]) <span class="keyword">continue</span>;</span><br><span class="line">            vector&lt;<span class="keyword">int</span>&gt; seq;</span><br><span class="line">            <span class="function">vector&lt;<span class="keyword">bool</span>&gt; <span class="title">used</span><span class="params">(nums.size(), <span class="literal">false</span>)</span></span>;</span><br><span class="line">            used[i] = <span class="literal">true</span>;</span><br><span class="line">            <span class="built_in">backtracking</span>(nums, seq, used, i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
@@ -1747,7 +1750,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">637k</span>
+    <span title="站点总字数">638k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
