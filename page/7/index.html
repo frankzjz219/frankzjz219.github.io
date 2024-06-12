@@ -1727,7 +1727,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-12 23:12:06" itemprop="dateModified" datetime="2024-06-12T23:12:06+08:00">2024-06-12</time>
+                <time title="修改时间：2024-06-12 23:28:43" itemprop="dateModified" datetime="2024-06-12T23:28:43+08:00">2024-06-12</time>
               </span>
 
           <br>
@@ -2455,6 +2455,12 @@
 </ul>
 </li>
 </ul>
+<h3 id="软连接和硬链接的区别"><a href="#软连接和硬链接的区别" class="headerlink" title="软连接和硬链接的区别"></a>软连接和硬链接的区别</h3><ul>
+<li>类似于文件本身和快捷方式的区别</li>
+<li>软连接是个独立的文件</li>
+<li>硬链接和它的文件指向相同的inode，所有硬链接被删除之后才会真的删除文件</li>
+<li>软链接是否删除与文件无关</li>
+</ul>
 <h3 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h3><ul>
 <li><p>“零拷贝”（Zero Copy）是一种优化技术，用于在数据传输和处理过程中减少或消除数据的拷贝操作，以提高性能和降低资源消耗。零拷贝的核心思想是尽量减少不必要的数据拷贝，而不是在数据传输的过程中将数据从一个缓冲区复制到另一个缓冲区。</p>
 </li>
@@ -2552,7 +2558,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-06 14:33:21" itemprop="dateModified" datetime="2024-06-06T14:33:21+08:00">2024-06-06</time>
+                <time title="修改时间：2024-06-13 00:36:34" itemprop="dateModified" datetime="2024-06-13T00:36:34+08:00">2024-06-13</time>
               </span>
 
           <br>
@@ -2561,14 +2567,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>11k</span>
+              <span>12k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>20 分钟</span>
+              <span>22 分钟</span>
             </span>
 
         </div>
@@ -2778,10 +2784,73 @@ UDP接收方收到报文后，不需要给出任何确认
 </ul>
 <h3 id="IP地址的分类？"><a href="#IP地址的分类？" class="headerlink" title="IP地址的分类？"></a>IP地址的分类？</h3><p>路由器仅根据网络号net-id来转发分组，当分组到达目的网络的路由器之后，再按照主机号host-id将分组交付给主机；同一网络上的所有主机的网络号相同。</p>
 <h3 id="什么叫划分子网？"><a href="#什么叫划分子网？" class="headerlink" title="什么叫划分子网？"></a>什么叫划分子网？</h3><p>从主机号host-id借用若干个比特作为子网号subnet-id；子网掩码：网络号a和子网号都为1，主机号为0；数据报仍然先按照网络号找到目的网络，发送到路由器，路由器再按照网络号和子网号找到目的子网：将子网掩码与目标地址逐比特与操作，若结果为某个子网的网络地址，则送到该子网。</p>
-<h3 id="什么是ARP协议-Address-Resolution-Protocol-？"><a href="#什么是ARP协议-Address-Resolution-Protocol-？" class="headerlink" title="什么是ARP协议 (Address Resolution Protocol)？"></a>什么是ARP协议 (Address Resolution Protocol)？</h3><p><strong>ARP协议完成了IP地址与物理地址的映射</strong>。每一个主机都设有一个 ARP 高速缓存，里面有<strong>所在的局域网</strong>上的各主机和路由器的 IP 地址到硬件地址的映射表。当源主机要发送数据包到目的主机时，会先检查自己的ARP高速缓存中有没有目的主机的MAC地址，如果有，就直接将数据包发到这个MAC地址，如果没有，就向<strong>所在的局域网</strong>发起一个ARP请求的广播包（在发送自己的 ARP 请求时，同时会带上自己的 IP 地址到硬件地址的映射），收到请求的主机检查自己的IP地址和目的主机的IP地址是否一致，如果一致，则先保存源主机的映射到自己的ARP缓存，然后给源主机发送一个ARP响应数据包。源主机收到响应数据包之后，先添加目的主机的IP地址与MAC地址的映射，再进行数据传送。如果源主机一直没有收到响应，表示ARP查询失败。</p>
+<h3 id="什么是ARP协议-Address-Resolution-Protocol-？"><a href="#什么是ARP协议-Address-Resolution-Protocol-？" class="headerlink" title="什么是ARP协议 (Address Resolution Protocol)？"></a>什么是ARP协议 (Address Resolution Protocol)？</h3><ul>
+<li>arp是链路层协议</li>
+</ul>
+<p><strong>ARP协议完成了IP地址与物理地址的映射</strong>。每一个主机都设有一个 ARP 高速缓存，里面有<strong>所在的局域网</strong>上的各主机和路由器的 IP 地址到硬件地址的映射表。当源主机要发送数据包到目的主机时，会先检查自己的ARP高速缓存中有没有目的主机的MAC地址，如果有，就直接将数据包发到这个MAC地址，如果没有，就向<strong>所在的局域网</strong>发起一个ARP请求的广播包（在发送自己的 ARP 请求时，同时会带上自己的 IP 地址到硬件地址的映射），收到请求的主机检查自己的IP地址和目的主机的IP地址是否一致，如果一致，则先保存源主机的映射到自己的ARP缓存，然后给源主机发送一个ARP响应数据包。源主机收到响应数据包之后，先添加目的主机的IP地址与MAC地址的映射，再进行数据传送。如果源主机一直没有收到响应，表示ARP查询失败。</p>
 <p>如果所要找的主机和源主机不在同一个局域网上，那么就要通过 ARP 找到一个位于本局域网上的某个路由器的硬件地址，然后把分组发送给这个路由器，让这个路由器把分组转发给下一个网络。剩下的工作就由下一个网络来做。</p>
 <h3 id="什么是NAT-Network-Address-Translation-网络地址转换-？"><a href="#什么是NAT-Network-Address-Translation-网络地址转换-？" class="headerlink" title="什么是NAT (Network Address Translation, 网络地址转换)？"></a>什么是NAT (Network Address Translation, 网络地址转换)？</h3><p>用于解决内网中的主机要和因特网上的主机通信。由NAT路由器将主机的本地IP地址转换为全球IP地址，分为静态转换（转换得到的全球IP地址固定不变）和动态NAT转换。</p>
-<h2 id="HTTP各版本"><a href="#HTTP各版本" class="headerlink" title="HTTP各版本"></a>HTTP各版本</h2><ul>
+<h3 id="ipv4和ipv6的区别"><a href="#ipv4和ipv6的区别" class="headerlink" title="ipv4和ipv6的区别"></a>ipv4和ipv6的区别</h3><ul>
+<li>v4使用32位地址，地址总数为约43亿</li>
+<li>v6使用128位地址，地址总数为约340兆亿</li>
+<li>ipv4地址手动配置：需要管理员手动分配IP地址或DHCP</li>
+<li>ipv6地址自动配置（SLAAC，状态无连接自动配置）：设备可以自行生成IPv6地址。</li>
+<li>或者DHCPv6：自动分配IPv6地址。</li>
+<li>头部结构</li>
+<li>IPv4：<ul>
+<li>头部较复杂，包含13个字段，总长度为20-60字节。</li>
+<li>需要校验和字段来校验头部。</li>
+</ul>
+</li>
+<li>IPv6：<ul>
+<li>头部简化，固定长度为40字节，包含8个字段。</li>
+<li>不需要校验和字段，简化了路由处理。</li>
+</ul>
+</li>
+<li>内置安全</li>
+<li>IPv4：<ul>
+<li>安全性不强，IPSec（Internet Protocol Security）是可选的。</li>
+</ul>
+</li>
+<li>IPv6：<ul>
+<li>内置IPSec支持，提供更强的安全性。</li>
+</ul>
+</li>
+<li>广播和多播</li>
+<li>IPv4：<ul>
+<li>支持广播（发送到子网中的所有节点）。</li>
+</ul>
+</li>
+<li>IPv6：<ul>
+<li>不支持广播，使用多播和单播替代。</li>
+<li>支持任播（发送到最近的一个节点）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="如何判断一个IP地址是否有效"><a href="#如何判断一个IP地址是否有效" class="headerlink" title="如何判断一个IP地址是否有效"></a>如何判断一个IP地址是否有效</h3><ul>
+<li>检查格式<ul>
+<li>IPv4地址必须由四个十进制数（0-255）组成，每个数之间用点（.）分隔。</li>
+</ul>
+</li>
+<li>检查数值范围<ul>
+<li>每个数值必须在0到255之间。</li>
+</ul>
+</li>
+<li>排除无效地址<ul>
+<li>全零地址：0.0.0.0 通常表示默认路由。</li>
+<li>回环地址：127.0.0.0 到 127.255.255.255，用于环回测试。</li>
+<li>全一地址：255.255.255.255，用于广播。</li>
+<li>保留地址：特定于私有网络、实验和其他用途的保留地址。</li>
+</ul>
+</li>
+<li>检查私有地址<ul>
+<li>A类私有地址：10.0.0.0 到 10.255.255.255</li>
+<li>B类私有地址：172.16.0.0 到 172.31.255.255</li>
+<li>C类私有地址：192.168.0.0 到 192.168.255.255<h2 id="HTTP各版本"><a href="#HTTP各版本" class="headerlink" title="HTTP各版本"></a>HTTP各版本</h2></li>
+</ul>
+</li>
+</ul>
+<ul>
 <li><p>HTTP 0.9版本</p>
 <ul>
 <li>HTTP协议的第一个版本，功能简单，<strong>已弃用</strong></li>
@@ -3187,13 +3256,13 @@ UDP接收方收到报文后，不需要给出任何确认
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">638k</span>
+    <span title="站点总字数">639k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:21</span>
+    <span title="站点阅读时长">19:22</span>
 </div>
 
         
