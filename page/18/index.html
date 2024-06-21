@@ -182,6 +182,117 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/17/%E4%BD%BF%E7%94%A8FreeRTOS%E5%92%8CILI9341%E7%82%B9%E4%BA%AELCD%E5%B1%8F%E5%B9%95/" class="post-title-link" itemprop="url">使用FreeRTOS和ILI9341点亮LCD屏幕</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-12-17 21:35:25 / 修改时间：22:04:34" itemprop="dateCreated datePublished" datetime="2021-12-17T21:35:25+08:00">2021-12-17</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>871</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕"><a href="#使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕" class="headerlink" title="使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕"></a>使用FreeRTOS和上一篇中提到的ili9341芯片驱动点亮屏幕</h1><h2 id="CubeMX配置"><a href="#CubeMX配置" class="headerlink" title="CubeMX配置"></a>CubeMX配置</h2><ul>
+<li><p>SPI：</p>
+</li>
+<li><p><img src="/imgs/image-20211217213656004.png" alt="image-20211217213656004"></p>
+</li>
+<li><p>DMA：</p>
+</li>
+<li><p><img src="/imgs/image-20211217213717712.png" alt="image-20211217213717712"></p>
+</li>
+<li><p>NVIC（重要）：</p>
+</li>
+<li><p><img src="/imgs/image-20211217213754825.png" alt="image-20211217213754825"></p>
+</li>
+<li><p>注意此处SPI、TIM1和DMA<strong>不要使用FreeRTOS 的中断函数</strong>，将对勾去掉，同时将中断优先级<strong>改为一个比FreeRTOS小的数字</strong>，比如2。假如使用了FreeRTOS的中断的话在Cube中无法修改这个数字为更小的值</p>
+</li>
+<li><p>FreeRTOS:</p>
+</li>
+<li><p><img src="/imgs/image-20211217213921708.png" alt="image-20211217213921708"></p>
+</li>
+<li><p>注意此处使用的是<strong>v1</strong>，尚未测试v2是否可以，其他内容（比如每个线程的堆栈空间之类的没有修改，默认应该是128字节）</p>
+</li>
+</ul>
+<h2 id="程序配置"><a href="#程序配置" class="headerlink" title="程序配置"></a>程序配置</h2><p><strong>主程序</strong>中include如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ili9341.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ili9341_font.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ili9341_gfx.h&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>同时添加</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ili9341_t</span> *_lcd;</span><br><span class="line"><span class="keyword">ili9341_text_attr_t</span> fontSend1;</span><br><span class="line"><span class="keyword">ili9341_text_attr_t</span> fontSend2;</span><br><span class="line"><span class="function"><span class="keyword">ili9341_t</span> *<span class="title">screenReturn</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _lcd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>freeRTOS</strong>的C文件中添加上面的Include，此外还有</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">ili9341_text_attr_t</span> fontSend1;</span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">ili9341_text_attr_t</span> fontSend2;</span><br></pre></td></tr></table></figure>
+
+<p>freeRTOS的<strong>线程</strong>定义如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* USER CODE END Header_startScreenFill */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">startScreenFill</span><span class="params">(<span class="keyword">void</span> <span class="keyword">const</span> * argument)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN startScreenFill */</span></span><br><span class="line">  <span class="comment">/* Infinite loop */</span></span><br><span class="line">  <span class="keyword">for</span>(;;)</span><br><span class="line">  &#123;</span><br><span class="line">    ili9341_fill_screen(screenReturn(),ILI9341_BLUE);</span><br><span class="line">    osDelay(<span class="number">500</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/* USER CODE END startScreenFill */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意不同的线程要区分优先级，如图</li>
+<li><img src="/imgs/image-20211217220230058.png" alt="image-20211217220230058"></li>
+</ul>
+<h2 id="文中没有提到的按照上一篇博客的操作"><a href="#文中没有提到的按照上一篇博客的操作" class="headerlink" title="文中没有提到的按照上一篇博客的操作"></a>文中没有提到的按照上一篇博客的操作</h2><h2 id="效果如图"><a href="#效果如图" class="headerlink" title="效果如图"></a>效果如图</h2><p><img src="/imgs/20211217220332.gif" alt="20211217220332"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2021/12/16/STM32F4%E7%82%B9%E4%BA%AEili9341%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B1%8F%E5%B9%95%EF%BC%88HAL%E5%BA%93%EF%BC%892/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1343,14 +1454,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">179</span>
+          <span class="site-state-item-count">180</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-count">55</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1393,7 +1504,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:23</span>
+    <span title="站点阅读时长">19:24</span>
 </div>
 
         

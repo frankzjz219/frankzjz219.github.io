@@ -182,6 +182,97 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/09/18/Jetson%E4%B8%8D%E8%83%BD%E7%94%A8%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E7%94%B5%E8%84%91%E7%BD%91%E7%BB%9C%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/18/Jetson%E4%B8%8D%E8%83%BD%E7%94%A8%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E7%94%B5%E8%84%91%E7%BD%91%E7%BB%9C%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">Jetson不能用网线连接电脑网络的解决方法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-09-18 10:37:20" itemprop="dateCreated datePublished" datetime="2023-09-18T10:37:20+08:00">2023-09-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-23 15:33:36" itemprop="dateModified" datetime="2023-10-23T15:33:36+08:00">2023-10-23</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>188</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li>有时候使用网线将Jetson插到电脑上之后并不能有效的链接jetson和电脑</li>
+<li>此时是因为jetson的网络接口不能上网导致的</li>
+<li>需要在网络设置中修改jetson对应的以太网接口的设置</li>
+<li><img src="/imgs/f560574cd753800eaebac407879a908f7c87fd151da78f60359658a2a5da0423.png" alt="picture 0">  <ul>
+<li>打开自己电脑访问网络的渠道（比如WLAN）</li>
+<li>设置属性</li>
+<li>打开共享</li>
+<li>将其与jetson连接的网络端口共享即可</li>
+</ul>
+</li>
+<li>可能还需要重启jetson的网络配置<code>sudo service network-manager restart</code></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/09/08/python%E5%A4%9A%E8%BF%9B%E7%A8%8B%EF%BC%88multiprocessing%EF%BC%89%E7%9B%B8%E5%85%B3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1480,90 +1571,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/06/30/%E8%A7%A3%E5%86%B3Windows%E4%B8%8BPowershell%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC%E6%97%A0%E6%B3%95%E8%BF%90%E8%A1%8Cconda%E7%9A%84%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/06/30/%E8%A7%A3%E5%86%B3Windows%E4%B8%8BPowershell%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC%E6%97%A0%E6%B3%95%E8%BF%90%E8%A1%8Cconda%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">解决Windows下Powershell无法执行脚本无法运行conda的问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-06-30 16:58:20 / 修改时间：17:01:26" itemprop="dateCreated datePublished" datetime="2023-06-30T16:58:20+08:00">2023-06-30</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>221</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="解决Windows下Powershell无法执行脚本或者无法运行conda指令的问题"><a href="#解决Windows下Powershell无法执行脚本或者无法运行conda指令的问题" class="headerlink" title="解决Windows下Powershell无法执行脚本或者无法运行conda指令的问题"></a>解决Windows下Powershell无法执行脚本或者无法运行conda指令的问题</h1><ul>
-<li>报错：<ul>
-<li><img src="/imgs/ec0ce3a3276e41b0a7f11baf2d2b6179554a375156cb73f2a218c518eeda6c32.png" alt="picture 1">  </li>
-</ul>
-</li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43939392/article/details/123537132">参考</a></li>
-<li>在当前powershell中输入<code>get-ExecutionPolicy</code>查看，一般结果是<code>Restricted</code></li>
-<li>输入<code>Set-ExecutionPolicy -Scope CurrentUser</code></li>
-<li>输入<code>RemoteSigned</code>切换模式</li>
-<li>然后重启powershell即可</li>
-<li>此时假如遇到<code>conda</code>命令无法执行的问题，只需要<code>conda init powershell</code>然后重启即可</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1635,14 +1642,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">179</span>
+          <span class="site-state-item-count">180</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-count">55</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1685,7 +1692,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:23</span>
+    <span title="站点阅读时长">19:24</span>
 </div>
 
         
