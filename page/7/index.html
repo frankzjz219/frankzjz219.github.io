@@ -942,7 +942,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-21 14:24:49" itemprop="dateModified" datetime="2024-06-21T14:24:49+08:00">2024-06-21</time>
+                <time title="修改时间：2024-06-24 10:26:10" itemprop="dateModified" datetime="2024-06-24T10:26:10+08:00">2024-06-24</time>
               </span>
 
           <br>
@@ -982,13 +982,17 @@
 <li><code>_libc_start_main()</code>函数</li>
 <li>Linux内核</li>
 </ul>
-<h3 id="a和-amp-a有什么区别"><a href="#a和-amp-a有什么区别" class="headerlink" title="a和&amp;a有什么区别"></a>a和&amp;a有什么区别</h3><ul>
-<li>假设数组int a[10]; int (*p)[10] = &a;其中<ul>
-<li>a是数组名，是数组首元素地址，+1表示地址值加上一个int类型的大小，如果a的值是0x00000001，加1操作后变为0x00000005。*(a + 1) = a[1]</li>
-<li>&amp;a是数组的指针，其类型为int (*)[10]（就是前⾯提到的数组指针），其加1时，系统会认为是数组首地址加上整个数组的偏移（10个int型变量），值为数组a尾元素后一个元素的地址</li>
-<li>若(int *)p ，此时输出 *p时，其值为a[0]的值，因为被转为int *类型，解引用时按照int类型大小来读取<h3 id="static的作用"><a href="#static的作用" class="headerlink" title="static的作用"></a>static的作用</h3></li>
+<h3 id="指向数组的指针"><a href="#指向数组的指针" class="headerlink" title="指向数组的指针"></a>指向数组的指针</h3><ul>
+<li>指向数组的指针声明<code>int (*ptr)[10]</code>，表示一个指向具有十个元素的数组的指针</li>
+<li>不仅保存了数组的起始地址，还保存了数组的大小等信息</li>
+<li>解引用方式：要先解引用这个指针，再解引用某个元素，也就是<code>(*ptr)[10]</code>访问第十个元素</li>
 </ul>
-</li>
+<h3 id="数组和指针的区别"><a href="#数组和指针的区别" class="headerlink" title="数组和指针的区别"></a>数组和指针的区别</h3><ul>
+<li>取sizeof的时候数组取的是数组整个的大小，指针取的是指针自己的大小</li>
+<li>数组名是数组的首地址，对数组取地址取的是指向数组的指针</li>
+<li>传递数组作为参数的时候，可以指定大小，传递多维数组的时候，需要指定除了第一个维度以外的所有维度的大小</li>
+<li>传递<code>int a[]</code>和<code>int* a</code>在语义上没有区别</li>
+<li>数组和指针都支持下标访问<h3 id="static的作用"><a href="#static的作用" class="headerlink" title="static的作用"></a>static的作用</h3></li>
 <li>修饰局部变量时，使得该变量在静态存储区分配内存；只能在首次函数调用中进行首次初始化，之后的函数调用不再进行初始化；其生命周期与程序相同，但其作用域为局部作用域，并不能一直被访问</li>
 <li>修饰全局变量时，使得该变量在静态存储区分配内存；在声明该变量的整个文件中都是可见的，而在文件外是不可见的</li>
 <li>修饰函数时，在声明该函数的整个文件中都是可见的，而在文件外是不可见的，从而可以在多⼈协作时避免同名的函数冲突</li>
