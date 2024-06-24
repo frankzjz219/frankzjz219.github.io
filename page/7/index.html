@@ -942,7 +942,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-24 10:26:10" itemprop="dateModified" datetime="2024-06-24T10:26:10+08:00">2024-06-24</time>
+                <time title="修改时间：2024-06-24 10:28:48" itemprop="dateModified" datetime="2024-06-24T10:28:48+08:00">2024-06-24</time>
               </span>
 
           <br>
@@ -990,9 +990,11 @@
 <h3 id="数组和指针的区别"><a href="#数组和指针的区别" class="headerlink" title="数组和指针的区别"></a>数组和指针的区别</h3><ul>
 <li>取sizeof的时候数组取的是数组整个的大小，指针取的是指针自己的大小</li>
 <li>数组名是数组的首地址，对数组取地址取的是指向数组的指针</li>
-<li>传递数组作为参数的时候，可以指定大小，传递多维数组的时候，需要指定除了第一个维度以外的所有维度的大小</li>
+<li>传递数组作为参数的时候，可以指定大小如<code>int a[5]</code>，传递多维数组的时候，需要指定除了第一个维度以外的所有维度的大小如<code>int a[][3]</code></li>
 <li>传递<code>int a[]</code>和<code>int* a</code>在语义上没有区别</li>
-<li>数组和指针都支持下标访问<h3 id="static的作用"><a href="#static的作用" class="headerlink" title="static的作用"></a>static的作用</h3></li>
+<li>数组和指针都支持下标访问</li>
+</ul>
+<h3 id="static的作用"><a href="#static的作用" class="headerlink" title="static的作用"></a>static的作用</h3><ul>
 <li>修饰局部变量时，使得该变量在静态存储区分配内存；只能在首次函数调用中进行首次初始化，之后的函数调用不再进行初始化；其生命周期与程序相同，但其作用域为局部作用域，并不能一直被访问</li>
 <li>修饰全局变量时，使得该变量在静态存储区分配内存；在声明该变量的整个文件中都是可见的，而在文件外是不可见的</li>
 <li>修饰函数时，在声明该函数的整个文件中都是可见的，而在文件外是不可见的，从而可以在多⼈协作时避免同名的函数冲突</li>
