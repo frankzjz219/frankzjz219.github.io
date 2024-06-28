@@ -182,6 +182,234 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/10/10/Linux%E5%AE%9E%E6%97%B6%E7%BA%BF%E7%A8%8B%E5%92%8C%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/10/Linux%E5%AE%9E%E6%97%B6%E7%BA%BF%E7%A8%8B%E5%92%8C%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/" class="post-title-link" itemprop="url">Linux实时线程和进程调度</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-10 10:48:43" itemprop="dateCreated datePublished" datetime="2023-10-10T10:48:43+08:00">2023-10-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-05-13 21:19:14" itemprop="dateModified" datetime="2024-05-13T21:19:14+08:00">2024-05-13</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="实时线程"><a href="#实时线程" class="headerlink" title="实时线程"></a>实时线程</h2><ul>
+<li>在Linux中，实时线程是一种特殊类型的线程，它们的调度策略和优先级可以被设置为<strong>实时的</strong>。这意味着，<u>相比于普通的线程，实时线程有更高的优先级</u>，而且它们的执行<strong>不会被低优先级的线程打断</strong>。<h3 id="实时线程的调度策略"><a href="#实时线程的调度策略" class="headerlink" title="实时线程的调度策略"></a>实时线程的调度策略</h3></li>
+<li><code>SCHED_FIFO</code><strong>先入先出</strong>策略<ul>
+<li>线程会一直运行，直到它自己放弃CPU时间，或者有更高优先级的线程需要运行</li>
+</ul>
+</li>
+<li><code>SCHED_RR</code>时间片轮转调度方案<ul>
+<li>类似于SCHED_FIFO，但是每个线程会有一个固定的时间片来运行。当一个线程的时间片用完时，它会被放到同优先级线程的队列尾部<h3 id="C语言设置线程优先级的方法"><a href="#C语言设置线程优先级的方法" class="headerlink" title="C语言设置线程优先级的方法"></a>C语言设置线程优先级的方法</h3></li>
+</ul>
+</li>
+<li>使用<code>pthread</code>多线程库<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sched.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">thread_func</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 这里是线程的代码</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> thread;</span><br><span class="line">    <span class="keyword">pthread_attr_t</span> attr;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sched_param</span> <span class="title">param</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始化线程属性</span></span><br><span class="line">    pthread_attr_init(&amp;attr);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置线程为分离状态，这样当线程结束时会自动释放所有资源</span></span><br><span class="line">    pthread_attr_setdetachstate(&amp;attr, PTHREAD_CREATE_DETACHED);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置线程的调度策略为实时调度策略SCHED_FIFO</span></span><br><span class="line">    pthread_attr_setschedpolicy(&amp;attr, SCHED_FIFO);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置线程的优先级为最高</span></span><br><span class="line">    param.sched_priority = sched_get_priority_max(SCHED_FIFO);</span><br><span class="line">    pthread_attr_setschedparam(&amp;attr, &amp;param);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建线程</span></span><br><span class="line">    pthread_create(&amp;thread, &amp;attr, thread_func, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 销毁线程属性对象</span></span><br><span class="line">    pthread_attr_destroy(&amp;attr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>请注意，只有具有适当权限的用户（<strong>通常是root用户</strong>）才能创建实时线程。此外，过度使用实时线程可能会导致系统响应变慢，甚至完全无响应, 也可能导致系统直接崩溃。请谨慎使用。<h3 id="time命令"><a href="#time命令" class="headerlink" title="time命令"></a>time命令</h3></li>
+<li>使用<code>time</code>命令运行程序的时候，Ctrl+C可以计算程序在系统空间（sys）总时间（包括多个CPU核心）、用户空间（user）（包括多个CPU核心）总时间以及人类视角（real）运行了多长时间</li>
+<li><img src="/imgs/25e8453983943c5738259427ffafb96927d6435b643d6e48c2bf3ee66bc2eff6.png" alt="picture 8">  </li>
+</ul>
+<h2 id="实时进程"><a href="#实时进程" class="headerlink" title="实时进程"></a>实时进程</h2><ul>
+<li>实时进程和实施线程类似，因为Linux在进行CPU调度的时候线程和进程是平等的</li>
+<li>调度方式也是有<code>SCHED_FIFO</code>和<code>SCHED_RR</code>两种方式</li>
+<li>设置一个进程为实时进程<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo chrt -f -a -p 99 pid</span><br></pre></td></tr></table></figure></li>
+<li>其中<code>pid</code>是需要控制的线程的进程id（Linux中每个线程都有单独的进程ID，inux中每个线程都有单独的进程ID。在Linux中，线程其实是通过轻量级进程（LWP）实现的，因此<strong>Linux中每个线程都是一个进程</strong>，都拥有一个PID。换句话说，操作系统原理中的线程，对应的其实是Linux中的进程）</li>
+<li><code>-a</code>是进程的所有线程，可以不用这个选项，针对每个线程单独设置</li>
+<li>在C程序中设置一个进程的调度方式<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sched.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sched_param</span> <span class="title">param</span>;</span></span><br><span class="line">    <span class="keyword">int</span> policy = SCHED_FIFO;  <span class="comment">// 这里可以改为你想要的调度策略</span></span><br><span class="line"></span><br><span class="line">    param.sched_priority = sched_get_priority_max(policy);</span><br><span class="line">    <span class="keyword">if</span> (sched_setscheduler(<span class="number">0</span>, policy, &amp;param) == <span class="number">-1</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;sched_setscheduler&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里是进程的代码</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>在shell脚本中设置进程的调度方式<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo chrt -f 99 pid</span><br><span class="line"><span class="meta">#</span><span class="bash"> -f是FIFO调度方式</span></span><br><span class="line">sudo chrt -m</span><br><span class="line"><span class="meta">#</span><span class="bash"> 上面这句命令可以显示所有可用的调度策略和优先级</span></span><br></pre></td></tr></table></figure>
+<h2 id="进程和CPU的关系"><a href="#进程和CPU的关系" class="headerlink" title="进程和CPU的关系"></a>进程和CPU的关系</h2></li>
+<li>将一个进程<strong>绑定到一个特定的CPU</strong><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">taskset -cp &lt;cpuID&gt; pid</span><br><span class="line"><span class="meta">#</span><span class="bash"> 或者</span></span><br><span class="line">taskset -cp &lt;cpu-list&gt; pid</span><br><span class="line"><span class="meta">#</span><span class="bash">其中cpu-list是数字化的cpu列表，从1开始。多个不连续的cpu可用逗号连接，连续的可用短现连接，比如1,2,5-11等</span></span><br></pre></td></tr></table></figure></li>
+<li>pid是需要改变的进程的ID，cpuID是需要绑定的CPU核心id</li>
+<li>或者使用掩码的方式设置</li>
+<li><img src="/imgs/0cfa0cc9aca9dff9463ac3fba1b77e33b5665391b94f2619d1de822e3bffe170.png" alt="picture 10">  </li>
+<li><code>taskset -a -p &lt;掩码&gt; &lt;pid&gt;</code></li>
+<li>在C程序中将进程绑定到某个特定的CPU<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _GNU_SOURCE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sched.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">cpu_set_t</span> cpuset;</span><br><span class="line"></span><br><span class="line">    CPU_ZERO(&amp;cpuset); <span class="comment">// 初始化CPU集合，将cpuset置为空</span></span><br><span class="line">    CPU_SET(<span class="number">2</span>, &amp;cpuset); <span class="comment">// 将本进程绑定到CPU2上</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置进程的CPU亲和性</span></span><br><span class="line">    <span class="keyword">if</span> (sched_setaffinity(<span class="number">0</span>, <span class="keyword">sizeof</span>(cpuset), &amp;cpuset) == <span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Set CPU affinity failed, error: %s\n&quot;</span>, strerror(errno));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>线程绑定到某个CPU</li>
+<li><img src="/imgs/1ce1b4c75e20f9482db83cc3d39e3a3bf047e26402a4a02a4055f9cf245bcda1.png" alt="picture 9">  </li>
+<li>Linux中线程可以在<strong>不同CPU核心之间来回移动</strong></li>
+<li>中断也可以设置CPU亲和性</li>
+<li><img src="/imgs/03d15d76a02662434d9b644221a6ac7595a4fb4eae20f7aeca23f736e252ac41.png" alt="picture 11">  </li>
+<li><img src="/imgs/35da23818b21302c1fc698e039136553e68132522f0a0c7028363502f2833ae3.png" alt="picture 12">  <ul>
+<li>上述补丁的意义是将软中断负载均衡到每个核心<h3 id="进程群"><a href="#进程群" class="headerlink" title="进程群"></a>进程群</h3></li>
+</ul>
+</li>
+<li><img src="/imgs/f782a4c045a95c3e4365f2f93ad2916a2198af3e6f24b8e88f0b5b8e458381ec.png" alt="picture 13">  </li>
+<li>设置进程群的CPU使用比率，先调度进程群，再调度其中的进程</li>
+<li>现决定一个进程群内部所有进程能用的所有CPU时间，再考虑分配给谁<h4 id="如何创建"><a href="#如何创建" class="headerlink" title="如何创建"></a>如何创建</h4></li>
+<li>进入<code>/sys/fs/cgroup/cpu/</code>下创建目录dir</li>
+<li><img src="/imgs/7898a3b15778e0c7dee719faad1c26e8aaba7dca33cf1640144f0778088d39e6.png" alt="picture 14">  </li>
+<li>进入创建的目录查看<code>cpu.shares</code>权重</li>
+<li>添加某个进程到进程组<ul>
+<li>将进程的pid添加到<code>cgroup.procs</code>文件中</li>
+</ul>
+</li>
+<li><code>cpu.cfs_period_us</code>和<code>cpu.cfs_quota_us</code>是一个进程组中的<code>cfs</code>进程在一个<code>period</code>范围内能运行最多<code>quota</code>微秒</li>
+<li>quota可以大于period，因为是多核的，可以设置为period*核心数</li>
+</ul>
+<h2 id="硬实时"><a href="#硬实时" class="headerlink" title="硬实时"></a>硬实时</h2><ul>
+<li>从创建一个任务到他开始被调度，<strong>不会超过一个截止期限</strong></li>
+<li>Linux是一个软实时的系统，因此可能会超过这个时间</li>
+<li>Linux无法实现硬实时</li>
+<li><img src="/imgs/8f26b7f5a54a75857d69e1a46eb2a59e279d3055747f756438e50bb3df84b6c8.png" alt="picture 15">  <ul>
+<li>Linux下假如你休眠10ms，因为Linux的调度抖动，可能会导致进程就绪之后无法被调度，因此两次调度会间隔大于10ms，会随着系统负载变大而延迟变大，具有不确定性<h3 id="Linux不可调度区域"><a href="#Linux不可调度区域" class="headerlink" title="Linux不可调度区域"></a>Linux不可调度区域</h3></li>
+</ul>
+</li>
+<li><img src="/imgs/7630501f02899c084a7aa457b2e87602d66bc044ac3df2b080783619a6035bda.png" alt="picture 16">  <ul>
+<li>打上硬实时补丁之后可以进一步减小不可调度的范围，将系统变为硬实时的</li>
+</ul>
+</li>
+<li><img src="/imgs/734ab76e71cd209c5093076f5ab83c6b02c7436c08fc6eee5129b3268a8f67a6.png" alt="picture 17">  <ul>
+<li>中断，软中断和自旋锁执行时都不能被调度，不能被抢占</li>
+<li>一个CPU拿到spin lock的时候，这个核心就不能被调度了</li>
+<li>软中断中可以嵌套中断，硬中断不行</li>
+<li>如果需要抢占的任务发生在上述三种情况中，则只能在上述三种状态执行结束的瞬间立即抢占</li>
+</ul>
+</li>
+<li><img src="/imgs/35e248271e574e99ab1f8e2014bec3b82ead40d3c781c076a90d9bdbf49383b5.png" alt="picture 18">  <ul>
+<li>因为当一个进程占有不可打断的任务的时候，中断无法抢占他导致中断被延迟处理，不满足实时性，延迟的长度是橙色箭头<h3 id="实时补丁"><a href="#实时补丁" class="headerlink" title="实时补丁"></a>实时补丁</h3></li>
+</ul>
+</li>
+<li><img src="/imgs/1bccc755a6bcbbc6dd504edbce907725eec3277907078ce77435e412588352e6.png" alt="picture 19">  </li>
+<li>preempt_rt补丁</li>
+<li>第四个选项就是完全硬实时补丁的选项<h4 id="自旋锁和互斥锁的区别"><a href="#自旋锁和互斥锁的区别" class="headerlink" title="自旋锁和互斥锁的区别"></a>自旋锁和互斥锁的区别</h4></li>
+<li>自旋锁是CPU一个核心拿到锁，开始处理，另一个核心拿不到则原地自旋</li>
+<li>互斥锁是一个进程拿到锁开始执行，另一个线程没拿到，则睡眠直到上一个进程释放锁唤醒<h4 id="优先级继承"><a href="#优先级继承" class="headerlink" title="优先级继承"></a>优先级继承</h4></li>
+<li>在低优先级的进程持有高优先级的进程试图获取的锁的时候，临时提高这个低优先级进程的优先级到跟高优先级进程一样，使得他能够在调度上获得优势从而赶快执行完，释放锁给高优先级进程使用，防止高优先级进程因为争抢锁等待低优先级进程<h2 id="Linux的进程调度策略"><a href="#Linux的进程调度策略" class="headerlink" title="Linux的进程调度策略"></a>Linux的进程调度策略</h2></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/541695664">进程调度参考1</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/550569525">进程调度参考2</a><h3 id="进程调度的基础知识"><a href="#进程调度的基础知识" class="headerlink" title="进程调度的基础知识"></a>进程调度的基础知识</h3></li>
+<li>进程调度本身所需要的时间很短，基本就是更改一些寄存器等等，但是因为这个原因导致的上下文变化引起的CPU内部高速<strong>缓存的不命中</strong>可能在更大程度上导致程序执行时间受到影响</li>
+<li>调度的基本单位是<strong>线程</strong></li>
+<li><img src="/imgs/b1de16a877ef1fa3d2f3ef0f582de0ace62efe8b94cfccfcd5bda55e3c395054.png" alt="picture 0">  <ul>
+<li>Linux内核的抢占设置</li>
+<li>服务器一般讲究的是吞吐量而不是响应速度，但是桌面电脑和手机必须讲究响应速度否则导致卡顿</li>
+<li>第一个的话操作系统几乎没有抢占调度</li>
+<li>内核不能被抢占</li>
+<li>第三个内核也可以被抢占</li>
+</ul>
+</li>
+<li>进程的特性<ul>
+<li>CPU消耗型和IO消耗型</li>
+<li>IO消耗型任务得到CPU要求的较为<strong>及时</strong>，因为不及时的话会导致IO速度下降，用户体验下降，但是CPU<strong>性能对其影响不大</strong><h3 id="早期调度器设计"><a href="#早期调度器设计" class="headerlink" title="早期调度器设计"></a>早期调度器设计</h3></li>
+</ul>
+</li>
+<li><img src="/imgs/6466a27a813f7ac6570e339fa50e595246888c1b4faf2e413d5b34b3186e0fbb.png" alt="picture 2">  </li>
+<li>内核优先级0-139，内核数字越小优先级越高</li>
+<li>0-99算是实时线程，99-139是非实时线程，<strong>0-99之间的数字越大优先级越高</strong>，内核实际计算的时候是<u>99-用户设置的优先级</u></li>
+<li>调度看的就是从高优先级到低优先级，谁先有进程就绪就调度谁</li>
+<li>优先级高的进程可以抢占优先级低的进程</li>
+<li><img src="/imgs/1b51495c4a2e463b8be8db7f8ec302a929e37c4c36d7809e3ffd5763fddbb0b5.png" alt="picture 3">  </li>
+<li>以上是优先级再0-99期间的进程的调度策略，二者的区别是FIFO同等优先级是<strong>先进先出</strong>，RR是<strong>时间片轮转方式</strong>（同等优先级）</li>
+<li><u>所有前面的进程都跑完了，<strong>才会跑100-139的进程</strong></u></li>
+<li>普通进程的优先级是<code>nice</code>，也就是-20-19，值越大优先级越低</li>
+<li>普通进程优先级高不会形成对低优先级的绝对优势</li>
+<li>前面<strong>不会堵着</strong>后面</li>
+<li><img src="/imgs/6ef88985eeca2da2eed21858d7725f50a80216dc31949964cbb977c125b8dd3e.png" alt="picture 4">  <ul>
+<li><strong>RT的门限</strong>：上面一条设置的是实时进程在<span style="color:#00B0F0"><strong>一个sched_rt_period中能运行的最多时间是sched_rt_runtime</strong></span></li>
+<li>修改上述门限的方法：</li>
+<li><span style="color:#00F0F0">直接消除门限：<code>sudo sysctl -w kernel.sched_rt_runtime_us=-1</code></span><ul>
+<li><img src="/imgs/c776d0d11cf3b96d61bd412282d8dec3f0a72ff80dea670899ad6453e4d18547.png" alt="picture 21">  </li>
+<li>看得出解除门限之后确实<strong>CPU使用不受限制了</strong></li>
+</ul>
+</li>
+<li><code>sudo sh -c &#39;echo &quot;1000000&quot; &gt; /proc/sys/kernel/sched_rt_runtime_us&#39;</code></li>
+<li>因此，在一些情况下猛然将一个进程从普通进程转换为实时进程可能导致<strong>进程运行速度下降</strong>，因为实时进程的运行时间比率是有限的，但是<strong>普通进程没有这个限制</strong></li>
+<li>但是可能会导致<strong>系统运行明显卡顿</strong>，因为实时进程的优先级太高了，比很多系统进程优先级都高</li>
+<li><strong>RT进程创建的线程也是RT的</strong></li>
+<li>RT类型的进程应该尽可能的小<h3 id="Linux系统的实时进程"><a href="#Linux系统的实时进程" class="headerlink" title="Linux系统的实时进程"></a>Linux系统的实时进程</h3></li>
+</ul>
+</li>
+<li>使用命令<code>ps -eo pid,rtprio,cmd</code>可以查看系统中所有具有实时优先级的进程</li>
+<li>非实时进程没有实时优先级，因此是<code>-</code>，实时进程则会显示实时优先级</li>
+<li><img src="/imgs/2f730c031808bd98d1d94c3cfac71dc7f94da3e28371b3e4024330273bca0d59.png" alt="picture 20">  </li>
+<li>但是系统中也有一些其他自身的实时进程，比如<code>/usr/libexec/tracker-miner-fs-3</code>优先级是0，<code>irq/24-pciehp</code>，<code>watchdogd</code>, <code>idle_inject</code>等的实时优先级是50，<code>migration/9</code>等是99</li>
+<li>不建议超过50，否则可能导致看门狗进程无法正常运行，使得系统崩溃<h3 id="CFS调度算法（也就是所谓的OTHER调度算法）"><a href="#CFS调度算法（也就是所谓的OTHER调度算法）" class="headerlink" title="CFS调度算法（也就是所谓的OTHER调度算法）"></a>CFS调度算法（也就是所谓的OTHER调度算法）</h3></li>
+<li>针对<strong>非实时进程</strong>的调度算法，<strong>实时进程的优先级是大于这些进程的</strong></li>
+<li>追求的是每个进程的vruntime接近</li>
+<li><strong>线程才有nice，线程是调度单位</strong>，进程资源分配单位（不包括CPU）</li>
+<li>默认的线程的nice是0</li>
+<li>无法设置进程是IO消耗还是CPU消耗</li>
+<li><img src="/imgs/5f2fffda16e9a46bb031d3e073895e3fb251b4ea245f6c751cde068ddcea59c1.png" alt="picture 5">  </li>
+<li>CFS能在真实硬件上模拟出一种“公平的、精确的任务多处理CPU”</li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/372441187">参考</a></li>
+<li>vruntime += 实际运行时间(time process run) * 1024 / 进程权重(load weight of this process)<ul>
+<li><img src="/imgs/60deded430df972428f4b32678ec2a4f32bef2fc89a4e69d60575fc08e19acf9.png" alt="picture 6">  </li>
+</ul>
+</li>
+<li>调度的是<strong>虚拟运行时间最短的进程</strong>（利用红黑树排序）</li>
+<li>vruntime并不是无限小的，有一个最小值来限定。假如新进程的vruntime初值为0的话，比老进程的值小很多，那么它在相当长的时间内都会保持抢占CPU的优势，老进程就要饿死了</li>
+<li>每个CPU的运行队列cfs_rq都维护一个min_vruntime字段，记录该运行队列中所有进程的vruntime最小值，新进程的初始vruntime值就以它所在运行队列的min_vruntime为基础来设置，与老进程保持在合理的差距范围内</li>
+<li>唤醒抢占<ul>
+<li>休眠进程在<strong>唤醒时会获得vruntime的补偿</strong>，它在醒来的时候有能力<strong>抢占CPU</strong>是大概率事件，这也是CFS调度算法的本意，即保证交互式进程的响应速度，因为交互式进程等待用户输入会频繁休眠<h3 id="调度API"><a href="#调度API" class="headerlink" title="调度API"></a>调度API</h3></li>
+</ul>
+</li>
+<li><img src="/imgs/a63520a86097fd5338f11cf3a9f79afd7e95ee1fdadd703e7c1126e17c072798.png" alt="picture 7">  </li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/09/18/Jetson%E4%B8%8D%E8%83%BD%E7%94%A8%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E7%94%B5%E8%84%91%E7%BD%91%E7%BB%9C%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1475,106 +1703,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/07/01/gitClone%E6%97%B6%E6%8C%82%E4%BA%86%E6%A2%AF%E5%AD%90%E4%BB%8D%E7%84%B6%E6%8A%A5443%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/07/01/gitClone%E6%97%B6%E6%8C%82%E4%BA%86%E6%A2%AF%E5%AD%90%E4%BB%8D%E7%84%B6%E6%8A%A5443%E9%94%99%E8%AF%AF%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">gitClone时挂了梯子仍然报443错误的问题和pip无法使用的问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-07-01 00:26:38" itemprop="dateCreated datePublished" datetime="2023-07-01T00:26:38+08:00">2023-07-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-11-29 15:50:52" itemprop="dateModified" datetime="2023-11-29T15:50:52+08:00">2023-11-29</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>631</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="问题与解决"><a href="#问题与解决" class="headerlink" title="问题与解决"></a>问题与解决</h2><ul>
-<li>报错<ul>
-<li>git clone时虽然已经挂了clash全局，但是仍然访问github 443端口超时</li>
-</ul>
-</li>
-<li>解决<ul>
-<li>使用命令<code>git config --global http.proxy &quot;localhost:&lt;clash端口号&gt;&quot;</code></li>
-<li><img src="/imgs/66c3ecbedbc2b13e4c8394192f4e4f74cd7e2924069e7c01fc4a22a687ec043b.png" alt="picture 1">  </li>
-</ul>
-</li>
-</ul>
-<h2 id="git-clone时permission-denied的问题"><a href="#git-clone时permission-denied的问题" class="headerlink" title="git clone时permission denied的问题"></a>git clone时permission denied的问题</h2><ul>
-<li>可能原因很多，一个是本地的<code>ssh</code>密钥已经无法使用，需要本地生成之后在github上重新添加一个<code>ssh</code>密钥</li>
-<li>另一个是需要clone入的文件夹没有写入权限，此时需要使用管理员权限打开控制台即可<h2 id="pip代理配置"><a href="#pip代理配置" class="headerlink" title="pip代理配置"></a>pip代理配置</h2></li>
-<li><code>pip config set global.HTTPS_PROXY https://127.0.0.1:&lt;端口号&gt;</code></li>
-<li><code>pip config set global.HTTP_PROXY https://127.0.0.1:&lt;端口号&gt;</code></li>
-<li>如果遇到<code>WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by &#39;ProxyError(&#39;Cannot connect to proxy.&#39;, RemoteDisconnected(&#39;Remote end closed connection without response&#39;))&#39;</code>之类的错误，一般是因为代理配置有问题导致的，重新设置正确的端口号即可</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1642,14 +1774,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">180</span>
+          <span class="site-state-item-count">181</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">56</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1692,7 +1824,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:29</span>
+    <span title="站点阅读时长">19:30</span>
 </div>
 
         
