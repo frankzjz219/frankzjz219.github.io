@@ -207,7 +207,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-06-28 12:28:34 / 修改时间：16:45:31" itemprop="dateCreated datePublished" datetime="2024-06-28T12:28:34+08:00">2024-06-28</time>
+              <time title="创建时间：2024-06-28 12:28:34 / 修改时间：16:46:36" itemprop="dateCreated datePublished" datetime="2024-06-28T12:28:34+08:00">2024-06-28</time>
             </span>
 
           <br>
@@ -216,7 +216,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>737</span>
+              <span>744</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -255,7 +255,7 @@
 <li><code>make -j4 Image.gz modules dtbs</code>编译内核</li>
 <li><code>make modules_install</code><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 这一步是备份</span></span><br><span class="line">sudo cp /boot/firmware/$KERNEL.img /boot/firmware/$KERNEL-backup.img</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装内核</span></span><br><span class="line">sudo cp arch/arm64/boot/Image.gz /boot/firmware/$KERNEL.img</span><br><span class="line">sudo cp arch/arm64/boot/dts/broadcom/*.dtb /boot/firmware/</span><br><span class="line">sudo cp arch/arm64/boot/dts/overlays/*.dtb* /boot/firmware/overlays/</span><br><span class="line">sudo cp arch/arm64/boot/dts/overlays/README /boot/firmware/overlays/</span><br></pre></td></tr></table></figure></li>
 <li>然后使用<code>sudo vim /boot/firmware/config.txt</code></li>
-<li>最后添加一句<code>kernel=kernel8.img</code></li>
+<li>最后添加一句<code>kernel=&lt;你的内核名字&gt;.img</code></li>
 <li>reboot重启</li>
 </ul>
 
