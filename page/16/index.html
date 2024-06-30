@@ -182,6 +182,86 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/15/Linux%E4%B8%8B%E6%8C%82%E8%BD%BDU%E7%9B%98%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/15/Linux%E4%B8%8B%E6%8C%82%E8%BD%BDU%E7%9B%98%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">Linux下挂载U盘操作</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-01-15 12:49:24 / 修改时间：12:53:18" itemprop="dateCreated datePublished" datetime="2022-01-15T12:49:24+08:00">2022-01-15</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>162</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Linux下挂载U盘操作"><a href="#Linux下挂载U盘操作" class="headerlink" title="Linux下挂载U盘操作"></a>Linux下挂载U盘操作</h1><p>首先在控制台输入<code>sudo fdisk -l</code></p>
+<p>然后找到自己的U盘比如下图</p>
+<p><img src="/imgs/image-20220115125056297.png" alt="image-20220115125056297"></p>
+<p>看到其名称为<code>/dev/sda1</code>，然后在<code>/dev</code>下新建一个文件夹比如叫USB</p>
+<p><code>mkdir /dev/USB</code></p>
+<p>然后将USB设备挂载在这个目录下</p>
+<p><code>sudo mount /dev/sda1 /dev/USB</code></p>
+<p>解除挂载类似，区别仅仅是mount换成unmount</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/13/Cpp%E5%A4%8D%E4%B9%A0%E5%92%8CQt%EF%BC%88%E4%B8%80%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1968,105 +2048,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/08/%E4%BD%BF%E7%94%A8STM32%E8%AF%BB%E5%8F%96Winbond-W25Q16-Flash%E8%8A%AF%E7%89%87%E7%9A%84ID%E5%92%8C%E5%BA%8F%E5%88%97%E5%8F%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/08/%E4%BD%BF%E7%94%A8STM32%E8%AF%BB%E5%8F%96Winbond-W25Q16-Flash%E8%8A%AF%E7%89%87%E7%9A%84ID%E5%92%8C%E5%BA%8F%E5%88%97%E5%8F%B7/" class="post-title-link" itemprop="url">使用STM32读取Winbond_W25Q16_Flash芯片的ID和序列号</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-01-08 11:10:07 / 修改时间：11:30:24" itemprop="dateCreated datePublished" datetime="2022-01-08T11:10:07+08:00">2022-01-08</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="使用STM32读取Winbond-W25Q16-Flash芯片的ID和序列号"><a href="#使用STM32读取Winbond-W25Q16-Flash芯片的ID和序列号" class="headerlink" title="使用STM32读取Winbond_W25Q16_Flash芯片的ID和序列号"></a>使用STM32读取Winbond_W25Q16_Flash芯片的ID和序列号</h1><h2 id="Cube配置"><a href="#Cube配置" class="headerlink" title="Cube配置"></a>Cube配置</h2><p>配置为<strong>全双工主设备</strong></p>
-<p><img src="/imgs/image-20220108111641258.png" alt="image-20220108111641258"></p>
-<p><img src="/imgs/image-20220108111113092.png" alt="image-20220108111113092"></p>
-<p>使用的是SPI1（根据开发板的接线），<strong>Prescaler配置多少都可以，不关键，2和256都行</strong></p>
-<p><img src="/imgs/image-20220108111433160.png" alt="image-20220108111433160"></p>
-<p>DMA也<strong>可以开</strong>，不影响</p>
-<p><strong>配置CS引脚</strong>，原理图接线为</p>
-<p><img src="/imgs/image-20220108111515938.png" alt="image-20220108111515938"></p>
-<p>图中的F_CS是片选引脚，注意低电平有效</p>
-<h2 id="程序编写"><a href="#程序编写" class="headerlink" title="程序编写"></a>程序编写</h2><p>封装一个片选函数</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">EnCS</span><span class="params">(<span class="keyword">uint8_t</span> flag)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(flag==<span class="number">1</span>)</span><br><span class="line">    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="读取chipID的函数根据手册编写"><a href="#读取chipID的函数根据手册编写" class="headerlink" title="读取chipID的函数根据手册编写"></a><strong>读取chipID</strong>的函数根据手册编写</h3><p><img src="/imgs/image-20220108111759707.png" alt="image-20220108111759707"></p>
-<p>可见是先把CS置为低电平，然后SPI发送0x90，然后发送3byte的0x00地址，然后接收即可</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ReadChipID</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">uint8_t</span> D00 = <span class="number">0x00</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> DFF = <span class="number">0xFF</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> D90 = <span class="number">0x90</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> D06 = <span class="number">0x06</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> D60 = <span class="number">0x60</span>;</span><br><span class="line">  </span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D90, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D00, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D00, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D00, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_TransmitReceive(&amp;hspi1,&amp;DFF, recBuff, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_TransmitReceive(&amp;hspi1, &amp;DFF, recBuff+<span class="number">1</span>, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//然后将接收到的字符串格式化</span></span><br><span class="line"><span class="built_in">sprintf</span>(stringToSend, <span class="string">&quot;0x%2x%2x%2x%2x%2x%2x%2x%2x&quot;</span>,recBuff[<span class="number">7</span>],recBuff[<span class="number">6</span>],recBuff[<span class="number">5</span>],recBuff[<span class="number">4</span>],recBuff[<span class="number">3</span>],recBuff[<span class="number">2</span>],recBuff[<span class="number">1</span>],recBuff[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
-
-<p>注意此处因为函数的接收参数是接受数据存放位置的<strong>指针</strong>，所以必须使用<code>recBuff + X</code>的形式（<code>recBuff</code>是一个<code>uint8_t</code>数组）而不能用<code>recBuff[X]</code>的形式。</p>
-<p>结果如图</p>
-<p><img src="/imgs/image-20220108112619532.png" alt="image-20220108112619532"></p>
-<h3 id="同样根据手册编写读取芯片唯一序列号的程序"><a href="#同样根据手册编写读取芯片唯一序列号的程序" class="headerlink" title="同样根据手册编写读取芯片唯一序列号的程序"></a>同样根据手册编写读取芯片<strong>唯一序列号</strong>的程序</h3><p><img src="/imgs/image-20220108112138116.png" alt="image-20220108112138116"></p>
-<p>也是先把CS置为低电平，然后发送指令，然后等待三个数据传输周期（可以向芯片发送0xFF模拟等待延时），然后接收，注意此时必须手动等待，而<strong>不能直接使用HAL库的SPI接收函数的接收超时等待</strong>功能，因为会接收到错误的结果（比如<strong>全是0xFF</strong>）。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ReadUniqueID</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D4B = <span class="number">0x4B</span>;</span><br><span class="line">  <span class="keyword">int8_t</span> count = <span class="number">7</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> DFF = <span class="number">0xFF</span>;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D4B, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;DFF, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;DFF, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;DFF, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;DFF, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">for</span>(count=<span class="number">7</span>;count&gt;=<span class="number">0</span>;count--)</span><br><span class="line">  &#123;</span><br><span class="line">    HAL_SPI_Receive(&amp;hspi1, recBuff+count, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//然后将接收到的字符串格式化</span></span><br><span class="line"><span class="built_in">sprintf</span>(stringToSend, <span class="string">&quot;0x%2x%2x%2x%2x%2x%2x%2x%2x&quot;</span>,recBuff[<span class="number">7</span>],recBuff[<span class="number">6</span>],recBuff[<span class="number">5</span>],recBuff[<span class="number">4</span>],recBuff[<span class="number">3</span>],recBuff[<span class="number">2</span>],recBuff[<span class="number">1</span>],recBuff[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
-
-<p><img src="/imgs/image-20220108112807141.png" alt="image-20220108112807141"></p>
-<p>假如去掉四行<code>HAL_SPI_Transmit(&amp;hspi1, &amp;DFF, 1, 1000);</code>，接收到的序列号将会变成</p>
-<p><img src="/imgs/image-20220108112925406.png" alt="image-20220108112925406"></p>
-<p>注意到开头出现了很多ff，因为芯片在此时的4个数据周期中是没有响应的，对应接收到<strong>4byte的ff</strong>，也就是图上的8个ff</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2138,14 +2119,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-count">182</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-count">57</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -2182,13 +2163,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">644k</span>
+    <span title="站点总字数">645k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:30</span>
+    <span title="站点阅读时长">19:32</span>
 </div>
 
         

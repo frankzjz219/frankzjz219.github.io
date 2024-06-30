@@ -182,6 +182,160 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/03/02/%E5%9C%A8%E5%9B%BA%E6%80%81%E5%92%8C%E6%9C%BA%E6%A2%B0%E7%9B%98%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/02/%E5%9C%A8%E5%9B%BA%E6%80%81%E5%92%8C%E6%9C%BA%E6%A2%B0%E7%9B%98%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu/" class="post-title-link" itemprop="url">在固态和机械盘上安装Ubuntu</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-02 11:43:09" itemprop="dateCreated datePublished" datetime="2022-03-02T11:43:09+08:00">2022-03-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-04 09:45:04" itemprop="dateModified" datetime="2022-03-04T09:45:04+08:00">2022-03-04</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>714</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="在固态和机械盘上安装Ubuntu"><a href="#在固态和机械盘上安装Ubuntu" class="headerlink" title="在固态和机械盘上安装Ubuntu"></a>在固态和机械盘上安装Ubuntu</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>挂载系统不同分区的时候，注意/和/home的空间大小是按照/来计算的，也就是说假如/home是另外挂载在容量更大的机械硬盘上的话，是无法使用的，同样会因为空间超出而导致无法继续使用</li>
+</ul>
+<h2 id="系统映像烧写"><a href="#系统映像烧写" class="headerlink" title="系统映像烧写"></a>系统映像烧写</h2><ul>
+<li>使用UltraISO点击此处打开.iso文件</li>
+<li><img src="/imgs/image-20220302114757775.png" alt="image-20220302114757775"></li>
+<li>打开之后选择启动–写入硬盘映像</li>
+<li><img src="/imgs/image-20220302114830381.png" alt="image-20220302114830381"></li>
+<li>然后选择插入的U盘</li>
+<li><img src="/imgs/image-20220302114901025.png" alt="image-20220302114901025"></li>
+<li>开始写入即可</li>
+</ul>
+<hr>
+<ul>
+<li>系统安装参考链接<a target="_blank" rel="noopener" href="https://www.cnblogs.com/booturbo/p/10265039.html">https://www.cnblogs.com/booturbo/p/10265039.html</a></li>
+</ul>
+<h2 id="磁盘空间划分"><a href="#磁盘空间划分" class="headerlink" title="磁盘空间划分"></a>磁盘空间划分</h2><ul>
+<li>在C盘划分大约<strong>40G</strong>的空闲空间，在机械盘划分<strong>150G</strong>的空闲空间，然后开始安装</li>
+</ul>
+<h3 id="进入BIOS并且使用U盘启动"><a href="#进入BIOS并且使用U盘启动" class="headerlink" title="进入BIOS并且使用U盘启动"></a>进入BIOS并且使用U盘启动</h3><ul>
+<li><p>我的电脑是微星主板，按下开机键之后连续按下delete直到进入BIOS界面</p>
+</li>
+<li><p>无论是简易模式还是高级模式都能找到这个拖动条</p>
+</li>
+<li><p><img src="/imgs/image-20220302115447406.png" alt="image-20220302115447406"></p>
+</li>
+<li><p>用鼠标将U盘拖动到第一个即可</p>
+</li>
+<li><p>点击右上角<code>x</code>保存并退出</p>
+</li>
+<li><p>选择normal installation</p>
+</li>
+<li><p>点击continue，等待一段时间</p>
+</li>
+<li><p>此处选择something else</p>
+</li>
+<li><p><img src="/imgs/image-20220302115923889.png" alt="image-20220302115923889"></p>
+</li>
+<li><p>首先选中free space ，划分/boot分区512M即可</p>
+</li>
+<li><p><img src="/imgs/image-20220302120523616.png" alt="image-20220302120523616"></p>
+</li>
+<li><p>此时划分交换空间8G</p>
+</li>
+<li><p><img src="/imgs/image-20220302120719950.png" alt="image-20220302120719950"></p>
+</li>
+<li><p>C盘的剩余空间划分给系统<code>/</code>目录</p>
+</li>
+<li><p><img src="/imgs/image-20220302121047750.png" alt="image-20220302121047750"></p>
+</li>
+<li><p>机械盘上的空间划分给/home</p>
+</li>
+<li><p><img src="/imgs/image-20220302121132920.png" alt="image-20220302121132920"></p>
+</li>
+<li><p><strong>注意，device for boot loader installation选择/boot所在的分区，否则有可能<u>安装好后系统无法启动</u></strong></p>
+</li>
+<li><p><img src="/imgs/image-20220302122927538.png" alt="image-20220302122927538"></p>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p>有时候，安装好Ubuntu之后，微星主板启动的时候<strong>还是会直接进入Windows，无法进入Ubuntu</strong>，这是因为<strong>硬盘启动项</strong>的原因</p>
+</li>
+<li><p><img src="/imgs/image-20220302153254474.png" alt="image-20220302153254474"></p>
+<ul>
+<li><p>顺序为，先点击顶部的倒梯形切换到高级模式，然后点击设置-启动-底部的<code>UEFI硬盘BBS优先权</code></p>
+</li>
+<li><p><img src="/imgs/image-20220302153411158.png" alt="image-20220302153411158"></p>
+</li>
+<li><p>将第一个选择为Ubuntu即可</p>
+</li>
+</ul>
+</li>
+<li><p>退出BIOS设置，重新启动，可见已经可以进入ubuntu提供的系统选择的界面了</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/02/27/Linux%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1597,196 +1751,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/26/Linux%E6%96%87%E4%BB%B6%E9%94%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/26/Linux%E6%96%87%E4%BB%B6%E9%94%81/" class="post-title-link" itemprop="url">Linux文件锁</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-01-26 12:24:49 / 修改时间：13:47:50" itemprop="dateCreated datePublished" datetime="2022-01-26T12:24:49+08:00">2022-01-26</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>8.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>15 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Linux文件锁"><a href="#Linux文件锁" class="headerlink" title="Linux文件锁"></a>Linux文件锁</h1><ul>
-<li>对于有些应用程序，进程有时需要确保只有它自己能够对某一文件进行 I/O 操作，在这段时间内不允许 其它进程对该文件进行 I/O 操作。为了向进程提供这种功能，Linux 系统提供了文件锁机制。</li>
-<li>譬如进程对文件进行 I/O 操作时，首先对文件进行上锁，将其锁住，然后再进行读写操作；只要进程没有对 文件进行解锁，那么其它的进程将无法对其进行操作；这样就可以保证，文件被锁住期间，只有它（该进程） 可以对其进行读写操作。</li>
-</ul>
-<h2 id="文件锁的分类"><a href="#文件锁的分类" class="headerlink" title="文件锁的分类"></a>文件锁的分类</h2><h3 id="建议性锁"><a href="#建议性锁" class="headerlink" title="建议性锁"></a>建议性锁</h3><ul>
-<li>建议性锁本质上是一种协议，程序访问文件之前，先对文件上锁，上锁成功之后再访问文件，这是建议 性锁的一种用法；但是如果你的程序不管三七二十一，在没有对文件上锁的情况下直接访问文件，也是可以 访问的，并非无法访问文件；如果是这样，那么建议性锁就没有起到任何作用，如果要使得建议性锁起作用， 那么大家就要遵守协议，访问文件之前先对文件上锁。这就好比交通信号灯，规定红灯不能通行，绿灯才可 以通行，但如果你非要在红灯的时候通行，谁也拦不住你，那么后果将会导致发生交通事故；所以必须要大 家共同遵守交通规则，交通信号灯才能起到作用。</li>
-</ul>
-<h3 id="强制性锁"><a href="#强制性锁" class="headerlink" title="强制性锁"></a>强制性锁</h3><ul>
-<li>强制性锁比较好理解，它是一种强制性的要求，如果进程对文件上了强制性锁，其它的进程在没有获取 到文件锁的情况下是无法对文件进行访问的。其本质原因在于，强制性锁会让内核检查每一个 I/O 操作（譬 如 read()、write()），验证调用进程是否是该文件锁的拥有者，如果不是将无法访问文件。当一个文件被上 锁进行写入操作的时候，内核将阻止其它进程对其进行读写操作。采取强制性锁对性能的影响很大，每次进 行读写操作都必须检查文件锁。</li>
-</ul>
-<h2 id="flock-函数加锁"><a href="#flock-函数加锁" class="headerlink" title="flock()函数加锁"></a>flock()函数加锁</h2><ul>
-<li>先来学习系统调用 flock()，使用该函数可以对文件加锁或者解锁，但是 flock()函数只能产生建议性锁</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/file.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">flock</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> operation)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>fd：参数 fd 为文件描述符，指定需要加锁的文件。</p>
-</li>
-<li><p>operation：参数 operation 指定了操作方式，可以设置为以下值的其中一个：</p>
-<ul>
-<li>LOCK_SH：在 fd 引用的文件上放置一把共享锁。所谓共享，指的便是多个进程可以拥有对同一 个文件的共享锁，该共享锁可被多个进程同时拥有。</li>
-<li>LOCK_EX：在 fd 引用的文件上放置一把排它锁（或叫互斥锁）。所谓互斥，指的便是互斥锁只 能同时被一个进程所拥有。</li>
-<li>LOCK_UN：解除文件锁定状态，解锁、释放锁。</li>
-<li>LOCK_NB：表示以<strong>非阻塞方式获取锁</strong>。默认情况下，调用 flock()无法获取到文件锁时会阻塞、直 到其它进程释放锁为止，如果不想让程序被阻塞，可以指定 LOCK_NB 标志，如果无法获取到锁 应立刻返回（错误返回，并将 errno 设置为 EWOULDBLOCK），通常与 LOCK_SH 或 LOCK_EX 一起使用，通过位或运算符组合在一起。</li>
-</ul>
-</li>
-<li><p>注意，虽然一个程序对文件加锁之后，另一个程序企图加锁文件会失败，但是另一个程序同样可以打开并且编辑这个文件。</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/file.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> fd = <span class="number">-1</span>; <span class="comment">//文件描述符</span></span><br><span class="line"><span class="comment">/* 信号处理函数 */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sigint_handler</span><span class="params">(<span class="keyword">int</span> sig)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (SIGINT != sig)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">/* 解锁 */</span></span><br><span class="line">    flock(fd, LOCK_UN);</span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;进程 1: 文件已解锁!\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">2</span> != argc)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;usage: %s &lt;file&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 打开文件 */</span></span><br><span class="line">    fd = open(argv[<span class="number">1</span>], O_WRONLY);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 以非阻塞方式对文件加锁(排它锁) */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == flock(fd, LOCK_EX | LOCK_NB))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;进程 1: 文件加锁失败&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;进程 1: 文件加锁成功!\n&quot;</span>);</span><br><span class="line">    <span class="comment">/* 为 SIGINT 信号注册处理函数 */</span></span><br><span class="line">    signal(SIGINT, sigint_handler);</span><br><span class="line">    <span class="keyword">for</span> (;;)</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>另一个试图读写文件的程序</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/file.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">100</span>] = <span class="string">&quot;Hello World!&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    <span class="keyword">int</span> len;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">2</span> != argc)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;usage: %s &lt;file&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 打开文件 */</span></span><br><span class="line">    fd = open(argv[<span class="number">1</span>], O_RDWR);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 以非阻塞方式对文件加锁(排它锁) */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == flock(fd, LOCK_EX | LOCK_NB))</span><br><span class="line">        perror(<span class="string">&quot;进程 2: 文件加锁失败&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;进程 2: 文件加锁成功!\n&quot;</span>);</span><br><span class="line">    <span class="comment">/* 写文件 */</span></span><br><span class="line">    len = <span class="built_in">strlen</span>(buf);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; write(fd, buf, len))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;进程 2: 写入到文件的字符串&lt;%s&gt;\n&quot;</span>, buf);</span><br><span class="line">    <span class="comment">/* 将文件读写位置移动到文件头 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; lseek(fd, <span class="number">0x0</span>, SEEK_SET))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;lseek error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 读文件 */</span></span><br><span class="line">    <span class="built_in">memset</span>(buf, <span class="number">0x0</span>, <span class="keyword">sizeof</span>(buf)); <span class="comment">//清理 buf</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; read(fd, buf, len))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;read error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;进程 2: 从文件读取的字符串&lt;%s&gt;\n&quot;</span>, buf);</span><br><span class="line">    <span class="comment">/* 解锁、退出 */</span></span><br><span class="line">    flock(fd, LOCK_UN);</span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>使用 kill 命令向 testApp1 进程发送编号为 2 的信号，也就是 SIGIO 信号，testApp1 接收到信号之后， 对 infile 文件进行解锁、然后退出；接着再次执行 testApp2 程序，从打印信息可知，这次能够成功对 infile 文件加锁了，读写也是没有问题的。</li>
-<li>关于 flock()的几条规则<ul>
-<li>同一进程对文件多次加锁<strong>不会导致死锁</strong>。当进程调用 flock()对文件加锁成功，再次调用 flock()对 文件（同一文件描述符）加锁，这样不会导致死锁，<strong>新加的锁会<u>替换</u>旧的锁</strong>。譬如调用 flock()对文 件加共享锁，再次调用 flock()对文件加排它锁，最终文件锁会由共享锁替换为排它锁。</li>
-<li>文件关闭的时候，<strong>会自动解锁</strong>。进程调用 flock()对文件加锁，如果在未解锁之前将文件关闭，则会 导致文件锁自动解锁，也就是说，文件锁会在相应的文件描述符被关闭之后自动释放。同理，当一 个进程终止时，它所建立的锁将全部释放。</li>
-<li>一个进程不可以对<strong>另一个进程持有</strong>的文件锁进行解锁。</li>
-<li>由 fork()创建的子进程不会继承父进程所创建的锁。这意味着，若一个进程对文件加锁成功，然后 该进程调用 fork()创建了子进程，那么对父进程创建的锁而言，子进程被视为另一个进程，虽然<strong>子 进程从父进程继承了其文件描述符，但不能继承文件锁</strong>。这个约束是有道理的，因为锁的作用就是 阻止多个进程同时写同一个文件，<strong>如果子进程通过 fork()继承了父进程的锁，则</strong> <strong>父进程和子进程就 可以同时写同一个文件了</strong>。</li>
-<li>除此之外，当一个<strong>文件描述符被复制时</strong>（譬如使用 dup()、dup2()或 fcntl()F_DUPFD 操作），这些通过 复制得到的文件描述符和源文件描述符都会<strong>引用同一个文件锁</strong>，使用<strong>这些文件描述符中的任何一个进行解 锁都可以</strong></li>
-</ul>
-</li>
-</ul>
-<h2 id="fcntl-函数加锁"><a href="#fcntl-函数加锁" class="headerlink" title="fcntl()函数加锁"></a>fcntl()函数加锁</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fcntl</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> cmd, ... <span class="comment">/* struct flock *flockptr */</span> )</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>与锁相关的 cmd 为 F_SETLK、F_SETLKW、F_GETLK，第三个参数 flockptr 是一个 struct flock 结构体 指针。使用 fcntl()实现文件锁功能与 flock()有两个比较大的区别：</p>
-<ul>
-<li>flock()仅支持对整个文件进行加锁/解锁；而 fcntl()可以对文件的<strong>某个区域（某部分内容）进行加锁 /解锁，可以精确到某一个字节数据</strong>。</li>
-<li>flock()<strong>仅支持建议性锁类型</strong>；而 fcntl()可支持建议性锁和强制性锁两种类型。</li>
-</ul>
-</li>
-<li><p>结构体参数如下</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">flock</span> &#123;</span></span><br><span class="line"> ...</span><br><span class="line"> <span class="keyword">short</span> l_type; <span class="comment">/* Type of lock: F_RDLCK,F_WRLCK, F_UNLCK */</span></span><br><span class="line"> <span class="keyword">short</span> l_whence; <span class="comment">/* How to interpret l_start: SEEK_SET, SEEK_CUR, SEEK_END */</span></span><br><span class="line"> <span class="keyword">off_t</span> l_start; <span class="comment">/* Starting offset for lock */</span></span><br><span class="line"> <span class="keyword">off_t</span> l_len; <span class="comment">/* Number of bytes to lock */</span></span><br><span class="line"> <span class="keyword">pid_t</span> l_pid; <span class="comment">/* PID of process blocking our lock(set by F_GETLK and F_OFD_GETLK) */</span></span><br><span class="line"> ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>具体说明</p>
-<ul>
-<li>l_type：所希望的锁类型，可以设置为 F_RDLCK、F_WRLCK 和 F_UNLCK 三种类型之一，F_RDLCK 表示共享性质的读锁，F_WRLCK 表示独占性质的写锁，F_UNLCK 表示解锁一个区域。</li>
-<li>l_whence 和 l_start：这两个变量用于指定要加锁或解锁区域的起始字节偏移量，与 2.7 小节所学 的 lseek()函数中的 offset 和 whence 参数相同，这里不再重述，如果忘记了，可以回到 2.7 小节再 看看。</li>
-<li>l_len：需要加锁或解锁区域的字节长度。</li>
-<li>l_pid：一个 pid，指向一个进程，表示该进程持有的锁能阻塞当前进程，当 cmd=F_GETLK 时有效。</li>
-</ul>
-</li>
-<li><p>几条规则</p>
-<ul>
-<li>锁区域可以在当前文件末尾处开始或者越过末尾处开始，但是不能在文件起始位置之前开始。</li>
-<li>若参数 l_len 设置为 0，表示将锁区域扩大到最大范围，也就是说从锁区域的起始位置开始，到文 件的最大偏移量处（也就是文件末尾）都处于锁区域范围内。而且是动态的，这意味着不管向该文 件追加写了多少数据，它们都处于锁区域范围，起始位置可以是文件的任意位置。</li>
-<li>如果我们需要对整个文件加锁，可以将 l_whence 和 l_start 设置为指向文件的起始位置，并且指定 参数 l_len 等于 0。</li>
-</ul>
-</li>
-<li><p>锁的类型</p>
-</li>
-<li><p>上面我们提到了两种类型的锁，分别为共享性读锁（F_RDLCK）和独占性写锁（F_WRLCK）。基本的 规则与 12.5 小节所介绍的线程同步读写锁很相似，<strong>任意多个进程在一个给定的字节上可以有一把共享的读 锁</strong>，但是<strong>在一个给定的字节上只能有一个进程有一把独占写锁</strong>，进一步而言，如果在一个给定的字节上已经 有一把或多把读锁，则不能在该字节上加写锁；如果在一个字节上<strong>已经有一把独占性写锁，则不能再对它加 任何锁</strong>（包括读锁和写锁）</p>
-</li>
-</ul>
-<p><img src="/../imgs/image-20220126132857197.png" alt="image-20220126132857197"></p>
-<ul>
-<li><p>如果一个进程对文件的某个区域已经上了一把锁，后来该进程又试图在该区域再加一把锁，那么通常<strong>新 加的锁将替换旧的锁</strong>。譬如，若某一进程在文件的 100<del>200 字节区间有一把写锁，然后又试图在 100</del>200 字 节区间再加一把读锁，那么该请求将会成功执行，原来的写锁会替换为读锁。</p>
-</li>
-<li><p>当对文件的某一区域加读锁时，调用进程必须对该文件有读权限，譬如 open() 时 flags 参数指定了 O_RDONLY 或 O_RDWR；当对文件的某一区域加写锁时，调用进程必须对该文件有写 权限，譬如 open()时 flags 参数指定了 O_WRONLY 或 O_RDWR。</p>
-</li>
-<li><p>F_SETLK、F_SETLKW 和 F_GETLK</p>
-<ul>
-<li> F_GETLK：这种用法一般用于测试，测试调用进程对文件加一把由参数 flockptr 指向的 struct flock 对象所描述的锁是否会加锁成功。如果加锁不成功，意味着该文件的这部分区域已经存在一把锁， 并且由另一进程所持有，并且调用进程加的锁与现有锁之间存在排斥关系，现有锁会阻止调用进程 想要加的锁，并且现有锁的信息将会重写参数 flockptr 指向的对象信息。如果不存在这种情况，也 就是说 flockptr 指向的 struct flock 对象所描述的锁会加锁成功，则除了将 struct flock 对象的 l_type 修改为 F_UNLCK 之外，结构体中的其它信息保持不变。</li>
-<li>F_SETLK：对文件添加由 flockptr 指向的 struct flock 对象所描述的锁。譬如试图对文件的某一区 域加读锁（l_type 等于 F_RDLCK）或写锁（l_type 等于 F_WRLCK），如果加锁失败，那么 fcntl() 将立即出错返回，此时将 errno 设置为 EACCES 或 EAGAIN。也可用于清除由 flockptr 指向的 struct  flock 对象所描述的锁（l_type 等于 F_UNLCK）。</li>
-<li>F_SETLKW：此命令是 F_SETLK 的阻塞版本（命令名中的 W 表示等待 wait），如果所请求的读 锁或写锁因另一个进程当前已经对所请求区域的某部分进行了加锁，而导致请求失败，那么调用进 程将会进入阻塞状态。只有当请求的锁可用时，进程才会被唤醒。</li>
-</ul>
-</li>
-<li><p>规则</p>
-<ul>
-<li>文件关闭的时候，会自动解锁。</li>
-<li>一个进程不可以对另一个进程持有的文件锁进行解锁。</li>
-<li>由 fork()创建的子进程不会继承父进程所创建的锁。</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">flock</span> <span class="title">lock</span> =</span> &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> fd = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">char</span> buf[] = <span class="string">&quot;Hello World!&quot;</span>;</span><br><span class="line">    <span class="comment">/* 校验传参 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">2</span> != argc)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;usage: %s &lt;file&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 打开文件 */</span></span><br><span class="line">    fd = open(argv[<span class="number">1</span>], O_WRONLY);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 对文件加锁 */</span></span><br><span class="line">    lock.l_type = F_WRLCK;    <span class="comment">//独占性写锁</span></span><br><span class="line">    lock.l_whence = SEEK_SET; <span class="comment">//文件头部</span></span><br><span class="line">    lock.l_start = <span class="number">0</span>;         <span class="comment">//偏移量为 0</span></span><br><span class="line">    lock.l_len = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fcntl(fd, F_SETLK, &amp;lock))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;加锁失败&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;对文件加锁成功!\n&quot;</span>);</span><br><span class="line">    <span class="comment">/* 对文件进行写操作 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> &gt; write(fd, buf, <span class="built_in">strlen</span>(buf)))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;write error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 解锁 */</span></span><br><span class="line">    lock.l_type = F_UNLCK; <span class="comment">//解锁</span></span><br><span class="line">    fcntl(fd, F_SETLK, &amp;lock);</span><br><span class="line">    <span class="comment">/* 退出 */</span></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>不同区域加锁</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">flock</span> <span class="title">wr_lock</span> =</span> &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">flock</span> <span class="title">rd_lock</span> =</span> &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> fd = <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">/* 校验传参 */</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">2</span> != argc)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;usage: %s &lt;file&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 打开文件 */</span></span><br><span class="line">    fd = open(argv[<span class="number">1</span>], O_RDWR);</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fd)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 将文件大小截断为 1024 字节 */</span></span><br><span class="line">    ftruncate(fd, <span class="number">1024</span>);</span><br><span class="line">    <span class="comment">/* 对 100~200 字节区间加写锁 */</span></span><br><span class="line">    wr_lock.l_type = F_WRLCK;</span><br><span class="line">    wr_lock.l_whence = SEEK_SET;</span><br><span class="line">    wr_lock.l_start = <span class="number">100</span>;</span><br><span class="line">    wr_lock.l_len = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fcntl(fd, F_SETLK, &amp;wr_lock))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;加写锁失败&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;加写锁成功!\n&quot;</span>);</span><br><span class="line">    <span class="comment">/* 对 400~500 字节区间加读锁 */</span></span><br><span class="line">    rd_lock.l_type = F_RDLCK;</span><br><span class="line">    rd_lock.l_whence = SEEK_SET;</span><br><span class="line">    rd_lock.l_start = <span class="number">400</span>;</span><br><span class="line">    rd_lock.l_len = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == fcntl(fd, F_SETLK, &amp;rd_lock))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;加读锁失败&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;加读锁成功!\n&quot;</span>);</span><br><span class="line">    <span class="comment">/* 对文件进行 I/O 操作 */</span></span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">    <span class="comment">/* 解锁 */</span></span><br><span class="line">    wr_lock.l_type = F_UNLCK; <span class="comment">//写锁解锁</span></span><br><span class="line">    fcntl(fd, F_SETLK, &amp;wr_lock);</span><br><span class="line">    rd_lock.l_type = F_UNLCK; <span class="comment">//读锁解锁</span></span><br><span class="line">    fcntl(fd, F_SETLK, &amp;rd_lock);</span><br><span class="line">    <span class="comment">/* 退出 */</span></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>多个进程对同一文件的相同区域都可以加读锁，说明读锁是共享性的。由于程序 是放置在后台运行的，测试完毕之后，可以使用 kill 命令将这些进程杀死，或者直接关闭当前终端，重新启 动新的终端。</li>
-<li>第一次启动的进程对文件加写锁之后，后面再启动进程对同一文件的相同区域加写 锁发现都会失败，所以由此可知，写锁是独占性的。</li>
-</ul>
-<p>锁的规则同上面的<code>flock()</code>函数</p>
-<p><strong>强制性锁</strong>会直接影响<code>read()</code>和<code>write()</code>函数的操作（失败会报错），在此处略</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1858,14 +1822,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-count">182</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-count">57</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1902,13 +1866,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">644k</span>
+    <span title="站点总字数">645k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:30</span>
+    <span title="站点阅读时长">19:32</span>
 </div>
 
         

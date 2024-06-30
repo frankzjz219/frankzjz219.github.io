@@ -182,6 +182,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/08/29/Morris%E9%81%8D%E5%8E%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/29/Morris%E9%81%8D%E5%8E%86/" class="post-title-link" itemprop="url">Morris遍历</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-29 10:50:15" itemprop="dateCreated datePublished" datetime="2022-08-29T10:50:15+08:00">2022-08-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-27 15:48:27" itemprop="dateModified" datetime="2024-04-27T15:48:27+08:00">2024-04-27</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Morris遍历细节"><a href="#Morris遍历细节" class="headerlink" title="Morris遍历细节"></a>Morris遍历细节</h2><ul>
+<li><img src="/imgs/da93ce774972f0e9d9f5fed4f9038f8fe80708e3395fa90c87058ef38ced2d57.png" alt="图 8">  </li>
+<li>传统遍历方法的空间复杂度是O(树的高度)</li>
+<li>利用底层叶节点的空指针节省空间</li>
+<li>假如不允许修改题目给出的树就没法使用Morris遍历</li>
+<li>Morris遍历对于所有有左子树的节点都能到达两次</li>
+<li>一个节点指针来到他的右子树之后就不会再次返回这个节点了<ul>
+<li>判断第几次到达一个节点？</li>
+<li>根据左子树上最右节点的右指针指向谁，假如指向自己，那就是第二次到达<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">morris</span><span class="params">(Node head)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Node cur = head;</span><br><span class="line">    Node mostRight = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span> (cur != <span class="keyword">null</span>) &#123;</span><br><span class="line">        mostRight = cur.left;</span><br><span class="line">        <span class="keyword">if</span> (mostRight != <span class="keyword">null</span>) &#123;<span class="comment">// z有左孩子否则直接退回大循环</span></span><br><span class="line">            <span class="keyword">while</span> (mostRight.right != <span class="keyword">null</span> &amp;&amp; mostRight.right != cur) &#123; <span class="comment">// 找左树上的最右节点，右孩子不能等于当前节点</span></span><br><span class="line">                mostRight = mostRight.right;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (mostRight.right == <span class="keyword">null</span>) &#123;<span class="comment">// 第一次来到cur</span></span><br><span class="line">                mostRight.right = cur;</span><br><span class="line">                cur = cur.left;<span class="comment">//向左子树发展</span></span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                mostRight.right = <span class="keyword">null</span>;<span class="comment">// 第二次来到cur</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        cur = cur.right;<span class="comment">// 向右树移动</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>时间复杂度: O(N)<h2 id="Morris遍历改为先序遍历："><a href="#Morris遍历改为先序遍历：" class="headerlink" title="Morris遍历改为先序遍历："></a>Morris遍历改为先序遍历：</h2></li>
+<li>如果一个节点<strong>只能到达一次</strong>，直接打印内容</li>
+<li>如果可以到达<strong>两次</strong>，第一次打印<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">morrisPre</span><span class="params">(Node head)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Node cur = head;</span><br><span class="line">    Node mostRight = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span> (cur != <span class="keyword">null</span>) &#123;</span><br><span class="line">        mostRight = cur.left;</span><br><span class="line">        <span class="keyword">if</span> (mostRight != <span class="keyword">null</span>) &#123;<span class="comment">// 有左子树</span></span><br><span class="line">            <span class="keyword">while</span> (mostRight.right != <span class="keyword">null</span> &amp;&amp; mostRight.right != cur) &#123;</span><br><span class="line">                mostRight = mostRight.right;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (mostRight.right == <span class="keyword">null</span>) &#123;<span class="comment">// 第一次来到这个节点</span></span><br><span class="line">                System.out.print(cur.value + <span class="string">&quot; &quot;</span>);</span><br><span class="line">                mostRight.right = cur;</span><br><span class="line">                cur = cur.left;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;<span class="comment">// 第二次来，不打印</span></span><br><span class="line">                mostRight.right = <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;<span class="comment">// 没有左子树</span></span><br><span class="line">            System.out.print(cur.value + <span class="string">&quot; &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        cur = cur.right;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h2></li>
+<li>只经过一次的节点：直接输出</li>
+<li>两次的节点：第二次经过的时候打印<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">morrisIn</span><span class="params">(Node head)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Node cur = head;</span><br><span class="line">    Node mostRight = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span> (cur != <span class="keyword">null</span>) &#123;</span><br><span class="line">        mostRight = cur.left;</span><br><span class="line">        <span class="keyword">if</span> (mostRight != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">while</span> (mostRight.right != <span class="keyword">null</span> &amp;&amp; mostRight.right != cur) &#123;</span><br><span class="line">                mostRight = mostRight.right;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (mostRight.right == <span class="keyword">null</span>) &#123;<span class="comment">// 第一次经过会跳过打印</span></span><br><span class="line">                mostRight.right = cur;</span><br><span class="line">                cur = cur.left;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                mostRight.right = <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 跟原本代码唯一的区别就是此处加一个打印</span></span><br><span class="line">        System.out.print(cur.value + <span class="string">&quot; &quot;</span>);</span><br><span class="line">        cur = cur.right;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Morris后序遍历"><a href="#Morris后序遍历" class="headerlink" title="Morris后序遍历"></a>Morris后序遍历</h2></li>
+<li>将打印的时机安排在一个能回到自己两次的节点第二次被经过的时候</li>
+<li>第二次回到自己的时候<u>逆序打印自己左树的右边界</u></li>
+<li>整个过程结束之后<u>逆序打印整棵树的右边界</u><h3 id="逆序遍历如何实现"><a href="#逆序遍历如何实现" class="headerlink" title="逆序遍历如何实现"></a>逆序遍历如何实现</h3></li>
+<li>借用单链表逆序遍历的操作</li>
+<li>指针逆序之后，打印然后再调整回去<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">morrisPos</span><span class="params">(Node head)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Node cur = head;</span><br><span class="line">    Node mostRight = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span> (cur != <span class="keyword">null</span>) &#123;</span><br><span class="line">        mostRight = cur.left;</span><br><span class="line">        <span class="keyword">if</span> (mostRight != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">while</span> (mostRight.right != <span class="keyword">null</span> &amp;&amp; mostRight.right != cur) &#123;</span><br><span class="line">                mostRight = mostRight.right;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (mostRight.right == <span class="keyword">null</span>) &#123;</span><br><span class="line">                mostRight.right = cur;</span><br><span class="line">                cur = cur.left;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                mostRight.right = <span class="keyword">null</span>;</span><br><span class="line">                printEdge(cur.left);<span class="comment">// 第二次经过的时候逆序打印左树的右边界</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        cur = cur.right;</span><br><span class="line">    &#125;</span><br><span class="line">    printEdge(head);<span class="comment">// 整个结束之后逆序打印整棵树的右边界</span></span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printEdge</span><span class="params">(Node head)</span> </span>&#123;<span class="comment">// 打印然后再逆序回去</span></span><br><span class="line">    Node tail = reverseEdge(head);</span><br><span class="line">    Node cur = tail;</span><br><span class="line">    <span class="keyword">while</span> (cur != <span class="keyword">null</span>) &#123;</span><br><span class="line">        System.out.print(cur.value + <span class="string">&quot; &quot;</span>);</span><br><span class="line">        cur = cur.right;</span><br><span class="line">    &#125;</span><br><span class="line">    reverseEdge(tail);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">reverseEdge</span><span class="params">(Node from)</span> </span>&#123;<span class="comment">// 单链表的逆序操作</span></span><br><span class="line">    Node pre = <span class="keyword">null</span>;</span><br><span class="line">    Node next = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span> (from != <span class="keyword">null</span>) &#123;</span><br><span class="line">        next = from.right;</span><br><span class="line">        from.right = pre;</span><br><span class="line">        pre = from;</span><br><span class="line">        from = next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> pre;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/08/28/%E5%8D%95%E8%B0%83%E6%A0%88/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1216,85 +1318,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/08/16/Cubic%E6%8F%92%E5%80%BC%E4%BB%A3%E7%A0%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/16/Cubic%E6%8F%92%E5%80%BC%E4%BB%A3%E7%A0%81/" class="post-title-link" itemprop="url">Cubic插值代码</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-08-16 14:49:50 / 修改时间：14:53:38" itemprop="dateCreated datePublished" datetime="2022-08-16T14:49:50+08:00">2022-08-16</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="一维Cubic插值代码"><a href="#一维Cubic插值代码" class="headerlink" title="一维Cubic插值代码"></a>一维Cubic插值代码</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;chrono&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">cubicCalc</span><span class="params">(<span class="keyword">double</span> xs[<span class="number">4</span>], <span class="keyword">double</span> ys[<span class="number">4</span>], <span class="keyword">double</span> xInput)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 旧方法</span></span><br><span class="line">    <span class="comment">// return p[1] + 0.5 * x*(p[2] - p[0] + x * (2.0*p[0] - 5.0*p[1] + 4.0*p[2] - p[3] + x * (3.0*(p[1] - p[2]) + p[3] - p[0])));</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始化</span></span><br><span class="line">    <span class="keyword">double</span>* H,*A,*B,*C,*D,*Z,*F,*X,*Y;</span><br><span class="line">    <span class="keyword">double</span> dbOutY;</span><br><span class="line">    X = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line">    Y = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line"></span><br><span class="line">    A = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line">    B = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line">    C = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line">    D = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line">    H = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>];   </span><br><span class="line">    <span class="built_in">memcpy</span>(X, xs, <span class="number">4</span>*<span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">double</span>));</span><br><span class="line">    <span class="built_in">memcpy</span>(Y, ys, <span class="number">4</span>*<span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">double</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> M = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">int</span> N = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">int</span> i,P,L;   </span><br><span class="line">    <span class="comment">// 生成Spline</span></span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">1</span>;i&lt;=N;i++)   </span><br><span class="line">    &#123;   </span><br><span class="line">        H[i<span class="number">-1</span>]=X[i]-X[i<span class="number">-1</span>];   </span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    L=N<span class="number">-1</span>;   </span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=L;i++)   </span><br><span class="line">    &#123;   </span><br><span class="line">        A[i]=H[i<span class="number">-1</span>]/(H[i<span class="number">-1</span>]+H[i]);   </span><br><span class="line">        B[i]=<span class="number">3</span>*((<span class="number">1</span>-A[i])*(Y[i]-Y[i<span class="number">-1</span>])/H[i<span class="number">-1</span>]+A[i]*(Y[i+<span class="number">1</span>]-Y[i])/H[i]);   </span><br><span class="line">    &#125;   </span><br><span class="line">    A[<span class="number">0</span>]=<span class="number">1</span>;   </span><br><span class="line">    A[N]=<span class="number">0</span>;   </span><br><span class="line">    B[<span class="number">0</span>]=<span class="number">3</span>*(Y[<span class="number">1</span>]-Y[<span class="number">0</span>])/H[<span class="number">0</span>];   </span><br><span class="line">    B[N]=<span class="number">3</span>*(Y[N]-Y[N<span class="number">-1</span>])/H[N<span class="number">-1</span>];   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=N;i++)   </span><br><span class="line">    &#123;   </span><br><span class="line">        D[i]=<span class="number">2</span>;   </span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=N;i++)   </span><br><span class="line">    &#123;   </span><br><span class="line">        C[i]=<span class="number">1</span>-A[i];   </span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    P=N;   </span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=P;i++)   </span><br><span class="line">    &#123;   </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (  <span class="built_in">fabs</span>(D[i]) &lt;= <span class="number">0.000001</span> )                                  </span><br><span class="line">        &#123;   </span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;   </span><br><span class="line">            <span class="comment">//    MessageBox(0,&quot;�޽�&quot;,&quot;��ʾ,MB_OK);   </span></span><br><span class="line">            <span class="comment">//break;   </span></span><br><span class="line">        &#125;   </span><br><span class="line">        A[i<span class="number">-1</span>]=A[i<span class="number">-1</span>]/D[i<span class="number">-1</span>];   </span><br><span class="line">        B[i<span class="number">-1</span>]=B[i<span class="number">-1</span>]/D[i<span class="number">-1</span>];   </span><br><span class="line">        D[i]=A[i<span class="number">-1</span>]*(-C[i])+D[i];   </span><br><span class="line">        B[i]=-C[i]*B[i<span class="number">-1</span>]+B[i];   </span><br><span class="line">    &#125;   </span><br><span class="line">    B[P]=B[P]/D[P];   </span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=P;i++)   </span><br><span class="line">    &#123;   </span><br><span class="line">        B[P-i]=B[P-i]-A[P-i]*B[P-i+<span class="number">1</span>];   </span><br><span class="line">    &#125;   </span><br><span class="line">    <span class="comment">// 生成Spline结束</span></span><br><span class="line">    <span class="comment">// 获得Y坐标</span></span><br><span class="line">    <span class="keyword">double</span> E,E1,K,K1,H1;   </span><br><span class="line">    <span class="keyword">int</span> j ;    </span><br><span class="line">    <span class="keyword">if</span>(xInput&lt;X[<span class="number">0</span>])   </span><br><span class="line">    &#123;   </span><br><span class="line">        j = <span class="number">0</span>;   </span><br><span class="line"></span><br><span class="line">    &#125;   </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (xInput &gt; X[N])   </span><br><span class="line">    &#123;   </span><br><span class="line">        j = N<span class="number">-1</span>;   </span><br><span class="line">    &#125;   </span><br><span class="line">    <span class="keyword">else</span>  </span><br><span class="line">    &#123;   </span><br><span class="line">        <span class="keyword">for</span> (j=<span class="number">1</span>;j&lt;=N;j++)   </span><br><span class="line">        &#123;   </span><br><span class="line">            <span class="keyword">if</span>(xInput&lt;=X[j])   </span><br><span class="line">            &#123;   </span><br><span class="line">                j=j<span class="number">-1</span>;   </span><br><span class="line"></span><br><span class="line">                <span class="keyword">break</span>;   </span><br><span class="line">            &#125;   </span><br><span class="line">        &#125;   </span><br><span class="line"></span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    <span class="comment">//////////////////////////////////////////////////////////////////////////   </span></span><br><span class="line">    E=X[j+<span class="number">1</span>]-xInput;   </span><br><span class="line">    E1=E*E;   </span><br><span class="line">    K=xInput-X[j];   </span><br><span class="line">    K1=K*K;   </span><br><span class="line">    H1=H[j]*H[j];   </span><br><span class="line"></span><br><span class="line">    dbOutY=(<span class="number">3</span>*E1<span class="number">-2</span>*E1*E/H[j])*Y[j]+(<span class="number">3</span>*K1<span class="number">-2</span>*K1*K/H[j])*Y[j+<span class="number">1</span>];   </span><br><span class="line">    dbOutY=dbOutY+(H[j]*E1-E1*E)*B[j]-(H[j]*K1-K1*K)*B[j+<span class="number">1</span>];   </span><br><span class="line">    dbOutY=dbOutY/H1;   </span><br><span class="line">    <span class="keyword">return</span> dbOutY;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="二维插值"><a href="#二维插值" class="headerlink" title="二维插值"></a>二维插值</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">bicubicInterpolate</span><span class="params">(<span class="keyword">double</span>* xs, <span class="keyword">double</span>* ys, <span class="keyword">double</span> p[<span class="number">4</span>][<span class="number">4</span>], <span class="keyword">double</span> x, <span class="keyword">double</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">double</span> arr[<span class="number">4</span>];</span><br><span class="line">    arr[<span class="number">0</span>] = <span class="built_in">cubicCalc</span>(xs, p[<span class="number">0</span>], y);</span><br><span class="line">    arr[<span class="number">1</span>] = <span class="built_in">cubicCalc</span>(xs, p[<span class="number">1</span>], y);</span><br><span class="line">    arr[<span class="number">2</span>] = <span class="built_in">cubicCalc</span>(xs, p[<span class="number">2</span>], y);</span><br><span class="line">    arr[<span class="number">3</span>] = <span class="built_in">cubicCalc</span>(xs, p[<span class="number">3</span>], y);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">cubicCalc</span>(ys, arr, x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>上述代码中的<code>xs</code>是描述二维矩阵中取样点的X坐标的集合（从小到大）</li>
-<li><code>ys</code>是上述矩阵中取样点的y坐标的集合</li>
-<li>二位插值的思路实际上就是<strong>先在一维上</strong>完成插值然后利用<strong>一维插值的结果向量</strong>再进行<strong>正交方向</strong>上的<strong>一维插值</strong></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1366,14 +1389,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-count">182</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-count">57</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1410,13 +1433,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">644k</span>
+    <span title="站点总字数">645k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:30</span>
+    <span title="站点阅读时长">19:32</span>
 </div>
 
         

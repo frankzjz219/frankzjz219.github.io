@@ -182,6 +182,86 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/03/13/%E4%BB%80%E4%B9%88%E6%98%AF%E6%97%A0%E6%A0%88%E5%8D%8F%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/03/13/%E4%BB%80%E4%B9%88%E6%98%AF%E6%97%A0%E6%A0%88%E5%8D%8F%E7%A8%8B/" class="post-title-link" itemprop="url">什么是无栈协程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-03-13 22:43:48 / 修改时间：22:47:59" itemprop="dateCreated datePublished" datetime="2024-03-13T22:43:48+08:00">2024-03-13</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="什么是无栈协程"><a href="#什么是无栈协程" class="headerlink" title="什么是无栈协程"></a>什么是无栈协程</h2><ul>
+<li>无栈协程是一种轻量级的协程实现方式，相比有栈协程，它们不拥有独立的调用栈。这种设计让无栈协程更加轻量，因为它们不需要为每个协程分配独立的栈空间，从而减少了内存的使用量。</li>
+<li>全程都在使用系统<strong>自动分配的栈空间</strong>，只不过是将一次调用和下一次调用之间所需要的数据利用某种数据结构（比如类的局部变量）<strong>手动保存了下来</strong></li>
+<li>无栈协程的核心原理是将协程中的代码转换成一个或多个状态机。每当执行到协程内的一个异步调用时，协程会保存当前的状态（例如局部变量的值、程序执行到哪一行等），然后暂停执行，将控制权交回给协程的调度器或事件循环。当异步调用完成后，协程根据保存的状态恢复执行</li>
+<li>实际上就是利用系统的数据结构（比如类的成员）保存状态，外界需要其重新执行的时候读取该状态再执行</li>
+<li>例子<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 协程状态</span></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="keyword">class</span> <span class="title">CoroutineState</span> &#123;</span></span><br><span class="line">    BeforeStart = <span class="number">0</span>,</span><br><span class="line">    AfterHello,</span><br><span class="line">    AfterWorld,</span><br><span class="line">    Completed</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloWorldCoroutine</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 协程当前状态</span></span><br><span class="line">    CoroutineState state = CoroutineState::BeforeStart;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 协程的执行函数</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">resume</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="built_in"><span class="keyword">switch</span></span> (state) &#123;</span><br><span class="line">            <span class="keyword">case</span> CoroutineState::BeforeStart:</span><br><span class="line">                <span class="comment">// 第一个操作：打印&quot;Hello&quot;</span></span><br><span class="line">                std::cout &lt;&lt; <span class="string">&quot;Hello, &quot;</span>;</span><br><span class="line">                <span class="comment">// 更新状态到下一步</span></span><br><span class="line">                state = CoroutineState::AfterHello;</span><br><span class="line">                <span class="comment">// 退出当前执行，模拟异步操作的暂停</span></span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            <span class="keyword">case</span> CoroutineState::AfterHello:</span><br><span class="line">                <span class="comment">// 第二个操作：打印&quot;World&quot;</span></span><br><span class="line">                std::cout &lt;&lt; <span class="string">&quot;World!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">                <span class="comment">// 更新状态到完成</span></span><br><span class="line">                state = CoroutineState::AfterWorld;</span><br><span class="line">                <span class="comment">// 退出当前执行</span></span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            <span class="keyword">case</span> CoroutineState::AfterWorld:</span><br><span class="line">                <span class="comment">// 协程已完成，不做任何操作</span></span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="comment">// 非法状态</span></span><br><span class="line">                std::cerr &lt;&lt; <span class="string">&quot;Invalid state&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查协程是否完成</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isCompleted</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state == CoroutineState::AfterWorld;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    HelloWorldCoroutine coroutine;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 循环执行，直到协程状态表示完成</span></span><br><span class="line">    <span class="keyword">while</span> (!coroutine.<span class="built_in">isCompleted</span>()) &#123;</span><br><span class="line">        coroutine.<span class="built_in">resume</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>实际上就是将需要的状态手动保存了下来，在被外界调用的时候手动的恢复，是一种比较间接的协程实现方法</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/03/13/windows%E7%B3%BB%E7%BB%9F%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1434,189 +1514,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/01/11/%E6%90%BA%E7%A8%8B%E5%BA%93%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/11/%E6%90%BA%E7%A8%8B%E5%BA%93%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">协程库实现（一）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-01-11 17:50:36" itemprop="dateCreated datePublished" datetime="2024-01-11T17:50:36+08:00">2024-01-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-27 15:48:27" itemprop="dateModified" datetime="2024-04-27T15:48:27+08:00">2024-04-27</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>3.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>6 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ul>
-<li><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/52886">参考</a><h2 id="ucontext-h上下文切换"><a href="#ucontext-h上下文切换" class="headerlink" title="ucontext.h上下文切换"></a><code>ucontext.h</code>上下文切换</h2></li>
-<li>上下文结构体定义</li>
-<li> <code>mcontext_t</code>类型与机器相关，并且不透明.<code>ucontext_t</code>结构体则至少拥有以下几个域:<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">ucontext</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ucontext</span> *<span class="title">uc_link</span>;</span></span><br><span class="line">    <span class="keyword">sigset_t</span>         uc_sigmask;</span><br><span class="line">    <span class="keyword">stack_t</span>          uc_stack;</span><br><span class="line">    <span class="keyword">mcontext_t</span>       uc_mcontext;</span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="keyword">ucontext_t</span>;</span><br></pre></td></tr></table></figure></li>
-<li>当当前上下文(如使用makecontext创建的上下文）运行终止时系统会恢复<code>uc_link</code>指向的上下文；<code>uc_sigmask</code>为该上下文中的阻塞信号集合；<code>uc_stack</code>为该上下文中使用的栈；<code>uc_mcontext</code>保存的上下文的特定机器表示，包括调用线程的特定寄存器等<h3 id="四个操作函数"><a href="#四个操作函数" class="headerlink" title="四个操作函数"></a>四个操作函数</h3></li>
-<li><code>int getcontext(ucontext_t *ucp);</code><ul>
-<li>初始化ucp结构体，将当前的上下文保存到ucp中</li>
-</ul>
-</li>
-<li><code>int setcontext(const ucontext_t *ucp);</code><ul>
-<li>设置当前的上下文为ucp，setcontext的上下文ucp应该通过getcontext或者makecontext取得，如果调用成功则不返回。</li>
-<li>如果上下文是通过调用getcontext()取得,程序会继续执行这个调用。如果上下文是通过调用makecontext取得,程序会调用makecontext函数的第二个参数指向的函数，如果func函数返回,则恢复makecontext第一个参数指向的上下文第一个参数指向的上下文context_t中指向的uc_link</li>
-<li>如果uc_link为NULL,则线程退出。</li>
-</ul>
-</li>
-<li><code>void makecontext(ucontext_t *ucp, void (*func)(), int argc, ...);</code><ul>
-<li> <code>makecontext</code>修改通过<code>getcontext</code>取得的上下文ucp(这意味着调用makecontext前必须先调用getcontext)。然后给该上下文指定一个栈空间ucp-&gt;stack，设置后继的上下文ucp-&gt;uc_link.</li>
-<li> 当上下文通过setcontext或者swapcontext激活后，执行func函数，argc为func的参数个数，后面是func的参数序列。当func执行返回后，继承的上下文被激活，如果继承上下文为NULL时，线程退出</li>
-</ul>
-</li>
-<li><code>int swapcontext(ucontext_t *oucp, ucontext_t *ucp);</code><ul>
-<li><strong>保存当前上下文到oucp结构体中</strong>，<strong>然后激活upc上下文</strong>。 </li>
-</ul>
-</li>
-<li>如果执行成功，<code>getcontext</code>返回0，<code>setcontext</code>和<code>swapcontext</code>不返回；如果执行失败，<code>getcontext</code>,<code>setcontext</code>,<code>swapcontext</code>返回-1，并设置对于的errno.</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>函数名</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>getcontext</td>
-<td>获取上下文</td>
-</tr>
-<tr>
-<td>setcontext</td>
-<td>设置上下文</td>
-</tr>
-<tr>
-<td>swapcontext</td>
-<td>保存当前上下文，切换上下文</td>
-</tr>
-<tr>
-<td>makecontext</td>
-<td>创建新的上下文</td>
-</tr>
-</tbody></table>
-<ul>
-<li>例子<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ucontext.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> *argv[])</span></span>&#123;</span><br><span class="line">    <span class="keyword">ucontext_t</span> context;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">getcontext</span>(&amp;context);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Hello world&quot;</span>);</span><br><span class="line">    <span class="built_in">sleep</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">setcontext</span>(&amp;context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>上述函数会不断重复输出<code>Hello World</code>，因为<code>getcontext</code>将上下文设置在了输出之前，<code>setcontext</code>每次都把整个执行流返回到输出的位置</li>
-</ul>
-<h3 id="更换为执行时间最短先服务逻辑的调度器版本"><a href="#更换为执行时间最短先服务逻辑的调度器版本" class="headerlink" title="更换为执行时间最短先服务逻辑的调度器版本"></a>更换为执行时间最短先服务逻辑的调度器版本</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/Winnerhust/uthread">参考的原版</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/frankzjz219/coThread">我改进代码的github仓库</a></li>
-<li>使用了优先级队列重写携程选择逻辑，切换的时候会选择当前已经运行时间最短的携程上处理机执行</li>
-<li>运行结果<ul>
-<li><img src="/imgs/941347f9abd1720738aefc5d97931550f21aa9612e6620b2f0e59f887e23f2f5.png" alt="picture 0">  </li>
-<li>四个线程的优先级分别是4，3，2，1，可见是符合设置的<h3 id="1月12日修改"><a href="#1月12日修改" class="headerlink" title="1月12日修改"></a>1月12日修改</h3></li>
-</ul>
-</li>
-<li>修改为了多线程版本，分别调度，分别设置优先级</li>
-<li><img src="/imgs/e31840ca773951d3d8406fb1a527485c5ca3492df2b7055bd5d175e851c5e9d0.png" alt="picture 1">  </li>
-<li><img src="/imgs/d78782a55f0dc69ab765b2e962fede515994cce6269969ff93cea72ac87690e4.png" alt="picture 2">  </li>
-</ul>
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
-<li>C/C++文件编译的时候<strong>每个源文件都是独立编译的</strong>，这样会导致即使头文件使用了<code>ifndef</code>之类的保护，仍然可能在整个项目中被<strong>不同的文件</strong>引用多次<ul>
-<li>因此如果头文件中出现了函数或者是变量的定义的话，这个变量在整个项目中会被定义多次</li>
-<li>因此头文件中只能声明，变量使用<code>extern</code>关键字声明</li>
-<li>必须定义的函数用<code>inline</code></li>
-</ul>
-</li>
-<li>注意类的静态<code>static</code>成员变量必须在某个源文件中定义，才能在其他源文件中使用类名和作用域运算符<code>::</code>访问</li>
-<li>C++可以使用宏<code>__FILE__</code>判断自己所处的文件名称</li>
-<li><code>makecontext</code>的第二个参数无论传入的是什么函数，都要将其转换为<code>void(*)(void)</code>类型的函数指针，然后再给出参数</li>
-<li>执行流路径<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-----------调度器或main中-----------------</span><br><span class="line">创建协程(create)--&gt;</span><br><span class="line">  获取互斥锁</span><br><span class="line">  使用makecontext生成开始执行协程函数的上下文</span><br><span class="line">  令目标函数的上下文的后继位置时刻指向调度器schedule的上下文main</span><br><span class="line">  释放互斥锁</span><br><span class="line">切换到协程(resume)--&gt;</span><br><span class="line">  将当前的上下文保存在调度器schedule.main中，切换到目标函数的上下文</span><br><span class="line">-----------协程函数中----------------</span><br><span class="line">切换回main(yield)--&gt;</span><br><span class="line">  获取锁</span><br><span class="line">  将协程当前的上下文保存在ctx中</span><br><span class="line">  释放锁</span><br><span class="line">  切换回之前指向的main上下文</span><br><span class="line">-----------------main中-----------------</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
-<li>因为添加协程<code>create</code>函数与协程调度器不在一个线程中，可能会有竞争关系，因此添加了互斥锁防止冲突</li>
-</ul>
-<h2 id="lt-setjmp-h-gt-实现切换"><a href="#lt-setjmp-h-gt-实现切换" class="headerlink" title="&lt;setjmp.h&gt;实现切换"></a><code>&lt;setjmp.h&gt;</code>实现切换</h2><h3 id="setjmp-函数："><a href="#setjmp-函数：" class="headerlink" title="setjmp 函数："></a><code>setjmp</code> 函数：</h3><ul>
-<li><p><code>setjmp</code> 用于保存当前程序的执行状态，并返回一个整数值。</p>
-</li>
-<li><p>当首次调用 <code>setjmp</code> 时，它返回0，表示保存了当前执行状态。</p>
-</li>
-<li><p>当从 <code>longjmp</code> 调用返回时，<code>setjmp</code> 返回一个非零值，通常用于区分<strong>正常返回和通过 <code>longjmp</code> 返回</strong>。</p>
-<h3 id="longjmp函数"><a href="#longjmp函数" class="headerlink" title="longjmp函数"></a><code>longjmp</code>函数</h3></li>
-<li><p><code>longjmp</code> 用于恢复之前由 <code>setjmp</code> 保存的执行状态。</p>
-</li>
-<li><p>它接受两个参数：保存的执行状态（由 <code>setjmp</code> 返回的值）和一个非零的返回值。</p>
-</li>
-<li><p>调用 <code>longjmp</code> 会导致程序跳转到相应 <code>setjmp</code> 处，并且 <code>setjmp</code> 返回的值为 <code>longjmp</code> 的返回值。</p>
-<h3 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h3></li>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/82492121">参考</a></p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;setjmp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">jmp_buf env;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">my_func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (b == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;do not allow division by 0\n&quot;</span>);</span><br><span class="line">        <span class="built_in">longjmp</span>(env, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> a / b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span> *argv[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="built_in">setjmp</span>(env);</span><br><span class="line">    <span class="keyword">if</span> (res == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;return from setjmp\n&quot;</span>);</span><br><span class="line">        <span class="built_in">my_func</span>(<span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;return from longjmp: %d\n&quot;</span>, res);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="C-语言的锁机制"><a href="#C-语言的锁机制" class="headerlink" title="C++语言的锁机制"></a>C++语言的锁机制</h2><h3 id="unique-lock"><a href="#unique-lock" class="headerlink" title="unique_lock"></a><code>unique_lock</code></h3></li>
-<li><p><code>#include &lt;mutex&gt;</code>和<code>#include &lt;thread&gt;</code></p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(myMutex)</span></span>;  <span class="comment">// 构造 unique_lock，并锁定互斥量</span></span><br></pre></td></tr></table></figure></li>
-<li><p>构造就是加锁</p>
-</li>
-<li><p>析构就是解锁</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">lock.<span class="built_in">lock</span>();  <span class="comment">// 手动锁定互斥量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 锁定期间的其他操作...</span></span><br><span class="line"></span><br><span class="line">lock.<span class="built_in">unlock</span>();  <span class="comment">// 手动释放锁</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 在 unique_lock 离开作用域时，会自动释放锁</span></span><br></pre></td></tr></table></figure></li>
-<li><p>同样支持手动操作，加锁和解锁</p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1688,14 +1585,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-count">182</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-count">57</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1732,13 +1629,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">644k</span>
+    <span title="站点总字数">645k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:30</span>
+    <span title="站点阅读时长">19:32</span>
 </div>
 
         
