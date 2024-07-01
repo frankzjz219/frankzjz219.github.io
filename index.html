@@ -205,10 +205,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-06-30 17:31:42 / 修改时间：20:45:34" itemprop="dateCreated datePublished" datetime="2024-06-30T17:31:42+08:00">2024-06-30</time>
+              <time title="创建时间：2024-06-30 17:31:42" itemprop="dateCreated datePublished" datetime="2024-06-30T17:31:42+08:00">2024-06-30</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-01 16:25:35" itemprop="dateModified" datetime="2024-07-01T16:25:35+08:00">2024-07-01</time>
+              </span>
 
           <br>
             <span class="post-meta-item" title="本文字数">
@@ -216,7 +222,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>899</span>
+              <span>966</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -263,6 +269,16 @@
 </ul>
 <h2 id="端口映射"><a href="#端口映射" class="headerlink" title="端口映射"></a>端口映射</h2><ul>
 <li>将内网的<code>445</code>端口映射到外网方便访问</li>
+</ul>
+<h2 id="如果无法使用桥接模式，怎么在外界访问samba"><a href="#如果无法使用桥接模式，怎么在外界访问samba" class="headerlink" title="如果无法使用桥接模式，怎么在外界访问samba"></a>如果无法使用桥接模式，怎么在外界访问samba</h2><ul>
+<li>主要应对一些开启了屏蔽模式的局域网</li>
+<li>如图操作<ul>
+<li><img src="/imgs/c4ee6644a37c7847f42bafe42208329208e66486b0ae60789949546c6e1e8607.png" alt="picture 1">  </li>
+<li><img src="/imgs/97616eb7b0e90717411305f87b22b2aa8e5b05dde2d21baf80cd3e2fd405df10.png" alt="picture 2">  </li>
+</ul>
+</li>
+<li>然后直接访问<code>\\远程主机ip\shared</code>即可</li>
+<li><img src="/imgs/c797170d0e008aabb414d9909cd8e57b65a93ca18ee6bcf807e0f87e493da575.png" alt="picture 3">  </li>
 </ul>
 
       
