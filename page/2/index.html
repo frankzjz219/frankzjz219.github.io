@@ -182,6 +182,114 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/04/30/%E4%BD%BF%E7%94%A8%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B%E7%9A%84Netlink%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/04/30/%E4%BD%BF%E7%94%A8%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B%E7%9A%84Netlink%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97/" class="post-title-link" itemprop="url">使用内核线程的Netlink内核模块</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-30 21:02:43" itemprop="dateCreated datePublished" datetime="2024-04-30T21:02:43+08:00">2024-04-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-05-01 14:47:31" itemprop="dateModified" datetime="2024-05-01T14:47:31+08:00">2024-05-01</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="使用内核线程的Linux内核的Netlink服务器"><a href="#使用内核线程的Linux内核的Netlink服务器" class="headerlink" title="使用内核线程的Linux内核的Netlink服务器"></a>使用内核线程的Linux内核的Netlink服务器</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/frankzjz219/kernelNetlinkServer">代码仓库</a></li>
+<li><code>./client</code>下是客户目录</li>
+<li>根目录下执行<code>make</code>可以编译模块，执行<code>./remake.sh</code>可以一键编译安装</li>
+<li>此服务器运行在Ubuntu系统，内核版本为<code>6.5.0-27-generic</code>，基于NETLINK协议</li>
+<li>主要实现了基于netlink的通信响应，每次响应的时候都创建一个内核线程（kthread）来执行操作，执行完之后线程自动结束<ul>
+<li>在内核中，不需要手动的执行<code>wait</code>或者是<code>join</code>等负责回收工作，内核会自动回收内核线程</li>
+<li>可以在需要强行停止的时候执行<code>kthread_stop()</code> 函数。该函数会向内核线程发送一个停止请求,并等待线程完全退出。在内核线程函数中,我们可以使用 <code>kthread_should_stop()</code> 函数来检查是否收到了停止请求, 检测到该函数返回值为真的时候退出内核线程的工作函数。<h2 id="netlink"><a href="#netlink" class="headerlink" title="netlink"></a>netlink</h2></li>
+</ul>
+</li>
+<li>内核创建netlink服务端<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">nl_sk = <span class="built_in">netlink_kernel_create</span>(&amp;init_net, NETLINK_USER, &amp;cfg);</span><br></pre></td></tr></table></figure></li>
+<li>上面注意<code>NETLINK_USER</code>协议号必须跟用户态的程序设置的相同，否则无法通信</li>
+<li>发送数据使用<code>nlmsg_new</code>, <code>nlmsg_put</code>两个函数构造信息，使用<code>nlmsg_unicast</code>发送数据（不区分多播组）</li>
+<li>接收数据使用回调函数实现<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建netlink socket</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">netlink_kernel_cfg</span> <span class="title">cfg</span> =</span> &#123;</span><br><span class="line">    .input = &lt;call back function&gt;,</span><br><span class="line">&#125;;</span><br><span class="line">nl_sk = <span class="built_in">netlink_kernel_create</span>(&amp;init_net, NETLINK_USER, &amp;cfg);</span><br></pre></td></tr></table></figure></li>
+<li>回调函数会自动传入此时接收到的数据，使用内核提供的宏<code>NLMSG_DATA</code>和<code>NLMSG_PAYLOAD</code>等可以提取到信息和长度<h3 id="用户端的相关操作"><a href="#用户端的相关操作" class="headerlink" title="用户端的相关操作"></a>用户端的相关操作</h3></li>
+<li>创建sock<code>sock_fd = socket(PF_NETLINK, SOCK_RAW, NETLINK_USER);</code></li>
+<li>绑定后可以通信<code>bind(sock_fd, (struct sockaddr*)&amp;src_addr, sizeof(src_addr))</code></li>
+<li>发送<code>sendmsg(sock_fd, &amp;msg, 0)</code></li>
+<li>接收<code>recvmsg(sock_fd, &amp;msg_recv, 0)</code><h2 id="proc下的文件"><a href="#proc下的文件" class="headerlink" title="/proc下的文件"></a>/proc下的文件</h2></li>
+<li>在<code>/proc</code>下创建一个文件用于读取内核模块的信息<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">proc_entry = <span class="built_in">proc_create</span>(<span class="string">&quot;netlink_stats&quot;</span>, <span class="number">0666</span>, <span class="literal">NULL</span>, &amp;proc_file_fops);</span><br></pre></td></tr></table></figure></li>
+<li>处理用户的读取操作<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// proc文件的读取操作</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">ssize_t</span> <span class="title">proc_read</span><span class="params">(struct file *file, <span class="keyword">char</span> __user *user_buf, <span class="keyword">size_t</span> count, <span class="keyword">loff_t</span> *ppos)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buffer[<span class="number">128</span>];</span><br><span class="line">    <span class="keyword">int</span> len;</span><br><span class="line"></span><br><span class="line">    len = <span class="built_in">sprintf</span>(buffer, <span class="string">&quot;Messages received: %d\nTotal bytes: %d\n&quot;</span>, message_count, total_bytes);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">simple_read_from_buffer</span>(user_buf, count, ppos, buffer, len);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="内核线程"><a href="#内核线程" class="headerlink" title="内核线程"></a>内核线程</h2></li>
+<li><code>kthread_run(threadfn, data, namefmt, ...)</code></li>
+<li>第一个函数是一个<code>int(*)(void*)</code>的函数，接收一个<code>void*</code>的参数，返回一个返回码</li>
+<li>第二个是传入的参数</li>
+<li>第三个是名称<h2 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h2></li>
+<li><img src="/imgs/899d1ad68264dd9dfd56b30e838b5564e165b87d08f957991a2d73790683f724.png" alt="picture 0">  </li>
+<li><img src="/imgs/b2f8c24b6d4e4787ec28c1dcf76a3f07a193cccab86307193c17763b79a27500.png" alt="picture 1"> </li>
+<li><img src="/imgs/e167e9f8ba08d456270b8ed77aacbd1a7f249178b20f8d54f4b6c06f34e65931.png" alt="picture 2">  </li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/03/13/%E4%BB%80%E4%B9%88%E6%98%AF%E6%97%A0%E6%A0%88%E5%8D%8F%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1430,90 +1538,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/01/17/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%EF%BC%88%E4%BA%8C%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/17/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-title-link" itemprop="url">二叉树的非递归遍历（二）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-01-17 12:38:29" itemprop="dateCreated datePublished" datetime="2024-01-17T12:38:29+08:00">2024-01-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-27 15:41:25" itemprop="dateModified" datetime="2024-04-27T15:41:25+08:00">2024-04-27</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="二叉树的非递归遍历"><a href="#二叉树的非递归遍历" class="headerlink" title="二叉树的非递归遍历"></a>二叉树的非递归遍历</h2><ul>
-<li>通过在遍历过一次的节点前面加入一个NULL指针，提示下一个节点遍历过一次了<h3 id="前序遍历"><a href="#前序遍历" class="headerlink" title="前序遍历"></a>前序遍历</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">preorderTraversal</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; result;</span><br><span class="line">        stack&lt;TreeNode*&gt; st;</span><br><span class="line">        <span class="keyword">if</span> (root != <span class="literal">NULL</span>) st.<span class="built_in">push</span>(root);</span><br><span class="line">        <span class="keyword">while</span> (!st.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            TreeNode* node = st.<span class="built_in">top</span>();</span><br><span class="line">            <span class="keyword">if</span> (node != <span class="literal">NULL</span>) &#123;</span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                <span class="keyword">if</span> (node-&gt;right) st.<span class="built_in">push</span>(node-&gt;right);  <span class="comment">// 右</span></span><br><span class="line">                <span class="keyword">if</span> (node-&gt;left) st.<span class="built_in">push</span>(node-&gt;left);    <span class="comment">// 左</span></span><br><span class="line">                st.<span class="built_in">push</span>(node);                          <span class="comment">// 中</span></span><br><span class="line">                st.<span class="built_in">push</span>(<span class="literal">NULL</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                node = st.<span class="built_in">top</span>();</span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                result.<span class="built_in">push_back</span>(node-&gt;val);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-<li>遍历过一次的节点第二次直接输出<h3 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">inorderTraversal</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; result;</span><br><span class="line">        stack&lt;TreeNode*&gt; st;</span><br><span class="line">        <span class="keyword">if</span> (root != <span class="literal">NULL</span>) st.<span class="built_in">push</span>(root);</span><br><span class="line">        <span class="keyword">while</span> (!st.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            TreeNode* node = st.<span class="built_in">top</span>();</span><br><span class="line">            <span class="keyword">if</span> (node != <span class="literal">NULL</span>) &#123;</span><br><span class="line">                st.<span class="built_in">pop</span>(); <span class="comment">// 将该节点弹出，避免重复操作，下面再将右中左节点添加到栈中</span></span><br><span class="line">                <span class="keyword">if</span> (node-&gt;right) st.<span class="built_in">push</span>(node-&gt;right);  <span class="comment">// 添加右节点（空节点不入栈）</span></span><br><span class="line"></span><br><span class="line">                st.<span class="built_in">push</span>(node);                          <span class="comment">// 添加中节点</span></span><br><span class="line">                st.<span class="built_in">push</span>(<span class="literal">NULL</span>); <span class="comment">// 中节点访问过，但是还没有处理，加入空节点做为标记。</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (node-&gt;left) st.<span class="built_in">push</span>(node-&gt;left);    <span class="comment">// 添加左节点（空节点不入栈）</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// 只有遇到空节点的时候，才将下一个节点放进结果集</span></span><br><span class="line">                st.<span class="built_in">pop</span>();           <span class="comment">// 将空节点弹出</span></span><br><span class="line">                node = st.<span class="built_in">top</span>();    <span class="comment">// 重新取出栈中元素</span></span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                result.<span class="built_in">push_back</span>(node-&gt;val); <span class="comment">// 加入到结果集</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-<li>针对没访问过的节点，先把他的左孩子入栈，再把NULL和自身入栈，再入栈右孩子<h3 id="后序遍历"><a href="#后序遍历" class="headerlink" title="后序遍历"></a>后序遍历</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">postorderTraversal</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; result;</span><br><span class="line">        stack&lt;TreeNode*&gt; st;</span><br><span class="line">        <span class="keyword">if</span> (root != <span class="literal">NULL</span>) st.<span class="built_in">push</span>(root);</span><br><span class="line">        <span class="keyword">while</span> (!st.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            TreeNode* node = st.<span class="built_in">top</span>();</span><br><span class="line">            <span class="keyword">if</span> (node != <span class="literal">NULL</span>) &#123;</span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                st.<span class="built_in">push</span>(node);                          <span class="comment">// 中</span></span><br><span class="line">                st.<span class="built_in">push</span>(<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (node-&gt;right) st.<span class="built_in">push</span>(node-&gt;right);  <span class="comment">// 右</span></span><br><span class="line">                <span class="keyword">if</span> (node-&gt;left) st.<span class="built_in">push</span>(node-&gt;left);    <span class="comment">// 左</span></span><br><span class="line"></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                node = st.<span class="built_in">top</span>();</span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                result.<span class="built_in">push_back</span>(node-&gt;val);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-<li>针对没访问过的节点，先把自己和NULL入栈，再把右孩子入栈，再把左孩子入栈</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1585,14 +1609,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">182</span>
+          <span class="site-state-item-count">183</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">57</span>
+        <span class="site-state-item-count">58</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1629,13 +1653,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">645k</span>
+    <span title="站点总字数">646k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:32</span>
+    <span title="站点阅读时长">19:34</span>
 </div>
 
         

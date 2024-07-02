@@ -182,6 +182,133 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/08/STM32%E5%AE%9E%E7%8E%B0W25Q16%E8%8A%AF%E7%89%87%E7%9A%84%E6%93%A6%E9%99%A4%E3%80%81%E8%AF%BB%E5%92%8C%E5%86%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/08/STM32%E5%AE%9E%E7%8E%B0W25Q16%E8%8A%AF%E7%89%87%E7%9A%84%E6%93%A6%E9%99%A4%E3%80%81%E8%AF%BB%E5%92%8C%E5%86%99/" class="post-title-link" itemprop="url">STM32实现W25Q16芯片的擦除、读和写</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-01-08 12:45:39 / 修改时间：13:40:12" itemprop="dateCreated datePublished" datetime="2022-01-08T12:45:39+08:00">2022-01-08</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="STM32实现W25Q16芯片的擦除、读和写"><a href="#STM32实现W25Q16芯片的擦除、读和写" class="headerlink" title="STM32实现W25Q16芯片的擦除、读和写"></a>STM32实现W25Q16芯片的擦除、读和写</h1><h2 id="封装等待函数（通过读取状态寄存器）"><a href="#封装等待函数（通过读取状态寄存器）" class="headerlink" title="封装等待函数（通过读取状态寄存器）"></a>封装等待函数（通过读取状态寄存器）</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">delayBusy</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D05 = <span class="number">0x05</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> result;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D05, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Receive(&amp;hspi1, &amp;result, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">while</span>((result&amp;<span class="number">0x01</span>) == <span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// HAL_SPI_Transmit(&amp;hspi1, &amp;D05, 1, 1000);</span></span><br><span class="line">    HAL_SPI_Receive(&amp;hspi1, &amp;result, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意，手册上说明此处的状态寄存器可以连续读取，也就是在指令开始的时候发送一次<code>0x05</code>即可，之后<strong>循环读取</strong>，通过将片选信号<strong>CS置为高电平停止</strong></p>
+<h2 id="擦除函数"><a href="#擦除函数" class="headerlink" title="擦除函数"></a>擦除函数</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">EraseChip</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D60 = <span class="number">0x60</span>;</span><br><span class="line">  writeEnable();</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D60, <span class="number">1</span> ,<span class="number">1000</span>);</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">  delayBusy();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意，将芯片内容擦除之前需要<strong>先发送一个使能写</strong>的命令，在下面的函数中会封装这个功能</p>
+<p>然后在函数的最后增加等待芯片空闲的函数，该芯片的擦除时间大概1-2s，不同容量的芯片可能时间不同。</p>
+<ul>
+<li>擦除前的读取数据（第二行）：</li>
+<li><img src="/imgs/image-20220108130401292.png" alt="image-20220108130401292"></li>
+<li>擦除后的读取数据</li>
+<li><img src="/imgs/image-20220108130417022.png" alt="image-20220108130417022"></li>
+<li>可见擦除成功</li>
+</ul>
+<h2 id="写使能函数"><a href="#写使能函数" class="headerlink" title="写使能函数"></a>写使能函数</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">writeEnable</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D06 = <span class="number">0x06</span>;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D06, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>禁止写</strong>函数与写使能函数类似，将命令替换为0x04即可</p>
+<h2 id="读取函数"><a href="#读取函数" class="headerlink" title="读取函数"></a>读取函数</h2><p><img src="/imgs/image-20220108125308657.png" alt="image-20220108125308657"></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">readChip</span><span class="params">(<span class="keyword">uint32_t</span> addr, <span class="keyword">int32_t</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D03 = <span class="number">0x03</span>;</span><br><span class="line">  <span class="keyword">int32_t</span> count = length<span class="number">-1</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> Haddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Maddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Laddr;</span><br><span class="line">  Haddr = addr/<span class="number">256</span>/<span class="number">256</span>;</span><br><span class="line">  Maddr = (addr/<span class="number">256</span>)&amp;<span class="number">0xff</span>;</span><br><span class="line">  Laddr = addr&amp;<span class="number">0xff</span>;</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D03, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Haddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Maddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Laddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">for</span>(count = length<span class="number">-1</span>; count&gt;=<span class="number">0</span>;count--)</span><br><span class="line">  &#123;</span><br><span class="line">    HAL_SPI_Receive(&amp;hspi1, recBuff+count, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中的<code>recBuff</code>是一个大小与length相同的byte数组</p>
+<p>注意，与上面类似的是，此处在发送一次读指令之后，芯片会从指定的地址开始自动向前串行发送往后的数据直到CS被置为高电平终止指令，严格的讲从发送的地址开始，可以<strong>只发送一次读取指令便读取到芯片的末尾存储空间</strong>。</p>
+<h2 id="写数据函数"><a href="#写数据函数" class="headerlink" title="写数据函数"></a>写数据函数</h2><p><img src="/imgs/image-20220108133158219.png" alt="image-20220108133158219"></p>
+<p>写函数的执行逻辑是：</p>
+<ul>
+<li>发送一个写使能信号</li>
+<li>CS置为低电平</li>
+<li>发送0x02</li>
+<li>发送24位地址</li>
+<li>连续发送写入的数据（1-256个，一次最多不超过256个，否则超出的会从头部开始覆盖）</li>
+<li>CS置为高电平</li>
+<li>等待芯片写完</li>
+<li>发送禁止写命令</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">writeChip</span><span class="params">(<span class="keyword">uint32_t</span> addr, <span class="keyword">uint16_t</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> D02 = <span class="number">0x02</span>;</span><br><span class="line">  <span class="keyword">int32_t</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">uint8_t</span> Haddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Maddr;</span><br><span class="line">  <span class="keyword">uint8_t</span> Laddr;</span><br><span class="line">  Haddr = addr/<span class="number">256</span>/<span class="number">256</span>;</span><br><span class="line">  Maddr = (addr/<span class="number">256</span>)&amp;<span class="number">0xff</span>;</span><br><span class="line">  Laddr = addr&amp;<span class="number">0xff</span>;</span><br><span class="line">  writeEnable();</span><br><span class="line">  EnCS(<span class="number">0</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;D02, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Haddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Maddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  HAL_SPI_Transmit(&amp;hspi1, &amp;Laddr, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">for</span>(count = <span class="number">0</span>; count&lt;length;count++)</span><br><span class="line">  &#123;</span><br><span class="line">    HAL_SPI_Transmit(&amp;hspi1, writeBuff+count, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  EnCS(<span class="number">1</span>);</span><br><span class="line">  delayBusy();</span><br><span class="line">  writeDisable();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>writeBuff</code>是一个长度为<code>length</code>的字节数组</p>
+<p>注意：</p>
+<ul>
+<li>假如一次写256个字节的话，地址的最后8位务必是0，假如不是的话会导致超出的部分从头部开始覆盖</li>
+<li>写入的字节数不能超出从地址位置开始剩余的字节量（比如地址后8位是0的话，剩余的字节就是256）</li>
+<li>注意在写完最后一个数据之后，比如将片选信号CS置为高电平，此时芯片会开始写入数据，写入的时候查询BUSY寄存器会得到1，所以使用等待函数等待</li>
+</ul>
+<p>执行效果</p>
+<ul>
+<li> 发送buff定义为<code>uint8_t writeBuff[] = &#123;1,2,3,4,5,6,7,8&#125;;</code><strong>注意数组初始化不要漏写</strong><code>[]</code></li>
+<li>发送函数和读取函数</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">writeChip(<span class="number">0x01</span>,<span class="number">8</span>);</span><br><span class="line">readChip(<span class="number">0x01</span>, <span class="number">8</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结果</li>
+<li><img src="/imgs/image-20220108133835422.png" alt="image-20220108133835422"></li>
+<li>可见已经成功写入</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/08/%E4%BD%BF%E7%94%A8STM32%E8%AF%BB%E5%8F%96Winbond-W25Q16-Flash%E8%8A%AF%E7%89%87%E7%9A%84ID%E5%92%8C%E5%BA%8F%E5%88%97%E5%8F%B7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2034,120 +2161,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2021/12/20/%E4%BD%BF%E7%94%A8CubeIDE%E9%85%8D%E7%BD%AEJLink%E5%92%8C%E9%A1%B9%E7%9B%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/20/%E4%BD%BF%E7%94%A8CubeIDE%E9%85%8D%E7%BD%AEJLink%E5%92%8C%E9%A1%B9%E7%9B%AE/" class="post-title-link" itemprop="url">使用CubeIDE配置JLink和项目</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-12-20 20:59:09 / 修改时间：22:14:02" itemprop="dateCreated datePublished" datetime="2021-12-20T20:59:09+08:00">2021-12-20</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>265</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="使用CubeIDE配置JLink和项目"><a href="#使用CubeIDE配置JLink和项目" class="headerlink" title="使用CubeIDE配置JLink和项目"></a>使用CubeIDE配置JLink和项目</h1><h2 id="配置Cube"><a href="#配置Cube" class="headerlink" title="配置Cube"></a>配置Cube</h2><ul>
-<li><p><img src="/imgs/image-20211220210102796.png" alt="image-20211220210102796"></p>
-</li>
-<li><p>新建项目，然后在Cube中配置相关的内容</p>
-</li>
-<li><p>选择填写相关的信息，名称等</p>
-</li>
-<li><p><img src="/imgs/image-20211220210224776.png" alt="image-20211220210224776"></p>
-</li>
-<li><p>此处放大窗口</p>
-</li>
-<li><p><img src="/imgs/image-20211220211956239.png" alt="image-20211220211956239"></p>
-</li>
-<li><p>设置好之后，右键创建代码</p>
-</li>
-<li><p><img src="/imgs/image-20211220212713729.png" alt="image-20211220212713729"></p>
-</li>
-<li><p>假如此时不能点击<code>generate code</code>的话，右键选择<code>build project</code>然后在提示创建代码的时候选择ok，或者是点击cancel然后再次右键，可以看到<code>generate code</code>可以使用了</p>
-</li>
-</ul>
-<h2 id="配置J-Link"><a href="#配置J-Link" class="headerlink" title="配置J-Link"></a>配置J-Link</h2><ul>
-<li><p><img src="/imgs/image-20211220210941718.png" alt="image-20211220210941718"></p>
-</li>
-<li><p>然后点击这里</p>
-</li>
-<li><p><img src="/imgs/image-20211220213008029.png" alt="image-20211220213008029"></p>
-</li>
-<li><p>然后选择</p>
-</li>
-<li><p><img src="/imgs/image-20211220213904526.png" alt="image-20211220213904526"></p>
-</li>
-<li><p>此处选择</p>
-</li>
-<li><p><img src="/imgs/image-20211220215318321.png" alt="image-20211220215318321"></p>
-</li>
-<li><p>否则会说program file does not exist的错误</p>
-</li>
-<li><p>注意include 文件的时候需要包括上一级目录到系统的include路径下才行，比如</p>
-</li>
-<li><p><img src="/imgs/image-20211220215431799.png" alt="image-20211220215431799"></p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2219,14 +2232,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">182</span>
+          <span class="site-state-item-count">183</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">57</span>
+        <span class="site-state-item-count">58</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -2263,13 +2276,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">645k</span>
+    <span title="站点总字数">646k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:32</span>
+    <span title="站点阅读时长">19:34</span>
 </div>
 
         

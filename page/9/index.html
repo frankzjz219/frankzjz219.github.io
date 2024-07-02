@@ -182,6 +182,132 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/10/07/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/10/07/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89/" class="post-title-link" itemprop="url">强化学习复习（三）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-07 21:12:05" itemprop="dateCreated datePublished" datetime="2022-10-07T21:12:05+08:00">2022-10-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-09 15:39:31" itemprop="dateModified" datetime="2022-10-09T15:39:31+08:00">2022-10-09</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/pytorch/examples/tree/main/reinforcement_learning">pytorch关于强化学习的示例</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/_modules/torch/distributions/normal.html">pytorch源码</a></p>
+<h2 id="Policy-Gradient"><a href="#Policy-Gradient" class="headerlink" title="Policy Gradient"></a>Policy Gradient</h2></li>
+<li><p>基本上就是通过动作获得的奖励或者惩罚信息反向传播，给<code>Actor</code>网络进行指导</p>
+</li>
+<li><p><code>Critic</code>实际上是一个类似于<code>QNetwork</code>的网络，它的作用是对Actor的动作做出每个时刻的评价，之前只能在回合结束的时候根据给出的回报进行更新，但是拥有<code>Critic</code>之后就可以在每个时刻进行更新了，也就是**在一个回合结束之前，猜测出这个动作可能导致的reward，并以此指导<code>Actor</code>**。</p>
+</li>
+<li><p>例子</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> count</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">from</span> torch.distributions <span class="keyword">import</span> Categorical</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">&#x27;PyTorch REINFORCE example&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--gamma&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">float</span>, default=<span class="number">0.99</span>, metavar=<span class="string">&#x27;G&#x27;</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;discount factor (default: 0.99)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--seed&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">543</span>, metavar=<span class="string">&#x27;N&#x27;</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;random seed (default: 543)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--render&#x27;</span>, action=<span class="string">&#x27;store_true&#x27;</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;render the environment&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--log-interval&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">10</span>, metavar=<span class="string">&#x27;N&#x27;</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;interval between training status logs (default: 10)&#x27;</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">env = gym.make(<span class="string">&#x27;CartPole-v1&#x27;</span>)</span><br><span class="line">env.seed(args.seed)</span><br><span class="line">torch.manual_seed(args.seed)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Policy</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(Policy, self).__init__()</span><br><span class="line">        self.affine1 = nn.Linear(<span class="number">4</span>, <span class="number">128</span>)</span><br><span class="line">        self.dropout = nn.Dropout(p=<span class="number">0.6</span>)</span><br><span class="line">        self.affine2 = nn.Linear(<span class="number">128</span>, <span class="number">2</span>)</span><br><span class="line"> </span><br><span class="line">        self.saved_log_probs = []</span><br><span class="line">        self.rewards = []</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = self.affine1(x)</span><br><span class="line">        x = self.dropout(x)</span><br><span class="line">        x = F.relu(x)</span><br><span class="line">        action_scores = self.affine2(x)</span><br><span class="line">        <span class="keyword">return</span> F.softmax(action_scores, dim=<span class="number">1</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">policy = Policy()</span><br><span class="line">optimizer = optim.Adam(policy.parameters(), lr=<span class="number">1e-2</span>)</span><br><span class="line">eps = np.finfo(np.float64).eps.item()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">select_action</span>(<span class="params">state</span>):</span></span><br><span class="line">    state = torch.from_numpy(state).<span class="built_in">float</span>().unsqueeze(<span class="number">0</span>)</span><br><span class="line">    probs = policy(state)</span><br><span class="line">    m = Categorical(probs)</span><br><span class="line">    action = m.sample()</span><br><span class="line">    policy.saved_log_probs.append(m.log_prob(action))</span><br><span class="line">    <span class="keyword">return</span> action.item()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">finish_episode</span>():</span></span><br><span class="line">    R = <span class="number">0</span></span><br><span class="line">    policy_loss = []</span><br><span class="line">    returns = []</span><br><span class="line">    <span class="keyword">for</span> r <span class="keyword">in</span> policy.rewards[::-<span class="number">1</span>]:</span><br><span class="line">        R = r + args.gamma * R</span><br><span class="line">        returns.insert(<span class="number">0</span>, R)</span><br><span class="line">    returns = torch.tensor(returns)</span><br><span class="line">    returns = (returns - returns.mean()) / (returns.std() + eps)</span><br><span class="line">    <span class="keyword">for</span> log_prob, R <span class="keyword">in</span> <span class="built_in">zip</span>(policy.saved_log_probs, returns):</span><br><span class="line">        policy_loss.append(-log_prob * R)</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    policy_loss = torch.cat(policy_loss).<span class="built_in">sum</span>()</span><br><span class="line">    policy_loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="keyword">del</span> policy.rewards[:]</span><br><span class="line">    <span class="keyword">del</span> policy.saved_log_probs[:]</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    running_reward = <span class="number">10</span></span><br><span class="line">    <span class="keyword">for</span> i_episode <span class="keyword">in</span> count(<span class="number">1</span>):</span><br><span class="line">        state, ep_reward = env.reset(), <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">10000</span>):  <span class="comment"># Don&#x27;t infinite loop while learning</span></span><br><span class="line">            action = select_action(state)</span><br><span class="line">            state, reward, done, _ = env.step(action)</span><br><span class="line">            <span class="keyword">if</span> args.render:</span><br><span class="line">                env.render()</span><br><span class="line">            policy.rewards.append(reward)</span><br><span class="line">            ep_reward += reward</span><br><span class="line">            <span class="keyword">if</span> done:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"> </span><br><span class="line">        running_reward = <span class="number">0.05</span> * ep_reward + (<span class="number">1</span> - <span class="number">0.05</span>) * running_reward</span><br><span class="line">        finish_episode()</span><br><span class="line">        <span class="keyword">if</span> i_episode % args.log_interval == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Episode &#123;&#125;\tLast reward: &#123;:.2f&#125;\tAverage reward: &#123;:.2f&#125;&#x27;</span>.<span class="built_in">format</span>(</span><br><span class="line">                  i_episode, ep_reward, running_reward))</span><br><span class="line">        <span class="keyword">if</span> running_reward &gt; env.spec.reward_threshold:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Solved! Running reward is now &#123;&#125; and &quot;</span></span><br><span class="line">                  <span class="string">&quot;the last episode runs to &#123;&#125; time steps!&quot;</span>.<span class="built_in">format</span>(running_reward, t))</span><br><span class="line">            torch.save(policy.state_dict(),<span class="string">&#x27;hello.pt&#x27;</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></li>
+<li><p><code>Categorical</code>：<img src="/imgs/bbff369c31599485cece0ecd1f86a3c2d5f7d254eeb1b8f76de5053a207275b2.png" alt="picture 49">  </p>
+<ul>
+<li><code>log_probs</code><img src="/imgs/b02e3510312ce797463f7218ef7fde86af78b655a54491b1bee2766aac44d92d.png" alt="picture 50">  ，实际上就是将对应动作发生的可能性求了log<h3 id="给出策略的具体操作"><a href="#给出策略的具体操作" class="headerlink" title="给出策略的具体操作"></a>给出策略的具体操作</h3></li>
+</ul>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/439220435">参考链接</a></p>
+</li>
+<li><p>给出策略的具体操作是先将输入经过一系列网络的运算之后，经过softmax归一化，得到和为1的几个输出。然后在输出过程中对于具有这几种概率的输出进行随机取样，得到最终的输出动作。（<strong>离散动作</strong>）</p>
+</li>
+<li><p>针对<strong>连续动作</strong>，可以将整个网络的输出更改为输出一个高斯分布函数的μ值（均值），结合用户指定的σ（方差），即可形成一个高斯分布，然后通过类似的sample采样即可得出需要的动作。注意训练阶段为了实现有效的exploration，不要使用太小的σ，否则因为输出太集中没法找到实际上的最优解。</p>
+<ul>
+<li>也可以让网络也输出σ</li>
+<li>反向传播的思路相似，也是直接利用<code>torch.Distributions.Normal</code>的<code>log_prob</code>函数输出概率的log值<img src="/imgs/da881cab2fe598db70c03731a3ec37aec64f13d6f84d04168d697c1aa1d390d6.png" alt="picture 51"></li>
+</ul>
+</li>
+</ul>
+<h3 id="网络更新"><a href="#网络更新" class="headerlink" title="网络更新"></a>网络更新</h3><ul>
+<li><img src="/imgs/b734753c9daa77b5104e2738198288151b8eafd8ec96a44556debd73f729b630.png" alt="picture 48">  <h2 id="DDPG"><a href="#DDPG" class="headerlink" title="DDPG"></a>DDPG</h2></li>
+<li>现在我们来说说 DDPG 中所用到的神经网络. 它其实和我们之前提到的 Actor-Critic 形式差不多, 也需要有基于 策略 Policy 的神经网络 和基于 价值 Value 的神经网络, 但是为了体现 DQN 的思想, 每种神经网络我们都需要再细分为两个, Policy Gradient 这边, 我们有估计网络和现实网络, 估计网络用来输出实时的动作, 供 actor 在现实中实行. 而现实网络则是用来更新价值网络系统的. 所以我们再来看看价值系统这边, 我们也有现实网络和估计网络, 他们都在输出这个状态的价值, 而输入端却有不同, <strong>状态现实网络这边会拿着从动作现实网络来的动作加上状态的观测值加以分析, 而状态估计网络则是拿着当时 Actor 施加的动作当做输入</strong>.在实际运用中, DDPG 的这种做法的确带来了更有效的学习过程.</li>
+<li><img src="/imgs/6a83e078a6bdb97f3a4cd97e1da8d01ea4068866f7bf6254e44e27d51c3f03ea.png" alt="picture 43">  <h3 id="学习的过程"><a href="#学习的过程" class="headerlink" title="学习的过程"></a>学习的过程</h3><h4 id="Critic网络"><a href="#Critic网络" class="headerlink" title="Critic网络"></a>Critic网络</h4></li>
+<li><code>y_true</code>是要学习的值，这个值是通过<code>Critci</code>的<code>target</code>网络对于下一时刻的<code>actor</code>的<code>target</code>网络的动作做出的评估加上这一时刻的汇报<code>reward</code>计算出来的，而它自身需要修改的值就是直接对当前的环境观测和动作做出的值的判断<code>y_pred</code><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">critic_learn</span>():</span></span><br><span class="line">    a1 = self.actor_target(s1).detach()</span><br><span class="line">    y_true = r1 + self.gamma * self.critic_target(s1, a1).detach()</span><br><span class="line">    </span><br><span class="line">    y_pred = self.critic(s0, a0)</span><br><span class="line">    </span><br><span class="line">    loss_fn = nn.MSELoss()</span><br><span class="line">    loss = loss_fn(y_pred, y_true)</span><br><span class="line">    self.critic_optim.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    self.critic_optim.step()</span><br></pre></td></tr></table></figure></li>
+<li>然后按照一定的比例<code>soft_update</code>对应的<code>target</code>网络即可<h4 id="Actor网络"><a href="#Actor网络" class="headerlink" title="Actor网络"></a>Actor网络</h4></li>
+<li>直接利用<code>critic</code>网络对于此刻环境的观测和在此刻环境下<code>actor</code>网络的行为做出评价，然后直接反向传播</li>
+<li>同样<code>soft_update</code>另一个<code>target</code>网络即可<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">actor_learn</span>():</span></span><br><span class="line">    loss = -torch.mean( self.critic(s0, self.actor(s0)) )</span><br><span class="line">    self.actor_optim.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    self.actor_optim.step()</span><br></pre></td></tr></table></figure>
+<h2 id="A3C"><a href="#A3C" class="headerlink" title="A3C"></a>A3C</h2></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/MorvanZhou/pytorch-A3C">pytorch A3C参考</a></li>
+<li><img src="/imgs/8bed5783887792cdbaffbae4046098a68b2539e3a7093d5a4624fb6bb1378a00.png" alt="picture 44">  </li>
+<li><img src="/imgs/bf942436af1a670b0ab91f0705dd4a8136963ade316c598d29a6a775f107841f.png" alt="picture 45">  </li>
+<li><img src="/imgs/daf4381936a5297b7e62f97c553d7c997f51b7ebbecfaee2b4b204c1dd156fba.png" alt="picture 46">  </li>
+<li><img src="/imgs/1cdcd316476945548933f8ad5922351079bb5ee5808860489a251970aa3c805d.png" alt="picture 47">  </li>
+<li>实际上每个本地网络都是一个Actor-Critic的网络，损失分为动作网络<code>Actor</code>的loss和<code>Critic</code>网络的loss<ul>
+<li>Critic的loss可以先计算<code>td_error</code>，用Critic在此时的环境中计算出的值与实际上每一步得到的增加随时间衰减的因子之后的实际上的Reward做差，然后平方即可得到Critic的loss</li>
+<li>Actor的loss则是使用反向求出刚才动作的log_prob（怎么求上文有），然后再求出<code>entropy</code>，公式为<img src="/imgs/082feca831bedf90bf6c3253215c0e01b8c26b2ba406997eb4acb361db659f73.png" alt="`0.5 + 0.5 * math.log(2 * math.pi) + torch.log(m.scale)` 1">，然后log_prob×上文的td_error+一个系数×entropy，然后整个计算出来之后取相反数即可得到Actor的loss，然后将整个的两个loss取平均数，反向传播更新参数即可<u>（因为根据计算图倒推可以分别得到组成这个变量的两个变量分别的影响因素，所以不影响反向传播分别更新两个网络）</u>。<h3 id="torch中backword是怎么用的"><a href="#torch中backword是怎么用的" class="headerlink" title="torch中backword是怎么用的"></a>torch中backword是怎么用的</h3></li>
+</ul>
+</li>
+<li>针对<strong>标量</strong>做出的对计算图的反向传播，得到标量的值，算出计算图中每个变量对于得到这个标量的偏导数<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/168748668">参考</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/10/06/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1253,135 +1379,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/08/29/%E5%B0%8F%E7%A9%BA%E9%97%B4%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/29/%E5%B0%8F%E7%A9%BA%E9%97%B4%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1/" class="post-title-link" itemprop="url">小空间词频统计</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-29 12:56:52" itemprop="dateCreated datePublished" datetime="2022-08-29T12:56:52+08:00">2022-08-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-27 15:48:27" itemprop="dateModified" datetime="2024-04-27T15:48:27+08:00">2024-04-27</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="大数据问题的一般思路"><a href="#大数据问题的一般思路" class="headerlink" title="大数据问题的一般思路"></a>大数据问题的一般思路</h2><ul>
-<li><img src="/imgs/de52034f9740d556c3569a224bb4bc6ba1d9926fdec348c89cfb28b7d82fd640.png" alt="图 9">  <h2 id="利用位数组"><a href="#利用位数组" class="headerlink" title="利用位数组"></a>利用位数组</h2></li>
-<li>利用基础类型（比如int）制作一个bit数组</li>
-<li>比如一个int是32位，那么10个int就是320位的位数组</li>
-<li>利用<u>每个位的1和0</u>计数数字的存在与否<h2 id="小空间词频统计"><a href="#小空间词频统计" class="headerlink" title="小空间词频统计"></a>小空间词频统计</h2></li>
-<li>假如用一个小空间计算40亿个数字中<code>unsigned int</code>中的<u>哪个不包括在内</u><ul>
-<li>先申请允许内存大小的数组，检查系统内存能够允许的数组长度，找<u>最近的长度为2的整数幂次</u>的数组长度作为长度</li>
-<li>然后按照数组的长度均分<code>unsigned int</code>范围得到小的范围长度</li>
-<li>遍历整个数组，每个元素除以小范围的长度，结果向下取整得到自己属于哪个小范围</li>
-<li>将词频数组对应的index位置（上一步计算的结果）<code>+1</code></li>
-<li>循环一遍之后，词频数组中肯定有某个位置的词频达不到理论上的小范围长度</li>
-<li>将整个统计范围的长度从整个<code>unsigned int</code>范围调整到上一个词频达不到满的小范围</li>
-<li><u>重复上述步骤</u>遍历整个数据，丢弃所有不在范围内的数字，其他数字按照第二次划分的小范围分类，统计结束之后再看哪个位置的词频达不到此时的小范围</li>
-</ul>
-</li>
-<li>统计巨量URL的访问次数<ul>
-<li>使用哈希函数将URL转换，然后分流到一定数量（按照服务器的内存资源决定）的小文件中，每个小文件使用一个利用<u>URL被访问次数</u>组织的大根堆</li>
-<li>将每个大根堆的堆顶组织成大根堆得到总堆</li>
-<li>结果就是依次将内容从总堆中弹出，弹出之后找到这个元素原来所在的大根堆，同样将这个元素弹出，然后弹出后的大根堆的头部放入总大根堆中。</li>
-</ul>
-</li>
-<li>利用位数组统计出现了两次的数字<ul>
-<li>用<strong>两位</strong>表示一个数字是否出现过</li>
-<li><code>00</code>没出现过，<code>01</code>出现一次，<code>10</code>出现两次，<code>11</code>出现大于2次</li>
-</ul>
-</li>
-<li>利用小空间找<strong>中位数</strong><ul>
-<li>同样利用小范围词频统计（第一种）操作</li>
-<li>统计到找出中位数在哪个小分区里</li>
-<li>然后对这个对应的小分区再等分找到具体的中位数的位置<h2 id="小空间给大数组"><a href="#小空间给大数组" class="headerlink" title="小空间给大数组"></a>小空间给大数组</h2></li>
-</ul>
-</li>
-<li>方法一<ul>
-<li>小空间使用小根堆</li>
-<li>小根堆存储的内容是&lt;数字，出现次数&gt;的元组，有小根堆中存在的数字的时候，相应的出现次数+1</li>
-<li>小根堆不能直接用一条记录的空间计算，<u>需要考虑一些额外的开销</u>，实际可用的空间可能是总空间/16或者其他数值</li>
-<li>堆的大小用最接近的2的整数次幂次</li>
-<li>然后按照被排序的内容/堆的大小得到被排序内容按大小分的小段</li>
-<li>第一次处理落在最小部分段内的数据，第二次处理第二小部分段内的数据…</li>
-<li>都处理完即可得到所有排序</li>
-</ul>
-</li>
-<li>方法二<ul>
-<li>使用一个大根堆存储此时数组中最小的几种数字</li>
-<li>假如此时一个新的数字小于此时大根堆中最大的数字，那么可以加入</li>
-<li>假如这个数字比大根堆中最大的数字还大，那么说明这个数字不属于整个数组中最小的k个数字之一，直接忽略（k为堆的大小）</li>
-<li>假如此时大根堆的数字超出数字限制，那么将最大的数字弹出然后将新的数字压入</li>
-<li>然后将大根堆内的所有数字逆序排出并清空堆，然后给堆设置最小值，等于上次弹出之前堆中最大的数字，以后只考虑大于这个数字的数</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1453,14 +1450,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">182</span>
+          <span class="site-state-item-count">183</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">57</span>
+        <span class="site-state-item-count">58</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1497,13 +1494,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">645k</span>
+    <span title="站点总字数">646k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:32</span>
+    <span title="站点阅读时长">19:34</span>
 </div>
 
         

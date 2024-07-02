@@ -182,6 +182,103 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/07/02/%E4%BD%BF%E7%94%A8futex%E5%92%8Chrtimer%E7%9A%84%E5%86%85%E6%A0%B8%E5%AE%9A%E6%97%B6%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/07/02/%E4%BD%BF%E7%94%A8futex%E5%92%8Chrtimer%E7%9A%84%E5%86%85%E6%A0%B8%E5%AE%9A%E6%97%B6%E5%99%A8/" class="post-title-link" itemprop="url">使用futex和hrtimer的内核定时器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-07-02 14:11:32 / 修改时间：18:09:43" itemprop="dateCreated datePublished" datetime="2024-07-02T14:11:32+08:00">2024-07-02</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="copy-from-user和copy-to-user"><a href="#copy-from-user和copy-to-user" class="headerlink" title="copy_from_user和copy_to_user"></a><code>copy_from_user</code>和<code>copy_to_user</code></h2><ul>
+<li>这两个函数是内核程序和用户程序互相传递信息的函数</li>
+<li>原型是<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="title">copy_to_user</span><span class="params">(<span class="keyword">void</span> __user *to, <span class="keyword">const</span> <span class="keyword">void</span> *from, <span class="keyword">unsigned</span> <span class="keyword">long</span> n)</span></span></span><br><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="title">copy_from_user</span><span class="params">(<span class="keyword">void</span> *to, <span class="keyword">const</span> <span class="keyword">void</span> __user *from, <span class="keyword">unsigned</span> <span class="keyword">long</span> n)</span></span></span><br></pre></td></tr></table></figure></li>
+<li>函数中的<code>__user</code>指的是这个指针指向的是用户空间的地址，也就是在用户空间使用<code>&amp;</code>取地址得到的指针</li>
+<li>返回值是没有成功拷贝的字节数，0代表成功</li>
+<li>这两个函数不能在中断上下文中使用，因为这两个函数可能导致休眠和阻塞，影响进程切换<h3 id="刚拿到一个用户地址的时候可以读写，但是过一段时间就不能了"><a href="#刚拿到一个用户地址的时候可以读写，但是过一段时间就不能了" class="headerlink" title="刚拿到一个用户地址的时候可以读写，但是过一段时间就不能了"></a>刚拿到一个用户地址的时候可以读写，但是过一段时间就不能了</h3></li>
+<li>可能原因<ul>
+<li>用户空间地址可能已经发生了变化。用户进程可能已经释放了该地址或重新分配了内存，导致原来的地址不再有效</li>
+<li>操作系统的内存保护机制可能导致内核无法访问用户空间的地址</li>
+<li>如果内核和用户空间的数据在进行同步操作时出现问题，可能导致地址的有效性检测失败。例如，内核线程和用户线程在不同步的情况下对同一地址进行操作，可能会引发竞争条件。</li>
+</ul>
+</li>
+</ul>
+<h3 id="锁定用户页面"><a href="#锁定用户页面" class="headerlink" title="锁定用户页面"></a>锁定用户页面</h3><ul>
+<li>使用<code>get_user_pages</code>函数<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">get_user_pages</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> start, <span class="keyword">unsigned</span> <span class="keyword">long</span> nr_pages,<span class="keyword">unsigned</span> <span class="keyword">int</span> gup_flags, struct page **pages)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>传递参数pages是供函数获取到页之后修改用的，相当于返回值</li>
+<li>然后使用<code>kmap_local_page</code>获取到内核空间的页地址<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> *<span class="title">kmap_local_page</span><span class="params">(struct page *page)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>通过内核地址向用户空间写入内容</li>
+<li>因为已经获取到了用户地址映射到内核空间的地址，因此可以直接写入</li>
+<li>使用memcpy：<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">memcpy</span>(&lt;内核页地址&gt;+((<span class="keyword">unsigned</span> <span class="keyword">long</span>)&lt;用户给的用户空间地址&gt; &amp; ~PAGE_MASK), &amp;&lt;要拷贝的源地址&gt;, <span class="keyword">sizeof</span>(value));</span><br></pre></td></tr></table></figure></li>
+<li>用户空间地址与页掩码取反的结果求与，实际上是求出用户空间地址在当前页面下的偏移量，加上页地址得到完整的内核空间地址<h2 id="使用hrtimer的定时器"><a href="#使用hrtimer的定时器" class="headerlink" title="使用hrtimer的定时器"></a>使用hrtimer的定时器</h2></li>
+<li>hrtimer 是 Linux 内核中的高分辨率定时器（High-Resolution Timer）子系统的一部分，它允许开发人员精确地调度和管理定时任务。与传统的 jiffies 计时机制不同，hrtimer 提供了<strong>纳秒级</strong>的精度，这对于需要精确时间管理的应用程序非常有用，例如实时系统、精确定时事件的触发等。</li>
+<li>使用回调函数的方式处理定时器到达的问题，注意回调函数是在<strong>中断语境</strong>的，要防止阻塞。</li>
+<li></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/06/30/%E4%BD%BF%E7%94%A8VMWare%E5%92%8CUbuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%8C%82%E8%BD%BD%E4%B8%BB%E6%9C%BA%E7%A1%AC%E7%9B%98%E5%85%85%E5%BD%93%E4%BA%91%E7%9B%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1004,114 +1101,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/04/30/%E4%BD%BF%E7%94%A8%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B%E7%9A%84Netlink%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/04/30/%E4%BD%BF%E7%94%A8%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B%E7%9A%84Netlink%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97/" class="post-title-link" itemprop="url">使用内核线程的Netlink内核模块</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-30 21:02:43" itemprop="dateCreated datePublished" datetime="2024-04-30T21:02:43+08:00">2024-04-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-01 14:47:31" itemprop="dateModified" datetime="2024-05-01T14:47:31+08:00">2024-05-01</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.5k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="使用内核线程的Linux内核的Netlink服务器"><a href="#使用内核线程的Linux内核的Netlink服务器" class="headerlink" title="使用内核线程的Linux内核的Netlink服务器"></a>使用内核线程的Linux内核的Netlink服务器</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/frankzjz219/kernelNetlinkServer">代码仓库</a></li>
-<li><code>./client</code>下是客户目录</li>
-<li>根目录下执行<code>make</code>可以编译模块，执行<code>./remake.sh</code>可以一键编译安装</li>
-<li>此服务器运行在Ubuntu系统，内核版本为<code>6.5.0-27-generic</code>，基于NETLINK协议</li>
-<li>主要实现了基于netlink的通信响应，每次响应的时候都创建一个内核线程（kthread）来执行操作，执行完之后线程自动结束<ul>
-<li>在内核中，不需要手动的执行<code>wait</code>或者是<code>join</code>等负责回收工作，内核会自动回收内核线程</li>
-<li>可以在需要强行停止的时候执行<code>kthread_stop()</code> 函数。该函数会向内核线程发送一个停止请求,并等待线程完全退出。在内核线程函数中,我们可以使用 <code>kthread_should_stop()</code> 函数来检查是否收到了停止请求, 检测到该函数返回值为真的时候退出内核线程的工作函数。<h2 id="netlink"><a href="#netlink" class="headerlink" title="netlink"></a>netlink</h2></li>
-</ul>
-</li>
-<li>内核创建netlink服务端<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">nl_sk = <span class="built_in">netlink_kernel_create</span>(&amp;init_net, NETLINK_USER, &amp;cfg);</span><br></pre></td></tr></table></figure></li>
-<li>上面注意<code>NETLINK_USER</code>协议号必须跟用户态的程序设置的相同，否则无法通信</li>
-<li>发送数据使用<code>nlmsg_new</code>, <code>nlmsg_put</code>两个函数构造信息，使用<code>nlmsg_unicast</code>发送数据（不区分多播组）</li>
-<li>接收数据使用回调函数实现<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建netlink socket</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">netlink_kernel_cfg</span> <span class="title">cfg</span> =</span> &#123;</span><br><span class="line">    .input = &lt;call back function&gt;,</span><br><span class="line">&#125;;</span><br><span class="line">nl_sk = <span class="built_in">netlink_kernel_create</span>(&amp;init_net, NETLINK_USER, &amp;cfg);</span><br></pre></td></tr></table></figure></li>
-<li>回调函数会自动传入此时接收到的数据，使用内核提供的宏<code>NLMSG_DATA</code>和<code>NLMSG_PAYLOAD</code>等可以提取到信息和长度<h3 id="用户端的相关操作"><a href="#用户端的相关操作" class="headerlink" title="用户端的相关操作"></a>用户端的相关操作</h3></li>
-<li>创建sock<code>sock_fd = socket(PF_NETLINK, SOCK_RAW, NETLINK_USER);</code></li>
-<li>绑定后可以通信<code>bind(sock_fd, (struct sockaddr*)&amp;src_addr, sizeof(src_addr))</code></li>
-<li>发送<code>sendmsg(sock_fd, &amp;msg, 0)</code></li>
-<li>接收<code>recvmsg(sock_fd, &amp;msg_recv, 0)</code><h2 id="proc下的文件"><a href="#proc下的文件" class="headerlink" title="/proc下的文件"></a>/proc下的文件</h2></li>
-<li>在<code>/proc</code>下创建一个文件用于读取内核模块的信息<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">proc_entry = <span class="built_in">proc_create</span>(<span class="string">&quot;netlink_stats&quot;</span>, <span class="number">0666</span>, <span class="literal">NULL</span>, &amp;proc_file_fops);</span><br></pre></td></tr></table></figure></li>
-<li>处理用户的读取操作<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// proc文件的读取操作</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">ssize_t</span> <span class="title">proc_read</span><span class="params">(struct file *file, <span class="keyword">char</span> __user *user_buf, <span class="keyword">size_t</span> count, <span class="keyword">loff_t</span> *ppos)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buffer[<span class="number">128</span>];</span><br><span class="line">    <span class="keyword">int</span> len;</span><br><span class="line"></span><br><span class="line">    len = <span class="built_in">sprintf</span>(buffer, <span class="string">&quot;Messages received: %d\nTotal bytes: %d\n&quot;</span>, message_count, total_bytes);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">simple_read_from_buffer</span>(user_buf, count, ppos, buffer, len);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="内核线程"><a href="#内核线程" class="headerlink" title="内核线程"></a>内核线程</h2></li>
-<li><code>kthread_run(threadfn, data, namefmt, ...)</code></li>
-<li>第一个函数是一个<code>int(*)(void*)</code>的函数，接收一个<code>void*</code>的参数，返回一个返回码</li>
-<li>第二个是传入的参数</li>
-<li>第三个是名称<h2 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h2></li>
-<li><img src="/imgs/899d1ad68264dd9dfd56b30e838b5564e165b87d08f957991a2d73790683f724.png" alt="picture 0">  </li>
-<li><img src="/imgs/b2f8c24b6d4e4787ec28c1dcf76a3f07a193cccab86307193c17763b79a27500.png" alt="picture 1"> </li>
-<li><img src="/imgs/e167e9f8ba08d456270b8ed77aacbd1a7f249178b20f8d54f4b6c06f34e65931.png" alt="picture 2">  </li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1183,14 +1172,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">182</span>
+          <span class="site-state-item-count">183</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">57</span>
+        <span class="site-state-item-count">58</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1227,13 +1216,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">645k</span>
+    <span title="站点总字数">646k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:32</span>
+    <span title="站点阅读时长">19:34</span>
 </div>
 
         
