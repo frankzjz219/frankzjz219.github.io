@@ -739,7 +739,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-16 22:17:27" itemprop="dateModified" datetime="2024-06-16T22:17:27+08:00">2024-06-16</time>
+                <time title="修改时间：2024-07-04 22:53:43" itemprop="dateModified" datetime="2024-07-04T22:53:43+08:00">2024-07-04</time>
               </span>
 
           <br>
@@ -748,14 +748,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.5k</span>
+              <span>5.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>8 分钟</span>
+              <span>10 分钟</span>
             </span>
 
         </div>
@@ -767,7 +767,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Leetcode-33-搜索旋转排序数组"><a href="#Leetcode-33-搜索旋转排序数组" class="headerlink" title="Leetcode 33. 搜索旋转排序数组"></a>Leetcode 33. 搜索旋转排序数组</h2><ul>
+          <h2 id="Leetcode-283-移动零"><a href="#Leetcode-283-移动零" class="headerlink" title="Leetcode 283. 移动零"></a>Leetcode 283. 移动零</h2><ul>
+<li>此题是使用双指针法<ul>
+<li>一个指针是依次向前的</li>
+<li>另一个是指向非0区的左边界</li>
+<li>每次遇到一个非0的数字，就把他跟左边界位置的数字互换然后将左边界右移一位<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">moveZeroes</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> nonZero = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;nums.<span class="built_in">size</span>(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i] != <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">swap</span>(nums[i], nums[nonZero]);</span><br><span class="line">                ++nonZero;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>&amp; a, <span class="keyword">int</span>&amp; b)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> tmp = a;</span><br><span class="line">        a = b;</span><br><span class="line">        b = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="Leetcode-560-和为k的子数组"><a href="#Leetcode-560-和为k的子数组" class="headerlink" title="Leetcode 560.和为k的子数组"></a>Leetcode 560.和为k的子数组</h2><ul>
+<li>循环一次，每次寻找每个位置的前缀和</li>
+<li>然后寻找字典中是否存在<code>pre-k</code></li>
+<li>假如存在的话，意味着从<code>pre-k</code>的结束位置开始，到当前的位置结束的一段数组的和是k<ul>
+<li>map中<code>pre-k</code>有多少个，增加多少个到结果中<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">subarraySum</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        unordered_map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; mp;</span><br><span class="line">        mp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">0</span>, pre = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; x:nums) &#123;</span><br><span class="line">            pre += x; <span class="comment">// 这一步是前缀和</span></span><br><span class="line">            <span class="keyword">if</span> (mp.<span class="built_in">find</span>(pre - k) != mp.<span class="built_in">end</span>()) &#123;</span><br><span class="line">                count += mp[pre - k]; <span class="comment">// 可行的计数加上这个计数</span></span><br><span class="line">            &#125;</span><br><span class="line">            mp[pre]++; <span class="comment">// 添加上当前计算的前缀和到字典</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="Leetcode-33-搜索旋转排序数组"><a href="#Leetcode-33-搜索旋转排序数组" class="headerlink" title="Leetcode 33. 搜索旋转排序数组"></a>Leetcode 33. 搜索旋转排序数组</h2><ul>
 <li>此题是针对一个向后平移过的有序数组进行操作</li>
 <li>如果数组的第一个元素小于当前元素，则当前元素位于数组的前半部分，否则是后半部分</li>
 <li>然后在自己的区间内二分即可，与数组的最左侧和最右侧元素比较<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">search</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = (<span class="keyword">int</span>)nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (!n) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> nums[<span class="number">0</span>] == target ? <span class="number">0</span> : <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> l = <span class="number">0</span>, r = n - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt;= r) &#123;</span><br><span class="line">            <span class="keyword">int</span> mid = (l + r) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] == target) <span class="keyword">return</span> mid;</span><br><span class="line">            <span class="keyword">if</span> (nums[<span class="number">0</span>] &lt;= nums[mid]) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[<span class="number">0</span>] &lt;= target &amp;&amp; target &lt; nums[mid]) &#123;</span><br><span class="line">                    r = mid - <span class="number">1</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    l = mid + <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[mid] &lt; target &amp;&amp; target &lt;= nums[n - <span class="number">1</span>]) &#123;</span><br><span class="line">                    l = mid + <span class="number">1</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    r = mid - <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -1674,7 +1690,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-01 17:00:51" itemprop="dateModified" datetime="2024-05-01T17:00:51+08:00">2024-05-01</time>
+                <time title="修改时间：2024-07-04 22:50:15" itemprop="dateModified" datetime="2024-07-04T22:50:15+08:00">2024-07-04</time>
               </span>
 
           <br>
@@ -1683,14 +1699,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>7.1k</span>
+              <span>6.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>13 分钟</span>
+              <span>12 分钟</span>
             </span>
 
         </div>
@@ -1729,11 +1745,6 @@
 </ul>
 </li>
 <li>然后用宽度和栈顶元素的高度算面积<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 版本一</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largestRectangleArea</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; heights)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">        stack&lt;<span class="keyword">int</span>&gt; st;</span><br><span class="line">        heights.<span class="built_in">insert</span>(heights.<span class="built_in">begin</span>(), <span class="number">0</span>); <span class="comment">// 数组头部加入元素0</span></span><br><span class="line">        heights.<span class="built_in">push_back</span>(<span class="number">0</span>); <span class="comment">// 数组尾部加入元素0</span></span><br><span class="line">        st.<span class="built_in">push</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 第一个元素已经入栈，从下标1开始</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; heights.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (heights[i] &gt; heights[st.<span class="built_in">top</span>()]) &#123; <span class="comment">// 情况一</span></span><br><span class="line">                st.<span class="built_in">push</span>(i);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (heights[i] == heights[st.<span class="built_in">top</span>()]) &#123; <span class="comment">// 情况二</span></span><br><span class="line">                st.<span class="built_in">pop</span>(); <span class="comment">// 这个可以加，可以不加，效果一样，思路不同</span></span><br><span class="line">                st.<span class="built_in">push</span>(i);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// 情况三</span></span><br><span class="line">                <span class="keyword">while</span> (!st.<span class="built_in">empty</span>() &amp;&amp; heights[i] &lt; heights[st.<span class="built_in">top</span>()]) &#123; <span class="comment">// 注意是while</span></span><br><span class="line">                    <span class="keyword">int</span> mid = st.<span class="built_in">top</span>();</span><br><span class="line">                    st.<span class="built_in">pop</span>();</span><br><span class="line">                    <span class="keyword">if</span> (!st.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">                        <span class="keyword">int</span> left = st.<span class="built_in">top</span>();</span><br><span class="line">                        <span class="keyword">int</span> right = i;</span><br><span class="line">                        <span class="keyword">int</span> w = right - left - <span class="number">1</span>;</span><br><span class="line">                        <span class="keyword">int</span> h = heights[mid];</span><br><span class="line">                        result = <span class="built_in">max</span>(result, w * h);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                st.<span class="built_in">push</span>(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Leetcode-560-和为k的子数组"><a href="#Leetcode-560-和为k的子数组" class="headerlink" title="Leetcode 560.和为k的子数组"></a>Leetcode 560.和为k的子数组</h2><ul>
-<li>循环一次，每次寻找每个位置的前缀和</li>
-<li>然后寻找字典中是否存在<code>pre-k</code></li>
-<li>假如存在的话，意味着从<code>pre-k</code>的结束位置开始，到当前的位置结束的一段数组的和是k<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">subarraySum</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        unordered_map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; mp;</span><br><span class="line">        mp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">0</span>, pre = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; x:nums) &#123;</span><br><span class="line">            pre += x; <span class="comment">// 这一步是前缀和</span></span><br><span class="line">            <span class="keyword">if</span> (mp.<span class="built_in">find</span>(pre - k) != mp.<span class="built_in">end</span>()) &#123;</span><br><span class="line">                count += mp[pre - k]; <span class="comment">// 可行的计数加上这个计数</span></span><br><span class="line">            &#125;</span><br><span class="line">            mp[pre]++; <span class="comment">// 添加上当前计算的前缀和到字典</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="leetcode-239-滑动窗口最大值"><a href="#leetcode-239-滑动窗口最大值" class="headerlink" title="leetcode 239.滑动窗口最大值"></a>leetcode 239.滑动窗口最大值</h2><ul>
 <li>用优先级队列解决即可</li>
@@ -2004,7 +2015,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:43</span>
+    <span title="站点阅读时长">19:44</span>
 </div>
 
         
