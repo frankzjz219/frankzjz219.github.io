@@ -20,18 +20,18 @@
     var CONFIG = {"hostname":"frankzjz219.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="严格参考下文的官网方式 参考网站 编译内核官方参考 实时内核官方参考编译指令 在树莓派github连接下载内核压缩包 解压到&#x2F;usr&#x2F;src目录下 切换超级用户sudo passwd root设置密码 sudo su切换到超级用户 apt install git bc bison flex libssl-dev make安装必要的包 执行KERNEL&#x3D;&lt;你的内核名字&gt;和sudo mak">
+  <meta name="description" content="严格参考下文的官网方式参考网站 编译内核官方参考 实时内核官方参考编译指令 在树莓派github连接下载内核压缩包 解压到&#x2F;usr&#x2F;src目录下 切换超级用户sudo passwd root设置密码 sudo su切换到超级用户 apt install git bc bison flex libssl-dev libncurses-dev make安装必要的包 执行KERNEL&#x3D;&lt;你的内核">
 <meta property="og:type" content="article">
 <meta property="og:title" content="编译并更换树莓派内核">
 <meta property="og:url" content="https://frankzjz219.github.io/2024/06/28/%E7%BC%96%E8%AF%91%E5%B9%B6%E6%9B%B4%E6%8D%A2%E6%A0%91%E8%8E%93%E6%B4%BE%E5%86%85%E6%A0%B8/index.html">
 <meta property="og:site_name" content="Frank&#39;s blogs">
-<meta property="og:description" content="严格参考下文的官网方式 参考网站 编译内核官方参考 实时内核官方参考编译指令 在树莓派github连接下载内核压缩包 解压到&#x2F;usr&#x2F;src目录下 切换超级用户sudo passwd root设置密码 sudo su切换到超级用户 apt install git bc bison flex libssl-dev make安装必要的包 执行KERNEL&#x3D;&lt;你的内核名字&gt;和sudo mak">
+<meta property="og:description" content="严格参考下文的官网方式参考网站 编译内核官方参考 实时内核官方参考编译指令 在树莓派github连接下载内核压缩包 解压到&#x2F;usr&#x2F;src目录下 切换超级用户sudo passwd root设置密码 sudo su切换到超级用户 apt install git bc bison flex libssl-dev libncurses-dev make安装必要的包 执行KERNEL&#x3D;&lt;你的内核">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://frankzjz219.github.io/imgs/317c32e5324bd81b627218bf427e23b1bbb9470abd84c8f51f62646f053c0829.png">
 <meta property="og:image" content="https://frankzjz219.github.io/imgs/e7336911053a20b4bff1af0029d43f20fe365dec420e051b8d64ead3222120b0.png">
 <meta property="og:image" content="https://frankzjz219.github.io/imgs/4ab822ad206f3ea923475d64e98b9db8567173483aefcd518352c4cd9a83fff2.png">
 <meta property="article:published_time" content="2024-06-28T04:28:34.000Z">
-<meta property="article:modified_time" content="2024-06-28T11:17:38.507Z">
+<meta property="article:modified_time" content="2024-07-10T04:59:40.663Z">
 <meta property="article:author" content="FrankZhang">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="内核">
@@ -215,10 +215,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-06-28 12:28:34 / 修改时间：19:17:38" itemprop="dateCreated datePublished" datetime="2024-06-28T12:28:34+08:00">2024-06-28</time>
+              <time title="创建时间：2024-06-28 12:28:34" itemprop="dateCreated datePublished" datetime="2024-06-28T12:28:34+08:00">2024-06-28</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-10 12:59:40" itemprop="dateModified" datetime="2024-07-10T12:59:40+08:00">2024-07-10</time>
+              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
@@ -233,7 +239,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>882</span>
+              <span>907</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -252,15 +258,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><strong>严格参考下文的官网方式</strong></p>
-<h2 id="参考网站"><a href="#参考网站" class="headerlink" title="参考网站"></a>参考网站</h2><ul>
+        <ul>
+<li><strong>严格参考下文的官网方式</strong><h2 id="参考网站"><a href="#参考网站" class="headerlink" title="参考网站"></a>参考网站</h2></li>
 <li><a target="_blank" rel="noopener" href="https://www.raspberrypi.com/documentation/computers/linux_kernel.html#kernel">编译内核官方参考</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.raspberrypi.com/documentation/computers/linux_kernel.html#patch-the-kernel">实时内核官方参考</a><h2 id="编译指令"><a href="#编译指令" class="headerlink" title="编译指令"></a>编译指令</h2></li>
 <li>在<a target="_blank" rel="noopener" href="https://github.com/raspberrypi/linux">树莓派github连接</a>下载内核压缩包</li>
 <li>解压到<code>/usr/src</code>目录下</li>
 <li>切换超级用户<code>sudo passwd root</code>设置密码</li>
 <li><code>sudo su</code>切换到超级用户</li>
-<li><code>apt install git bc bison flex libssl-dev make</code>安装必要的包</li>
+<li><code>apt install git bc bison flex libssl-dev libncurses-dev make</code>安装必要的包</li>
 <li>执行<code>KERNEL=&lt;你的内核名字&gt;</code>和<code>sudo make bcm2712_defconfig</code><ul>
 <li>注意设置完环境变量之后就不能切换用户了</li>
 </ul>
@@ -271,7 +277,7 @@
 </ul>
 </li>
 <li><code>make -j4 Image.gz modules dtbs</code>编译内核</li>
-<li><code>make modules_install</code><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 这一步是备份</span></span><br><span class="line">sudo cp /boot/firmware/$KERNEL.img /boot/firmware/$KERNEL-backup.img</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装内核</span></span><br><span class="line">sudo cp arch/arm64/boot/Image.gz /boot/firmware/$KERNEL.img</span><br><span class="line">sudo cp arch/arm64/boot/dts/broadcom/*.dtb /boot/firmware/</span><br><span class="line">sudo cp arch/arm64/boot/dts/overlays/*.dtb* /boot/firmware/overlays/</span><br><span class="line">sudo cp arch/arm64/boot/dts/overlays/README /boot/firmware/overlays/</span><br></pre></td></tr></table></figure></li>
+<li><code>make modules_install</code><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 这一步是备份，名字不冲突可以不执行</span></span><br><span class="line">sudo cp /boot/firmware/$KERNEL.img /boot/firmware/$KERNEL-backup.img</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装内核</span></span><br><span class="line">sudo cp arch/arm64/boot/Image.gz /boot/firmware/$KERNEL.img</span><br><span class="line">sudo cp arch/arm64/boot/dts/broadcom/*.dtb /boot/firmware/</span><br><span class="line">sudo cp arch/arm64/boot/dts/overlays/*.dtb* /boot/firmware/overlays/</span><br><span class="line">sudo cp arch/arm64/boot/dts/overlays/README /boot/firmware/overlays/</span><br></pre></td></tr></table></figure></li>
 <li>然后使用<code>sudo vim /boot/firmware/config.txt</code></li>
 <li>最后添加一句<code>kernel=&lt;你的内核名字&gt;.img</code></li>
 <li>reboot重启</li>
