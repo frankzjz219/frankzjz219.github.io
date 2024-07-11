@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://frankzjz219.github.io/imgs/b43e2b5ad8a38f7eed236cc409d35ddf366b245f2701794b13aac3c9ffb3073d.png">
 <meta property="article:published_time" content="2024-01-26T13:36:09.000Z">
-<meta property="article:modified_time" content="2024-06-19T15:08:42.498Z">
+<meta property="article:modified_time" content="2024-07-11T13:07:49.318Z">
 <meta property="article:author" content="FrankZhang">
 <meta property="article:tag" content="C++">
 <meta property="article:tag" content="Cpp">
@@ -222,7 +222,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-19 23:08:42" itemprop="dateModified" datetime="2024-06-19T23:08:42+08:00">2024-06-19</time>
+                <time title="修改时间：2024-07-11 21:07:49" itemprop="dateModified" datetime="2024-07-11T21:07:49+08:00">2024-07-11</time>
               </span>
 
           
@@ -238,14 +238,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>6.1k</span>
+              <span>6.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>11 分钟</span>
+              <span>12 分钟</span>
             </span>
 
         </div>
@@ -266,6 +266,10 @@
 <li>主要思路还是背包问题，只不过此时的背包容量和装的物品的价值<strong>都是石头的重量</strong></li>
 <li><u>注意内存循环必须从后往前遍历，否则会导致前面被添加过的物品被连续重复添加</u></li>
 <li>外层循环的意思是使用到的石头是<code>0</code>-<code>i</code>个，内层的意思是石头<u>总重不超过某个值的时候的最大总重是多少</u><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lastStoneWeightII</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; stones)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; i:stones)sum+=i;</span><br><span class="line">        <span class="keyword">int</span> target = sum/<span class="number">2</span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">maxArr</span><span class="params">(target+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;stones.<span class="built_in">size</span>(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> wi = stones[i];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = target; j&gt;=wi; --j)</span><br><span class="line">            &#123;</span><br><span class="line">                maxArr[j] = <span class="built_in">max</span>(maxArr[j], maxArr[j-wi]+wi);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum - (maxArr[target]*<span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="139-单词拆分"><a href="#139-单词拆分" class="headerlink" title="139. 单词拆分"></a>139. 单词拆分</h2><ul>
+<li>此题主要是将字符串视为一个背包，字典中的每个单词都是一个物品</li>
+<li>从字符串的每个位置开始，如果这个位置已经可达，那么从这个位置开始枚举substring，如果这个substring在字典中，则这个substring的位置也可达，从前往后遍历（因为每个单词使用次数不限制）<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    unordered_set&lt;string&gt; us; </span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; able;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">wordBreak</span><span class="params">(string s, vector&lt;string&gt;&amp; wordDict)</span> </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">bool</span>&gt; <span class="title">able</span><span class="params">(s.size()+<span class="number">1</span>, <span class="literal">false</span>)</span></span>;</span><br><span class="line">        unordered_set&lt;string&gt; um;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; w : wordDict)</span><br><span class="line">        &#123;</span><br><span class="line">            um.<span class="built_in">insert</span>(w);</span><br><span class="line">        &#125;</span><br><span class="line">        able[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i&lt;=s.<span class="built_in">size</span>(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(!able[i<span class="number">-1</span>])<span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; i+j<span class="number">-1</span>&lt;=s.<span class="built_in">size</span>(); ++j)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(um.<span class="built_in">count</span>(s.<span class="built_in">substr</span>(i<span class="number">-1</span>, j)))</span><br><span class="line">                &#123;</span><br><span class="line">                    able[i+j<span class="number">-1</span>] = able[i+j<span class="number">-1</span>]|able[i<span class="number">-1</span>];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> able[s.<span class="built_in">size</span>()];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="Leetcode-474-一和零"><a href="#Leetcode-474-一和零" class="headerlink" title="Leetcode 474. 一和零"></a>Leetcode 474. 一和零</h2><ul>
 <li>此题是一个递推问题，做题方式类似于背包法</li>
@@ -387,7 +391,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Leetcode-416-%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86"><span class="nav-number">1.</span> <span class="nav-text">Leetcode 416. 分割等和子集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Leetcode-1049-%E6%9C%80%E5%90%8E%E4%B8%80%E5%9D%97%E7%9F%B3%E5%A4%B4%E9%87%8D%E9%87%8F-II"><span class="nav-number">2.</span> <span class="nav-text">Leetcode 1049. 最后一块石头重量 II</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Leetcode-474-%E4%B8%80%E5%92%8C%E9%9B%B6"><span class="nav-number">3.</span> <span class="nav-text">Leetcode 474. 一和零</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Leetcode-518-%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2II"><span class="nav-number">4.</span> <span class="nav-text">Leetcode 518. 零钱兑换II</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Leetcode-377-%E7%BB%84%E5%90%88%E6%80%BB%E5%92%8CIV"><span class="nav-number">5.</span> <span class="nav-text">Leetcode 377. 组合总和IV</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Leetcode-279-%E5%AE%8C%E5%85%A8%E5%B9%B3%E6%96%B9%E6%95%B0"><span class="nav-number">6.</span> <span class="nav-text">Leetcode 279. 完全平方数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%A1%E7%A0%81%E7%BD%91-28-%E5%AD%90%E5%BA%8F%E5%88%97%E4%B8%AD%E7%9A%84-k-%E7%A7%8D%E5%AD%97%E6%AF%8D"><span class="nav-number">7.</span> <span class="nav-text">卡码网 28. 子序列中的 k 种字母</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nowcoder-HJ16-%E8%B4%AD%E7%89%A9%E5%8D%95"><span class="nav-number">8.</span> <span class="nav-text">nowcoder HJ16 购物单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#494-%E7%9B%AE%E6%A0%87%E5%92%8C"><span class="nav-number">9.</span> <span class="nav-text">494. 目标和</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Leetcode-416-%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86"><span class="nav-number">1.</span> <span class="nav-text">Leetcode 416. 分割等和子集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Leetcode-1049-%E6%9C%80%E5%90%8E%E4%B8%80%E5%9D%97%E7%9F%B3%E5%A4%B4%E9%87%8D%E9%87%8F-II"><span class="nav-number">2.</span> <span class="nav-text">Leetcode 1049. 最后一块石头重量 II</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#139-%E5%8D%95%E8%AF%8D%E6%8B%86%E5%88%86"><span class="nav-number">3.</span> <span class="nav-text">139. 单词拆分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Leetcode-474-%E4%B8%80%E5%92%8C%E9%9B%B6"><span class="nav-number">4.</span> <span class="nav-text">Leetcode 474. 一和零</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Leetcode-518-%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2II"><span class="nav-number">5.</span> <span class="nav-text">Leetcode 518. 零钱兑换II</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Leetcode-377-%E7%BB%84%E5%90%88%E6%80%BB%E5%92%8CIV"><span class="nav-number">6.</span> <span class="nav-text">Leetcode 377. 组合总和IV</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Leetcode-279-%E5%AE%8C%E5%85%A8%E5%B9%B3%E6%96%B9%E6%95%B0"><span class="nav-number">7.</span> <span class="nav-text">Leetcode 279. 完全平方数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%A1%E7%A0%81%E7%BD%91-28-%E5%AD%90%E5%BA%8F%E5%88%97%E4%B8%AD%E7%9A%84-k-%E7%A7%8D%E5%AD%97%E6%AF%8D"><span class="nav-number">8.</span> <span class="nav-text">卡码网 28. 子序列中的 k 种字母</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nowcoder-HJ16-%E8%B4%AD%E7%89%A9%E5%8D%95"><span class="nav-number">9.</span> <span class="nav-text">nowcoder HJ16 购物单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#494-%E7%9B%AE%E6%A0%87%E5%92%8C"><span class="nav-number">10.</span> <span class="nav-text">494. 目标和</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -447,13 +451,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">651k</span>
+    <span title="站点总字数">652k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:44</span>
+    <span title="站点阅读时长">19:46</span>
 </div>
 
         
