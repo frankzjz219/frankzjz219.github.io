@@ -182,6 +182,121 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2021/12/20/freeRTOS%E4%B8%AD%E6%96%AD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/20/freeRTOS%E4%B8%AD%E6%96%AD/" class="post-title-link" itemprop="url">freeRTOS中断和信号量以及任务管理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-12-20 22:10:33" itemprop="dateCreated datePublished" datetime="2021-12-20T22:10:33+08:00">2021-12-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-21 00:00:26" itemprop="dateModified" datetime="2021-12-21T00:00:26+08:00">2021-12-21</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="freeRTOS中断和信号量"><a href="#freeRTOS中断和信号量" class="headerlink" title="freeRTOS中断和信号量"></a>freeRTOS中断和信号量</h1><p>使用freeRTOS中断与使用正常的中断区别不大（不使用FreeRTOS自带的API），直接使用系统给的中断函数即可</p>
+<ul>
+<li><p>手动启动这两个</p>
+</li>
+<li><p><img src="/imgs/image-20211220221301553.png" alt="image-20211220221301553"></p>
+</li>
+<li><p>注意，使用EXTI的时候（外部中断），需要自己<strong>手动定义</strong>中断处理函数</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HAL_GPIO_EXTI_Callback</span><span class="params">(<span class="keyword">uint16_t</span> GPIO_Pin)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>系统没有给出这个函数的定义，可以自己在任意文件中定义</p>
+</li>
+<li><p>设置的优先级比系统（RTOS）<strong>高</strong>的话，中断处理函数就<strong>不会被系统打断执行</strong>。</p>
+</li>
+<li><p>注意，在中断函数中调用FreeRTOS的API的时候，需要采用Fron_ISR的API。FreeRTOS对于一些系统API函数提供两种版本，一种是供<strong>任务调用</strong>的，一种是供<strong>中断调用的（Interrupt Safe API）</strong>。由中断调用的API函数后缀上会有“FromISR”。</p>
+</li>
+</ul>
+<h2 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h2><ul>
+<li><p>简单而言就是一个进程通过一个信号变量指示另一个线程是阻塞还是运行，详见<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/139469342">https://zhuanlan.zhihu.com/p/139469342</a></p>
+</li>
+<li><p>有两种调用方式，一种是使用CMSIS_OS中的<code>osSemaphoreId osSemaphoreCreate (const osSemaphoreDef_t *semaphore_def, int32_t count);</code>、<code>int32_t osSemaphoreWait (osSemaphoreId semaphore_id, uint32_t millisec);</code>和<code>osStatus osSemaphoreRelease (osSemaphoreId semaphore_id);</code>函数</p>
+</li>
+<li><p>或者是手动<code>#include &quot;semphr.h&quot;</code>，然后使用知乎网页上的<code>SemaphoreHandle_t xSemaphoreCreateBinary( void )</code>、<code>BaseType_t xSemaphoreTake( SemaphoreHandle_t xSemaphore, TickType_t xTicksToWait )</code>、<code>BaseType_t xSemaphoreGive( SemaphoreHandle_t xSemaphore );</code>以及中断函数中的<code>BaseType_t xSemaphoreGiveFromISR( SemaphoreHandle_t xSemaphore, BaseType_t *pxHigherPriorityTaskWoken )</code></p>
+</li>
+<li><p>注意，<code>xSemaphoreGiveFromISR</code>函数的第二个参数是可选的，不需要的时候可以给NULL，具体作用详见<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45045399/article/details/103238514">https://blog.csdn.net/weixin_45045399/article/details/103238514</a></p>
+</li>
+<li><p><strong>xTicksToWait</strong> 如果信号量不可用的话任务处于阻塞状态的<strong>最长时间</strong>，设置为 portMAX_DELAY的话任务会<strong>一直处于阻塞状态</strong>直到信号量可用，设置为0的话如果信号量不可用的话会<strong>直接返回</strong></p>
+</li>
+<li><p>假如准备在对应的中断中调用系统的API的话，注意<strong>勾选这个选项</strong>并且<strong>调整相应的中断优先级</strong>，<strong>否则会卡死</strong></p>
+</li>
+<li><p><img src="/imgs/image-20211220234334003.png" alt="image-20211220234334003"></p>
+</li>
+<li><p>经过测试，虽然<code>osSemaphoreId</code>与FreeRTOS原生的API要求的<code>SemaphoreHandle_t</code>不同，但是两种API<strong>都可以运行</strong>，直接替换即可。</p>
+</li>
+</ul>
+<h2 id="优先级倒置"><a href="#优先级倒置" class="headerlink" title="优先级倒置"></a>优先级倒置</h2><p>参考知乎文章<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/139469342">https://zhuanlan.zhihu.com/p/139469342</a></p>
+<h2 id="互斥量"><a href="#互斥量" class="headerlink" title="互斥量"></a>互斥量</h2><p>同上</p>
+<h2 id="关键区"><a href="#关键区" class="headerlink" title="关键区"></a>关键区</h2><p>同上</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2021/12/20/%E4%BD%BF%E7%94%A8CubeIDE%E9%85%8D%E7%BD%AEJLink%E5%92%8C%E9%A1%B9%E7%9B%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1167,92 +1282,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2021/12/11/FreeRtos2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/11/FreeRtos2/" class="post-title-link" itemprop="url">FreeRtos2</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-12-11 18:03:10" itemprop="dateCreated datePublished" datetime="2021-12-11T18:03:10+08:00">2021-12-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-14 09:33:30" itemprop="dateModified" datetime="2021-12-14T09:33:30+08:00">2021-12-14</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>186</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="FreeRtos创建注意（使用CubeMX）"><a href="#FreeRtos创建注意（使用CubeMX）" class="headerlink" title="FreeRtos创建注意（使用CubeMX）"></a>FreeRtos创建注意（使用CubeMX）</h2><ul>
-<li><p>创建按照前篇知乎上的文章创建即可，注意此时会提示Systick的问题，设置为外部时钟晶振，而且设置为TIM1（或者其他timer可能也可以，没有尝试过）</p>
-</li>
-<li><p><img src="/imgs/image-20211214001535585.png" alt="image-20211214001535585"></p>
-</li>
-<li><p>然后另一个可能存在的问题是在<code>freertos.c</code> 文件中定义一些与<code>UART</code>相关的东西的时候会因为没有<code>#include &quot;usart.h&quot;</code>而出错，此时加上引用即可</p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1324,14 +1353,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">183</span>
+          <span class="site-state-item-count">184</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-count">59</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1368,7 +1397,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">652k</span>
+    <span title="站点总字数">653k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>

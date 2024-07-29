@@ -182,6 +182,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/21/Linux%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/21/Linux%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E7%AE%80%E4%BB%8B/" class="post-title-link" itemprop="url">Linux进程间通信简介</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-01-21 23:36:06 / 修改时间：23:43:42" itemprop="dateCreated datePublished" datetime="2022-01-21T23:36:06+08:00">2022-01-21</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Linux进程间通信简介"><a href="#Linux进程间通信简介" class="headerlink" title="Linux进程间通信简介"></a>Linux进程间通信简介</h1><h2 id="管道和-FIFO"><a href="#管道和-FIFO" class="headerlink" title="管道和 FIFO"></a>管道和 FIFO</h2><ul>
+<li>管道是 UNIX 系统上最古老的 IPC 方法，它在 20 世纪 70 年代早期 UNIX 的第三个版本上就出现了。 把一个进程连接到另一个进程的数据流称为管道，管道被抽象成一个文件，5.1 小节曾提及过管道文件（pipe） 这样一种文件类型。<ul>
+<li>普通管道 pipe：通常有两种限制，一是单工，数据只能单向传输；二是只能在父子或者兄弟进程间 使用；</li>
+<li>流管道 s_pipe：去除了普通管道的第一种限制，为半双工，可以双向传输；只能在父子或兄弟进程 间使用；</li>
+<li>有名管道 name_pipe（FIFO）：去除了普通管道的第二种限制，并且允许在不相关（不是父子或兄 弟关系）的进程间进行通讯。</li>
+</ul>
+</li>
+<li>普通管道可用于具有亲缘关系的进程间通信，并且数据只能单向传输，如果要实现双向传输，则必须要 使用两个管道；而流管道去除了普通管道的第一种限制，可以半双工的方式实现双向传输，但也只能在具有 亲缘关系的进程间通信；而有名管道（FIFO）则同时突破了普通管道的两种限制，即可实现双向传输、又能 在非亲缘关系的进程间通信。</li>
+</ul>
+<h2 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h2><ul>
+<li>通知接收信号的进程有某种事件发生，所以可 用于进程间通信；除了用于进程间通信之外，进程还可以发送信号给进程本身。</li>
+</ul>
+<h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><ul>
+<li>消息队列是消息的链表，存放在内核中并由消息队列标识符标识，消息队列克服了信号传递信息少、管 道只能承载无格式字节流以及缓冲区大小受限等缺陷。消息队列包括 POSIX 消息队列和 System V 消息队 列。</li>
+<li>消息队列是 UNIX 下不同进程之间实现共享资源的一种机制，UNIX 允许不同进程将格式化的数据流以 消息队列形式发送给任意进程，有足够权限的进程可以向队列中添加消息，被赋予读权限的进程则可以读 走队列中的消息。</li>
+</ul>
+<h2 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h2><ul>
+<li>信号量是一个计数器，与其它进程间通信方式不大相同，它主要用于控制多个进程间或一个进程内的多 个线程间对共享资源的访问，相当于内存中的标志，进程可以根据它判定是否能够访问某些共享资源，同 时，进程也可以修改该标志，除了用于共享资源的访问控制外，还可用于进程同步。</li>
+<li>它常作为一种锁机制，防止某进程在访问资源时其它进程也访问该资源，因此，主要作为进程间以及同 一个进程内不同线程之间的同步手段。Linux 提供了一组精心设计的信号量接口来对信号量进行操作，它们 声明在头文件 sys/sem.h 中。</li>
+</ul>
+<h2 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h2><ul>
+<li>共享内存就是映射一段能被其它进程所访问的内存，这段共享内存由一个进程创建，但其它的多个进程 都可以访问，使得多个进程可以访问同一块内存空间。共享内存是最快的 IPC 方式，它是针对其它进程间 通信方式运行效率低而专门设计的，它往往与其它通信机制，譬如结合信号量来使用，以实现进程间的同步 和通信。</li>
+</ul>
+<h2 id="套接字（Socket）"><a href="#套接字（Socket）" class="headerlink" title="套接字（Socket）"></a>套接字（Socket）</h2><ul>
+<li>Socket 是一种 IPC 方法，是基于网络的 IPC 方法，允许位于同一主机（计算机）或使用网络连接起来 的不同主机上的应用程序之间交换数据，说白了就是网络通信，在提高篇章节内容中将会向大家介绍 Linux 系统下的网络编程。<ul>
+<li>各个应用程序创建一个 socket。socket 是一个允许通信的“设备”，两个应用程序都需要用到它。</li>
+<li>服务器将自己的 socket 绑定到一个众所周知的地址（名称）上使得客户端能够定位到它的位置。</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/21/linux%E8%BF%9B%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1347,104 +1449,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/01/17/%E5%90%8C%E4%B8%80WiFi%E4%B8%8B%E4%B8%A4%E4%B8%AALinux%E8%AE%BE%E5%A4%87%E4%BD%BF%E7%94%A8scp%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/17/%E5%90%8C%E4%B8%80WiFi%E4%B8%8B%E4%B8%A4%E4%B8%AALinux%E8%AE%BE%E5%A4%87%E4%BD%BF%E7%94%A8scp%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6/" class="post-title-link" itemprop="url">同一WiFi下两个Linux设备使用scp传输文件</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-17 09:37:12" itemprop="dateCreated datePublished" datetime="2022-01-17T09:37:12+08:00">2022-01-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-03 14:34:52" itemprop="dateModified" datetime="2024-04-03T14:34:52+08:00">2024-04-03</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>357</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="同一WiFi下两个Linux设备使用scp传输文件"><a href="#同一WiFi下两个Linux设备使用scp传输文件" class="headerlink" title="同一WiFi下两个Linux设备使用scp传输文件"></a>同一WiFi下两个Linux设备使用scp传输文件</h1><p>首先要保证两个设备可以互相ping通</p>
-<p><img src="/imgs/image-20220117122232319.png" alt="image-20220117122232319"></p>
-<p>然后在主机上使用</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">scp &lt;文件路径&gt; &lt;对方用户名&gt;@ip:&lt;要复制到的路径&gt;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/imgs/image-20220117122635576.png" alt="image-20220117122635576"></p>
-<p>效果如上图</p>
-<h2 id="遇到向windows传输的时候connect-refused的问题"><a href="#遇到向windows传输的时候connect-refused的问题" class="headerlink" title="遇到向windows传输的时候connect refused的问题"></a>遇到向windows传输的时候connect refused的问题</h2><ul>
-<li><img src="/imgs/1203203bc20b4679abc84fdfed06dd63c9b78dfdf231f48b2db0500ed36333fd.png" alt="picture 1">  <h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3></li>
-<li>安装<code>openssh</code></li>
-<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows-server/administration/openssh/openssh_install_firstuse">参考</a></li>
-<li>注意要用管理员权限打开Terminal</li>
-<li>使用powershell安装即可</li>
-<li>安装完之后关闭防火墙<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Start the sshd service</span></span><br><span class="line">Start-Service sshd</span><br></pre></td></tr></table></figure></li>
-<li>之后即可使用scp向Windows发送文件</li>
-<li><img src="/imgs/13a8f9af8fb2610bdffc75804507a1ea3fd5139b6390c1dba2b1e52ad66161d9.png" alt="picture 2">  <h2 id="windows发送文件的一些注意事项"><a href="#windows发送文件的一些注意事项" class="headerlink" title="windows发送文件的一些注意事项"></a>windows发送文件的一些注意事项</h2></li>
-<li>windows设备的用户名是C盘<code>用户</code>文件夹下的用户文件夹的名字</li>
-<li>密码是<code>微软账号</code>的密码</li>
-<li>目标地址路径<strong>不能带有空格，不能使用引号</strong>, 如果含有特殊符号的话，整个路径需要用双引号包括起来</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1516,14 +1520,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">183</span>
+          <span class="site-state-item-count">184</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-count">59</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1560,7 +1564,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">652k</span>
+    <span title="站点总字数">653k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
