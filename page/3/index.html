@@ -182,6 +182,326 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/01/22/Linux%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/22/Linux%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">Linux进程、线程等底层原理笔记（一）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-22 20:11:48" itemprop="dateCreated datePublished" datetime="2024-01-22T20:11:48+08:00">2024-01-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-18 20:23:17" itemprop="dateModified" datetime="2024-04-18T20:23:17+08:00">2024-04-18</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="fork和vfork"><a href="#fork和vfork" class="headerlink" title="fork和vfork"></a>fork和vfork</h2><ul>
+<li><code>fork</code>创建进程的时候，将父进程的所有资源拷贝给子进程<ul>
+<li>写时复制的</li>
+<li>实际上是将内存地址设置为只读的</li>
+<li>假如任何一个进程试图写入的话，会触发<code>page fault</code>导致系统给他分配新的内存，也就是复制</li>
+</ul>
+</li>
+<li><code>vfork</code>的时候是直接将子进程的资源指向父进程的，二者是同时共有资源的，一个修改会影响另一个<h2 id="线程与进程的关系"><a href="#线程与进程的关系" class="headerlink" title="线程与进程的关系"></a>线程与进程的关系</h2></li>
+<li>通过<code>pthread_create</code>创建线程的时候，实际上是调用系统的<code>clone</code>（类似于<code>vfork</code>）方式创建了一个<u>与父进程共享一切资源的子进程</u></li>
+<li><img src="/imgs/df695c03041cf38aefbc7ecbbdedac0edeb848523d8e8e8de52c8026a22c85fe.png" alt="picture 0">  </li>
+<li>本来理论上父子进程之间的资源是写时复制的，但是这里直接共享了</li>
+<li>每个线程都有一个独立的PID<h3 id="线程的真假ID"><a href="#线程的真假ID" class="headerlink" title="线程的真假ID"></a>线程的真假ID</h3></li>
+<li>用户空间<code>getpid()</code>获得的PID是<u>进程ID</u>，并不是线程独立的PID<ul>
+<li><code>gettid()</code>获得的才是真正<strong>线程PID</strong>，也就是内核的真正PID</li>
+<li><img src="/imgs/a91e7465f98780d02621e8f5b9b630367fa9ac81365bb4c16b76064c3b778a4c.png" alt="picture 1">  </li>
+</ul>
+</li>
+</ul>
+<h2 id="进程的托孤"><a href="#进程的托孤" class="headerlink" title="进程的托孤"></a>进程的托孤</h2><ul>
+<li>一个拥有子进程的进程终止的时候，会向init进程或者是自己最近一级的父进程中的subreaper进程托孤，将自己的子进程交给这些进程处理<ul>
+<li>subreaper需要一个进程<strong>自己声明自己是</strong>才可以<h2 id="深度睡眠和浅度睡眠"><a href="#深度睡眠和浅度睡眠" class="headerlink" title="深度睡眠和浅度睡眠"></a>深度睡眠和浅度睡眠</h2></li>
+</ul>
+</li>
+<li>深度睡眠只能被资源唤醒<ul>
+<li>甚至无法被信号杀死</li>
+</ul>
+</li>
+<li>浅度睡眠可以被资源或者是信号（signal）唤醒</li>
+<li>比如程序因为内存没加载导致page fault<ul>
+<li>此时如果因为接收到信号开始执行内容，会导致程序继而触发更多的page fault</li>
+<li>因此只有等到相关内存页面被分配了才可以</li>
+</ul>
+</li>
+</ul>
+<h2 id="睡眠与唤醒"><a href="#睡眠与唤醒" class="headerlink" title="睡眠与唤醒"></a>睡眠与唤醒</h2><ul>
+<li>程序的睡眠是程序访问资源的时候发现需要等待，自己让出CPU使用权并且将状态设置为sleep</li>
+<li>睡眠结束的时候需要判断自己是被什么唤醒的（如果是浅度睡眠的话）<ul>
+<li>是被信号唤醒的？是什么信号</li>
+<li>是被资源唤醒的？继续执行</li>
+</ul>
+</li>
+</ul>
+<h2 id="第一个进程是被谁创建出来的"><a href="#第一个进程是被谁创建出来的" class="headerlink" title="第一个进程是被谁创建出来的"></a>第一个进程是被谁创建出来的</h2><ul>
+<li>1进程（也就是init）是被Linux的0进程创建出来的</li>
+<li>但是Linux的0进程使用pstree看不到</li>
+<li>退化为了IDLE进程<ul>
+<li>所有进程停止或者睡眠之后，才会调度的进程</li>
+<li>它会把将CPU设置为省电状态，只有中断可以唤醒<h2 id="进程切换"><a href="#进程切换" class="headerlink" title="进程切换"></a>进程切换</h2></li>
+</ul>
+</li>
+<li>进程切换的开销不只是上下文切换，主要还包括进程切换引起的内存cache 的<code>cache miss</code></li>
+<li>因为不同进程需要的内存空间不同，导致切换会极大增加miss概率</li>
+</ul>
+<h2 id="非实时进程的时间片分配"><a href="#非实时进程的时间片分配" class="headerlink" title="非实时进程的时间片分配"></a>非实时进程的时间片分配</h2><ul>
+<li>使用<code>nice</code>值分配</li>
+<li><code>nice</code>越大，优先级越低</li>
+<li>优先级高的相对于优先级低的可以在唤醒的一瞬间抢占，但是之后会一起轮转</li>
+<li>优先级越高的在轮转中分配到的时间片越长</li>
+<li>在整个循环过程中是所有优先级的进程一起轮转的，不会高优先级阻塞低优先级运行</li>
+<li>系统会针对应用是IO类型还是CPU消耗类型来调整nice值<ul>
+<li>越CPU占用，nice越低<h2 id="控制实时进程和非实时进程占用的CPU比例"><a href="#控制实时进程和非实时进程占用的CPU比例" class="headerlink" title="控制实时进程和非实时进程占用的CPU比例"></a>控制实时进程和非实时进程占用的CPU比例</h2></li>
+</ul>
+</li>
+<li><code>sched_rt_period_us</code>和<code>shced_rt_runtime_us</code></li>
+<li>控制FIFO和RR最多占用的时间</li>
+<li><code>sudo sh -c &#39;echo CPU核心数*1000000 &gt; /proc/sys/kernel/sched_rt_period_us&#39;</code><ul>
+<li>上面那个不能超过<code>CPU核心数*1000000</code></li>
+</ul>
+</li>
+<li><code>sudo sh -c &#39;echo 某个小于period的值 &gt; /proc/sys/kernel/sched_rt_runtime_us&#39;</code></li>
+<li>不能超过<code>sched_rt_period_us</code><ul>
+<li><strong>但是可能会导致系统崩溃</strong></li>
+</ul>
+</li>
+<li><img src="/imgs/852dd435f32fd9baa80f8fd4e531104996a4aefc62f80afc69816d2f63d3c04a.png" alt="picture 2">  </li>
+</ul>
+<h2 id="CFS-完全公平调度"><a href="#CFS-完全公平调度" class="headerlink" title="CFS-完全公平调度"></a>CFS-完全公平调度</h2><ul>
+<li>每次都调度到当前位置vruntime最小的进程</li>
+<li>也就是考虑到优先级修正之后，运行时间最小的进程</li>
+<li>完全公平，使得所有进程的vruntime尽可能公平分配<ul>
+<li>vruntime是实际运行时间进行一些权重和系数运算得出的</li>
+<li>物理runtime除以权重</li>
+<li><img src="/imgs/e478ee6ad032f1596c2fb5c13bad47341d7da1c13f4987d3cee46d0360a00958.png" alt="picture 3">  </li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>System Call</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nice()</td>
+<td>Sets a process’s nice value</td>
+</tr>
+<tr>
+<td>sched_setscheduler()</td>
+<td>Sets a process’s scheduling policy</td>
+</tr>
+<tr>
+<td>sched_getscheduler()</td>
+<td>Gets a process’s scheduling pol1icy</td>
+</tr>
+<tr>
+<td>sched_setparam()</td>
+<td>Sets a process’s real-time priority</td>
+</tr>
+<tr>
+<td>sched_getparam()</td>
+<td>Gets a process’s real-time priority</td>
+</tr>
+<tr>
+<td>sched_get_priority_max()</td>
+<td>Gets the maximum real-time priority</td>
+</tr>
+<tr>
+<td>sched_get_priority_min()</td>
+<td>Gets the minimum real-time priority</td>
+</tr>
+<tr>
+<td>sched_rr_get_interval()</td>
+<td>Gets a process’s timeslice value</td>
+</tr>
+<tr>
+<td>sched_setaffinity()</td>
+<td>Sets a process’s processor affinity</td>
+</tr>
+<tr>
+<td>sched_getaffinity()</td>
+<td>Gets a process’s processor affinity</td>
+</tr>
+<tr>
+<td>sched_yield()</td>
+<td>Temporarily yields the processor</td>
+</tr>
+</tbody></table>
+<h2 id="设置进程的CPU亲和"><a href="#设置进程的CPU亲和" class="headerlink" title="设置进程的CPU亲和"></a>设置进程的CPU亲和</h2><ul>
+<li>使用<code>taskset</code>命令行工具</li>
+<li>上文提到的<code>sched_setaffinity()</code></li>
+<li>或者单独设置线程的亲和力<code>pthread_setaffinity_np()</code><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_setaffinity_np</span><span class="params">(<span class="keyword">pthread_t</span> thread, <span class="keyword">size_t</span> cpusetsize, <span class="keyword">const</span> <span class="keyword">cpu_set_t</span> *cpuset)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>或者创建新线程时，通过属性结构体，控制新线程的亲和性<code>pthread_attr_setaffinity_np()</code><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_setaffinity_np</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">size_t</span> cpusetsize, <span class="keyword">const</span> <span class="keyword">cpu_set_t</span> *cpuset)</span></span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="进程组"><a href="#进程组" class="headerlink" title="进程组"></a>进程组</h2><ul>
+<li>cgroup（Control Groups）是 Linux 内核提供的一个功能，用于限制、控制和监视一个或多个进程的资源使用。cgroup 允许你将进程组织在层次结构中，并为每个组分配特定的资源限制。</li>
+<li>创建<ul>
+<li><code>sudo mkdir /sys/fs/cgroup/cpu/my_cgroup</code></li>
+</ul>
+</li>
+<li>添加进程<ul>
+<li><code>echo &lt;PID&gt; &gt; /sys/fs/cgroup/cpu/my_cgroup/tasks</code></li>
+</ul>
+</li>
+<li>设置 cgroup 的资源限制<ul>
+<li><code>echo 1000000 &gt; /sys/fs/cgroup/cpu/my_cgroup/cpu.cfs_quota_us</code></li>
+</ul>
+</li>
+<li>查看 cgroup 信息<ul>
+<li><code>cat /sys/fs/cgroup/cpu/my_cgroup/cpu.cfs_quota_us</code></li>
+</ul>
+</li>
+<li>删除 cgroup<ul>
+<li><code>sudo rmdir /sys/fs/cgroup/cpu/my_cgroup</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="如何使用sudo权限将echo的输出写入到文件中"><a href="#如何使用sudo权限将echo的输出写入到文件中" class="headerlink" title="如何使用sudo权限将echo的输出写入到文件中"></a>如何使用sudo权限将echo的输出写入到文件中</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c &#x27;echo string &gt; /path/to/file&#x27;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 或者</span></span><br><span class="line">echo &quot;Hello, world&quot; | sudo tee -a /path/to/file</span><br></pre></td></tr></table></figure>
+<h2 id="Linux中进程可以抢占的部分"><a href="#Linux中进程可以抢占的部分" class="headerlink" title="Linux中进程可以抢占的部分"></a>Linux中<code>进程</code>可以抢占的部分</h2><ul>
+<li>即使是在下面不可调度的部分唤醒了一个优先级再高的进程，也不允许抢占执行</li>
+<li>一个核心上的进程拿到了spinlock，会直接关闭这个核心的调度器停止调度</li>
+<li>一个程序的<strong>优先级改变（降低）</strong>的时候，别的优先级高的进程可以<strong>立即抢占</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>区间</th>
+<th>可调度性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>（硬）中断（不允许中断嵌套）</td>
+<td>不可调度</td>
+</tr>
+<tr>
+<td>软中断（可以中断嵌套）</td>
+<td>不可调度</td>
+</tr>
+<tr>
+<td>进程上下文中获取到<code>spinlock</code></td>
+<td>不可调度</td>
+</tr>
+<tr>
+<td>其他进程上下文</td>
+<td>可以调度</td>
+</tr>
+</tbody></table>
+<ul>
+<li>自旋锁的自旋一定发生在不同的核心之间<ul>
+<li>如果同一个核心的两个进程争夺自旋锁，一个抢到之后就直接关闭了调度器，另一个进程根本上不来，不可能自旋</li>
+<li>只有可能是一个核心持有锁，另一个核心自旋</li>
+</ul>
+</li>
+</ul>
+<h2 id="进程回收和僵尸进程"><a href="#进程回收和僵尸进程" class="headerlink" title="进程回收和僵尸进程"></a>进程回收和僵尸进程</h2><ul>
+<li>一个进程变成僵尸状态之后，进程的资源都消失了</li>
+<li>但是进程的<code>task_struct</code>还没有消失</li>
+<li>等待父进程使用<code>waitpid</code>回收并且查看进程的<strong>退出码</strong>，判断子进程的死因</li>
+<li>只有父进程使用wait等待的时候他的task struct才会消失</li>
+<li>这个进程无法使用系统的signal杀死</li>
+</ul>
+<h2 id="Linux进程状态"><a href="#Linux进程状态" class="headerlink" title="Linux进程状态"></a>Linux进程状态</h2><ul>
+<li><img src="/imgs/8234473b9b901abca50f411cfe93f07e7bb03b02e925e19096cfe46f38cd29fb.png" alt="picture 4">  </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>就绪</td>
+<td>等待上CPU（因为时间片结束或者被抢占等）</td>
+</tr>
+<tr>
+<td>运行</td>
+<td>执行</td>
+</tr>
+<tr>
+<td>睡眠</td>
+<td>等资源（等到了就绪）</td>
+</tr>
+<tr>
+<td>僵尸</td>
+<td>执行完但是还没有回收</td>
+</tr>
+<tr>
+<td>停止</td>
+<td>STOP或者收到了Ctrl+Z等信号，还可以继续恢复（输入fg，bg等）</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/01/22/%E5%9B%9E%E6%BA%AF%E5%92%8C%E9%80%92%E5%BD%92%E6%B3%95%E9%A2%98%E7%9B%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1783,125 +2103,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/11/18/leetcode%E9%9D%9E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%B1%BB%E5%9E%8B%E9%A2%98%E7%9B%AE%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/11/18/leetcode%E9%9D%9E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%B1%BB%E5%9E%8B%E9%A2%98%E7%9B%AE%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">leetcode非数据结构类型题目题解</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-11-18 17:40:55" itemprop="dateCreated datePublished" datetime="2023-11-18T17:40:55+08:00">2023-11-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-04 22:50:15" itemprop="dateModified" datetime="2024-07-04T22:50:15+08:00">2024-07-04</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>6.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>12 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="牛客-HJ30-字符串合并处理"><a href="#牛客-HJ30-字符串合并处理" class="headerlink" title="牛客 HJ30 字符串合并处理"></a>牛客 HJ30 字符串合并处理</h2><ul>
-<li>注意此题取了最低一位<code>tmp &amp; 1</code>之后要将这个类型立即转换为<code>int</code>类型，否则无法计算移位或者乘法<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    string a, b;</span><br><span class="line">    cin&gt;&gt;a&gt;&gt;b;</span><br><span class="line">    string s = a+b;</span><br><span class="line">    string even, odd;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;s.<span class="built_in">size</span>(); ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(i%<span class="number">2</span> == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            even+=s[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">        &#123;</span><br><span class="line">            odd+=s[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">sort</span>(even.<span class="built_in">begin</span>(), even.<span class="built_in">end</span>());</span><br><span class="line">    <span class="built_in">sort</span>(odd.<span class="built_in">begin</span>(), odd.<span class="built_in">end</span>());</span><br><span class="line">    vector&lt;<span class="keyword">char</span>&gt; num2char = &#123;<span class="string">&#x27;0&#x27;</span>, <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;4&#x27;</span>, <span class="string">&#x27;5&#x27;</span>, <span class="string">&#x27;6&#x27;</span>, <span class="string">&#x27;7&#x27;</span>, <span class="string">&#x27;8&#x27;</span>, <span class="string">&#x27;9&#x27;</span>, <span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>, <span class="string">&#x27;D&#x27;</span>, <span class="string">&#x27;E&#x27;</span>, <span class="string">&#x27;F&#x27;</span>&#125;;</span><br><span class="line">    string ans;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;s.<span class="built_in">size</span>(); ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(i%<span class="number">2</span> == <span class="number">0</span>)ans+=even[i/<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">else</span> ans+=odd[i/<span class="number">2</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;ans.<span class="built_in">size</span>(); ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">&#x27;0&#x27;</span>&lt;= ans[i] &amp;&amp; ans[i] &lt;=<span class="string">&#x27;9&#x27;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">int</span> tmp = ans[i]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">            <span class="keyword">int</span> a = <span class="built_in"><span class="keyword">int</span></span>(tmp&amp;<span class="number">1</span>)*<span class="number">8</span>;</span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">int</span> converted = <span class="built_in"><span class="keyword">int</span></span>(tmp&amp;<span class="number">1</span>)*<span class="number">8</span>+<span class="built_in"><span class="keyword">int</span></span>((tmp/<span class="number">2</span>)&amp;<span class="number">1</span>)*<span class="number">4</span>+<span class="built_in"><span class="keyword">int</span></span>((tmp/<span class="number">4</span>)&amp;<span class="number">1</span>)*<span class="number">2</span>+<span class="built_in"><span class="keyword">int</span></span>((tmp/<span class="number">8</span>)&amp;<span class="number">1</span>);</span><br><span class="line">            ans[i] = num2char[converted];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&#x27;a&#x27;</span>&lt;= ans[i] &amp;&amp; ans[i] &lt;=<span class="string">&#x27;f&#x27;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">int</span> tmp = ans[i]-<span class="string">&#x27;a&#x27;</span>+<span class="number">10</span>;</span><br><span class="line">            <span class="keyword">int</span> a = <span class="built_in"><span class="keyword">int</span></span>((tmp/<span class="number">2</span>)&amp;<span class="number">1</span>)*<span class="number">8</span>;</span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">int</span> converted = <span class="built_in"><span class="keyword">int</span></span>(tmp&amp;<span class="number">1</span>)*<span class="number">8</span>+<span class="built_in"><span class="keyword">int</span></span>((tmp/<span class="number">2</span>)&amp;<span class="number">1</span>)*<span class="number">4</span>+<span class="built_in"><span class="keyword">int</span></span>((tmp/<span class="number">4</span>)&amp;<span class="number">1</span>)*<span class="number">2</span>+<span class="built_in"><span class="keyword">int</span></span>((tmp/<span class="number">8</span>)&amp;<span class="number">1</span>);</span><br><span class="line">            ans[i] = num2char[converted];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&#x27;A&#x27;</span>&lt;= ans[i] &amp;&amp; ans[i] &lt;=<span class="string">&#x27;F&#x27;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">int</span> tmp = ans[i]-<span class="string">&#x27;A&#x27;</span>+<span class="number">10</span>;</span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">int</span> converted = <span class="built_in"><span class="keyword">int</span></span>(tmp&amp;<span class="number">1</span>)*<span class="number">8</span>+<span class="built_in"><span class="keyword">int</span></span>((tmp/<span class="number">2</span>)&amp;<span class="number">1</span>)*<span class="number">4</span>+<span class="built_in"><span class="keyword">int</span></span>((tmp/<span class="number">4</span>)&amp;<span class="number">1</span>)*<span class="number">2</span>+<span class="built_in"><span class="keyword">int</span></span>((tmp/<span class="number">8</span>)&amp;<span class="number">1</span>);</span><br><span class="line">            ans[i] = num2char[converted];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="leetcode-318-最大单词长度乘积"><a href="#leetcode-318-最大单词长度乘积" class="headerlink" title="leetcode 318. 最大单词长度乘积"></a>leetcode 318. 最大单词长度乘积</h2></li>
-<li>此题主要是将26个字母映射为26个位，用位运算的形式寻找是否存在重复字母<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxProduct</span><span class="params">(vector&lt;string&gt;&amp; words)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">flags</span><span class="params">(words.size(), <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;words.<span class="built_in">size</span>(); i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">auto</span> j = words[i].<span class="built_in">begin</span>(); j!=words[i].<span class="built_in">end</span>(); j++)</span><br><span class="line">            &#123;</span><br><span class="line">                flags[i] |= <span class="number">1</span>&lt;&lt;<span class="built_in"><span class="keyword">int</span></span>(*j-<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> maxVal = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;words.<span class="built_in">size</span>()<span class="number">-1</span>; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>; j&lt;words.<span class="built_in">size</span>(); j++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>((flags[i]&amp;flags[j]) == <span class="number">0</span>)</span><br><span class="line">                maxVal = <span class="built_in">max</span>(maxVal, <span class="built_in"><span class="keyword">int</span></span>(words[i].<span class="built_in">size</span>()*words[j].<span class="built_in">size</span>()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxVal;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="leetcode-11-接最多水的容器"><a href="#leetcode-11-接最多水的容器" class="headerlink" title="leetcode 11.接最多水的容器"></a>leetcode 11.接最多水的容器</h2><ul>
-<li>双指针法，左边一个右边一个，先左边在最左边，右边在最右边</li>
-<li>然后两个指针靠近，选择下一个高度较高的往里挪</li>
-<li>每一步的时候都计算承载量，取每一步的最大值<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> maxVal = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = height.<span class="built_in">size</span>()<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">int</span> tempVal = <span class="built_in">min</span>(height[left], height[right])*(right-left);</span><br><span class="line">        <span class="keyword">while</span>(left!=right)</span><br><span class="line">        &#123;</span><br><span class="line">            tempVal = <span class="built_in">min</span>(height[left], height[right])*(right-left);</span><br><span class="line">            maxVal = maxVal&gt;tempVal?maxVal: tempVal;</span><br><span class="line">            <span class="keyword">if</span>(height[left]&lt;=height[right])left++;</span><br><span class="line">            <span class="keyword">else</span> right--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxVal;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="leetcode-42-接雨水"><a href="#leetcode-42-接雨水" class="headerlink" title="leetcode 42.接雨水"></a>leetcode 42.接雨水</h2><h3 id="遍历求双侧的最大值"><a href="#遍历求双侧的最大值" class="headerlink" title="遍历求双侧的最大值"></a>遍历求双侧的最大值</h3><ul>
-<li>这种方式先从左往右遍历一次，再从右往左遍历一次，存储下每个位置左侧和右侧比自己大的元素的位置，然后横向计算矩形的面积。<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> leftMax = <span class="number">0</span>, templ = <span class="number">0</span>, rightMax = <span class="number">0</span>, tempr = <span class="number">0</span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">leftMap</span><span class="params">(height.size(), <span class="number">0</span>)</span>, <span class="title">rightMap</span><span class="params">(height.size(), <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;height.<span class="built_in">size</span>(); i++)</span><br><span class="line">        &#123;</span><br><span class="line">            leftMax = <span class="built_in">max</span>(leftMax, height[i]);</span><br><span class="line">            rightMax = <span class="built_in">max</span>(rightMax, height[height.<span class="built_in">size</span>()-i<span class="number">-1</span>]);</span><br><span class="line">            leftMap[i] = leftMax;</span><br><span class="line">            rightMap[height.<span class="built_in">size</span>()<span class="number">-1</span>-i] = rightMax;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> sumW = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i&lt;height.<span class="built_in">size</span>()<span class="number">-1</span>; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            sumW+=<span class="built_in">max</span>(<span class="number">0</span>, <span class="built_in">min</span>(leftMap[i<span class="number">-1</span>], rightMap[i+<span class="number">1</span>]) - height[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sumW;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="单调栈"><a href="#单调栈" class="headerlink" title="单调栈"></a>单调栈</h3><ul>
-<li>使用单调栈找每个位置右侧比自己大的第一个值（因为左侧比自己大的第一个值是自己下面的一个值）</li>
-<li>找到之后，意味着这个位置必然出现了凹陷部位（<u>因为左侧和右侧都存在一个元素比自己大</u>）</li>
-<li>然后找这个凹陷部位左侧的墙在哪里，实际上就是栈中顶上元素的下一个元素，找到之后将这个元素与<strong>此时要插入栈的元素取最小值</strong>，与当前栈顶元素做差得到高度，同时计算出当前元素和左侧的墙<strong>之间</strong>（不包括墙）的宽度，二者相乘得到水的面积<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">        stack&lt;<span class="keyword">int</span>&gt; st;</span><br><span class="line">        st.<span class="built_in">push</span>(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; height.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!st.<span class="built_in">empty</span>() &amp;&amp; height[i] &gt; height[st.<span class="built_in">top</span>()]) &#123;</span><br><span class="line">                <span class="keyword">int</span> mid = st.<span class="built_in">top</span>();</span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                <span class="keyword">if</span> (!st.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">                    <span class="keyword">int</span> h = <span class="built_in">min</span>(height[st.<span class="built_in">top</span>()], height[i]) - height[mid];</span><br><span class="line">                    <span class="keyword">int</span> w = i - st.<span class="built_in">top</span>() - <span class="number">1</span>;</span><br><span class="line">                    sum += h * w;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            st.<span class="built_in">push</span>(i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Leetcode-84-柱状图中最大的矩形"><a href="#Leetcode-84-柱状图中最大的矩形" class="headerlink" title="Leetcode 84. 柱状图中最大的矩形"></a>Leetcode 84. 柱状图中最大的矩形</h2><ul>
-<li>这题的解决思路与上一题几乎相同</li>
-<li>用的栈是一个递增栈</li>
-<li>用来找比当前元素小的第一个元素</li>
-<li>然后找比这个元素小的左侧第一个（也就是栈中它下面那个）<ul>
-<li>以上条件的隐含意思是在当前元素和比当前元素小的左侧第一个元素<strong>之间的所有元素</strong>的最小值（之一）就是<strong>栈顶元素</strong>，因此用栈顶元素的高度乘这个宽度即可得到面积，实际上栈顶元素是最小元素</li>
-</ul>
-</li>
-<li>然后用宽度和栈顶元素的高度算面积<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 版本一</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largestRectangleArea</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; heights)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">        stack&lt;<span class="keyword">int</span>&gt; st;</span><br><span class="line">        heights.<span class="built_in">insert</span>(heights.<span class="built_in">begin</span>(), <span class="number">0</span>); <span class="comment">// 数组头部加入元素0</span></span><br><span class="line">        heights.<span class="built_in">push_back</span>(<span class="number">0</span>); <span class="comment">// 数组尾部加入元素0</span></span><br><span class="line">        st.<span class="built_in">push</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 第一个元素已经入栈，从下标1开始</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; heights.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (heights[i] &gt; heights[st.<span class="built_in">top</span>()]) &#123; <span class="comment">// 情况一</span></span><br><span class="line">                st.<span class="built_in">push</span>(i);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (heights[i] == heights[st.<span class="built_in">top</span>()]) &#123; <span class="comment">// 情况二</span></span><br><span class="line">                st.<span class="built_in">pop</span>(); <span class="comment">// 这个可以加，可以不加，效果一样，思路不同</span></span><br><span class="line">                st.<span class="built_in">push</span>(i);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// 情况三</span></span><br><span class="line">                <span class="keyword">while</span> (!st.<span class="built_in">empty</span>() &amp;&amp; heights[i] &lt; heights[st.<span class="built_in">top</span>()]) &#123; <span class="comment">// 注意是while</span></span><br><span class="line">                    <span class="keyword">int</span> mid = st.<span class="built_in">top</span>();</span><br><span class="line">                    st.<span class="built_in">pop</span>();</span><br><span class="line">                    <span class="keyword">if</span> (!st.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">                        <span class="keyword">int</span> left = st.<span class="built_in">top</span>();</span><br><span class="line">                        <span class="keyword">int</span> right = i;</span><br><span class="line">                        <span class="keyword">int</span> w = right - left - <span class="number">1</span>;</span><br><span class="line">                        <span class="keyword">int</span> h = heights[mid];</span><br><span class="line">                        result = <span class="built_in">max</span>(result, w * h);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                st.<span class="built_in">push</span>(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="leetcode-239-滑动窗口最大值"><a href="#leetcode-239-滑动窗口最大值" class="headerlink" title="leetcode 239.滑动窗口最大值"></a>leetcode 239.滑动窗口最大值</h2><ul>
-<li>用优先级队列解决即可</li>
-<li>先把窗口内部的所有元素压入队列，然后每次前进窗口的时候将队列所有已经在窗口外（窗口结束坐标之前）的元素弹出，然后队列中队头的元素就是此时最大的值<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">maxSlidingWindow</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        priority_queue&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; q;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; ++i) &#123;</span><br><span class="line">            q.<span class="built_in">emplace</span>(nums[i], i);</span><br><span class="line">        &#125;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; ans = &#123;q.<span class="built_in">top</span>().first&#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = k; i &lt; n; ++i) &#123;</span><br><span class="line">            q.<span class="built_in">emplace</span>(nums[i], i);</span><br><span class="line">            <span class="keyword">while</span> (q.<span class="built_in">top</span>().second &lt;= i - k) &#123;</span><br><span class="line">                q.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            ans.<span class="built_in">push_back</span>(q.<span class="built_in">top</span>().first);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="使用单调队列的方式"><a href="#使用单调队列的方式" class="headerlink" title="使用单调队列的方式"></a>使用单调队列的方式</h3></li>
-<li><code>pop(value)</code>：如果窗口移除的元素value<strong>等于</strong>单调队列的出口（队头）元素，那么队列<strong>弹出元素</strong>，否则不用任何操作</li>
-<li><code>push(value)</code>：如果push的元素value<strong>大于入口（队尾）元素的数值</strong>，那么就将<strong>队列入口的元素弹出</strong>，直到push元素的数值小于等于队列入口元素的数值为止</li>
-<li>滑动窗口每往前一步就弹出不在窗口内的元素</li>
-<li>再加入最后面的元素</li>
-<li>把此时队尾头元素加入答案序列中<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyQueue</span> &#123;</span> <span class="comment">//单调队列（从大到小）</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        deque&lt;<span class="keyword">int</span>&gt; que; <span class="comment">// 使用deque来实现单调队列</span></span><br><span class="line">        <span class="comment">// 每次弹出的时候，比较当前要弹出的数值是否等于队列出口元素的数值，如果相等则弹出。</span></span><br><span class="line">        <span class="comment">// 同时pop之前判断队列当前是否为空。</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">pop</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (!que.<span class="built_in">empty</span>() &amp;&amp; value == que.<span class="built_in">front</span>()) &#123;</span><br><span class="line">                que.<span class="built_in">pop_front</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 如果push的数值大于入口元素的数值，那么就将队列后端的数值弹出，直到push的数值小于等于队列入口元素的数值为止。</span></span><br><span class="line">        <span class="comment">// 这样就保持了队列里的数值是单调从大到小的了。</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">while</span> (!que.<span class="built_in">empty</span>() &amp;&amp; value &gt; que.<span class="built_in">back</span>()) &#123;</span><br><span class="line">                que.<span class="built_in">pop_back</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            que.<span class="built_in">push_back</span>(value);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 查询当前队列里的最大值 直接返回队列前端也就是front就可以了。</span></span><br><span class="line">        <span class="function"><span class="keyword">int</span> <span class="title">front</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> que.<span class="built_in">front</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">maxSlidingWindow</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        MyQueue que;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; result;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; i++) &#123; <span class="comment">// 先将前k的元素放进队列</span></span><br><span class="line">            que.<span class="built_in">push</span>(nums[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        result.<span class="built_in">push_back</span>(que.<span class="built_in">front</span>()); <span class="comment">// result 记录前k的元素的最大值</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = k; i &lt; nums.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            que.<span class="built_in">pop</span>(nums[i - k]); <span class="comment">// 滑动窗口移除最前面元素</span></span><br><span class="line">            que.<span class="built_in">push</span>(nums[i]); <span class="comment">// 滑动窗口前加入最后面的元素</span></span><br><span class="line">            result.<span class="built_in">push_back</span>(que.<span class="built_in">front</span>()); <span class="comment">// 记录对应的最大值</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="leetcode-48-旋转图像"><a href="#leetcode-48-旋转图像" class="headerlink" title="leetcode 48. 旋转图像"></a>leetcode 48. 旋转图像</h2><ul>
-<li>使用临时变量储存，将矩阵旋转中的四个位置变量依次交换<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">rotate</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; matrix)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = matrix.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n / <span class="number">2</span>; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; (n + <span class="number">1</span>) / <span class="number">2</span>; ++j) &#123;</span><br><span class="line">                <span class="keyword">int</span> temp = matrix[i][j];</span><br><span class="line">                <span class="comment">// 存一个变量然后旋转</span></span><br><span class="line">                matrix[i][j] = matrix[n - j - <span class="number">1</span>][i];</span><br><span class="line">                matrix[n - j - <span class="number">1</span>][i] = matrix[n - i - <span class="number">1</span>][n - j - <span class="number">1</span>];</span><br><span class="line">                matrix[n - i - <span class="number">1</span>][n - j - <span class="number">1</span>] = matrix[j][n - i - <span class="number">1</span>];</span><br><span class="line">                matrix[j][n - i - <span class="number">1</span>] = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1973,7 +2174,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">184</span>
+          <span class="site-state-item-count">185</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2017,13 +2218,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">653k</span>
+    <span title="站点总字数">654k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:46</span>
+    <span title="站点阅读时长">19:49</span>
 </div>
 
         

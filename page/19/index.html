@@ -182,6 +182,122 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2021/12/11/FreeRtos1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/11/FreeRtos1/" class="post-title-link" itemprop="url">FreeRtos1</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-12-11 18:03:10" itemprop="dateCreated datePublished" datetime="2021-12-11T18:03:10+08:00">2021-12-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-13 23:16:46" itemprop="dateModified" datetime="2021-12-13T23:16:46+08:00">2021-12-13</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>754</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="资源连接集合"><a href="#资源连接集合" class="headerlink" title="资源连接集合"></a>资源连接集合</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/97869854">ARM+LINUX嵌入式学习路线 - 知乎 (zhihu.com)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://www.openedv.com/docs/book-videos/zdyzshipin/4free/zdyz-freertos-book.html">http://www.openedv.com/docs/book-videos/zdyzshipin/4free/zdyz-freertos-book.html</a></p>
+</li>
+</ul>
+<h2 id="为什么选择FreeRtos"><a href="#为什么选择FreeRtos" class="headerlink" title="为什么选择FreeRtos?"></a>为什么选择FreeRtos?</h2><ul>
+<li><p>RTOS 类系统有很多，比如 uC/OS，资料很多，尤其是中文资料，那为什么要选择 FreeRTOS 呢？</p>
+</li>
+<li><p>FreeRTOS是免费的，学习RTOS操作系统的话 uC/OS是首选，但要做产品的话，免费的FreeRTOS操作系统就是个不错的选择。</p>
+</li>
+<li><p>许多半导体厂商产品的 SDK(Software Development Kit—软件开发工具包) 包就使用 FreeRTOS 作为其操作系统，尤其是 WIFI、蓝牙这些带协议栈的芯片或模块。</p>
+</li>
+<li><p>简单，因为FreeRTOS 的文件数量很少。</p>
+</li>
+</ul>
+<h2 id="FreeRtos-特点"><a href="#FreeRtos-特点" class="headerlink" title="FreeRtos 特点"></a>FreeRtos 特点</h2><ul>
+<li>FreeRTOS 的内核支持抢占式，合作式和时间片调度。</li>
+<li>提供了一个用于低功耗的 Tickless 模式。</li>
+<li>系统的组件在创建时可以选择动态或者静态的 RAM，比如任务、消息队列、信号量、软件定时器等等。</li>
+<li>FreeRTOS-MPU 支持 Corex-M 系列中的 MPU 单元，如 STM32F429。</li>
+<li>FreeRTOS 系统简单、小巧、易用，通常情况下内核占用 4k-9k 字节的空间。</li>
+<li>高可移植性，代码主要 C 语言编写。</li>
+<li>高效的软件定时器。</li>
+<li>强大的跟踪执行功能。</li>
+<li>堆栈溢出检测功能。</li>
+<li>任务数量不限。</li>
+<li>任务优先级不限。</li>
+</ul>
+<p><strong>官网：</strong><a target="_blank" rel="noopener" href="http://www.freertos.org/">www.freertos.org</a></p>
+<h2 id="基于STM32F407和Cubemx（HAL库）的FreeRtos开发"><a href="#基于STM32F407和Cubemx（HAL库）的FreeRtos开发" class="headerlink" title="基于STM32F407和Cubemx（HAL库）的FreeRtos开发"></a>基于STM32F407和Cubemx（HAL库）的FreeRtos开发</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/90608412">FreeRTOS 从入门到精通1–实时操作系统的前世今生 - 知乎 (zhihu.com)</a></p>
+</li>
+<li><p>为什么选用HAl库？因为ST官方 <strong><u>已经停止</u></strong> 对于标准库的维护</p>
+</li>
+<li><p>使用STM32CubeIDE的（ <strong>未尝试盗版仿真器能不能使用</strong> ）</p>
+</li>
+</ul>
+<h2 id="待续"><a href="#待续" class="headerlink" title="待续"></a>待续</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2021/12/11/FreeRtos2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -761,7 +877,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">184</span>
+          <span class="site-state-item-count">185</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -805,13 +921,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">653k</span>
+    <span title="站点总字数">654k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:46</span>
+    <span title="站点阅读时长">19:49</span>
 </div>
 
         

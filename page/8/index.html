@@ -182,6 +182,121 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/01/19/VMWare%E5%AE%89%E8%A3%85%E5%AE%89%E5%8D%93%E8%99%9A%E6%8B%9F%E6%9C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/01/19/VMWare%E5%AE%89%E8%A3%85%E5%AE%89%E5%8D%93%E8%99%9A%E6%8B%9F%E6%9C%BA/" class="post-title-link" itemprop="url">VMWare安装安卓虚拟机</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-01-19 10:02:30 / 修改时间：11:31:37" itemprop="dateCreated datePublished" datetime="2023-01-19T10:02:30+08:00">2023-01-19</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>320</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="VMWare安装安卓虚拟机"><a href="#VMWare安装安卓虚拟机" class="headerlink" title="VMWare安装安卓虚拟机"></a>VMWare安装安卓虚拟机</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41930631/article/details/125922411">参考链接</a></li>
+<li><a target="_blank" rel="noopener" href="https://osdn.net/projects/android-x86/releases/66512">Android-x86下载地址</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.android-x86.org/">Android x86网站</a></li>
+<li>下载的文件：<strong>cm-x86-14.1-r5.iso</strong> 对应的版本：<img src="/imgs/9c996e27832f31e785c3ff0f754b076708d8c3a03bd70ffd5a84aac637f54ab3.png" alt="picture 11">  </li>
+<li>下载的文件:** android-x86_64-9.0-r2-k49.iso**对应的版本<img src="/imgs/3b670a9ec837461bbf26ce397d220bbf0338408339c34afa45bbdffeb1ea8d74.png" alt="picture 12">  </li>
+</ul>
+<h2 id="部分步骤截图"><a href="#部分步骤截图" class="headerlink" title="部分步骤截图"></a>部分步骤截图</h2><ul>
+<li>可能无法检测操作系统，此时只需要手动选择FreeBSD如图即可<ul>
+<li><img src="/imgs/dc56bcd5c5212c990e728b364b4501628587d7633b07f18a735cbd3904ca18c7.png" alt="picture 1">  </li>
+<li><img src="/imgs/820c7f377a64d81192f6d0f5d95bfd021fcfe23c53be10bf59e53e0533e9a95a.png" alt="picture 2">  </li>
+</ul>
+</li>
+<li>下一步磁盘记得勾选这个<ul>
+<li><img src="/imgs/dacecac03215b7a999b022bc6394b7590497df64d979e756401fded87a56d749.png" alt="picture 3">  </li>
+</ul>
+</li>
+<li>此时记得打开设置关闭CD驱动器等<ul>
+<li><img src="/imgs/810585dce08781495adb429f9dd926f58bbfec8f4359a18f3c253a3c16fd4b35.png" alt="picture 4">  </li>
+</ul>
+</li>
+<li>然后正常重启即可</li>
+<li>有时开机的时候回卡在黑屏界面，屏幕上角有光标但是卡住不动</li>
+<li>此时重启到debug模式<ul>
+<li><img src="/imgs/fc7bd905a97f9a932f1e545c4563f47540638ea4464aaa8520504f0da36b1452.png" alt="picture 5">  </li>
+<li>在命令行输入<code>vi /mnt/grub/menu.lst</code></li>
+<li>红线位置添加<img src="/imgs/64d3b05b4778357e2e701b7390061551a6a73383ce93ea2f4ef578eb843edf64.png" alt="picture 6">  </li>
+<li>添加完成之后再次利用VMWare手动重启即可打开图形界面<ul>
+<li><img src="/imgs/3841d33e89117672f772a6b0967f918a34e131b7c92b5f18ae9bf98d923cd436.png" alt="picture 7">  </li>
+</ul>
+</li>
+<li>编辑虚拟网络<ul>
+<li><img src="/imgs/da29b0f7a771e985201634fe3f05c8bc951f84f263a8ce49546beb0fa60b5983.png" alt="picture 8">  </li>
+</ul>
+</li>
+<li>更改虚拟机网络使得虚拟机可以访问互联网<ul>
+<li><img src="/imgs/5e5ab8ac742eec624c9639a85c96b6074b3907a6bd5266e170909180d38f49c4.png" alt="picture 9">  </li>
+</ul>
+</li>
+<li>此时会出现<img src="/imgs/efe0e0d718b98bc6debf0144694743d6f5cb27ed4ef4bacb1aca891f69bd5e45.png" alt="picture 10">  </li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/01/01/CppToRemember/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2892,122 +3007,6 @@ UDP接收方收到报文后，不需要给出任何确认
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/10/09/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/09/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/" class="post-title-link" itemprop="url">强化学习复习（四）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-10-09 15:27:06" itemprop="dateCreated datePublished" datetime="2022-10-09T15:27:06+08:00">2022-10-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-10-14 15:04:07" itemprop="dateModified" datetime="2022-10-14T15:04:07+08:00">2022-10-14</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>6.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>11 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ul>
-<li><p><a target="_blank" rel="noopener" href="https://github.com/sweetice/Deep-reinforcement-learning-with-pytorch">基于pytorch实现的强化学习网络</a></p>
-<ul>
-<li><strong>这个的PPO写的似乎有问题</strong></li>
-</ul>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://github.com/labmlai/annotated_deep_learning_paper_implementations">强化学习网络集合</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://github.com/thu-ml/tianshou">集合 2</a></p>
-</li>
-<li><h2 id="PPO"><a href="#PPO" class="headerlink" title="PPO"></a>PPO</h2></li>
-<li><p>PPO是基于Actor-Critic的算法</p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/468828804">参考链接</a></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">from</span> torch.distributions <span class="keyword">import</span> Normal</span><br><span class="line"><span class="keyword">from</span> torch.utils.data.sampler <span class="keyword">import</span> BatchSampler, SubsetRandomSampler</span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">&#x27;Solve the Pendulum-v0 with PPO&#x27;</span>)</span><br><span class="line">parser.add_argument(</span><br><span class="line">    <span class="string">&#x27;--gamma&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">float</span>, default=<span class="number">0.9</span>, metavar=<span class="string">&#x27;G&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;discount factor (default: 0.9)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--seed&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">0</span>, metavar=<span class="string">&#x27;N&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;random seed (default: 0)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--render&#x27;</span>, action=<span class="string">&#x27;store_true&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;render the environment&#x27;</span>)</span><br><span class="line">parser.add_argument(</span><br><span class="line">    <span class="string">&#x27;--log-interval&#x27;</span>,</span><br><span class="line">    <span class="built_in">type</span>=<span class="built_in">int</span>,</span><br><span class="line">    default=<span class="number">10</span>,</span><br><span class="line">    metavar=<span class="string">&#x27;N&#x27;</span>,</span><br><span class="line">    <span class="built_in">help</span>=<span class="string">&#x27;interval between training status logs (default: 10)&#x27;</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">torch.manual_seed(args.seed)</span><br><span class="line"></span><br><span class="line">TrainingRecord = namedtuple(<span class="string">&#x27;TrainingRecord&#x27;</span>, [<span class="string">&#x27;ep&#x27;</span>, <span class="string">&#x27;reward&#x27;</span>])</span><br><span class="line">Transition = namedtuple(<span class="string">&#x27;Transition&#x27;</span>, [<span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;a_log_p&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;s_&#x27;</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ActorNet</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(ActorNet, self).__init__()</span><br><span class="line">        self.fc = nn.Linear(<span class="number">3</span>, <span class="number">100</span>)</span><br><span class="line">        self.mu_head = nn.Linear(<span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line">        self.sigma_head = nn.Linear(<span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = F.relu(self.fc(x))</span><br><span class="line">        mu = <span class="number">2.0</span> * F.tanh(self.mu_head(x))</span><br><span class="line">        sigma = F.softplus(self.sigma_head(x))</span><br><span class="line">        <span class="keyword">return</span> (mu, sigma)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CriticNet</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(CriticNet, self).__init__()</span><br><span class="line">        self.fc = nn.Linear(<span class="number">3</span>, <span class="number">100</span>)</span><br><span class="line">        self.v_head = nn.Linear(<span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = F.relu(self.fc(x))</span><br><span class="line">        state_value = self.v_head(x)</span><br><span class="line">        <span class="keyword">return</span> state_value</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Agent</span>():</span></span><br><span class="line"></span><br><span class="line">    clip_param = <span class="number">0.2</span></span><br><span class="line">    max_grad_norm = <span class="number">0.5</span></span><br><span class="line">    ppo_epoch = <span class="number">10</span></span><br><span class="line">    buffer_capacity, batch_size = <span class="number">1000</span>, <span class="number">32</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.training_step = <span class="number">0</span></span><br><span class="line">        self.anet = ActorNet().<span class="built_in">float</span>()</span><br><span class="line">        self.cnet = CriticNet().<span class="built_in">float</span>()</span><br><span class="line">        self.buffer = []</span><br><span class="line">        self.counter = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        self.optimizer_a = optim.Adam(self.anet.parameters(), lr=<span class="number">1e-4</span>)</span><br><span class="line">        self.optimizer_c = optim.Adam(self.cnet.parameters(), lr=<span class="number">3e-4</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select_action</span>(<span class="params">self, state</span>):</span></span><br><span class="line">        state = torch.from_numpy(state).<span class="built_in">float</span>().unsqueeze(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            (mu, sigma) = self.anet(state)</span><br><span class="line">        dist = Normal(mu, sigma)</span><br><span class="line">        action = dist.sample()</span><br><span class="line">        action_log_prob = dist.log_prob(action)</span><br><span class="line">        action = action.clamp(-<span class="number">2.0</span>, <span class="number">2.0</span>)</span><br><span class="line">        <span class="keyword">return</span> action.item(), action_log_prob.item()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span>(<span class="params">self, state</span>):</span></span><br><span class="line"></span><br><span class="line">        state = torch.from_numpy(state).<span class="built_in">float</span>().unsqueeze(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            state_value = self.cnet(state)</span><br><span class="line">        <span class="keyword">return</span> state_value.item()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save_param</span>(<span class="params">self</span>):</span></span><br><span class="line">        torch.save(self.anet.state_dict(), <span class="string">&#x27;param/ppo_anet_params.pkl&#x27;</span>)</span><br><span class="line">        torch.save(self.cnet.state_dict(), <span class="string">&#x27;param/ppo_cnet_params.pkl&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">store</span>(<span class="params">self, transition</span>):</span></span><br><span class="line">        self.buffer.append(transition)</span><br><span class="line">        self.counter += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> self.counter % self.buffer_capacity == <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.training_step += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        s = torch.tensor([t.s <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>)</span><br><span class="line">        a = torch.tensor([t.a <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        r = torch.tensor([t.r <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        s_ = torch.tensor([t.s_ <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>)</span><br><span class="line"></span><br><span class="line">        old_action_log_probs = torch.tensor(</span><br><span class="line">            [t.a_log_p <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        r = (r - r.mean()) / (r.std() + <span class="number">1e-5</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            target_v = r + args.gamma * self.cnet(s_)</span><br><span class="line"></span><br><span class="line">        adv = (target_v - self.cnet(s)).detach()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(self.ppo_epoch):</span><br><span class="line">            <span class="keyword">for</span> index <span class="keyword">in</span> BatchSampler(</span><br><span class="line">                    SubsetRandomSampler(<span class="built_in">range</span>(self.buffer_capacity)), self.batch_size, <span class="literal">False</span>):</span><br><span class="line"></span><br><span class="line">                (mu, sigma) = self.anet(s[index])</span><br><span class="line">                dist = Normal(mu, sigma)</span><br><span class="line">                action_log_probs = dist.log_prob(a[index])</span><br><span class="line">                ratio = torch.exp(action_log_probs - old_action_log_probs[index])</span><br><span class="line"></span><br><span class="line">                surr1 = ratio * adv[index]</span><br><span class="line">                surr2 = torch.clamp(ratio, <span class="number">1.0</span> - self.clip_param,</span><br><span class="line">                                    <span class="number">1.0</span> + self.clip_param) * adv[index]</span><br><span class="line">                action_loss = -torch.<span class="built_in">min</span>(surr1, surr2).mean()</span><br><span class="line"></span><br><span class="line">                self.optimizer_a.zero_grad()</span><br><span class="line">                action_loss.backward()</span><br><span class="line">                nn.utils.clip_grad_norm_(self.anet.parameters(), self.max_grad_norm)</span><br><span class="line">                self.optimizer_a.step()</span><br><span class="line"></span><br><span class="line">                value_loss = F.smooth_l1_loss(self.cnet(s[index]), target_v[index])</span><br><span class="line">                self.optimizer_c.zero_grad()</span><br><span class="line">                value_loss.backward()</span><br><span class="line">                nn.utils.clip_grad_norm_(self.cnet.parameters(), self.max_grad_norm)</span><br><span class="line">                self.optimizer_c.step()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">del</span> self.buffer[:]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    env = gym.make(<span class="string">&#x27;Pendulum-v0&#x27;</span>)</span><br><span class="line">    env.seed(args.seed)</span><br><span class="line"></span><br><span class="line">    agent = Agent()</span><br><span class="line"></span><br><span class="line">    training_records = []</span><br><span class="line">    running_reward = -<span class="number">1000</span></span><br><span class="line">    state = env.reset()</span><br><span class="line">    <span class="keyword">for</span> i_ep <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">        score = <span class="number">0</span></span><br><span class="line">        state = env.reset()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">200</span>):</span><br><span class="line">            action, action_log_prob = agent.select_action(state)</span><br><span class="line">            state_, reward, done, _ = env.step([action])</span><br><span class="line">            <span class="keyword">if</span> args.render:</span><br><span class="line">                env.render()</span><br><span class="line">            <span class="keyword">if</span> agent.store(Transition(state, action, action_log_prob, (reward + <span class="number">8</span>) / <span class="number">8</span>, state_)):</span><br><span class="line">                agent.update()</span><br><span class="line">            score += reward</span><br><span class="line">            state = state_</span><br><span class="line"></span><br><span class="line">        running_reward = running_reward * <span class="number">0.9</span> + score * <span class="number">0.1</span></span><br><span class="line">        training_records.append(TrainingRecord(i_ep, running_reward))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> i_ep % args.log_interval == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Ep &#123;&#125;\tMoving average score: &#123;:.2f&#125;\t&#x27;</span>.<span class="built_in">format</span>(i_ep, running_reward))</span><br><span class="line">        <span class="keyword">if</span> running_reward &gt; -<span class="number">200</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Solved! Moving average score is now &#123;&#125;!&quot;</span>.<span class="built_in">format</span>(running_reward))</span><br><span class="line">            env.close()</span><br><span class="line">            agent.save_param()</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;log/ppo_training_records.pkl&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                pickle.dump(training_records, f)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    plt.plot([r.ep <span class="keyword">for</span> r <span class="keyword">in</span> training_records], [r.reward <span class="keyword">for</span> r <span class="keyword">in</span> training_records])</span><br><span class="line">    plt.title(<span class="string">&#x27;PPO&#x27;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&#x27;Episode&#x27;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&#x27;Moving averaged episode reward&#x27;</span>)</span><br><span class="line">    plt.savefig(<span class="string">&quot;img/ppo.png&quot;</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></li>
-<li><p>产生动作的方式与一般的PG类似，就是使用PG输出一个μ和σ然后使用正态分布，然后进行采样输出真正的动作</p>
-<h3 id="网络更新"><a href="#网络更新" class="headerlink" title="网络更新"></a>网络更新</h3></li>
-<li><p>reward归一化，将reward-平均数/标准差</p>
-</li>
-<li><p>计算target价值，使用当前回合的reward+系数×Critic对于下一状态的分析</p>
-</li>
-<li><p>估计价值和实际价值的差：直接用估计当前状态的价值与上一步计算的价值做差</p>
-</li>
-<li><p>计算actor网络的loss的方法是</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(mu, sigma) = self.anet(s[index])</span><br><span class="line">dist = Normal(mu, sigma)</span><br><span class="line">action_log_probs = dist.log_prob(a[index])</span><br><span class="line">ratio = torch.exp(action_log_probs - old_action_log_probs[index])</span><br><span class="line"></span><br><span class="line">surr1 = ratio * adv[index]</span><br><span class="line">surr2 = torch.clamp(ratio, <span class="number">1.0</span> - self.clip_param,</span><br><span class="line">                    <span class="number">1.0</span> + self.clip_param) * adv[index]</span><br><span class="line">action_loss = -torch.<span class="built_in">min</span>(surr1, surr2).mean()</span><br></pre></td></tr></table></figure></li>
-<li><p>先利用当前的网络采样输出μ和σ，然后计算之前action的log_prob，，然后利用表达式<code>e^(这次网络计算出的log可能性-上次网络计算出的log可能性)</code>，实际上就是<code>这次网络计算出的可能性/上次网络计算出的可能性</code>与上一步算出的估计价值和实际价值的差值<strong>修正这个值</strong>，主要目的是用合理的方法<u>利用其他时刻动作的输出，增加一个动作的利用效率</u></p>
-</li>
-<li><p><img src="/imgs/f8606933037c3541da1fdedf4142d2a36bcb61ee2ddd0dba8b63febd43dfd75c.png" alt="picture 1">  </p>
-</li>
-<li><p>然后用一个参数×上面的数值，处理之后得到最终需要反向传播的值（actor）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">value_loss = F.smooth_l1_loss(self.cnet(s[index]), target_v[index])</span><br><span class="line">self.optimizer_c.zero_grad()</span><br><span class="line">value_loss.backward()</span><br><span class="line">nn.utils.clip_grad_norm_(self.cnet.parameters(), self.max_grad_norm)</span><br><span class="line">self.optimizer_c.step()</span><br></pre></td></tr></table></figure></li>
-<li><p>更新Critic的参数操作是将现在的Critic网络对价值的判断与前面算出的目标价值判断进行比较，将二者的差进行反向传播</p>
-<h2 id="BatchSampler和SubsetRamdomSampler"><a href="#BatchSampler和SubsetRamdomSampler" class="headerlink" title="BatchSampler和SubsetRamdomSampler"></a>BatchSampler和SubsetRamdomSampler</h2></li>
-<li><p><code>SubsetRandomSampler</code>实际上是将数据的顺序打乱做一个全排列</p>
-</li>
-<li><p><code>BatchSampler</code>实际上是根据设置的batch_size给数据分成一个个的batch</p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -3079,7 +3078,7 @@ UDP接收方收到报文后，不需要给出任何确认
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">184</span>
+          <span class="site-state-item-count">185</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -3123,13 +3122,13 @@ UDP接收方收到报文后，不需要给出任何确认
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">653k</span>
+    <span title="站点总字数">654k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:46</span>
+    <span title="站点阅读时长">19:49</span>
 </div>
 
         

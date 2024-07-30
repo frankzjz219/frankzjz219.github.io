@@ -182,6 +182,109 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/07/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%99%BB%E5%BD%95windows%E8%AE%BE%E5%A4%87%E5%B9%B6%E4%B8%94%E5%88%9B%E5%BB%BA%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/07/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%99%BB%E5%BD%95windows%E8%AE%BE%E5%A4%87%E5%B9%B6%E4%B8%94%E5%88%9B%E5%BB%BA%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1/" class="post-title-link" itemprop="url">如何使用远程命令行登录windows设备并且创建后台任务</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-07-30 20:53:06 / 修改时间：21:01:03" itemprop="dateCreated datePublished" datetime="2024-07-30T20:53:06+08:00">2024-07-30</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="使用ssh远程另一台电脑"><a href="#使用ssh远程另一台电脑" class="headerlink" title="使用ssh远程另一台电脑"></a>使用ssh远程另一台电脑</h2><ul>
+<li><p>另一台电脑的22号端口需要可以访问</p>
+</li>
+<li><p>安装OpenSSH服务器:</p>
+<ul>
+<li>打开 设置 (Settings)。</li>
+<li>选择 应用 (Apps)。</li>
+<li>点击 可选功能 (Optional features)。</li>
+<li>选择 添加功能 (Add a feature)。</li>
+</ul>
+</li>
+<li><p>以管理员身份运行命令行，执行<code>Start-Service sshd</code></p>
+</li>
+<li><p>执行<code>Set-Service -Name sshd -StartupType &#39;Automatic&#39;</code>允许开机自启动</p>
+</li>
+<li><p>一般需要关闭相关防火墙等</p>
+</li>
+<li><p>在服务端电脑执行<code>ssh &lt;user&gt;@&lt;ip&gt;</code></p>
+</li>
+</ul>
+<h2 id="如何在命令行开启一个不依赖于命令行存在的进程"><a href="#如何在命令行开启一个不依赖于命令行存在的进程" class="headerlink" title="如何在命令行开启一个不依赖于命令行存在的进程"></a>如何在命令行开启一个不依赖于命令行存在的进程</h2><ul>
+<li>一般的进程在自己依附的命令行被关闭之后就无法继续执行了<ul>
+<li><strong>会导致使用远程ssh命令行创建的进程在连接断开之后停止运行</strong></li>
+</ul>
+</li>
+<li>需要使用<code>Start-Process</code>命令结合<code>-WindowStyle Hidden</code>参数</li>
+<li>一个示例powershell脚本（包括传递命令行参数的部分要写成一个字符串，否则无法传递）<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="keyword">param</span> (</span><br><span class="line">    [<span class="built_in">string</span>]<span class="variable">$S</span>,</span><br><span class="line">    [<span class="built_in">string</span>[]]<span class="variable">$Arg</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Conda 环境路径</span></span><br><span class="line"><span class="variable">$condaEnvPath</span> = <span class="string">&quot;D:\anaconda\envs\torchGPU\python.exe&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前目录</span></span><br><span class="line"><span class="variable">$currentDirectory</span> = <span class="built_in">Get-Location</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 完整脚本路径</span></span><br><span class="line"><span class="variable">$scriptFullPath</span> = <span class="built_in">Join-Path</span> <span class="literal">-Path</span> <span class="variable">$currentDirectory</span> <span class="literal">-ChildPath</span> <span class="variable">$S</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查脚本是否存在</span></span><br><span class="line"><span class="keyword">if</span> (<span class="operator">-Not</span> (<span class="built_in">Test-Path</span> <span class="literal">-Path</span> <span class="variable">$scriptFullPath</span>)) &#123;</span><br><span class="line">    <span class="built_in">Write-Host</span> <span class="string">&quot;Error: Script &#x27;<span class="variable">$scriptFullPath</span>&#x27; does not exist.&quot;</span> <span class="literal">-ForegroundColor</span> Red</span><br><span class="line">    <span class="keyword">exit</span> <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">Write-Host</span> <span class="string">&quot;Process file &#x27;<span class="variable">$scriptFullPath</span>&#x27;found!&quot;</span></span><br><span class="line">    <span class="built_in">Write-Host</span> <span class="string">&quot;Running <span class="variable">$condaEnvPath</span> in <span class="variable">$currentDirectory</span>&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出文件路径</span></span><br><span class="line"><span class="variable">$outputFilePath</span> = <span class="built_in">Join-Path</span> <span class="literal">-Path</span> <span class="variable">$currentDirectory</span> <span class="literal">-ChildPath</span> <span class="string">&quot;output.txt&quot;</span></span><br><span class="line"><span class="variable">$errorFilePath</span> = <span class="built_in">Join-Path</span> <span class="literal">-Path</span> <span class="variable">$currentDirectory</span> <span class="literal">-ChildPath</span> <span class="string">&quot;error.txt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建参数字符串</span></span><br><span class="line"><span class="variable">$argumentsString</span> = <span class="string">&quot;<span class="variable">$scriptFullPath</span> &quot;</span> + (<span class="variable">$Arg</span> <span class="operator">-join</span> <span class="string">&#x27; &#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">Write-Host</span> <span class="string">&quot;&#x27;<span class="variable">$argumentsString</span>&#x27;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动进程并重定向输出</span></span><br><span class="line"><span class="variable">$process</span> = <span class="built_in">Start-Process</span> <span class="literal">-FilePath</span> <span class="variable">$condaEnvPath</span>   <span class="literal">-ArgumentList</span> <span class="variable">$argumentsString</span> `</span><br><span class="line">                         <span class="literal">-RedirectStandardOutput</span> <span class="variable">$outputFilePath</span> `</span><br><span class="line">                         <span class="literal">-RedirectStandardError</span> <span class="variable">$errorFilePath</span> `</span><br><span class="line">                         <span class="literal">-WindowStyle</span> <span class="keyword">Hidden</span> `</span><br><span class="line">                         <span class="literal">-PassThru</span> `</span><br><span class="line">                         <span class="literal">-WorkingDirectory</span> <span class="variable">$currentDirectory</span></span><br><span class="line"><span class="comment"># 输出进程ID</span></span><br><span class="line"><span class="built_in">Write-Host</span> <span class="string">&quot;Process ID: <span class="variable">$</span>(<span class="variable">$process</span>.Id)&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="如何管理进程"><a href="#如何管理进程" class="headerlink" title="如何管理进程"></a>如何管理进程</h2></li>
+<li>查看<code>Get-Process -Id &lt;ID&gt;</code></li>
+<li>停止<code>Stop-Process -Id &lt;ID&gt;</code></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/07/29/%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9vscode%E7%9A%84SSH%E6%8F%92%E4%BB%B6%E6%8C%87%E5%AE%9A%E4%B8%80%E4%B8%AA%E4%B8%BB%E6%9C%BA%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%B1%BB%E5%9E%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1030,87 +1133,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/05/15/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88%E9%A2%98%E7%9B%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/05/15/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88%E9%A2%98%E7%9B%AE/" class="post-title-link" itemprop="url">排列组合题目</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-05-15 14:36:44 / 修改时间：14:44:19" itemprop="dateCreated datePublished" datetime="2024-05-15T14:36:44+08:00">2024-05-15</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>887</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="组合数的计算"><a href="#组合数的计算" class="headerlink" title="组合数的计算"></a>组合数的计算</h2><ul>
-<li><code>C(n, 0)+C(n, 1)+...+C(n, n) = 2^n</code></li>
-<li>n是偶数的时候，<code>C(n, 0)+C(n, 2)+...+C(n, n)=2^(n-1)</code></li>
-<li>n是奇数的时候，<code>C(n, 1)+C(n, 3)+...+C(n, n)=2^(n-1)</code></li>
-<li><strong>注意某些组合问题，回溯问题可以直接借用这个方式求解</strong><h3 id="5-12阿里"><a href="#5-12阿里" class="headerlink" title="5.12阿里"></a>5.12阿里</h3></li>
-<li>小红定义一个数组是好数组，当且仅当所有奇数出现了奇数次，所有偶数出现了偶数次。现在小红拿到了一个数组，她希望取一个该数组的非空子序列(可以不连续)，使得子序列是好数组。你能帮小红求出子序列的方案数吗?由于答案过大，请对1e9+ 7取模。</li>
-<li>对于每个数字，如果该数字为奇数，且该数字一共出现了x次，则出现奇数次的方案数为c(x,1)+c(x,3)+c(x,5)+…+c(x,x).其中c表示组合数，这个大小就是2^(x-1)，但是该数字也可以不出现，所以还要加一，一共就是2^(x-1)+1种方案</li>
-<li>偶数就是c(x,0)+c(x,2)+…c(x,x),这个也是2^(x-1),然后乘起来，再减去全部都不出现的一次，即减去空串的情况，就是最后答案<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> int long long</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mod=<span class="number">1e9</span>+<span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> a[<span class="number">100010</span>],pow2[<span class="number">100100</span>];</span><br><span class="line">map&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt;mp;</span><br><span class="line"><span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    cin&gt;&gt;n;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        cin&gt;&gt;a[i];</span><br><span class="line">        mp[a[i]]++;</span><br><span class="line">    &#125;</span><br><span class="line">    pow2[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> ans=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)pow2[i]=pow2[i<span class="number">-1</span>]*<span class="number">2</span>%mod;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> i:mp)&#123;</span><br><span class="line">        <span class="keyword">if</span>(i.first&amp;<span class="number">1</span>)</span><br><span class="line">        ans=ans*(pow2[i.second<span class="number">-1</span>]+<span class="number">1</span>)%mod;</span><br><span class="line">        <span class="keyword">else</span> ans=ans*pow2[i.second<span class="number">-1</span>]%mod;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;ans<span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1182,7 +1204,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">184</span>
+          <span class="site-state-item-count">185</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1226,13 +1248,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">653k</span>
+    <span title="站点总字数">654k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:46</span>
+    <span title="站点阅读时长">19:49</span>
 </div>
 
         
