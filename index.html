@@ -182,6 +182,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/07/31/%E8%87%AA%E5%B7%B1%E4%BD%BF%E7%94%A8curses%E5%86%99%E4%B8%80%E4%B8%AA%E7%B1%BB%E4%BC%BC%E4%BA%8Ehtop%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2%E7%A8%8B%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/07/31/%E8%87%AA%E5%B7%B1%E4%BD%BF%E7%94%A8curses%E5%86%99%E4%B8%80%E4%B8%AA%E7%B1%BB%E4%BC%BC%E4%BA%8Ehtop%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2%E7%A8%8B%E5%BA%8F/" class="post-title-link" itemprop="url">自己使用curses写一个类似于htop的命令行界面程序</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-07-31 10:59:12 / 修改时间：11:05:14" itemprop="dateCreated datePublished" datetime="2024-07-31T10:59:12+08:00">2024-07-31</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="在命令行循环显示一个内容而不向下叠加"><a href="#在命令行循环显示一个内容而不向下叠加" class="headerlink" title="在命令行循环显示一个内容而不向下叠加"></a>在命令行循环显示一个内容而不向下叠加</h2><ul>
+<li>使用<code>curses.wrapper</code>包裹工作函数</li>
+<li>工作函数需要接受一个参数<code>stdscr</code><h2 id="stdscr的用法"><a href="#stdscr的用法" class="headerlink" title="stdscr的用法"></a>stdscr的用法</h2></li>
+<li><code>stdscr.addstr(y, x, str, curses.color_pair)</code></li>
+<li>第一个参数是行数，第二个是列数，第三个是颜色对<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 定义</span></span><br><span class="line">curses.start_color()</span><br><span class="line">curses.init_pair(<span class="number">1</span>, curses.COLOR_WHITE, curses.COLOR_BLACK)</span><br><span class="line">bold = curses.A_BOLD</span><br><span class="line"><span class="comment"># 使用</span></span><br><span class="line">stdscr.addstr(y, x, <span class="string">&quot;****&quot;</span>, curses.color_pair(<span class="number">1</span>) | bold)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="获取CPU核GPU信息"><a href="#获取CPU核GPU信息" class="headerlink" title="获取CPU核GPU信息"></a>获取CPU核GPU信息</h2><ul>
+<li>使用<code>psutil</code>和<code>pynvml</code>库</li>
+<li>具体参考如下用例</li>
+</ul>
+<h2 id="完整示例"><a href="#完整示例" class="headerlink" title="完整示例"></a>完整示例</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> psutil</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> curses</span><br><span class="line"><span class="keyword">from</span> pynvml <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_system_stats</span>():</span></span><br><span class="line">    cpu_usage = psutil.cpu_percent(interval=<span class="number">1</span>)</span><br><span class="line">    cpu_core_usages = psutil.cpu_percent(interval=<span class="number">1</span>, percpu=<span class="literal">True</span>)</span><br><span class="line">    memory_info = psutil.virtual_memory()</span><br><span class="line">    memory_usage = memory_info.percent</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取CPU频率</span></span><br><span class="line">    cpu_freq = psutil.cpu_freq()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> cpu_usage, cpu_core_usages, memory_usage, cpu_freq</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_gpu_stats</span>():</span></span><br><span class="line">    nvmlInit()</span><br><span class="line">    device_count = nvmlDeviceGetCount()</span><br><span class="line">    gpu_stats = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(device_count):</span><br><span class="line">        handle = nvmlDeviceGetHandleByIndex(i)</span><br><span class="line">        gpu_name = nvmlDeviceGetName(handle)</span><br><span class="line">        gpu_memory = nvmlDeviceGetMemoryInfo(handle)</span><br><span class="line">        gpu_utilization = nvmlDeviceGetUtilizationRates(handle)</span><br><span class="line">        gpu_temp = nvmlDeviceGetTemperature(handle, NVML_TEMPERATURE_GPU)</span><br><span class="line">        gpu_stats.append(&#123;</span><br><span class="line">            <span class="string">&#x27;name&#x27;</span>: gpu_name,</span><br><span class="line">            <span class="string">&#x27;memory_used&#x27;</span>: gpu_memory.used / <span class="number">1024</span>**<span class="number">3</span>,  <span class="comment"># Convert to MB</span></span><br><span class="line">            <span class="string">&#x27;memory_total&#x27;</span>: gpu_memory.total / <span class="number">1024</span>**<span class="number">3</span>,  <span class="comment"># Convert to MB</span></span><br><span class="line">            <span class="string">&#x27;utilization&#x27;</span>: gpu_utilization.gpu,</span><br><span class="line">            <span class="string">&#x27;temperature&#x27;</span>: gpu_temp</span><br><span class="line">        &#125;)</span><br><span class="line">    nvmlShutdown()</span><br><span class="line">    <span class="keyword">return</span> gpu_stats</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw_bar</span>(<span class="params">stdscr, y, width, percent, color_pair, color_inv</span>):</span></span><br><span class="line">    bar_length = <span class="built_in">int</span>(width * (percent / <span class="number">100</span>))</span><br><span class="line">    bar = <span class="string">&#x27; &#x27;</span> * bar_length</span><br><span class="line">    stdscr.addstr(y, <span class="number">0</span>, bar, curses.color_pair(color_pair) | curses.A_BOLD)</span><br><span class="line">    stdscr.addstr(y, bar_length, <span class="string">&#x27;|&#x27;</span> * (width - bar_length), curses.color_pair(<span class="number">6</span>))</span><br><span class="line">    stdscr.addstr(y, width, <span class="string">&#x27;|&#x27;</span>, curses.color_pair(color_inv))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw_rect</span>(<span class="params">stdscr, y: <span class="built_in">int</span>, x: <span class="built_in">int</span>, width: <span class="built_in">int</span>, max_width: <span class="built_in">int</span>, color_pair, color_inv</span>):</span></span><br><span class="line">    bar = <span class="string">&#x27; &#x27;</span>*width</span><br><span class="line">    stdscr.addstr(y, x, bar, curses.color_pair(color_pair) | curses.A_BOLD)</span><br><span class="line">    stdscr.addstr(y, width+x, <span class="string">&#x27;|&#x27;</span> * (max_width - width), curses.color_pair(<span class="number">6</span>))</span><br><span class="line">    stdscr.addstr(y, max_width+x, <span class="string">&#x27;|&#x27;</span>, curses.color_pair(color_inv))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">display_stats</span>(<span class="params">stdscr</span>):</span></span><br><span class="line">    curses.curs_set(<span class="number">0</span>)  <span class="comment"># Hide cursor</span></span><br><span class="line">    stdscr.nodelay(<span class="number">1</span>)   <span class="comment"># Non-blocking input</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Initialize colors</span></span><br><span class="line">    curses.start_color()</span><br><span class="line">    curses.init_pair(<span class="number">1</span>, curses.COLOR_WHITE, curses.COLOR_BLACK)</span><br><span class="line">    curses.init_pair(<span class="number">2</span>, curses.COLOR_RED, curses.COLOR_BLACK)</span><br><span class="line">    curses.init_pair(<span class="number">3</span>, curses.COLOR_WHITE, curses.COLOR_BLACK)</span><br><span class="line">    curses.init_pair(<span class="number">4</span>, curses.COLOR_GREEN, curses.COLOR_BLACK)</span><br><span class="line">    curses.init_pair(<span class="number">5</span>, curses.COLOR_BLACK, curses.COLOR_WHITE)</span><br><span class="line">    curses.init_pair(<span class="number">6</span>, curses.COLOR_BLACK, curses.COLOR_BLACK)</span><br><span class="line">    curses.init_pair(<span class="number">7</span>, curses.COLOR_BLACK, curses.COLOR_YELLOW)</span><br><span class="line">    curses.init_pair(<span class="number">8</span>, curses.COLOR_BLACK, curses.COLOR_GREEN)</span><br><span class="line">    curses.init_pair(<span class="number">9</span>, curses.COLOR_YELLOW, curses.COLOR_BLACK)</span><br><span class="line">    curses.init_pair(<span class="number">10</span>, curses.COLOR_GREEN, curses.COLOR_BLACK)</span><br><span class="line">    curses.init_pair(<span class="number">11</span>, curses.COLOR_BLACK, curses.COLOR_CYAN)</span><br><span class="line">    curses.init_pair(<span class="number">12</span>, curses.COLOR_CYAN, curses.COLOR_BLACK)</span><br><span class="line">    </span><br><span class="line">    bold = curses.A_BOLD</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        height, width = stdscr.getmaxyx()</span><br><span class="line">        max_width = width-<span class="number">10</span></span><br><span class="line">        cpu_usage, cpu_core_usages, memory_usage, cpu_freq = get_system_stats()</span><br><span class="line">        gpu_stats = get_gpu_stats()</span><br><span class="line"></span><br><span class="line">        stdscr.clear()</span><br><span class="line">        stdscr.addstr(<span class="number">0</span>, <span class="built_in">int</span>((max_width-<span class="number">22</span>)/<span class="number">2</span>), <span class="string">&quot;System Monitoring Tool&quot;</span>, curses.color_pair(<span class="number">5</span>) | bold)</span><br><span class="line">        </span><br><span class="line">        stdscr.addstr(<span class="number">2</span>, <span class="number">0</span>, <span class="string">&quot;■ CPU Usage:&quot;</span>, curses.color_pair(<span class="number">1</span>) | bold)</span><br><span class="line">        stdscr.addstr(<span class="number">2</span>, <span class="built_in">int</span>(max_width/<span class="number">2</span>), <span class="string">f&quot;<span class="subst">&#123;cpu_usage:<span class="number">.2</span>f&#125;</span>%&quot;</span>, curses.color_pair(<span class="number">1</span>) | bold)</span><br><span class="line">        <span class="comment"># draw_bar(stdscr, 3, max_width, cpu_usage, 7, 9)</span></span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        line = <span class="number">3</span></span><br><span class="line">        <span class="built_in">id</span> = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> <span class="built_in">id</span> &lt; <span class="built_in">len</span>(cpu_core_usages):</span><br><span class="line">            stdscr.addstr(line, <span class="number">0</span>, <span class="string">f&quot;<span class="subst">&#123;cpu_core_usages[<span class="built_in">id</span>]:<span class="number">.0</span>f&#125;</span>&quot;</span>, curses.color_pair(<span class="number">1</span>))</span><br><span class="line">            draw_rect(stdscr, line, <span class="number">3</span>, <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>*cpu_core_usages[<span class="built_in">id</span>]/<span class="number">100</span>), <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>), <span class="number">11</span>, <span class="number">12</span>)</span><br><span class="line">            <span class="built_in">id</span>+=<span class="number">1</span></span><br><span class="line">            stdscr.addstr(line, <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>)+<span class="number">4</span>, <span class="string">f&quot;<span class="subst">&#123;cpu_core_usages[<span class="built_in">id</span>]:<span class="number">.0</span>f&#125;</span>&quot;</span>, curses.color_pair(<span class="number">1</span>))</span><br><span class="line">            draw_rect(stdscr, line, <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>)+<span class="number">7</span>, <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>*cpu_core_usages[<span class="built_in">id</span>]/<span class="number">100</span>), <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>), <span class="number">11</span>, <span class="number">12</span>)</span><br><span class="line">            <span class="built_in">id</span>+=<span class="number">1</span></span><br><span class="line">            stdscr.addstr(line, <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>)*<span class="number">2</span>+<span class="number">8</span>, <span class="string">f&quot;<span class="subst">&#123;cpu_core_usages[<span class="built_in">id</span>]:<span class="number">.0</span>f&#125;</span>&quot;</span>, curses.color_pair(<span class="number">1</span>))</span><br><span class="line">            draw_rect(stdscr, line, <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>)*<span class="number">2</span>+<span class="number">11</span>, <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>*cpu_core_usages[<span class="built_in">id</span>]/<span class="number">100</span>), <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>), <span class="number">11</span>, <span class="number">12</span>)</span><br><span class="line">            <span class="built_in">id</span>+=<span class="number">1</span></span><br><span class="line">            stdscr.addstr(line, <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>)*<span class="number">3</span>+<span class="number">12</span>, <span class="string">f&quot;<span class="subst">&#123;cpu_core_usages[<span class="built_in">id</span>]:<span class="number">.0</span>f&#125;</span>&quot;</span>, curses.color_pair(<span class="number">1</span>))</span><br><span class="line">            draw_rect(stdscr, line, <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>)*<span class="number">3</span>+<span class="number">15</span>, <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>*cpu_core_usages[<span class="built_in">id</span>]/<span class="number">100</span>), <span class="built_in">int</span>((max_width-<span class="number">12</span>)/<span class="number">4</span>), <span class="number">11</span>, <span class="number">12</span>)</span><br><span class="line">            <span class="built_in">id</span>+=<span class="number">1</span></span><br><span class="line">            line+=<span class="number">1</span></span><br><span class="line">        <span class="comment"># line += 1</span></span><br><span class="line">        stdscr.addstr(line, <span class="number">0</span>, <span class="string">&quot;■ Memory Usage:&quot;</span>, curses.color_pair(<span class="number">3</span>) | bold)</span><br><span class="line">        stdscr.addstr(line, <span class="built_in">int</span>(max_width/<span class="number">2</span>), <span class="string">f&quot;<span class="subst">&#123;memory_usage:<span class="number">.2</span>f&#125;</span>%&quot;</span>, curses.color_pair(<span class="number">3</span>) | bold)</span><br><span class="line">        line+=<span class="number">1</span></span><br><span class="line">        draw_bar(stdscr, line, max_width, memory_usage, <span class="number">7</span>, <span class="number">9</span>)</span><br><span class="line">        line+=<span class="number">1</span></span><br><span class="line">        stdscr.addstr(line, <span class="number">0</span>, <span class="string">&quot;-&quot;</span>*(max_width), curses.color_pair(<span class="number">1</span>) | bold)</span><br><span class="line">        line+=<span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> i, gpu <span class="keyword">in</span> <span class="built_in">enumerate</span>(gpu_stats):</span><br><span class="line">            stdscr.addstr(line, <span class="number">0</span>, <span class="string">f&quot;■ GPU <span class="subst">&#123;i&#125;</span> (<span class="subst">&#123;gpu[<span class="string">&#x27;name&#x27;</span>]&#125;</span>):&quot;</span>, curses.color_pair(<span class="number">2</span>) | bold)</span><br><span class="line">            </span><br><span class="line">            stdscr.addstr(line + <span class="number">1</span>, <span class="number">0</span>, <span class="string">&quot;  Memory Usage:&quot;</span>, curses.color_pair(<span class="number">4</span>))</span><br><span class="line">            stdscr.addstr(line + <span class="number">1</span>, <span class="built_in">int</span>(max_width/<span class="number">2</span>), <span class="string">f&quot;<span class="subst">&#123;gpu[<span class="string">&#x27;memory_used&#x27;</span>]:<span class="number">.2</span>f&#125;</span> GB / <span class="subst">&#123;gpu[<span class="string">&#x27;memory_total&#x27;</span>]:<span class="number">.2</span>f&#125;</span> GB&quot;</span>, curses.color_pair(<span class="number">4</span>))</span><br><span class="line">            draw_bar(stdscr, line + <span class="number">2</span>, max_width, (gpu[<span class="string">&#x27;memory_used&#x27;</span>] / gpu[<span class="string">&#x27;memory_total&#x27;</span>]) * <span class="number">100</span>, <span class="number">8</span>, <span class="number">10</span>)</span><br><span class="line">            </span><br><span class="line">            stdscr.addstr(line + <span class="number">3</span>, <span class="number">0</span>, <span class="string">&quot;  Utilization:&quot;</span>, curses.color_pair(<span class="number">4</span>))</span><br><span class="line">            stdscr.addstr(line + <span class="number">3</span>, <span class="built_in">int</span>(max_width/<span class="number">2</span>), <span class="string">f&quot;<span class="subst">&#123;gpu[<span class="string">&#x27;utilization&#x27;</span>]&#125;</span>%&quot;</span>, curses.color_pair(<span class="number">4</span>))</span><br><span class="line">            draw_bar(stdscr, line + <span class="number">4</span>, max_width, gpu[<span class="string">&#x27;utilization&#x27;</span>], <span class="number">8</span>, <span class="number">10</span>)</span><br><span class="line">            </span><br><span class="line">            stdscr.addstr(line + <span class="number">5</span>, <span class="number">0</span>, <span class="string">f&quot;  Temperature: <span class="subst">&#123;gpu[<span class="string">&#x27;temperature&#x27;</span>]&#125;</span>°C&quot;</span>, curses.color_pair(<span class="number">4</span>))</span><br><span class="line">            line += <span class="number">7</span></span><br><span class="line"></span><br><span class="line">        stdscr.refresh()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Wait for 1 second before updating the stats</span></span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Check if user pressed &#x27;q&#x27; to quit</span></span><br><span class="line">        <span class="keyword">if</span> stdscr.getch() == <span class="built_in">ord</span>(<span class="string">&#x27;q&#x27;</span>):</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    curses.wrapper(display_stats)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li>效果<ul>
+<li><img src="/imgs/e95ad5a5ea9fb262652efe6b6cd8be85f2a7f0f853c02b24e0f99baaa77db96d.png" alt="picture 0">  </li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/07/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%99%BB%E5%BD%95windows%E8%AE%BE%E5%A4%87%E5%B9%B6%E4%B8%94%E5%88%9B%E5%BB%BA%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1037,102 +1126,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/05/17/Ubuntu%E8%AF%BB%E5%8F%96PS4%E6%89%8B%E6%9F%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/05/17/Ubuntu%E8%AF%BB%E5%8F%96PS4%E6%89%8B%E6%9F%84/" class="post-title-link" itemprop="url">Ubuntu读取PS4手柄</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-05-17 22:32:52" itemprop="dateCreated datePublished" datetime="2024-05-17T22:32:52+08:00">2024-05-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-20 20:01:41" itemprop="dateModified" datetime="2024-05-20T20:01:41+08:00">2024-05-20</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><ul>
-<li>使用bluetoothctl工具</li>
-<li>命令行敲击之后，输入<code>power on</code></li>
-<li><code>agent on</code></li>
-<li><code>default-agent</code></li>
-<li><code>scan on</code></li>
-<li>找到名字（最右边一列）中带有<code>Wireless Controller</code>字样的设备</li>
-<li>与之MAC地址配对<code>pair XX:XX:XX:XX:XX:XX</code></li>
-<li>然后<code>connect XX:XX:XX:XX:XX:XX</code><h3 id="第二次链接"><a href="#第二次链接" class="headerlink" title="第二次链接"></a>第二次链接</h3></li>
-<li>输入命令查看配对的设备：<code>paired-devices</code></li>
-<li><code>connect XX:XX:XX:XX:XX:XX</code></li>
-<li><img src="/imgs/4fb436872bdd20df976268ba8eb00772abbe5da84fe227e5f0dfc0e6865b8d6c.png" alt="picture 1">  </li>
-<li>使用<code>trust &lt;MAC地址&gt;</code>的方式信任设备<h2 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h2></li>
-<li>使用<code>sudo evtest</code>查看手柄状态</li>
-<li><img src="/imgs/b4827177c2d2e372721a16a464cb14d24b1967eeffb9ab7e9219c5854eb6a07f.png" alt="picture 0">  </li>
-<li>6是触控板，8是按钮（不包括左边的四个方向键）</li>
-<li>例子</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;libevdev/libevdev.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_event</span><span class="params">(struct input_event *ev)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (ev-&gt;type == EV_ABS) &#123;</span><br><span class="line">        <span class="keyword">switch</span> (ev-&gt;code) &#123;</span><br><span class="line">            <span class="keyword">case</span> ABS_X:</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Left stick X: %d\n&quot;</span>, ev-&gt;value);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> ABS_Y:</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Left stick Y: %d\n&quot;</span>, ev-&gt;value);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> ABS_RX:</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Right stick X: %d\n&quot;</span>, ev-&gt;value);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> ABS_RY:</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Right stick Y: %d\n&quot;</span>, ev-&gt;value);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> ABS_Z:</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Left trigger: %d\n&quot;</span>, ev-&gt;value);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> ABS_RZ:</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Right trigger: %d\n&quot;</span>, ev-&gt;value);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ev-&gt;type == EV_KEY) &#123;</span><br><span class="line">        <span class="keyword">switch</span> (ev-&gt;code) &#123;</span><br><span class="line">            <span class="keyword">case</span> BTN_A:</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Cross button: %s\n&quot;</span>, ev-&gt;value ? <span class="string">&quot;pressed&quot;</span> : <span class="string">&quot;released&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> BTN_B:</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Circle button: %s\n&quot;</span>, ev-&gt;value ? <span class="string">&quot;pressed&quot;</span> : <span class="string">&quot;released&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> BTN_X:</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Square button: %s\n&quot;</span>, ev-&gt;value ? <span class="string">&quot;pressed&quot;</span> : <span class="string">&quot;released&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> BTN_Y:</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Triangle button: %s\n&quot;</span>, ev-&gt;value ? <span class="string">&quot;pressed&quot;</span> : <span class="string">&quot;released&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">libevdev</span> *<span class="title">dev</span> =</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="comment">// eventX要用sudo evtest自己看</span></span><br><span class="line">    <span class="keyword">int</span> fd = open(<span class="string">&quot;/dev/input/eventX&quot;</span>, O_RDONLY | O_NONBLOCK);</span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;Failed to open device&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> rc = libevdev_new_from_fd(fd, &amp;dev);</span><br><span class="line">    <span class="keyword">if</span> (rc &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Failed to init libevdev (%s)\n&quot;</span>, strerror(-rc));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Input device name: \&quot;%s\&quot;\n&quot;</span>, libevdev_get_name(dev));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">input_event</span> <span class="title">ev</span>;</span></span><br><span class="line">        rc = libevdev_next_event(dev, LIBEVDEV_READ_FLAG_NORMAL, &amp;ev);</span><br><span class="line">        <span class="keyword">if</span> (rc == <span class="number">0</span>) &#123;</span><br><span class="line">            print_event(&amp;ev);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (rc != -EAGAIN) &#123;</span><br><span class="line">            <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Failed to read next event (%s)\n&quot;</span>, strerror(-rc));</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        usleep(<span class="number">10000</span>);  <span class="comment">// Sleep for 10ms to reduce CPU usage</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    libevdev_free(dev);</span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1204,14 +1197,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">185</span>
+          <span class="site-state-item-count">186</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1248,13 +1241,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">654k</span>
+    <span title="站点总字数">660k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:49</span>
+    <span title="站点阅读时长">19:59</span>
 </div>
 
         

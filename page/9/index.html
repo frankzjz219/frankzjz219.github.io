@@ -182,6 +182,106 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/10/13/HindsightExperienceReplay%EF%BC%88HER%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/10/13/HindsightExperienceReplay%EF%BC%88HER%EF%BC%89/" class="post-title-link" itemprop="url">HindsightExperienceReplay（HER）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-13 14:45:00" itemprop="dateCreated datePublished" datetime="2022-10-13T14:45:00+08:00">2022-10-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-16 11:13:35" itemprop="dateModified" datetime="2022-10-16T11:13:35+08:00">2022-10-16</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>921</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Hindsight-Experience-Replay"><a href="#Hindsight-Experience-Replay" class="headerlink" title="Hindsight Experience Replay"></a>Hindsight Experience Replay</h1><ul>
+<li>原文<ul>
+<li>Hindsight experience replay</li>
+<li>Advances in neural information processing systems</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43145941/article/details/119219436?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1-119219436-blog-79498248.pc_relevant_3mothn_strategy_and_data_recovery&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1-119219436-blog-79498248.pc_relevant_3mothn_strategy_and_data_recovery&utm_relevant_index=2">参考链接</a><h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2></li>
+<li>你得知道从状态S到目标goal的映射关系（以机械臂为例，状态可能是多个关节的角度，目标是三维空间一个点的坐标，如果知道状态，那么也能推算出机械臂末端在空间中的坐标）；</li>
+<li>你得建立一个新的reward计算机制，它取决于目标goal和状态S，一般当状态S映射的goal’与goal相近时给予奖励；</li>
+<li>你得创建一个记录每个episode transition的列表，它的作用是在每个episode结束后进行事后经验回放，具体回放方法之后讲；</li>
+<li>RL算法接受的状态维度相较于原始的维度增加了目标goal的维度，也就是RL接受：<ul>
+<li><img src="/imgs/dba2e2146bcea81c1cc62e3cafac2015a03a4b67fb2a29916283b8ea130ea278.png" alt="picture 2">  <h2 id="举例的github"><a href="#举例的github" class="headerlink" title="举例的github"></a>举例的github</h2></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ZYunfeii/DRL_algorithm_library/tree/master/DDPG/DDPG_spinningup_HER">HER举例</a></li>
+<li>这里episode_cache为存储transition的列表((s1,a1,r1,s1’),(s2,a2,r2,s2’)…)，枚举这个列表的元素。在第二句根据每个transition产生HER_SAMPLE_NUM个新的目标点new_goals，这些<strong>目标点时根据之后的transition的state推算得到的</strong>，当然一种简单的情况就是state。之后对这些new_goals做遍历，对每一个new_goal都重新计算reward，并将transition中s和s’的goal部分替换为new_goal，之后将这个新的transition存储入经验池buffer。这里之所以可以这么做是因为在动作a不变的情况下，改变goal是不会改变从原来的s转移到s’的转移概率的。</li>
+<li>先对每个回合中的所有输入做一个reward的评价</li>
+<li>然后在整个回合的数据后处理时，循环到i时，从i之后的数据里随机选出一部分作为新的goal，然后利用这些新的goal重新计算i这个数据的reward，然后将其放入到replay buffer中，可能导致replay buffer中包含多条由同一条数据而来但是reward不同的数据条目</li>
+<li>可以在每训练一个回合之后更换初始的goal（也就是在筛选之前针对所有对象的goal）达到多目标训练的效果</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ZYunfeii/DRL_algorithm_library/blob/master/DDPG/DDPG_spinningup_HER/main.py">示例代码</a></li>
+<li><img src="/imgs/000d30cf3c120ce06399c7b098681c9274e60a801893efe32854f09bf18d13d6.png" alt="picture 5">  </li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/10/09/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%A4%8D%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1208,111 +1308,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/09/03/%E6%9C%89%E5%BA%8F%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/09/03/%E6%9C%89%E5%BA%8F%E8%A1%A8/" class="post-title-link" itemprop="url">有序表</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-09-03 10:06:15" itemprop="dateCreated datePublished" datetime="2022-09-03T10:06:15+08:00">2022-09-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-27 15:48:27" itemprop="dateModified" datetime="2024-04-27T15:48:27+08:00">2024-04-27</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>308</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="有序表的实现"><a href="#有序表的实现" class="headerlink" title="有序表的实现"></a>有序表的实现</h2><ul>
-<li>底层：<ul>
-<li>红黑树</li>
-<li>AVL树</li>
-<li>SB树</li>
-<li>跳表</li>
-</ul>
-</li>
-<li>时间复杂度：O(log(N)) </li>
-<li>红黑树、AVL树、SB树是<em>平衡搜索二叉树</em><h3 id="搜索二叉树的插入和删除"><a href="#搜索二叉树的插入和删除" class="headerlink" title="搜索二叉树的插入和删除"></a>搜索二叉树的插入和删除</h3></li>
-<li>插入直接按照大小分支插入即可</li>
-<li>假如没有子节点的节点直接删除即可</li>
-<li>假如删除的节点只有一个孩子节点<ul>
-<li>直接让父节点的指针指向唯一的孩子即可</li>
-</ul>
-</li>
-<li>左右双全：<ul>
-<li>用左树最右的节点或者是右树最左的节点</li>
-<li>这样的节点必然不是两个孩子的节点</li>
-<li>先将这个节点的子节点（假如存在）移到这个节点原来的位置</li>
-<li>然后将这个节点移到被删除的具有两个孩子的节点的位置<h3 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h3></li>
-</ul>
-</li>
-<li>防止因为用户数据输入顺序的原因导致树左右不平衡使得搜索的时间复杂度上升</li>
-<li>左树和右树的体量差不多大</li>
-<li>AVL树在增删结点的时候会从这个节点的父节点开始向上查每个节点的平衡性</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1384,14 +1379,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">185</span>
+          <span class="site-state-item-count">186</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1428,13 +1423,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">654k</span>
+    <span title="站点总字数">660k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19:49</span>
+    <span title="站点阅读时长">19:59</span>
 </div>
 
         
