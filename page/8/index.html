@@ -443,7 +443,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-24 17:38:44" itemprop="dateModified" datetime="2024-06-24T17:38:44+08:00">2024-06-24</time>
+                <time title="修改时间：2024-08-08 13:23:34" itemprop="dateModified" datetime="2024-08-08T13:23:34+08:00">2024-08-08</time>
               </span>
 
           <br>
@@ -459,7 +459,7 @@
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>48 分钟</span>
+              <span>49 分钟</span>
             </span>
 
         </div>
@@ -659,7 +659,10 @@
 <li>编程时 static 的记忆性，和全局性的特点可以让在不同时期调用的函数进行通信，传递信息，而 C++的静态成员则可以在多个对象实例间进行通信，传递信息<h3 id="volatile有什么作用"><a href="#volatile有什么作用" class="headerlink" title="volatile有什么作用"></a>volatile有什么作用</h3></li>
 <li>状态寄存器一类的并行设备硬件寄存器</li>
 <li>一个中断服务子程序会访问到的非自动变量</li>
-<li>多线程间被几个任务共享的变量<h3 id="一个参数可以既是const又是volatile吗"><a href="#一个参数可以既是const又是volatile吗" class="headerlink" title="一个参数可以既是const又是volatile吗"></a>一个参数可以既是const又是volatile吗</h3></li>
+<li>多线程间被几个任务共享的变量<h4 id="volatile修饰的指针"><a href="#volatile修饰的指针" class="headerlink" title="volatile修饰的指针"></a>volatile修饰的指针</h4></li>
+<li><code>int * volatile p;</code>指的是这个指针指向的地址可能随时发生改变</li>
+<li><code>volatile int * p;</code>说的是指针指向的内存的内容可能会被改变</li>
+<li><code>volatile int * volatile p;</code>此时指针指向的地址和指针指向的内容都可能发生改变<h3 id="一个参数可以既是const又是volatile吗"><a href="#一个参数可以既是const又是volatile吗" class="headerlink" title="一个参数可以既是const又是volatile吗"></a>一个参数可以既是const又是volatile吗</h3></li>
 <li>可以，用const和volatile同时修饰变量，表示这个变量在程序内部是只读的，不能改变的，只在程序外部条件变化下改变，并且编译器不会优化这个变量。每次使用这个变量时，都要小心地去内存读取这个变量的值，而不是去寄存器读取它的备份</li>
 <li>在此一定要注意const的意思，const只是不允许程序中的代码改变某一变量，其在编译期发挥作用，它并没有实际地禁止某段内存的读写特性</li>
 </ul>
@@ -3143,7 +3146,7 @@ UDP接收方收到报文后，不需要给出任何确认
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">20:02</span>
+    <span title="站点阅读时长">20:03</span>
 </div>
 
         
