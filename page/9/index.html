@@ -182,6 +182,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/10/13/PPO%E8%B0%83%E5%8F%82%E5%AE%9E%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/10/13/PPO%E8%B0%83%E5%8F%82%E5%AE%9E%E5%BD%95/" class="post-title-link" itemprop="url">PPO调参实录</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-13 18:54:17" itemprop="dateCreated datePublished" datetime="2022-10-13T18:54:17+08:00">2022-10-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-13 16:15:40" itemprop="dateModified" datetime="2022-11-13T16:15:40+08:00">2022-11-13</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>8.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>15 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="PPO调参实录"><a href="#PPO调参实录" class="headerlink" title="PPO调参实录"></a>PPO调参实录</h1><h2 id="采用甄别reward的replay-buffer"><a href="#采用甄别reward的replay-buffer" class="headerlink" title="采用甄别reward的replay buffer"></a>采用甄别reward的replay buffer</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">store</span>(<span class="params">self, transition</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(self.buffer)&gt;=self.buffer_capacity:</span><br><span class="line">        tmp = np.random.randint(low=<span class="number">0</span>, high=<span class="built_in">len</span>(self.buffer))</span><br><span class="line">        <span class="keyword">if</span> self.buffer[tmp].r &gt; transition.r:</span><br><span class="line">            <span class="keyword">if</span> np.random.randint(low=<span class="number">0</span>, high=<span class="number">2</span>) == <span class="number">1</span>:  <span class="comment"># 一半的概率 替换的时候会保留reward更高的</span></span><br><span class="line">                self.buffer[tmp] = transition</span><br><span class="line">        self.buffer[tmp] = transition</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        self.buffer.append(transition)</span><br><span class="line">    self.counter += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> self.counter % self.buffer_capacity == <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>结果</p>
+<ul>
+<li><img src="/imgs/e94f577e49117f5b41cc7faa4f930abd7e60400dbb265f1cc2530435a3534e2f.png" alt="image.png 1">  </li>
+</ul>
+</li>
+<li><p>甄别的比率降到1/3之后</p>
+<ul>
+<li><img src="/imgs/71d730a255173dfdc717d546f3cb9815b2b53c00e33de147e389c889754c1d03.png" alt="picture 4">  </li>
+</ul>
+</li>
+</ul>
+<h2 id="优化（22年11月13日）的网络"><a href="#优化（22年11月13日）的网络" class="headerlink" title="优化（22年11月13日）的网络"></a>优化（22年11月13日）的网络</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">from</span> torch.distributions <span class="keyword">import</span> Normal</span><br><span class="line"><span class="keyword">from</span> torch.utils.data.sampler <span class="keyword">import</span> BatchSampler, SubsetRandomSampler</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">torch.set_num_threads(<span class="number">12</span>)</span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">&#x27;Solve the Pendulum-v0 with PPO&#x27;</span>)</span><br><span class="line">parser.add_argument(</span><br><span class="line">    <span class="string">&#x27;--gamma&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">float</span>, default=<span class="number">0.9</span>, metavar=<span class="string">&#x27;G&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;discount factor (default: 0.9)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--seed&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">0</span>, metavar=<span class="string">&#x27;N&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;random seed (default: 0)&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--render&#x27;</span>, action=<span class="string">&#x27;store_true&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;render the environment&#x27;</span>)</span><br><span class="line">parser.add_argument(</span><br><span class="line">    <span class="string">&#x27;--log-interval&#x27;</span>,</span><br><span class="line">    <span class="built_in">type</span>=<span class="built_in">int</span>,</span><br><span class="line">    default=<span class="number">10</span>,</span><br><span class="line">    metavar=<span class="string">&#x27;N&#x27;</span>,</span><br><span class="line">    <span class="built_in">help</span>=<span class="string">&#x27;interval between training status logs (default: 10)&#x27;</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">torch.manual_seed(args.seed)</span><br><span class="line"></span><br><span class="line">TrainingRecord = namedtuple(<span class="string">&#x27;TrainingRecord&#x27;</span>, [<span class="string">&#x27;ep&#x27;</span>, <span class="string">&#x27;reward&#x27;</span>])</span><br><span class="line">Transition = namedtuple(<span class="string">&#x27;Transition&#x27;</span>, [<span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;a_log_p&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;s_&#x27;</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ActorNet</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(ActorNet, self).__init__()</span><br><span class="line">        self.fc = nn.Linear(<span class="number">3</span>, <span class="number">200</span>)</span><br><span class="line">        self.mu_head = nn.Linear(<span class="number">200</span>, <span class="number">1</span>)</span><br><span class="line">        self.sigma_head = nn.Linear(<span class="number">200</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = F.relu(self.fc(x))</span><br><span class="line">        mu = <span class="number">2.0</span> * torch.tanh(self.mu_head(x))</span><br><span class="line">        sigma = F.softplus(self.sigma_head(x))</span><br><span class="line">        <span class="keyword">return</span> (mu, sigma)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CriticNet</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(CriticNet, self).__init__()</span><br><span class="line">        self.fc = nn.Linear(<span class="number">3</span>, <span class="number">200</span>)</span><br><span class="line">        self.hidden = nn.Linear(<span class="number">200</span>, <span class="number">200</span>)</span><br><span class="line">        self.v_head = nn.Linear(<span class="number">200</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = F.relu(self.fc(x))</span><br><span class="line">        x = F.relu(self.hidden(x))</span><br><span class="line">        state_value = self.v_head(x)</span><br><span class="line">        <span class="keyword">return</span> state_value</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Agent</span>():</span></span><br><span class="line">    clip_param = <span class="number">0.1</span></span><br><span class="line">    max_grad_norm = <span class="number">0.5</span></span><br><span class="line">    ppo_epoch = <span class="number">5</span></span><br><span class="line">    buffer_capacity, batch_size = <span class="number">1000</span>, <span class="number">32</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.training_step = <span class="number">0</span></span><br><span class="line">        self.anet = ActorNet().<span class="built_in">float</span>()</span><br><span class="line">        self.cnet = CriticNet().<span class="built_in">float</span>()</span><br><span class="line">        self.buffer = []</span><br><span class="line">        self.counter = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        self.optimizer_a = optim.Adam(self.anet.parameters(), lr=<span class="number">4e-5</span>)</span><br><span class="line">        self.optimizer_c = optim.Adam(self.cnet.parameters(), lr=<span class="number">6e-5</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select_action</span>(<span class="params">self, state</span>):</span></span><br><span class="line">        state = torch.from_numpy(state).<span class="built_in">float</span>().unsqueeze(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            (mu, sigma) = self.anet(state)</span><br><span class="line">        dist = Normal(mu, sigma)</span><br><span class="line">        action = dist.sample()</span><br><span class="line">        action_log_prob = dist.log_prob(action)</span><br><span class="line">        action = action.clamp(-<span class="number">2.0</span>, <span class="number">2.0</span>)</span><br><span class="line">        <span class="keyword">return</span> action.item(), action_log_prob.item()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span>(<span class="params">self, state</span>):</span></span><br><span class="line"></span><br><span class="line">        state = torch.from_numpy(state).<span class="built_in">float</span>().unsqueeze(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            state_value = self.cnet(state)</span><br><span class="line">        <span class="keyword">return</span> state_value.item()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save_param</span>(<span class="params">self</span>):</span></span><br><span class="line">        torch.save(self.anet.state_dict(), <span class="string">&#x27;param/ppo_anet_params.pkl&#x27;</span>)</span><br><span class="line">        torch.save(self.cnet.state_dict(), <span class="string">&#x27;param/ppo_cnet_params.pkl&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">store</span>(<span class="params">self, transition</span>):</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(self.buffer)&gt;=self.buffer_capacity:</span><br><span class="line">            tmp = np.random.randint(low=<span class="number">0</span>, high=<span class="built_in">len</span>(self.buffer))</span><br><span class="line">            <span class="keyword">if</span> self.buffer[tmp].r &gt; transition.r:</span><br><span class="line">                <span class="keyword">if</span> np.random.randint(low=<span class="number">0</span>, high=<span class="number">3</span>) == <span class="number">1</span>:  <span class="comment"># 一半的概率 替换的时候会保留reward更高的</span></span><br><span class="line">                    self.buffer[tmp] = transition</span><br><span class="line">            self.buffer[tmp] = transition</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.buffer.append(transition)</span><br><span class="line">        self.counter += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> self.counter % self.buffer_capacity == <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.training_step += <span class="number">1</span></span><br><span class="line">        self.counter = <span class="number">1</span></span><br><span class="line">        s = torch.tensor([t.s <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>)</span><br><span class="line">        a = torch.tensor([t.a <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        r = torch.tensor([t.r <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        s_ = torch.tensor([t.s_ <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>)</span><br><span class="line"></span><br><span class="line">        old_action_log_probs = torch.tensor(</span><br><span class="line">            [t.a_log_p <span class="keyword">for</span> t <span class="keyword">in</span> self.buffer], dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        r = (r - r.mean()) / (r.std() + <span class="number">1e-5</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            target_v = r + args.gamma * self.cnet(s_)</span><br><span class="line"></span><br><span class="line">        adv = (target_v - self.cnet(s)).detach()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(self.ppo_epoch):</span><br><span class="line">            <span class="comment"># indexArray = []</span></span><br><span class="line">            <span class="comment"># dist = Normal(self.buffer_capacity, self.buffer_capacity / 4)</span></span><br><span class="line">            <span class="comment"># sampleList = []</span></span><br><span class="line">            <span class="comment"># cntArray = [0 for i in range(self.buffer_capacity)]</span></span><br><span class="line">            <span class="comment"># # print(cntArray)</span></span><br><span class="line">            <span class="comment"># dist = Normal(self.batch_size*2/3, self.batch_size)</span></span><br><span class="line">            <span class="comment"># for i in range(self.batch_size):</span></span><br><span class="line">            <span class="comment">#     cnt = 0</span></span><br><span class="line">            <span class="comment">#     samples = []</span></span><br><span class="line">            <span class="comment">#     while cnt &lt; self.batch_size:</span></span><br><span class="line">            <span class="comment">#         # print(dist.sample())</span></span><br><span class="line">            <span class="comment">#         # print(cnt)</span></span><br><span class="line">            <span class="comment">#         tmp = round(float(dist.sample()))</span></span><br><span class="line">            <span class="comment">#         if 0 &lt;= tmp and tmp &lt; self.buffer_capacity:</span></span><br><span class="line">            <span class="comment">#             if not tmp in samples:</span></span><br><span class="line">            <span class="comment">#                 if not cntArray[tmp]&gt;4:</span></span><br><span class="line">            <span class="comment">#                     cnt += 1</span></span><br><span class="line">            <span class="comment">#                     samples.append(tmp)</span></span><br><span class="line">            <span class="comment">#                     cntArray[tmp]+=1</span></span><br><span class="line">            <span class="comment">#     sampleList.append(samples)</span></span><br><span class="line">            <span class="keyword">for</span> index <span class="keyword">in</span> BatchSampler(</span><br><span class="line">                    SubsetRandomSampler(<span class="built_in">range</span>(self.buffer_capacity)), self.batch_size, <span class="literal">False</span>):</span><br><span class="line">            <span class="comment"># for index in sampleList:</span></span><br><span class="line">                <span class="comment"># print(len(index))</span></span><br><span class="line">                (mu, sigma) = self.anet(s[index])</span><br><span class="line">                <span class="comment"># print(mu)</span></span><br><span class="line">                dist = Normal(mu, sigma)</span><br><span class="line">                action_log_probs = dist.log_prob(a[index])</span><br><span class="line">                ratio = torch.exp(action_log_probs - old_action_log_probs[index])</span><br><span class="line"></span><br><span class="line">                surr1 = ratio * adv[index]</span><br><span class="line">                surr2 = torch.clamp(ratio, <span class="number">1.0</span> - self.clip_param,</span><br><span class="line">                                    <span class="number">1.0</span> + self.clip_param) * adv[index]</span><br><span class="line">                action_loss = -torch.<span class="built_in">min</span>(surr1, surr2).mean()</span><br><span class="line"></span><br><span class="line">                self.optimizer_a.zero_grad()</span><br><span class="line">                action_loss.backward()</span><br><span class="line">                nn.utils.clip_grad_norm_(self.anet.parameters(), self.max_grad_norm)</span><br><span class="line">                self.optimizer_a.step()</span><br><span class="line"></span><br><span class="line">                value_loss = F.smooth_l1_loss(self.cnet(s[index]), target_v[index])</span><br><span class="line">                self.optimizer_c.zero_grad()</span><br><span class="line">                value_loss.backward()</span><br><span class="line">                nn.utils.clip_grad_norm_(self.cnet.parameters(), self.max_grad_norm)</span><br><span class="line">                self.optimizer_c.step()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># del self.buffer[:]</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">flagVar = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">pendulumGoal = [<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rewardFunc</span>(<span class="params">goal, state, absMax</span>):</span></span><br><span class="line">    tmp = -(np.power(state[<span class="number">0</span>] - goal[<span class="number">0</span>], <span class="number">2</span>) + <span class="number">1</span>*np.power(state[<span class="number">1</span>] - goal[<span class="number">1</span>], <span class="number">2</span>) + <span class="number">0.1</span> * np.power(state[<span class="number">2</span>] - goal[<span class="number">2</span>], <span class="number">2</span>))</span><br><span class="line">    <span class="keyword">return</span> (tmp + absMax)/absMax</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="keyword">global</span> flagVar</span><br><span class="line">    <span class="comment"># env = gym.make(&#x27;Pendulum-v1&#x27;, render_mode=&quot;human&quot;)</span></span><br><span class="line">    env = gym.make(<span class="string">&#x27;Pendulum-v1&#x27;</span>)</span><br><span class="line">    <span class="comment"># env.seed(args.seed)</span></span><br><span class="line">    <span class="comment"># env.render()</span></span><br><span class="line">    agent = Agent()</span><br><span class="line"></span><br><span class="line">    training_records = []</span><br><span class="line">    running_reward = -<span class="number">1000</span></span><br><span class="line">    <span class="comment"># state = env.reset()</span></span><br><span class="line">    TRAIN_EPISODE = <span class="number">1000</span></span><br><span class="line">    EPISODE_LENGTH = <span class="number">200</span></span><br><span class="line">    <span class="keyword">for</span> i_ep <span class="keyword">in</span> <span class="built_in">range</span>(TRAIN_EPISODE):</span><br><span class="line">        score = <span class="number">0</span></span><br><span class="line">        state = np.array(env.reset()[<span class="number">0</span>])</span><br><span class="line">        <span class="comment"># if i_ep % 100 == 0:</span></span><br><span class="line">        <span class="comment">#     print(&#x27;!&#x27;)</span></span><br><span class="line">        <span class="comment">#     env.render()</span></span><br><span class="line">        <span class="comment"># print(type(state))</span></span><br><span class="line">        start = time.time()</span><br><span class="line">        <span class="keyword">if</span> i_ep == <span class="number">0</span>:</span><br><span class="line">            firstY = []</span><br><span class="line">        <span class="keyword">if</span> i_ep == TRAIN_EPISODE-<span class="number">1</span>:</span><br><span class="line">            lastX = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(EPISODE_LENGTH)]</span><br><span class="line">            lastY = []</span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(EPISODE_LENGTH):</span><br><span class="line">            action, action_log_prob = agent.select_action(state)</span><br><span class="line">            <span class="comment"># if i_ep%100 == 0:</span></span><br><span class="line">                <span class="comment"># print(&#x27;!&#x27;)</span></span><br><span class="line">                <span class="comment"># env.render()</span></span><br><span class="line">            envRet = env.step([action])</span><br><span class="line">            <span class="comment"># print(envRet)</span></span><br><span class="line">            state_, reward, done, _, _ = envRet</span><br><span class="line">            <span class="keyword">if</span> i_ep == TRAIN_EPISODE-<span class="number">1</span>:</span><br><span class="line">                lastY.append(math.acos(state_[<span class="number">0</span>]))</span><br><span class="line">                <span class="comment"># lastY.append(state_[0])</span></span><br><span class="line">            <span class="keyword">elif</span> i_ep == <span class="number">0</span>:</span><br><span class="line">                firstY.append(math.acos(state_[<span class="number">0</span>]))</span><br><span class="line">                <span class="comment"># firstY.append(state_[0])</span></span><br><span class="line">            <span class="comment"># print(state_)</span></span><br><span class="line">            <span class="comment"># if args.render:</span></span><br><span class="line">            <span class="comment">#     env.render()</span></span><br><span class="line">            <span class="keyword">if</span> agent.store(Transition(state, action, action_log_prob, (reward + <span class="number">8</span>) / <span class="number">8</span>, state_)):</span><br><span class="line">                agent.update()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># reward = rewardFunc(pendulumGoal, state_, 8)</span></span><br><span class="line">            <span class="comment"># if agent.store(Transition(state, action, action_log_prob, reward, state_)):</span></span><br><span class="line">            <span class="comment">#     agent.update()</span></span><br><span class="line"></span><br><span class="line">            score += reward</span><br><span class="line">            state = state_</span><br><span class="line"></span><br><span class="line">        running_reward = running_reward * <span class="number">0.85</span> + score * <span class="number">0.1</span></span><br><span class="line">        training_records.append(TrainingRecord(i_ep, running_reward))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> i_ep % args.log_interval == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Ep &#123;&#125;\tMoving average score: &#123;:.2f&#125;\t&#x27;</span>.<span class="built_in">format</span>(i_ep, running_reward))</span><br><span class="line">            time_ = time.time()</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;time used is &#123;:.5f&#125;&quot;</span>.<span class="built_in">format</span>(time_ - start))</span><br><span class="line">            <span class="comment"># start = time_</span></span><br><span class="line">        <span class="comment"># if running_reward &gt; -200:</span></span><br><span class="line">        <span class="comment">#     print(&quot;Solved! Moving average score is now &#123;&#125;!&quot;.format(running_reward))</span></span><br><span class="line">        <span class="comment">#     env.close()</span></span><br><span class="line">        <span class="comment">#     agent.save_param()</span></span><br><span class="line">        <span class="comment">#     with open(&#x27;log/ppo_training_records.pkl&#x27;, &#x27;wb&#x27;) as f:</span></span><br><span class="line">        <span class="comment">#         pickle.dump(training_records, f)</span></span><br><span class="line">        <span class="comment">#     break</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment"># if running_reward &gt; -850 and not flagVar:  # 减小学习率防止波动</span></span><br><span class="line">        <span class="comment">#     flagVar = True</span></span><br><span class="line">        <span class="comment">#     print(&quot;-------------------------------&quot;)</span></span><br><span class="line">        <span class="comment">#     agent.optimizer_a = optim.Adam(agent.anet.parameters(), lr=1e-5)</span></span><br><span class="line">        <span class="comment">#     agent.optimizer_c = optim.Adam(agent.cnet.parameters(), lr=2e-5)</span></span><br><span class="line"></span><br><span class="line">    plt.figure(figsize=(<span class="number">8</span>, <span class="number">5</span>))</span><br><span class="line">    plt.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;SimHei&#x27;</span>]  <span class="comment"># 指定默认字体</span></span><br><span class="line">    plt.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span>  <span class="comment"># 解决保存图像时符号-显示为方块的2问题</span></span><br><span class="line">    plt.subplot(<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">    plt.plot([r.ep <span class="keyword">for</span> r <span class="keyword">in</span> training_records], [r.reward <span class="keyword">for</span> r <span class="keyword">in</span> training_records])</span><br><span class="line">    plt.title(<span class="string">&#x27;PPO&#x27;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&#x27;Episode&#x27;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&#x27;Moving averaged episode reward&#x27;</span>)</span><br><span class="line">    <span class="comment"># plt.savefig(&quot;img/ppo.png&quot;)</span></span><br><span class="line">    plt.subplot(<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>)</span><br><span class="line">    plt.plot(lastX, firstY, label=<span class="string">&quot;第一次&quot;</span>)</span><br><span class="line">    plt.plot(lastX, lastY, label=<span class="string">&quot;最后一次&quot;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&quot;cos(&quot;</span>+<span class="string">r&#x27;$\theta$&#x27;</span>+<span class="string">&quot;)&quot;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&quot;time&quot;</span>)</span><br><span class="line">    plt.legend()</span><br><span class="line">    plt.tight_layout()</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br><span class="line">    <span class="comment"># example = [i for i in range(100)]</span></span><br><span class="line">    <span class="comment"># print(len([i for i in BatchSampler(SubsetRandomSampler(range(100)), 20, False)]))</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>效果<img src="/imgs/d0ba034ff53840a354c441cf51e2eacc8194cbbd0fffe8f9ec9d557d97fe54ee.png" alt="picture 4">  </li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/10/13/HindsightExperienceReplay%EF%BC%88HER%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1221,93 +1316,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/09/17/%E8%A7%A3%E5%86%B3VMwareTools%E5%AE%89%E8%A3%85%E4%BA%86%E4%BB%8D%E7%84%B6%E4%B8%8D%E8%83%BD%E5%AE%9E%E7%8E%B0%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%92%8C%E4%B8%BB%E6%9C%BA%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E7%9A%84%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/09/17/%E8%A7%A3%E5%86%B3VMwareTools%E5%AE%89%E8%A3%85%E4%BA%86%E4%BB%8D%E7%84%B6%E4%B8%8D%E8%83%BD%E5%AE%9E%E7%8E%B0%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%92%8C%E4%B8%BB%E6%9C%BA%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">解决VMwareTools安装了仍然不能实现虚拟机和主机复制粘贴的问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-09-17 18:20:54 / 修改时间：18:24:54" itemprop="dateCreated datePublished" datetime="2022-09-17T18:20:54+08:00">2022-09-17</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>297</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="解决VMwareTools安装了仍然不能实现虚拟机和主机复制粘贴的问题"><a href="#解决VMwareTools安装了仍然不能实现虚拟机和主机复制粘贴的问题" class="headerlink" title="解决VMwareTools安装了仍然不能实现虚拟机和主机复制粘贴的问题"></a>解决VMwareTools安装了仍然不能实现虚拟机和主机复制粘贴的问题</h2><ul>
-<li>Ubuntu版本：<code>18.04</code></li>
-<li>先尝试使用VMware提供的安装方法（从插入的CD驱动器中安装包）</li>
-<li><strong>失败解决办法</strong><ul>
-<li>命令行输入<code>sudo apt-get autoremove open-vm-tools</code></li>
-<li>然后使用<code>sudo apt-get install open-vm-tools-desktop</code></li>
-<li>假如安装不上的话就执行<code>sudo apt-get update</code>和<code>sudo apt-get install open-vm-tools-desktop fuse</code>两句命令，但是实际上直接update之后就可以安装了</li>
-<li>然后重启虚拟机，尝试拖放和粘贴文字操作已经可行</li>
-</ul>
-</li>
-<li>参考链接<ul>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhouzhihao/p/16486787.html">参考</a></li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1379,7 +1387,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">186</span>
+          <span class="site-state-item-count">187</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1423,7 +1431,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">661k</span>
+    <span title="站点总字数">662k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>

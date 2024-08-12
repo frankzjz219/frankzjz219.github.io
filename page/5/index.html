@@ -182,6 +182,97 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/09/04/Cpp%E8%AF%AD%E8%A8%80STL%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%B0%93%E8%AF%8D%E7%9A%84%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/04/Cpp%E8%AF%AD%E8%A8%80STL%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%B0%93%E8%AF%8D%E7%9A%84%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">C++语言STL中使用谓词的方法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-09-04 14:33:19" itemprop="dateCreated datePublished" datetime="2023-09-04T14:33:19+08:00">2023-09-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-27 15:48:27" itemprop="dateModified" datetime="2024-04-27T15:48:27+08:00">2024-04-27</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li>C++的STL模板库中很多容器都需要谓词，比如有序集合<code>set</code>等，此时定义谓词主要有两种方式<h2 id="使用重载运算符作为谓词"><a href="#使用重载运算符作为谓词" class="headerlink" title="使用重载运算符作为谓词"></a>使用重载运算符作为谓词</h2></li>
+<li>新建一个struct<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">compFun</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">const</span> shared_ptr&lt;test&gt;&amp; a, <span class="keyword">const</span> shared_ptr&lt;test&gt;&amp; b)</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a-&gt;id&gt;b-&gt;id;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* data */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li> 传参的时候使用<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">set&lt;shared_ptr&lt;test&gt;, compFun&gt; setTest;</span><br></pre></td></tr></table></figure></li>
+<li>上面不需要显式的传入比较函数，因为类型已经包含了比较函数<h2 id="使用lambda表达式作为谓词"><a href="#使用lambda表达式作为谓词" class="headerlink" title="使用lambda表达式作为谓词"></a>使用lambda表达式作为谓词</h2></li>
+<li>定义<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">function&lt;<span class="built_in"><span class="keyword">bool</span></span>(<span class="keyword">const</span> test&amp;, <span class="keyword">const</span> test&amp;)&gt; funComp = [](<span class="keyword">const</span> test&amp; a, <span class="keyword">const</span> test&amp; b)</span><br><span class="line">&#123;</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;comparing!&quot;</span>&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">return</span> (a.id)&lt;(b.id);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li>使用<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">set&lt;test, function&lt;<span class="keyword">bool</span>(<span class="keyword">const</span> test&amp;, <span class="keyword">const</span> test&amp;)&gt;&gt; <span class="built_in">setTest</span>(funComp);</span><br></pre></td></tr></table></figure></li>
+<li>注意，<strong>不显式的传入lambda表达式的时候不能向set中插入超过一个元素</strong>，否则会因为触发比较而报错<code>what():  bad_function_call</code></li>
+<li>根据<code>leetcode</code>的测试，使用内联函数作为STL标准库的函数的谓词，会比使用<code>static inline</code>但是功能相同的函数作为谓词快一些，比如<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span>&amp; a, <span class="keyword">int</span>&amp; b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a&gt;b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 更快的方法是</span></span><br><span class="line"><span class="keyword">auto</span> cmp = [](<span class="keyword">int</span> a, <span class="keyword">int</span> b)-&gt;<span class="keyword">bool</span>&#123;<span class="keyword">return</span> a&gt;b;&#125;;</span><br></pre></td></tr></table></figure></li>
+<li>此处注意使用<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> cmp = [](<span class="keyword">int</span> a, <span class="keyword">int</span> b)-&gt;<span class="keyword">bool</span>&#123;<span class="keyword">return</span> a&lt;b;&#125;;</span><br><span class="line"><span class="comment">// 以下二者结果不同，混用可能得到类型错误</span></span><br><span class="line"><span class="keyword">decltype</span>(cmp);function&lt;<span class="built_in"><span class="keyword">bool</span></span>(<span class="keyword">int</span>, <span class="keyword">int</span>)&gt;;</span><br></pre></td></tr></table></figure></li>
+<li>注意对于cpp的优先级队列而言，使用<strong>大于号作为比较符得到的是最小堆，小于号是最大堆</strong></li>
+<li>优先级队列在使用谓词之前必须先指定存储的数据结构，比如如下代码<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> cmp = [](<span class="keyword">int</span> a, <span class="keyword">int</span> b)-&gt;<span class="keyword">bool</span>&#123;<span class="keyword">return</span> a&lt;b;&#125;;</span><br><span class="line">priority_queue&lt;<span class="keyword">int</span>, vector&lt;<span class="keyword">int</span>&gt;, function&lt;<span class="keyword">bool</span>(<span class="keyword">int</span>, <span class="keyword">int</span>)&gt;&gt; <span class="built_in">pq</span>(cmp);</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/09/02/%E4%BD%BF%E7%94%A8gdb%E8%B0%83%E8%AF%95qemu%E4%B8%8A%E7%9A%84Linux/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1207,287 +1298,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0%EF%BC%884%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0%EF%BC%884%EF%BC%89/" class="post-title-link" itemprop="url">操作系统and编译随记（4）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-06-19 12:15:53" itemprop="dateCreated datePublished" datetime="2023-06-19T12:15:53+08:00">2023-06-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-06-25 19:41:22" itemprop="dateModified" datetime="2023-06-25T19:41:22+08:00">2023-06-25</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>6.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>12 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="在操作系统上实现进程"><a href="#在操作系统上实现进程" class="headerlink" title="在操作系统上实现进程"></a>在操作系统上实现进程</h2><h3 id="Thread-OS"><a href="#Thread-OS" class="headerlink" title="Thread OS"></a>Thread OS</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;am.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;klib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;klib-macros.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NTASK 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">union</span> <span class="title">task</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> <span class="title">task</span> *<span class="title">next</span>;</span></span><br><span class="line">    <span class="keyword">void</span>      (*entry)(<span class="keyword">void</span> *);</span><br><span class="line">    Context    *context;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">uint8_t</span> <span class="built_in">stack</span>[<span class="number">8192</span>];</span><br><span class="line">&#125; Task;</span><br><span class="line"></span><br><span class="line">Task *current, tasks[NTASK];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">thread_entry</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    yield();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Context *<span class="title">on_interrupt</span><span class="params">(Event ev, Context *ctx)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!current) &#123;</span><br><span class="line">    current = &amp;tasks[<span class="number">0</span>];  <span class="comment">// First trap</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    current-&gt;context = ctx;</span><br><span class="line">    current = current-&gt;next;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> current-&gt;context;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  cte_init(on_interrupt);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; LENGTH(tasks); i++) &#123;</span><br><span class="line">    Task *task    = &amp;tasks[i];</span><br><span class="line">    Area <span class="built_in">stack</span>    = (Area) &#123; &amp;task-&gt;context + <span class="number">1</span>, task + <span class="number">1</span> &#125;;</span><br><span class="line">    task-&gt;context = kcontext(<span class="built_in">stack</span>, thread_entry, <span class="literal">NULL</span>);</span><br><span class="line">    task-&gt;next    = &amp;tasks[(i + <span class="number">1</span>) % LENGTH(tasks)];</span><br><span class="line">  &#125;</span><br><span class="line">  yield();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="上面的系统与真实的进程有什么区别"><a href="#上面的系统与真实的进程有什么区别" class="headerlink" title="上面的系统与真实的进程有什么区别"></a>上面的系统与真实的进程有什么区别</h3><ul>
-<li>每个进程都能看到<strong>所有变量</strong></li>
-<li>进程的地址空间<strong>不是独立的</strong><h3 id="如何解决"><a href="#如何解决" class="headerlink" title="如何解决"></a>如何解决</h3></li>
-<li>硬件对内存地址进行翻译，将虚拟内存地址翻译为物理内存地址</li>
-<li><img src="/imgs/645d35334ac80ab478cea330d373549cf3cebc9107209d7644b9c50756a24b5b.png" alt="picture 1">  </li>
-<li>用户态的程序不能够访问上述映射的数据结构</li>
-<li>系统虚拟地址空间映射到实际地址空间可能不是全部的（可能<u>没有分配物理页面</u>）<ul>
-<li>访问的没有分配的页面的时候会有缺页异常被调用</li>
-<li>只是在地址空间上做了一个标记</li>
-</ul>
-</li>
-<li>使用二叉搜索树找到某一个内存空间的位置（一个有序的集合）<h3 id="多个进程的不同虚拟地址映射到同一个位置"><a href="#多个进程的不同虚拟地址映射到同一个位置" class="headerlink" title="多个进程的不同虚拟地址映射到同一个位置"></a>多个进程的不同虚拟地址映射到同一个位置</h3></li>
-<li>比如很多进程都用到<code>libc</code>，但是所有进程都用的是同一个而且只读</li>
-<li>证明：找到映射的物理地址是同一个</li>
-<li>复制的不同进程中使用<code>malloc</code>分配的是不同的，但是代码部分的地址是相同的，不会真的复制<h3 id="fork-写时复制"><a href="#fork-写时复制" class="headerlink" title="fork()写时复制"></a><code>fork()</code>写时复制</h3></li>
-<li><img src="/imgs/b81fe55c1611965d77874e50f2a6f58a96dda8b596cc43c44295f53a81834b0b.png" alt="picture 2">  </li>
-<li>防止<code>fork</code>之后直接执行<code>execve</code>浪费时间</li>
-<li>只读的部分就不需要拷贝</li>
-<li>写的时候触发一个缺页中断，写这个位置的进程在检查权限之后会拷贝一次这个页面</li>
-<li>注意是按页面拷贝的，而不是按变量拷贝的，比如在一个巨大的数组中修改一个值，只拷贝被修改的这个页面<h3 id="利用fork-创建内存的历史记录"><a href="#利用fork-创建内存的历史记录" class="headerlink" title="利用fork()创建内存的历史记录"></a>利用fork()创建内存的历史记录</h3></li>
-<li>一个长期执行的应用程序防止出现bug导致crash，可以每隔一段时间fork()一次，相当于记录了一个快照，如果出错的话可以回退<h3 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h3></li>
-<li><img src="/imgs/916913544eea956df2161d852a39cc09cd7f5620e890e2fdf1ac20ad1d2acc37.png" alt="picture 3"> <h4 id="手动控制CPU的调度"><a href="#手动控制CPU的调度" class="headerlink" title="手动控制CPU的调度"></a>手动控制CPU的调度</h4></li>
-<li>Linux没有硬实时的机制，只能体现在CPU资源获得的控制上</li>
-<li>使用<code>nice</code>分配CPU<h4 id="多级反馈调度队列"><a href="#多级反馈调度队列" class="headerlink" title="多级反馈调度队列"></a>多级反馈调度队列</h4></li>
-<li>如果一个程序是计算密集的，可以往后排，但是如果这个程序需要与用户交互那就需要往前排</li>
-<li>实现的方式是如果一个程序没有用完时间片就主动交出CPU，就提高它的优先级，否则降低<h4 id="尽量公平分配CPU"><a href="#尽量公平分配CPU" class="headerlink" title="尽量公平分配CPU"></a>尽量公平分配CPU</h4></li>
-<li><img src="/imgs/511133687f997c6d22afeb6849ce33292bf31547a629e42e3e02749e0da04ba9.png" alt="picture 4">  </li>
-<li>中断的时候补偿获得过CPU最少的进程</li>
-<li>使用红黑树把所有可以调度的进程的时间排序<h3 id="如何在公平的调度之下实现不同的优先级"><a href="#如何在公平的调度之下实现不同的优先级" class="headerlink" title="如何在公平的调度之下实现不同的优先级"></a>如何在公平的调度之下实现不同的优先级</h3></li>
-<li>不同进程运行的时间的计算方式不同，不同的人的时钟不一样快即可，优先级高的人的时钟慢，否则就快一些<h3 id="真实的CPU调度"><a href="#真实的CPU调度" class="headerlink" title="真实的CPU调度"></a>真实的CPU调度</h3></li>
-<li>低优先级的进程持有锁的时候被高优先级打断了怎么办</li>
-<li><u>实时操作系统的操作就是<strong>高优先级的进程可以无条件抢占低优先级</strong>的进程</u></li>
-<li>操作系统需要知道到底谁获得了什么锁，在什么时候释放</li>
-<li>优先级继承：<ul>
-<li>低优先级的任务阻碍了高优先级的任务，则低优先级的任务会继承高优先级任务的优先级</li>
-<li>优先级反转<ul>
-<li><img src="/imgs/a5a7267d9035709b1ea47c92a09a49894cdf6a2c4ea147ebedd896e83eee63ee.png" alt="picture 5">  <h3 id="多处理器调度"><a href="#多处理器调度" class="headerlink" title="多处理器调度"></a>多处理器调度</h3></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><img src="/imgs/37e5ea926bc0162e5b650495e824b86fd50f467606f81dc1bc08dee45038737d.png" alt="picture 6">  </li>
-<li><img src="/imgs/95e5c77318d5e738409d65367a3e4640140a2cd9f1a2b73441259b7c5804e6da.png" alt="picture 7">  </li>
-<li>处理器逻辑门跳变的时候会发热产生功耗，也就是所谓的动态功耗（另外还有静态功耗）<h2 id="什么是core-dump"><a href="#什么是core-dump" class="headerlink" title="什么是core dump"></a>什么是core dump</h2></li>
-<li>将程序crash的时候的内存保存成elf文件，事后可以用gdb调试<h2 id="输入输出设备"><a href="#输入输出设备" class="headerlink" title="输入输出设备"></a>输入输出设备</h2></li>
-<li>I/O是什么</li>
-<li>设备抽象成寄存器<ul>
-<li><img src="/imgs/4e0dcd5aa40f3a83efb5f928fc793bb1ffeda77c7e6d7dbb9f68dd5afbc8ec07.png" alt="picture 8">  </li>
-</ul>
-</li>
-<li>将设备寄存器<strong>映射到内粗地址</strong>上</li>
-<li>CPU<u>像访问内存一样访问寄存器</u><h2 id="设备树"><a href="#设备树" class="headerlink" title="设备树"></a>设备树</h2></li>
-<li>告诉系统任何设备在什么位置</li>
-<li><img src="/imgs/ce8514bb8c3ac03e14091fc35c0e7ad2700ad16545bf1225518cdef8c50bf2e3.png" alt="picture 9">  <h2 id="总线"><a href="#总线" class="headerlink" title="总线"></a>总线</h2></li>
-<li>如何在不增加系统IO设计的基础上扩展其他设备</li>
-<li>通过总线连接设备</li>
-<li>连接其他总线</li>
-<li>将所有的IO设备统一管理起来的设备</li>
-<li><img src="/imgs/e9a364661e7974eb38fdea09b042ab8bce8d67f21d8d3ba88c062c9d5383bf8f.png" alt="picture 10">  </li>
-<li><code>PCI</code>可以连接<code>USB</code>总线</li>
-<li>速度快的设备是直接连接在PCI总线上的<ul>
-<li> 显卡是直接挂载PCI总线上的</li>
-<li> 千兆网卡</li>
-<li> 桥接USB、SATA等控制器也可以<h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2></li>
-</ul>
-</li>
-<li>什么是中断？</li>
-<li>中断就是CPU上的一根线</li>
-<li>处理重要的中断的时候需要屏蔽掉其他的中断<h2 id="DMA"><a href="#DMA" class="headerlink" title="DMA"></a>DMA</h2></li>
-<li>大量的内存拷贝需要占用很长的CPU时间</li>
-<li><img src="/imgs/4d5162de01434b9faa779ed7a95a43295ccb4f91683202fe7b910bfa74f69d31.png" alt="picture 12">  </li>
-<li>此时引入一个专门的拷贝控制器</li>
-<li><img src="/imgs/2d4ca609192063157056dce1daeac7750787e6ea423218c89e279969719b3393.png" alt="picture 11">  </li>
-<li>此时内存复制不再需要CPU的直接参与，节约时间</li>
-<li>用于控制内存和设备之间传输数据<h2 id="GPU"><a href="#GPU" class="headerlink" title="GPU"></a>GPU</h2></li>
-<li><img src="/imgs/1d6d125acabe82b610e452fc49ab309f6106c9ac5f35ab55e4e17e16f3322b3c.png" alt="picture 13">  </li>
-<li>将通用计算简化，得到可以大量并行的计算<h3 id="如何绘制三维画面"><a href="#如何绘制三维画面" class="headerlink" title="如何绘制三维画面"></a>如何绘制三维画面</h3></li>
-<li>任何一个多边形都可以分为<code>n-2</code>个三角形</li>
-<li>为每个三角形贴图</li>
-<li>将三角形投射到摄像机的平面上</li>
-<li><img src="/imgs/f7b3d21cba0a06fe1a8f4106942e0df5ef32ee2641438873b0a6cc3dbc3d3539.png" alt="picture 14">  <h2 id="IO设备的抽象和分类"><a href="#IO设备的抽象和分类" class="headerlink" title="IO设备的抽象和分类"></a>IO设备的抽象和分类</h2></li>
-<li><img src="/imgs/772c552ea3472f7c2b691064f62ecf123e79793a371f26ef7d5fc3f19c73add5.png" alt="picture 15">  <h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3></li>
-<li>字节流，读取字符然后丢弃</li>
-<li>块设备，读取字节数组按块访问<h2 id="设备驱动是什么"><a href="#设备驱动是什么" class="headerlink" title="设备驱动是什么"></a>设备驱动是什么</h2></li>
-<li><img src="/imgs/7a797eb9b5c7c59ac577bdd012ecefd3240a3995529135c7f54a140f087d551d.png" alt="picture 16">  </li>
-<li>就是一段内核代码</li>
-<li>将系统对设备的<code>read</code>，<code>write</code>等操作翻译成设备对应的操作</li>
-<li>设备驱动程序完成的就是设备的通讯协议</li>
-<li><code>/dev</code>下就是设备文件<ul>
-<li><code>/dev/stdout</code>就是标准输出，还有<code>/dev/stdin</code>, <code>/dev/stderr</code></li>
-<li><code>echo Hello &gt; /dev/tty</code>这句话会把Hello输出到命令行上</li>
-<li><code>/dev/tty</code>就是命令行</li>
-<li>但是用户实际使用的是<strong>虚拟终端</strong>，也就是所谓的<code>/dev/pts/数字序号</code><ul>
-<li>不同的终端数字不同</li>
-</ul>
-</li>
-<li><code>/dev/zero</code>是一个0设备，不断生成0</li>
-<li><code>/dev/null</code>设备是一个NULL设备，将其他设备的输出重定向给这个设备，就会直接被扔掉<ul>
-<li>这个设备的<code>weite</code>函数什么都不做</li>
-</ul>
-</li>
-<li><code>/dev/random</code>生成随机数，认为是真的随机数</li>
-<li><code>/dev/urandom</code>是随机性不太高的随机数</li>
-</ul>
-</li>
-<li><img src="/imgs/62d42c205ed95d3f5e65209089d919fb2b0dd8cccab9f06b11a45456fc92de0d.png" alt="picture 17">  </li>
-<li><img src="/imgs/c4f7e1d7cd3e91d936f819aca7009d6cdf84aee7cf562aa4b91d32a9eac278cf.png" alt="picture 18">  <ul>
-<li>将一切额外的复杂性都丢给了<strong>控制</strong>，也就是<code>ioctl</code></li>
-<li>将所有的复杂性都丢给了<strong>文件系统</strong></li>
-<li>导致系统存在很多隐形的依赖关系，比如<code>/proc</code>等等<h3 id="字符设备"><a href="#字符设备" class="headerlink" title="字符设备"></a>字符设备</h3></li>
-</ul>
-</li>
-<li>内核模块实例<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/kernel.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/init.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/cdev.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/device.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/fs.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/uaccess.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_DEV 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> dev_major = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="keyword">class</span> *<span class="title">lx_class</span> =</span> <span class="literal">NULL</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">cdev</span> <span class="title">cdev</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">ssize_t</span> <span class="title">lx_read</span><span class="params">(struct file *, <span class="keyword">char</span> __user *, <span class="keyword">size_t</span>, <span class="keyword">loff_t</span> *)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">ssize_t</span> <span class="title">lx_write</span><span class="params">(struct file *, <span class="keyword">const</span> <span class="keyword">char</span> __user *, <span class="keyword">size_t</span>, <span class="keyword">loff_t</span> *)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">fops</span> =</span> &#123;</span><br><span class="line">  .owner = THIS_MODULE,</span><br><span class="line">  .read = lx_read,</span><br><span class="line">  .write = lx_write,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">nuke</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">cdev</span> <span class="title">cdev</span>;</span></span><br><span class="line">&#125; devs[MAX_DEV];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> __init <span class="title">lx_init</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">dev_t</span> dev;</span><br><span class="line">  <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// allocate device range</span></span><br><span class="line">  alloc_chrdev_region(&amp;dev, <span class="number">0</span>, <span class="number">1</span>, <span class="string">&quot;nuke&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// create device major number</span></span><br><span class="line">  dev_major = MAJOR(dev);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// create class</span></span><br><span class="line">  lx_class = class_create(THIS_MODULE, <span class="string">&quot;nuke&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; MAX_DEV; i++) &#123;</span><br><span class="line">    <span class="comment">// register device</span></span><br><span class="line">    cdev_init(&amp;devs[i].cdev, &amp;fops);</span><br><span class="line">    cdev.owner = THIS_MODULE;</span><br><span class="line">    cdev_add(&amp;devs[i].cdev, MKDEV(dev_major, i), <span class="number">1</span>);</span><br><span class="line">    device_create(lx_class, <span class="literal">NULL</span>, MKDEV(dev_major, i), <span class="literal">NULL</span>, <span class="string">&quot;nuke%d&quot;</span>, i);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> __exit <span class="title">lx_exit</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  device_destroy(lx_class, MKDEV(dev_major, <span class="number">0</span>));</span><br><span class="line">  class_unregister(lx_class);</span><br><span class="line">  class_destroy(lx_class);</span><br><span class="line">  unregister_chrdev_region(MKDEV(dev_major, <span class="number">0</span>), MINORMASK);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">ssize_t</span> <span class="title">lx_read</span><span class="params">(struct file *file, <span class="keyword">char</span> __user *buf, <span class="keyword">size_t</span> count, <span class="keyword">loff_t</span> *offset)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (*offset != <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">uint8_t</span> *data = <span class="string">&quot;This is dangerous!\n&quot;</span>;</span><br><span class="line">    <span class="keyword">size_t</span> datalen = <span class="built_in">strlen</span>(data);</span><br><span class="line">    <span class="keyword">if</span> (count &gt; datalen) &#123;</span><br><span class="line">      count = datalen;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (copy_to_user(buf, data, count)) &#123;</span><br><span class="line">      <span class="keyword">return</span> -EFAULT;</span><br><span class="line">    &#125;</span><br><span class="line">    *offset += count;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">ssize_t</span> <span class="title">lx_write</span><span class="params">(struct file *file, <span class="keyword">const</span> <span class="keyword">char</span> __user *buf, <span class="keyword">size_t</span> count, <span class="keyword">loff_t</span> *offset)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">char</span> databuf[<span class="number">4</span>] = <span class="string">&quot;\0\0\0\0&quot;</span>;</span><br><span class="line">  <span class="keyword">if</span> (count &gt; <span class="number">4</span>) &#123;</span><br><span class="line">    count = <span class="number">4</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  copy_from_user(databuf, buf, count);</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">strncmp</span>(databuf, <span class="string">&quot;\x01\x14\x05\x14&quot;</span>, <span class="number">4</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *EXPLODE[] = &#123;</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣀⣀⠀⠀⣀⣤⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⣀⣠⣤⣤⣾⣿⣿⣿⣿⣷⣾⣿⣿⣿⣿⣿⣶⣿⣿⣿⣶⣤⡀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⢠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⡀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠟⠁⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠻⢿⡿⢿⣿⣿⣿⣿⠟⠛⠛⠋⣀⣀⠙⠻⠿⠿⠋⠻⢿⣿⣿⠟⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⠈⠉⣉⣠⣴⣷⣶⣿⣿⣿⣿⣶⣶⣶⣾⣶⠀⠀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠋⠈⠛⠿⠟⠉⠻⠿⠋⠉⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣶⣷⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⢀⣀⣠⣤⣤⣤⣤⣶⣿⣿⣷⣦⣤⣤⣤⣤⣀⣀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⢰⣿⠛⠉⠉⠁⠀⠀⠀⢸⣿⣿⣧⠀⠀⠀⠀⠉⠉⠙⢻⣷⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠙⠻⠷⠶⣶⣤⣤⣤⣿⣿⣿⣿⣦⣤⣤⣴⡶⠶⠟⠛⠁⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">      <span class="string">&quot;    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠒⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠓⠀⠀⠀⠀⠀⠀⠀⠀⠀&quot;</span>,</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="keyword">sizeof</span>(EXPLODE) / <span class="keyword">sizeof</span>(EXPLODE[<span class="number">0</span>]); i++) &#123;</span><br><span class="line">      printk(<span class="string">&quot;\033[01;31m%s\033[0m\n&quot;</span>, EXPLODE[i]);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    printk(<span class="string">&quot;nuke: incorrect secret, cannot lanuch.\n&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module_init(lx_init);</span><br><span class="line">module_exit(lx_exit);</span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;GPL&quot;</span>);</span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;jyy&quot;</span>);</span><br></pre></td></tr></table></figure></li>
-<li>更多file operations<ul>
-<li><img src="/imgs/48d959984abc94cebcc887af1c8440381b9a85cab4c82c6cec509456e7924379.png" alt="picture 19">  <h3 id="块设备"><a href="#块设备" class="headerlink" title="块设备"></a>块设备</h3></li>
-</ul>
-</li>
-<li><img src="/imgs/ae6e9ee70d5e032f11bbadf1fbd71e5861f3d026b29710829c6f9cb982f92abc.png" alt="picture 20">  </li>
-<li>是一种<u>共享</u>的设备</li>
-<li>不能直接写入字节，必须先把所在范围内的全部擦除，然后才能写入</li>
-<li>一次写入的大小是一个block，不是随机访问的</li>
-<li>在文件系统和磁盘设备之间<ul>
-<li><img src="/imgs/eccaf80280becb4369ee89ac8c574b570dc7269706c76b5bf39d3bc620d8d9bf.png" alt="picture 21">  </li>
-<li><img src="/imgs/3919d17b349bfae35d2cafd8b9577d892fba46e78f3b365bb773693f8d012eb5.png" alt="picture 22">  </li>
-</ul>
-</li>
-<li>因此通过隔离实现了虚拟化保障安全<ul>
-<li><img src="/imgs/28f565503ddcb6d093f4b51bce865fdb314086c71e30e43fce2da1b873cdd666.png" alt="picture 23">  </li>
-<li>文件系统是磁盘的虚拟化</li>
-<li>将一个磁盘变成多个可扩展的动态字节序列（虚拟磁盘）</li>
-</ul>
-</li>
-<li>将虚拟磁盘映射到进程的地址空间<ul>
-<li><img src="/imgs/f3ac35c8d682fe3ff820cab2857e95892955744da47f18b4bd45824f3b3fb8df.png" alt="picture 24">  </li>
-<li>可以改变虚拟磁盘（文件）的大小</li>
-</ul>
-</li>
-<li><code>fork</code>的时候会继承偏移量<ul>
-<li><img src="/imgs/3b84113f43355660c23939cde848f671167cd508b03469f5ddf8ec3b198b0d72.png" alt="picture 25">  </li>
-<li>假如父子进程一起write一个文件100字节，会共享同一个偏移量，互相不覆盖但是顺序会竞争<h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2></li>
-</ul>
-</li>
-<li><code>Unix</code>系统的文件系统只有一个根<code>/</code></li>
-<li>外接存储设备<ul>
-<li>可以将任何一个磁盘上的文件系统挂载到文件系统中的任何一个节点上</li>
-<li>可以把各种各样的文件系统挂载到任何一个节点上</li>
-<li>目录拼接</li>
-<li>磁盘分区也可以通过挂载将其包含到文件系统中</li>
-<li><code>mount</code>方法，<code>mount 设备 要挂载到的地址</code><ul>
-<li><img src="/imgs/ab2f6c26e3fd6ce21e84730d5bbe02a93092640915ba675fa6c9659bc03446d8.png" alt="picture 26">  </li>
-</ul>
-</li>
-</ul>
-</li>
-<li><code>loop</code>是回环设备，将文件变为磁盘设备</li>
-<li><img src="/imgs/b5fc5c4fe32464e06fde01d003c8a6a28aa5a7424760e65facb62edc033340f2.png" alt="picture 29">  <h3 id="切换根文件系统"><a href="#切换根文件系统" class="headerlink" title="切换根文件系统"></a>切换根文件系统</h3></li>
-<li>使用<code>switch_root</code>命令</li>
-<li>执行的内容包括<ul>
-<li>删除根文件系统的全部内容，节省空间</li>
-<li>安装新的文件系统并切换到这个文件系统</li>
-<li>把<code>stdin</code>, <code>stdout</code>, <code>stderr</code>附加到新的<code>/dev/console</code>，然后执行新文件系统的<code>init</code>程序</li>
-</ul>
-</li>
-<li>命令格式</li>
-<li><code>switch_root [-c /dev/console] NEW_ROOT NEW_INIT [ARGUMENTS_TO_INIT]</code><ul>
-<li>其中<code>NEW_ROOT</code>是实际的根文件系统的挂载目录，执行<code>switch_root</code>命令前需要挂载到系统中</li>
-<li><code>NEW_INIT</code>是实际根文件系统的<code>init</code>程序的路径，一般是<code>/sbin/init</code></li>
-<li><code>-c /dev/console</code>是可选参数，用于重定向实际的根文件系统的设备文件，一般情况我们不会使用</li>
-<li>而<code>ARGUMENTS_TO_INIT</code>则是传递给实际的根文件系统的<code>init</code>程序的参数，也是可选的<h3 id="将一个磁盘映像文件挂载到文件系统之中"><a href="#将一个磁盘映像文件挂载到文件系统之中" class="headerlink" title="将一个磁盘映像文件挂载到文件系统之中"></a>将一个磁盘映像文件挂载到文件系统之中</h3></li>
-</ul>
-</li>
-<li><code>.img</code>文件</li>
-<li><code>mnt xxx.img /路径</code></li>
-<li>系统将这个文件使用一个<code>loop</code>创建为一个设备</li>
-<li>然后挂载这个设备<ul>
-<li><img src="/imgs/2886cc5713330f3abc84175c7476c53a6c2751b5a6a8080c74910eb23dd3b0e5.png" alt="picture 27">  <h2 id="Linux文件系统的标准"><a href="#Linux文件系统的标准" class="headerlink" title="Linux文件系统的标准"></a>Linux文件系统的标准</h2></li>
-</ul>
-</li>
-<li><img src="/imgs/d9c5ee68a7ec204d6df6d6c090c5e1924aa2b0afa0402f7e29af1a8814e0f693.png" alt="picture 28">  <h3 id="使用python访问目录"><a href="#使用python访问目录" class="headerlink" title="使用python访问目录"></a>使用python访问目录</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> Path(<span class="string">&#x27;/proc&#x27;</span>).glob(<span class="string">&#x27;*/status&#x27;</span>):</span><br><span class="line">    <span class="built_in">print</span>(f.parts[-<span class="number">2</span>], \</span><br><span class="line">        (f.parent / <span class="string">&#x27;cmdline&#x27;</span>).read_text() <span class="keyword">or</span> <span class="string">&#x27;[kernel]&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="创建链接"><a href="#创建链接" class="headerlink" title="创建链接"></a>创建链接</h3><h4 id="硬链接"><a href="#硬链接" class="headerlink" title="硬链接"></a>硬链接</h4></li>
-<li><code>ln [参数] [源文件或目录] [目标文件或目录]</code></li>
-<li>创建的是硬链接，实际上指向的是同一个文件，文件的编号都是相同的</li>
-<li>修改一个就是修改所有</li>
-<li>完全不可区分</li>
-<li>便于节省空间</li>
-<li><strong>仅仅存储指向实际文件数据的指针</strong></li>
-<li><strong>不可链接目录</strong></li>
-<li><strong>不可跨文件系统</strong><h4 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h4></li>
-<li>类似于快捷方式</li>
-<li>本身就是一个文件</li>
-<li>当引用这个文件时，去找另一个文件</li>
-<li>另一个文件的绝对/相对路径以文本形式存储在文件里</li>
-<li><strong>可以跨文件系统、可以链接目录</strong></li>
-<li>链接指向的位置当前不存在也没关系</li>
-<li><code>ln -s 目标 快捷方式</code></li>
-<li>允许创建一个到<u>上一级目录</u>的软连接</li>
-<li>允许成环<ul>
-<li>无限递归</li>
-<li>使用<code>find</code>寻找的时候，会报错检测到了文件系统回环</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1559,7 +1369,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">186</span>
+          <span class="site-state-item-count">187</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1603,7 +1413,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">661k</span>
+    <span title="站点总字数">662k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>

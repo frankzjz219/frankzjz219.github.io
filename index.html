@@ -182,6 +182,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/08/12/%E8%A7%A3%E5%86%B3Linux%E7%AB%AFpython%E6%97%A0%E6%B3%95%E6%89%BE%E5%88%B0%E5%BD%93%E5%89%8D%E8%B7%AF%E5%BE%84%E4%B8%8B%E6%9F%90%E4%BA%9B%E7%9B%AE%E5%BD%95%E7%9A%84%E5%8C%85%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/08/12/%E8%A7%A3%E5%86%B3Linux%E7%AB%AFpython%E6%97%A0%E6%B3%95%E6%89%BE%E5%88%B0%E5%BD%93%E5%89%8D%E8%B7%AF%E5%BE%84%E4%B8%8B%E6%9F%90%E4%BA%9B%E7%9B%AE%E5%BD%95%E7%9A%84%E5%8C%85%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">解决Linux端python无法找到当前路径下某些目录的包的问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-08-12 19:17:13 / 修改时间：19:22:18" itemprop="dateCreated datePublished" datetime="2024-08-12T19:17:13+08:00">2024-08-12</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>276</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="解决python无法import当前目录下的某些在文件夹中的文件中的内容的问题"><a href="#解决python无法import当前目录下的某些在文件夹中的文件中的内容的问题" class="headerlink" title="解决python无法import当前目录下的某些在文件夹中的文件中的内容的问题"></a>解决python无法import当前目录下的某些在文件夹中的文件中的内容的问题</h2><ul>
+<li>比如我此时有一个目录是<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pyTest/</span><br><span class="line">│</span><br><span class="line">├── env/</span><br><span class="line">│   └── c.py  <span class="comment"># 文件 c.py 中定义了类 C</span></span><br><span class="line">│</span><br><span class="line">└── m/</span><br><span class="line">    └── main.py  <span class="comment"># 文件 main.py 尝试从 env.c 导入类 C</span></span><br></pre></td></tr></table></figure></li>
+<li>但是我在<code>pyTest</code>目录下执行的时候遇到报错<ul>
+<li><img src="/imgs/d8db566a12e674a0c7730619f7cd1662465f26c9b89d9a7e19c491981c3f5469.png" alt="picture 0">  <h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3></li>
+</ul>
+</li>
+<li>在<code>~/.bashrc</code>中添加一段环境变量，将当前的文件之形目录添加到<code>pythonpath</code>中<ul>
+<li>末尾添加<code>export PYTHONPATH=$PYTHONPATH:/home/frank/Desktop/pyTest</code></li>
+<li>然后<code>source ~/.bashrc</code>即可正常运行</li>
+<li><img src="/imgs/53ba07839aadac9ded121d14eb355bdb43bec5089556e7222efc407e281003b5.png" alt="picture 1">  </li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/07/31/%E8%87%AA%E5%B7%B1%E4%BD%BF%E7%94%A8curses%E5%86%99%E4%B8%80%E4%B8%AA%E7%B1%BB%E4%BC%BC%E4%BA%8Ehtop%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%95%8C%E9%9D%A2%E7%A8%8B%E5%BA%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1029,105 +1114,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/05/22/%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/05/22/%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">旅行商问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-05-22 21:11:01 / 修改时间：21:27:41" itemprop="dateCreated datePublished" datetime="2024-05-22T21:11:01+08:00">2024-05-22</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="旅行商问题"><a href="#旅行商问题" class="headerlink" title="旅行商问题"></a>旅行商问题</h2><ul>
-<li>此题实际上是一个动态规划的问题</li>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ne411i7gG/?share_source=copy_web&vd_source=e29d06662d9baca058bed682909766d6">B站讲解</a></li>
-<li>将整个路径排成一个圈，这一圈总的路程最小</li>
-<li>因此从哪个点出发已经无所谓了，指定为0</li>
-<li>先递推一个开环问题，也就是从某个固定点出发遍历地图上所有的点，最短的总路径是什么<ul>
-<li>任意一个长度为n，结尾点为i的问题都依赖于一个长度为n-1，而且不包括i点的路径的总路程</li>
-</ul>
-</li>
-<li>递推数组中记录<code>[按位表示的经历过的点][末尾位置][路线的总长度]</code><h3 id="递推"><a href="#递推" class="headerlink" title="递推"></a>递推</h3></li>
-<li>n从2开始</li>
-<li>对于所有长度为n-1的路径，搜索其中所有到达过的点不同的路径</li>
-<li>对于到达过的点相同的路径，按末尾点不同搜索路径</li>
-<li>用地图上除了开始点之外的所有点尝试作为新的到达点<ul>
-<li>如果这个点该路径已经到达过了，跳过</li>
-<li>如果没有，则将其添加到路径中，将路径的总长度增加一个原来的末尾点到这个点的距离</li>
-</ul>
-</li>
-<li>将路径的末尾点修改为当前点</li>
-<li>查找长度为n的路径表中是否已经存在了<code>&lt;到达点与其相同&gt;&lt;末尾点与其相同&gt;</code>的路径<ul>
-<li>如果存在，将其长度和刚求出的长度取最小值，更新为新的<code>&lt;到达点与其相同&gt;&lt;末尾点与其相同&gt;</code>的所有路径的最小长度（不关心中间点的顺序，只在意结束位置）</li>
-</ul>
-</li>
-<li>最开始的时候，向dp图长度为1的路径添加所有起始点以外的点，长度为从起始点到任意点的距离，表示从开始点到任意其他点的路径</li>
-<li>结束的时候，长度为n的路径应该具有相同的到达点（也就是除了开始点之外的点全部到达过），这是末尾点不同，根据不同的末尾点，寻找末尾点返回起始点的距离，将其加到路径的长度上计算出每条长度为n的路径的闭环长度</li>
-<li>最短的一条就是结果<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;climits&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line">vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; to;</span><br><span class="line">vector&lt;unordered_map&lt;<span class="keyword">int</span>, unordered_map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt;&gt; dp;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    cin&gt;&gt;n;</span><br><span class="line">    to = vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;(n, vector&lt;<span class="keyword">int</span>&gt;(n));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j&lt;n; ++j)</span><br><span class="line">        &#123;</span><br><span class="line">            cin&gt;&gt;to[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    dp = vector&lt;unordered_map&lt;<span class="keyword">int</span>, unordered_map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt;&gt;(n+<span class="number">1</span>);</span><br><span class="line">    <span class="comment">// 默认从0开始</span></span><br><span class="line">    <span class="comment">// dp的第一个下标是路径长度，第二个是当前到达过的点标志（从低到高按位），第三个是当前路径的最后一个点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i&lt;n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        dp[<span class="number">1</span>][<span class="number">1</span>&lt;&lt;i][i] = to[<span class="number">0</span>][i];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> len = <span class="number">2</span>; len&lt;n; ++len)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> p : dp[len<span class="number">-1</span>])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">auto</span> q : p.second)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> s = <span class="number">1</span>; s&lt;n; ++s)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">if</span>((<span class="number">1</span>&lt;&lt;s)&amp;p.first)<span class="keyword">continue</span>;</span><br><span class="line">                    <span class="keyword">if</span>(dp[len].<span class="built_in">count</span>(p.first|<span class="number">1</span>&lt;&lt;s))</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">if</span>(dp[len][p.first|<span class="number">1</span>&lt;&lt;s].<span class="built_in">count</span>(s))</span><br><span class="line">                        &#123;</span><br><span class="line">                            dp[len][p.first|<span class="number">1</span>&lt;&lt;s][s] = <span class="built_in">min</span>(dp[len][p.first|<span class="number">1</span>&lt;&lt;s][s], q.second+to[q.first][s]);</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">else</span> </span><br><span class="line">                        &#123;</span><br><span class="line">                            dp[len][p.first|<span class="number">1</span>&lt;&lt;s][s] = q.second+to[q.first][s];</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> </span><br><span class="line">                    &#123;</span><br><span class="line">                        dp[len][p.first|<span class="number">1</span>&lt;&lt;s][s] = q.second+to[q.first][s];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> minDist = INT_MAX;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> p : dp[n<span class="number">-1</span>])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> q:p.second)</span><br><span class="line">        &#123;</span><br><span class="line">            minDist = <span class="built_in">min</span>(minDist, q.second+to[q.first][<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;minDist&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 64 位输出请用 printf(&quot;%lld&quot;)</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1199,7 +1185,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">186</span>
+          <span class="site-state-item-count">187</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1243,7 +1229,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">661k</span>
+    <span title="站点总字数">662k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>

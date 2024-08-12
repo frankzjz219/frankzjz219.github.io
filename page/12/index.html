@@ -182,6 +182,118 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/07/27/%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E6%9D%BF%E9%80%9A%E8%BF%87%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E6%9C%AC%E6%9C%BAWSL%E8%99%9A%E6%8B%9F%E6%9C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/27/%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E6%9D%BF%E9%80%9A%E8%BF%87%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5%E6%9C%AC%E6%9C%BAWSL%E8%99%9A%E6%8B%9F%E6%9C%BA/" class="post-title-link" itemprop="url">配置开发板通过网线连接本机WSL虚拟机</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-07-27 11:55:00 / 修改时间：12:09:14" itemprop="dateCreated datePublished" datetime="2022-07-27T11:55:00+08:00">2022-07-27</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>593</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="配置开发板通过网线连接本机WSL虚拟机"><a href="#配置开发板通过网线连接本机WSL虚拟机" class="headerlink" title="配置开发板通过网线连接本机WSL虚拟机"></a>配置开发板通过网线连接本机WSL虚拟机</h1><ul>
+<li><p>开发板先正常启动到Linux系统方便调试</p>
+</li>
+<li><p>开发板用上面的网线接口连接到计算机的网口</p>
+</li>
+<li><p>此时在计算机Windows端命令行输入<code>ipconfig</code>可以看到“以太网”具有相应的IP地址等信息</p>
+</li>
+<li><p>打开WSL虚拟机</p>
+</li>
+<li><p>在WSL虚拟机使用<code>ifconfig</code>命令查看虚拟机的网络配置，IP地址，子网掩码，广播地址等等</p>
+</li>
+<li><p><img src="/imgs/61f4265dbfff438355aad4fbe7486a2eafda4b901f1dc691ab19f9d533f457b0.png" alt="图 1">  </p>
+</li>
+<li><p>虚拟机使用<code>netstat -rn</code>命令查看网关</p>
+</li>
+<li><p><img src="/imgs/4c7645d1ddf70738ba0b2481e06e64ba824a9cf41d4df016ae1d27d57c2c3747.png" alt="图 2">  </p>
+</li>
+<li><p>看到内核路由表的第一条的Gateway就是网关信息</p>
+</li>
+<li><p><strong>此时WSL处在NAT模式，没有开启桥接</strong></p>
+</li>
+<li><p>使用命令<code>Get-NetAdapter</code>查看网络设备</p>
+</li>
+<li><p>使用命令<code>Set-VMSwitch WSL -NetAdapterName &lt;桥接到的网卡名称&gt;</code>桥接WSL与以太网，如下(直接输入中文“以太网”即可)</p>
+</li>
+<li><p><img src="/imgs/ec8dfe21ae9cf0d454518137d0a9b8c4ac8759f610575c1012027702b0fbc280.png" alt="图 3">  </p>
+</li>
+<li><p>复位开发板，按下键盘打断Uboot启动Linux</p>
+</li>
+<li><p>使用Uboot的如下命令设置网络并保存环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">setenv ipaddr &lt;与WSL虚拟机在同一子网下的另一个IP地址&gt;</span><br><span class="line">setenv gatewayip &lt;WSL虚拟机上看到的网关&gt;</span><br><span class="line">setenv netmask &lt;WSL虚拟机看到的子网掩码&gt;</span><br><span class="line">setenv serverip &lt;WSL虚拟机上ifconfig看到的IP地址&gt;</span><br><span class="line">saveenv</span><br></pre></td></tr></table></figure></li>
+<li><p>然后尝试ping WSL虚拟机IP（也就是在WSL中ifconfig看到的IP）</p>
+</li>
+<li><p><img src="/imgs/5aa9ff0c921acd969021449f60b49a85e3d9597b1ed0c42f285dac9fb217856c.png" alt="图 4">  </p>
+</li>
+<li><p>然后开始使用tftp传输Linux内核</p>
+</li>
+<li><p><img src="/imgs/7aca547914f9f4056cbb698df2d99ecef6131cf615739af5b4c324fce75ade36.png" alt="图 5">  </p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/07/26/%E9%85%8D%E7%BD%AEWSL2%E4%B8%BA%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%8E%9F%E6%9D%A5%E6%98%AFNAT%E6%A8%A1%E5%BC%8F%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1427,124 +1539,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/06/27/WSL2%E4%B8%8A%E4%BD%BF%E7%94%A8matplotlib%E7%BB%93%E5%90%88VSCode%E8%BF%9C%E7%A8%8B%E4%B8%8D%E6%98%BE%E7%A4%BA%E8%BE%93%E5%87%BA%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/06/27/WSL2%E4%B8%8A%E4%BD%BF%E7%94%A8matplotlib%E7%BB%93%E5%90%88VSCode%E8%BF%9C%E7%A8%8B%E4%B8%8D%E6%98%BE%E7%A4%BA%E8%BE%93%E5%87%BA%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-06-27 13:21:29 / 修改时间：13:35:32" itemprop="dateCreated datePublished" datetime="2022-06-27T13:21:29+08:00">2022-06-27</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>806</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法"><a href="#WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法" class="headerlink" title="WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法"></a>WSL2上使用matplotlib结合VSCode远程不显示输出的解决方法</h1><h2 id="报错信息"><a href="#报错信息" class="headerlink" title="报错信息"></a>报错信息</h2><h3 id="问题一般分为两种"><a href="#问题一般分为两种" class="headerlink" title="问题一般分为两种"></a>问题一般分为两种</h3><ul>
-<li>没有报错但是使用<code>plt.show()</code>之后<strong>没有任何输出</strong></li>
-<li>使用<code>matplotlib.use(&#39;Tkagg&#39;)</code>之后出现报错<code>Cannot load backend &#39;TkAgg&#39; which requires the &#39;tk&#39; interactive framework, as &#39;headless&#39; is currently running</code>，或者是<code>_tkinter.TclError: couldn&#39;t connect to display &quot;:0.0&quot;</code><ul>
-<li><img src="/imgs/image-20220627132430453.png" alt="image-20220627132430453"></li>
-</ul>
-</li>
-</ul>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ul>
-<li>开始Import的时候改变顺序</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line">matplotlib.use(<span class="string">&#x27;Tkagg&#x27;</span>) <span class="comment">#这一句修改使用的后端输出设备</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>然后在windows上安装<code>VcXsrv</code>服务器并且启动，具体下载地址为 <a target="_blank" rel="noopener" href="https://sourceforge.net/projects/vcxsrv/">sourceForge</a></p>
-</li>
-<li><p>安装过程中一路选择默认设置</p>
-</li>
-<li><p>然后通过桌面图标启动VcXsrv</p>
-</li>
-<li><p><img src="/imgs/3c06ab6204e183d7f8fcbf6507ef0822_r.jpg" alt="preview"></p>
-</li>
-<li><p><img src="/imgs/43f9d404f8d8db71b566a9d97439229d_r.jpg" alt="preview"></p>
-</li>
-<li><p><img src="/imgs/d0f6d5aaaa26b78d6af77e2a7094fff7_r.jpg" alt="preview"></p>
-</li>
-<li><p><img src="/imgs/v908aa4dd6a4dec03549efd26f418ca49_r.jpg" alt="preview"></p>
-</li>
-<li><p>然后正常情况会弹出Windows防火墙提示，允许访问即可</p>
-</li>
-<li><p>然后修改WSL端的环境</p>
-</li>
-<li><p>首先需要查看Windows系统和WSL2通信使用的<strong>虚拟网卡地址</strong></p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/resolv.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># nameserver后面的地址就是Windows系统虚拟网卡的地址,记一下</span></span><br><span class="line"><span class="comment"># 需要取消下面两行内容的注释,禁用自动重新生成配置文件,否则重启后这个地址会变</span></span><br><span class="line">[network]</span><br><span class="line">generateResolvConf = <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>然后修改<code>.bashrc</code></li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim ~/.bashrc</span><br><span class="line"><span class="comment"># 在文件最后追加下面内容,地址使用上面查看到的</span></span><br><span class="line"><span class="built_in">export</span> DISPLAY=&lt;nameServer IP地址&gt;:0</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">source</span> ~/.bashrc </span><br></pre></td></tr></table></figure>
-
-<p>详细可以参考配置<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/150555651">VcXsrv</a></p>
-<ul>
-<li>最终效果</li>
-<li><img src="/imgs/image-20220627133421950.png" alt="image-20220627133421950"></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1616,7 +1610,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">186</span>
+          <span class="site-state-item-count">187</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1660,7 +1654,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">661k</span>
+    <span title="站点总字数">662k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>

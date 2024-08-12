@@ -182,6 +182,89 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/04/07/%E6%89%8B%E5%8A%A8%E4%BF%AE%E5%A4%8D%E6%A1%8C%E9%9D%A2%E5%8F%8D%E5%A4%8D%E7%99%BB%E5%BD%95%EF%BC%88%E7%99%BB%E4%B8%8D%E8%BF%9B%E5%8E%BB%EF%BC%89%E4%BB%A5%E5%8F%8A%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E6%A1%8C%E9%9D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/04/07/%E6%89%8B%E5%8A%A8%E4%BF%AE%E5%A4%8D%E6%A1%8C%E9%9D%A2%E5%8F%8D%E5%A4%8D%E7%99%BB%E5%BD%95%EF%BC%88%E7%99%BB%E4%B8%8D%E8%BF%9B%E5%8E%BB%EF%BC%89%E4%BB%A5%E5%8F%8A%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E6%A1%8C%E9%9D%A2/" class="post-title-link" itemprop="url">手动修复桌面反复登录（登不进去）以及开机自启桌面</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-04-07 19:07:00 / 修改时间：19:31:44" itemprop="dateCreated datePublished" datetime="2023-04-07T19:07:00+08:00">2023-04-07</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>306</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="删除桌面管理器"><a href="#删除桌面管理器" class="headerlink" title="删除桌面管理器"></a>删除桌面管理器</h2><ul>
+<li>可能遇到在这个界面反复登录进不去或者进去之后一个黑色光标左上角反复跳动无限循环的情况<ul>
+<li><img src="/imgs/a2601ab29befcccffb945f638ff8cd649e816608585f428c466b17308998a832.jpg" alt="picture 1">  </li>
+</ul>
+</li>
+<li>此时可能需要手动删除掉原先的桌面管理器。使用<code>Ctrl+alt+F2</code>切换到TTY，删除比如<code>lightdm</code>，直接<code>sudo purge lightdm</code>，假如提示被占用的话，使用<code>skill+进程号</code>终止即可<h2 id="重装桌面"><a href="#重装桌面" class="headerlink" title="重装桌面"></a>重装桌面</h2></li>
+<li>删除原来的桌面，然后安装一个新的（比如<code>xfce4</code>）使用<code>sudo apt install xfce4 sfce4-terminal</code><h2 id="设置开机自启动"><a href="#设置开机自启动" class="headerlink" title="设置开机自启动"></a>设置开机自启动</h2></li>
+<li>在<code>/etc/rc.local</code>中添加一句话<code>startxfce4</code>即可</li>
+<li>然后实现开机自动进入桌面环境</li>
+<li><strong>注意，开机启动无论是在service中还是在rc.local中，都是以root身份启动的</strong></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/04/05/Linux%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1159,142 +1242,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/02/21/windows%E6%90%AD%E5%BB%BAFTP%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88%E5%B8%A6%E9%80%8F%E7%A9%BF%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/21/windows%E6%90%AD%E5%BB%BAFTP%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88%E5%B8%A6%E9%80%8F%E7%A9%BF%EF%BC%89/" class="post-title-link" itemprop="url">windows搭建FTP服务器（带透穿）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-02-21 11:56:53 / 修改时间：13:20:44" itemprop="dateCreated datePublished" datetime="2023-02-21T11:56:53+08:00">2023-02-21</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>320</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="windows搭建FTP服务器（带透穿）"><a href="#windows搭建FTP服务器（带透穿）" class="headerlink" title="windows搭建FTP服务器（带透穿）"></a>windows搭建FTP服务器（带透穿）</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33322515/article/details/127729960">权限参考</a></li>
-<li><a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1722628091716283305&wfr=spider&for=pc">配置参考</a><h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2></li>
-<li><img src="/imgs/8422aa1eaabd424b0cbd8832747cf6f1e6d96566039caa7494c42513f9a9ca71.png" alt="picture 1">  </li>
-<li>打开相应的系统功能</li>
-<li>然后直接搜索<code>IIS</code><ul>
-<li><img src="/imgs/2bb46b8c2c32ef946cbb2cfd5b47cf3e264da35e55b9d786b4185ab2dd5cadb9.png" alt="picture 2">  </li>
-</ul>
-</li>
-<li>打开之后添加<code>FTP站点</code><ul>
-<li><img src="/imgs/e0f9234024eaa4f4637ebcb61197b05dbc00edcb4028d9ad5a2088033e898cb1.png" alt="picture 3">  </li>
-</ul>
-</li>
-<li>添加站点名称等<img src="/imgs/5bd5d79fbd0d7b89f81f84030009cf3d487229ba25e28124f0a4fe1d10695faa.png" alt="picture 4">  </li>
-<li>此处SSH选择<strong>无</strong><ul>
-<li><img src="/imgs/8b63ca4d13c659fe8e978d984444c6f918451ae5528ef4b7c5ba18fbc2a6d35f.png" alt="picture 5">  </li>
-</ul>
-</li>
-<li>然后将内部服务器ip地址的<code>21</code>号端口映射到路由器的21号端口<h2 id="修改权限"><a href="#修改权限" class="headerlink" title="修改权限"></a>修改权限</h2></li>
-<li>找到被共享的目录的属性然后按照图上操作<ul>
-<li><img src="/imgs/026ac8d5f121d4c691455f43aaae26a59bd11b972de38eba807762ec7dc2e00e.png" alt="picture 7">  </li>
-</ul>
-</li>
-<li>点击“高级”然后查找<ul>
-<li><img src="/imgs/5d0a1a1e705f971e4552db3d892fec341e33c55fc1218aeb48418714b8773c04.png" alt="picture 8">  </li>
-<li>找到<u>NETWORK SERVICE</u>将其添加</li>
-</ul>
-</li>
-<li>编辑权限即可</li>
-<li><u>然后需要将路由器的21号端口映射到内网计算机的21号端口（21号端口是FTP服务）即可</u></li>
-</ul>
-<h2 id="更换端口"><a href="#更换端口" class="headerlink" title="更换端口"></a>更换端口</h2><ul>
-<li>假如更换成端口20</li>
-<li><img src="/imgs/6175ecc7e218f707a01c76e9364f6b87aa2e6495204f7ce492c1dbbe22e71c98.png" alt="picture 20">  </li>
-<li>只要手动指定端口，仍然可以登录<ul>
-<li><img src="/imgs/35493bde59b1c2b0d86ac2e112d0a63f6234fcf7a153ba4589ceacb577fa1831.png" alt="picture 21">  </li>
-</ul>
-</li>
-</ul>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ul>
-<li>遇到如图问题<ul>
-<li><img src="/imgs/a7db6a6502a2b20d0552fa5b51bf73d0956e4f24bc9461fe34a976e6edbb9fdb.png" alt="picture 9">  </li>
-</ul>
-</li>
-<li>需要关闭服务器端的防火墙<ul>
-<li><img src="/imgs/1ddf07c79b607c919c78e8f75b89d8067188975b68751c6f969e53749d0330aa.png" alt="picture 10">  </li>
-</ul>
-</li>
-<li>进入计算机的管理页面查看用户<ul>
-<li><img src="/imgs/a60846292a10ba3e430e8045cdd57764d3599e8741ed700d6e16ee6e05d1df2f.png" alt="picture 11">  </li>
-<li><img src="/imgs/cea90bd8b5399c7a411483636cb0762ab06390f33483c4cdcd1a6b4c1d8c88aa.png" alt="picture 12">  </li>
-</ul>
-</li>
-<li>编辑授权规则<ul>
-<li><img src="/imgs/b61c39095e7b4ed99438a402db16a0504804375100f307643cb63c29919402e5.png" alt="image.png 1">  </li>
-<li>在<strong>添加允许规则</strong>位置添加用户<img src="/imgs/6472bd7353ef5a1238d98a66a8c2ec5049028c35b2e2bc78336dce9fd06f7a8e.png" alt="picture 16">  </li>
-</ul>
-</li>
-<li>或者直接在<strong>创建</strong>的时候选择访问的权限（<strong>不要选择所有用户</strong>）<ul>
-<li><img src="/imgs/92bd5ae0658551637458a0a39682f191d4f0205f5606ec063e6518134fe16466.png" alt="picture 17">  </li>
-</ul>
-</li>
-<li>最后大功告成<img src="/imgs/2178e69e87d40791d497a3dd974928cc56f6af4c5fcf49f3b2b7f25d35d9e203.png" alt="picture 18">  </li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1366,7 +1313,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">186</span>
+          <span class="site-state-item-count">187</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1410,7 +1357,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">661k</span>
+    <span title="站点总字数">662k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>

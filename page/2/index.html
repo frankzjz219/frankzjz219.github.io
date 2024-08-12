@@ -182,6 +182,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/05/22/%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/05/22/%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">旅行商问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-05-22 21:11:01 / 修改时间：21:27:41" itemprop="dateCreated datePublished" datetime="2024-05-22T21:11:01+08:00">2024-05-22</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="旅行商问题"><a href="#旅行商问题" class="headerlink" title="旅行商问题"></a>旅行商问题</h2><ul>
+<li>此题实际上是一个动态规划的问题</li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ne411i7gG/?share_source=copy_web&vd_source=e29d06662d9baca058bed682909766d6">B站讲解</a></li>
+<li>将整个路径排成一个圈，这一圈总的路程最小</li>
+<li>因此从哪个点出发已经无所谓了，指定为0</li>
+<li>先递推一个开环问题，也就是从某个固定点出发遍历地图上所有的点，最短的总路径是什么<ul>
+<li>任意一个长度为n，结尾点为i的问题都依赖于一个长度为n-1，而且不包括i点的路径的总路程</li>
+</ul>
+</li>
+<li>递推数组中记录<code>[按位表示的经历过的点][末尾位置][路线的总长度]</code><h3 id="递推"><a href="#递推" class="headerlink" title="递推"></a>递推</h3></li>
+<li>n从2开始</li>
+<li>对于所有长度为n-1的路径，搜索其中所有到达过的点不同的路径</li>
+<li>对于到达过的点相同的路径，按末尾点不同搜索路径</li>
+<li>用地图上除了开始点之外的所有点尝试作为新的到达点<ul>
+<li>如果这个点该路径已经到达过了，跳过</li>
+<li>如果没有，则将其添加到路径中，将路径的总长度增加一个原来的末尾点到这个点的距离</li>
+</ul>
+</li>
+<li>将路径的末尾点修改为当前点</li>
+<li>查找长度为n的路径表中是否已经存在了<code>&lt;到达点与其相同&gt;&lt;末尾点与其相同&gt;</code>的路径<ul>
+<li>如果存在，将其长度和刚求出的长度取最小值，更新为新的<code>&lt;到达点与其相同&gt;&lt;末尾点与其相同&gt;</code>的所有路径的最小长度（不关心中间点的顺序，只在意结束位置）</li>
+</ul>
+</li>
+<li>最开始的时候，向dp图长度为1的路径添加所有起始点以外的点，长度为从起始点到任意点的距离，表示从开始点到任意其他点的路径</li>
+<li>结束的时候，长度为n的路径应该具有相同的到达点（也就是除了开始点之外的点全部到达过），这是末尾点不同，根据不同的末尾点，寻找末尾点返回起始点的距离，将其加到路径的长度上计算出每条长度为n的路径的闭环长度</li>
+<li>最短的一条就是结果<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;climits&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line">vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; to;</span><br><span class="line">vector&lt;unordered_map&lt;<span class="keyword">int</span>, unordered_map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt;&gt; dp;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    cin&gt;&gt;n;</span><br><span class="line">    to = vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;(n, vector&lt;<span class="keyword">int</span>&gt;(n));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j&lt;n; ++j)</span><br><span class="line">        &#123;</span><br><span class="line">            cin&gt;&gt;to[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    dp = vector&lt;unordered_map&lt;<span class="keyword">int</span>, unordered_map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt;&gt;(n+<span class="number">1</span>);</span><br><span class="line">    <span class="comment">// 默认从0开始</span></span><br><span class="line">    <span class="comment">// dp的第一个下标是路径长度，第二个是当前到达过的点标志（从低到高按位），第三个是当前路径的最后一个点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i&lt;n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        dp[<span class="number">1</span>][<span class="number">1</span>&lt;&lt;i][i] = to[<span class="number">0</span>][i];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> len = <span class="number">2</span>; len&lt;n; ++len)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> p : dp[len<span class="number">-1</span>])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">auto</span> q : p.second)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> s = <span class="number">1</span>; s&lt;n; ++s)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">if</span>((<span class="number">1</span>&lt;&lt;s)&amp;p.first)<span class="keyword">continue</span>;</span><br><span class="line">                    <span class="keyword">if</span>(dp[len].<span class="built_in">count</span>(p.first|<span class="number">1</span>&lt;&lt;s))</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">if</span>(dp[len][p.first|<span class="number">1</span>&lt;&lt;s].<span class="built_in">count</span>(s))</span><br><span class="line">                        &#123;</span><br><span class="line">                            dp[len][p.first|<span class="number">1</span>&lt;&lt;s][s] = <span class="built_in">min</span>(dp[len][p.first|<span class="number">1</span>&lt;&lt;s][s], q.second+to[q.first][s]);</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">else</span> </span><br><span class="line">                        &#123;</span><br><span class="line">                            dp[len][p.first|<span class="number">1</span>&lt;&lt;s][s] = q.second+to[q.first][s];</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> </span><br><span class="line">                    &#123;</span><br><span class="line">                        dp[len][p.first|<span class="number">1</span>&lt;&lt;s][s] = q.second+to[q.first][s];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> minDist = INT_MAX;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> p : dp[n<span class="number">-1</span>])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> q:p.second)</span><br><span class="line">        &#123;</span><br><span class="line">            minDist = <span class="built_in">min</span>(minDist, q.second+to[q.first][<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;minDist&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 64 位输出请用 printf(&quot;%lld&quot;)</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/05/17/Ubuntu%E8%AF%BB%E5%8F%96PS4%E6%89%8B%E6%9F%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1051,177 +1150,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/01/31/Linux%E4%B8%8BC%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/31/Linux%E4%B8%8BC%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/" class="post-title-link" itemprop="url">Linux下C语言开发技巧</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-01-31 11:39:58" itemprop="dateCreated datePublished" datetime="2024-01-31T11:39:58+08:00">2024-01-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-02-05 11:29:44" itemprop="dateModified" datetime="2024-02-05T11:29:44+08:00">2024-02-05</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>5.5k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>10 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="比较的宏以及typeof-类型判断宏"><a href="#比较的宏以及typeof-类型判断宏" class="headerlink" title="比较的宏以及typeof()类型判断宏`"></a>比较的宏以及<code>typeof()</code>类型判断宏`</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> max(a,b) ((a)&gt;(b)?(a):(b))</span></span><br><span class="line"><span class="comment">// 上述无法处理包含a++等的情况</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用<code>typeof()</code><strong>类转换宏</strong>处理<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> max(a, b) (&#123;        \</span></span><br><span class="line"><span class="meta">    typeof(a) _a = (a);      \</span></span><br><span class="line"><span class="meta">    typeof(b) _b = (b);      \</span></span><br><span class="line"><span class="meta">    (void) (&amp;_a == &amp;_b);   \</span></span><br><span class="line"><span class="meta">    _a &gt; _b ? _a : _b; &#125;)</span></span><br></pre></td></tr></table></figure></li>
-<li><code>typeof(a) _a = (a)</code>定义一个a类型的变量，值等于a</li>
-<li><code>(void) (&amp;_a == &amp;_b)</code>判断二者类型是否相同，<u>不同的话会出现警告</u><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">typeof(<span class="keyword">int</span> *) a,b;<span class="comment">//等价于：int *a,*b;</span></span><br></pre></td></tr></table></figure>
-<h2 id="零长数组（变长数组）"><a href="#零长数组（变长数组）" class="headerlink" title="零长数组（变长数组）"></a>零长数组（变长数组）</h2></li>
-<li>满足需要变长度的结构体，因此有时也习惯性地称为变长数组。</li>
-<li>在一个结构体的最后, 申明一个长度为0的数组, 就可以使得这个结构体是可变长的<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">line</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> length;</span><br><span class="line">    <span class="keyword">char</span> contents[<span class="number">0</span>];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">line</span> *<span class="title">thisline</span> =</span> <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct line) + this_length);</span><br><span class="line">thisline-&gt;length = this_length;</span><br></pre></td></tr></table></figure></li>
-<li>上述结构体本身的大小只有一个length的大小，不包括content</li>
-<li>创建的时候人为分配空间给contents即可</li>
-</ul>
-<h2 id="switch-case的条件指定范围"><a href="#switch-case的条件指定范围" class="headerlink" title="switch case的条件指定范围"></a>switch case的条件指定范围</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">case</span> low ... high:</span><br><span class="line"><span class="keyword">case</span> <span class="string">&#x27;A&#x27;</span> ..<span class="number">.&#x27;</span>Z<span class="number">&#x27;</span>:</span><br></pre></td></tr></table></figure>
-<ul>
-<li>还可以用整形数来表示范围，但是这里需要注意在“…”两边有空格</li>
-</ul>
-<h2 id="struct的指定成员初始化"><a href="#struct的指定成员初始化" class="headerlink" title="struct的指定成员初始化"></a>struct的指定成员初始化</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 三维点的结构体</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Point3D</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">    <span class="keyword">int</span> y;</span><br><span class="line">    <span class="keyword">int</span> z;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 包含点操作的结构体</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">PointOperations</span> &#123;</span></span><br><span class="line">    <span class="comment">// 函数指针，用于计算两个点的距离</span></span><br><span class="line">    <span class="keyword">double</span> (*calculateDistance)(<span class="keyword">const</span> struct Point3D* p1, <span class="keyword">const</span> struct Point3D* p2);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 函数指针，用于打印点的坐标</span></span><br><span class="line">    <span class="keyword">void</span> (*printCoordinates)(<span class="keyword">const</span> struct Point3D* point);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算两个点的距离的具体实现</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">calculateDistance</span><span class="params">(<span class="keyword">const</span> struct Point3D* p1, <span class="keyword">const</span> struct Point3D* p2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> dx = p1-&gt;x - p2-&gt;x;</span><br><span class="line">    <span class="keyword">int</span> dy = p1-&gt;y - p2-&gt;y;</span><br><span class="line">    <span class="keyword">int</span> dz = p1-&gt;z - p2-&gt;z;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sqrt</span>(dx*dx + dy*dy + dz*dz);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 打印点的坐标的具体实现</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printCoordinates</span><span class="params">(<span class="keyword">const</span> struct Point3D* point)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;(%d, %d, %d)\n&quot;</span>, point-&gt;x, point-&gt;y, point-&gt;z);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 定义一个三维点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Point3D</span> <span class="title">pointA</span> =</span> &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 实例化操作的结构体并初始化函数指针</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">PointOperations</span> <span class="title">pointOps</span> =</span> &#123;</span><br><span class="line">        .calculateDistance = calculateDistance,</span><br><span class="line">        .printCoordinates = printCoordinates</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用结构体中的函数指针计算两个点的距离</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Point3D</span> <span class="title">pointB</span> =</span> &#123;<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125;;</span><br><span class="line">    <span class="keyword">double</span> distance = pointOps.calculateDistance(&amp;pointA, &amp;pointB);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Distance between points: %f\n&quot;</span>, distance);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用结构体中的函数指针打印点的坐标</span></span><br><span class="line">    pointOps.printCoordinates(&amp;pointA);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>上文中的指定名称初始化是<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 定义点操作的结构体并初始化函数指针</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">PointOperations</span> <span class="title">pointOps</span> =</span> &#123;</span><br><span class="line">    .calculateDistance = calculateDistance,</span><br><span class="line">    .printCoordinates = printCoordinates</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-<li>这里可以手动指定需要初始化的结构体成员的名字</li>
-</ul>
-<h2 id="可变参数宏"><a href="#可变参数宏" class="headerlink" title="可变参数宏"></a>可变参数宏</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/printk.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> pr_debug(fmt, ...) \</span></span><br><span class="line"><span class="meta">    dynamic_pr_debug(fmt, ##__VA_ARGS__)</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>dynamic_pr_debug 是 Linux 内核中用于动态调试打印的宏，而 fmt 和 <code>__VA_ARGS__</code> 则是格式化字符串和可变参数列表。</p>
-</li>
-<li><p>fmt：格式化字符串，类似于 printf 中的格式化字符串，包含要打印的文本和格式说明符。</p>
-</li>
-<li><p><code>__VA_ARGS__</code>：表示可变参数的宏，用于将额外的参数传递给 fmt 中的格式说明符。</p>
-</li>
-<li><p><code>##__VA_ARGS__</code> 是一个预处理器技巧，用于处理当可变参数列表为空时的情况，确保宏在没有额外参数时也能正确展开</p>
-</li>
-</ul>
-<h2 id="函数属性-attribute"><a href="#函数属性-attribute" class="headerlink" title="函数属性 __attribute__"></a>函数属性 <code>__attribute__</code></h2><ul>
-<li><p><code>__attribute__ ((attribute-list))</code></p>
-</li>
-<li><p><code>attribute-list</code>的定义有很多，如<code>noreturn</code>、<code>format</code>以及<code>const</code>等。此外，还可以定义一些和处理器体系结构相关的函数属性</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> __attribute__((noreturn)) die(<span class="keyword">void</span>);</span><br></pre></td></tr></table></figure></li>
-<li><p>其他属性</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __pure           __attribute__((pure))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __aligned(x)        __attribute__((aligned(x)))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __printf(a, b)      __attribute__((format(printf, a, b)))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __scanf(a, b)       __attribute__((format(scanf, a, b)))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> noinline          __attribute__((noinline))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __attribute_const__   __attribute__((__const__))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __maybe_unused      __attribute__((unused))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __always_unused      __attribute__((unused))</span></span><br></pre></td></tr></table></figure>
-<h2 id="变量属性和类属性"><a href="#变量属性和类属性" class="headerlink" title="变量属性和类属性"></a>变量属性和类属性</h2></li>
-<li><p>变量属性可以对变量或结构体成员进行属性设置。类型属性常见的属性有<code>alignment</code>、<code>packed</code>和<code>sections</code>等。</p>
-</li>
-<li><p><code>alignment</code>属性规定变量或者结构体成员的最小对齐格式，以字节为单位</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">qib_user_info</span> &#123;</span></span><br><span class="line">    __u32 spu_userversion;</span><br><span class="line">    __u64 spu_base_info;</span><br><span class="line">&#125; __aligned(<span class="number">8</span>);</span><br></pre></td></tr></table></figure></li>
-<li><p>上述例子中结构体存储会以八字节对齐</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">test</span>&#123;</span></span><br><span class="line"> <span class="keyword">char</span> a;</span><br><span class="line">    <span class="keyword">int</span> x[<span class="number">2</span>] __attribute__ ((packed));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-<li><p>x成员使用了packed属性，它会存储在变量a后面，所以这个结构体一共占用9字节</p>
-<h2 id="内建函数"><a href="#内建函数" class="headerlink" title="内建函数"></a>内建函数</h2></li>
-<li><p>内建函数以“_builtin_”作为函数名前缀。下面介绍Linux内核常用的一些内建函数</p>
-</li>
-<li><p><code>__builtin_constant_p(x)</code>：判断x是否在编译时就可以被确定为常量。如果x为常量，该函数返回1，否则返回0</p>
-</li>
-<li><p><code>__builtin_expect(exp, c)</code>：这里的意思是<code>exp==c</code>的概率很大，用来引导GCC编译器进行条件分支预测</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __swab16(x)        \</span></span><br><span class="line"><span class="meta">(__builtin_constant_p((__u16)(x)) ?  \</span></span><br><span class="line"><span class="meta">___constant_swab16(x) :      \</span></span><br><span class="line"><span class="meta">__fswab16(x))__builtin_expect(exp, c)</span></span><br></pre></td></tr></table></figure></li>
-<li><p><code>__builtin_prefetch(const void *addr, int rw, int locality)</code>：主动进行数据预取，在使用<strong>地址addr的值之前就把其值加载到cache中</strong>，<u>减少读取的延迟</u>，从而提高性能。</p>
-<ul>
-<li><p>该函数可以接受3个参数：</p>
-<ul>
-<li>第一个参数addr表示要预取数据的地址；</li>
-<li>第二个参数rw表示读写属性，1表示可写，0表示只读；</li>
-<li>第三个参数locality表示数据在cache中的时间局部性，其中0表示读取完addr的之后不用保留在cache中，而1～3表示时间局部性逐渐增强</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="asmlinkage"><a href="#asmlinkage" class="headerlink" title="asmlinkage"></a>asmlinkage</h2><ul>
-<li>在标准C语言中，函数的形参在实际传入参数时会涉及参数存放问题</li>
-<li>对于x86架构，函数参数和局部变量被一起分配到函数的局部堆栈里<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&lt;arch/x86/include/<span class="keyword">asm</span>/linkage.h&gt;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> asmlinkage CPP_ASMLINKAGE __attribute__((regparm(0)))</span></span><br></pre></td></tr></table></figure></li>
-<li>告诉编译器一个声明了<code>asmlinkage</code>的函数<strong>不需要通过任何寄存器来传递参数，只通过堆栈来传递</strong></li>
-<li>用法<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">asmlinkage <span class="keyword">void</span> <span class="title">my_assembly_function</span><span class="params">(<span class="keyword">int</span> arg1, <span class="keyword">int</span> arg2)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 汇编函数的实现</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>asmlinkage 用于标识 my_assembly_function 是一个汇编语言编写的函数，并且该函数使用堆栈而不是寄存器来传递参数</li>
-<li>对于ARM来说，函数参数的传递有一套ATPCS标准，即通过寄存器来传递。<strong>ARM中的R0～R4寄存器存放传入参数，当参数超过5个时，多余的参数被存放在局部堆栈中</strong><ul>
-<li>ARM平台没有定义asmlinkage</li>
-</ul>
-</li>
-</ul>
-<h2 id="switch-case和枚举类型配合使用"><a href="#switch-case和枚举类型配合使用" class="headerlink" title="switch case和枚举类型配合使用"></a>switch case和枚举类型配合使用</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> XX(name) \</span></span><br><span class="line"><span class="meta">    case LogLevel::name: \</span></span><br><span class="line"><span class="meta">        return #name; \</span></span><br><span class="line"><span class="meta">        break;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">switch</span> (level1) &#123;</span><br><span class="line">    XX(DEBUG);</span><br><span class="line">    XX(INFO);</span><br><span class="line">    XX(WARN);</span><br><span class="line">    XX(ERROR);</span><br><span class="line">    XX(FATAL);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">undef</span> XX</span></span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;UNKNOWN&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>此前包含一个枚举类型的定义包括<code>DEBUG</code>等</li>
-<li>这个可以将枚举类型的数字逆向映射为字符串（通过<code>#name</code>转换为字符串）</li>
-</ul>
-<h2 id="std-enable-shared-from-this"><a href="#std-enable-shared-from-this" class="headerlink" title="std::enable_shared_from_this"></a>std::enable_shared_from_this</h2><ul>
-<li><strong>安全的</strong>获取一个对象的this指针<ul>
-<li>防止重复析构等情况</li>
-</ul>
-</li>
-<li>使用<code>shared_from_this()</code>函数返回当前函数的共享指针</li>
-<li>使用例<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span> :</span> <span class="keyword">public</span> std::enable_shared_from_this&lt;Widget&gt;&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Widget</span>()&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Widget constructor run&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    ~<span class="built_in">Widget</span>()&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Widget destructor run&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">GetSharedObject</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">shared_from_this</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">p</span><span class="params">(<span class="keyword">new</span> Widget())</span></span>;</span><br><span class="line">    std::shared_ptr&lt;Widget&gt; q = p-&gt;<span class="built_in">GetSharedObject</span>();</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; p.<span class="built_in">use_count</span>() &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; q.<span class="built_in">use_count</span>() &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="thread-local关键字"><a href="#thread-local关键字" class="headerlink" title="thread_local关键字"></a>thread_local关键字</h2><ul>
-<li><code>thread_local</code> 是 C++11 标准引入的关键字，用于声明线程局部存储（Thread-local storage，TLS）变量。线程局部存储意味着每个线程都有自己独立的变量副本，这样可以避免线程间的竞争条件</li>
-<li>使得每个线程都有自己独立的某个这个变量的副本而不是与其他线程共享<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">thread_local</span> <span class="keyword">int</span> threadSpecificValue = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">threadFunction</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 每个线程都有独立的 threadSpecificValue</span></span><br><span class="line">    threadSpecificValue += <span class="number">1</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Thread Specific Value: &quot;</span> &lt;&lt; threadSpecificValue &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建两个线程，并在每个线程中调用 threadFunction</span></span><br><span class="line">    <span class="function">std::thread <span class="title">t1</span><span class="params">(threadFunction)</span></span>;</span><br><span class="line">    <span class="function">std::thread <span class="title">t2</span><span class="params">(threadFunction)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 等待线程执行完成</span></span><br><span class="line">    t1.<span class="built_in">join</span>();</span><br><span class="line">    t2.<span class="built_in">join</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1293,7 +1221,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">186</span>
+          <span class="site-state-item-count">187</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1337,7 +1265,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">661k</span>
+    <span title="站点总字数">662k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
