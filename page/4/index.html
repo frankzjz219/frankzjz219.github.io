@@ -1279,7 +1279,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-08-15 14:31:05" itemprop="dateModified" datetime="2024-08-15T14:31:05+08:00">2024-08-15</time>
+                <time title="修改时间：2024-08-15 22:53:20" itemprop="dateModified" datetime="2024-08-15T22:53:20+08:00">2024-08-15</time>
               </span>
 
           <br>
@@ -1288,14 +1288,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.2k</span>
+              <span>4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>8 分钟</span>
+              <span>7 分钟</span>
             </span>
 
         </div>
@@ -1334,48 +1334,40 @@
 </li>
 </ul>
 <h2 id="（更新）安装参考"><a href="#（更新）安装参考" class="headerlink" title="（更新）安装参考"></a>（更新）安装参考</h2><ul>
-<li><p>安装依赖<code>libncurses-dev</code>和<code>flex</code>, <code>bison</code></p>
-</li>
-<li><p>如果下载的是形如<code>patches-6.1.83-rt28.tar.xz</code>之类的</p>
-</li>
-<li><p>先将其解压缩，然后在内核源码目录下执行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">for patch in &lt;解压缩目录&gt;/*.patch; do</span><br><span class="line">    patch -p1 &lt; &quot;$patch&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure></li>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_28882933/article/details/118293544">简单流程</a></p>
-</li>
-<li><p>注意最后要注释设置<code>CONFIG_MODULE_SIG_ALL</code>, <code>CONFIG_MODULE_SIG_KEY</code>, <code>CONFIG_SYSTEM_TRUSTED_KEYS</code>,<code>CONFIG_SYSTEM_REVOCATION_LIST</code>, <code>CONFIG_SYSTEM_REVOCATION_KEYS</code>, <code>CONFIG_DEBUG_INFO=y</code></p>
-<ul>
+<li>安装依赖<code>libncurses-dev</code>和<code>flex</code>, <code>bison</code></li>
+<li>如果下载的是形如<code>patches-6.1.83-rt28.tar.xz</code>之类的</li>
+<li>先将其解压缩，然后在内核源码目录下执行<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">for patch in &lt;解压缩目录&gt;/*.patch; do</span><br><span class="line">    patch -p1 &lt; &quot;$patch&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_28882933/article/details/118293544">简单流程</a></li>
+<li>注意最后要注释设置<code>CONFIG_MODULE_SIG_ALL</code>, <code>CONFIG_MODULE_SIG_KEY</code>, <code>CONFIG_SYSTEM_TRUSTED_KEYS</code>,<code>CONFIG_SYSTEM_REVOCATION_LIST</code>, <code>CONFIG_SYSTEM_REVOCATION_KEYS</code>, <code>CONFIG_DEBUG_INFO=y</code><ul>
 <li>注意，<u><strong>上述每个都必须注释掉，如果注释了一部分但是漏掉其余部分会导致编译内核的时候出错</strong></u></li>
 </ul>
 </li>
-<li><p>此外还要在<code>make menuconfig</code>中配置抢占为General setup -&gt; Preemption Model:选择 Fully Preemptible Kernel (RT)</p>
-</li>
-<li><p>Processor type and features -&gt; Timer frequency:设置为 1000 Hz 以获得更高的时钟分辨率</p>
-</li>
-<li><p>General setup -&gt; Timers subsystem:启用 High Resolution Timer Support</p>
-</li>
-<li><p>然后删除内核模块的一些校验如图<img src="/imgs/d38463d06cd032900c646aea63e9cd5ce8cf91f46cfd3c0be900f292bfa2e93d.png" alt="picture 2">  </p>
-</li>
-<li><p>按教程编译即可</p>
-<h3 id="设置启动顺序"><a href="#设置启动顺序" class="headerlink" title="设置启动顺序"></a>设置启动顺序</h3></li>
-<li><p>因为自己编译的内核可能不是系统默认启动的内核，因此需要自己手动修改grub文件指定启动的内核</p>
-</li>
-<li><p>使用<code>grep &quot;menuentry&quot; /boot/grub/grub.cfg | cut -d &quot;&#39;&quot; -f2</code>命令查看系统安装的内核</p>
+<li>此外还要在<code>make menuconfig</code>中配置抢占为General setup -&gt; Preemption Model:选择 Fully Preemptible Kernel (RT)</li>
+<li>Processor type and features -&gt; Timer frequency:设置为 1000 Hz 以获得更高的时钟分辨率</li>
+<li>General setup -&gt; Timers subsystem:启用 High Resolution Timer Support</li>
+<li>然后删除内核模块的一些校验如图<img src="/imgs/d38463d06cd032900c646aea63e9cd5ce8cf91f46cfd3c0be900f292bfa2e93d.png" alt="picture 2">  </li>
+<li>按教程编译即可</li>
+</ul>
+<h3 id="修改默认启动内核"><a href="#修改默认启动内核" class="headerlink" title="修改默认启动内核"></a>修改默认启动内核</h3><ul>
+<li><p>先使用<code>sudo update-grub</code>观察</p>
 <ul>
-<li><img src="/imgs/5a11d993641759d633e33b5e109520204936a26d5db8dfc0edea05e4817da5ae.png" alt="picture 11">  </li>
+<li><img src="/imgs/ab4825e63da0896926b904d4feff4dc3636e700a122c77fbf8061cd44ae8f07e.png" alt="picture 14">  </li>
 </ul>
 </li>
-<li><p>然后看到自己需要的内核从0开始排第4个</p>
+<li><p>一般情况下编译安装内核之后，系统默认的启动内核还是原来的</p>
 </li>
-<li><p>修改<code>/etc/default/grub</code>文件</p>
-</li>
-<li><p>修改<code>GRUB_DEFAULT</code>为刚才的编号</p>
+<li><p>此时需要修改<code>/etc/default/grub</code>如图</p>
 <ul>
-<li><img src="/imgs/5e1e9dfe0ae2f691ca9a9d0bec737d60da951f6f6a33facdf78c9c2f72671ab7.png" alt="picture 12">  </li>
+<li><img src="/imgs/7ac153360953c93f129f1730a649e030d861af3f14ebc055bcacd91737ac6435.png" alt="picture 13">  </li>
+<li>也就是修改为<code>GRUB_DEFAULT=&quot;Advanced options for Ubuntu&gt;Ubuntu, with Linux &lt;你的Linux内核版本名称&gt;&quot;</code></li>
 </ul>
 </li>
-<li><p>执行<code>sudo update-grub</code>命令</p>
+<li><p>然后执行<code>sudo update-grub</code></p>
 </li>
-<li><p>重启</p>
+<li><p>然后重启即可自动进入指定的内核</p>
+<ul>
+<li><img src="/imgs/90ed2978f1ff7adea1edf9e2b3296bd6ef2effbb17dad7de030ce0369447afcc.png" alt="picture 15">  </li>
+</ul>
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://ftp.sjtu.edu.cn/sites/ftp.kernel.org/pub/linux/kernel/v6.x/">交大内核镜像（下载快）</a></p>
 <h3 id="内核模块测试"><a href="#内核模块测试" class="headerlink" title="内核模块测试"></a>内核模块测试</h3></li>
@@ -1386,23 +1378,6 @@
 <li><p>按照上述逻辑完美解决</p>
 </li>
 <li><p><img src="/imgs/f84343da00796cd0ca4f9669b26eb47a29f48e0364f448b7bc3d9907daa95320.png" alt="picture 3">  </p>
-</li>
-</ul>
-<h3 id="修改默认启动内核"><a href="#修改默认启动内核" class="headerlink" title="修改默认启动内核"></a>修改默认启动内核</h3><ul>
-<li>先使用<code>sudo update-grub</code>观察<ul>
-<li><img src="/imgs/ab4825e63da0896926b904d4feff4dc3636e700a122c77fbf8061cd44ae8f07e.png" alt="picture 14">  </li>
-</ul>
-</li>
-<li>一般情况下编译安装内核之后，系统默认的启动内核还是原来的</li>
-<li>此时需要修改<code>/etc/default/grub</code>如图<ul>
-<li><img src="/imgs/7ac153360953c93f129f1730a649e030d861af3f14ebc055bcacd91737ac6435.png" alt="picture 13">  </li>
-<li>也就是修改为<code>GRUB_DEFAULT=&quot;Advanced options for Ubuntu&gt;Ubuntu, with Linux &lt;你的Linux内核版本名称&gt;&quot;</code></li>
-</ul>
-</li>
-<li>然后执行<code>sudo update-grub</code></li>
-<li>然后重启即可自动进入指定的内核<ul>
-<li><img src="/imgs/90ed2978f1ff7adea1edf9e2b3296bd6ef2effbb17dad7de030ce0369447afcc.png" alt="picture 15">  </li>
-</ul>
 </li>
 </ul>
 <hr>
@@ -2236,7 +2211,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">663k</span>
+    <span title="站点总字数">662k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
