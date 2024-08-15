@@ -207,7 +207,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-08-15 10:14:34 / 修改时间：10:35:39" itemprop="dateCreated datePublished" datetime="2024-08-15T10:14:34+08:00">2024-08-15</time>
+              <time title="创建时间：2024-08-15 10:14:34 / 修改时间：16:02:35" itemprop="dateCreated datePublished" datetime="2024-08-15T10:14:34+08:00">2024-08-15</time>
             </span>
 
           <br>
@@ -216,7 +216,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>589</span>
+              <span>662</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -235,39 +235,42 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="使用忙等待和睡眠结合"><a href="#使用忙等待和睡眠结合" class="headerlink" title="使用忙等待和睡眠结合"></a>使用忙等待和睡眠结合</h2><ul>
+          <h2 id="使用忙等待和睡眠结合实现节约CPU的同时保证精确定时"><a href="#使用忙等待和睡眠结合实现节约CPU的同时保证精确定时" class="headerlink" title="使用忙等待和睡眠结合实现节约CPU的同时保证精确定时"></a>使用忙等待和睡眠结合实现节约CPU的同时保证精确定时</h2><ul>
 <li>单纯使用忙等待可以实现较高精度的定时，但是会导致<strong>CPU占用率升高</strong>，因此需要将<strong>忙等待和睡眠</strong>结合，让出CPU给其他进程使用，需要的时候再上处理机运行</li>
 <li>代码<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">threadRT</span><span class="params">(<span class="keyword">void</span>*)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// setThreadRT(98);</span></span><br><span class="line">    FILE* fp;</span><br><span class="line">    fp = fopen(<span class="string">&quot;log.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line">    <span class="keyword">uint64_t</span> prev = get_us();</span><br><span class="line">    <span class="keyword">uint64_t</span> cur;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        usleep(<span class="number">1500</span>);</span><br><span class="line">        <span class="keyword">while</span>(get_us() - prev &lt; <span class="number">2500UL</span>)&#123;&#125;</span><br><span class="line">        cur = get_us();</span><br><span class="line">        <span class="built_in">fprintf</span>(fp, <span class="string">&quot;%lu,&quot;</span>, cur-prev);</span><br><span class="line">        prev = cur;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>此时如果不将线程设置为实时线程而且睡眠1500微秒，画出延时图片如下<ul>
-<li><img src="/imgs/b6d0108a7128e9994d12fff457c020017435d571497956ffa3e88514d0393780.png" alt="picture 0">  </li>
+<li>将线程设置为<strong>实时线程</strong><h3 id="纯忙等测试"><a href="#纯忙等测试" class="headerlink" title="纯忙等测试"></a>纯忙等测试</h3><ul>
+<li>除了小部分误差很大的极端位置之外，运行时间极为稳定</li>
+<li><img src="/imgs/9e60924698bdfa82554db0033cd0fe53438ad10f2f4383600e1ab1f0df4ec68c.png" alt="picture 8">  </li>
+<li>大部分误差在50000微秒左右</li>
+<li>将上述位置除去之后，发现剩余的时间几乎不发生任何变化</li>
+<li><img src="/imgs/4c37b060e97b7eb10b22f16749255adc7779adb1d5c2bcbfa163d3d92b634c21.png" alt="picture 9">  </li>
 </ul>
 </li>
-<li>可见还是有一些不规律的部分</li>
-<li>将睡眠时间调整为1000微秒<ul>
-<li><img src="/imgs/df3d4e3bcfdf58a39fb9f2fa9c32343c22863ffc3be39fee99e636ef100cbcca.png" alt="picture 1"> </li>
+<li>推测是是实时线程的<code>sched_rt_runtime_us</code>设置为<code>950000</code>导致的</li>
+<li>将<code>sched_rt_runtime_us</code>设置为<code>1000000</code>之后，测试结果十分稳定<ul>
+<li><img src="/imgs/028fe6a25c2a18ffc39f2f2ac01533abe2450342b0571fba14871fe04a5764f8.png" alt="picture 12">  </li>
+<li><img src="/imgs/1726c7dad1568b98021faa7900e35d7cb18e1a0d66ea821a313bb6f02c9e27a2.png" alt="picture 13">  </li>
 </ul>
 </li>
-<li>可见不规律的部分大为减少，而且波动范围也比之前有所下降</li>
-<li>此时CPU的占用率为（单核心）<ul>
-<li><img src="/imgs/205866412694baa85677be6f4b14cfc7673585376b4411420679b3e4e6bf8f9c.png" alt="picture 2">  </li>
+</ul>
+<h3 id="引入usleep节省CPU占用"><a href="#引入usleep节省CPU占用" class="headerlink" title="引入usleep节省CPU占用"></a>引入usleep节省CPU占用</h3><ul>
+<li><p>usleep设置为1500的情况</p>
+<ul>
+<li><img src="/imgs/59ea195416af7d19e9966a1b21f71f750baa81309a33fde5f798ef3f9e407327.png" alt="picture 10">  </li>
+<li>可见误差最大不超过1微秒</li>
 </ul>
 </li>
-<li>不超过50%</li>
-<li>如果将线程设置为<strong>实时线程</strong><ul>
-<li><img src="/imgs/5f62c8aaecdf654c7e8871f6d1f66fb29700e2f7f4d2b1a287e00a2e5d21ebac.png" alt="picture 3">  </li>
-<li>可见此时CPU占用直接升到了50%</li>
-<li><img src="/imgs/5cd4a4fa5db215f098a15f3948798f127b34bd65baa5338ef71abd6a0149eea3.png" alt="picture 5">  </li>
-<li>效果提升不明显，换用nanosleep也是如此</li>
+<li><p>usleep设置为2000</p>
+<ul>
+<li><img src="/imgs/209fbce39f205aea6727648005f51673156b2d41390a4120d53cd48df849715e.png" alt="picture 11">  </li>
+<li>可见误差最大不超过2微秒</li>
+<li>而且在1600次测试中只发生了不超过三次</li>
 </ul>
 </li>
-<li>如果使用实时线程+纯忙等<ul>
-<li><img src="/imgs/61bc6bf358eff6fdc2bf0a1f5ce35d3979925e40cb2e16af268e8f385763ed84.png" alt="picture 6">  </li>
-<li>看到CPU占用超过了100%</li>
-<li><img src="/imgs/27b664db367dcf315dce80f8ca55e241cc57057eac41e4d1cc9f1ca4de28f972.png" alt="picture 7">  </li>
-<li>但还是存在阶段性的波动</li>
-</ul>
+<li><p><strong>注意上述测试不能在虚拟机完成，必须在物理机完成</strong></p>
 </li>
-<li><strong>注意，上述所有测试都是在Ubuntu虚拟机进行的，可能收到虚拟机局限较大</strong></li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33386775/article/details/111749677">使用VMWare安装可插拔物理机教程</a></p>
+</li>
 </ul>
 
       
