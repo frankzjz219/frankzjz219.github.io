@@ -1279,7 +1279,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-08-14 20:10:03" itemprop="dateModified" datetime="2024-08-14T20:10:03+08:00">2024-08-14</time>
+                <time title="修改时间：2024-08-15 14:31:05" itemprop="dateModified" datetime="2024-08-15T14:31:05+08:00">2024-08-15</time>
               </span>
 
           <br>
@@ -1288,7 +1288,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.1k</span>
+              <span>4.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1388,19 +1388,24 @@
 <li><p><img src="/imgs/f84343da00796cd0ca4f9669b26eb47a29f48e0364f448b7bc3d9907daa95320.png" alt="picture 3">  </p>
 </li>
 </ul>
+<h3 id="修改默认启动内核"><a href="#修改默认启动内核" class="headerlink" title="修改默认启动内核"></a>修改默认启动内核</h3><ul>
+<li>先使用<code>sudo update-grub</code>观察<ul>
+<li><img src="/imgs/ab4825e63da0896926b904d4feff4dc3636e700a122c77fbf8061cd44ae8f07e.png" alt="picture 14">  </li>
+</ul>
+</li>
+<li>一般情况下编译安装内核之后，系统默认的启动内核还是原来的</li>
+<li>此时需要修改<code>/etc/default/grub</code>如图<ul>
+<li><img src="/imgs/7ac153360953c93f129f1730a649e030d861af3f14ebc055bcacd91737ac6435.png" alt="picture 13">  </li>
+<li>也就是修改为<code>GRUB_DEFAULT=&quot;Advanced options for Ubuntu&gt;Ubuntu, with Linux &lt;你的Linux内核版本名称&gt;&quot;</code></li>
+</ul>
+</li>
+<li>然后执行<code>sudo update-grub</code></li>
+<li>然后重启即可自动进入指定的内核<ul>
+<li><img src="/imgs/90ed2978f1ff7adea1edf9e2b3296bd6ef2effbb17dad7de030ce0369447afcc.png" alt="picture 15">  </li>
+</ul>
+</li>
+</ul>
 <hr>
-<ul>
-<li>以下为旧流程<h2 id="安装实时补丁"><a href="#安装实时补丁" class="headerlink" title="安装实时补丁"></a>安装实时补丁</h2></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44786250/article/details/125736966">参考</a><h3 id="对单个文件打补丁"><a href="#对单个文件打补丁" class="headerlink" title="对单个文件打补丁"></a>对单个文件打补丁</h3></li>
-<li>在内核源码根目录下</li>
-<li><code>patch -p1 &lt; 补丁文件.patch</code><h3 id="修改内核启动顺序"><a href="#修改内核启动顺序" class="headerlink" title="修改内核启动顺序"></a>修改内核启动顺序</h3></li>
-<li>编辑<code>/etc/default/grub</code>文件</li>
-<li>GRUB_TIMEOUT=10  %超时时间，单位s</li>
-<li>GRUB_DEFAULT=”1&gt;2”  %1代表默认启动内核，2代表所启动内核位于列表中第2个（序号从0开始）</li>
-</ul>
-<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><ul>
-<li><img src="/imgs/77624abe0dcccbff9f91659a256034ba71294da78a837f76211681bf0f79806b.png" alt="picture 0">  </li>
-</ul>
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="启动Ubuntu的时候bad-shim-signature"><a href="#启动Ubuntu的时候bad-shim-signature" class="headerlink" title="启动Ubuntu的时候bad shim signature"></a>启动Ubuntu的时候bad shim signature</h3><ul>
 <li><p>因为BIOS里开启了安全启动，进入BIOS关闭<strong>secure boot</strong>即可</p>
 <h3 id="遇到类似于memtest86-needs-a-16bit等等问题"><a href="#遇到类似于memtest86-needs-a-16bit等等问题" class="headerlink" title="遇到类似于memtest86+ needs a 16bit等等问题"></a>遇到类似于memtest86+ needs a 16bit等等问题</h3></li>
