@@ -182,6 +182,115 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/10/31/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9F%A5%E8%AF%86%E5%B8%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/10/31/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9F%A5%E8%AF%86%E5%B8%96/" class="post-title-link" itemprop="url">机器学习知识帖</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-31 15:45:40" itemprop="dateCreated datePublished" datetime="2022-10-31T15:45:40+08:00">2022-10-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-14 16:28:02" itemprop="dateModified" datetime="2022-11-14T16:28:02+08:00">2022-11-14</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>686</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33992985">梯度下降法</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/34842727">正规方程法(最小二乘法)</a></p>
+<h2 id="逻辑回归"><a href="#逻辑回归" class="headerlink" title="逻辑回归"></a>逻辑回归</h2></li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28408516">逻辑回归</a></p>
+<h2 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h2></li>
+<li><p>在逻辑回归中，最常用的是代价函数是交叉熵(Cross Entropy)，交叉熵是一个常见的代价函数，在神经网络中也会用到。下面是《神经网络与深度学习》一书对交叉熵的解释：</p>
+</li>
+<li><p>交叉熵是对「出乎意料」（译者注：原文使用suprise）的度量。神经元的目标是去计算函数x→y=y(x)。但是我们让它取而代之计算函数x→a=a(x)。假设我们把a当作y等于1的概率，1−a是y等于0的概率。那么，交叉熵衡量的是我们在知道y的真实值时的平均「出乎意料」程度。当输出是我们期望的值，我们的「出乎意料」程度比较低；当输出不是我们期望的，我们的「出乎意料」程度就比较高。</p>
+</li>
+<li><p>在1948年，克劳德·艾尔伍德·香农将热力学的熵，引入到信息论，因此它又被称为香农熵(Shannon Entropy)，它是香农信息量(Shannon Information Content, SIC)的期望。香农信息量用来度量不确定性的大小：一个事件的香农信息量等于0，表示该事件的发生不会给我们提供任何新的信息，例如确定性的事件，发生的概率是1，发生了也不会引起任何惊讶；当不可能事件发生时，香农信息量为无穷大，这表示给我们提供了无穷多的新信息，并且使我们无限的惊讶</p>
+</li>
+<li><p>[交叉熵](<a target="_blank" rel="noopener" href="https://blog.csdn.net/rtygbwwwerr/article/details/50778098">https://blog.csdn.net/rtygbwwwerr/article/details/50778098</a></p>
+</li>
+<li><p><img src="/imgs/320549d4337620d61dd7b081632aa72e223e40cb5484ebaedd5756de3236de03.png" alt="picture 1">  </p>
+<ul>
+<li>上述式子是熵的期望（不同情况的熵的加权和）</li>
+</ul>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28415991">代价函数</a></p>
+<h2 id="SVM"><a href="#SVM" class="headerlink" title="SVM"></a>SVM</h2></li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/v_july_v/article/details/7624837">SVM原理</a></p>
+<h2 id="KMeans"><a href="#KMeans" class="headerlink" title="KMeans"></a>KMeans</h2></li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/78798251?utm_source=qq">KMeans</a></p>
+<h2 id="Dueling-DQN"><a href="#Dueling-DQN" class="headerlink" title="Dueling DQN"></a>Dueling DQN</h2></li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/110807201">Dueling DQN</a></p>
+<h2 id="文章链接"><a href="#文章链接" class="headerlink" title="文章链接"></a>文章链接</h2></li>
+<li><p><a target="_blank" rel="noopener" href="https://openai.com/blog/vpt/">openai用强化学习玩我的世界</a></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/10/16/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%9B%9E%E5%BD%92/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1146,128 +1255,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2022/09/17/Ubuntu%E4%B8%8B%E5%BC%80%E5%8F%91Linux%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/09/17/Ubuntu%E4%B8%8B%E5%BC%80%E5%8F%91Linux%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97/" class="post-title-link" itemprop="url">Ubuntu下开发Linux内核模块</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-09-17 19:46:38" itemprop="dateCreated datePublished" datetime="2022-09-17T19:46:38+08:00">2022-09-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-03-04 23:02:57" itemprop="dateModified" datetime="2023-03-04T23:02:57+08:00">2023-03-04</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ul>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43455712/article/details/117468579">参考链接</a></p>
-<h2 id="Ubuntu下开发Linux内核模块"><a href="#Ubuntu下开发Linux内核模块" class="headerlink" title="Ubuntu下开发Linux内核模块"></a>Ubuntu下开发Linux内核模块</h2></li>
-<li><p>Linux内核源码头文件位置<code>/usr/src/linux-headers-$(LINUX_KERNEL)</code></p>
-</li>
-<li><p>其中的LINUX_KERNEL是Linux内核版本号，使用<code>uname -r</code>获得</p>
-<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">obj-m := test.o</span><br><span class="line">CURRENT_PATH := <span class="variable">$(<span class="built_in">shell</span> pwd)</span></span><br><span class="line">LINUX_KERNEL := <span class="variable">$(<span class="built_in">shell</span> uname -r)</span></span><br><span class="line">LINUX_KERNEL_PATH := /usr/src/linux-headers-<span class="variable">$(LINUX_KERNEL)</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">	make -C <span class="variable">$(LINUX_KERNEL_PATH)</span> M=<span class="variable">$(CURRENT_PATH)</span> modules</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	make -C <span class="variable">$(LINUX_KERNEL_PATH)</span> M=<span class="variable">$(CURRENT_PATH)</span> clean</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="更新包含文件的目录"><a href="#更新包含文件的目录" class="headerlink" title="更新包含文件的目录"></a>更新包含文件的目录</h2></li>
-<li><p>在<u>远程端</u>安装C/C++等全套插件（<strong>不安装的话没有相应的选项</strong>）</p>
-</li>
-<li><p>按<code>Ctrl+Shift+P</code>打开命令</p>
-</li>
-<li><p>输入<code>C/C++</code></p>
-</li>
-<li><p><img src="/imgs/3fadb8e8eb03dd521095a75961d71a0eaf8e0b8e404d5036369e33bffed6555b.png" alt="图 5">  </p>
-</li>
-<li><p>然后在输入框里粘贴地址<code>/usr/src/linux-headers-&lt;uname -r的输出&gt;/include/**</code>和<code>/usr/src/linux-headers-&lt;uname -r的输出&gt;/arch/x86/include/</code></p>
-</li>
-<li><p><img src="/imgs/b578e50a48b4244960928d63e81d416ad4ebdb44bc237a25b504132ce59fc89f.png" alt="picture 4">  </p>
-<ul>
-<li>重启设置之后<code>**</code>可能会消失</li>
-</ul>
-</li>
-<li><p>然后即可找到printk等函数的定义</p>
-<ul>
-<li><img src="/imgs/4eb3b08f44d7d9de7683b995f0a039fbb891857b050e26c607cce3733dc5db20.png" alt="图 7">  </li>
-</ul>
-</li>
-</ul>
-<h3 id="但是还是有报错"><a href="#但是还是有报错" class="headerlink" title="但是还是有报错"></a>但是还是有报错</h3><ul>
-<li><img src="/imgs/c559b03e240382fdaea8cfeda7b97012bf360206024705575ce9fa6f259d614f.png" alt="picture 1">  </li>
-</ul>
-<h2 id="代码文件"><a href="#代码文件" class="headerlink" title="代码文件"></a>代码文件</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/init.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;Dual BSD/GPL&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hello_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	printk(KERN_ALERT <span class="string">&quot; Hello World enter\n&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hello_exit</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	printk(KERN_ALERT<span class="string">&quot; Hello World exit\n &quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">module_init(hello_init);</span><br><span class="line">module_exit(hello_exit);</span><br><span class="line"> </span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;Song Baohua&quot;</span>);</span><br><span class="line">MODULE_DESCRIPTION(<span class="string">&quot;A simple Hello World Module&quot;</span>);</span><br></pre></td></tr></table></figure>
-<h2 id="编译结果"><a href="#编译结果" class="headerlink" title="编译结果"></a>编译结果</h2><ul>
-<li><img src="/imgs/bcffe914e1cdc23926f55b30fbf48854fe6645be5a7c614c63d7c5d294562232.png" alt="图 3">  </li>
-<li><code>insmod</code>安装模块，<code>rmmod</code>移除模块<ul>
-<li><code>insmod</code>需要<code>sudo</code></li>
-<li>安装的是<code>.ko</code>文件</li>
-<li><img src="/imgs/d49222db17a55746e5d61c89182a737c6275304412c38ff3d9587f685f379c00.png" alt="picture 2">  </li>
-</ul>
-</li>
-<li>使用<code>dmesg</code>查看<strong>系统输出</strong></li>
-<li><img src="/imgs/6433a69aa1954041ecf4f563d8d6362a7365db8eaa4b83c234917c50fb663ba2.png" alt="图 4">  </li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1339,14 +1326,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">188</span>
+          <span class="site-state-item-count">189</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">64</span>
+        <span class="site-state-item-count">65</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1389,7 +1376,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">20:05</span>
+    <span title="站点阅读时长">20:06</span>
 </div>
 
         

@@ -182,6 +182,139 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/09/08/python%E5%A4%9A%E8%BF%9B%E7%A8%8B%EF%BC%88multiprocessing%EF%BC%89%E7%9B%B8%E5%85%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/08/python%E5%A4%9A%E8%BF%9B%E7%A8%8B%EF%BC%88multiprocessing%EF%BC%89%E7%9B%B8%E5%85%B3/" class="post-title-link" itemprop="url">python多进程（multiprocessing）相关</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-09-08 10:52:55 / 修改时间：16:35:03" itemprop="dateCreated datePublished" datetime="2023-09-08T10:52:55+08:00">2023-09-08</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="多进程库及其API"><a href="#多进程库及其API" class="headerlink" title="多进程库及其API"></a>多进程库及其API</h2><ul>
+<li><p><code>import multiprocessing</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建进程</span></span><br><span class="line">Process(主函数)</span><br><span class="line"><span class="comment"># 注意调用的时候使用</span></span><br><span class="line">multiprocessing.Process(target=worker)</span><br><span class="line"><span class="comment"># 启动进程</span></span><br><span class="line">process.start()</span><br><span class="line"><span class="comment"># 回收进程（阻塞）</span></span><br><span class="line">process.join()</span><br></pre></td></tr></table></figure></li>
+<li><p>注意，在实验过程中多进程和单进程方式执行程序，消耗的<strong>总时间几乎没有区别</strong>，同时从任务管理器上可以看出，python并没有创建真正意义上的多个进程</p>
+</li>
+<li><p>推测仍然是利用并发而不是并行实现的</p>
+<ul>
+<li><img src="/imgs/58058282893e7ce2dba1cce50925a9e47e2f3ddbe7fe445f2c8210495a73a7a2.png" alt="picture 0">  </li>
+<li>CPU端也没有明显看到多CPU并行计算的痕迹</li>
+<li><img src="/imgs/89cf0ea913325b7877a2f0a23f514ea338c80cde44172bed57fd2bd3b136ebe6.png" alt="picture 1">  </li>
+</ul>
+</li>
+<li><p><img src="/imgs/fc7876c3bf2ac9f48119643bdc5a5fd8c85c061968826211f9c15602684d7924.png" alt="picture 3">  </p>
+<ul>
+<li>main线程计时出现问题可<h2 id="相关的计时函数"><a href="#相关的计时函数" class="headerlink" title="相关的计时函数"></a>相关的计时函数</h2></li>
+</ul>
+</li>
+<li><p><code>time.thread_time</code>和<code>time.process_time</code>都是Python中<code>time</code>模块中的函数。<code>thread_time</code>函数返回当前线程的系统和用户CPU时间之和（<strong>以秒为单位</strong>）。它<strong>不包括睡眠期间经过的时间</strong>，因此它是线程特定的。而<code>process_time</code>函数返回当前进程的<strong>系统和用户CPU时间之和</strong>（以秒为单位）。这两个函数都可以用来测量代码执行的性能，但它们所测量的对象不同：一个是线程，另一个是进程</p>
+</li>
+<li><p><code>time.perf_counter</code>是Python中<code>time</code>模块中的一个函数，它返回一个性能计数器的值（以秒为单位）。这个计数器具有<strong>最高可用的分辨率</strong>，用于测量<strong>短时间</strong>内的时间。它包括睡眠期间经过的时间，并且是系统范围内的。返回值的参考点是未定义的，因此只有连续调用之间的结果差异是有效的。您可以使用这个函数来测量代码执行的性能。</p>
+</li>
+<li><p><code>time.time()</code>是Python中time模块的一个函数，它返回当前时间的时间戳（以1970年1月1日00:00:00为起点的秒数）。这个时间戳表示从1970年1月1日00:00:00（UTC）到当前时间经过的秒数，通常不包括闰秒</p>
+<h2 id="进程间通信（套接字）"><a href="#进程间通信（套接字）" class="headerlink" title="进程间通信（套接字）"></a>进程间通信（套接字）</h2></li>
+<li><p>因为单纯的使用python并无法实现真正的多进程并行计算，因此需要使用多个程序分开运行，之间通过<code>socket</code>套接字通信</p>
+<h3 id="python中启动另一个（真正意义上的）进程"><a href="#python中启动另一个（真正意义上的）进程" class="headerlink" title="python中启动另一个（真正意义上的）进程"></a>python中启动另一个（真正意义上的）进程</h3></li>
+<li><p>使用<code>subprocess</code>库</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">subprocess.run([<span class="string">&#x27;python&#x27;</span>, <span class="string">&#x27;./localClient.py&#x27;</span>], close_fds=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure></li>
+<li><p>其中<code> close_fds=True</code>的作用是防止子进程继承父进程的文件描述符导致出现不可预知的问题（比如<code>socket</code>无法链接等）</p>
+</li>
+<li><p>windows下无法使用<code>os</code>库的<code>os.fork()</code>创建子进程</p>
+<h3 id="进程与子进程之间通过套接字通信"><a href="#进程与子进程之间通过套接字通信" class="headerlink" title="进程与子进程之间通过套接字通信"></a>进程与子进程之间通过套接字通信</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># localServer.py</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">startClient</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;proc Start&quot;</span>)</span><br><span class="line">    subprocess.run([<span class="string">&#x27;python&#x27;</span>, <span class="string">&#x27;./localClient.py&#x27;</span>], close_fds=<span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># print(result.stdout.decode(&quot;utf-8&quot;))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    server = socket.socket()</span><br><span class="line">    host = socket.gethostname()</span><br><span class="line">    port = <span class="number">11111</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;server on &quot;</span>, host)</span><br><span class="line">    server.bind((host, port))</span><br><span class="line">    <span class="comment"># 在这个端口等待链接</span></span><br><span class="line">    server.listen(<span class="number">2</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Waiting... &quot;</span>)</span><br><span class="line"></span><br><span class="line">    proc = multiprocessing.Process(target=startClient)</span><br><span class="line">    proc.start()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># while True:</span></span><br><span class="line">    client, addr = server.accept()</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">    b = <span class="built_in">bytes</span>(<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">    client.send(b)</span><br><span class="line">    rec = client.recv(<span class="number">5</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;server time stamp: %f&quot;</span> % time.time())</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Server rec: &quot;</span>, rec.decode(<span class="string">&quot;utf-8&quot;</span>))</span><br><span class="line">    proc.join()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># localClient.py</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;client running&quot;</span>)</span><br><span class="line"></span><br><span class="line">client = socket.socket()</span><br><span class="line">host = socket.gethostname()</span><br><span class="line">port = <span class="number">11111</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Trying to connect...on &quot;</span>, host)</span><br><span class="line">time.sleep(<span class="number">0.5</span>)</span><br><span class="line">client.connect((host, port))</span><br><span class="line"><span class="built_in">print</span>(client.recv(<span class="number">5</span>).decode(<span class="string">&quot;utf-8&quot;</span>))</span><br><span class="line">time.sleep(<span class="number">2</span>)</span><br><span class="line">b = <span class="built_in">bytes</span>(<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">client.send(b)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;client time stamp: %f&quot;</span>%time.time())</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="真正的多进程测试"><a href="#真正的多进程测试" class="headerlink" title="真正的多进程测试"></a>真正的多进程测试</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process, Queue</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calcFunc</span>(<span class="params">cnt, <span class="built_in">id</span></span>):</span></span><br><span class="line">    subprocess.run([<span class="string">&#x27;python&#x27;</span>, <span class="string">&#x27;./calcProc.py&#x27;</span>, <span class="built_in">str</span>(cnt), <span class="built_in">str</span>(<span class="built_in">id</span>)])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    cnt = <span class="built_in">round</span>(<span class="number">5e8</span>)</span><br><span class="line">    proLen = <span class="number">10</span></span><br><span class="line">    proArr = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(proLen):</span><br><span class="line">        proArr.append(Process(target=calcFunc, args = (cnt, i)))</span><br><span class="line">    start = time.time()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(proLen):</span><br><span class="line">        proArr[i].start()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(proLen):</span><br><span class="line">        proArr[i].join()</span><br><span class="line">    end = time.time()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Time of main thread: %f&quot;</span>%(end-start))</span><br></pre></td></tr></table></figure></li>
+<li><p>测试过程</p>
+<ul>
+<li><img src="/imgs/fb16e5a78a62a4a4f2ea442bbddf1f873c1449d7fa3969fe9499857e41e67b18.png" alt="picture 4">  <ul>
+<li>可见是真的创建了很多进程</li>
+</ul>
+</li>
+<li><img src="/imgs/45f7997c503bcd39b982f96e591bc0d66748f9cede6f9463182d08667b0f9370.png" alt="picture 8">  <ul>
+<li>以上是使用<code>time.time()</code>计时的结果, 可见<strong>主进程使用的时间跟任何一个计算进程相当</strong></li>
+</ul>
+</li>
+<li><img src="/imgs/67dc74cbd86ca322124bee27912b90f8ccc74cca7fbbd193049a584d1b72f0ec.png" alt="picture 6">  <ul>
+<li>以上使用<code>time.process_time()</code>的计时结果，可见计时<u>出现了一些问题</u></li>
+</ul>
+</li>
+<li>在主进程中的顺序执行结果为<ul>
+<li><img src="/imgs/5b306eaad041c7ddf3e6193bb48ddbfe56a4ef6f43a8d6af3ac63ff8858d4607.png" alt="picture 7">  </li>
+<li>可见执行的时间很长，但是其中<strong>单个进程的执行时间较短</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="多个父进程与子进程通过套接字通信"><a href="#多个父进程与子进程通过套接字通信" class="headerlink" title="多个父进程与子进程通过套接字通信"></a>多个父进程与子进程通过套接字通信</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 主进程</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">startClient</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;proc Start&quot;</span>)</span><br><span class="line">    subprocess.run([<span class="string">&#x27;python&#x27;</span>, <span class="string">&#x27;./localClient.py&#x27;</span>], close_fds=<span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># print(result.stdout.decode(&quot;utf-8&quot;))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    server = socket.socket()</span><br><span class="line">    host = socket.gethostname()</span><br><span class="line">    port = <span class="number">11111</span></span><br><span class="line">    procLen = <span class="number">10</span></span><br><span class="line">    procArr = []</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;server on &quot;</span>, host)</span><br><span class="line">    server.bind((host, port))</span><br><span class="line">    <span class="comment"># 在这个端口等待链接</span></span><br><span class="line">    server.listen(procLen)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Waiting... &quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(procLen):</span><br><span class="line">        proc = multiprocessing.Process(target=startClient)</span><br><span class="line">        proc.start()</span><br><span class="line">        procArr.append(proc)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(procLen):</span><br><span class="line">        client, addr = server.accept()</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">        b = <span class="built_in">bytes</span>(<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">        client.send(b)</span><br><span class="line">        rec = client.recv(<span class="number">5</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;server time stamp: %f&quot;</span> % time.time())</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Server rec: &quot;</span>, rec.decode(<span class="string">&quot;utf-8&quot;</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(procLen):</span><br><span class="line">        procArr[i].join()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 子进程</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;client running&quot;</span>)</span><br><span class="line"></span><br><span class="line">client = socket.socket()</span><br><span class="line">host = socket.gethostname()</span><br><span class="line">port = <span class="number">11111</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Trying to connect...on &quot;</span>, host)</span><br><span class="line">time.sleep(<span class="number">0.5</span>)</span><br><span class="line">client.connect((host, port))</span><br><span class="line"><span class="built_in">print</span>(client.recv(<span class="number">5</span>).decode(<span class="string">&quot;utf-8&quot;</span>))</span><br><span class="line">time.sleep(<span class="number">2</span>)</span><br><span class="line">b = <span class="built_in">bytes</span>(<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">client.send(b)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\nclient time stamp: %f&quot;</span>%time.time())</span><br></pre></td></tr></table></figure>
+<ul>
+<li>运行效果</li>
+<li><img src="/imgs/b6f49217c7a7f4205dcaf34519acc94f71e81346c898385a413c7bdcc396e288.png" alt="picture 9">  </li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/09/04/Cpp%E4%B8%ADSTL%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1431,85 +1564,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/06/27/%E4%BF%AE%E6%94%B9-etc-sudoers%E6%96%87%E4%BB%B6%E5%87%BA%E9%94%99%E5%AF%BC%E8%87%B4%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/06/27/%E4%BF%AE%E6%94%B9-etc-sudoers%E6%96%87%E4%BB%B6%E5%87%BA%E9%94%99%E5%AF%BC%E8%87%B4%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">修改/etc/sudoers文件出错导致问题解决方案</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-06-27 16:36:10 / 修改时间：16:38:03" itemprop="dateCreated datePublished" datetime="2023-06-27T16:36:10+08:00">2023-06-27</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>564</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="出错实例"><a href="#出错实例" class="headerlink" title="出错实例"></a>出错实例</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; /etc/sudoers: syntax error near line 21 &lt;&lt;&lt;</span></span><br><span class="line">sudo: parse error in /etc/sudoers near line 21</span><br><span class="line">sudo: no valid sudoers sources found, quitting</span><br><span class="line">sudo: unable to initialize policy plugin</span><br></pre></td></tr></table></figure>
-<p>之后尝试使用</p>
-<ul>
-<li><code>pkexec visudo</code>又报错<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">==== AUTHENTICATING FOR org.freedesktop.policykit.exec ===</span><br><span class="line">Authentication is needed to run `/usr/sbin/visudo&#x27; as the super user</span><br><span class="line">Authenticating as: ubuntu,,, (ubuntu)</span><br><span class="line">Password: </span><br><span class="line">polkit-agent-helper-1: error response to PolicyKit daemon: GDBus.Error:org.freedesktop.PolicyKit1.Error.Failed: No session for cookie</span><br><span class="line">==== AUTHENTICATION FAILED ===</span><br><span class="line">Error executing command as another user: Not authorized</span><br></pre></td></tr></table></figure>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2></li>
-<li><a target="_blank" rel="noopener" href="https://codeleading.com/article/16806443604/#google_vignette">参考链接</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1581,14 +1635,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">188</span>
+          <span class="site-state-item-count">189</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">64</span>
+        <span class="site-state-item-count">65</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1631,7 +1685,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">20:05</span>
+    <span title="站点阅读时长">20:06</span>
 </div>
 
         
