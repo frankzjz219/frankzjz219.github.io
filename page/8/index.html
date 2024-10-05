@@ -2607,7 +2607,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-24 17:39:34" itemprop="dateModified" datetime="2024-06-24T17:39:34+08:00">2024-06-24</time>
+                <time title="修改时间：2024-10-05 10:17:16" itemprop="dateModified" datetime="2024-10-05T10:17:16+08:00">2024-10-05</time>
               </span>
 
           <br>
@@ -2732,7 +2732,10 @@ UDP接收方收到报文后，不需要给出任何确认
 <li>UDP 的主机不需要维持复杂的连接状态表</li>
 </ol>
 <h5 id="什么时候选择TCP，什么时候选UDP？"><a href="#什么时候选择TCP，什么时候选UDP？" class="headerlink" title="什么时候选择TCP，什么时候选UDP？"></a>什么时候选择TCP，什么时候选UDP？</h5><p>对某些实时性要求比较高的情况，选择UDP，比如游戏，媒体通信，实时视频流（直播），即使出现传输错误也可以容忍；其它大部分情况下，HTTP都是用TCP，因为要求传输的内容可靠，不出现丢失</p>
-<h5 id="HTTP可以使用UDP吗？"><a href="#HTTP可以使用UDP吗？" class="headerlink" title="HTTP可以使用UDP吗？"></a>HTTP可以使用UDP吗？</h5><p>HTTP不可以使用UDP，HTTP需要基于可靠的传输协议，而UDP不可靠<br>注：<strong>http 3.0 使用udp实现</strong><br><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/HTTP/3">https://zh.wikipedia.org/wiki/HTTP/3</a></p>
+<h5 id="HTTP可以使用UDP吗？"><a href="#HTTP可以使用UDP吗？" class="headerlink" title="HTTP可以使用UDP吗？"></a>HTTP可以使用UDP吗？</h5><p>HTTP不可以使用UDP，HTTP需要基于可靠的传输协议，而UDP不可靠<br>注：<strong>http 3.0 使用udp实现</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/HTTP/3">维基</a></li>
+</ul>
 <h5 id="面向连接和无连接的区别"><a href="#面向连接和无连接的区别" class="headerlink" title="面向连接和无连接的区别"></a>面向连接和无连接的区别</h5><p>无连接的网络服务（数据报服务） –   面向连接的网络服务（虚电路服务）</p>
 <p>虚电路服务：首先建立连接，所有的数据包经过相同的路径，服务质量有较好的保证；</p>
 <p>数据报服务：每个数据包含目的地址，数据路由相互独立（路径可能变化）；网络尽最大努力交付数据，但不保证不丢失、不保证先后顺序、不保证在时限内交付；网络发生拥塞时，可能会将一些分组丢弃；</p>
