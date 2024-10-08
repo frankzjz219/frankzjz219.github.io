@@ -1403,7 +1403,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-08-18 20:44:42" itemprop="dateModified" datetime="2024-08-18T20:44:42+08:00">2024-08-18</time>
+                <time title="修改时间：2024-10-08 15:56:01" itemprop="dateModified" datetime="2024-10-08T15:56:01+08:00">2024-10-08</time>
               </span>
 
           <br>
@@ -1412,14 +1412,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4k</span>
+              <span>4.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
+              <span>8 分钟</span>
             </span>
 
         </div>
@@ -1458,19 +1458,53 @@
 </li>
 </ul>
 <h2 id="（更新）安装参考"><a href="#（更新）安装参考" class="headerlink" title="（更新）安装参考"></a>（更新）安装参考</h2><ul>
-<li>安装依赖<code>libncurses-dev</code>和<code>flex</code>, <code>bison</code>, <code>libelf-dev</code>, <code>libssl-dev</code></li>
-<li>如果下载的是形如<code>patches-6.1.83-rt28.tar.xz</code>之类的</li>
-<li>先将其解压缩，然后在内核源码目录下执行<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">for patch in &lt;解压缩目录&gt;/*.patch; do</span><br><span class="line">    patch -p1 &lt; &quot;$patch&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_28882933/article/details/118293544">简单流程</a></li>
-<li>注意最后要注释设置<code>CONFIG_MODULE_SIG_ALL</code>, <code>CONFIG_MODULE_SIG_KEY</code>, <code>CONFIG_SYSTEM_TRUSTED_KEYS</code>,<code>CONFIG_SYSTEM_REVOCATION_LIST</code>, <code>CONFIG_SYSTEM_REVOCATION_KEYS</code>, <code>CONFIG_DEBUG_INFO=y</code><ul>
+<li><p>安装依赖<code>sudo apt-get install build-essential libncurses-dev bison flex libssl-dev libelf-dev</code></p>
+</li>
+<li><p>如果下载的是形如<code>patches-6.1.83-rt28.tar.xz</code>之类的</p>
+</li>
+<li><p>先将其解压缩，然后在内核源码目录下执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">for patch in &lt;解压缩目录&gt;/*.patch; do</span><br><span class="line">    patch -p1 &lt; &quot;$patch&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure></li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_28882933/article/details/118293544">简单流程</a></p>
+<ul>
+<li>将内核源码解压到<code>/usr/src/&lt;你的内核名称&gt;</code>，目录下<ul>
+<li><code>sudo tar -xvf &lt;&gt;.tar.xz -C &lt;path to kernel dir&gt;</code></li>
+</ul>
+</li>
+<li><code>sudo su</code>切换到root用户</li>
+<li>(此处跳过打实时patch的步骤)</li>
+<li>将旧的config复制到当前源码目录下的<code>.config</code>文件<ul>
+<li><code>cp /boot/config-$(uname -r) .config</code></li>
+</ul>
+</li>
+<li>按照上面说的修改<code>.config</code></li>
+<li>使用<code>make menuconfig</code>修改设置<ul>
+<li><img src="/imgs/6310661b6931e6aac02c6ae8d56df682d8e33283a2dbf6254cef363c71b500dd.png" alt="picture 16">  </li>
+<li><img src="/imgs/4c92ae0abc9812ad3a8b4c55141ef826d8f7762d70d5a57b4a2df7b5cf3dacef.png" alt="picture 17">  </li>
+<li><img src="/imgs/20da80fb0f664b790143434e31c18d416b30406ca02bb6e32bcc94ddc2b59f4d.png" alt="picture 18">  </li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>此外还要在<code>make menuconfig</code>中配置抢占为General setup -&gt; Preemption Model:选择 Fully Preemptible Kernel (RT)</p>
+</li>
+<li><p>Processor type and features -&gt; Timer frequency:设置为 1000 Hz 以获得更高的时钟分辨率</p>
+</li>
+<li><p>General setup -&gt; Timers subsystem:启用 High Resolution Timer Support</p>
+</li>
+<li><p>然后删除内核模块的一些校验如图<img src="/imgs/d38463d06cd032900c646aea63e9cd5ce8cf91f46cfd3c0be900f292bfa2e93d.png" alt="picture 2">  </p>
+</li>
+<li><p>注意最后要注释设置<code>CONFIG_MODULE_SIG_ALL</code>, <code>CONFIG_MODULE_SIG_KEY</code>, <code>CONFIG_SYSTEM_TRUSTED_KEYS</code>,<code>CONFIG_SYSTEM_REVOCATION_LIST</code>, <code>CONFIG_SYSTEM_REVOCATION_KEYS</code>, <code>CONFIG_DEBUG_INFO=y</code></p>
+<ul>
 <li>注意，<u><strong>上述每个都必须注释掉，如果注释了一部分但是漏掉其余部分会导致编译内核的时候出错</strong></u></li>
 </ul>
 </li>
-<li>此外还要在<code>make menuconfig</code>中配置抢占为General setup -&gt; Preemption Model:选择 Fully Preemptible Kernel (RT)</li>
-<li>Processor type and features -&gt; Timer frequency:设置为 1000 Hz 以获得更高的时钟分辨率</li>
-<li>General setup -&gt; Timers subsystem:启用 High Resolution Timer Support</li>
-<li>然后删除内核模块的一些校验如图<img src="/imgs/d38463d06cd032900c646aea63e9cd5ce8cf91f46cfd3c0be900f292bfa2e93d.png" alt="picture 2">  </li>
-<li>按教程编译即可</li>
+<li><p>修改<code>.config</code>的<code>CONFIG_LOCALVERSION</code>选项为自己需要的内核后缀名</p>
+<ul>
+<li><img src="/imgs/1fd62122433eb976b91cd63e48fe08b54dacf7b8fc667782abe22321847ba48f.png" alt="picture 19">  </li>
+</ul>
+</li>
+<li><p><code>make -j8 &amp;&amp; make modules_install -j8</code></p>
+</li>
 </ul>
 <h3 id="修改默认启动内核"><a href="#修改默认启动内核" class="headerlink" title="修改默认启动内核"></a>修改默认启动内核</h3><ul>
 <li><p>先使用<code>sudo update-grub</code>观察</p>
@@ -2208,7 +2242,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">20:10</span>
+    <span title="站点阅读时长">20:11</span>
 </div>
 
         
