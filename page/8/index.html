@@ -1761,7 +1761,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-10-08 09:44:27" itemprop="dateModified" datetime="2024-10-08T09:44:27+08:00">2024-10-08</time>
+                <time title="修改时间：2024-10-08 09:51:21" itemprop="dateModified" datetime="2024-10-08T09:51:21+08:00">2024-10-08</time>
               </span>
 
           <br>
@@ -1962,6 +1962,10 @@
 <li>释放互斥锁 (pthread_mutex_unlock)<br>解锁：持锁线程使用原子操作将互斥锁状态从“锁定”改为“未锁定”。<br>唤醒线程：如果有其他线程在等待，通过 <code>futex</code> 唤醒其中一个线程，使其可以尝试获取锁。</li>
 <li>快速路径：大多数锁操作在用户空间完成，只有竞争时才进入内核。</li>
 <li>等待和唤醒：锁被占用时，线程通过 futex 进入等待，锁释放时通过 futex 唤醒。</li>
+</ul>
+<h3 id="多线程同时使用同一个socktet描述符可行吗"><a href="#多线程同时使用同一个socktet描述符可行吗" class="headerlink" title="多线程同时使用同一个socktet描述符可行吗"></a>多线程同时使用同一个socktet描述符可行吗</h3><ul>
+<li>在 Linux 下，对 TCP socket 的写操作是原子的，但这是有限制的。对于较小的数据（通常是小于或等于 64 KB 的数据），系统能够保证多个线程同时向同一个 TCP socket 写入时，数据不会交错。如果写入的数据量较大，数据可能会被分片，导致数据出现交错等问题</li>
+<li>读操作可能发生竞争：多个线程从同一个 TCP socket 读取数据时，文件描述符中的数据是共享的。</li>
 </ul>
 <h3 id="进程有哪几种状态？"><a href="#进程有哪几种状态？" class="headerlink" title="进程有哪几种状态？"></a>进程有哪几种状态？</h3><ul>
 <li>创建状态：进程正在被创建的状态，创建完之后进入就绪态</li>
@@ -3311,7 +3315,7 @@ UDP接收方收到报文后，不需要给出任何确认
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">665k</span>
+    <span title="站点总字数">666k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
