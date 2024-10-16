@@ -182,6 +182,88 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/10/16/python%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E5%85%B6%E4%BB%96%E8%BF%9B%E7%A8%8B%E4%B9%8B%E5%90%8E%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%97%A0%E5%93%8D%E5%BA%94%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/16/python%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E5%85%B6%E4%BB%96%E8%BF%9B%E7%A8%8B%E4%B9%8B%E5%90%8E%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%97%A0%E5%93%8D%E5%BA%94%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/" class="post-title-link" itemprop="url">python进程启动其他进程之后命令行无响应如何解决</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-10-16 13:28:17 / 修改时间：13:35:37" itemprop="dateCreated datePublished" datetime="2024-10-16T13:28:17+08:00">2024-10-16</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Ubuntu之下python使用subprocess启动新的进程之后命令行没有任何反应"><a href="#Ubuntu之下python使用subprocess启动新的进程之后命令行没有任何反应" class="headerlink" title="Ubuntu之下python使用subprocess启动新的进程之后命令行没有任何反应"></a>Ubuntu之下python使用subprocess启动新的进程之后命令行没有任何反应</h2><ul>
+<li>启动进程之后，主进程和子进程都在正常运行，但是<strong>用户无法通过命令行对其输入任何内容</strong>，也<strong>无法使用<code>Ctrl+C</code>对其执行任何操作</strong>，均表现为无响应</li>
+<li>此时可能是因为新任务启动之后，两个进程共用命令行的<code>stdin</code>和<code>stdout</code>冲突导致的</li>
+<li>两个进程并发的向同一个命令行输出，可能是出现某些问题导致无法输入内容<h2 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h2></li>
+<li>用父进程捕获子进程的<code>stdout</code>，并且在python的父进程中新开线程实时读取子进程的输出并且将其输出<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">startCAN</span>(<span class="params">recvport, sendport, motorFlag, use_power, use_gamePad, can_send_interval</span>):</span></span><br><span class="line">    <span class="comment"># 构建命令列表，避免使用字符串格式化和 shell 操作符</span></span><br><span class="line">    cmd = [</span><br><span class="line">        ...</span><br><span class="line">    ]</span><br><span class="line">    </span><br><span class="line">    process = subprocess.Popen(</span><br><span class="line">        cmd,</span><br><span class="line">        stdin=subprocess.DEVNULL,   <span class="comment"># 防止子进程读取主进程的输入</span></span><br><span class="line">        stdout=subprocess.PIPE,  <span class="comment"># 可选：重定向子进程的输出</span></span><br><span class="line">        stderr=subprocess.PIPE,  <span class="comment"># 可选：重定向子进程的错误输出</span></span><br><span class="line">        text=<span class="literal">True</span>,</span><br><span class="line">        bufsize=<span class="number">1</span>,</span><br><span class="line">        universal_newlines=<span class="literal">True</span></span><br><span class="line">    )</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">read_output</span>():</span></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            line = process.stdout.readline()</span><br><span class="line">            <span class="keyword">if</span> line:</span><br><span class="line">                <span class="built_in">print</span>(line, end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">            <span class="keyword">if</span> process.poll() <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="keyword">break</span>  <span class="comment"># 如果子进程已终止，退出循环</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">read_err</span>():</span></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            line = process.stderr.readline()</span><br><span class="line">            <span class="keyword">if</span> line:</span><br><span class="line">                <span class="built_in">print</span>(line, end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">            <span class="keyword">if</span> process.poll() <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="keyword">break</span>  <span class="comment"># 如果子进程已终止，退出循环</span></span><br><span class="line">    output_thread = threading.Thread(target=read_output)</span><br><span class="line">    output_thread.start()</span><br><span class="line">    err_thread = threading.Thread(target=read_err)</span><br><span class="line">    err_thread.start()</span><br></pre></td></tr></table></figure></li>
+<li>但是有些时候子进程的输出<strong>无法实时的显示出来</strong>，只有当程序<strong>被结束的时候</strong>才会一起被显示</li>
+<li>这往往是因为子进程的输出<strong>被缓存</strong>了导致的</li>
+<li>C语言可以使用<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 设置stdout和stderr为无缓冲</span></span><br><span class="line">setvbuf(<span class="built_in">stdout</span>, <span class="literal">NULL</span>, _IONBF, <span class="number">0</span>);</span><br><span class="line">setvbuf(<span class="built_in">stderr</span>, <span class="literal">NULL</span>, _IONBF, <span class="number">0</span>);</span><br></pre></td></tr></table></figure></li>
+<li>防止自己的输出被缓冲，从而实现实时输出到父进程的命令行再通过父进程输出到<code>stdout</code></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/08/19/%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AEUbuntu%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%9F%90%E4%B8%AA%E6%9C%89%E7%BA%BF%E7%BD%91%E5%8F%A3%E4%B8%BADHCP%E6%9C%8D%E5%8A%A1%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1133,90 +1215,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/06/21/C%E8%AF%AD%E8%A8%80%E9%80%9A%E8%BF%87%E9%87%8D%E5%86%99malloc%E7%AD%89%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%AF%B9%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E7%9A%84%E6%A3%80%E6%B5%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/06/21/C%E8%AF%AD%E8%A8%80%E9%80%9A%E8%BF%87%E9%87%8D%E5%86%99malloc%E7%AD%89%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%AF%B9%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E7%9A%84%E6%A3%80%E6%B5%8B/" class="post-title-link" itemprop="url">C语言通过重写malloc等函数实现对内存泄漏的检测</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-06-21 13:13:02 / 修改时间：13:53:28" itemprop="dateCreated datePublished" datetime="2024-06-21T13:13:02+08:00">2024-06-21</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>6 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="重写带参数的宏实现对内存泄漏的检测"><a href="#重写带参数的宏实现对内存泄漏的检测" class="headerlink" title="重写带参数的宏实现对内存泄漏的检测"></a>重写带参数的宏实现对内存泄漏的检测</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> malloc(size) _malloc(size, __FILE__, __LINE__)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> free(ptr) _free(ptr, __FILE__, __LINE__)</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用C语言的<code>__FILE__</code>宏定位文件，使用<code>__LINE__</code>定位行数</li>
-<li>进一步定义函数<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span>* _malloc(<span class="keyword">size_t</span> size, <span class="keyword">const</span> <span class="keyword">char</span>* filename, <span class="keyword">int</span> line)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">void</span>* p = <span class="built_in">malloc</span>(size);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[+]%p, %s, %d\n&quot;</span>, p, filename, line);</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> _free(<span class="keyword">void</span>* ptr, <span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> line)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">free</span>(ptr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[-]%p, %s, %d\n&quot;</span>, ptr, filename, line);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>注意上述的宏定义需要在定义指定的函数<code>_malloc</code>和<code>_free</code>之后执行</li>
-<li>线程安全的完整例子</li>
-<li><code>#define _GNU_SOURCE</code> 是一个预处理指令，它用于启用GNU C库（glibc）中的各种扩展功能。这些扩展功能包含了许多标准C库中没有的额外功能和特性，包括额外的函数、常量和类型等</li>
-<li>定义 <code>_GNU_SOURCE</code> 可以启用GNU C库中的许多扩展功能，使程序能够使用标准C库和POSIX标准之外的额外功能<ul>
-<li>如果你要使用 <code>dlsym</code> 函数，并希望它能够使用 <code>RTLD_NEXT</code> 这个特殊的标识符，你可能需要定义 <code>_GNU_SOURCE</code>。这是因为 <code>RTLD_NEXT</code> 是GNU扩展的一部分，而不是标准<code>POSIX</code>的一部分<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _GNU_SOURCE</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dlfcn.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 数据结构定义</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">MemBlock</span> &#123;</span></span><br><span class="line">    <span class="keyword">void</span> *ptr;</span><br><span class="line">    <span class="keyword">size_t</span> size;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *file;</span><br><span class="line">    <span class="keyword">int</span> line;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">MemBlock</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125; MemBlock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> MemBlock *mem_list = <span class="literal">NULL</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">pthread_mutex_t</span> mem_mutex = PTHREAD_MUTEX_INITIALIZER;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 原始的 malloc 和 free 函数指针</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> *(*real_malloc)(<span class="keyword">size_t</span>) = <span class="literal">NULL</span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="title">void</span> <span class="params">(*real_free)</span><span class="params">(<span class="keyword">void</span> *)</span> </span>= <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加内存块到链表</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add_mem_block</span><span class="params">(<span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size, <span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">int</span> line)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!real_malloc) &#123;</span><br><span class="line">        real_malloc = <span class="built_in">malloc</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    pthread_mutex_lock(&amp;mem_mutex);</span><br><span class="line">    MemBlock *new_block = (MemBlock *)real_malloc(<span class="keyword">sizeof</span>(MemBlock));</span><br><span class="line">    new_block-&gt;ptr = ptr;</span><br><span class="line">    new_block-&gt;size = size;</span><br><span class="line">    new_block-&gt;file = file;</span><br><span class="line">    new_block-&gt;line = line;</span><br><span class="line">    new_block-&gt;next = mem_list;</span><br><span class="line">    mem_list = new_block;</span><br><span class="line">    pthread_mutex_unlock(&amp;mem_mutex);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从链表中移除内存块</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">remove_mem_block</span><span class="params">(<span class="keyword">void</span> *ptr)</span> </span>&#123;</span><br><span class="line">    pthread_mutex_lock(&amp;mem_mutex);</span><br><span class="line">    MemBlock *current = mem_list;</span><br><span class="line">    MemBlock *previous = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">while</span> (current) &#123;</span><br><span class="line">        <span class="keyword">if</span> (current-&gt;ptr == ptr) &#123;</span><br><span class="line">            <span class="keyword">if</span> (previous) &#123;</span><br><span class="line">                previous-&gt;next = current-&gt;next;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                mem_list = current-&gt;next;</span><br><span class="line">            &#125;</span><br><span class="line">            real_free(current);</span><br><span class="line">            pthread_mutex_unlock(&amp;mem_mutex);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        previous = current;</span><br><span class="line">        current = current-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    pthread_mutex_unlock(&amp;mem_mutex);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// malloc 钩子函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">malloc_hook</span><span class="params">(<span class="keyword">size_t</span> size, <span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">int</span> line)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ptr = real_malloc(size);</span><br><span class="line">    <span class="keyword">if</span> (ptr) &#123;</span><br><span class="line">        add_mem_block(ptr, size, file, line);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ptr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// free 钩子函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">free_hook</span><span class="params">(<span class="keyword">void</span> *ptr, <span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">int</span> line)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (ptr) &#123;</span><br><span class="line">        remove_mem_block(ptr);</span><br><span class="line">        real_free(ptr);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 检查内存泄漏</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">check_memory_leaks</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    pthread_mutex_lock(&amp;mem_mutex);</span><br><span class="line">    MemBlock *current = mem_list;</span><br><span class="line">    <span class="keyword">while</span> (current) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Memory leak detected: %p (%zu bytes) allocated at %s:%d\n&quot;</span>,</span><br><span class="line">                current-&gt;ptr, current-&gt;size, current-&gt;file, current-&gt;line);</span><br><span class="line">        current = current-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    pthread_mutex_unlock(&amp;mem_mutex);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 宏定义替换 malloc 和 free</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> malloc(size) malloc_hook(size, __FILE__, __LINE__)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> free(ptr) free_hook(ptr, __FILE__, __LINE__)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 使用 dlsym 获取原始的 malloc 和 free 函数指针</span></span><br><span class="line">    real_malloc = (<span class="keyword">void</span> *(*)(<span class="keyword">size_t</span>))dlsym(RTLD_NEXT, <span class="string">&quot;malloc&quot;</span>);</span><br><span class="line">    real_free = (<span class="keyword">void</span> (*)(<span class="keyword">void</span> *))dlsym(RTLD_NEXT, <span class="string">&quot;free&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 示例用法</span></span><br><span class="line">    <span class="keyword">char</span> *leak = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(<span class="number">10</span>); <span class="comment">// 这个分配未释放，应该被检测到</span></span><br><span class="line">    <span class="keyword">char</span> *no_leak = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(<span class="number">20</span>);</span><br><span class="line">    <span class="built_in">free</span>(no_leak);</span><br><span class="line"></span><br><span class="line">    check_memory_leaks(); <span class="comment">// 检测并打印内存泄漏</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1288,14 +1286,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">189</span>
+          <span class="site-state-item-count">190</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">65</span>
+        <span class="site-state-item-count">66</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1332,13 +1330,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">666k</span>
+    <span title="站点总字数">667k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">20:11</span>
+    <span title="站点阅读时长">20:13</span>
 </div>
 
         
