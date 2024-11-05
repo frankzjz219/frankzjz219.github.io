@@ -182,6 +182,118 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/11/05/%E4%BD%BF%E7%94%A8Cgroup%E8%AE%BE%E7%BD%AEUbuntu%E5%AE%9E%E6%97%B6%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%8B%AC%E5%8D%A0CPU/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/05/%E4%BD%BF%E7%94%A8Cgroup%E8%AE%BE%E7%BD%AEUbuntu%E5%AE%9E%E6%97%B6%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%8B%AC%E5%8D%A0CPU/" class="post-title-link" itemprop="url">使用Cgroup设置Ubuntu实时进程和独占CPU</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-11-05 19:23:50 / 修改时间：12:45:48" itemprop="dateCreated datePublished" datetime="2024-11-05T19:23:50+08:00">2024-11-05</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="使用进程组将特定的CPU留给特定的进程执行"><a href="#使用进程组将特定的CPU留给特定的进程执行" class="headerlink" title="使用进程组将特定的CPU留给特定的进程执行"></a>使用进程组将特定的CPU留给特定的进程执行</h2><ul>
+<li><p>安装<code>cgroup</code>工具</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt install cgroup-tools</span><br></pre></td></tr></table></figure></li>
+<li><p>给进程组分配适当的核心</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo cgcreate -g cpuset:/restricted_cpus</span><br><span class="line">sudo cgset -r cpuset.cpus=&quot;0,1&quot; restricted_cpus</span><br><span class="line">sudo cgset -r cpuset.mems=&quot;0&quot; restricted_cpus</span><br></pre></td></tr></table></figure></li>
+<li><p>使用在该CPU组下执行进程</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo cgexec -g cpuset:/restricted_cpus &lt;command&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>结果</p>
+<ul>
+<li><p><img src="/imgs/58cc34eea1c739701dda07a3376b5ad590f5823c91c2fc6231e445ebb8901c72.png" alt="picture 1">  </p>
+</li>
+<li><p><img src="/imgs/de0091ae4bfda3bc88db327c16a846ba8d5110543d42bd9570243f9e5663fb0c.png" alt="picture 2">  </p>
+</li>
+<li><p>可见，虽然进程开启了4个线程，但是只占用了两个CPU核心，而且进程是两个两个执行的</p>
+</li>
+</ul>
+</li>
+<li><p>创建额外的进程组</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo cgcreate -g cpuset:/default_cpus</span><br><span class="line"><span class="meta">#</span><span class="bash"> 将其他CPU分配给这个进程组</span></span><br><span class="line">sudo cgset -r cpuset.cpus=&quot;2-11&quot; default_cpus</span><br><span class="line">sudo cgset -r cpuset.mems=&quot;0&quot; default_cpus</span><br></pre></td></tr></table></figure></li>
+<li><p>将系统剩余的进程划归这个进程组管理</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo cgclassify -g cpuset:/default_cpus $(pgrep -u $(whoami))</span><br></pre></td></tr></table></figure></li>
+<li><p>此时直接使用命令行执行一个具有20个线程的程序</p>
+</li>
+<li><p>CPU使用情况如图</p>
+<ul>
+<li><img src="/imgs/83591760bd9b0a26f3cfd8b8cbd4b442bcfed0695b0afa1da738b89ce78e3efb.png" alt="picture 3">  </li>
+<li>虽然其他核心都被占满仍然不够，但是不会影响上述两个核心</li>
+</ul>
+</li>
+<li><p>也就是被上述进程独占的CPU不会受到任何影响</p>
+</li>
+<li><p>关于<code>sudo cgclassify -g cpuset:/default_cpus $(pgrep -u $(whoami))</code>的解释</p>
+<ul>
+<li><code>$(pgrep -u $(whoami))</code> 将所有当前用户的进程 ID 列出来，并将这些进程传递给 <code>cgclassify</code>。</li>
+<li>这样，<code>cgclassify</code> 会将这些进程添加到 <code>default_cpus</code> cgroup 中。</li>
+<li>如果当前用户的所有进程都被分配到 default_cpus cgroup 中，那么新创建的进程（<strong>由这些进程派生的子进程</strong>）<strong>默认也会属于同一个 cgroup</strong></li>
+<li>因此，执行上述命令之后，不显式的指定进程组创建的进程，会在<code>default_cpus</code>运行<h2 id="测试用的C语言程序"><a href="#测试用的C语言程序" class="headerlink" title="测试用的C语言程序"></a>测试用的C语言程序</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sched.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NUM_THREADS 20  <span class="comment">// 线程数量</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ACC_RANGE 900000000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> start;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> end;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> sum;</span><br><span class="line">&#125; ThreadData;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算时间差，以毫秒为单位</span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">get_time_diff_ms</span><span class="params">(struct timespec start, struct timespec end)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (end.tv_sec - start.tv_sec) * <span class="number">1000</span> + (end.tv_nsec - start.tv_nsec) / <span class="number">1000000</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">get_time_diff_ns</span><span class="params">(struct timespec start, struct timespec end)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (end.tv_sec - start.tv_sec) * <span class="number">1000000</span> + (end.tv_nsec - start.tv_nsec) / <span class="number">1000</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置进程为实时进程的函数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">set_realtime</span><span class="params">(<span class="keyword">int</span> priority)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sched_param</span> <span class="title">param</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 实时优先级范围通常为 1 到 99，99 为最高优先级</span></span><br><span class="line">    <span class="keyword">if</span> (priority &lt; <span class="number">1</span> || priority &gt; <span class="number">99</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Priority must be between 1 and 99.\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置调度参数的优先级</span></span><br><span class="line">    param.sched_priority = priority;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将进程设置为 SCHED_FIFO 调度策略</span></span><br><span class="line">    <span class="keyword">if</span> (sched_setscheduler(<span class="number">0</span>, SCHED_FIFO, &amp;param) == <span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Failed to set realtime priority: %s\n&quot;</span>, strerror(errno));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Process is now running with real-time priority %d\n&quot;</span>, priority);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 累加函数，计算从 start 到 end 的累加和</span></span><br><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">accumulateRange</span><span class="params">(<span class="keyword">void</span>* arg)</span> </span>&#123;</span><br><span class="line">    ThreadData* data = (ThreadData*)arg;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">startTime</span>, <span class="title">endTime</span>;</span></span><br><span class="line">    <span class="comment">// 记录开始时间</span></span><br><span class="line">    clock_gettime(CLOCK_MONOTONIC, &amp;startTime);</span><br><span class="line">    data-&gt;sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">long</span> <span class="keyword">long</span> i = data-&gt;start; i &lt;= data-&gt;end; ++i) &#123;</span><br><span class="line">        data-&gt;sum += i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Thread calculating sum from %lld to %lld: %lld\n&quot;</span>, data-&gt;start, data-&gt;end, data-&gt;sum);</span><br><span class="line">    <span class="comment">// 记录结束时间</span></span><br><span class="line">    clock_gettime(CLOCK_MONOTONIC, &amp;endTime);</span><br><span class="line">    <span class="keyword">long</span> elapsedTime = get_time_diff_ns(startTime, endTime);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Thread execution time: %ld (ns)\n&quot;</span>, elapsedTime);</span><br><span class="line">    pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> rangeStart = <span class="number">1</span>;     <span class="comment">// 累加范围起始值</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> rangeEnd = ACC_RANGE;     <span class="comment">// 累加范围终止值</span></span><br><span class="line">    <span class="comment">// int rangePerThread = (rangeEnd - rangeStart + 1) / NUM_THREADS;</span></span><br><span class="line">    set_realtime(<span class="number">90</span>);</span><br><span class="line">    <span class="keyword">pthread_t</span> threads[NUM_THREADS];</span><br><span class="line">    ThreadData threadData[NUM_THREADS];</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">startTime</span>, <span class="title">endTime</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 记录开始时间</span></span><br><span class="line">    clock_gettime(CLOCK_MONOTONIC, &amp;startTime);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建线程并分配累加范围</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; NUM_THREADS; ++i) &#123;</span><br><span class="line">        threadData[i].start = rangeStart;</span><br><span class="line">        threadData[i].end = rangeEnd;</span><br><span class="line"></span><br><span class="line">        pthread_create(&amp;threads[i], <span class="literal">NULL</span>, accumulateRange, (<span class="keyword">void</span>*)&amp;threadData[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 等待所有线程完成，并汇总结果</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> totalSum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; NUM_THREADS; ++i) &#123;</span><br><span class="line">        pthread_join(threads[i], <span class="literal">NULL</span>);</span><br><span class="line">        <span class="comment">// totalSum += threadData[i].sum;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 记录结束时间</span></span><br><span class="line">    clock_gettime(CLOCK_MONOTONIC, &amp;endTime);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 计算并输出总运行时间</span></span><br><span class="line">    <span class="comment">// long elapsedTime = get_time_diff_ms(startTime, endTime);</span></span><br><span class="line">    <span class="comment">// printf(&quot;Total sum from %d to %d: %d\n&quot;, rangeStart, rangeEnd, totalSum);</span></span><br><span class="line">    <span class="comment">// printf(&quot;Total execution time: %ld (ms)\n&quot;, elapsedTime);</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> elapsedTime = get_time_diff_ns(startTime, endTime);</span><br><span class="line">    <span class="comment">// printf(&quot;Total sum from %lld to %lld: %lld\n&quot;, rangeStart, rangeEnd, totalSum);</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Total execution time: %ld (ns)\n&quot;</span>, elapsedTime);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/10/16/python%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E5%85%B6%E4%BB%96%E8%BF%9B%E7%A8%8B%E4%B9%8B%E5%90%8E%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%97%A0%E5%93%8D%E5%BA%94%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1096,125 +1208,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/06/28/%E7%BC%96%E8%AF%91%E5%B9%B6%E6%9B%B4%E6%8D%A2%E6%A0%91%E8%8E%93%E6%B4%BE%E5%86%85%E6%A0%B8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/06/28/%E7%BC%96%E8%AF%91%E5%B9%B6%E6%9B%B4%E6%8D%A2%E6%A0%91%E8%8E%93%E6%B4%BE%E5%86%85%E6%A0%B8/" class="post-title-link" itemprop="url">编译并更换树莓派内核</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-06-28 12:28:34" itemprop="dateCreated datePublished" datetime="2024-06-28T12:28:34+08:00">2024-06-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-10 12:59:40" itemprop="dateModified" datetime="2024-07-10T12:59:40+08:00">2024-07-10</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>907</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ul>
-<li><strong>严格参考下文的官网方式</strong><h2 id="参考网站"><a href="#参考网站" class="headerlink" title="参考网站"></a>参考网站</h2></li>
-<li><a target="_blank" rel="noopener" href="https://www.raspberrypi.com/documentation/computers/linux_kernel.html#kernel">编译内核官方参考</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.raspberrypi.com/documentation/computers/linux_kernel.html#patch-the-kernel">实时内核官方参考</a><h2 id="编译指令"><a href="#编译指令" class="headerlink" title="编译指令"></a>编译指令</h2></li>
-<li>在<a target="_blank" rel="noopener" href="https://github.com/raspberrypi/linux">树莓派github连接</a>下载内核压缩包</li>
-<li>解压到<code>/usr/src</code>目录下</li>
-<li>切换超级用户<code>sudo passwd root</code>设置密码</li>
-<li><code>sudo su</code>切换到超级用户</li>
-<li><code>apt install git bc bison flex libssl-dev libncurses-dev make</code>安装必要的包</li>
-<li>执行<code>KERNEL=&lt;你的内核名字&gt;</code>和<code>sudo make bcm2712_defconfig</code><ul>
-<li>注意设置完环境变量之后就不能切换用户了</li>
-</ul>
-</li>
-<li>使用<code>make menuconfig</code>修改内核选项</li>
-<li>修改<code>.config</code>中的<code>CONFIG_LOCALVERSION</code>选项为自己希望的自定义内核后缀名<ul>
-<li>注意，上述内容在<code>make menuconfig</code>后会被覆盖，因此要在上一步之后进行</li>
-</ul>
-</li>
-<li><code>make -j4 Image.gz modules dtbs</code>编译内核</li>
-<li><code>make modules_install</code><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 这一步是备份，名字不冲突可以不执行</span></span><br><span class="line">sudo cp /boot/firmware/$KERNEL.img /boot/firmware/$KERNEL-backup.img</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装内核</span></span><br><span class="line">sudo cp arch/arm64/boot/Image.gz /boot/firmware/$KERNEL.img</span><br><span class="line">sudo cp arch/arm64/boot/dts/broadcom/*.dtb /boot/firmware/</span><br><span class="line">sudo cp arch/arm64/boot/dts/overlays/*.dtb* /boot/firmware/overlays/</span><br><span class="line">sudo cp arch/arm64/boot/dts/overlays/README /boot/firmware/overlays/</span><br></pre></td></tr></table></figure></li>
-<li>然后使用<code>sudo vim /boot/firmware/config.txt</code></li>
-<li>最后添加一句<code>kernel=&lt;你的内核名字&gt;.img</code></li>
-<li>reboot重启</li>
-<li>最终成功切换到自己定义的内核<ul>
-<li><img src="/imgs/317c32e5324bd81b627218bf427e23b1bbb9470abd84c8f51f62646f053c0829.png" alt="picture 0">  </li>
-</ul>
-</li>
-</ul>
-<h2 id="实时内核"><a href="#实时内核" class="headerlink" title="实时内核"></a>实时内核</h2><ul>
-<li>完全按照官网的指示来</li>
-<li>去<a target="_blank" rel="noopener" href="https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt">rt patch</a>找包的时候找符合自己大版本的即可，小版本也相同的可能不好找</li>
-<li>注意有时候patch中可能会出现<code>fail</code>的情况，不全是成功，但是不影响编译</li>
-<li>结果<ul>
-<li><img src="/imgs/e7336911053a20b4bff1af0029d43f20fe365dec420e051b8d64ead3222120b0.png" alt="picture 1">  </li>
-</ul>
-</li>
-<li>测试CAN的驱动不受影响<ul>
-<li><img src="/imgs/4ab822ad206f3ea923475d64e98b9db8567173483aefcd518352c4cd9a83fff2.png" alt="picture 2">  </li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1330,13 +1323,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">667k</span>
+    <span title="站点总字数">671k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">20:13</span>
+    <span title="站点阅读时长">20:20</span>
 </div>
 
         
