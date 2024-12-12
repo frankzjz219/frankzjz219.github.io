@@ -1,4 +1,4 @@
-nvm use 12
+# nvm use 12.0.0
 # Set the error preference to stop the script on any command failure
 $ErrorActionPreference = 'Stop'
 

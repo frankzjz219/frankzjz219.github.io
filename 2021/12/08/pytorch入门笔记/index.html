@@ -20,16 +20,17 @@
     var CONFIG = {"hostname":"frankzjz219.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="pytorch入门笔记及资源集合安装配置支持Cuda的pytorch conda显示所有源 conda config --show   conda添加国内源 conda config --add channels &lt;网址&gt;   conda删除源 conda config --remove channels &lt;网址&gt;   清华源网站清华源 下载Cuda tool kit网站">
+  <meta name="description" content="pytorch入门笔记及资源集合安装配置支持Cuda的pytorch 参考教程 conda显示所有源 conda config --show   conda添加国内源 conda config --add channels &lt;网址&gt;   conda删除源 conda config --remove channels &lt;网址&gt;   清华源网站清华源 下载Cuda tool k">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pytorch入门笔记">
 <meta property="og:url" content="https://frankzjz219.github.io/2021/12/08/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Frank&#39;s blogs">
-<meta property="og:description" content="pytorch入门笔记及资源集合安装配置支持Cuda的pytorch conda显示所有源 conda config --show   conda添加国内源 conda config --add channels &lt;网址&gt;   conda删除源 conda config --remove channels &lt;网址&gt;   清华源网站清华源 下载Cuda tool kit网站">
+<meta property="og:description" content="pytorch入门笔记及资源集合安装配置支持Cuda的pytorch 参考教程 conda显示所有源 conda config --show   conda添加国内源 conda config --add channels &lt;网址&gt;   conda删除源 conda config --remove channels &lt;网址&gt;   清华源网站清华源 下载Cuda tool k">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://frankzjz219.github.io/imgs/ac38c7fd83c0e067e1d49a0c0f1a3abad5b5d116d1521434df59085eb7a2f930.png">
 <meta property="og:image" content="https://frankzjz219.github.io/imgs/31a02dce09f2fe708a2d8eecec609a74fa00b163f7e9330fb586a379fd90e8bd.png">
 <meta property="og:image" content="https://frankzjz219.github.io/imgs/837e9cfffa8611c0bcafe4d5b49d358be4cffd14285992eb312b4064952b8aff.png">
+<meta property="og:image" content="https://frankzjz219.github.io/imgs/d95703d03c033070a468675e4f4acb762358cb478c4bf814915dd1a79eb7e2c1.png">
 <meta property="og:image" content="https://frankzjz219.github.io/imgs/50c9faa8d6b6a76f26b9902c7a998ab59938bdfaf1117a6f3f81dc5b4a14700f.png">
 <meta property="og:image" content="https://frankzjz219.github.io/imgs/cf4cc41c2b34494854a1c3662a1e16238ec21a10dd3d151b245477088b950a57.png">
 <meta property="og:image" content="https://frankzjz219.github.io/imgs/c0577006ba23e2df4a37e467756a55f016f0b2143078650c0daed7e891dba90f.png">
@@ -37,7 +38,7 @@
 <meta property="og:image" content="https://frankzjz219.github.io/imgs/4c60e86b0de8c2dbf449552f23d0b4e870f769bf39de1271825167ced38fc4e5.png">
 <meta property="og:image" content="https://frankzjz219.github.io/imgs/e317ba90bc5aa315f81b9f9c7f8348c74ca3f4eef31244c81dfbbe3a3d90738f.png">
 <meta property="article:published_time" content="2021-12-08T13:59:11.000Z">
-<meta property="article:modified_time" content="2024-12-12T14:56:13.232Z">
+<meta property="article:modified_time" content="2024-12-12T15:04:19.471Z">
 <meta property="article:author" content="FrankZhang">
 <meta property="article:tag" content="C, C++, Leetcode, Linux, 嵌入式, Ununtu, 驱动">
 <meta name="twitter:card" content="summary">
@@ -227,7 +228,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-12 22:56:13" itemprop="dateModified" datetime="2024-12-12T22:56:13+08:00">2024-12-12</time>
+                <time title="修改时间：2024-12-12 23:04:19" itemprop="dateModified" datetime="2024-12-12T23:04:19+08:00">2024-12-12</time>
               </span>
 
           
@@ -243,7 +244,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.1k</span>
+              <span>3.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -263,6 +264,7 @@
 
       
         <h1 id="pytorch入门笔记及资源集合"><a href="#pytorch入门笔记及资源集合" class="headerlink" title="pytorch入门笔记及资源集合"></a>pytorch入门笔记及资源集合</h1><h2 id="安装配置支持Cuda的pytorch"><a href="#安装配置支持Cuda的pytorch" class="headerlink" title="安装配置支持Cuda的pytorch"></a>安装配置支持Cuda的pytorch</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zijie1024/articles/18375637">参考教程</a></li>
 <li>conda显示所有源<ul>
 <li><code>conda config --show</code></li>
 </ul>
@@ -296,7 +298,12 @@
 <li><code>pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124</code></li>
 </ul>
 </li>
+<li>**使用conda安装，可能因为不清楚的原因导致<code>torch.cuda.is_available()</code>**返回<code>False</code>，使用pip安装解决问题<ul>
 <li>安装过程中，使用命令<code>conda install pytorch torchvision torchaudio pytorch-cuda=12.4 -c pytorch -c nvidia</code>可能因为网络（或者服务器）原因报错链接失败，此时关闭代理即可成功</li>
+<li>使用pip安装成功，并且可以使用<code>cuda</code></li>
+<li><img src="/imgs/d95703d03c033070a468675e4f4acb762358cb478c4bf814915dd1a79eb7e2c1.png" alt="picture 5">  </li>
+</ul>
+</li>
 </ul>
 <h2 id="教程手册"><a href="#教程手册" class="headerlink" title="教程手册"></a>教程手册</h2><p>莫烦 <a target="_blank" rel="noopener" href="https://mofanpy.com/tutorials/machine-learning/reinforcement-learning/">https://mofanpy.com/tutorials/machine-learning/reinforcement-learning/</a></p>
 <p>pytorch中文手册</p>
@@ -508,7 +515,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">20:22</span>
+    <span title="站点阅读时长">20:23</span>
 </div>
 
         
