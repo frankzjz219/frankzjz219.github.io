@@ -182,6 +182,189 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/01/11/%E6%90%BA%E7%A8%8B%E5%BA%93%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/11/%E6%90%BA%E7%A8%8B%E5%BA%93%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">协程库实现（一）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-11 17:50:36" itemprop="dateCreated datePublished" datetime="2024-01-11T17:50:36+08:00">2024-01-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-27 15:48:27" itemprop="dateModified" datetime="2024-04-27T15:48:27+08:00">2024-04-27</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/52886">参考</a><h2 id="ucontext-h上下文切换"><a href="#ucontext-h上下文切换" class="headerlink" title="ucontext.h上下文切换"></a><code>ucontext.h</code>上下文切换</h2></li>
+<li>上下文结构体定义</li>
+<li> <code>mcontext_t</code>类型与机器相关，并且不透明.<code>ucontext_t</code>结构体则至少拥有以下几个域:<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">ucontext</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ucontext</span> *<span class="title">uc_link</span>;</span></span><br><span class="line">    <span class="keyword">sigset_t</span>         uc_sigmask;</span><br><span class="line">    <span class="keyword">stack_t</span>          uc_stack;</span><br><span class="line">    <span class="keyword">mcontext_t</span>       uc_mcontext;</span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="keyword">ucontext_t</span>;</span><br></pre></td></tr></table></figure></li>
+<li>当当前上下文(如使用makecontext创建的上下文）运行终止时系统会恢复<code>uc_link</code>指向的上下文；<code>uc_sigmask</code>为该上下文中的阻塞信号集合；<code>uc_stack</code>为该上下文中使用的栈；<code>uc_mcontext</code>保存的上下文的特定机器表示，包括调用线程的特定寄存器等<h3 id="四个操作函数"><a href="#四个操作函数" class="headerlink" title="四个操作函数"></a>四个操作函数</h3></li>
+<li><code>int getcontext(ucontext_t *ucp);</code><ul>
+<li>初始化ucp结构体，将当前的上下文保存到ucp中</li>
+</ul>
+</li>
+<li><code>int setcontext(const ucontext_t *ucp);</code><ul>
+<li>设置当前的上下文为ucp，setcontext的上下文ucp应该通过getcontext或者makecontext取得，如果调用成功则不返回。</li>
+<li>如果上下文是通过调用getcontext()取得,程序会继续执行这个调用。如果上下文是通过调用makecontext取得,程序会调用makecontext函数的第二个参数指向的函数，如果func函数返回,则恢复makecontext第一个参数指向的上下文第一个参数指向的上下文context_t中指向的uc_link</li>
+<li>如果uc_link为NULL,则线程退出。</li>
+</ul>
+</li>
+<li><code>void makecontext(ucontext_t *ucp, void (*func)(), int argc, ...);</code><ul>
+<li> <code>makecontext</code>修改通过<code>getcontext</code>取得的上下文ucp(这意味着调用makecontext前必须先调用getcontext)。然后给该上下文指定一个栈空间ucp-&gt;stack，设置后继的上下文ucp-&gt;uc_link.</li>
+<li> 当上下文通过setcontext或者swapcontext激活后，执行func函数，argc为func的参数个数，后面是func的参数序列。当func执行返回后，继承的上下文被激活，如果继承上下文为NULL时，线程退出</li>
+</ul>
+</li>
+<li><code>int swapcontext(ucontext_t *oucp, ucontext_t *ucp);</code><ul>
+<li><strong>保存当前上下文到oucp结构体中</strong>，<strong>然后激活upc上下文</strong>。 </li>
+</ul>
+</li>
+<li>如果执行成功，<code>getcontext</code>返回0，<code>setcontext</code>和<code>swapcontext</code>不返回；如果执行失败，<code>getcontext</code>,<code>setcontext</code>,<code>swapcontext</code>返回-1，并设置对于的errno.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>getcontext</td>
+<td>获取上下文</td>
+</tr>
+<tr>
+<td>setcontext</td>
+<td>设置上下文</td>
+</tr>
+<tr>
+<td>swapcontext</td>
+<td>保存当前上下文，切换上下文</td>
+</tr>
+<tr>
+<td>makecontext</td>
+<td>创建新的上下文</td>
+</tr>
+</tbody></table>
+<ul>
+<li>例子<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ucontext.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> *argv[])</span></span>&#123;</span><br><span class="line">    <span class="keyword">ucontext_t</span> context;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">getcontext</span>(&amp;context);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Hello world&quot;</span>);</span><br><span class="line">    <span class="built_in">sleep</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">setcontext</span>(&amp;context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>上述函数会不断重复输出<code>Hello World</code>，因为<code>getcontext</code>将上下文设置在了输出之前，<code>setcontext</code>每次都把整个执行流返回到输出的位置</li>
+</ul>
+<h3 id="更换为执行时间最短先服务逻辑的调度器版本"><a href="#更换为执行时间最短先服务逻辑的调度器版本" class="headerlink" title="更换为执行时间最短先服务逻辑的调度器版本"></a>更换为执行时间最短先服务逻辑的调度器版本</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/Winnerhust/uthread">参考的原版</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/frankzjz219/coThread">我改进代码的github仓库</a></li>
+<li>使用了优先级队列重写携程选择逻辑，切换的时候会选择当前已经运行时间最短的携程上处理机执行</li>
+<li>运行结果<ul>
+<li><img src="/imgs/941347f9abd1720738aefc5d97931550f21aa9612e6620b2f0e59f887e23f2f5.png" alt="picture 0">  </li>
+<li>四个线程的优先级分别是4，3，2，1，可见是符合设置的<h3 id="1月12日修改"><a href="#1月12日修改" class="headerlink" title="1月12日修改"></a>1月12日修改</h3></li>
+</ul>
+</li>
+<li>修改为了多线程版本，分别调度，分别设置优先级</li>
+<li><img src="/imgs/e31840ca773951d3d8406fb1a527485c5ca3492df2b7055bd5d175e851c5e9d0.png" alt="picture 1">  </li>
+<li><img src="/imgs/d78782a55f0dc69ab765b2e962fede515994cce6269969ff93cea72ac87690e4.png" alt="picture 2">  </li>
+</ul>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<li>C/C++文件编译的时候<strong>每个源文件都是独立编译的</strong>，这样会导致即使头文件使用了<code>ifndef</code>之类的保护，仍然可能在整个项目中被<strong>不同的文件</strong>引用多次<ul>
+<li>因此如果头文件中出现了函数或者是变量的定义的话，这个变量在整个项目中会被定义多次</li>
+<li>因此头文件中只能声明，变量使用<code>extern</code>关键字声明</li>
+<li>必须定义的函数用<code>inline</code></li>
+</ul>
+</li>
+<li>注意类的静态<code>static</code>成员变量必须在某个源文件中定义，才能在其他源文件中使用类名和作用域运算符<code>::</code>访问</li>
+<li>C++可以使用宏<code>__FILE__</code>判断自己所处的文件名称</li>
+<li><code>makecontext</code>的第二个参数无论传入的是什么函数，都要将其转换为<code>void(*)(void)</code>类型的函数指针，然后再给出参数</li>
+<li>执行流路径<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-----------调度器或main中-----------------</span><br><span class="line">创建协程(create)--&gt;</span><br><span class="line">  获取互斥锁</span><br><span class="line">  使用makecontext生成开始执行协程函数的上下文</span><br><span class="line">  令目标函数的上下文的后继位置时刻指向调度器schedule的上下文main</span><br><span class="line">  释放互斥锁</span><br><span class="line">切换到协程(resume)--&gt;</span><br><span class="line">  将当前的上下文保存在调度器schedule.main中，切换到目标函数的上下文</span><br><span class="line">-----------协程函数中----------------</span><br><span class="line">切换回main(yield)--&gt;</span><br><span class="line">  获取锁</span><br><span class="line">  将协程当前的上下文保存在ctx中</span><br><span class="line">  释放锁</span><br><span class="line">  切换回之前指向的main上下文</span><br><span class="line">-----------------main中-----------------</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
+<li>因为添加协程<code>create</code>函数与协程调度器不在一个线程中，可能会有竞争关系，因此添加了互斥锁防止冲突</li>
+</ul>
+<h2 id="lt-setjmp-h-gt-实现切换"><a href="#lt-setjmp-h-gt-实现切换" class="headerlink" title="&lt;setjmp.h&gt;实现切换"></a><code>&lt;setjmp.h&gt;</code>实现切换</h2><h3 id="setjmp-函数："><a href="#setjmp-函数：" class="headerlink" title="setjmp 函数："></a><code>setjmp</code> 函数：</h3><ul>
+<li><p><code>setjmp</code> 用于保存当前程序的执行状态，并返回一个整数值。</p>
+</li>
+<li><p>当首次调用 <code>setjmp</code> 时，它返回0，表示保存了当前执行状态。</p>
+</li>
+<li><p>当从 <code>longjmp</code> 调用返回时，<code>setjmp</code> 返回一个非零值，通常用于区分<strong>正常返回和通过 <code>longjmp</code> 返回</strong>。</p>
+<h3 id="longjmp函数"><a href="#longjmp函数" class="headerlink" title="longjmp函数"></a><code>longjmp</code>函数</h3></li>
+<li><p><code>longjmp</code> 用于恢复之前由 <code>setjmp</code> 保存的执行状态。</p>
+</li>
+<li><p>它接受两个参数：保存的执行状态（由 <code>setjmp</code> 返回的值）和一个非零的返回值。</p>
+</li>
+<li><p>调用 <code>longjmp</code> 会导致程序跳转到相应 <code>setjmp</code> 处，并且 <code>setjmp</code> 返回的值为 <code>longjmp</code> 的返回值。</p>
+<h3 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h3></li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/82492121">参考</a></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;setjmp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">jmp_buf env;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">my_func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (b == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;do not allow division by 0\n&quot;</span>);</span><br><span class="line">        <span class="built_in">longjmp</span>(env, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> a / b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span> *argv[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="built_in">setjmp</span>(env);</span><br><span class="line">    <span class="keyword">if</span> (res == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;return from setjmp\n&quot;</span>);</span><br><span class="line">        <span class="built_in">my_func</span>(<span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;return from longjmp: %d\n&quot;</span>, res);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="C-语言的锁机制"><a href="#C-语言的锁机制" class="headerlink" title="C++语言的锁机制"></a>C++语言的锁机制</h2><h3 id="unique-lock"><a href="#unique-lock" class="headerlink" title="unique_lock"></a><code>unique_lock</code></h3></li>
+<li><p><code>#include &lt;mutex&gt;</code>和<code>#include &lt;thread&gt;</code></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(myMutex)</span></span>;  <span class="comment">// 构造 unique_lock，并锁定互斥量</span></span><br></pre></td></tr></table></figure></li>
+<li><p>构造就是加锁</p>
+</li>
+<li><p>析构就是解锁</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">lock.<span class="built_in">lock</span>();  <span class="comment">// 手动锁定互斥量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 锁定期间的其他操作...</span></span><br><span class="line"></span><br><span class="line">lock.<span class="built_in">unlock</span>();  <span class="comment">// 手动释放锁</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 在 unique_lock 离开作用域时，会自动释放锁</span></span><br></pre></td></tr></table></figure></li>
+<li><p>同样支持手动操作，加锁和解锁</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/12/19/leetcode%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%A2%98%E7%9B%AE%E8%AF%A6%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1861,210 +2044,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/10/18/%E4%BD%BF%E7%94%A8Cython%E5%8A%A0%E9%80%9Fpython%E7%A8%8B%E5%BA%8F%E8%AE%A1%E7%AE%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/10/18/%E4%BD%BF%E7%94%A8Cython%E5%8A%A0%E9%80%9Fpython%E7%A8%8B%E5%BA%8F%E8%AE%A1%E7%AE%97/" class="post-title-link" itemprop="url">使用Cython加速python程序计算</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-10-18 18:55:52" itemprop="dateCreated datePublished" datetime="2023-10-18T18:55:52+08:00">2023-10-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-25 11:47:27" itemprop="dateModified" datetime="2023-10-25T11:47:27+08:00">2023-10-25</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>10k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>18 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://cython.readthedocs.io/en/latest/">cython</a><h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2></li>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/traditional/p/13285339.html">参考（详细）</a></li>
-<li>定义一个<code>.pyx</code>文件<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># try111.pyx</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">say_hello_to_c</span>(<span class="params">m</span>):</span></span><br><span class="line">    t1 = time.time()</span><br><span class="line">    <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        <span class="built_in">sum</span>+=i</span><br><span class="line">    t2 = time.time()</span><br><span class="line">    <span class="comment"># print(t2-t1)</span></span><br><span class="line">    <span class="keyword">return</span> t2-t1</span><br></pre></td></tr></table></figure></li>
-<li>创建<code>setup.py</code><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># setup.py</span></span><br><span class="line"><span class="keyword">from</span> setuptools <span class="keyword">import</span> setup</span><br><span class="line"><span class="keyword">from</span> Cython.Build <span class="keyword">import</span> cythonize</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=<span class="string">&#x27;Hello world app&#x27;</span>,</span><br><span class="line">    ext_modules=cythonize(<span class="string">&quot;try111.pyx&quot;</span>),</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
-<li>使用cython<strong>编译</strong>文件为一个<code>.so</code>模块</li>
-<li><code>python3 setup.py build_ext --inplace</code></li>
-<li>直接调用<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> try111 <span class="keyword">import</span> say_hello_to_c</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">say_hello_to_py</span>(<span class="params">m</span>):</span></span><br><span class="line">    t1 = time.time()</span><br><span class="line">    <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        <span class="built_in">sum</span>+=i</span><br><span class="line">    t2 = time.time()</span><br><span class="line">    <span class="comment"># print(t2-t1)</span></span><br><span class="line">    <span class="keyword">return</span> t2-t1</span><br><span class="line"></span><br><span class="line">t1s = []</span><br><span class="line">t2s = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> tqdm(<span class="built_in">range</span>(<span class="number">100</span>)):</span><br><span class="line">    t1s.append(say_hello_to_c(<span class="number">10000000</span>))</span><br><span class="line">    t2s.append(say_hello_to_py(<span class="number">10000000</span>))</span><br><span class="line"></span><br><span class="line">plt.plot(t1s, label=<span class="string">&quot;cython&quot;</span>)</span><br><span class="line">plt.plot(t2s, label=<span class="string">&quot;python&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.ylabel(<span class="string">&quot;time elapsed: s&quot;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;count of try&quot;</span>)</span><br><span class="line">avg1 = <span class="built_in">sum</span>(t1s)/<span class="built_in">len</span>(t1s)</span><br><span class="line">avg2 = <span class="built_in">sum</span>(t2s)/<span class="built_in">len</span>(t2s)</span><br><span class="line">plt.title(<span class="string">&quot;Cython average time: %03f, pythonaverage time: %03f&quot;</span>% (avg1, avg2))</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></li>
-<li><img src="/imgs/ac34bc5371e0a7c44304670157611ef0717929dd11f3237001517566579a2bf6.png" alt="picture 0">  <ul>
-<li>可见cython有一定的速度优势<h3 id="编译单个文件"><a href="#编译单个文件" class="headerlink" title="编译单个文件"></a>编译单个文件</h3></li>
-</ul>
-</li>
-<li>使用<code>cythonize</code>直接编译</li>
-<li>使用方法<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">options:</span><br><span class="line">  -h, --<span class="built_in">help</span>            show this <span class="built_in">help</span> message and <span class="built_in">exit</span></span><br><span class="line">  -X NAME=VALUE,..., --directive NAME=VALUE,...</span><br><span class="line">                        <span class="built_in">set</span> a compiler directive</span><br><span class="line">  -E NAME=VALUE,..., --compile-time-env NAME=VALUE,...</span><br><span class="line">                        <span class="built_in">set</span> a compile time environment variable</span><br><span class="line">  -s NAME=VALUE, --option NAME=VALUE</span><br><span class="line">                        <span class="built_in">set</span> a cythonize option</span><br><span class="line">  -2                    use Python 2 syntax mode by default</span><br><span class="line">  -3                    use Python 3 syntax mode by default</span><br><span class="line">  --3str                use Python 3 syntax mode by default</span><br><span class="line">  -+, --cplus           Compile as C++ rather than C</span><br><span class="line">  -a, --annotate        Produce a colorized HTML version of the <span class="built_in">source</span>.</span><br><span class="line">  --annotate-fullc      Produce a colorized HTML version of the <span class="built_in">source</span> <span class="built_in">which</span> includes entire generated C/C++-code.</span><br><span class="line">  -x PATTERN, --exclude PATTERN</span><br><span class="line">                        exclude certain file patterns from the compilation</span><br><span class="line">  -b, --build           build extension modules using distutils/setuptools</span><br><span class="line">  -i, --inplace         build extension modules <span class="keyword">in</span> place using distutils/setuptools (implies -b)</span><br><span class="line">  -j N, --parallel N    run builds <span class="keyword">in</span> N parallel <span class="built_in">jobs</span> (default: 18)</span><br><span class="line">  -f, --force           force recompilation</span><br><span class="line">  -q, --quiet           be less verbose during compilation</span><br><span class="line">  --lenient             increase Python compatibility by ignoring some compile time errors</span><br><span class="line">  -k, --keep-going      compile as much as possible, ignore compilation failures</span><br><span class="line">  --no-docstrings       strip docstrings</span><br><span class="line">  -M, --depfile         produce depfiles <span class="keyword">for</span> the sources</span><br></pre></td></tr></table></figure></li>
-<li>编译C++文件的时候需要加上<code>--cplus</code></li>
-<li>比如<code>cythonize -i &lt;pyx文件名&gt; -j &lt;并行的线程数量&gt;</code><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># tryCpp.pyx</span></span><br><span class="line"><span class="comment"># distutils: language = c++</span></span><br><span class="line"><span class="keyword">from</span> libcpp.vector cimport vector</span><br><span class="line"><span class="keyword">from</span> libcpp.<span class="built_in">map</span> cimport <span class="built_in">map</span></span><br><span class="line"><span class="keyword">from</span> libcpp.string cimport string</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">vectorCalc</span>(<span class="params"><span class="built_in">int</span> num</span>):</span></span><br><span class="line">    cdef <span class="built_in">int</span> cnt, i, j</span><br><span class="line">    cdef vector[<span class="built_in">int</span>] p</span><br><span class="line">    cdef <span class="built_in">map</span></span><br><span class="line"></span><br><span class="line">    p.reserve(num)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num*<span class="number">5</span>):</span><br><span class="line">        p.push_back(i)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(num*<span class="number">5</span>):</span><br><span class="line">        p.pop_back()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">useMap</span>(<span class="params"><span class="built_in">int</span> cnt</span>):</span></span><br><span class="line">    cdef <span class="built_in">int</span> i, j</span><br><span class="line">    cdef <span class="built_in">map</span>[<span class="built_in">int</span>, string] testMap</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(cnt):</span><br><span class="line">        testMap[i] = &lt;string&gt;(<span class="string">b&quot;This is %d&quot;</span> % i)</span><br><span class="line">    <span class="keyword">return</span> testMap</span><br><span class="line"></span><br><span class="line"><span class="comment"># 以下是另一种方法</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">useMap</span>(<span class="params"><span class="built_in">int</span> cnt</span>):</span></span><br><span class="line">    cdef <span class="built_in">int</span> i, j</span><br><span class="line">    cdef <span class="built_in">map</span>[<span class="built_in">int</span>, string] testMap</span><br><span class="line">    cdef pair[<span class="built_in">int</span>, string] p</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(cnt):</span><br><span class="line">        <span class="comment"># testMap[i] = &lt;string&gt;(b&quot;This is %d&quot; % i)</span></span><br><span class="line">        p = (i, &lt;string&gt;(<span class="string">b&quot;This is %d&quot;</span> % i))</span><br><span class="line">        testMap.insert(p)</span><br><span class="line">    <span class="keyword">return</span> testMap</span><br></pre></td></tr></table></figure></li>
-<li><code># distutils: language = c++</code>的意思是告诉cython这个文件需要做成Cpp文件</li>
-<li>从上述代码可以看出，可以在cython中使用cpp标准库中的文件<h3 id="在cython中使用C-中编写的类"><a href="#在cython中使用C-中编写的类" class="headerlink" title="在cython中使用C++中编写的类"></a>在cython中使用C++中编写的类</h3></li>
-<li><a target="_blank" rel="noopener" href="https://cython.readthedocs.io/en/latest/src/userguide/wrapping_CPlusPlus.html#standard-library">教程</a></li>
-<li>编写头文件和Cpp文件<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//tryCLass.h</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">ifndef</span> TRYCLASS</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">define</span> TRYCLASS</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> try111</span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">tryClass</span></span></span><br><span class="line"><span class="class">    &#123;</span></span><br><span class="line">        <span class="keyword">int</span> i, j;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="built_in">tryClass</span>(<span class="keyword">int</span> m, <span class="keyword">int</span> n);</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">        <span class="built_in">tryClass</span>();</span><br><span class="line"></span><br><span class="line">        ~<span class="built_in">tryClass</span>();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta"># <span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//tryCLass.cpp</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&quot;tryClass.h&quot;</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line">try111::tryClass::<span class="built_in">tryClass</span>(<span class="keyword">int</span> m, <span class="keyword">int</span> n):<span class="built_in">i</span>(m),<span class="built_in">j</span>(n)</span><br><span class="line">&#123;</span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;try Class created, i:&quot;</span>&lt;&lt;i&lt;&lt;<span class="string">&quot;j:&quot;</span>&lt;&lt;j&lt;&lt;std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">try111::tryClass::<span class="built_in">tryClass</span>():<span class="built_in">i</span>(<span class="number">1</span>),<span class="built_in">j</span>(<span class="number">1</span>)</span><br><span class="line">&#123;</span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;try Class created&quot;</span>&lt;&lt;std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">try111::tryClass::~<span class="built_in">tryClass</span>()</span><br><span class="line">&#123;</span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;try Class destroyed, i:&quot;</span>&lt;&lt;i&lt;&lt;<span class="string">&quot;j:&quot;</span>&lt;&lt;j&lt;&lt;std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li>在<code>.pxd</code>文件中声明这个文件<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># tryClass.pxd</span></span><br><span class="line">cdef extern <span class="keyword">from</span> <span class="string">&quot;tryClass.cpp&quot;</span>:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">cdef extern <span class="keyword">from</span> <span class="string">&quot;tryClass.h&quot;</span> namespace <span class="string">&quot;try111&quot;</span>:</span><br><span class="line">    cdef cppclass tryClass:</span><br><span class="line">        tryClass(<span class="built_in">int</span> i, <span class="built_in">int</span> j) <span class="keyword">except</span> +</span><br><span class="line">        tryClass() <span class="keyword">except</span> +</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li>在<code>.pyx</code>文件中引用这个文件中的类</li>
-<li><code>.pyx</code>的第一行要添加<code># distutils: language = c++</code><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># tryImp.pyx</span></span><br><span class="line"><span class="comment"># distutils: language = c++</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> tryCLass cimport tryClass</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tryObj</span>():</span></span><br><span class="line">    heapObj = new tryClass(<span class="number">99</span>, <span class="number">98</span>)</span><br><span class="line">    cdef tryClass ttt = tryClass(<span class="number">97</span>, <span class="number">96</span>)</span><br><span class="line">    <span class="keyword">del</span> heapObj</span><br></pre></td></tr></table></figure></li>
-<li>编译<code>cythonize -i -f tryImp.pyx -j8</code></li>
-<li>在python文件中调用<code>.pyx</code>文件中的函数<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># main.py</span></span><br><span class="line"><span class="keyword">from</span> tryImp <span class="keyword">import</span> *</span><br><span class="line">tryObj()</span><br></pre></td></tr></table></figure>
-<h3 id="cython中使用C-开发的函数"><a href="#cython中使用C-开发的函数" class="headerlink" title="cython中使用C++开发的函数"></a>cython中使用C++开发的函数</h3></li>
-<li>类似的，直接在cpp文件中定义一个函数<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// func.cpp</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> cnt)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;func:&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;cnt; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout&lt;&lt;i&lt;&lt;std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>使用<code>.pxd</code>文件包装<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># impFunc.pxd</span></span><br><span class="line">cdef extern <span class="keyword">from</span> <span class="string">&quot;func.cpp&quot;</span>:</span><br><span class="line">    void func(<span class="built_in">int</span> cnt)</span><br></pre></td></tr></table></figure></li>
-<li>在<code>.pyx</code>中调用<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#useFunc.pyx</span></span><br><span class="line"><span class="comment"># distutils: language = c++</span></span><br><span class="line"><span class="keyword">from</span> impFunc cimport func</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">useFunc</span>(<span class="params"><span class="built_in">int</span> i</span>):</span></span><br><span class="line">    func(i)</span><br></pre></td></tr></table></figure></li>
-<li>编译<code>cythonize -i -f useFunc.pyx -j8</code></li>
-<li>在python文件中使用<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> useFunc <span class="keyword">import</span> useFunc</span><br><span class="line">useFunc(<span class="number">5</span>)</span><br></pre></td></tr></table></figure></li>
-<li>执行结果<ul>
-<li><img src="/imgs/43fc6fe5a770a3ea885661862de05d62e6f47d9ebdc2d39e9c439434390c1b57.png" alt="picture 8">  <h3 id="cython中使用C-运算符重载和泛型"><a href="#cython中使用C-运算符重载和泛型" class="headerlink" title="cython中使用C++运算符重载和泛型"></a>cython中使用C++运算符重载和泛型</h3></li>
-</ul>
-</li>
-<li><a target="_blank" rel="noopener" href="https://cython.readthedocs.io/en/latest/src/userguide/wrapping_CPlusPlus.html#overloading-operators">参考</a></li>
-<li>使用重载运算符和类模板<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// opReload.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> OPERSTOR_RELOAD</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> OPERATOR_RELOAD</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> OPRELOAD</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">opReload</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    T inner;</span><br><span class="line">    <span class="comment">/* data */</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">opReload</span>();</span><br><span class="line">    <span class="built_in">opReload</span>(<span class="keyword">const</span> T&amp; arg);</span><br><span class="line">    <span class="built_in">opReload</span>(<span class="keyword">const</span> opReload&lt;T&gt;&amp; o);</span><br><span class="line">    opReload <span class="keyword">operator</span>+(<span class="keyword">const</span> opReload&lt;T&gt;&amp; o1);</span><br><span class="line">    opReload <span class="keyword">operator</span>-(<span class="keyword">const</span> opReload&lt;T&gt;&amp; o1);</span><br><span class="line">    <span class="function">T <span class="title">getInner</span><span class="params">()</span></span>;</span><br><span class="line">    ~<span class="built_in">opReload</span>();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">T opReload&lt;T&gt;::<span class="built_in">getInner</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>-&gt;inner;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">opReload&lt;T&gt;::<span class="built_in">opReload</span>()</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">opReload&lt;T&gt; ::<span class="built_in">opReload</span>(<span class="keyword">const</span> opReload&lt;T&gt;&amp; arg)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;inner = arg.inner;</span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;copying...&quot;</span>&lt;&lt;arg.inner&lt;&lt;std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">opReload&lt;T&gt;::<span class="built_in">opReload</span>(<span class="keyword">const</span> T&amp; arg)</span><br><span class="line">&#123;</span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;op created: &quot;</span>&lt;&lt;arg&lt;&lt;std::endl;</span><br><span class="line">    inner = arg;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">opReload&lt;T&gt;::~<span class="built_in">opReload</span>()</span><br><span class="line">&#123;</span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;op destroyed: &quot;</span>&lt;&lt;<span class="keyword">this</span>-&gt;inner&lt;&lt;std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">opReload&lt;T&gt; opReload&lt;T&gt;:: <span class="keyword">operator</span>+(<span class="keyword">const</span> opReload&lt;T&gt;&amp; o1)</span><br><span class="line">&#123;</span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;Adding...&quot;</span>&lt;&lt;<span class="keyword">this</span>-&gt;inner+o1.inner&lt;&lt;std::endl;</span><br><span class="line">    <span class="keyword">return</span> opReload&lt;T&gt;(<span class="keyword">this</span>-&gt;inner+o1.inner);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">opReload&lt;T&gt; opReload&lt;T&gt;:: <span class="keyword">operator</span>-(<span class="keyword">const</span> opReload&lt;T&gt;&amp; o1)</span><br><span class="line">&#123;</span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;Minusing...&quot;</span>&lt;&lt;<span class="keyword">this</span>-&gt;inner-o1.inner&lt;&lt;std::endl;</span><br><span class="line">    <span class="keyword">return</span> opReload&lt;T&gt;(<span class="keyword">this</span>-&gt;inner-o1.inner);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># opReload.pxd</span></span><br><span class="line">cdef extern <span class="keyword">from</span> <span class="string">&quot;opReload.h&quot;</span> namespace <span class="string">&quot;OPRELOAD&quot;</span>:</span><br><span class="line">    cdef cppclass opReload[T]:</span><br><span class="line">        opReload() <span class="keyword">except</span> +</span><br><span class="line">        opReload(const T&amp; arg) <span class="keyword">except</span> +</span><br><span class="line">        opReload(const opReload[T]&amp; o) <span class="keyword">except</span> +</span><br><span class="line">        opReload[T] operator+(opReload[T]&amp;)</span><br><span class="line">        opReload[T] operator-(opReload[T]&amp;)</span><br><span class="line">        T getInner()</span><br></pre></td></tr></table></figure></li>
-<li>上面引入的时候需要传入模板类的参数<code>opReload[T]&amp;</code></li>
-<li>可以使用复制构造函数，使用方法是<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">oo = opReload[double](op1)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># distutils: language = c++</span></span><br><span class="line"><span class="keyword">from</span> opReload cimport opReload</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">useClass</span>():</span></span><br><span class="line">    cdef double o1 = <span class="number">1.5</span></span><br><span class="line">    cdef double o2 = <span class="number">2.5</span></span><br><span class="line">    cdef opReload[double] op1 = opReload[double](o1)</span><br><span class="line">    cdef opReload[double] op2 = opReload[double](o2)</span><br><span class="line"></span><br><span class="line">    cdef opReload[double] o, o_, oo</span><br><span class="line">    oo = opReload[double](op1)</span><br><span class="line">    o = op1+op2</span><br><span class="line">    o_ = op1-op2</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> o.getInner(), o_.getInner()</span><br></pre></td></tr></table></figure></li>
-<li>调用输出（main中只调用了pyx中的函数）<ul>
-<li><img src="/imgs/cfc20733ae8050783fd590438597bd445ca0cf54b12195fedfab5c37094b1d38.png" alt="picture 9"></li>
-</ul>
-</li>
-<li>创建栈上的对象的时候，对象必须至少有一个无参数的构造函数，否则无法创建  <h3 id="在栈上和堆上分配变量"><a href="#在栈上和堆上分配变量" class="headerlink" title="在栈上和堆上分配变量"></a>在栈上和堆上分配变量</h3></li>
-<li>从<code>libc.stdlib</code>引入<code>malloc</code>和<code>free</code></li>
-<li>分配堆上对象<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cdef vector[char]* v = new vector[char](<span class="number">10</span>)</span><br><span class="line">cdef char* strOnHeap = &lt;char*&gt;malloc(<span class="number">10</span>)</span><br></pre></td></tr></table></figure></li>
-<li>注意此处分配的动态<code>vector</code>对象需要使用<code>v[0]</code>·解引用（类似于<code>*v</code>）才能使用，否则会出错类似于<code>terminate called after throwing an instance of &#39;std::bad_alloc&#39;</code><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># distutils: language = c++</span></span><br><span class="line"><span class="keyword">from</span> libc.stdlib cimport malloc, free</span><br><span class="line"><span class="keyword">from</span> libcpp.vector cimport vector</span><br><span class="line"><span class="keyword">from</span> libc.stdio cimport printf</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">allocAndFree</span>():</span></span><br><span class="line">    cdef char* strOnHeap = &lt;char*&gt;malloc(<span class="number">10</span>)</span><br><span class="line">    printf(<span class="string">&quot;Alloced\n&quot;</span>)</span><br><span class="line">    cdef vector[char]* v = new vector[char](<span class="number">10</span>)</span><br><span class="line">    </span><br><span class="line">    cdef <span class="built_in">int</span> m</span><br><span class="line">    cdef char* strLit = <span class="string">&quot;Hello&quot;</span></span><br><span class="line">    <span class="keyword">for</span> m <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(strLit)):</span><br><span class="line">        strOnHeap[m] = strLit[m]</span><br><span class="line">    </span><br><span class="line">    cdef <span class="built_in">int</span> i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">        v[<span class="number">0</span>][i] = &lt;char&gt;(<span class="built_in">int</span>(<span class="string">&#x27;0&#x27;</span>.encode(<span class="string">&quot;ascii&quot;</span>))+i)</span><br><span class="line">    </span><br><span class="line">    printf(<span class="string">&quot;%s\n&quot;</span>, strOnHeap)</span><br><span class="line">    <span class="comment"># printf(&quot;Alloced\n&quot;)</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">        printf(<span class="string">&quot;%d&quot;</span>, v[<span class="number">0</span>][i])</span><br><span class="line">    printf(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">del</span> v</span><br><span class="line">    free(strOnHeap)</span><br></pre></td></tr></table></figure></li>
-<li>释放<code>malloc</code>内存空间直接<code>free</code>即可</li>
-<li>释放申请的动态变量使用<code>del</code><h3 id="使用编译好的C-C-动态库-so（Linux下）"><a href="#使用编译好的C-C-动态库-so（Linux下）" class="headerlink" title="使用编译好的C/C++动态库.so（Linux下）"></a>使用编译好的C/C++动态库.so（Linux下）</h3></li>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/traditional/p/13285339.html">参考</a></li>
-<li>c 源文件<code>calc.c</code><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;calc.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">calcFunc</span><span class="params">(<span class="keyword">int</span> max)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (;i&lt;max;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\r|&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>; j&lt;=i; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;■&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(j = i+<span class="number">1</span>; j&lt;max; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;|&quot;</span>);</span><br><span class="line">        fflush(<span class="built_in">stdout</span>);</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>c头文件<code>calc.h</code><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta"># <span class="meta-keyword">ifndef</span> CALC</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">define</span> CALC</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">calcFunc</span><span class="params">(<span class="keyword">int</span> i)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></li>
-<li>.pyx文件（注意导入的C库函数不可以被直接引用，需要在.pyx中包装一次）<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># useCalc.pyx</span></span><br><span class="line">cdef extern <span class="keyword">from</span> <span class="string">&quot;calc.h&quot;</span>:</span><br><span class="line">    void calcFunc(<span class="built_in">int</span> i)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">useFunc</span>(<span class="params"><span class="built_in">int</span> i</span>):</span></span><br><span class="line">    calcFunc(i)</span><br></pre></td></tr></table></figure></li>
-<li><code>gcc</code>生成动态链接库</li>
-<li><code>gcc -shared -o lib&lt;输出文件&gt;.so 源文件.c -fPIC</code><ul>
-<li><code>-fPIC</code>是生成位置无关代码的意思</li>
-<li>注意必须遵守命名规范</li>
-</ul>
-</li>
-<li>给出头<code>.h</code>文件方便调用</li>
-<li>但是直接使用命令行工具cythonize编译将会无法找到符号，报错<code>undefined symbol: calcFunc</code></li>
-<li>需要创建<code>setup.py</code>指导编译和链接<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> distutils.core <span class="keyword">import</span> setup, Extension</span><br><span class="line"><span class="keyword">from</span> Cython.Build <span class="keyword">import</span> cythonize</span><br><span class="line"></span><br><span class="line">ext_modules = [</span><br><span class="line">    Extension(</span><br><span class="line">        <span class="string">&quot;useCalc&quot;</span>,  <span class="comment"># the module name exposed to python</span></span><br><span class="line">        [<span class="string">&quot;useCalc.pyx&quot;</span>],  <span class="comment"># the Cython source file</span></span><br><span class="line">        libraries=[<span class="string">&quot;calc&quot;</span>],  <span class="comment"># the name of library to link with</span></span><br><span class="line">        library_dirs=[<span class="string">&quot;/home/frank/study/cython/use_So&quot;</span>],  <span class="comment"># the path to your library</span></span><br><span class="line"></span><br><span class="line">    )</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=<span class="string">&quot;useCalc&quot;</span>,</span><br><span class="line">    ext_modules=cythonize(ext_modules, language_level=<span class="number">3</span>),</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
-<li>执行<code>python3 setup.py build_ext --inplace</code></li>
-<li>仍然报错<code>libcalc.so: cannot open shared object file: No such file or directory</code></li>
-<li>使用<code>ldd</code>命令查看cython编译出的<code>.so</code>文件，看到<ul>
-<li><img src="/imgs/d49db8317b38865063fc451d1863fc4426509294bd3f89984a4591f8f690a0d5.png" alt="picture 10">  </li>
-<li>此时可见<code>libcalc.so</code>是<code>not found</code></li>
-<li>将库文件的目录添加到<code>/etc/ld.so.conf</code>，使用<code>vim</code>编辑</li>
-<li><img src="/imgs/955c917f8662d9fdf93eb5714341b9c311b042672da5728094796072165e66c7.png" alt="picture 12">  <ul>
-<li>自己添加的目录前面不加<code>include</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><code>sudo /sbin/ldconfig</code>使添加生效<h4 id="另：使用C语言如何调用动态链接库"><a href="#另：使用C语言如何调用动态链接库" class="headerlink" title="另：使用C语言如何调用动态链接库"></a>另：使用C语言如何调用动态链接库</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;calc.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    calcFunc(<span class="number">10</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>引入头文件直接使用</li>
-<li>编译的时候需要添加搜索路径<code>-L</code>和添加自身库<code>-l</code></li>
-<li><code>gcc -o main main.c -L. -lmylib</code><ul>
-<li><code>-L.</code>的意思是在当前目录下查找</li>
-</ul>
-</li>
-<li>同样需要在<code>/etc/ld.so.conf</code>中添加并且执行<code>sudo /sbin/ldconfig</code>生效</li>
-</ul>
-<h3 id="提高代码执行速度"><a href="#提高代码执行速度" class="headerlink" title="提高代码执行速度"></a>提高代码执行速度</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">say_hello_to_c</span>(<span class="params"><span class="built_in">int</span> m</span>):</span></span><br><span class="line">    cdef double t1 = time.time()</span><br><span class="line">    cdef long <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    cdef <span class="built_in">int</span> i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        <span class="built_in">sum</span>+=i</span><br><span class="line">    cdef double t2 = time.time()</span><br><span class="line">    <span class="comment"># print(t2-t1)</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>, t2-t1</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><img src="/imgs/0ab7640f35d15174084b37c7a0e1d12bd0fccebc55582a8730827d6591fc5c2b.png" alt="picture 4">  </p>
-</li>
-<li><p>可以看出<strong>增加了类型声明</strong>，会使得函数性能有很大的提高</p>
-</li>
-<li><p>给<code>sum</code>添加了<code>volatile</code>关键字<code>cdef volatile long sum = 0</code>，没有很大的变化</p>
-</li>
-<li><p>如果将变量变为全局变量，则</p>
-</li>
-<li><p><img src="/imgs/a2232f7f204bdc754b369d58bf58dd2d21fea4d41bdb77d2d4724cabf41d2c4d.png" alt="picture 5">  </p>
-</li>
-<li><p>还是并无明显区别，判断不是编译器优化导致的不同，快了124.46倍</p>
-</li>
-<li><p>更换需要外部空间的计算，也是C程序快非常多</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">arraySum</span>(<span class="params"><span class="built_in">int</span> m</span>):</span></span><br><span class="line">    cdef <span class="built_in">int</span> a[<span class="number">1000000</span>]</span><br><span class="line">    cdef long <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    cdef <span class="built_in">int</span> i = <span class="number">0</span></span><br><span class="line">    cdef <span class="built_in">int</span> j = <span class="number">0</span></span><br><span class="line">    cdef double t1 = time.time()</span><br><span class="line">    cdef double t2</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        a[i] = i</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        <span class="built_in">sum</span>+=a[j]</span><br><span class="line">    t2 = time.time()</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>, t2-t1</span><br></pre></td></tr></table></figure></li>
-<li><p>比较时间</p>
-</li>
-<li><p><img src="/imgs/8dc7e5fda4cb21da9aa39b6e66c5b7aff6156b77b92d45d8dbaf5dc9db8788d8.png" alt="picture 6">  </p>
-<ul>
-<li>无论是在程序内部还是外部测量，可见二者时间没有明显的差异，都比python程序快非常多，基本上快了50倍左右</li>
-</ul>
-</li>
-</ul>
-<h2 id="其他加速python程序的方法"><a href="#其他加速python程序的方法" class="headerlink" title="其他加速python程序的方法"></a>其他加速python程序的方法</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/347185566">参考知乎</a><h3 id="可以给函数加缓存lru-cache"><a href="#可以给函数加缓存lru-cache" class="headerlink" title="可以给函数加缓存lru_cache"></a>可以给函数加缓存<code>lru_cache</code></h3></li>
-<li>函数前加一个<code>@lru_cache()</code></li>
-<li><img src="/imgs/e0b2da1abf14f2206680f772c1ad31cdffb7323c5b4c60f087a2b9d919e7ba5c.png" alt="picture 7">  </li>
-</ul>
-<h3 id="pypy解释器"><a href="#pypy解释器" class="headerlink" title="pypy解释器"></a>pypy解释器</h3><ul>
-<li><code>pypy3 &lt;代码路径&gt;</code></li>
-<li>速度可以提高多倍</li>
-</ul>
-<h3 id="使用numba作为python的解释器"><a href="#使用numba作为python的解释器" class="headerlink" title="使用numba作为python的解释器"></a>使用numba作为python的解释器</h3><ul>
-<li>如果代码中有很多numpy数组或者循环，使用numba会提高效率</li>
-<li>使用装饰器<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> numba <span class="keyword">import</span> jit</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">x = np.arange(<span class="number">100</span>).reshape(<span class="number">10</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@jit(<span class="params">nopython=<span class="literal">True</span></span>) </span><span class="comment"># Set &quot;nopython&quot; mode for best performance, equivalent to @njit</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">go_fast</span>(<span class="params">a</span>):</span> <span class="comment"># Function is compiled to machine code when called the first time</span></span><br><span class="line">    trace = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(a.shape[<span class="number">0</span>]):   <span class="comment"># Numba likes loops</span></span><br><span class="line">        trace += np.tanh(a[i, i]) <span class="comment"># Numba likes NumPy functions</span></span><br><span class="line">    <span class="keyword">return</span> a + trace              <span class="comment"># Numba likes NumPy broadcasting</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(go_fast(x))</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="其他参考"><a href="#其他参考" class="headerlink" title="其他参考"></a>其他参考</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/152343123">参考2</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2136,7 +2115,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">191</span>
+          <span class="site-state-item-count">192</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2180,13 +2159,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">672k</span>
+    <span title="站点总字数">673k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">20:23</span>
+    <span title="站点阅读时长">20:24</span>
 </div>
 
         
