@@ -1,4 +1,5 @@
 Clear-Host
+Write-Host "If error encountered, please use 'nvm use 12.0.0' to switch nodeJS version to 12.0.0"
 # nvm use 12.0.0
 # Set the error preference to stop the script on any command failure
 $ErrorActionPreference = 'Stop'
