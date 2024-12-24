@@ -182,6 +182,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/12/24/%E7%BB%99zotero%E6%92%B0%E5%86%99%E8%84%9A%E6%9C%AC%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E8%AF%AD%E8%A8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/24/%E7%BB%99zotero%E6%92%B0%E5%86%99%E8%84%9A%E6%9C%AC%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E8%AF%AD%E8%A8%80/" class="post-title-link" itemprop="url">给zotero撰写脚本批量修改参考文献语言</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-12-24 23:57:11" itemprop="dateCreated datePublished" datetime="2024-12-24T23:57:11+08:00">2024-12-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 00:09:08" itemprop="dateModified" datetime="2024-12-25T00:09:08+08:00">2024-12-25</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="下载各类使用的csl文件"><a href="#下载各类使用的csl文件" class="headerlink" title="下载各类使用的csl文件"></a>下载各类使用的<code>csl</code>文件</h2><ul>
+<li>在zotero的设置-&gt;引用-&gt;获取更多样式位置搜索<ul>
+<li><img src="/imgs/782fe92f4ad9a194c2facbac91c7c4e03b4022a9f52c7751842d1a29487e719a.png" alt="picture 1">  </li>
+</ul>
+</li>
+<li>或者在<a target="_blank" rel="noopener" href="https://zotero-chinese.com/styles/">网站</a>搜索</li>
+<li>然后导入<h2 id="撰写javascript脚本批量修改"><a href="#撰写javascript脚本批量修改" class="headerlink" title="撰写javascript脚本批量修改"></a>撰写javascript脚本批量修改</h2></li>
+<li>大部分样式是根据文献的”语言”属性设置文献的中英文，从而决定使用et al还是等作为省略标记。</li>
+<li>因此需要批量对文献的语言属性做出设置，中文的设置为<code>zh-CN</code>，英文的设置为<code>en-US</code></li>
+<li>下面代码的判断方式是作者名称中是否含有汉字，含有认为语言是中文，否则是英文</li>
+<li>全选所有文件<ul>
+<li><img src="/imgs/b5d958b424dab0b8fe8cf48582b8a6b0ddcadc55bd1c338918225c5a38bc6b90.png" alt="picture 0">  </li>
+<li>在这个目录下按下<code>Ctrl+A</code></li>
+</ul>
+</li>
+<li>打开工具→开发者→Run JavaScript<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 检查作者姓名中是否包含中文字符的函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">containsChinese</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">const</span> regex = <span class="regexp">/[\u4e00-\u9fa5]/</span>;  <span class="comment">// 中文字符的 Unicode 范围</span></span><br><span class="line">      <span class="keyword">return</span> regex.test(str);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 替换后的语言</span></span><br><span class="line"><span class="keyword">const</span> newLanguageCN = <span class="string">&quot;zh-CN&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> newLanguageEN = <span class="string">&quot;en-US&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 以下内容无需修改</span></span><br><span class="line">zoteroPane = Zotero.getActiveZoteroPane();</span><br><span class="line">items = zoteroPane.getSelectedItems();</span><br><span class="line"><span class="keyword">var</span> cnCount = <span class="number">0</span>; <span class="comment">// 中文条目计数</span></span><br><span class="line"><span class="keyword">var</span> enCount = <span class="number">0</span>; <span class="comment">// 英文条目计数</span></span><br><span class="line"><span class="keyword">var</span> rn = <span class="number">0</span>; <span class="comment">// 替换条目个数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (item <span class="keyword">of</span> items) &#123;</span><br><span class="line">      <span class="keyword">var</span> la = item.getField(<span class="string">&quot;language&quot;</span>);</span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 获取文章的作者信息</span></span><br><span class="line">      <span class="keyword">var</span> authors = item.getCreators();</span><br><span class="line">      <span class="keyword">var</span> hasChineseName = <span class="literal">false</span>;</span><br><span class="line">  </span><br><span class="line">      <span class="comment">// 检查作者是否包含中文名字</span></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">const</span> author <span class="keyword">of</span> authors) &#123;</span><br><span class="line">        <span class="keyword">if</span> (containsChinese(author.lastName) || containsChinese(author.firstName)) &#123;</span><br><span class="line">          hasChineseName = <span class="literal">true</span>;</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据是否包含中文名字决定语言设置</span></span><br><span class="line">    <span class="keyword">if</span> (hasChineseName) &#123;</span><br><span class="line">      item.setField(<span class="string">&quot;language&quot;</span>, newLanguageCN);  <span class="comment">// 中文名字则设置为 zh-CN</span></span><br><span class="line">      cnCount += <span class="number">1</span>;  <span class="comment">// 中文条目计数</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      item.setField(<span class="string">&quot;language&quot;</span>, newLanguageEN);  <span class="comment">// 否则设置为 en-US</span></span><br><span class="line">      enCount += <span class="number">1</span>;  <span class="comment">// 英文条目计数</span></span><br><span class="line">    &#125;</span><br><span class="line">    rn += <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">await</span> item.saveTx();</span><br><span class="line">  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出中文和英文条目的数量</span></span><br><span class="line"><span class="keyword">return</span> <span class="string">`已替换的条目总数: <span class="subst">$&#123;rn&#125;</span>。其中中文条目: <span class="subst">$&#123;cnCount&#125;</span>，英文条目: <span class="subst">$&#123;enCount&#125;</span>`</span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/12/21/CppPremier%E5%A4%8D%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1132,85 +1227,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/07/29/%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9vscode%E7%9A%84SSH%E6%8F%92%E4%BB%B6%E6%8C%87%E5%AE%9A%E4%B8%80%E4%B8%AA%E4%B8%BB%E6%9C%BA%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%B1%BB%E5%9E%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/07/29/%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9vscode%E7%9A%84SSH%E6%8F%92%E4%BB%B6%E6%8C%87%E5%AE%9A%E4%B8%80%E4%B8%AA%E4%B8%BB%E6%9C%BA%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%B1%BB%E5%9E%8B/" class="post-title-link" itemprop="url">如何修改vscode的SSH插件指定一个主机的操作系统类型</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-07-29 17:32:55 / 修改时间：17:37:01" itemprop="dateCreated datePublished" datetime="2024-07-29T17:32:55+08:00">2024-07-29</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>128</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="有些时候因为误操作或者vscode自身识别出错会导致在远程链接的时候选择了错误的对方主机操作系统"><a href="#有些时候因为误操作或者vscode自身识别出错会导致在远程链接的时候选择了错误的对方主机操作系统" class="headerlink" title="有些时候因为误操作或者vscode自身识别出错会导致在远程链接的时候选择了错误的对方主机操作系统"></a>有些时候因为误操作或者vscode自身识别出错会导致在远程链接的时候选择了错误的对方主机操作系统</h2><ul>
-<li>如图</li>
-<li><img src="/imgs/66d44601096649e4f13b1d35463fe53cad033aadc914acd1539ec9c86139bedf.png" alt="picture 0">  </li>
-<li>此时仅仅删除ssh host配置文件<img src="/imgs/1d0cdeb6d5a11638f0553d4038ab0a4d1065ed6d59d9ea40d7ffd64387ad1acb.png" alt="picture 1"> 和系统的ssh known-hosts文件都不能解决问题，需要在vscode的<code>Remote-SSH</code>插件处直接修改才可以</li>
-<li>如下图</li>
-<li><img src="/imgs/cfb7487d99794168583fbf34c5d0b3f36c2da0f85ba3a2076560e5fefabe69fa.png" alt="picture 2">  </li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1282,14 +1298,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-count">193</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">68</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1326,13 +1342,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">674k</span>
+    <span title="站点总字数">676k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">20:26</span>
+    <span title="站点阅读时长">20:29</span>
 </div>
 
         

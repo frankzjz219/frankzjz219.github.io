@@ -182,6 +182,87 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/05/07/python%E8%BF%9B%E8%A1%8CSocket%E7%AE%80%E5%8D%95%E5%BC%80%E5%8F%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/05/07/python%E8%BF%9B%E8%A1%8CSocket%E7%AE%80%E5%8D%95%E5%BC%80%E5%8F%91/" class="post-title-link" itemprop="url">python进行Socket简单开发</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-05-07 10:20:06 / 修改时间：10:35:02" itemprop="dateCreated datePublished" datetime="2023-05-07T10:20:06+08:00">2023-05-07</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>350</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_46958731/article/details/112670803">参考链接</a><h2 id="python的byte类型"><a href="#python的byte类型" class="headerlink" title="python的byte类型"></a>python的byte类型</h2></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39927059/article/details/110557393">参考链接</a></li>
+<li>byte类型是字节类型， 一般是不能直接打印的，与字符串不同，字符串编码得到字节类型，字节类型解码得到字符串<h3 id="打印字节"><a href="#打印字节" class="headerlink" title="打印字节"></a>打印字节</h3></li>
+<li>使用<code>bytes.hex()</code>将其转为十六进制字符串<ul>
+<li><img src="/imgs/5df60568cb9c2bcd4c57329a07c30473fa3acb23b7a1022832318ff19fea6596.png" alt="picture 1">  <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line">server = socket.socket(family=socket.AF_INET,<span class="built_in">type</span>=socket.SOCK_STREAM)</span><br><span class="line">server.bind((<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="number">4444</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;listening for one client&#x27;</span>)</span><br><span class="line">server.listen(<span class="number">1</span>)</span><br><span class="line">conn,ip_addr = server.accept()</span><br><span class="line">res = conn.recv(<span class="number">2</span>)</span><br><span class="line"><span class="built_in">print</span>(ip_addr)</span><br><span class="line"><span class="built_in">print</span>(res.<span class="built_in">hex</span>())</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/05/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fand%E7%BC%96%E8%AF%91%E9%9A%8F%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1214,107 +1295,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/04/02/%E5%9C%A8Ubuntu%E5%88%9B%E5%BB%BAftp%E6%9C%8D%E5%8A%A1%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/04/02/%E5%9C%A8Ubuntu%E5%88%9B%E5%BB%BAftp%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="post-title-link" itemprop="url">在Ubuntu创建ftp服务器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-04-02 12:22:55" itemprop="dateCreated datePublished" datetime="2023-04-02T12:22:55+08:00">2023-04-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-28 10:30:30" itemprop="dateModified" datetime="2023-07-28T10:30:30+08:00">2023-07-28</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>706</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="创建FTP并指定文件夹"><a href="#创建FTP并指定文件夹" class="headerlink" title="创建FTP并指定文件夹"></a>创建FTP并指定文件夹</h2><ul>
-<li>先安装<code>vsftpd</code>，使用<code>sudo apt install vsftpd</code>安装</li>
-<li>然后创建新用户<code>sudo useradd &lt;用户名&gt;</code></li>
-<li>然后设置新用户的密码<code>passwd &lt;用户名&gt;</code></li>
-<li><strong>指定新用户的根目录为你想使用的目录</strong><code>sudo usermod -d &lt;需要的路径&gt; &lt;用户名&gt;</code></li>
-<li>将这个目录的权限修改为全部允许，也就是<code>chmod 777 &lt;路径&gt;</code></li>
-<li>在<code>/etc/vsftpd.conf</code>中修改相应的选项给予相应的权限，<a target="_blank" rel="noopener" href="https://ubuntu.com/server/docs/service-ftp">参考</a><ul>
-<li><strong>不要乱改上述文件否则可能导致vsftpd服务无法启动</strong></li>
-<li>修改之前备份文件<code>sudo mv /etc/vsftpd.conf /etc/vsftpd.conf.bak</code></li>
-<li>查看FTP服务是否开启了<code>sudo netstat -antup | grep ftp</code></li>
-</ul>
-</li>
-<li>重启服务<code>sudo systemctl restart vsftpd</code></li>
-<li>在其他电脑使用<strong>刚才创建的用户和设置的密码登录FTP</strong>，打开直接就是根目录</li>
-<li>递归修改目录下的所有文件（夹）的权限<code>chmod -R 777 &lt;路径&gt;</code><h2 id="FTP目录下的文件无法打开的情况"><a href="#FTP目录下的文件无法打开的情况" class="headerlink" title="FTP目录下的文件无法打开的情况"></a>FTP目录下的文件无法打开的情况</h2></li>
-<li>具体是双击文件打开的时候<strong>直接打开浏览器</strong></li>
-<li>原因是windows必须把FTP上的文件复制到本地之后才能打开，不能在服务器页面直接打开<h2 id="透穿"><a href="#透穿" class="headerlink" title="透穿"></a>透穿</h2></li>
-<li>透穿教程参考windows下的FTP服务配置即可<h2 id="硬盘挂载"><a href="#硬盘挂载" class="headerlink" title="硬盘挂载"></a>硬盘挂载</h2></li>
-<li>机械硬盘重启Linux系统的时候可能需要<strong>重新插拔</strong>，否则可能挂载不上，挂载不上可能导致链接FTP的时候<strong>访问被拒绝</strong><h2 id="配置sudo无密码的非root用户"><a href="#配置sudo无密码的非root用户" class="headerlink" title="配置sudo无密码的非root用户"></a>配置sudo无密码的非root用户</h2></li>
-<li><code>sudo vim /etc/sudoers</code></li>
-<li>找到一行<code>%sudo   ALL=(ALL:ALL) ALL</code></li>
-<li>在其后加一行<code>&lt;用户名&gt; ALL=(ALL) NOPASSWD:ALL</code></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1386,14 +1366,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-count">193</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">68</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1430,13 +1410,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">674k</span>
+    <span title="站点总字数">676k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">20:26</span>
+    <span title="站点阅读时长">20:29</span>
 </div>
 
         

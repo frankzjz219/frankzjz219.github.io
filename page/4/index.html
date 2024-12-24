@@ -182,6 +182,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/01/17/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%EF%BC%88%E4%BA%8C%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/17/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-title-link" itemprop="url">二叉树的非递归遍历（二）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-17 12:38:29" itemprop="dateCreated datePublished" datetime="2024-01-17T12:38:29+08:00">2024-01-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-27 15:41:25" itemprop="dateModified" datetime="2024-04-27T15:41:25+08:00">2024-04-27</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="二叉树的非递归遍历"><a href="#二叉树的非递归遍历" class="headerlink" title="二叉树的非递归遍历"></a>二叉树的非递归遍历</h2><ul>
+<li>通过在遍历过一次的节点前面加入一个NULL指针，提示下一个节点遍历过一次了<h3 id="前序遍历"><a href="#前序遍历" class="headerlink" title="前序遍历"></a>前序遍历</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">preorderTraversal</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; result;</span><br><span class="line">        stack&lt;TreeNode*&gt; st;</span><br><span class="line">        <span class="keyword">if</span> (root != <span class="literal">NULL</span>) st.<span class="built_in">push</span>(root);</span><br><span class="line">        <span class="keyword">while</span> (!st.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            TreeNode* node = st.<span class="built_in">top</span>();</span><br><span class="line">            <span class="keyword">if</span> (node != <span class="literal">NULL</span>) &#123;</span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                <span class="keyword">if</span> (node-&gt;right) st.<span class="built_in">push</span>(node-&gt;right);  <span class="comment">// 右</span></span><br><span class="line">                <span class="keyword">if</span> (node-&gt;left) st.<span class="built_in">push</span>(node-&gt;left);    <span class="comment">// 左</span></span><br><span class="line">                st.<span class="built_in">push</span>(node);                          <span class="comment">// 中</span></span><br><span class="line">                st.<span class="built_in">push</span>(<span class="literal">NULL</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                node = st.<span class="built_in">top</span>();</span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                result.<span class="built_in">push_back</span>(node-&gt;val);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li>遍历过一次的节点第二次直接输出<h3 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">inorderTraversal</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; result;</span><br><span class="line">        stack&lt;TreeNode*&gt; st;</span><br><span class="line">        <span class="keyword">if</span> (root != <span class="literal">NULL</span>) st.<span class="built_in">push</span>(root);</span><br><span class="line">        <span class="keyword">while</span> (!st.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            TreeNode* node = st.<span class="built_in">top</span>();</span><br><span class="line">            <span class="keyword">if</span> (node != <span class="literal">NULL</span>) &#123;</span><br><span class="line">                st.<span class="built_in">pop</span>(); <span class="comment">// 将该节点弹出，避免重复操作，下面再将右中左节点添加到栈中</span></span><br><span class="line">                <span class="keyword">if</span> (node-&gt;right) st.<span class="built_in">push</span>(node-&gt;right);  <span class="comment">// 添加右节点（空节点不入栈）</span></span><br><span class="line"></span><br><span class="line">                st.<span class="built_in">push</span>(node);                          <span class="comment">// 添加中节点</span></span><br><span class="line">                st.<span class="built_in">push</span>(<span class="literal">NULL</span>); <span class="comment">// 中节点访问过，但是还没有处理，加入空节点做为标记。</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (node-&gt;left) st.<span class="built_in">push</span>(node-&gt;left);    <span class="comment">// 添加左节点（空节点不入栈）</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// 只有遇到空节点的时候，才将下一个节点放进结果集</span></span><br><span class="line">                st.<span class="built_in">pop</span>();           <span class="comment">// 将空节点弹出</span></span><br><span class="line">                node = st.<span class="built_in">top</span>();    <span class="comment">// 重新取出栈中元素</span></span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                result.<span class="built_in">push_back</span>(node-&gt;val); <span class="comment">// 加入到结果集</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li>针对没访问过的节点，先把他的左孩子入栈，再把NULL和自身入栈，再入栈右孩子<h3 id="后序遍历"><a href="#后序遍历" class="headerlink" title="后序遍历"></a>后序遍历</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">postorderTraversal</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; result;</span><br><span class="line">        stack&lt;TreeNode*&gt; st;</span><br><span class="line">        <span class="keyword">if</span> (root != <span class="literal">NULL</span>) st.<span class="built_in">push</span>(root);</span><br><span class="line">        <span class="keyword">while</span> (!st.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            TreeNode* node = st.<span class="built_in">top</span>();</span><br><span class="line">            <span class="keyword">if</span> (node != <span class="literal">NULL</span>) &#123;</span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                st.<span class="built_in">push</span>(node);                          <span class="comment">// 中</span></span><br><span class="line">                st.<span class="built_in">push</span>(<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (node-&gt;right) st.<span class="built_in">push</span>(node-&gt;right);  <span class="comment">// 右</span></span><br><span class="line">                <span class="keyword">if</span> (node-&gt;left) st.<span class="built_in">push</span>(node-&gt;left);    <span class="comment">// 左</span></span><br><span class="line"></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                node = st.<span class="built_in">top</span>();</span><br><span class="line">                st.<span class="built_in">pop</span>();</span><br><span class="line">                result.<span class="built_in">push_back</span>(node-&gt;val);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li>针对没访问过的节点，先把自己和NULL入栈，再把右孩子入栈，再把左孩子入栈</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2024/01/11/%E6%90%BA%E7%A8%8B%E5%BA%93%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1810,240 +1894,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/10/20/%E7%BB%99Linux%E5%86%85%E6%A0%B8%E5%A2%9E%E5%8A%A0%E5%AE%9E%E6%97%B6%E8%A1%A5%E4%B8%81%E5%B9%B6%E5%AE%89%E8%A3%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/10/20/%E7%BB%99Linux%E5%86%85%E6%A0%B8%E5%A2%9E%E5%8A%A0%E5%AE%9E%E6%97%B6%E8%A1%A5%E4%B8%81%E5%B9%B6%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">给Linux内核增加实时补丁并安装</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-10-20 13:18:56" itemprop="dateCreated datePublished" datetime="2023-10-20T13:18:56+08:00">2023-10-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-11-06 12:28:00" itemprop="dateModified" datetime="2024-11-06T12:28:00+08:00">2024-11-06</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.5k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>8 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="使用UltraISO制作启动盘"><a href="#使用UltraISO制作启动盘" class="headerlink" title="使用UltraISO制作启动盘"></a>使用UltraISO制作启动盘</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wangyanxiang66/article/details/118522752">链接</a></li>
-<li>用管理员权限启动UltraISO</li>
-</ul>
-<h2 id="为何要安装实时补丁"><a href="#为何要安装实时补丁" class="headerlink" title="为何要安装实时补丁"></a>为何要安装实时补丁</h2><ul>
-<li><p>Linux系统从原理上说并不是一个实时系统，因为Linux系统有很多状态是不可被抢占的，比如持有自旋锁的状态等等，在其他博客中有所涉及，这会导致Linux系统定时不准等一系列问题，对实时控制十分不利</p>
-</li>
-<li><p>增加实时补丁不能完全使得Linux系统变为实时系统，但是可以使得Linux系统不可抢占的部分大为减少，增强实时性</p>
-<h2 id="对Linux内核实时性影响比较大的情况"><a href="#对Linux内核实时性影响比较大的情况" class="headerlink" title="对Linux内核实时性影响比较大的情况"></a><strong>对Linux内核实时性影响比较大的情况</strong></h2></li>
-<li><p>实际上是Linux<strong>内核的进程切换频率</strong>影响比较大，决定了定时的最佳分辨率</p>
-</li>
-<li><p>Linux内核编译的时候最多只支持1000Hz，也就是时间分辨率为1ms，但是假如要求更高的话就必须自己在<code>kernel/Kconfig.hz</code>中添加设置如下图</p>
-<ul>
-<li><img src="/imgs/9c31ff062361c133b90f0bcd66f66d661116bd321b5f408b685d28261fbc2cfd.png" alt="picture 5">  </li>
-<li><img src="/imgs/94cd72c3e4dc057cccdd591aa69261d2016ef598f9813c69598bf45ecf4fe6c5.png" alt="picture 7">  </li>
-</ul>
-</li>
-<li><p>如图编译的时候就可以增加一个自定义的2000Hz选项</p>
-</li>
-<li><p><img src="/imgs/a493f5fe6997a8d751421b1b8850fa2747607c3c2b4b1bd8062c95cfa31d5c77.png" alt="picture 10">  </p>
-</li>
-<li><p><img src="/imgs/15b5aaeb20851c45727651d9621ecd08c6dee07d4412fee160928a04b5123123.png" alt="picture 8">  </p>
-</li>
-<li><p>然后再选择实时内核</p>
-</li>
-<li><p><img src="/imgs/688dd0644217a61cbe85eace4dccf1b000c969ab435d3fda98ae719758f05fcc.png" alt="picture 9">  </p>
-</li>
-<li><p>注意，对定时准确性影响比较大的<u><strong>是内核的<code>timer</code>频率</strong></u>，甚至实时内核与否都只起到<strong>次要作用</strong></p>
-</li>
-</ul>
-<h2 id="（更新）安装参考"><a href="#（更新）安装参考" class="headerlink" title="（更新）安装参考"></a>（更新）安装参考</h2><ul>
-<li><p>安装依赖<code>sudo apt-get install build-essential libncurses-dev bison flex libssl-dev libelf-dev</code></p>
-</li>
-<li><p>如果下载的是形如<code>patches-6.1.83-rt28.tar.xz</code>之类的</p>
-</li>
-<li><p>先将其解压缩，然后在内核源码目录下执行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">for patch in &lt;解压缩目录&gt;/*.patch; do</span><br><span class="line">    patch -p1 &lt; &quot;$patch&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure></li>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_28882933/article/details/118293544">简单流程</a></p>
-<ul>
-<li>将内核源码解压到<code>/usr/src/&lt;你的内核名称&gt;</code>，目录下<ul>
-<li><code>sudo tar -xvf &lt;&gt;.tar.xz -C &lt;path to kernel dir&gt;</code></li>
-</ul>
-</li>
-<li><code>sudo su</code>切换到root用户</li>
-<li>(此处跳过打实时patch的步骤)</li>
-<li>将旧的config复制到当前源码目录下的<code>.config</code>文件<ul>
-<li><code>cp /boot/config-$(uname -r) .config</code></li>
-</ul>
-</li>
-<li>按照上面说的修改<code>.config</code></li>
-<li>使用<code>make menuconfig</code>修改设置<ul>
-<li><img src="/imgs/6310661b6931e6aac02c6ae8d56df682d8e33283a2dbf6254cef363c71b500dd.png" alt="picture 16">  </li>
-<li><img src="/imgs/4c92ae0abc9812ad3a8b4c55141ef826d8f7762d70d5a57b4a2df7b5cf3dacef.png" alt="picture 17">  </li>
-<li><img src="/imgs/20da80fb0f664b790143434e31c18d416b30406ca02bb6e32bcc94ddc2b59f4d.png" alt="picture 18">  </li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>此外还要在<code>make menuconfig</code>中配置抢占为General setup -&gt; Preemption Model:选择 Fully Preemptible Kernel (RT)</p>
-</li>
-<li><p>Processor type and features -&gt; Timer frequency:设置为 1000 Hz 以获得更高的时钟分辨率</p>
-</li>
-<li><p>General setup -&gt; Timers subsystem:启用 High Resolution Timer Support</p>
-</li>
-<li><p>然后删除内核模块的一些校验如图<img src="/imgs/d38463d06cd032900c646aea63e9cd5ce8cf91f46cfd3c0be900f292bfa2e93d.png" alt="picture 2">  </p>
-</li>
-<li><p>注意最后要注释设置<code>CONFIG_MODULE_SIG_ALL</code>, <code>CONFIG_MODULE_SIG_KEY</code>, <code>CONFIG_SYSTEM_TRUSTED_KEYS</code>,<code>CONFIG_SYSTEM_REVOCATION_LIST</code>, <code>CONFIG_SYSTEM_REVOCATION_KEYS</code>, <code>CONFIG_DEBUG_INFO=y</code></p>
-<ul>
-<li>注意，<u><strong>上述每个都必须注释掉，如果注释了一部分但是漏掉其余部分会导致编译内核的时候出错</strong></u></li>
-</ul>
-</li>
-<li><p>修改<code>.config</code>的<code>CONFIG_LOCALVERSION</code>选项为自己需要的内核后缀名（记得前面加<code>-</code>）</p>
-</li>
-<li><p><code>make -j8 &amp;&amp; make modules_install -j8</code></p>
-</li>
-<li><p><code>make install</code></p>
-</li>
-</ul>
-<h3 id="修改默认启动内核"><a href="#修改默认启动内核" class="headerlink" title="修改默认启动内核"></a>修改默认启动内核</h3><ul>
-<li><p>先使用<code>sudo update-grub</code>观察</p>
-<ul>
-<li><img src="/imgs/ab4825e63da0896926b904d4feff4dc3636e700a122c77fbf8061cd44ae8f07e.png" alt="picture 14">  </li>
-</ul>
-</li>
-<li><p>一般情况下编译安装内核之后，系统默认的启动内核还是原来的</p>
-</li>
-<li><p>此时需要修改<code>/etc/default/grub</code>如图</p>
-<ul>
-<li><img src="/imgs/7ac153360953c93f129f1730a649e030d861af3f14ebc055bcacd91737ac6435.png" alt="picture 13">  </li>
-<li>也就是修改为<code>GRUB_DEFAULT=&quot;Advanced options for Ubuntu&gt;Ubuntu, with Linux &lt;你的Linux内核版本名称&gt;&quot;</code></li>
-</ul>
-</li>
-<li><p>然后执行<code>sudo update-grub</code></p>
-</li>
-<li><p>然后重启即可自动进入指定的内核</p>
-<ul>
-<li><img src="/imgs/90ed2978f1ff7adea1edf9e2b3296bd6ef2effbb17dad7de030ce0369447afcc.png" alt="picture 15">  </li>
-</ul>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://ftp.sjtu.edu.cn/sites/ftp.kernel.org/pub/linux/kernel/v6.x/">交大内核镜像（下载快）</a></p>
-<h3 id="内核模块测试"><a href="#内核模块测试" class="headerlink" title="内核模块测试"></a>内核模块测试</h3></li>
-<li><p>重点是要在<strong>一开始解压内核源码的时候，就把内核源码解压到<code>/usr/src</code>目录下</strong>，这样的话就可以编译自定义内核模块了</p>
-</li>
-<li><p><img src="/imgs/deb43cad5aff77ab42b663263600b444f41fa7de479a18cd33253169124707ce.png" alt="picture 4">  </p>
-</li>
-<li><p>按照上述逻辑完美解决</p>
-</li>
-<li><p><img src="/imgs/f84343da00796cd0ca4f9669b26eb47a29f48e0364f448b7bc3d9907daa95320.png" alt="picture 3">  </p>
-</li>
-</ul>
-<hr>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="启动Ubuntu的时候bad-shim-signature"><a href="#启动Ubuntu的时候bad-shim-signature" class="headerlink" title="启动Ubuntu的时候bad shim signature"></a>启动Ubuntu的时候bad shim signature</h3><ul>
-<li>因为BIOS里开启了安全启动，进入BIOS关闭<strong>secure boot</strong>即可<h3 id="遇到类似于memtest86-needs-a-16bit等等问题"><a href="#遇到类似于memtest86-needs-a-16bit等等问题" class="headerlink" title="遇到类似于memtest86+ needs a 16bit等等问题"></a>遇到类似于memtest86+ needs a 16bit等等问题</h3></li>
-<li>在<code>/etc/default/grub</code>文件中添加一行<code>GRUB_DISABLE_OS_PROBER=false</code>，但是<strong>未能解决问题</strong></li>
-<li>但是只要在开机的时候按下<code>Esc</code>到Ubuntu高级设置，找到需要的内核启动即可<h3 id="更换内核之后遇到载入Ubuntu内存盘，error-out-of-memory"><a href="#更换内核之后遇到载入Ubuntu内存盘，error-out-of-memory" class="headerlink" title="更换内核之后遇到载入Ubuntu内存盘，error: out of memory"></a>更换内核之后遇到<code>载入Ubuntu内存盘，error: out of memory</code></h3></li>
-<li>更换新内核之后遇到<code>载入Ubuntu内存盘，error: out of memory</code>无法开机，但是用旧的内核可以启动</li>
-<li><code>sudo update-initramfs -u</code></li>
-<li>之后又报错<code>can&#39;t find command hwmatch out of memory</code></li>
-<li>重新编译内核，暂时未解决</li>
-</ul>
-<h2 id="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"><a href="#更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块" class="headerlink" title="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"></a>更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块</h2><h3 id="以下方法未解决问题"><a href="#以下方法未解决问题" class="headerlink" title="以下方法未解决问题"></a>以下方法未解决问题</h3><ul>
-<li><p><code>insmod</code>报错为<code>insmod: ERROR: could not insert module ***.ko: Invalid module format</code></p>
-</li>
-<li><p><code>dmesg</code>查看到报错为<code>disagrees about version of symbol module_layout</code></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wukongmingjing/article/details/81901927">可能的解决方法</a></p>
-<ul>
-<li><p>(不要执行这一步)编译内核的时候删去模块版本检查<code>module versioning support</code>，在<code>Enable loadable module support</code>下</p>
-</li>
-<li><p>然后重新安装内核，重新编译模块安装，安装失败使用<code>sudo dmesg</code>查看内核log，得到<code>version magic &#39;6.2.0-rt3 SMP preempt mod_unload modversions &#39; should be &#39;6.2.0-rt3 SMP preempt_rt mod_unload &#39;</code></p>
-</li>
-<li><p>重新安装内核之后修改内核<code>/usr/src</code>下的内核源码</p>
-</li>
-<li><p><code>/usr/src/linux-headers-系统内核名称/include/generated</code>下的<code>utsrelease.h</code>中的选项</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> UTS_RELEASE <span class="meta-string">&quot;6.2.0-rt3&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> UTS_UBUNTU_RELEASE_ABI 35</span></span><br></pre></td></tr></table></figure></li>
-<li><p>第一个修改为需要的内核名称即可</p>
-</li>
-<li><p>然后修改<code>/usr/src/linux-headers-&lt;内核名称&gt;/include/config/kernel.release</code>文件，内容修改为</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&lt;需要的内核名称&gt; <span class="comment">// 比如 6.2.0-rt3</span></span><br></pre></td></tr></table></figure></li>
-<li><p>然后修改真正产生<code>version magic</code>字符串的文件<code>/usr/src/linux-headers-&lt;内核名称&gt;/include/linux/vermagic.h</code></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* SPDX-License-Identifier: GPL-2.0 */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _LINUX_VERMAGIC_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _LINUX_VERMAGIC_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> INCLUDE_VERMAGIC</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">error</span> <span class="meta-string">&quot;This header can be included from kernel/module.c or *.mod.c only&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;generated/utsrelease.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;asm/vermagic.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Simply sanity version stamp for modules. */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_SMP</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_SMP <span class="meta-string">&quot;SMP &quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_SMP <span class="meta-string">&quot;&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">#ifdef CONFIG_PREEMPT_BUILD</span></span><br><span class="line"><span class="comment">#define MODULE_VERMAGIC_PREEMPT &quot;preempt &quot;</span></span><br><span class="line"><span class="comment">#elif defined(CONFIG_PREEMPT_RT)</span></span><br><span class="line"><span class="comment">#define MODULE_VERMAGIC_PREEMPT &quot;preempt_rt &quot;</span></span><br><span class="line"><span class="comment">#else</span></span><br><span class="line"><span class="comment">#define MODULE_VERMAGIC_PREEMPT &quot;&quot;</span></span><br><span class="line"><span class="comment">#endif</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 修改此处</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_PREEMPT <span class="meta-string">&quot;preempt_rt &quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_MODULE_UNLOAD</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_MODULE_UNLOAD <span class="meta-string">&quot;mod_unload &quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_MODULE_UNLOAD <span class="meta-string">&quot;&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_MODVERSIONS</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_MODVERSIONS <span class="meta-string">&quot;modversions &quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_MODVERSIONS <span class="meta-string">&quot;&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> RANDSTRUCT</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;generated/randstruct_hash.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_RANDSTRUCT <span class="meta-string">&quot;RANDSTRUCT_&quot;</span> RANDSTRUCT_HASHED_SEED</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_RANDSTRUCT</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="comment">// 修改下面的部分拼出自己想要的version magic</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VERMAGIC_STRING                \</span></span><br><span class="line"><span class="meta">        UTS_RELEASE <span class="meta-string">&quot; &quot;</span>                \</span></span><br><span class="line"><span class="meta">        MODULE_VERMAGIC_SMP            \</span></span><br><span class="line"><span class="meta">         MODULE_VERMAGIC_PREEMPT       \</span></span><br><span class="line"><span class="meta">        MODULE_VERMAGIC_MODULE_UNLOAD  \</span></span><br><span class="line"><span class="meta">        <span class="comment">// MODULE_VERMAGIC_MODVERSIONS \</span></span></span><br><span class="line"><span class="comment"><span class="meta">        MODULE_ARCH_VERMAGIC           \</span></span></span><br><span class="line"><span class="comment"><span class="meta">        MODULE_RANDSTRUCT</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* _LINUX_VERMAGIC_H */</span></span></span><br></pre></td></tr></table></figure></li>
-<li><p>找到<code>VERMAGIC_STRING</code>中的对应项，自己修改为需要的值或者顺序，注释掉不需要的即可</p>
-</li>
-<li><p>然后得到与前面要求的相同的<code>version magic</code>字符串，即可<code>insmod</code>了</p>
-<h4 id="找不到符号Unknown-symbol-mutex-init-err-2"><a href="#找不到符号Unknown-symbol-mutex-init-err-2" class="headerlink" title="找不到符号Unknown symbol __mutex_init (err -2)"></a>找不到符号<code>Unknown symbol __mutex_init (err -2)</code></h4></li>
-</ul>
-</li>
-<li><p>insmod报错<code>insmod: ERROR: could not insert module ***.ko: Unknown symbol in module</code></p>
-</li>
-<li><p><strong>未能解决</strong></p>
-<h3 id="最终解决方案"><a href="#最终解决方案" class="headerlink" title="最终解决方案"></a>最终解决方案</h3></li>
-<li><p>在编译内核模块的时候，将内核模块目录下的<code>Makefile</code>文件中的<code>KDIR</code><strong>修改为自己编译当前内核源码的目录，不要用<code>/usr/src</code>下的源码</strong>，然后照常make即可<code>insmod</code></p>
-</li>
-<li><p><strong>不要</strong>在<code>make menuconfig</code>中关闭<code>module versioning support</code>选项，否则会因为<code>version magic</code>字符串不一致导致很多<u>预编译好的其他模组不能安装</u></p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2115,14 +1965,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-count">193</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">68</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -2159,13 +2009,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">674k</span>
+    <span title="站点总字数">676k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">20:26</span>
+    <span title="站点阅读时长">20:29</span>
 </div>
 
         

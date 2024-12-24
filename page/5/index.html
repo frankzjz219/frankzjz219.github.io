@@ -182,6 +182,240 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/10/20/%E7%BB%99Linux%E5%86%85%E6%A0%B8%E5%A2%9E%E5%8A%A0%E5%AE%9E%E6%97%B6%E8%A1%A5%E4%B8%81%E5%B9%B6%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.jpg">
+      <meta itemprop="name" content="FrankZhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/20/%E7%BB%99Linux%E5%86%85%E6%A0%B8%E5%A2%9E%E5%8A%A0%E5%AE%9E%E6%97%B6%E8%A1%A5%E4%B8%81%E5%B9%B6%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">给Linux内核增加实时补丁并安装</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-20 13:18:56" itemprop="dateCreated datePublished" datetime="2023-10-20T13:18:56+08:00">2023-10-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-06 12:28:00" itemprop="dateModified" datetime="2024-11-06T12:28:00+08:00">2024-11-06</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="使用UltraISO制作启动盘"><a href="#使用UltraISO制作启动盘" class="headerlink" title="使用UltraISO制作启动盘"></a>使用UltraISO制作启动盘</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wangyanxiang66/article/details/118522752">链接</a></li>
+<li>用管理员权限启动UltraISO</li>
+</ul>
+<h2 id="为何要安装实时补丁"><a href="#为何要安装实时补丁" class="headerlink" title="为何要安装实时补丁"></a>为何要安装实时补丁</h2><ul>
+<li><p>Linux系统从原理上说并不是一个实时系统，因为Linux系统有很多状态是不可被抢占的，比如持有自旋锁的状态等等，在其他博客中有所涉及，这会导致Linux系统定时不准等一系列问题，对实时控制十分不利</p>
+</li>
+<li><p>增加实时补丁不能完全使得Linux系统变为实时系统，但是可以使得Linux系统不可抢占的部分大为减少，增强实时性</p>
+<h2 id="对Linux内核实时性影响比较大的情况"><a href="#对Linux内核实时性影响比较大的情况" class="headerlink" title="对Linux内核实时性影响比较大的情况"></a><strong>对Linux内核实时性影响比较大的情况</strong></h2></li>
+<li><p>实际上是Linux<strong>内核的进程切换频率</strong>影响比较大，决定了定时的最佳分辨率</p>
+</li>
+<li><p>Linux内核编译的时候最多只支持1000Hz，也就是时间分辨率为1ms，但是假如要求更高的话就必须自己在<code>kernel/Kconfig.hz</code>中添加设置如下图</p>
+<ul>
+<li><img src="/imgs/9c31ff062361c133b90f0bcd66f66d661116bd321b5f408b685d28261fbc2cfd.png" alt="picture 5">  </li>
+<li><img src="/imgs/94cd72c3e4dc057cccdd591aa69261d2016ef598f9813c69598bf45ecf4fe6c5.png" alt="picture 7">  </li>
+</ul>
+</li>
+<li><p>如图编译的时候就可以增加一个自定义的2000Hz选项</p>
+</li>
+<li><p><img src="/imgs/a493f5fe6997a8d751421b1b8850fa2747607c3c2b4b1bd8062c95cfa31d5c77.png" alt="picture 10">  </p>
+</li>
+<li><p><img src="/imgs/15b5aaeb20851c45727651d9621ecd08c6dee07d4412fee160928a04b5123123.png" alt="picture 8">  </p>
+</li>
+<li><p>然后再选择实时内核</p>
+</li>
+<li><p><img src="/imgs/688dd0644217a61cbe85eace4dccf1b000c969ab435d3fda98ae719758f05fcc.png" alt="picture 9">  </p>
+</li>
+<li><p>注意，对定时准确性影响比较大的<u><strong>是内核的<code>timer</code>频率</strong></u>，甚至实时内核与否都只起到<strong>次要作用</strong></p>
+</li>
+</ul>
+<h2 id="（更新）安装参考"><a href="#（更新）安装参考" class="headerlink" title="（更新）安装参考"></a>（更新）安装参考</h2><ul>
+<li><p>安装依赖<code>sudo apt-get install build-essential libncurses-dev bison flex libssl-dev libelf-dev</code></p>
+</li>
+<li><p>如果下载的是形如<code>patches-6.1.83-rt28.tar.xz</code>之类的</p>
+</li>
+<li><p>先将其解压缩，然后在内核源码目录下执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">for patch in &lt;解压缩目录&gt;/*.patch; do</span><br><span class="line">    patch -p1 &lt; &quot;$patch&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure></li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_28882933/article/details/118293544">简单流程</a></p>
+<ul>
+<li>将内核源码解压到<code>/usr/src/&lt;你的内核名称&gt;</code>，目录下<ul>
+<li><code>sudo tar -xvf &lt;&gt;.tar.xz -C &lt;path to kernel dir&gt;</code></li>
+</ul>
+</li>
+<li><code>sudo su</code>切换到root用户</li>
+<li>(此处跳过打实时patch的步骤)</li>
+<li>将旧的config复制到当前源码目录下的<code>.config</code>文件<ul>
+<li><code>cp /boot/config-$(uname -r) .config</code></li>
+</ul>
+</li>
+<li>按照上面说的修改<code>.config</code></li>
+<li>使用<code>make menuconfig</code>修改设置<ul>
+<li><img src="/imgs/6310661b6931e6aac02c6ae8d56df682d8e33283a2dbf6254cef363c71b500dd.png" alt="picture 16">  </li>
+<li><img src="/imgs/4c92ae0abc9812ad3a8b4c55141ef826d8f7762d70d5a57b4a2df7b5cf3dacef.png" alt="picture 17">  </li>
+<li><img src="/imgs/20da80fb0f664b790143434e31c18d416b30406ca02bb6e32bcc94ddc2b59f4d.png" alt="picture 18">  </li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>此外还要在<code>make menuconfig</code>中配置抢占为General setup -&gt; Preemption Model:选择 Fully Preemptible Kernel (RT)</p>
+</li>
+<li><p>Processor type and features -&gt; Timer frequency:设置为 1000 Hz 以获得更高的时钟分辨率</p>
+</li>
+<li><p>General setup -&gt; Timers subsystem:启用 High Resolution Timer Support</p>
+</li>
+<li><p>然后删除内核模块的一些校验如图<img src="/imgs/d38463d06cd032900c646aea63e9cd5ce8cf91f46cfd3c0be900f292bfa2e93d.png" alt="picture 2">  </p>
+</li>
+<li><p>注意最后要注释设置<code>CONFIG_MODULE_SIG_ALL</code>, <code>CONFIG_MODULE_SIG_KEY</code>, <code>CONFIG_SYSTEM_TRUSTED_KEYS</code>,<code>CONFIG_SYSTEM_REVOCATION_LIST</code>, <code>CONFIG_SYSTEM_REVOCATION_KEYS</code>, <code>CONFIG_DEBUG_INFO=y</code></p>
+<ul>
+<li>注意，<u><strong>上述每个都必须注释掉，如果注释了一部分但是漏掉其余部分会导致编译内核的时候出错</strong></u></li>
+</ul>
+</li>
+<li><p>修改<code>.config</code>的<code>CONFIG_LOCALVERSION</code>选项为自己需要的内核后缀名（记得前面加<code>-</code>）</p>
+</li>
+<li><p><code>make -j8 &amp;&amp; make modules_install -j8</code></p>
+</li>
+<li><p><code>make install</code></p>
+</li>
+</ul>
+<h3 id="修改默认启动内核"><a href="#修改默认启动内核" class="headerlink" title="修改默认启动内核"></a>修改默认启动内核</h3><ul>
+<li><p>先使用<code>sudo update-grub</code>观察</p>
+<ul>
+<li><img src="/imgs/ab4825e63da0896926b904d4feff4dc3636e700a122c77fbf8061cd44ae8f07e.png" alt="picture 14">  </li>
+</ul>
+</li>
+<li><p>一般情况下编译安装内核之后，系统默认的启动内核还是原来的</p>
+</li>
+<li><p>此时需要修改<code>/etc/default/grub</code>如图</p>
+<ul>
+<li><img src="/imgs/7ac153360953c93f129f1730a649e030d861af3f14ebc055bcacd91737ac6435.png" alt="picture 13">  </li>
+<li>也就是修改为<code>GRUB_DEFAULT=&quot;Advanced options for Ubuntu&gt;Ubuntu, with Linux &lt;你的Linux内核版本名称&gt;&quot;</code></li>
+</ul>
+</li>
+<li><p>然后执行<code>sudo update-grub</code></p>
+</li>
+<li><p>然后重启即可自动进入指定的内核</p>
+<ul>
+<li><img src="/imgs/90ed2978f1ff7adea1edf9e2b3296bd6ef2effbb17dad7de030ce0369447afcc.png" alt="picture 15">  </li>
+</ul>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://ftp.sjtu.edu.cn/sites/ftp.kernel.org/pub/linux/kernel/v6.x/">交大内核镜像（下载快）</a></p>
+<h3 id="内核模块测试"><a href="#内核模块测试" class="headerlink" title="内核模块测试"></a>内核模块测试</h3></li>
+<li><p>重点是要在<strong>一开始解压内核源码的时候，就把内核源码解压到<code>/usr/src</code>目录下</strong>，这样的话就可以编译自定义内核模块了</p>
+</li>
+<li><p><img src="/imgs/deb43cad5aff77ab42b663263600b444f41fa7de479a18cd33253169124707ce.png" alt="picture 4">  </p>
+</li>
+<li><p>按照上述逻辑完美解决</p>
+</li>
+<li><p><img src="/imgs/f84343da00796cd0ca4f9669b26eb47a29f48e0364f448b7bc3d9907daa95320.png" alt="picture 3">  </p>
+</li>
+</ul>
+<hr>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="启动Ubuntu的时候bad-shim-signature"><a href="#启动Ubuntu的时候bad-shim-signature" class="headerlink" title="启动Ubuntu的时候bad shim signature"></a>启动Ubuntu的时候bad shim signature</h3><ul>
+<li>因为BIOS里开启了安全启动，进入BIOS关闭<strong>secure boot</strong>即可<h3 id="遇到类似于memtest86-needs-a-16bit等等问题"><a href="#遇到类似于memtest86-needs-a-16bit等等问题" class="headerlink" title="遇到类似于memtest86+ needs a 16bit等等问题"></a>遇到类似于memtest86+ needs a 16bit等等问题</h3></li>
+<li>在<code>/etc/default/grub</code>文件中添加一行<code>GRUB_DISABLE_OS_PROBER=false</code>，但是<strong>未能解决问题</strong></li>
+<li>但是只要在开机的时候按下<code>Esc</code>到Ubuntu高级设置，找到需要的内核启动即可<h3 id="更换内核之后遇到载入Ubuntu内存盘，error-out-of-memory"><a href="#更换内核之后遇到载入Ubuntu内存盘，error-out-of-memory" class="headerlink" title="更换内核之后遇到载入Ubuntu内存盘，error: out of memory"></a>更换内核之后遇到<code>载入Ubuntu内存盘，error: out of memory</code></h3></li>
+<li>更换新内核之后遇到<code>载入Ubuntu内存盘，error: out of memory</code>无法开机，但是用旧的内核可以启动</li>
+<li><code>sudo update-initramfs -u</code></li>
+<li>之后又报错<code>can&#39;t find command hwmatch out of memory</code></li>
+<li>重新编译内核，暂时未解决</li>
+</ul>
+<h2 id="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"><a href="#更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块" class="headerlink" title="更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块"></a>更换内核之后因为Linux下头文件与内核版本不符导致不能安装本机编译的模块</h2><h3 id="以下方法未解决问题"><a href="#以下方法未解决问题" class="headerlink" title="以下方法未解决问题"></a>以下方法未解决问题</h3><ul>
+<li><p><code>insmod</code>报错为<code>insmod: ERROR: could not insert module ***.ko: Invalid module format</code></p>
+</li>
+<li><p><code>dmesg</code>查看到报错为<code>disagrees about version of symbol module_layout</code></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wukongmingjing/article/details/81901927">可能的解决方法</a></p>
+<ul>
+<li><p>(不要执行这一步)编译内核的时候删去模块版本检查<code>module versioning support</code>，在<code>Enable loadable module support</code>下</p>
+</li>
+<li><p>然后重新安装内核，重新编译模块安装，安装失败使用<code>sudo dmesg</code>查看内核log，得到<code>version magic &#39;6.2.0-rt3 SMP preempt mod_unload modversions &#39; should be &#39;6.2.0-rt3 SMP preempt_rt mod_unload &#39;</code></p>
+</li>
+<li><p>重新安装内核之后修改内核<code>/usr/src</code>下的内核源码</p>
+</li>
+<li><p><code>/usr/src/linux-headers-系统内核名称/include/generated</code>下的<code>utsrelease.h</code>中的选项</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> UTS_RELEASE <span class="meta-string">&quot;6.2.0-rt3&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> UTS_UBUNTU_RELEASE_ABI 35</span></span><br></pre></td></tr></table></figure></li>
+<li><p>第一个修改为需要的内核名称即可</p>
+</li>
+<li><p>然后修改<code>/usr/src/linux-headers-&lt;内核名称&gt;/include/config/kernel.release</code>文件，内容修改为</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&lt;需要的内核名称&gt; <span class="comment">// 比如 6.2.0-rt3</span></span><br></pre></td></tr></table></figure></li>
+<li><p>然后修改真正产生<code>version magic</code>字符串的文件<code>/usr/src/linux-headers-&lt;内核名称&gt;/include/linux/vermagic.h</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* SPDX-License-Identifier: GPL-2.0 */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _LINUX_VERMAGIC_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _LINUX_VERMAGIC_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> INCLUDE_VERMAGIC</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">error</span> <span class="meta-string">&quot;This header can be included from kernel/module.c or *.mod.c only&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;generated/utsrelease.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;asm/vermagic.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Simply sanity version stamp for modules. */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_SMP</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_SMP <span class="meta-string">&quot;SMP &quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_SMP <span class="meta-string">&quot;&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">#ifdef CONFIG_PREEMPT_BUILD</span></span><br><span class="line"><span class="comment">#define MODULE_VERMAGIC_PREEMPT &quot;preempt &quot;</span></span><br><span class="line"><span class="comment">#elif defined(CONFIG_PREEMPT_RT)</span></span><br><span class="line"><span class="comment">#define MODULE_VERMAGIC_PREEMPT &quot;preempt_rt &quot;</span></span><br><span class="line"><span class="comment">#else</span></span><br><span class="line"><span class="comment">#define MODULE_VERMAGIC_PREEMPT &quot;&quot;</span></span><br><span class="line"><span class="comment">#endif</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 修改此处</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_PREEMPT <span class="meta-string">&quot;preempt_rt &quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_MODULE_UNLOAD</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_MODULE_UNLOAD <span class="meta-string">&quot;mod_unload &quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_MODULE_UNLOAD <span class="meta-string">&quot;&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_MODVERSIONS</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_MODVERSIONS <span class="meta-string">&quot;modversions &quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_VERMAGIC_MODVERSIONS <span class="meta-string">&quot;&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> RANDSTRUCT</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;generated/randstruct_hash.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_RANDSTRUCT <span class="meta-string">&quot;RANDSTRUCT_&quot;</span> RANDSTRUCT_HASHED_SEED</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MODULE_RANDSTRUCT</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="comment">// 修改下面的部分拼出自己想要的version magic</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VERMAGIC_STRING                \</span></span><br><span class="line"><span class="meta">        UTS_RELEASE <span class="meta-string">&quot; &quot;</span>                \</span></span><br><span class="line"><span class="meta">        MODULE_VERMAGIC_SMP            \</span></span><br><span class="line"><span class="meta">         MODULE_VERMAGIC_PREEMPT       \</span></span><br><span class="line"><span class="meta">        MODULE_VERMAGIC_MODULE_UNLOAD  \</span></span><br><span class="line"><span class="meta">        <span class="comment">// MODULE_VERMAGIC_MODVERSIONS \</span></span></span><br><span class="line"><span class="comment"><span class="meta">        MODULE_ARCH_VERMAGIC           \</span></span></span><br><span class="line"><span class="comment"><span class="meta">        MODULE_RANDSTRUCT</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* _LINUX_VERMAGIC_H */</span></span></span><br></pre></td></tr></table></figure></li>
+<li><p>找到<code>VERMAGIC_STRING</code>中的对应项，自己修改为需要的值或者顺序，注释掉不需要的即可</p>
+</li>
+<li><p>然后得到与前面要求的相同的<code>version magic</code>字符串，即可<code>insmod</code>了</p>
+<h4 id="找不到符号Unknown-symbol-mutex-init-err-2"><a href="#找不到符号Unknown-symbol-mutex-init-err-2" class="headerlink" title="找不到符号Unknown symbol __mutex_init (err -2)"></a>找不到符号<code>Unknown symbol __mutex_init (err -2)</code></h4></li>
+</ul>
+</li>
+<li><p>insmod报错<code>insmod: ERROR: could not insert module ***.ko: Unknown symbol in module</code></p>
+</li>
+<li><p><strong>未能解决</strong></p>
+<h3 id="最终解决方案"><a href="#最终解决方案" class="headerlink" title="最终解决方案"></a>最终解决方案</h3></li>
+<li><p>在编译内核模块的时候，将内核模块目录下的<code>Makefile</code>文件中的<code>KDIR</code><strong>修改为自己编译当前内核源码的目录，不要用<code>/usr/src</code>下的源码</strong>，然后照常make即可<code>insmod</code></p>
+</li>
+<li><p><strong>不要</strong>在<code>make menuconfig</code>中关闭<code>module versioning support</code>选项，否则会因为<code>version magic</code>字符串不一致导致很多<u>预编译好的其他模组不能安装</u></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/10/18/%E4%BD%BF%E7%94%A8Cython%E5%8A%A0%E9%80%9Fpython%E7%A8%8B%E5%BA%8F%E8%AE%A1%E7%AE%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1590,198 +1824,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://frankzjz219.github.io/2023/07/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.jpg">
-      <meta itemprop="name" content="FrankZhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Frank's blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/07/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/" class="post-title-link" itemprop="url">CSAPP知识笔记（1）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-07-28 15:45:25" itemprop="dateCreated datePublished" datetime="2023-07-28T15:45:25+08:00">2023-07-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-26 22:00:02" itemprop="dateModified" datetime="2023-10-26T22:00:02+08:00">2023-10-26</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>5.5k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>10 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="编译、重定位、装入和链接"><a href="#编译、重定位、装入和链接" class="headerlink" title="编译、重定位、装入和链接"></a>编译、重定位、装入和链接</h2><ul>
-<li><img src="/imgs/1a721cc175df7718d8b31218f7b2b189263c723c2fbf683d67155c7de7ae0ece.png" alt="picture 0">  <ul>
-<li>编译是得到单个的程序模块</li>
-<li>链接是将程序中用到的模块链接在一起，组合他们的虚拟地址（逻辑地址）</li>
-<li>装入是得到真正的物理地址<h3 id="可重定位文件的结构"><a href="#可重定位文件的结构" class="headerlink" title="可重定位文件的结构"></a>可重定位文件的结构</h3><h4 id="Elf-Header部分"><a href="#Elf-Header部分" class="headerlink" title="Elf Header部分"></a>Elf Header部分</h4></li>
-</ul>
-</li>
-<li>存放文件的基本信息<h4 id="text段"><a href="#text段" class="headerlink" title=".text段"></a>.text段</h4></li>
-<li>存放编译好的机器代码<h4 id="data段"><a href="#data段" class="headerlink" title=".data段"></a>.data段</h4></li>
-<li>存放已经初始化的全局变量和静态变量<h4 id="bss段"><a href="#bss段" class="headerlink" title=".bss段"></a>.bss段</h4></li>
-<li>未初始化的全局变量和静态变量以及初始化为0的全局变量和静态变量</li>
-<li><code>better save space</code></li>
-<li>并不占据实际的空间，只是一个占位符</li>
-<li>系统真正运行的时候会分配空间并且初始化为0<h4 id="COMMON"><a href="#COMMON" class="headerlink" title="COMMON"></a>COMMON</h4></li>
-<li>存放未初始化的全局变量<h4 id="rodata"><a href="#rodata" class="headerlink" title=".rodata"></a>.rodata</h4></li>
-<li>存放<strong>只读</strong>数据</li>
-<li>比如字符串和<code>switch</code>的跳转表<h4 id="rel-text"><a href="#rel-text" class="headerlink" title=".rel.text"></a>.rel.text</h4></li>
-<li>存放需要重定位的代码<h4 id="rel-data"><a href="#rel-data" class="headerlink" title=".rel.data"></a>.rel.data</h4></li>
-<li>存放已初始化的数据的重定位<h3 id="可执行文件的结构"><a href="#可执行文件的结构" class="headerlink" title="可执行文件的结构"></a>可执行文件的结构</h3><h4 id="ELF-Header"><a href="#ELF-Header" class="headerlink" title="ELF Header"></a>ELF Header</h4></li>
-<li>文件的总体格式<h4 id="init"><a href="#init" class="headerlink" title=".init"></a>.init</h4></li>
-<li>初始化用的代码<h4 id="text-rodata和-data"><a href="#text-rodata和-data" class="headerlink" title=".text .rodata和.data"></a>.text .rodata和.data</h4></li>
-<li>与可重定位文件类似</li>
-</ul>
-<h3 id="强符号和弱符号"><a href="#强符号和弱符号" class="headerlink" title="强符号和弱符号"></a>强符号和弱符号</h3><ul>
-<li>强符号<ul>
-<li>函数和已经初始化的全局变量</li>
-</ul>
-</li>
-<li>弱符号<ul>
-<li>未初始化的全局变量</li>
-</ul>
-</li>
-<li>多个同名的强符号一起出现的时候会引起链接器错误</li>
-<li>强符号和弱符号一起出现的时候会同意认为是强符号，而不会报错<ul>
-<li>类型不同的强弱符号，在弱符号出现的模块中，类型会保留弱符号的类型，尽管实际上内存中存储的是强符号的类型</li>
-<li>给编译器<code>-fno-common</code>选项，会在多重定义时报错防止上述错误</li>
-</ul>
-</li>
-<li>多个弱符号也会认为是同一个变量<h3 id="运行时的内存映像"><a href="#运行时的内存映像" class="headerlink" title="运行时的内存映像"></a>运行时的内存映像</h3></li>
-<li><img src="/imgs/b632dd4bb03af638e7ba5dd009fece7b790e76771370df56204484709be1304e.png" alt="picture 1">  </li>
-<li>代码段，数据段和堆是相邻的</li>
-<li>栈在最大可用地址的位置，从大到小，堆从小到大</li>
-<li>程序运行加载的过程<ul>
-<li><img src="/imgs/bfeee56b7cc8a00a5c78d26ca8052c4d853c6cafa1619180b3fb062d5b29ceb4.png" alt="picture 2">  </li>
-</ul>
-</li>
-<li>只编译不链接就得到<strong>可重定位目标文件</strong><h4 id="一个指令序列加载的例子"><a href="#一个指令序列加载的例子" class="headerlink" title="一个指令序列加载的例子"></a>一个指令序列加载的例子</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Generated by GPT-4; unmodified</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (argc != <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Usage: %s &lt;binary_file&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Open the binary file</span></span><br><span class="line">  <span class="keyword">int</span> fd = open(argv[<span class="number">1</span>], O_RDONLY);</span><br><span class="line">  <span class="keyword">if</span> (fd &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    perror(<span class="string">&quot;open&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Get the file size</span></span><br><span class="line">  <span class="keyword">off_t</span> file_size = lseek(fd, <span class="number">0</span>, SEEK_END);</span><br><span class="line">  lseek(fd, <span class="number">0</span>, SEEK_SET);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Allocate memory for the binary</span></span><br><span class="line">  <span class="keyword">void</span> *mem = mmap(<span class="literal">NULL</span>, file_size, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE, fd, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">if</span> (mem == MAP_FAILED) &#123;</span><br><span class="line">    perror(<span class="string">&quot;mmap&quot;</span>);</span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Close the file</span></span><br><span class="line">  close(fd);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Cast the memory address to a function pointer and call it</span></span><br><span class="line">  <span class="keyword">void</span> (*binary_func)() = (<span class="keyword">void</span> (*)())mem;</span><br><span class="line">  binary_func();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Clean up</span></span><br><span class="line">  munmap(mem, file_size);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>也就是打开文件，创建文件和内存位置之间大小等于文件大小的映射关系(mmap)，将指定大小的文件映射到内存空间中，然后将映射到的内存地址强制类型转换为函数指针，然后从这个位置开始执行<h4 id="一个应用程序加载的例子"><a href="#一个应用程序加载的例子" class="headerlink" title="一个应用程序加载的例子"></a>一个应用程序加载的例子</h4></li>
-<li>应用程序在内存中除了代码段<code>.text</code>，数据段<code>.data</code>和BSS段<code>.bss</code>以外，还包含动态分配内存用的堆和栈空间<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;elf.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> STK_SZ           (1 &lt;&lt; 20)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ROUND(x, align)  (((uintptr_t)x) &amp; ~(align - 1))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOD(x, align)    (((uintptr_t)x) &amp; (align - 1))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> push(sp, T, ...) (&#123; *((T*)sp) = (T)__VA_ARGS__; \</span></span><br><span class="line"><span class="meta">                            sp = (void *)((uintptr_t)(sp) + sizeof(T)); &#125;)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">execve_</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">char</span> *argv[], <span class="keyword">char</span> *envp[])</span> </span>&#123;</span><br><span class="line">  <span class="comment">// WARNING: This execve_ does not free process resources.</span></span><br><span class="line">  <span class="comment">// **NOT** all process states are properly initialized.</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> fd = open(file, O_RDONLY);</span><br><span class="line">  assert(fd &gt; <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Map ELF header to memory</span></span><br><span class="line">  Elf64_Ehdr *h = mmap(<span class="literal">NULL</span>, <span class="number">4096</span>, PROT_READ, MAP_PRIVATE, fd, <span class="number">0</span>);</span><br><span class="line">  assert(h != MAP_FAILED);</span><br><span class="line">  assert(h-&gt;e_type == ET_EXEC &amp;&amp; h-&gt;e_machine == EM_X86_64);</span><br><span class="line"></span><br><span class="line">  Elf64_Phdr *pht = (Elf64_Phdr *)((<span class="keyword">char</span> *)h + h-&gt;e_phoff);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; h-&gt;e_phnum; i++) &#123;</span><br><span class="line">    Elf64_Phdr *p = &amp;pht[i];</span><br><span class="line">    <span class="keyword">if</span> (p-&gt;p_type == PT_LOAD) &#123;</span><br><span class="line">      <span class="comment">// Memory map region</span></span><br><span class="line">      <span class="keyword">uintptr_t</span> map_beg = ROUND(p-&gt;p_vaddr, p-&gt;p_align);</span><br><span class="line">      <span class="keyword">uintptr_t</span> map_end = map_beg + p-&gt;p_memsz;</span><br><span class="line">      <span class="keyword">while</span> (map_end % p-&gt;p_align != <span class="number">0</span>) map_end++;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Memory map flags</span></span><br><span class="line">      <span class="keyword">int</span> prot = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">if</span> (p-&gt;p_flags &amp; PF_R) prot |= PROT_READ;</span><br><span class="line">      <span class="keyword">if</span> (p-&gt;p_flags &amp; PF_W) prot |= PROT_WRITE;</span><br><span class="line">      <span class="keyword">if</span> (p-&gt;p_flags &amp; PF_X) prot |= PROT_EXEC;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Memory map size</span></span><br><span class="line">      <span class="keyword">int</span> map_sz = p-&gt;p_filesz + (p-&gt;p_vaddr % p-&gt;p_align);</span><br><span class="line">      <span class="keyword">while</span> (map_sz % p-&gt;p_align != <span class="number">0</span>) map_sz++;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Map file contents to memory</span></span><br><span class="line">      <span class="keyword">void</span> *ret = mmap(</span><br><span class="line">        (<span class="keyword">void</span> *)map_beg,                 <span class="comment">// addr, rounded to ALIGN</span></span><br><span class="line">        map_sz,                          <span class="comment">// length</span></span><br><span class="line">        prot,                            <span class="comment">// protection</span></span><br><span class="line">        MAP_PRIVATE | MAP_FIXED,         <span class="comment">// flags, private &amp; strict</span></span><br><span class="line">        fd,                              <span class="comment">// file descriptor</span></span><br><span class="line">        ROUND(p-&gt;p_offset, p-&gt;p_align)   <span class="comment">// offset</span></span><br><span class="line">      );</span><br><span class="line">      assert(ret != MAP_FAILED);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Map extra anonymous memory (e.g., bss)</span></span><br><span class="line">      <span class="keyword">intptr_t</span> extra_sz = p-&gt;p_memsz - p-&gt;p_filesz;</span><br><span class="line">      <span class="keyword">if</span> (extra_sz &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">uintptr_t</span> extra_beg = map_beg + map_sz;</span><br><span class="line">        ret = mmap(</span><br><span class="line">          (<span class="keyword">void</span> *)extra_beg, extra_sz, prot,  <span class="comment">// addr, length, protection</span></span><br><span class="line">          MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED,  <span class="comment">// flags</span></span><br><span class="line">          <span class="number">-1</span>, <span class="number">0</span>  <span class="comment">// no file</span></span><br><span class="line">        );</span><br><span class="line">        assert(ret != MAP_FAILED);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  close(fd);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">char</span> <span class="built_in">stack</span>[STK_SZ], rnd[<span class="number">16</span>];</span><br><span class="line">  <span class="keyword">void</span> *sp = (<span class="keyword">void</span> *)ROUND(<span class="built_in">stack</span> + <span class="keyword">sizeof</span>(<span class="built_in">stack</span>) - <span class="number">4096</span>, <span class="number">16</span>);</span><br><span class="line">  <span class="keyword">void</span> *sp_exec = sp;</span><br><span class="line">  <span class="keyword">int</span> argc = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// argc</span></span><br><span class="line">  <span class="keyword">while</span> (argv[argc]) argc++;</span><br><span class="line">  push(sp, <span class="keyword">intptr_t</span>, argc);</span><br><span class="line">  <span class="comment">// argv[], NULL-terminate</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= argc; i++)</span><br><span class="line">    push(sp, <span class="keyword">intptr_t</span>, argv[i]);</span><br><span class="line">  <span class="comment">// envp[], NULL-terminate</span></span><br><span class="line">  <span class="keyword">for</span> (; *envp; envp++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strchr</span>(*envp, <span class="string">&#x27;_&#x27;</span>)) <span class="comment">// remove some verbose ones</span></span><br><span class="line">      push(sp, <span class="keyword">intptr_t</span>, *envp);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// auxv[], AT_NULL-terminate</span></span><br><span class="line">  push(sp, <span class="keyword">intptr_t</span>, <span class="number">0</span>);</span><br><span class="line">  push(sp, Elf64_auxv_t, &#123; .a_type = AT_RANDOM, .a_un.a_val = (<span class="keyword">uintptr_t</span>)rnd &#125; );</span><br><span class="line">  push(sp, Elf64_auxv_t, &#123; .a_type = AT_NULL &#125; );</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">asm</span> <span class="title">volatile</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="string">&quot;mov $0, %%rdx;&quot;</span> <span class="comment">// required by ABI</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="string">&quot;mov %0, %%rsp;&quot;</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="string">&quot;jmp *%1&quot;</span> : : <span class="string">&quot;a&quot;</span>(sp_exec), <span class="string">&quot;b&quot;</span>(h-&gt;e_entry))</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[], <span class="keyword">char</span> *envp[])</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (argc &lt; <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Usage: %s file [args...]\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  execve_(argv[<span class="number">1</span>], argv + <span class="number">1</span>, envp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>手动实现了一个应用程序的加载器</li>
-<li>先加载了ELF的文件头（header）到内存中</li>
-<li><img src="/imgs/7081ef003317910ae886fc032b1b94ad53140285b2cb7a9e151a8429b0e98d09.png" alt="picture 10">  </li>
-<li>ELF文件中有一些<code>LOAD</code>标记，指示文件中的某个位置的规定大小的部分需要加载到内存中指定的位置上，还原程序执行的初始状态</li>
-<li>然后给程序准备初始状态下的栈中的内容<ul>
-<li><img src="/imgs/3ab19a81ec989bca27e66af42a11225ce4085bbb5ea31718535261aa0af87e15.png" alt="picture 11">  </li>
-<li>操作就是分配一个栈大小的变量，然后向其中push变量，所谓push也就是存入东西然后移动指针</li>
-<li>然后跳转指针即可<h4 id="Linux提供了一个在程序执行的过程中加载共享库的函数"><a href="#Linux提供了一个在程序执行的过程中加载共享库的函数" class="headerlink" title="Linux提供了一个在程序执行的过程中加载共享库的函数"></a>Linux提供了一个在程序执行的过程中加载共享库的函数</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">dlopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><code>flag</code>可以设置为<code>RTLD_LASY</code>，将代码推迟到执行的时候再符号解析</li>
-<li>还提供了一个获取共享库的符号地址的方法<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">dlsym</span><span class="params">(<span class="keyword">void</span>* handle, <span class="keyword">char</span>* symbol)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>其中的<code>handle</code>就是前面打开的共享库</li>
-<li>symbol就是其中的符号名称<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dlclose</span><span class="params">(<span class="keyword">void</span>* handle)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>卸载共享库<h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2></li>
-<li>异步中断<ul>
-<li>不是当前程序引起的，比如I/O操作引起的</li>
-</ul>
-</li>
-<li>同步中断<ul>
-<li>CPU中执行的指令引起的中断</li>
-</ul>
-</li>
-<li><img src="/imgs/7e0dd67349348712f8cb96c04ffe5cf2ac370b12d3ba3acec424f32e0786d17a.png" alt="picture 3">  <h3 id="程序异常"><a href="#程序异常" class="headerlink" title="程序异常"></a>程序异常</h3></li>
-<li><img src="/imgs/575b6666f04b2d0c34cb2a4318f2bcea71bc3332562735760362f99ce9e27063.png" alt="picture 4">  </li>
-<li>所谓的段错误（Segmentation Fault）就是程序试图访问一块未申请的内存空间引起的，也就是图中的13号</li>
-<li>18号异常时机器检查，一般是硬件错误引起的</li>
-<li><img src="/imgs/de6a53626cd9334b198037cd83d99a01ac1129536503a21c46b383bfe632033d.png" alt="picture 5">  <ul>
-<li>Linux系统调用号对应的是跳转表中内存的偏移量<h3 id="fork和execve"><a href="#fork和execve" class="headerlink" title="fork和execve"></a>fork和execve</h3></li>
-</ul>
-</li>
-<li><code>fork</code>调用一次返回两次<ul>
-<li>父进程和子进程各一次</li>
-</ul>
-</li>
-<li><code>execve</code>调用一次不返回<h3 id="程序执行的传参argv"><a href="#程序执行的传参argv" class="headerlink" title="程序执行的传参argv"></a>程序执行的传参<code>argv</code></h3></li>
-<li><img src="/imgs/6f9ee657579f945904321a75edc03b43c5e81b4b631a4b07136b87ea62c63e25.png" alt="picture 6">  <ul>
-<li>argv的第一个是可执行文件的名字</li>
-<li><code>argc</code>是参数的数量</li>
-</ul>
-</li>
-<li><img src="/imgs/7d15745c726c53d708323f43631998d02d44f069cdb33bf319be7ae6ca5a4e92.png" alt="picture 7">  <ul>
-<li>环境变量是<code>envp</code>，也类似</li>
-<li><code>execve</code>的作用就是调用加载器如图<ul>
-<li><img src="/imgs/fed85bf9602bec823fc921d9e6e095eb3d78863a584da55971933c8f1c392ca8.png" alt="picture 8">  <h3 id="僵尸进程"><a href="#僵尸进程" class="headerlink" title="僵尸进程"></a>僵尸进程</h3></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>终止运行但是没有被父进程回收的进程就是<code>zombie</code>进程<h3 id="回收进程"><a href="#回收进程" class="headerlink" title="回收进程"></a>回收进程</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">waitpid</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">int</span> *statusp,<span class="keyword">int</span> options)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>如果pid&gt;0，则回收该pid指定的某个确定的进程</li>
-<li>如果pid=-1，则回收该进程创建的所有子进程</li>
-<li>第二个参数是导致返回的子进程的状态信息（终止的原因是正常返回还是异常终止还是其他）</li>
-<li><code>waitpid</code>程序<strong>不会按照任何特定顺序</strong>回收子进程，除非明确指定<h3 id="发送信号"><a href="#发送信号" class="headerlink" title="发送信号"></a>发送信号</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kill</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">int</span> sig)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>如果pid为0，则发送信号给调用进程所在进程组中的所有进程，包括自己</li>
-<li>如果pid&gt;0，则发送信号给pid指定的进程</li>
-<li>如果pid&lt;0，则发送信号给进程组-pid的每个进程<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">alarm</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> secs)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>进程可以用<code>alarm</code>给自己发送信号，参数是在 secs秒之后给调用进程发送一个<code>SIGALRM</code></li>
-<li>secs为0就不会调用新的闹钟了<h3 id="信号处理"><a href="#信号处理" class="headerlink" title="信号处理"></a>信号处理</h3></li>
-<li>一个进程最多<strong>只有一个</strong>同类型的信号，等待处理的信号超过一个的时候会被<strong>直接丢弃</strong></li>
-<li>处理多个信号<ul>
-<li><img src="/imgs/5c2be80572109b2acf56dcd28d8f3fa0553db2cfeecab42a7de0588293a2b3e1.png" alt="picture 9">  </li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1853,14 +1895,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-count">193</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">68</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1897,13 +1939,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">674k</span>
+    <span title="站点总字数">676k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">20:26</span>
+    <span title="站点阅读时长">20:29</span>
 </div>
 
         
