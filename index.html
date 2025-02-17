@@ -532,10 +532,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-11-05 19:23:50 / 修改时间：21:17:46" itemprop="dateCreated datePublished" datetime="2024-11-05T19:23:50+08:00">2024-11-05</time>
+              <time title="创建时间：2024-11-05 19:23:50" itemprop="dateCreated datePublished" datetime="2024-11-05T19:23:50+08:00">2024-11-05</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-02-17 22:46:03" itemprop="dateModified" datetime="2025-02-17T22:46:03+08:00">2025-02-17</time>
+              </span>
 
           <br>
             <span class="post-meta-item" title="本文字数">
@@ -543,14 +549,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.1k</span>
+              <span>5.4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>8 分钟</span>
+              <span>10 分钟</span>
             </span>
 
         </div>
@@ -563,8 +569,26 @@
 
       
           <h2 id="使用进程组将特定的CPU留给特定的进程执行"><a href="#使用进程组将特定的CPU留给特定的进程执行" class="headerlink" title="使用进程组将特定的CPU留给特定的进程执行"></a>使用进程组将特定的CPU留给特定的进程执行</h2><ul>
+<li><p><strong>以上使用的是cgroup v1，V2比较难用</strong></p>
+</li>
 <li><p>安装<code>cgroup</code>工具</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt install cgroup-tools</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt install cgroup-tools</span><br></pre></td></tr></table></figure>
+<h3 id="可能需要-将计算机的Cgroup版本切换到v1"><a href="#可能需要-将计算机的Cgroup版本切换到v1" class="headerlink" title="(可能需要)将计算机的Cgroup版本切换到v1"></a>(可能需要)将计算机的Cgroup版本切换到v1</h3></li>
+<li><p>检查当前计算机使用的<code>cgroup</code>配置</p>
+</li>
+<li><p>bash<code>mount | grep cgroup</code></p>
+<ul>
+<li>如果你看到 cgroup2，说明你的系统使用的是 cgroups v2</li>
+<li>切换：<ul>
+<li><code>sudo nano /etc/default/grub</code></li>
+<li>将<code>GRUB_CMDLINE_LINUX_DEFAULT=&quot;quiet splash&quot;</code>修改为<code>GRUB_CMDLINE_LINUX_DEFAULT=&quot;systemd.unified_cgroup_hierarchy=0&quot;</code></li>
+<li>更新grub并重启</li>
+<li><code>sudo update-grub</code></li>
+<li><code>sudo reboot</code></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><p>给进程组分配适当的核心</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo cgcreate -g cpuset:/&lt;专属CPU组名&gt;</span><br><span class="line">sudo cgset -r cpuset.cpus=&quot;0,1&quot; &lt;专属CPU组名&gt;</span><br><span class="line">sudo cgset -r cpuset.mems=&quot;0&quot; &lt;专属CPU组名&gt;</span><br></pre></td></tr></table></figure></li>
 <li><p>使用在该CPU组下执行进程</p>
@@ -619,6 +643,15 @@
 </li>
 <li><p>然后查看<code>ls /sys/fs/cgroup</code>可见该进程组对应的CPU目录确实被删除了</p>
 </li>
+</ul>
+<h2 id="python和C-如何将自己切换到某个组"><a href="#python和C-如何将自己切换到某个组" class="headerlink" title="python和C++如何将自己切换到某个组"></a>python和C++如何将自己切换到某个组</h2><h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><ul>
+<li><strong>不要</strong>直接使用类似于<code>os.system(&quot;sudo cgclassify -g cpuset:/&lt;某个组&gt; $$&quot;)</code></li>
+<li>因为os.system是启动了一个新的进程，可能无法正确切换当前的进程到某个组</li>
+<li>要使用<code>os.system(&quot;sudo cgclassify -g cpuset:/ignite %d&quot; % os.getpid())</code></li>
+<li>使用<code>os.system(&quot;sudo cat /proc/self/cgroup | grep cpuset&quot;)</code>查看在哪个组</li>
+</ul>
+<h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><ul>
+<li>示例代码<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CGROUP_PATH <span class="meta-string">&quot;/sys/fs/cgroup/cpuset/&lt;组名&gt;/cgroup.procs&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">pid_t</span> pid = getpid();  <span class="comment">// 获取当前进程的 PID</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打开 cgroup.procs 文件</span></span><br><span class="line">    <span class="keyword">int</span> fd = open(CGROUP_PATH, O_WRONLY);</span><br><span class="line">    <span class="keyword">if</span> (fd == <span class="number">-1</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;Failed to open cgroup.procs&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将 PID 写入 cgroup.procs</span></span><br><span class="line">    <span class="keyword">char</span> pid_str[<span class="number">20</span>];</span><br><span class="line">    <span class="built_in">snprintf</span>(pid_str, <span class="keyword">sizeof</span>(pid_str), <span class="string">&quot;%d&quot;</span>, pid);</span><br><span class="line">    <span class="keyword">if</span> (write(fd, pid_str, <span class="keyword">sizeof</span>(pid_str)) == <span class="number">-1</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;Failed to write PID to cgroup.procs&quot;</span>);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Process %d moved to ignite cgroup.\n&quot;</span>, pid);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 显示当前进程的 cgroup 信息</span></span><br><span class="line">    system(<span class="string">&quot;cat /proc/self/cgroup | grep cpuset&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 
       
@@ -1342,13 +1375,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">676k</span>
+    <span title="站点总字数">677k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">20:29</span>
+    <span title="站点阅读时长">20:31</span>
 </div>
 
         
